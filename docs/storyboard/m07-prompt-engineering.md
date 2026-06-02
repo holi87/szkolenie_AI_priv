@@ -6,7 +6,8 @@
 | Czas | 65 min |
 | Ścieżki | S1: obowiązkowy SKRÓCONY; S2: obowiązkowy; S3: obowiązkowy |
 | Element interaktywny | „Prompt clinic" — poprawa 3 wadliwych promptów z feedbackiem wg rubryki |
-| Quiz inline | 10 pytań, Q51–Q60 |
+| Pula modułu | Q51–Q60 (10 pytań) |
+| Quiz inline | 5–8 pytań z puli |
 
 > Wszystkie przykłady danych w tym module są **syntetyczne** (fikcyjna aplikacja „SklepDemo", zmyślone wymagania, brak realnych danych klienta i PII). Terminy techniczne podawane po polsku z oryginałem w nawiasie przy pierwszym użyciu. Pełna treść ekranów powstaje w M4 wdrożenia — tu opisany jest tylko plan struktury (skrót ≤300 słów na ekran).
 
@@ -29,7 +30,7 @@
 | 6 | Naprawa złego promptu wg rubryki | treść | Jak poprawiać nieprecyzyjny prompt na podstawie błędnego outputu. Rubryka oceny promptu (5 osi): kompletność, bezpieczeństwo, weryfikowalność, format, ograniczenia. Pętla: zły output → diagnoza wg rubryki → konkretna poprawka → lepszy output. Syntetyczny przykład „przed/po" jednego promptu. Ten ekran przygotowuje wprost do elementu interaktywnego. | E2 | Wszystkie ścieżki (pełny). **S1 SKRÓCONY: pozostaje — kluczowy dla S1, ale 1 oś rubryki = 1 zdanie.** |
 | 7 | Granice promptu: kiedy prompt nie pomoże | decyzja | Decyzja: prompt to nie magia. Gdy brakuje danych (model nie ma informacji w kontekście), żadne „dopieszczanie" promptu nie wygeneruje prawdy — powstanie halucynacja. Co zrobić zamiast tego: dostarczyć dane (kontekst/RAG), sięgnąć do źródła, oddać zadanie człowiekowi/ekspertowi. Sygnały ostrzegawcze: prompt rośnie, a output dalej zmyśla. Link do M11 (halucynacje). | E4 | Wszystkie ścieżki (pełny). **S1 SKRÓCONY: pozostaje — świadomościowo ważny, skrót do 1 zasady + 1 przykładu.** |
 | 8 | Prompt clinic (interakcja) | interakcja | Element interaktywny: uczestnik poprawia 3 wadliwe syntetyczne prompty i otrzymuje feedback tekstowy wg rubryki (kompletność, bezpieczeństwo, weryfikowalność, format, ograniczenia). Szczegóły i alternatywa klawiaturowa — sekcja „Element interaktywny" poniżej. | E1, E2, E3, E4 | Wszystkie ścieżki. **S1 SKRÓCONY: 2 z 3 promptów (pomija prompt few-shot), pozostawia poprawę kompletności i bezpieczeństwa.** |
-| 9 | Quiz inline (Q51–Q60) | quiz-inline | 10 pytań z natychmiastowym feedbackiem i wyjaśnieniem (tryb nauki). Q51–Q53 single choice; Q54–Q56 multiple choice; Q57–Q60 zadania scenariuszowe. Mapowanie kompetencji — sekcja „Quiz inline" poniżej. Brak pytań krytycznych w M7. | E1, E2, E3, E4 | Wszystkie ścieżki (pełny zestaw 10 pytań niezależnie od ścieżki). |
+| 9 | Quiz inline (5–8 z puli Q51–Q60) | quiz-inline | 5–8 z puli Q51–Q60, dobranych do treści widzianej na danej ścieżce, z natychmiastowym feedbackiem i wyjaśnieniem (tryb nauki). Pula modułu Q51–Q60 zasila również test końcowy. Typy w puli: Q51–Q53 single choice; Q54–Q56 multiple choice; Q57–Q60 zadania scenariuszowe. Mapowanie kompetencji — sekcja „Quiz inline" poniżej. Brak pytań krytycznych w M7. | E1, E2, E3, E4 | Wszystkie ścieżki (quiz inline = 5–8 z puli, dobranych do treści danej ścieżki). |
 | 10 | Podsumowanie i następny krok | podsumowanie | 4 kluczowe wnioski (7 elementów promptu, rubryka 5 osi, few-shot dla powtarzalności, granice promptu przy braku danych). Mostek do M8 (zastosowania GenAI w QA — generowanie i ocena przypadków testowych). Widoczny postęp + „następny krok →". | E1, E2, E3, E4 | Wszystkie ścieżki (pełny) |
 
 **Wariant S1 (obowiązkowy SKRÓCONY):** ekrany 3 i 4 scalone w jeden uproszczony ekran; ekran 5 (few-shot) zredukowany do akapitu; Prompt clinic na 2 promptach. Ekrany 1, 2, 6, 7, 9, 10 zostają (rdzeń: anatomia, naprawa promptu, granice, quiz). Szacunek czasu S1 ≈ 35–40 min, S2/S3 pełne ≈ 65 min (1 ekran ≈ 5–7 min z interakcją i quizem).
@@ -56,8 +57,8 @@
 
 ## Quiz inline
 
-- **Liczba pytań:** 10. **Mapowanie:** Q51–Q60.
-- **Typy:** Q51–Q53 single choice; Q54–Q56 multiple choice; Q57–Q60 zadania scenariuszowe (40% pytań scenariuszowych — zgodnie z curriculum).
+- **Pula modułu:** Q51–Q60 (10 pytań) — zasila również test końcowy. **Quiz inline:** 5–8 pytań losowanych z puli, dobranych do treści widzianej na danej ścieżce (wg wymagania/07).
+- **Typy (w puli Q51–Q60):** Q51–Q53 single choice; Q54–Q56 multiple choice; Q57–Q60 zadania scenariuszowe (40% pytań scenariuszowych — zgodnie z curriculum).
 - **Brak pytań krytycznych** w M7.
 - **Sprawdzane kompetencje:**
   - Q51–Q53 (single): rozpoznanie elementów dobrego promptu, definicje (rola, kontekst, format, ograniczenia, kryteria) — E1.

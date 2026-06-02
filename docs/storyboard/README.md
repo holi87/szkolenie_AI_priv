@@ -11,7 +11,7 @@ Storyboard rozpisuje moduły M1–M12 na **sekwencje ekranów**. Zasady: jeden e
 
 ## Moduły
 
-| Moduł | Plik | Ekrany | Quiz inline | Element interaktywny |
+| Moduł | Plik | Ekrany | Pula pytań | Element interaktywny |
 |---|---|---:|---|---|
 | M1 | [m01-fundamenty.md](m01-fundamenty.md) | 9 | Q1–Q8 | Klasyfikator zadań |
 | M2 | [m02-architektura.md](m02-architektura.md) | 9 | Q9–Q17 | Licznik kontekstu |
@@ -26,7 +26,7 @@ Storyboard rozpisuje moduły M1–M12 na **sekwencje ekranów**. Zasady: jeden e
 | M11 | [m11-verification.md](m11-verification.md) | 11 | Q95–Q104 | Output verifier |
 | M12 | [m12-evaluation.md](m12-evaluation.md) | 12 | Q105–Q116 | Judge calibration lab |
 
-Razem 116 pytań (zgodnie z curriculum), w tym 5 pytań krytycznych w M10 (warunek konieczny zaliczenia).
+Kolumna „Pula pytań" to **pełna pula modułu** (zakresy Q), nie liczba pytań w quizie inline. **Quiz inline losuje 5–8 pytań z puli** (wg `wymagania/07`), dobranych do treści widzianej na danej ścieżce; **ta sama pula zasila test końcowy**. Razem 116 pytań w puli (zgodnie z curriculum), w tym 5 pytań krytycznych w M10 (Q81–Q85, warunek konieczny zaliczenia). W M2 dobór dla S1 pomija pytania o kolejność procesu (Q14–Q15), zgodnie z uproszczonym wariantem S1.
 
 ## Kryteria akceptacji issue #6
 - [x] Każdy moduł ma strukturę ekranów — 12 plików `mNN-*.md`.

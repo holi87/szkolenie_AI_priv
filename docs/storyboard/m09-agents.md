@@ -6,7 +6,8 @@
 | Czas | 45 min |
 | Ścieżki | S1: opcjonalny ŚWIADOMOŚCIOWY; S2: opcjonalny; S3: obowiązkowy |
 | Element interaktywny | „Agent permission board" (tablica uprawnień agenta) |
-| Quiz inline | 8 pytań, Q73–Q80 |
+| Pula modułu | Q73–Q80 (8 pytań) — zasila również test końcowy |
+| Quiz inline | 5–8 pytań losowanych z puli |
 
 > Storyboard to STRUKTURA ekranów — plan treści w skrócie. Pełna treść powstaje w M4 (faza pisania).
 > Wszystkie przykłady danych są SYNTETYCZNE: fikcyjne repozytorium `synt-shop`, skrzynka `qa-bot@przyklad.test`, system testowy `TestRail-SANDBOX`. Zero realnych danych klienta / PII.
@@ -30,7 +31,7 @@
 | 6 | Cztery dźwignie kontroli | treść | Minimalna kontrola działania agenta — model „4 dźwigni": uprawnienia (permission scope — najmniejszy potrzebny zakres), logi (audit log — co agent zrobił i kiedy), zatwierdzanie człowieka (human-in-the-loop — bramka przed skutkiem nieodwracalnym), wycofanie (rollback — czy da się cofnąć zmianę). Dla każdej dźwigni: pytanie kontrolne, które tester powinien zadać. Tekstowa lista zamiast samej grafiki. | E3 | Wszystkie. S1: uproszczone — same 4 nazwy dźwigni + jedno zdanie po co, bez pytań kontrolnych. |
 | 7 | Które zadania wymagają audytu | treść | Klasyfikacja zadań: kiedy autonomia agenta jest akceptowalna (odwracalne, niskie skutki, łatwa weryfikacja), a kiedy konieczne są ograniczenia i audyt (nieodwracalne, dane wrażliwe, wpływ na produkcję/dane testowe, zatwierdzenia). Reguła kciuka: im trudniej cofnąć i im większy skutek, tym mocniejsza bramka HITL i pełniejszy log. Syntetyczne przykłady „zielone" vs „czerwone". | E4 | S2, S3. S1: skrót — sama reguła kciuka „nieodwracalne + duży skutek = bramka + audyt". |
 | 8 | Agent permission board | interakcja | ELEMENT INTERAKTYWNY (szczegół niżej). Uczestnik nadaje agentowi uprawnienia dla 5 syntetycznych zadań QA i minimalizuje ryzyko przez ograniczenie dostępu + dobór dźwigni kontroli. Output: ocena ryzyka tekstem dla każdego zadania. | E2, E3, E4 | S2, S3. S1: ZASTĄPIONY wersją demonstracyjną — 1 gotowy przykład „przed/po" z komentarzem, bez samodzielnej konfiguracji. |
-| 9 | Quiz inline (Q73–Q80) | quiz-inline | 8 pytań z natychmiastowym feedbackiem i wyjaśnieniem (tryb nauki). Q73–Q75 single choice (rozróżnienie trybów, dźwignie kontroli). Q76–Q78 scenariusz uprawnień (dobór minimalnego zakresu i bramek). Q79–Q80 multiple choice (ryzyka dostępu, elementy audytu). Każde pytanie linkuje do powiązanej sekcji. | E1–E4 | Wszystkie. S1: ten sam zestaw w trybie świadomościowym (wynik nie jest gatingiem — moduł opcjonalny). |
+| 9 | Quiz inline (5–8 z puli Q73–Q80) | quiz-inline | 5–8 pytań losowanych z puli Q73–Q80, dobranych do treści widzianej na danej ścieżce, z natychmiastowym feedbackiem i wyjaśnieniem (tryb nauki). Pula obejmuje: Q73–Q75 single choice (rozróżnienie trybów, dźwignie kontroli), Q76–Q78 scenariusz uprawnień (dobór minimalnego zakresu i bramek), Q79–Q80 multiple choice (ryzyka dostępu, elementy audytu). Każde pytanie linkuje do powiązanej sekcji. | E1–E4 | Wszystkie. S1: ten sam zestaw w trybie świadomościowym (wynik nie jest gatingiem — moduł opcjonalny). |
 | 10 | Podsumowanie i następny krok | podsumowanie | Domknięcie: 1 zdanie na efekt (E1–E4), karta „4 dźwigni" do zapamiętania, link do M10 (bezpieczeństwo, prompt injection) jako naturalna kontynuacja. „Następny najlepszy krok" zależny od ścieżki. Pasek postępu modułu = 100%. | E1–E4 | Wszystkie. S1: wersja 3-punktowa „co zapamiętać". |
 
 **Liczba ekranów: 10** (orientacyjnie 4–5 min/ekran; ekrany treści krótsze, interakcja i quiz dłuższe — mieści się w 45 min). W wariancie S1 świadomościowym aktywne pozostają ekrany 1, 2, 4, 6, 8 (demo), 9, 10; ekrany 3, 5, 7 są pomijane lub zredukowane do 1–2 zdań.
@@ -62,7 +63,7 @@
 
 ## Quiz inline
 
-- **8 pytań, Q73–Q80**, natychmiastowy feedback i wyjaśnienie (tryb nauki), każde z linkiem do powiązanej sekcji.
+- **Pula modułu: Q73–Q80 (8 pytań) — zasila również test końcowy. Quiz inline: 5–8 pytań losowanych z puli, dobranych do treści widzianej na danej ścieżce (wg `wymagania/07`).** Natychmiastowy feedback i wyjaśnienie (tryb nauki), każde pytanie z linkiem do powiązanej sekcji.
 - **Q73–Q75 — single choice:** rozróżnienie chatbot / workflow / agent (E1) i rozpoznanie dźwigni kontroli (E3).
 - **Q76–Q78 — scenariusz uprawnień:** dobór minimalnego zakresu dostępu i właściwej bramki dla syntetycznego zadania (E2, E3, E4) — sprawdza transfer z ćwiczenia „permission board".
 - **Q79–Q80 — multiple choice:** wskazanie wielu ryzyk dostępu agenta oraz elementów składających się na audyt (E2, E4).

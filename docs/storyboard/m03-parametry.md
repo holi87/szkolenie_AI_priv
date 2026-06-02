@@ -6,7 +6,8 @@
 | Czas | 30 min |
 | Ścieżki | S1: opcjonalny; S2: obowiązkowy; S3: obowiązkowy |
 | Element interaktywny | „Suwaki generacji” (temperature, top-p, max tokens) |
-| Quiz inline | 7 pytań (Q18–Q24) |
+| Pula modułu | Q18–Q24 (7 pytań) — zasila również test końcowy |
+| Quiz inline | 5–8 pytań losowanych z puli |
 
 ## Efekty uczenia
 - **E1** — dobiera temperature (temperatura, parametr losowości) do zadania kreatywnego i formalnego.
@@ -27,7 +28,7 @@
 | 5 | max tokens — kiedy odpowiedź się urywa | treść | Definicja max tokens (maksymalna liczba tokenów odpowiedzi) jako twardego limitu długości outputu. Skutek przekroczenia: odpowiedź ucięta w połowie zdania/tabeli, brak ostatnich kroków lub kryteriów akceptacji. Jak rozpoznać ucięcie: urwane zdanie, niedomknięta lista, brak podsumowania. Reakcja: zwiększ limit lub poproś o krótszy format. Syntetyczny przykład: lista 10 przypadków testowych ucięta na 6. | E3 | S1 opc. · S2 · S3 |
 | 6 | Które ustawienie do dokumentacji testowej? | decyzja | Decyzja: porównanie dwóch presetów dla tego samego zadania (np. spisanie kroków test case’a). Wariant A: temp 0,2 / top-p 0,3 / max tokens wysokie. Wariant B: temp 1,0 / top-p 0,95 / max tokens niskie. Uczestnik wybiera bezpieczniejszy dla dokumentacji i uzasadnia (powtarzalność + brak ucięcia). Konserwatywne domyślne: niższa losowość, zapas na długość. Zasila scenariusz Q24. | E4 | S1 opc. · S2 · S3 |
 | 7 | „Suwaki generacji” — eksperyment | interakcja | Element interaktywny: zmiana temperature, top-p i max tokens; symulowany output pokazuje różnice formalności, kompletności i ryzyka błędów. Cel: dotykowe powiązanie parametr→skutek przed quizem. Szczegół działania i alternatywa klawiaturowa w sekcji „Element interaktywny — szczegół”. Dane syntetyczne (zero PII). | E1, E2, E3, E4 | S1 opc. · S2 · S3 |
-| 8 | Quiz inline — sprawdź się | quiz-inline | 7 pytań Q18–Q24 z natychmiastowym feedbackiem i wyjaśnieniem (tryb nauki). Q18–Q21 single choice; Q22–Q23 dopasowanie parametr→skutek; Q24 scenariusz wyboru bezpieczniejszego ustawienia. Brak pytań krytycznych. | E1, E2, E3, E4 | S1 opc. · S2 · S3 |
+| 8 | Quiz inline — sprawdź się | quiz-inline | 5–8 z puli Q18–Q24 z natychmiastowym feedbackiem i wyjaśnieniem (tryb nauki). Q18–Q21 single choice; Q22–Q23 dopasowanie parametr→skutek; Q24 scenariusz wyboru bezpieczniejszego ustawienia. Brak pytań krytycznych. | E1, E2, E3, E4 | S1 opc. · S2 · S3 |
 | 9 | Podsumowanie i następny krok | podsumowanie | Skrót: temperature i top-p sterują losowością, max tokens — długością; dla QA preferuj niską losowość i zapas długości; zawsze weryfikuj powtarzalność i kompletność. Postęp procentowy + „następny najlepszy krok”: przejście do M4 (Embeddings) lub kolejnego modułu obowiązkowego ścieżki. | E1, E2, E3, E4 | S1 opc. · S2 · S3 |
 
 > **Wariant ścieżek.** M3 nie ma wersji skróconej ani świadomościowej na poziomie ekranu (w przeciwieństwie do M2 „w wersji skróconej” czy M6 „w wersji świadomościowej”). Dla S1 cały moduł jest **opcjonalny** — różnicowanie odbywa się na poziomie modułu (gating), nie przez pomijanie pojedynczych ekranów. Dlatego kolumna Ścieżki/wariant jest jednolita dla wszystkich ekranów i żaden ekran nie jest indywidualnie pomijany ani upraszczany.
@@ -58,7 +59,7 @@
 
 ## Quiz inline
 
-- **Liczba pytań:** 7, identyfikatory **Q18–Q24** (mapowanie z `wymagania/06`).
+- **Pula modułu:** Q18–Q24 (7 pytań) — zasila również test końcowy. **Quiz inline:** 5–8 pytań losowanych z puli, dobranych do treści widzianej na danej ścieżce (wg `wymagania/07`). Identyfikatory **Q18–Q24** — mapowanie z `wymagania/06`.
 - **Typy i sprawdzane kompetencje:**
   - **Q18–Q21 — single choice:** rozumienie pojedynczych parametrów — dobór temperature do zadania kreatywnego/formalnego (E1), ryzyko wysokiej losowości w QA (E2), rozpoznanie ucięcia przez max tokens (E3).
   - **Q22–Q23 — dopasowanie parametr→skutek:** połączenie temperature / top-p / max tokens z ich efektem na output (formalność, różnorodność, długość) — domyka pokrycie top-p (E2, E4).

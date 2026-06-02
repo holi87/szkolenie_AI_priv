@@ -6,7 +6,8 @@
 | Czas | 90 min |
 | Ścieżki | S1: opcjonalny; S2: opcjonalny ROZSZERZONY; S3: obowiązkowy |
 | Element interaktywny | „Judge calibration lab” (laboratorium kalibracji oceniającego) — porównanie ocen człowieka i LLM jako sędziego (ang. *LLM-as-a-judge*), wykrycie rozjazdów i poprawa rubryki |
-| Quiz inline | 12 pytań, Q105–Q116 |
+| Pula modułu | Q105–Q116 (12 pytań) — zasila również test końcowy |
+| Quiz inline | 5–8 pytań losowanych z puli modułu |
 
 > Storyboard to STRUKTURA ekranów — plan treści w skrócie. Pełna treść powstaje w M4 (faza pisania).
 >
@@ -40,10 +41,10 @@
 | 8 | Kalibracja z ekspertem i zgodność oceniaczy | treść | E5: jak ufać ocenie automatycznej — porównaj ją z oceną eksperta na tym samym golden secie i policz zgodność międzyoceniacza (ang. *inter-rater agreement*). Gdzie się rozjeżdżają = sygnał do poprawy rubryki, nie do ignorowania. Pętla: oceń → porównaj → znajdź rozjazd → popraw rubrykę → oceń ponownie. Pogłębienie (S2 ROZSZERZONE / S3): intuicja miar zgodności i dlaczego sama „zgodność %” bywa myląca przy nierównym rozkładzie ocen. | E5 | S1,S2,S3 (pogłębienie miar zgodności: rozszerzenie S2 ROZSZERZONE / S3) |
 | 9 | Próg akceptacji i decyzja go/no-go | treść | E6: ustalenie progu akceptacji jakości (ang. *acceptance threshold*) — np. „faithfulness ≥ próg X na golden secie, zero przypadków sprzecznych ze źródłem”. Jak dobrać próg: ryzyko przypadku użycia, koszt błędu, baseline poprzedniej wersji. Decyzja „dalej / wstrzymaj” (ang. *go / no-go*) i rola progu w regresji (porównanie wersji). Konserwatywne domyślne: brak danych → nie zaliczaj automatycznie. | E6 | S1,S2,S3 |
 | 10 | Judge calibration lab | interakcja | ELEMENT INTERAKTYWNY (szczegół niżej). Uczestnik porównuje ocenę człowieka i LLM-as-a-judge na syntetycznym zestawie A1–A6, wykrywa rozjazdy (w tym celowo wstrzyknięty position bias), wskazuje, gdzie rubryka jest niejednoznaczna, i proponuje poprawkę. Integruje E3, E4, E5. | E3,E4,E5 | S1,S2,S3 (warstwa pogłębiona: analiza zgodności i diagnoza position bias = rozszerzenie S2 ROZSZERZONE / S3) |
-| 11 | Quiz inline (Q105–Q116) | quiz-inline | 12 pytań z natychmiastowym feedbackiem i wyjaśnieniem (tryb nauki). Q105–Q108 single choice (definicje: golden set, metryki, rubryka, terminy bias). Q109–Q112 multiple choice (które sygnały = position bias, które metryki pasują, co należy do golden setu). Q113–Q116 scenariusz ewaluacji (przebieg od kalibracji do progu). Szczegóły w sekcji „Quiz inline”. Pytań krytycznych brak. | E1–E6 | S1,S2,S3 (S3: bramka ukończenia; S1/S2: opcjonalny, nie jest gatingiem) |
+| 11 | Quiz inline (5–8 z puli Q105–Q116) | quiz-inline | 5–8 pytań losowanych z puli modułu (Q105–Q116) z natychmiastowym feedbackiem i wyjaśnieniem (tryb nauki). Pula modułu Q105–Q116 zasila również test końcowy. Zakresy puli: Q105–Q108 single choice (definicje: golden set, metryki, rubryka, terminy bias). Q109–Q112 multiple choice (które sygnały = position bias, które metryki pasują, co należy do golden setu). Q113–Q116 scenariusz ewaluacji (przebieg od kalibracji do progu). Szczegóły w sekcji „Quiz inline”. Pytań krytycznych brak. | E1–E6 | S1,S2,S3 (S3: bramka ukończenia; S1/S2: opcjonalny, nie jest gatingiem) |
 | 12 | Podsumowanie i następny krok | podsumowanie | Domknięcie: 1 zdanie na efekt (E1–E6), karta „pętla ewaluacji” do zapamiętania (golden set → metryki → rubryka → kalibracja → próg → decyzja). Lista „co potrafię po M12” zmapowana na E1–E6. „Następny najlepszy krok →” zależny od ścieżki (dla S3 zwykle test końcowy / dodatki). Pasek postępu modułu = 100%. | E1–E6 | S1,S2,S3 |
 
-**Liczba ekranów: 12.** Bilans czasu (orientacyjnie, 90 min): ekrany treściowe/decyzyjne 5–7 min, ćwiczenie ~6 min, interakcja „Judge calibration lab” ~15 min, quiz 12 pytań ~15 min, podsumowanie ~4 min → ≈90 min. Wszystkie 12 ekranów są wspólne dla S1/S2/S3; ścieżki różnią się **gatingiem** (S3 obowiązkowy z quizem jako bramką; S1/S2 opcjonalne), a charakter ROZSZERZONY/pełny S2/S3 realizują **warstwy pogłębione** na ekranach 8 i 10 (zgodność międzyoceniacza, diagnoza position bias). Brak osobnego wariantu świadomościowego — `wymagania/06` go nie przypisuje.
+**Liczba ekranów: 12.** Bilans czasu (orientacyjnie, 90 min): ekrany treściowe/decyzyjne 5–7 min, ćwiczenie ~6 min, interakcja „Judge calibration lab” ~15 min, quiz inline (5–8 z puli) ~15 min, podsumowanie ~4 min → ≈90 min. Wszystkie 12 ekranów są wspólne dla S1/S2/S3; ścieżki różnią się **gatingiem** (S3 obowiązkowy z quizem jako bramką; S1/S2 opcjonalne), a charakter ROZSZERZONY/pełny S2/S3 realizują **warstwy pogłębione** na ekranach 8 i 10 (zgodność międzyoceniacza, diagnoza position bias). Brak osobnego wariantu świadomościowego — `wymagania/06` go nie przypisuje.
 
 ## Element interaktywny — szczegół
 
@@ -79,7 +80,7 @@
 
 ## Quiz inline
 
-**Liczba i mapowanie:** 12 pytań, **Q105–Q116** (zgodnie z curriculum, `wymagania/06`). Pytań krytycznych: **brak**. Tryb nauki — wynik i wyjaśnienie natychmiast po odpowiedzi (`docs/design-baseline.md` 2.2); obsługa klawiaturą i widoczny focus na opcjach. Moduł obowiązkowy tylko dla S3 — dla S1/S2 quiz nie jest bramką gatingu.
+**Liczba i mapowanie:** Pula modułu: **Q105–Q116 (12 pytań)** — zasila również test końcowy (zgodnie z curriculum, `wymagania/06`). Quiz inline: **5–8 pytań losowanych z puli, dobranych do treści widzianej na danej ścieżce** (wg `wymagania/07`). Pytań krytycznych: **brak**. Tryb nauki — wynik i wyjaśnienie natychmiast po odpowiedzi (`docs/design-baseline.md` 2.2); obsługa klawiaturą i widoczny focus na opcjach. Moduł obowiązkowy tylko dla S3 — dla S1/S2 quiz nie jest bramką gatingu. Poniższa tabela mapuje zakresy całej puli Q105–Q116 na typy i efekty; quiz inline losuje z nich 5–8 pytań.
 
 | Zakres | Typ | Sprawdzana kompetencja | Efekt |
 |---|---|---|---|

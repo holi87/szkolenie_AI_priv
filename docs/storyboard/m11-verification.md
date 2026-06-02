@@ -6,7 +6,8 @@
 | Czas | 60 min |
 | Ścieżki | S1: obowiązkowy; S2: obowiązkowy; S3: obowiązkowy |
 | Element interaktywny | „Output verifier" (weryfikator odpowiedzi) |
-| Quiz inline | 10 pytań, Q95–Q104 |
+| Pula modułu | Q95–Q104 (10 pytań) |
+| Quiz inline | 5–8 pytań dobranych z puli |
 
 > Storyboard to STRUKTURA ekranów — plan treści w skrócie. Pełna treść powstaje w M4 (faza pisania).
 >
@@ -35,7 +36,7 @@ Efekty z curriculum (`wymagania/06`) rozbite na ponumerowane pozycje:
 | 6 | Kiedy NIE używać LLM | decyzja | **Jedna decyzja: użyć LLM czy odrzucić (rdzeń E3).** Rama przed interakcją. Dwie osie: czy wynik da się **sprawdzić** (*verifiable*) oraz jaki jest **wpływ błędu** (odwracalny/niski vs nieodwracalny/wysoki — *high-impact / critical decision*). Reguła kciuka: **nie da się sprawdzić LUB błąd ma wysoki wpływ → nie polegaj na LLM** (odrzuć albo wymagaj weryfikacji człowieka/źródła). Pytanie prowadzące: „gdyby ta odpowiedź była zmyślona, jaki byłby najgorszy wiarygodny skutek i czy bym to wychwycił?". Syntetyczne „zielone" vs „czerwone" zastosowania. | E3 | rdzeń (S1/S2/S3) |
 | 7 | Oznaczanie fragmentów: źródło / ekspert | treść | **Jedna koncepcja: granulacja zamiast zero-jedynkowości (rdzeń E4).** Odpowiedź LLM rzadko jest w całości dobra albo zła — częściej miesza fragmenty pewne, niepewne i ryzykowne. Tester oznacza fragmenty: **wymaga źródła** (twierdzenie sprawdzalne, brak cytatu) lub **wymaga eksperta** (decyzja krytyczna / dziedzinowa poza weryfikacją testera). Wprowadzenie 5 kategorii oznaczeń używanych w interakcji: poprawne, nieuzasadnione, wymagające źródła, ryzykowne, do odrzucenia. | E4 | rdzeń (S1/S2/S3) |
 | 8 | Output verifier | interakcja | **Element interaktywny** (szczegół niżej). Uczestnik analizuje jedną syntetyczną odpowiedź LLM rozbitą na zdania i oznacza każde zdanie jedną z 5 kategorii: **poprawne / nieuzasadnione / wymagające źródła / ryzykowne / do odrzucenia**. Po zatwierdzeniu: tekstowy feedback per zdanie (z przyczyną halucynacji z E1) + ocena zbiorcza, czy fragmenty krytyczne zostały złapane. Dane i alternatywa klawiaturowa — w sekcji poniżej. | E1, E2, E4 | rdzeń (S1/S2/S3) |
-| 9 | Quiz inline (Q95–Q104) | quiz-inline | **10 pytań z natychmiastowym feedbackiem i wyjaśnieniem** (tryb nauki), każde z linkiem do powiązanej sekcji. Q95–Q98 scenariusz weryfikacji (analiza syntetycznego outputu: która przyczyna, jaka kategoria, użyć czy odrzucić). Q99–Q101 single choice (definicja halucynacji, przyczyny, próg odrzucenia). Q102–Q104 multiple choice (elementy checklisty, sygnały ostrzegawcze, kategorie oznaczeń). Pytań krytycznych: brak. | E1–E4 | rdzeń (S1/S2/S3) |
+| 9 | Quiz inline (5–8 z puli Q95–Q104) | quiz-inline | **5–8 pytań losowanych z puli Q95–Q104 z natychmiastowym feedbackiem i wyjaśnieniem** (tryb nauki), każde z linkiem do powiązanej sekcji. Pula obejmuje: Q95–Q98 scenariusz weryfikacji (analiza syntetycznego outputu: która przyczyna, jaka kategoria, użyć czy odrzucić). Q99–Q101 single choice (definicja halucynacji, przyczyny, próg odrzucenia). Q102–Q104 multiple choice (elementy checklisty, sygnały ostrzegawcze, kategorie oznaczeń). Pytań krytycznych: brak. | E1–E4 | rdzeń (S1/S2/S3) |
 | 10 | Karta weryfikacji do pracy | treść | **Jedna koncepcja: transfer do codziennej pracy.** Skondensowana karta-ściąga: 5 przyczyn (skrót), checklista (a–e), reguła „kiedy nie używać LLM", 5 kategorii oznaczeń. Do zachowania/wydruku — most między szkoleniem a stanowiskiem testera. Bez nowej treści (tylko synteza ekranów 4–7). | E1–E4 | rdzeń (S1/S2/S3) |
 | 11 | Podsumowanie i następny krok | podsumowanie | **Domknięcie modułu.** 1 zdanie syntezy na efekt (E1–E4): halucynacja wynika z mechanizmu (5 przyczyn), checklista chroni przed zaufaniem zmyślonej treści, brak weryfikowalności lub wysoki wpływ = odrzuć LLM, a odpowiedź oznaczamy fragmentami, nie zero-jedynkowo. „Następny najlepszy krok →": M12 (ewaluacja jakości LLM i RAG). Pasek postępu modułu = 100%. | E1–E4 | rdzeń (S1/S2/S3) |
 
@@ -68,7 +69,7 @@ Efekty z curriculum (`wymagania/06`) rozbite na ponumerowane pozycje:
 
 ## Quiz inline
 
-- **10 pytań, Q95–Q104**, natychmiastowy feedback i wyjaśnienie (tryb nauki, *formative*), każde z linkiem do powiązanej sekcji. Quiz jest **formatywny w module obowiązkowym** — utrwala kompetencje E1–E4; właściwa weryfikacja kompetencji odbywa się w teście końcowym ścieżki.
+- **Pula modułu: Q95–Q104 (10 pytań) — zasila również test końcowy. Quiz inline: 5–8 pytań losowanych z puli, dobranych do treści widzianej na danej ścieżce (wg `wymagania/07`).** Natychmiastowy feedback i wyjaśnienie (tryb nauki, *formative*), każde z linkiem do powiązanej sekcji. Quiz jest **formatywny w module obowiązkowym** — utrwala kompetencje E1–E4; właściwa weryfikacja kompetencji odbywa się w teście końcowym ścieżki.
 - **Q95–Q98 — scenariusz weryfikacji:** analiza syntetycznego outputu LLM — wskazanie przyczyny halucynacji (E1), nadanie kategorii zdaniu (E4) oraz decyzja „użyć / wymagać źródła / odrzucić" (E2, E3). Sprawdza transfer z ćwiczenia „Output verifier".
 - **Q99–Q101 — single choice:** definicja halucynacji vs niepewność (E1), rozpoznanie pojedynczej przyczyny (E1), próg odrzucenia LLM (E3).
 - **Q102–Q104 — multiple choice:** wybór wszystkich elementów checklisty weryfikacji (E2), wszystkich sygnałów ostrzegawczych halucynacji (E1), wszystkich fragmentów wymagających źródła/eksperta (E4). Punktacja 0–2 zgodnie z `wymagania/07` (pełne 2 tylko za komplet bez błędów).

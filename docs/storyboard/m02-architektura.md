@@ -6,7 +6,8 @@
 | Czas | 45 min |
 | Ścieżki | S1: obowiązkowy SKRÓCONY; S2: obowiązkowy; S3: obowiązkowy |
 | Element interaktywny | „Licznik kontekstu” (symulacja skracania dokumentu) |
-| Quiz inline | 9 pytań, Q9–Q17 |
+| Pula modułu | Q9–Q17 (9 pytań) — zasila również test końcowy |
+| Quiz inline | 5–8 pytań losowanych z puli modułu |
 
 ## Efekty uczenia
 
@@ -26,7 +27,7 @@
 | 5 | Transformer i uwaga — intuicja | treść | Transformer (transformer) intuicyjnie: mechanizm, który uczy się, które tokeny są ze sobą powiązane, niezależnie od odległości w tekście. Uwaga (attention) = „na co model patrzy”, łącząc np. zaimek z rzeczownikiem sprzed wielu zdań. Bez wzorów: schemat „każdy token waży powiązanie z innymi”. Tu rodzi się porządek kroków procesu (materiał do Q14–Q15: kolejność). Wersja tekstowa diagramu obowiązkowa (WCAG 1.1.1). | E3 | S2, S3 pełne. **S1: UPROSZCZONY** — jedno zdanie „model uczy się powiązań między fragmentami”, bez pojęcia attention i bez diagramu kroków. S3: dodatkowy akapit o kosztach uwagi przy długim kontekście (inference cost). |
 | 6 | Więcej parametrów ≠ lepsza jakość | treść | Parametry (parameters) = „pojemność” modelu, ale liczba parametrów nie gwarantuje trafności dla konkretnego zadania QA. Co realnie decyduje: dopasowanie do zadania, jakość danych, długość okna kontekstu, sposób promptowania. Przykład syntetyczny: większy model myli się na fikcyjnym formacie ID defektu, mniejszy z lepszym kontekstem trafia. Antywzorzec: wybór modelu „bo ma więcej miliardów parametrów”. | E4 | Wszystkie. S1: skrócony — jedno zdanie + zasada zakupowa/decyzyjna („nie kupuj po liczbie parametrów”). |
 | 7 | Interakcja: Licznik kontekstu | interakcja | Symulacja skracania dokumentu: uczestnik zmniejsza okno kontekstu i widzi, które fragmenty syntetycznej specyfikacji wypadają oraz jakie pytania przestają być możliwe do poprawnej odpowiedzi. Łączy E1 (mechanizm okna) i E2 (skutki). Szczegóły i alternatywa klawiaturowa w sekcji „Element interaktywny”. | E1,E2 | Wszystkie. S1: skrócony — start z gotowym scenariuszem i 2 fragmentami zamiast pełnej listy; ten sam mechanizm i wnioski. |
-| 8 | Quiz inline (Q9–Q17) | quiz-inline | 9 pytań z natychmiastowym feedbackiem i wyjaśnieniem (tryb nauki, zgodnie z design-baseline). Q9–Q11 single, Q12–Q13 multiple, Q14–Q15 kolejność procesu, Q16–Q17 scenariusz. Sprawdza E1–E4. Brak pytań krytycznych w tym module. | E1,E2,E3,E4 | Wszystkie ścieżki — pełny zestaw 9 pytań (gating modułu identyczny dla S1/S2/S3). |
+| 8 | Quiz inline (5–8 z puli Q9–Q17) | quiz-inline | 5–8 pytań losowanych z puli modułu (Q9–Q17), z natychmiastowym feedbackiem i wyjaśnieniem (tryb nauki, zgodnie z design-baseline). Pula: Q9–Q11 single, Q12–Q13 multiple, Q14–Q15 kolejność procesu, Q16–Q17 scenariusz. Sprawdza E1–E4. Brak pytań krytycznych w tym module. | E1,E2,E3,E4 | Wszystkie ścieżki — 5–8 z puli Q9–Q17, dobranych do treści widzianej na danej ścieżce. S1 (SKRÓCONY): dobór pomija pytania o kolejność procesu (Q14–Q15), spójnie z uproszczeniem ekranu 5. |
 | 9 | Podsumowanie i następny krok | podsumowanie | Domknięcie: token i okno kontekstu → 3 skutki za małego kontekstu → transformer/uwaga intuicyjnie → parametry to nie jakość. Widoczny postęp i „następny najlepszy krok”: M3 — parametry generacji (temperature, top-p, max tokens). | E1,E2,E3,E4 | Wszystkie. S1: skrócony — 4 zdania kluczowe + wskazanie dalszej ścieżki. |
 
 ## Element interaktywny — szczegół
@@ -53,7 +54,7 @@
 
 ## Quiz inline
 
-- **Liczba pytań:** 9, identyfikatory **Q9–Q17** (zgodnie z curriculum, wymagania/06).
+- **Pula modułu:** Q9–Q17 (9 pytań) — zasila również test końcowy. **Quiz inline:** 5–8 pytań losowanych z puli, dobranych do treści widzianej na danej ścieżce (wg wymagania/07). Identyfikatory puli **Q9–Q17** zgodnie z curriculum (wymagania/06).
 - **Mapowanie typów:**
   - **Q9–Q11** — single choice: rozpoznanie pojęć (token, tokenizacja, okno kontekstu, parametry).
   - **Q12–Q13** — multiple choice: skutki zbyt małego kontekstu (E2).
@@ -61,6 +62,7 @@
   - **Q16–Q17** — scenariusz: decyzja QA na podstawie sytuacji (np. długi dokument vs. okno; wybór modelu mimo większej liczby parametrów) (E1, E2, E4).
 - **Sprawdzane kompetencje:** rozumienie tokenizacji i okna kontekstu, identyfikacja skutków za małego kontekstu, intuicja transformera/uwagi, świadomość, że parametry ≠ jakość.
 - **Tryb:** inline (nauka) — natychmiastowy feedback i wyjaśnienie po każdej odpowiedzi (design-baseline 2.2).
+- **Dobór dla S1 (SKRÓCONY):** dobór 5–8 pytań dla S1 **jawnie pomija pytania o kolejność procesu (Q14–Q15)**, spójnie z uproszczeniem ekranu 5 (attention/transformer bez diagramu kolejności kroków). Dzięki temu S1 nie jest oceniany z treści, której nie uczył. Treść attention i pula Q14–Q15 pozostają pełne dla S2/S3.
 - **Pytania krytyczne:** brak w tym module.
 
 ## Mapowanie na efekty i pytania

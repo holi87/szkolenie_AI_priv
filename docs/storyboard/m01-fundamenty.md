@@ -6,7 +6,8 @@
 | Czas | 35 min |
 | Ścieżki | S1: obowiązkowy; S2: obowiązkowy; S3: obowiązkowy |
 | Element interaktywny | „Klasyfikator zadań" (drag & drop z alternatywą klawiaturową) |
-| Quiz inline | 8 pytań (Q1–Q8) |
+| Pula modułu | Q1–Q8 (8 pytań) |
+| Quiz inline | 5–8 z puli |
 
 > **Uwaga o ścieżkach.** M1 jest obowiązkowy dla wszystkich trzech ścieżek (S1/S2/S3), więc **żaden ekran nie jest wycinany przez gating**. Rdzeń (ekrany 1–4, 6–9) jest wspólny i identyczny dla S1/S2/S3. Jeden ekran (ekran 5, „Trening vs. wnioskowanie") niesie pogłębienie techniczne — w wariancie świadomościowym dla S1 jest **uproszczony** (czytany skrótowo, bez szczegółu inference cost), pełny dla S2/S3. To nie jest pominięcie, tylko regulacja głębokości w obrębie obowiązkowego modułu.
 >
@@ -31,7 +32,7 @@ Efekty z curriculum (`wymagania/06`) rozbite na ponumerowane pozycje:
 | 5 | Trening vs. wnioskowanie | treść | **Jedna koncepcja: training vs inference.** Trening (*training*) = jednorazowe nauczenie modelu na dużym zbiorze, ustala wzorce. Wnioskowanie (*inference*) = każde użycie modelu na Twoim wejściu, tu powstaje odpowiedź. Wniosek dla testera: model nie „douczy się" z Twojego jednego promptu i nie zna zdarzeń po dacie treningu. Dla S2/S3 dodatkowo: koszt wnioskowania (*inference cost*) rośnie z długością wejścia/wyjścia. | E2 | **S1: uproszczony** (świadomościowo, bez inference cost); S2/S3: pełny |
 | 6 | Trzy typy zadań: generatywne / klasyfikacyjne / deterministyczne | decyzja | **Jedna decyzja: do którego typu należy zadanie.** Rama przed ćwiczeniem (przygotowanie E3). Generatywne = tworzy nową treść (LLM/GenAI). Klasyfikacyjne = przypisuje etykietę z gotowego zbioru (klasyczny ML). Deterministyczne = ten sam wejściowy → zawsze ten sam wynik wg jawnej reguły (system regułowy, *rule-based*). Pytanie prowadzące do refleksji: „jakiego rodzaju jest zadanie, które masz teraz na biurku?" Bez pełnej listy zadań — to ekran ramujący kategorie, ćwiczenie jest na ekranie 7. | E3 | rdzeń (S1/S2/S3) |
 | 7 | Klasyfikator zadań | interakcja | **Element interaktywny.** Uczestnik przyporządkowuje **12 syntetycznych zadań** do **4 kategorii**: LLM / klasyczny ML / system regułowy / człowiek-ekspert. Po zatwierdzeniu: tekstowy feedback z uzasadnieniem przy każdym zadaniu + wynik liczbowy. Szczegół, dane i alternatywa klawiaturowa — w sekcji „Element interaktywny" poniżej. | E1, E3 | rdzeń (S1/S2/S3) |
-| 8 | Quiz inline (Q1–Q8) | quiz-inline | **8 pytań z natychmiastowym feedbackiem** (tryb nauki). Q1–Q4 single choice (rozróżnienie pojęć, output probabilistyczny). Q5–Q6 dopasowanie (zadanie → typ/technologia). Q7–Q8 scenariusz decyzyjny QA (wybór właściwego rozwiązania + uzasadnienie). Brak pytań krytycznych. Feedback i wyjaśnienie pojawiają się od razu po każdej odpowiedzi. | E1, E2, E3 | rdzeń (S1/S2/S3) |
+| 8 | Quiz inline (5–8 z puli Q1–Q8) | quiz-inline | **5–8 pytań losowanych z puli Q1–Q8, z natychmiastowym feedbackiem** (tryb nauki). Q1–Q4 single choice (rozróżnienie pojęć, output probabilistyczny). Q5–Q6 dopasowanie (zadanie → typ/technologia). Q7–Q8 scenariusz decyzyjny QA (wybór właściwego rozwiązania + uzasadnienie). Brak pytań krytycznych. Feedback i wyjaśnienie pojawiają się od razu po każdej odpowiedzi. | E1, E2, E3 | rdzeń (S1/S2/S3) |
 | 9 | Podsumowanie i następny krok | podsumowanie | **Domknięcie modułu.** 3–4 zdania syntezy: GenAI tworzy, klasyczny ML klasyfikuje, LLM przewiduje najbardziej prawdopodobny tekst (nie prawdę), a dobór technologii zależy od typu zadania. Mini-checklista „zanim użyjesz LLM". Pasek postępu modułu + „następny krok →": M2 (architektura LLM: tokeny i context window). | E1, E2, E3 | rdzeń (S1/S2/S3) |
 
 **Liczba ekranów: 9** (mieści się w 6–12 dla 35 min: ekrany treści ~3 min, ekran 6 decyzja ~3 min, interakcja ~7 min, quiz ~8 min, podsumowanie ~2 min).
@@ -61,7 +62,7 @@ Efekty z curriculum (`wymagania/06`) rozbite na ponumerowane pozycje:
 
 ## Quiz inline
 
-- **Liczba pytań: 8**, mapowanie zgodne z danymi modułu (`wymagania/06`): **Q1–Q4** single choice; **Q5–Q6** dopasowanie; **Q7–Q8** scenariusz decyzyjny.
+- **Pula modułu: Q1–Q8 (8 pytań)** — zasila również test końcowy. **Quiz inline: 5–8 pytań losowanych z puli, dobranych do treści widzianej na danej ścieżce** (wg `wymagania/07`). Mapowanie puli zgodne z danymi modułu (`wymagania/06`): **Q1–Q4** single choice; **Q5–Q6** dopasowanie; **Q7–Q8** scenariusz decyzyjny.
 - **Pytania krytyczne: brak.**
 - **Co sprawdza:**
   - Q1–Q4 (single choice) — rozumienie pojęć: czym różni się GenAI od klasycznego ML, czym LLM w GenAI, oraz że output jest probabilistyczny, a nie gwarantowaną prawdą (E1, E2).

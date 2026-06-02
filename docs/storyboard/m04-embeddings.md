@@ -6,7 +6,8 @@
 | Czas | 50 min |
 | Ścieżki | S1: opcjonalny; S2: opcjonalny ROZSZERZONY; S3: obowiązkowy |
 | Element interaktywny | „Mapa semantyczna” (wizualizacja embeddings 2D) |
-| Quiz inline | 8 pytań, Q25–Q32 (Q25–Q27 single; Q28–Q30 multiple; Q31–Q32 scenariusz diagnostyczny) |
+| Pula modułu | Q25–Q32 (8 pytań) — zasila również test końcowy (Q25–Q27 single; Q28–Q30 multiple; Q31–Q32 scenariusz diagnostyczny) |
+| Quiz inline | 5–8 pytań losowanych z puli modułu (wg wymagania/07) |
 
 > **Uwaga o gatingu (z curriculum, wymagania/06 — autorytatywne).** M4 **nie ma** wariantu skróconego ani świadomościowego. Gradient głębokości biegnie odwrotnie niż w M2/M6: S2 dostaje wersję **rozszerzoną** (więcej, nie mniej), S3 jest obowiązkowy w pełni. Dlatego nie pomijamy ekranów „w wersji skróconej”. Zamiast tego ekrany **rdzeniowe** są dostępne dla wszystkich ścieżek (S1/S2/S3), a ekrany **pogłębiające** (edge case’y, diagnostyka) oznaczamy jako „pogłębienie: S2 rozszerzony / S3” — to one są opcjonalne dla uczestnika S1.
 
@@ -34,7 +35,7 @@
 | 7 | Dobór zapytania do wyszukiwania semantycznego | treść | E4: jak formułować zapytanie (ang. *query*), by trafić w intencję — pełna fraza zamiast pojedynczego słowa, doprecyzowanie kontekstu i wersji, unikanie samej negacji jako zapytania. Synt. para „słabe vs lepsze zapytanie” i jak zmienia listę wyników. | E4 | S1/S2/S3 (rdzeń) |
 | 8 | Chcesz pogłębić? | decyzja | Decyzja ścieżki: kontynuacja do pełnej „Mapy semantycznej” z przypadkami diagnostycznymi (S2 rozszerzony / S3, zalecane) albo skok do uproszczonej wersji i quizu (S1). Jeden wybór, bez ściany tekstu; widoczny „następny najlepszy krok”. | E3, E4 | decyzja gatingu (rdzeń) |
 | 9 | Mapa semantyczna | interakcja | Element interaktywny: uczestnik przesuwa zapytania i fragmenty na mapie 2D i obserwuje, które są blisko semantycznie, ale niepoprawne biznesowo (np. para z negacją z ekranu 5). Pełny opis + alternatywa klawiaturowa w sekcji niżej. | E1, E2, E3, E4 | S1/S2/S3; pełny zestaw przypadków w S2 rozszerzony / S3, uproszczony w S1 |
-| 10 | Quiz inline (Q25–Q32) | quiz-inline | 8 pytań w trybie nauki (feedback i wyjaśnienie od razu po odpowiedzi). Q25–Q27 single, Q28–Q30 multiple, Q31–Q32 scenariusz diagnostyczny. Mapowanie kompetencji w sekcji „Quiz inline”. Brak pytań krytycznych. | E1, E2, E3, E4 | S1/S2/S3 (rdzeń); Q31–Q32 oznaczone jako pogłębione |
+| 10 | Quiz inline (5–8 z puli Q25–Q32) | quiz-inline | 5–8 pytań losowanych z puli modułu (Q25–Q32) w trybie nauki (feedback i wyjaśnienie od razu po odpowiedzi). Typy w puli: Q25–Q27 single, Q28–Q30 multiple, Q31–Q32 scenariusz diagnostyczny. Mapowanie kompetencji w sekcji „Quiz inline”. Brak pytań krytycznych. | E1, E2, E3, E4 | S1/S2/S3 (rdzeń); Q31–Q32 oznaczone jako pogłębione |
 | 11 | Podsumowanie i następny krok | podsumowanie | Skrót: embeddings = znaczenie jako wektor; cosine = kierunek; 4 pułapki podobieństwa; jak formułować zapytanie. „Następny krok →” do M5 (Vector databases i similarity search). Widoczny postęp procentowy. | E1, E2, E3, E4 | S1/S2/S3 (rdzeń) |
 
 ---
@@ -60,7 +61,7 @@ Wariant w pełni klawiaturowy bez przeciągania: **lista wyboru zapytania** (rad
 
 ## Quiz inline
 
-- **Liczba pytań:** 8. **Identyfikatory:** Q25–Q32. **Pytania krytyczne:** brak.
+- **Pula modułu:** Q25–Q32 (8 pytań) — zasila również test końcowy. **Quiz inline:** 5–8 pytań losowanych z puli, dobranych do treści widzianej na danej ścieżce (wg wymagania/07). **Pytania krytyczne:** brak.
 - **Typy i mapowanie:**
   - **Q25–Q27 — single choice:** rozpoznanie pojęć — embeddings jako reprezentacja znaczenia (E1), cosine similarity jako miara kierunku (E2).
   - **Q28–Q30 — multiple choice:** rozróżnianie poprawnych i mylących sygnałów podobieństwa; cechy dobrego zapytania semantycznego (E2, E3, E4).

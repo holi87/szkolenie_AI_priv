@@ -6,7 +6,8 @@
 | Czas | 55 min |
 | Ścieżki | S1: opcjonalny; S2: opcjonalny; S3: obowiązkowy |
 | Element interaktywny | „Retrieval debugger” (debuger wyszukiwania) |
-| Quiz inline | 8 pytań, Q33–Q40 |
+| Pula modułu | Q33–Q40 (8 pytań) — zasila również test końcowy |
+| Quiz inline | 5–8 pytań losowanych z puli |
 
 > Storyboard to STRUKTURA ekranów, nie pełna treść. Opisy ekranów są skrótem planu treści (każdy ≤300 słów); pełne teksty powstają w module wdrożeniowym M4 (issue [21]). Wszystkie dane przykładowe są **syntetyczne** — żadnych realnych danych klienta ani PII. Terminy techniczne po polsku, oryginał w nawiasie przy pierwszym użyciu. Każdy ekran ma widoczny postęp procentowy i „następny najlepszy krok →” (zgodnie z `docs/design-baseline.md`).
 
@@ -30,7 +31,7 @@
 | 7 | Jakość chunków | treść | Chunk = fragment dokumentu zaindeksowany jako jednostka. Zła granica chunku (urwane zdanie, zlepek dwóch wymagań) daje wektor o rozmytym znaczeniu → podobny, ale bezużyteczny wynik. Krótko: za duży vs za mały chunk. Łączy się z E4. | E3, E4 | S1/S2: **uproszczony** (jedno zdanie intuicji). S3: pełny. |
 | 8 | Podobny, ale nieużyteczny — diagnoza | ćwiczenie | Mini-ćwiczenie diagnostyczne (niepunktowane): syntetyczne zapytanie + 3 zwrócone fragmenty z wysokim podobieństwem, z których 2 są bezużyteczne. Uczestnik wybiera przyczynę (zły chunk / brak filtra metadanych / ANN pominął lepszy / podobieństwo ≠ trafność). Tekstowy feedback z linkiem do ekranu źródłowego. Przygotowuje do interakcji. | E4 | Wszystkie ścieżki. |
 | 9 | Retrieval debugger | interakcja | Element interaktywny: uczestnik dobiera top-k, filtr metadanych i próg podobieństwa (similarity threshold) na syntetycznym mini-korpusie QA i obserwuje wpływ na recall i precision. Szczegół i alternatywa klawiaturowa — sekcja „Element interaktywny”. | E2, E3, E4 | Wszystkie ścieżki. S1/S2: zachęta do min. 1 przebiegu; bez wymogu eksploracji wszystkich kombinacji. |
-| 10 | Quiz inline (Q33–Q40) | quiz-inline | 8 pytań, natychmiastowy feedback i wyjaśnienie (tryb nauki). Sprawdza E1–E4. Szczegół — sekcja „Quiz inline”. Brak pytań krytycznych w tym module. | E1, E2, E3, E4 | Wszystkie ścieżki. |
+| 10 | Quiz inline (5–8 z puli Q33–Q40) | quiz-inline | 5–8 z puli Q33–Q40, natychmiastowy feedback i wyjaśnienie (tryb nauki). Sprawdza E1–E4. Szczegół — sekcja „Quiz inline”. Brak pytań krytycznych w tym module. | E1, E2, E3, E4 | Wszystkie ścieżki. |
 | 11 | Podsumowanie i następny krok | podsumowanie | 4–5 zdań: baza wektorowa = co znaleziono; exact vs ANN = kompromis recall/szybkość; indeks, metadane i chunki sterują precision/recall; „podobny ≠ użyteczny”. Następny krok → M6 RAG: jak z dobrego retrieval zbudować odpowiedź z cytatami. | E1, E2, E3, E4 | Wszystkie ścieżki. |
 
 **Liczba ekranów:** 11 (≈5 min/ekran przy 55 min). W passie świadomościowym S1/S2 efektywnie krótszy: ekran 5 pomijany, ekrany 4 i 7 uproszczone.
@@ -60,7 +61,7 @@
 
 ## Quiz inline
 
-- **Liczba i mapowanie:** 8 pytań, **Q33–Q40** (zgodnie z curriculum, `wymagania/06`).
+- **Liczba i mapowanie:** Pula modułu: **Q33–Q40** (8 pytań, zgodnie z curriculum, `wymagania/06`) — zasila również test końcowy. Quiz inline: **5–8 pytań** losowanych z puli, dobranych do treści widzianej na danej ścieżce (wg `wymagania/07`).
   - **Q33–Q35** — single choice (jednokrotny wybór): rola bazy wektorowej; exact vs ANN; pojęcia recall/precision/top-k.
   - **Q36–Q37** — multiple choice (wielokrotny wybór): czynniki wpływające na wynik (indeks, filtr metadanych, jakość chunków, próg).
   - **Q38–Q40** — scenariusze retrieval: dana odpowiedź/zestaw zwróconych fragmentów → uczestnik diagnozuje przyczynę nietrafności lub dobiera korektę parametrów.

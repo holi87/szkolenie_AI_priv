@@ -6,7 +6,8 @@
 | Czas | 70 min |
 | Ścieżki | S1: opcjonalny ŚWIADOMOŚCIOWY; S2: obowiązkowy PRAKTYCZNY; S3: obowiązkowy PEŁNY |
 | Element interaktywny | „Zbuduj pipeline RAG" (konfiguracja źródeł, chunking, top-k, odpowiedź z cytatami dla scenariusza QA) |
-| Quiz inline | 10 pytań, Q41–Q50 |
+| Pula modułu | Q41–Q50 (10 pytań) |
+| Quiz inline | 5–8 z puli modułu |
 
 > **Konwencja ścieżek w tym storyboardzie.** Każdy ekran ma oznaczenie wariantu:
 > - **S1 (ŚWIADOMOŚCIOWY)** — moduł opcjonalny; wersja skrócona: tylko ekrany koncepcyjne i decyzyjne, bez technicznych szczegółów chunkingu i bez konfiguracji pełnego pipeline. Część ekranów pomijana (P) lub uproszczona (U).
@@ -35,7 +36,7 @@
 | 8 | Diagnoza: która warstwa zawiodła | ćwiczenie | Utrwalenie E4: 2–3 syntetyczne odpowiedzi modelu z widocznym pobranym kontekstem i cytatami. Dla każdej wybierz warstwę błędu (radio: retrieval / generation / źródłowy / brak błędu). Feedback tekstowy tłumaczy sygnały: brak właściwego cytatu = retrieval; cytat poprawny, ale wniosek sprzeczny = generation; cytat poprawny, ale treść w dokumencie błędna = źródłowy. Most do Q44–Q49. | E4 | S2,S3 (S1: P — diagnostyka warstwowa to kompetencja praktyczna/inżynierska) |
 | 9 | Pogłębienie inżynierskie: reranking i grounding | treść | Tylko S3. Przesortowanie wyników (*reranking*) po wstępnym retrievalu — poprawa trafności top-k. Ugruntowanie odpowiedzi (*grounding*) i wymuszanie cytatów: jak weryfikować, że każde zdanie odpowiedzi ma oparcie w pobranym fragmencie. Krótko o pomiarach jakości RAG jako zapowiedź M12 (ewaluacja). Bez powtarzania metryk retrievalu z M5. | E1,E4 | S3 (S1: P; S2: P — poza zakresem praktycznym) |
 | 10 | Zbuduj pipeline RAG | interakcja | Element interaktywny modułu — patrz sekcja „Element interaktywny". Uczestnik konfiguruje źródła, chunking i top-k dla scenariusza QA na korpusie „SklepDemo" i ogląda odpowiedź z cytatami. Integruje E1, E2, E4. | E1,E2,E4 | S2,S3 (S1: U — w wersji świadomościowej demonstracja „gotowego" pipeline tylko do obejrzenia, bez samodzielnej konfiguracji; konfiguracja opcjonalna) |
-| 11 | Quiz inline M6 | quiz-inline | 10 pytań Q41–Q50 z natychmiastowym feedbackiem i wyjaśnieniem (tryb nauki). Szczegóły w sekcji „Quiz inline". Pytań krytycznych brak. | E1,E2,E3,E4 | S2,S3 (S1: U — w wersji świadomościowej quiz opcjonalny/nieobowiązkowy do zaliczenia) |
+| 11 | Quiz inline M6 | quiz-inline | 5–8 z puli Q41–Q50 z natychmiastowym feedbackiem i wyjaśnieniem (tryb nauki). Szczegóły w sekcji „Quiz inline". Pytań krytycznych brak. | E1,E2,E3,E4 | S2,S3 (S1: U — w wersji świadomościowej quiz opcjonalny/nieobowiązkowy do zaliczenia) |
 | 12 | Podsumowanie i następny krok | podsumowanie | Skrót czterech wniosków (kolejność pipeline, dobór chunkingu, RAG vs fine-tuning, trzy warstwy błędu). Lista „co potrafię po M6" zmapowana na E1–E4. „Następny krok →": przejście do M7 (prompt engineering) — jak pisać prompt korzystający z pobranego kontekstu. Widoczny postęp procentowy modułu. | E1,E2,E3,E4 | S1,S2,S3 |
 
 **Bilans czasu (orientacyjnie):** 12 ekranów; ekrany treściowe/decyzyjne 4–6 min, ćwiczenia ~5 min, interakcja ~10 min, quiz ~12 min → ≈70 min dla S2/S3. Wersja S1 (ŚWIADOMOŚCIOWA) korzysta z ekranów 1, 2, 6, 7, 12 (+ opcjonalnie 10 jako demo i 11 jako quiz nieobowiązkowy), co skraca moduł do orientacyjnie 25–30 min.
@@ -67,7 +68,7 @@
 
 ## Quiz inline
 
-**Liczba i mapowanie:** 10 pytań, **Q41–Q50** (zgodnie z curriculum, `wymagania/06`). Pytań krytycznych brak.
+**Liczba i mapowanie:** Pula modułu: Q41–Q50 (10 pytań) — zasila również test końcowy. Quiz inline: 5–8 pytań losowanych z puli, dobranych do treści widzianej na danej ścieżce (wg `wymagania/07`). Mapowanie zakresów zgodnie z curriculum (`wymagania/06`). Pytań krytycznych brak.
 
 | Zakres | Typ | Sprawdzana kompetencja | Efekt |
 |---|---|---|---|

@@ -6,7 +6,8 @@
 | Czas | 75 min |
 | Ścieżki | S1: opcjonalny; S2: obowiązkowy; S3: obowiązkowy |
 | Element interaktywny | „QA workbench" |
-| Quiz inline | 12 pytań, Q61–Q72 |
+| Pula modułu | Q61–Q72 (12 pytań) — zasila również test końcowy |
+| Quiz inline | 5–8 pytań losowanych z puli |
 
 > **Uwaga o wariantach ścieżek.** Curriculum (`wymagania/06`) określa dla M8 status S1 jako po prostu **opcjonalny** — bez kwalifikatora „w wersji skróconej" ani „świadomościowej" (inaczej niż np. M2 czy M6). Dlatego M8 **nie ma** wariantu skróconego ani świadomościowego: moduł jest przerabiany w całości albo pomijany. Dla S2 i S3 (obowiązkowe) obowiązują wszystkie ekrany; dla S1 cały moduł jest do wyboru, ale jeśli uczestnik go podejmuje, przechodzi tę samą sekwencję. Kolumna „Ścieżki/wariant" nie zawiera więc pomijania pojedynczych ekranów.
 
@@ -32,7 +33,7 @@ Rozbicie opisu efektów z curriculum na ponumerowane, mierzalne efekty:
 | 6 | Czy ten output nadaje się do dokumentacji QA? | treść | Kryteria kontroli merytorycznej (review checklist) przed wklejeniem outputu do dokumentacji: zgodność z wymaganiem, kompletność, brak zmyślonych faktów (halucynacji), weryfikowalność, brak danych wrażliwych. Krótka rubryka „dopuść / popraw / odrzuć". Łącznik do M11 (weryfikacja) i M10 (dane). | E4 | S1/S2/S3 — wszystkie |
 | 7 | Asystent czy decydent — gdzie postawić granicę | decyzja | Decyzja: które zadania QA LLM może wspierać jako asystent (szkic, draft, burza pomysłów), a gdzie decyzję podejmuje człowiek (human-in-the-loop): akceptacja przypadków, ocena ryzyka krytycznego, zatwierdzenie do release. Krótkie zestawienie „asystent vs decydent" z 3 syntetycznymi sytuacjami; uczestnik wskazuje granicę. | E5 | S1/S2/S3 — wszystkie |
 | 8 | QA workbench — oceń output LLM | interakcja | Element interaktywny. Uczestnik dostaje syntetyczne wymaganie i syntetyczny output LLM (zestaw przypadków + założeń), po czym oznacza: brakujące testy, błędne założenia, ryzyka i elementy wymagające weryfikacji. Feedback tekstowy wskazuje trafienia i przeoczenia oraz linkuje do ekranów 2–7. Szczegół działania i alternatywa klawiaturowa — sekcja „Element interaktywny". | E1,E2,E3,E4,E5 | S1/S2/S3 — wszystkie |
-| 9 | Quiz inline — Q61–Q72 | quiz-inline | 12 pytań w trybie nauki: feedback i wyjaśnienie natychmiast po odpowiedzi. Q61–Q64 scenariusz QA (analiza outputu, pokrycie, decyzja asystent/decydent); Q65–Q68 multiple choice (kompletność, duplikaty, kryteria dopuszczenia do dokumentacji); Q69–Q72 dopasowanie artefakt→ryzyko (checklista ryzyk). Mapowanie pytań — sekcja „Quiz inline". | E1,E2,E3,E4,E5 | S1/S2/S3 — wszystkie |
+| 9 | Quiz inline — 5–8 z puli Q61–Q72 | quiz-inline | 5–8 pytań losowanych z puli modułu (Q61–Q72) w trybie nauki: feedback i wyjaśnienie natychmiast po odpowiedzi. Pula obejmuje: Q61–Q64 scenariusz QA (analiza outputu, pokrycie, decyzja asystent/decydent); Q65–Q68 multiple choice (kompletność, duplikaty, kryteria dopuszczenia do dokumentacji); Q69–Q72 dopasowanie artefakt→ryzyko (checklista ryzyk). Mapowanie pytań — sekcja „Quiz inline". | E1,E2,E3,E4,E5 | S1/S2/S3 — wszystkie |
 | 10 | Podsumowanie i następny krok | podsumowanie | Synteza pięciu efektów w jednym zdaniu na efekt; przypomnienie zasady „asystent, nie decydent". „Następny najlepszy krok": M9 (integracje i agenty) dla S3 i opcjonalnie S2; dla S1 — powrót do ścieżki obowiązkowej. Widoczny postęp procentowy modułu. | E1,E2,E3,E4,E5 | S1/S2/S3 — wszystkie |
 
 ## Element interaktywny — szczegół
@@ -53,7 +54,7 @@ Rozbicie opisu efektów z curriculum na ponumerowane, mierzalne efekty:
 
 ## Quiz inline
 
-**Liczba pytań:** 12 (Q61–Q72), tryb nauki (feedback natychmiast po odpowiedzi).
+**Pula modułu:** Q61–Q72 (12 pytań) — zasila również test końcowy. **Quiz inline:** 5–8 pytań losowanych z puli, dobranych do treści widzianej na danej ścieżce (wg `wymagania/07`). Tryb nauki (feedback natychmiast po odpowiedzi). Poniższa tabela opisuje całą pulę modułu, z której losowany jest quiz inline.
 
 | Zakres Q | Typ | Sprawdzana kompetencja |
 |---|---|---|
