@@ -1,0 +1,95 @@
+{
+  "_meta": {
+    "issue": "#7 [07][M1] Zdefiniuj rubryki zadań praktycznych",
+    "version": "0.1",
+    "doc": "docs/rubryki-zadan.md",
+    "source": "wymagania/07 (skale 0-5 i 0-3, progi, feedback), wymagania/06 (moduły, efekty)",
+    "notes": "Kryteria binarne (1/0) sumują się do maxScore. Progi: S2 promptowe >=4/5; S3 RAG i ewaluacja >=70% (>=3.5/5) jako warunek konieczny w M6 i M12."
+  },
+  "rubrics": [
+    {
+      "id": "R1-prompt",
+      "task": "Zadanie promptowe (Prompt clinic)",
+      "module": "M7",
+      "paths": ["S2", "S3"],
+      "scaleMax": 5,
+      "passThreshold": 4,
+      "passScope": "S2: warunek konieczny",
+      "criteria": [
+        { "id": "K1", "name": "Rola i cel", "points": 1 },
+        { "id": "K2", "name": "Kontekst i dane wejściowe (bez danych wrażliwych)", "points": 1 },
+        { "id": "K3", "name": "Ograniczenia i kryteria jakości", "points": 1 },
+        { "id": "K4", "name": "Format wyjścia (weryfikowalny)", "points": 1 },
+        { "id": "K5", "name": "Bezpieczeństwo i weryfikowalność", "points": 1 }
+      ],
+      "belowThresholdFeedback": "Brakuje: {failedCriteria}. Uzupełnij rolę/cel, kontekst, ograniczenia i kryteria, format wyjścia oraz higienę danych."
+    },
+    {
+      "id": "R2-rag",
+      "task": "Zadanie RAG readiness",
+      "module": "M6",
+      "paths": ["S3"],
+      "scaleMax": 5,
+      "passThreshold": 3.5,
+      "passScope": "S3: warunek konieczny (>=70% w M6)",
+      "criteria": [
+        { "id": "K1", "name": "Źródła i grounding", "points": 1 },
+        { "id": "K2", "name": "Chunking + overlap", "points": 1 },
+        { "id": "K3", "name": "Retrieval (top-k, filtry metadanych)", "points": 1 },
+        { "id": "K4", "name": "Cytaty / weryfikowalność", "points": 1 },
+        { "id": "K5", "name": "Diagnoza błędów (retrieval/generation/źródłowy)", "points": 1 }
+      ],
+      "belowThresholdFeedback": "Poniżej progu w M6. Brakuje: {failedCriteria}. Wróć do ekranów pipeline/chunking/diagnozy błędów."
+    },
+    {
+      "id": "R3-eval",
+      "task": "Zadanie ewaluacji (Judge/golden set)",
+      "module": "M12",
+      "paths": ["S3"],
+      "scaleMax": 5,
+      "passThreshold": 3.5,
+      "passScope": "S3: warunek konieczny (>=70% w M12)",
+      "criteria": [
+        { "id": "K1", "name": "Golden set adekwatny do use case", "points": 1 },
+        { "id": "K2", "name": "Metryki z uzasadnieniem", "points": 1 },
+        { "id": "K3", "name": "Rubryka LLM-as-a-judge (jednoznaczna)", "points": 1 },
+        { "id": "K4", "name": "Bias/position bias + kalibracja z ekspertem", "points": 1 },
+        { "id": "K5", "name": "Próg akceptacji jakości", "points": 1 }
+      ],
+      "belowThresholdFeedback": "Poniżej progu w M12. Brakuje: {failedCriteria}. Wróć do golden set / metryk / rubryki / kalibracji."
+    },
+    {
+      "id": "R4-qa-workbench",
+      "task": "QA workbench (ocena outputu QA)",
+      "module": "M8",
+      "paths": ["S2", "S3"],
+      "scaleMax": 5,
+      "passThreshold": null,
+      "passScope": "ćwiczeniowe (feedback / wkład do quizu)",
+      "criteria": [
+        { "id": "K1", "name": "Pokrycie testów", "points": 1 },
+        { "id": "K2", "name": "Braki pokrycia", "points": 1 },
+        { "id": "K3", "name": "Testy pozorne / duplikaty", "points": 1 },
+        { "id": "K4", "name": "Ryzyka / błędne założenia", "points": 1 },
+        { "id": "K5", "name": "Granica decyzji (weryfikacja człowieka)", "points": 1 }
+      ],
+      "belowThresholdFeedback": "Brakuje: {failedCriteria}."
+    },
+    {
+      "id": "R5-output-analysis",
+      "task": "Analiza outputu (Output verifier)",
+      "module": "M11",
+      "paths": ["S1", "S2", "S3"],
+      "scaleMax": 3,
+      "passThreshold": null,
+      "passScope": "ćwiczeniowe",
+      "levels": [
+        { "points": 3, "descriptor": "Wszystkie kluczowe zdania poprawnie sklasyfikowane; ryzykowne i nieuzasadnione wyłapane" },
+        { "points": 2, "descriptor": "Większość poprawna; pojedynczy błąd niekrytyczny" },
+        { "points": 1, "descriptor": "Częściowo; pominięte istotne ryzyko lub błąd na zdaniu krytycznym" },
+        { "points": 0, "descriptor": "Brak rozpoznania ryzyka / akceptacja nieuzasadnionych treści" }
+      ],
+      "belowThresholdFeedback": "Przeoczono: {kategorie}. Wróć do checklisty weryfikacji outputu."
+    }
+  ]
+}
