@@ -12,9 +12,9 @@ Lokalne zasady pracy dla repo `szkolenie_AI_priv`.
 
 ## Workflow GitHub
 
-- Kazdy GitHub issue musi byc realizowany na osobnym branchu.
+- Kazda GitHub paczka (oznaczona MX, gdzie X to liczba)  musi byc realizowany na osobnym branchu.
 - Nie commituj bezposrednio do `main` i nic nie merguj lokalnie do `main`.
-- Kazda zmiana wdrozeniowa konczy sie pull requestem.
+- Kazda zmiana wdrozeniowa konczy sie pull requestem (czyli Każdy MX ma swoj PR).
 - PR musi zamykac realizowane issue slowem kluczowym `Closes #<numer>` w opisie PR (np. `Closes #12`), zeby issue zamknelo sie automatycznie po merge. Dla wielu issue uzyj osobnej linii `Closes` na kazde issue.
 - Po wystawieniu PR czekamy na zielone CI oraz review Codexa.
 - Nie zamykaj issue i nie uznawaj pracy za zakonczona, dopoki PR nie przejdzie CI i review.
