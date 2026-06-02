@@ -1,0 +1,114 @@
+{
+  "_meta": {
+    "issue": "#5 [05][M1] Zamroź macierz ścieżek S1/S2/S3",
+    "version": "0.1",
+    "status": "freeze-candidate (do recenzji M1)",
+    "source": "wymagania/06_program_curriculum.md (autorytatywne dla statusu i czasu modułów), wymagania/07 (testy i progi), wymagania/03 (persony)",
+    "doc": "docs/macierz-sciezek.md",
+    "notes": "Czas treści modułów wg curriculum (doc 06). Czas skrócony oznaczony jako szacunek do doprecyzowania w storyboard (#6). Progi i testy wg doc 07. Wagi wyniku: quiz inline 30% / test końcowy 60% / zadanie praktyczne 10%."
+  },
+  "statusLegend": {
+    "obowiazkowy": "wymagany do ukończenia ścieżki (gating: blokuje zaliczenie)",
+    "obowiazkowy_skrocony": "wymagany, w wersji skróconej (podzbiór treści; czas do doprecyzowania w #6)",
+    "opcjonalny": "dostępny, nie wymagany do zaliczenia",
+    "opcjonalny_swiadomosciowy": "opcjonalny, wersja świadomościowa (lżejsza)",
+    "opcjonalny_rozszerzony": "opcjonalny, wersja rozszerzona"
+  },
+  "modules": {
+    "M1":  { "name": "Fundamenty GenAI i LLM", "timeFullMin": 35, "questions": 8 },
+    "M2":  { "name": "Architektura LLM", "timeFullMin": 45, "questions": 9 },
+    "M3":  { "name": "Parametry generacji", "timeFullMin": 30, "questions": 7 },
+    "M4":  { "name": "Embeddings", "timeFullMin": 50, "questions": 8 },
+    "M5":  { "name": "Vector databases", "timeFullMin": 55, "questions": 8 },
+    "M6":  { "name": "RAG", "timeFullMin": 70, "questions": 10 },
+    "M7":  { "name": "Prompt engineering", "timeFullMin": 65, "questions": 10 },
+    "M8":  { "name": "Zastosowania w QA", "timeFullMin": 75, "questions": 12 },
+    "M9":  { "name": "Integracje i agenty", "timeFullMin": 45, "questions": 8 },
+    "M10": { "name": "Bezpieczeństwo i governance", "timeFullMin": 80, "questions": 14, "criticalQuestions": 5 },
+    "M11": { "name": "Halucynacje i weryfikacja", "timeFullMin": 60, "questions": 10 },
+    "M12": { "name": "Ewaluacja LLM/RAG", "timeFullMin": 90, "questions": 12 }
+  },
+  "paths": {
+    "S1": {
+      "name": "Nietechniczna / decyzyjna",
+      "modules": {
+        "M1":  { "required": true,  "variant": "full" },
+        "M2":  { "required": true,  "variant": "skrocony" },
+        "M3":  { "required": false, "variant": "opcjonalny" },
+        "M4":  { "required": false, "variant": "opcjonalny" },
+        "M5":  { "required": false, "variant": "opcjonalny" },
+        "M6":  { "required": false, "variant": "swiadomosciowy" },
+        "M7":  { "required": true,  "variant": "skrocony" },
+        "M8":  { "required": false, "variant": "opcjonalny" },
+        "M9":  { "required": false, "variant": "swiadomosciowy" },
+        "M10": { "required": true,  "variant": "full" },
+        "M11": { "required": true,  "variant": "full" },
+        "M12": { "required": false, "variant": "opcjonalny" }
+      },
+      "requiredModules": ["M1", "M2", "M7", "M10", "M11"],
+      "estContentTimeMin": 245,
+      "estContentTimeNote": "M2 i M7 skrócone (szacunek ~30 i ~40 min); pełne czasy dałyby 285 min",
+      "assumedPathTime": "3.5-4.5 h (A4)",
+      "finalTestQuestions": 25,
+      "passThresholdPct": 75,
+      "criticalQuestionsRequiredPct": 100,
+      "practicalTasks": 0,
+      "extraPassConditions": ["100% pytań krytycznych M10"],
+      "attempts": 3
+    },
+    "S2": {
+      "name": "Praktyk-użytkownik / QA",
+      "modules": {
+        "M1":  { "required": true,  "variant": "full" },
+        "M2":  { "required": true,  "variant": "full" },
+        "M3":  { "required": true,  "variant": "full" },
+        "M4":  { "required": false, "variant": "rozszerzony" },
+        "M5":  { "required": false, "variant": "opcjonalny" },
+        "M6":  { "required": true,  "variant": "praktyczny" },
+        "M7":  { "required": true,  "variant": "full" },
+        "M8":  { "required": true,  "variant": "full" },
+        "M9":  { "required": false, "variant": "opcjonalny" },
+        "M10": { "required": true,  "variant": "full" },
+        "M11": { "required": true,  "variant": "full" },
+        "M12": { "required": false, "variant": "rozszerzony" }
+      },
+      "requiredModules": ["M1", "M2", "M3", "M6", "M7", "M8", "M10", "M11"],
+      "estContentTimeMin": 460,
+      "estContentTimeNote": "Suma pełnych czasów modułów obowiązkowych; przekracza założenie A4 6-7 h (patrz docs/macierz-sciezek.md, flaga F1)",
+      "assumedPathTime": "6-7 h (A4)",
+      "finalTestQuestions": 40,
+      "passThresholdPct": 78,
+      "criticalQuestionsRequiredPct": 100,
+      "practicalTasks": 1,
+      "extraPassConditions": ["100% pytań krytycznych M10", "min. 4/5 w zadaniu promptowym"],
+      "attempts": 3
+    },
+    "S3": {
+      "name": "Inżynier / automatyzacja / techniczny QA",
+      "modules": {
+        "M1":  { "required": true, "variant": "full" },
+        "M2":  { "required": true, "variant": "full" },
+        "M3":  { "required": true, "variant": "full" },
+        "M4":  { "required": true, "variant": "full" },
+        "M5":  { "required": true, "variant": "full" },
+        "M6":  { "required": true, "variant": "pelny" },
+        "M7":  { "required": true, "variant": "full" },
+        "M8":  { "required": true, "variant": "full" },
+        "M9":  { "required": true, "variant": "full" },
+        "M10": { "required": true, "variant": "full" },
+        "M11": { "required": true, "variant": "full" },
+        "M12": { "required": true, "variant": "full" }
+      },
+      "requiredModules": ["M1", "M2", "M3", "M4", "M5", "M6", "M7", "M8", "M9", "M10", "M11", "M12"],
+      "estContentTimeMin": 700,
+      "estContentTimeNote": "Suma pełnych czasów wszystkich 12 modułów; przekracza założenie A4 9-10 h (patrz docs/macierz-sciezek.md, flaga F1)",
+      "assumedPathTime": "9-10 h (A4)",
+      "finalTestQuestions": 55,
+      "passThresholdPct": 80,
+      "criticalQuestionsRequiredPct": 100,
+      "practicalTasks": 2,
+      "extraPassConditions": ["100% pytań krytycznych M10", "min. 70% w M6 i M12"],
+      "attempts": 3
+    }
+  }
+}
