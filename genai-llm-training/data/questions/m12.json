@@ -1,0 +1,549 @@
+{
+  "_meta": {
+    "module": "M12",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M12. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q105",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Weryfikuje, czy uczestnik dobiera właściwą metrykę jakości do objawu błędu odpowiedzi LLM/RAG.",
+      "prompt": "Oceniana odpowiedź modelu w korpusie SklepDemo zawiera zdanie sprzeczne z treścią dokumentu źródłowego (twierdzi, że link resetu hasła jest wielokrotnego użytku, choć źródło mówi: jednorazowy). Która metryka jakości najtrafniej wychwytuje ten problem?",
+      "options": [
+        {
+          "id": "A",
+          "text": "faithfulness (wierność źródłom)"
+        },
+        {
+          "id": "B",
+          "text": "relevance (adekwatność do pytania)"
+        },
+        {
+          "id": "C",
+          "text": "completeness (kompletność)"
+        },
+        {
+          "id": "D",
+          "text": "accuracy rozumiana wyłącznie jako poprawność gramatyczna"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Sprzeczność odpowiedzi z treścią źródła to klasyczny objaw niskiej faithfulness — odpowiedź nie jest wierna źródłu, na którym powinna się opierać.",
+      "feedbackIncorrect": "Tu nie chodzi o trafność tematu (relevance) ani o brak części odpowiedzi (completeness), lecz o zgodność ze źródłem. Powtórz definicję faithfulness na ekranie metryk jakości.",
+      "references": [
+        "M12.4",
+        "M12.5"
+      ]
+    },
+    {
+      "id": "Q106",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Weryfikuje rozumienie, dlaczego rubryka LLM-as-a-judge musi zawierać przykłady kotwiczące i definicje poziomów.",
+      "prompt": "Dlaczego dobra rubryka oceny (evaluation rubric) dla LLM-as-a-judge zawiera definicję każdego poziomu skali oraz przykłady kotwiczące (anchor examples)?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Bo zwiększają powtarzalność oceny — różne uruchomienia oceniają tak samo, według tych samych kryteriów zamiast ogólnego wrażenia"
+        },
+        {
+          "id": "B",
+          "text": "Bo skracają prompt oceniającego i obniżają koszt tokenów"
+        },
+        {
+          "id": "C",
+          "text": "Bo zastępują golden set i ground truth, więc nie trzeba dokumentować źródła prawdy"
+        },
+        {
+          "id": "D",
+          "text": "Bo gwarantują, że ocena automatyczna nigdy nie rozjedzie się z oceną eksperta"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Definicje poziomów i kotwice ustalają wspólny punkt odniesienia, więc ocena staje się powtarzalna zamiast być niepowtarzalnym 'czy to jest dobre?'.",
+      "feedbackIncorrect": "Rubryka nie zastępuje golden setu ani nie gwarantuje zgodności z ekspertem; jej celem jest powtarzalność oceny. Wróć do ekranu o rubryce dla LLM-as-a-judge.",
+      "references": [
+        "M12.6"
+      ]
+    },
+    {
+      "id": "Q107",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Weryfikuje umiejętność rozpoznania position bias na podstawie wzorca ocen w porównaniu parami.",
+      "prompt": "W laboratorium kalibracji w parze A3 vs A4 (dwa warianty odpowiedzi na to samo kryterium WYM-koszyk) oceniający LLM dał wyższą notę wariantowi pokazanemu jako pierwszy (A3: 2/2, A4: 1/2), podczas gdy QA-ekspert ocenił wyżej wariant drugi (A3: 1/2, A4: 2/2). Co najlepiej tłumaczy ten rozjazd?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Position bias — oceniający faworyzuje odpowiedź pokazaną jako pierwsza, niezależnie od jej rzeczywistej jakości"
+        },
+        {
+          "id": "B",
+          "text": "Niska faithfulness obu odpowiedzi wobec źródła"
+        },
+        {
+          "id": "C",
+          "text": "Brak reprezentatywnych pytań w golden secie"
+        },
+        {
+          "id": "D",
+          "text": "Ekspert popełnił błąd, bo ocena automatyczna jest z definicji bardziej obiektywna"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Werdykt zależy od kolejności prezentacji, a nie od treści — to definicyjny objaw position bias; zamiana kolejności A3/A4 prawdopodobnie odwróciłaby wynik judge'a.",
+      "feedbackIncorrect": "Wzorzec 'wyżej oceniona pozycja pokazana pierwsza' wskazuje na stronniczość pozycyjną, a nie na problem ze źródłem czy golden setem. Powtórz ekran o bias i position bias.",
+      "references": [
+        "M12.7",
+        "M12.10"
+      ]
+    },
+    {
+      "id": "Q108",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Weryfikuje umiejętność interpretacji zgodności międzyoceniacza i ograniczeń surowego wskaźnika % zgodności.",
+      "prompt": "Na golden secie GS-SklepDemo 90% pozycji ma ocenę 'pass', a oceniający LLM i ekspert zgadzają się co do werdyktu w 90% przypadków. Dlaczego sama 'zgodność 90%' może być myląca jako dowód kalibracji oceniającego?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Bo przy silnie nierównym rozkładzie ocen wysoki % zgodności da się osiągnąć niemal losowo — trzeba sprawdzić, czy zgadzają się też na rzadkich przypadkach 'fail'"
+        },
+        {
+          "id": "B",
+          "text": "Bo 90% to zawsze za niski próg i należy wymagać 100% zgodności"
+        },
+        {
+          "id": "C",
+          "text": "Bo zgodność międzyoceniacza dotyczy tylko relevance, a nie faithfulness"
+        },
+        {
+          "id": "D",
+          "text": "Bo % zgodności mierzy szybkość oceny, a nie jej jakość"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Gdy prawie wszystko jest 'pass', zgadzanie się 'na pass' jest tanie — kluczowe jest, czy oceniający trafia w rzadkie, ryzykowne przypadki 'fail'.",
+      "feedbackIncorrect": "Problemem nie jest sama wartość progu ani zakres metryki — to efekt nierównego rozkładu klas. Wróć do ekranu o kalibracji i zgodności międzyoceniacza.",
+      "references": [
+        "M12.8"
+      ]
+    },
+    {
+      "id": "Q109",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Weryfikuje, czy uczestnik rozpoznaje elementy, które powinien zawierać dobry golden set.",
+      "prompt": "Co powinien zawierać dobrze zaprojektowany golden set (zestaw wzorcowy) dla przypadku użycia QA w SklepDemo? Zaznacz wszystkie poprawne odpowiedzi.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Reprezentatywne pytania pokrywające typowe scenariusze przypadku użycia"
+        },
+        {
+          "id": "B",
+          "text": "Przypadki brzegowe i znane pułapki (np. pytanie poza zakresem źródła)"
+        },
+        {
+          "id": "C",
+          "text": "Udokumentowane źródło prawdy (ground truth) dla każdej pozycji"
+        },
+        {
+          "id": "D",
+          "text": "Losowo zebrane logi produkcyjne z surowymi danymi klientów"
+        },
+        {
+          "id": "E",
+          "text": "Pozycje o niejednoznacznym oczekiwaniu, których nie da się rozstrzygnąć"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Golden set to 'testy regresyjne dla odpowiedzi modelu': reprezentatywne pytania, przypadki brzegowe i jednoznaczne, udokumentowane źródło prawdy dla każdej pozycji.",
+      "feedbackIncorrect": "Surowe logi produkcyjne (PII) oraz pozycje bez rozstrzygalnego oczekiwania nie należą do golden setu. Powtórz ekran 'Golden set dla przypadku użycia'.",
+      "references": [
+        "M12.2",
+        "M12.3"
+      ]
+    },
+    {
+      "id": "Q110",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Weryfikuje rozpoznanie sygnałów świadczących o position bias oceniającego.",
+      "prompt": "Które z poniższych sygnałów wskazują, że oceniający LLM może być dotknięty stronniczością pozycyjną (position bias)? Zaznacz wszystkie poprawne.",
+      "options": [
+        {
+          "id": "A",
+          "text": "W porównaniach parami judge konsekwentnie wybiera odpowiedź prezentowaną jako pierwsza"
+        },
+        {
+          "id": "B",
+          "text": "Po zamianie kolejności dwóch odpowiedzi werdykt judge'a się odwraca, choć treść się nie zmieniła"
+        },
+        {
+          "id": "C",
+          "text": "Werdykt judge'a różni się od oceny eksperta dokładnie w parach porównawczych zależnych od kolejności"
+        },
+        {
+          "id": "D",
+          "text": "Judge ocenia odpowiedzi pojedynczo (bez porównania) i daje niskie noty wszystkim sprzecznym ze źródłem"
+        },
+        {
+          "id": "E",
+          "text": "Judge przyznaje identyczne noty niezależnie od kolejności prezentacji"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Position bias objawia się zależnością werdyktu od kolejności: faworyzowaniem pierwszej pozycji, odwracaniem werdyktu po zamianie i rozjazdami skupionymi w parach porównawczych.",
+      "feedbackIncorrect": "Odporność na kolejność (E) oraz spójna ocena treści sprzecznej ze źródłem (D) świadczą o braku position bias. Wróć do ekranu o position bias i jego diagnozie.",
+      "references": [
+        "M12.7",
+        "M12.10"
+      ]
+    },
+    {
+      "id": "Q111",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L4",
+      "bloom": "evaluation",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Weryfikuje umiejętność doboru kompletu metryk adekwatnych do złożonego pytania jakościowego.",
+      "prompt": "Pytanie jakościowe brzmi: 'Czy odpowiedź modelu wymienia wszystkie warunki płatności z dokumentu źródłowego i nie dodaje warunków spoza źródła?'. Które metryki najlepiej wspólnie pokrywają taką ocenę? Zaznacz wszystkie trafne.",
+      "options": [
+        {
+          "id": "A",
+          "text": "completeness — czy pokryto wszystkie warunki płatności wymagane przez kryterium"
+        },
+        {
+          "id": "B",
+          "text": "faithfulness — czy odpowiedź nie dodaje warunków sprzecznych ze źródłem lub w nim nieobecnych"
+        },
+        {
+          "id": "C",
+          "text": "groundedness — czy podane warunki da się ugruntować w przekazanym kontekście"
+        },
+        {
+          "id": "D",
+          "text": "samo position bias jako pojedyncza metryka jakości treści"
+        },
+        {
+          "id": "E",
+          "text": "wyłącznie relevance, bo pytanie dotyczy płatności"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Pytanie ma dwa wymiary: pokrycie wszystkich warunków (completeness) oraz brak treści spoza źródła i ugruntowanie w kontekście (faithfulness, groundedness).",
+      "feedbackIncorrect": "Position bias to ryzyko oceniającego, nie metryka treści; sama relevance nie zmierzy ani kompletności, ani wierności źródłu. Powtórz ekrany o metrykach i ich doborze.",
+      "references": [
+        "M12.4",
+        "M12.5"
+      ]
+    },
+    {
+      "id": "Q112",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L4",
+      "bloom": "evaluation",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Weryfikuje umiejętność oceny, które elementy czynią rubrykę LLM-as-a-judge wiarygodną i odporną na bias.",
+      "prompt": "Projektujesz rubrykę dla LLM-as-a-judge oceniającego faithfulness odpowiedzi w GS-SklepDemo. Które elementy powinny się w niej znaleźć, aby ocena była powtarzalna i odporna na stronniczość? Zaznacz wszystkie trafne.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Jasne kryterium oceny i skala z definicją każdego poziomu (np. 0–2)"
+        },
+        {
+          "id": "B",
+          "text": "Przykłady kotwiczące (anchor examples) dla skrajnych i pośrednich poziomów"
+        },
+        {
+          "id": "C",
+          "text": "Instrukcja 'oceniaj wyłącznie względem źródła', a nie wobec ogólnej wiedzy modelu"
+        },
+        {
+          "id": "D",
+          "text": "Zasada zamiany kolejności w porównaniach parami, by ograniczyć position bias"
+        },
+        {
+          "id": "E",
+          "text": "Reguła premiowania dłuższych odpowiedzi jako z założenia bardziej kompletnych"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "feedbackCorrect": "Powtarzalna i odporna na bias rubryka łączy jasne kryterium, zdefiniowaną skalę, kotwice, ocenę względem źródła oraz mitygację position bias przez zamianę kolejności.",
+      "feedbackIncorrect": "Premiowanie długości to length bias — zawyża ocenę niezależnie od treści. Wróć do ekranów o rubryce oraz o bias/position bias.",
+      "references": [
+        "M12.6",
+        "M12.7"
+      ]
+    },
+    {
+      "id": "Q113",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Weryfikuje interpretację rozjazdu, w którym oceniający zawyża notę względem eksperta przy odpowiedzi sprzecznej ze źródłem.",
+      "prompt": "W laboratorium kalibracji pozycja A2 (pytanie o termin polityki zwrotów w SklepDemo) ma ocenę eksperta faithfulness 0/2 — odpowiedź jest sprzeczna ze źródłem — a oceniający LLM dał 2/2. Jak najlepiej zinterpretować ten rozjazd i co z nim zrobić?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Judge zawyża ocenę odpowiedzi sprzecznej ze źródłem — to sygnał do poprawy rubryki (dobitna instrukcja 'sprzeczność ze źródłem = 0') i ponownej oceny, a nie do ignorowania"
+        },
+        {
+          "id": "B",
+          "text": "Skoro judge dał 2/2, odpowiedź jest dobra — należy zaktualizować golden set, podnosząc ground truth do 2/2"
+        },
+        {
+          "id": "C",
+          "text": "Rozjazd jest nieistotny, bo to tylko jedna pozycja — można ją pominąć w raporcie"
+        },
+        {
+          "id": "D",
+          "text": "To position bias, więc wystarczy zamienić kolejność odpowiedzi i problem zniknie"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Sprzeczność ze źródłem ocenioną przez eksperta na 0/2, a przez judge'a na 2/2, to zawyżenie wymagające korekty rubryki i ponownej oceny — golden set (ground truth) jest tu wyznacznikiem.",
+      "feedbackIncorrect": "Nie wolno dopasowywać ground truth do błędu judge'a ani pomijać rozjazdu; to nie position bias (brak pary porównawczej). Powtórz pętlę kalibracji z ekranu o zgodności oceniaczy.",
+      "references": [
+        "M12.8",
+        "M12.10"
+      ]
+    },
+    {
+      "id": "Q114",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L4",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Weryfikuje wybór poprawnej mitygacji po wykryciu position bias w przepływie kalibracji.",
+      "prompt": "Diagnoza w laboratorium potwierdza position bias w parze A3/A4: judge faworyzuje wariant pokazany pierwszy. Masz przekonać zespół, jak rzetelnie potwierdzić i ograniczyć ten efekt przed ustaleniem progu akceptacji. Która decyzja jest najlepsza?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Powtórzyć ocenę z zamienioną kolejnością A4/A3 (i/lub uśrednić oba ułożenia) — jeśli werdykt się odwraca, potwierdza to bias; wbudować zamianę kolejności do rubryki na stałe"
+        },
+        {
+          "id": "B",
+          "text": "Zaufać pierwszemu werdyktowi judge'a, bo ocena automatyczna jest szybsza i tańsza niż ekspert"
+        },
+        {
+          "id": "C",
+          "text": "Usunąć parę A3/A4 z golden setu, żeby zgodność % wzrosła"
+        },
+        {
+          "id": "D",
+          "text": "Podnieść próg akceptacji dla wszystkich pozycji, aby zrekompensować niepewność oceny"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Zamiana kolejności (i uśrednianie obu ułożeń) jednocześnie potwierdza position bias i go neutralizuje — to standardowa mitygacja wpisywana do rubryki przed decyzją o progu.",
+      "feedbackIncorrect": "Ufanie zależnemu od kolejności werdyktowi, usuwanie niewygodnych pozycji czy ślepe podnoszenie progu nie usuwają biasu — maskują go. Wróć do ekranów o position bias i kalibracji.",
+      "references": [
+        "M12.7",
+        "M12.10"
+      ]
+    },
+    {
+      "id": "Q115",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L4",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Weryfikuje podjęcie konserwatywnej decyzji go/no-go wobec ustalonego progu akceptacji.",
+      "prompt": "Próg akceptacji dla wdrożenia nowego promptu w SklepDemo brzmi: 'faithfulness ≥ 0,9 na golden secie ORAZ zero pozycji sprzecznych ze źródłem'. Nowa wersja osiąga średnią faithfulness 0,93, ale jedna pozycja (analog A2) jest sprzeczna ze źródłem. Jaka decyzja jest poprawna?",
+      "options": [
+        {
+          "id": "A",
+          "text": "No-go — warunek 'zero pozycji sprzecznych ze źródłem' nie jest spełniony, mimo dobrej średniej; najpierw usuń sprzeczność, potem oceń ponownie"
+        },
+        {
+          "id": "B",
+          "text": "Go — średnia 0,93 przekracza 0,9, więc próg jest spełniony niezależnie od pojedynczej pozycji"
+        },
+        {
+          "id": "C",
+          "text": "Go z obniżeniem progu do 0,85, skoro tylko jedna pozycja zawodzi"
+        },
+        {
+          "id": "D",
+          "text": "Go warunkowo — wdrożyć na produkcję i monitorować sprzeczną pozycję w trakcie"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Próg jest koniunkcją warunków; niespełniony warunek twardy 'zero sprzeczności' wymusza no-go niezależnie od dobrej średniej — konserwatywne domyślne zachowanie.",
+      "feedbackIncorrect": "Nie wolno obchodzić warunku twardego średnią ani obniżać progu czy wdrażać 'na próbę' — to obejście kryterium akceptacji. Powtórz ekran o progu i decyzji go/no-go.",
+      "references": [
+        "M12.9"
+      ]
+    },
+    {
+      "id": "Q116",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L4",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Weryfikuje, na jakim warunku ocenę automatyczną wolno dopuścić do decyzji go/no-go po udanej kalibracji.",
+      "prompt": "Po dwóch iteracjach poprawiania rubryki zgodność oceniającego LLM z ekspertem na golden secie GS-SklepDemo wzrosła z 4/6 do 6/6, a rozjazdy zniknęły. Zespół chce użyć oceny automatycznej do decyzji go/no-go o wydaniu. Jaki warunek właściwie dopuszcza ocenę automatyczną do tej decyzji?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Ustalić próg akceptacji (wymagana zgodność z ekspertem na golden secie i jej utrzymanie na świeżej próbce) oraz okresową rekalibrację z ekspertem — pojedynczy przebieg 6/6 nie gwarantuje trwałości."
+        },
+        {
+          "id": "B",
+          "text": "6/6 raz osiągnięte gwarantuje trafność na zawsze — można usunąć eksperta z procesu."
+        },
+        {
+          "id": "C",
+          "text": "Dopuścić ocenę automatyczną tylko, jeśli judge zgodzi się w 100% z każdą przyszłą odpowiedzią, inaczej nigdy jej nie używać."
+        },
+        {
+          "id": "D",
+          "text": "Próg akceptacji jest zbędny, bo LLM-as-a-judge jest z definicji obiektywny."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Dopuszczenie oceny automatycznej wymaga ustalonego progu akceptacji i jego utrzymania na świeżej próbce oraz okresowej rekalibracji z ekspertem — kalibracja jest ciągła, nie jednorazowa.",
+      "feedbackIncorrect": "Ani „raz 6/6 = na zawsze”, ani „100% na każdej przyszłej odpowiedzi”, ani „judge jest obiektywny” nie są właściwe — potrzebny jest próg akceptacji i okresowa rekalibracja. Wróć do ekranu o progu akceptacji jakości.",
+      "references": [
+        "M12.9",
+        "M12.10"
+      ]
+    }
+  ]
+}

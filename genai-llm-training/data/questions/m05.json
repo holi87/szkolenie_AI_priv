@@ -1,0 +1,369 @@
+{
+  "_meta": {
+    "module": "M5",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M5. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q033",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Uczestnik opisuje rolę bazy wektorowej w wyszukiwaniu semantycznym oraz kolejność kroków od zapytania do zwróconych fragmentów.",
+      "prompt": "Zespół buduje wyszukiwarkę po dokumentacji testowej NotkaApp opartą o bazę wektorową (vector database). Co jest jej główną rolą w wyszukiwaniu semantycznym (semantic search)?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Przechowuje embeddingi fragmentów i pozwala szybko znaleźć wektory najbardziej podobne do embeddingu zapytania, aby zwrócić powiązane fragmenty tekstu."
+        },
+        {
+          "id": "B",
+          "text": "Dopasowuje zapytanie do fragmentów wyłącznie przez dokładne dopasowanie tych samych słów kluczowych, ignorując znaczenie."
+        },
+        {
+          "id": "C",
+          "text": "Generuje odpowiedź w języku naturalnym na podstawie zapytania, zastępując model językowy w pipeline."
+        },
+        {
+          "id": "D",
+          "text": "Przechowuje surowe dokumenty jako pliki i udostępnia je przez wyszukiwanie pełnotekstowe po frazach."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Baza wektorowa trzyma embeddingi i znajduje najbliższe wektory względem embeddingu zapytania, dzięki czemu wyszukiwanie działa po znaczeniu, a nie po literalnych słowach.",
+      "feedbackIncorrect": "To pomyłka z wyszukiwaniem słów kluczowych lub z rolą modelu generującego. Powtórz, czym jest semantic search i co robi vector database (ekran M5.2).",
+      "references": [
+        "M5.2",
+        "M5.1"
+      ]
+    },
+    {
+      "id": "Q034",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik dobiera wyszukiwanie dokładne lub przybliżone (ANN) do charakterystyki korpusu i wymagań.",
+      "prompt": "Tester ma syntetyczny korpus ~12 fragmentów dokumentacji QA i potrzebuje mieć pewność, że ŻADEN trafny fragment nie zostanie pominięty przy weryfikacji pokrycia. Które podejście jest tu właściwe?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Wyszukiwanie dokładne (exact / brute force) — przy małym korpusie przegląd wszystkich wektorów jest tani i gwarantuje pełną trafność."
+        },
+        {
+          "id": "B",
+          "text": "Approximate nearest neighbor (ANN) z agresywnym indeksem — bo zawsze jest szybsze i nie pomija trafień."
+        },
+        {
+          "id": "C",
+          "text": "ANN z bardzo niskim top-k, żeby zwrócić tylko jeden wynik i uniknąć pomyłek."
+        },
+        {
+          "id": "D",
+          "text": "Wyszukiwanie po słowach kluczowych zamiast wektorowego, bo jest deterministyczne."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Przy małym korpusie koszt przeglądu wszystkich wektorów jest niski, a exact search gwarantuje, że żaden trafny fragment nie zostanie pominięty — to liczy się, gdy potrzebna jest pełna trafność.",
+      "feedbackIncorrect": "ANN przyspiesza kosztem ryzyka pominięcia trafnych wyników, więc nie gwarantuje kompletności; niskie top-k tylko obcina wyniki. Powtórz kompromis exact vs ANN (ekrany M5.3–M5.4).",
+      "references": [
+        "M5.4",
+        "M5.3"
+      ]
+    },
+    {
+      "id": "Q035",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik analizuje, jak ustawienia ANN i top-k przekładają się na parę miar recall i precision.",
+      "prompt": "W debugerze wyszukiwania tester podnosi top-k z 3 na 8 i jednocześnie poluzowuje parametry indeksu ANN w stronę szybkości. Jaki najbardziej prawdopodobny efekt na recall i precision?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Recall zwykle rośnie (więcej trafnych może wejść do wyników), ale precision spada, bo do wyników trafia więcej fragmentów luźno powiązanych."
+        },
+        {
+          "id": "B",
+          "text": "Recall i precision rosną równocześnie, bo większe top-k zawsze poprawia obie miary naraz."
+        },
+        {
+          "id": "C",
+          "text": "Recall spada, a precision rośnie, ponieważ większe top-k zawęża zbiór wyników."
+        },
+        {
+          "id": "D",
+          "text": "Ani recall, ani precision się nie zmienią, bo top-k i indeks nie wpływają na jakość wyników."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Większe top-k poszerza zbiór kandydatów, więc rośnie szansa złapania trafnych (recall ↑), a do wyników wpada też więcej szumu (precision ↓). Poluzowanie indeksu ANN w stronę szybkości działa na recall przeciwnie (może pominąć trafne), jednak netto przy top-k 3→8 dominuje wzrost recall — stąd odpowiedź A.",
+      "feedbackIncorrect": "Recall i precision zwykle idą w przeciwnych kierunkach przy poszerzaniu wyników; większe top-k nie zawęża zbioru. Powtórz definicje recall/precision i wpływ indeksu (ekrany M5.4–M5.5).",
+      "references": [
+        "M5.5",
+        "M5.4"
+      ]
+    },
+    {
+      "id": "Q036",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik wskazuje czynniki retrievalu, które realnie wpływają na zestaw zwróconych fragmentów i jego jakość.",
+      "prompt": "Które z poniższych czynników bezpośrednio wpływają na to, JAKIE fragmenty zwróci similarity search i jaka będzie jakość wyniku? Wybierz wszystkie poprawne.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Parametry indeksu (index) ANN — przesuwają punkt między recall a szybkością/precision."
+        },
+        {
+          "id": "B",
+          "text": "Filtrowanie metadanych (metadata filtering) — zawęża zbiór kandydatów (precision ↑), ale zbyt ostry filtr gubi trafne (recall ↓)."
+        },
+        {
+          "id": "C",
+          "text": "Jakość chunków (chunk quality) — zła granica fragmentu daje wektor o rozmytym znaczeniu i wynik podobny, lecz nieużyteczny."
+        },
+        {
+          "id": "D",
+          "text": "Próg podobieństwa (similarity threshold) — za wysoki odcina trafne fragmenty (recall ↓)."
+        },
+        {
+          "id": "E",
+          "text": "Kolejność dodawania dokumentów do bazy — fragmenty wstawione wcześniej są zawsze zwracane wyżej."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "feedbackCorrect": "Indeks, filtr metadanych, jakość chunków i próg podobieństwa to faktyczne dźwignie sterujące zestawem wyników i parą recall/precision.",
+      "feedbackIncorrect": "Kolejność dodawania dokumentów nie wyznacza rankingu — liczy się podobieństwo wektorów i ustawienia retrievalu. Powtórz wpływ indeksu, metadanych i chunków (ekrany M5.5–M5.7).",
+      "references": [
+        "M5.6",
+        "M5.5"
+      ]
+    },
+    {
+      "id": "Q037",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik łączy zaobserwowany objaw retrievalu z jego najbardziej prawdopodobną przyczyną wśród indeksu, metadanych, chunków i progu.",
+      "prompt": "Tester diagnozuje wyniki na syntetycznym korpusie QA. Które stwierdzenia poprawnie łączą objaw z przyczyną? Wybierz wszystkie poprawne.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Wyszukiwarka zwróciła zero fragmentów, choć trafny dokument istnieje — winny może być zbyt ostry filtr metadanych albo za wysoki próg podobieństwa, nie same dane."
+        },
+        {
+          "id": "B",
+          "text": "Zwrócony fragment ma wysokie podobieństwo, ale urywa się w połowie zdania i nie da się go użyć — to objaw złej granicy chunku."
+        },
+        {
+          "id": "C",
+          "text": "Trafny fragment istnieje w korpusie, ale nie znalazł się w wynikach ANN — możliwe, że agresywny indeks pominął go na rzecz szybkości."
+        },
+        {
+          "id": "D",
+          "text": "Spadek recall zawsze oznacza, że embeddingi są policzone błędnie i trzeba zmienić model embeddingów."
+        },
+        {
+          "id": "E",
+          "text": "Jeśli wyniki są trafne, ale jest ich za dużo i sporo szumu, jednym z lekarstw jest zawężenie przez filtr metadanych lub niższe top-k."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "E"
+      ],
+      "feedbackCorrect": "Każde z tych stwierdzeń poprawnie wiąże objaw (zero wyników, urwany chunk, pominięcie przez ANN, nadmiar szumu) z dźwignią retrievalu (filtr/próg, chunk, indeks, top-k).",
+      "feedbackIncorrect": "Spadek recall najczęściej wynika z indeksu, filtra lub progu, a nie automatycznie z błędnych embeddingów — to nadinterpretacja. Powtórz diagnozę z ekranów M5.5–M5.8.",
+      "references": [
+        "M5.7",
+        "M5.6"
+      ]
+    },
+    {
+      "id": "Q038",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik diagnozuje przypadek, w którym fragment o wysokim podobieństwie jest nietrafny, mimo poprawnego działania bazy.",
+      "prompt": "W bazie wektorowej NotkaApp są m.in. fragmenty: DOC1 „token sesji wygasa po 30 min bezczynności”, DOC3 „link resetu hasła ważny 30 min, jednorazowy”. Na zapytanie „Po jakim czasie wygasa link resetu hasła?” retrieval zwrócił na pierwszym miejscu DOC1 z bardzo wysokim podobieństwem. Jak najlepiej zdiagnozować ten wynik?",
+      "options": [
+        {
+          "id": "A",
+          "text": "DOC1 jest semantycznie podobny (oba mówią o „30 min” i wygasaniu), ale dotyczy sesji, nie resetu hasła — wysokie podobieństwo nie równa się trafności; właściwym źródłem jest DOC3."
+        },
+        {
+          "id": "B",
+          "text": "Baza wektorowa działa błędnie i należy ją przebudować, bo zwróciła nietrafny dokument."
+        },
+        {
+          "id": "C",
+          "text": "DOC1 jest poprawną odpowiedzią, bo ma najwyższe podobieństwo, więc temat zgadza się z zapytaniem."
+        },
+        {
+          "id": "D",
+          "text": "Problem znika po samym zwiększeniu top-k do 10, bo wtedy DOC1 przestanie być zwracany."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "To podręcznikowy przypadek „podobny, ale nieużyteczny”: nakładające się słowa (30 min, wygasanie) podnoszą podobieństwo DOC1, choć trafnym źródłem jest DOC3 — podobieństwo to nie trafność.",
+      "feedbackIncorrect": "Wysokie podobieństwo nie dowodzi trafności, a baza nie działa błędnie — po prostu DOC1 leksykalnie nachodzi na zapytanie. Powtórz diagnozę „podobny ≠ użyteczny” (ekrany M5.7–M5.8).",
+      "references": [
+        "M5.8",
+        "M5.7"
+      ]
+    },
+    {
+      "id": "Q039",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Uczestnik ocenia, dlaczego trafny fragment zniknął z wyników, i wiąże to z konfiguracją filtra metadanych.",
+      "prompt": "Tester szuka odpowiedzi na „Po jakim czasie wygasa link resetu hasła?” w korpusie NotkaApp, gdzie DOC3 (reset hasła) ma metadaną typ_dokumentu=\"przypadek_testowy\". Aby ograniczyć szum, włącza filtr metadanych typ_dokumentu=\"wymaganie\". Wyszukiwarka zwraca teraz 0 trafnych fragmentów. Jaka jest najlepsza diagnoza?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Filtr metadanych odciął DOC3, bo ma inny typ_dokumentu niż dopuszczony przez filtr — zbyt ostry filtr podniósł precision, ale zgubił trafny wynik (recall ↓); należy poszerzyć filtr."
+        },
+        {
+          "id": "B",
+          "text": "DOC3 nie istnieje już w bazie i trzeba go ponownie zaindeksować, bo inaczej nigdy się nie pojawi."
+        },
+        {
+          "id": "C",
+          "text": "Próg podobieństwa jest za niski i dlatego zwrócono pustą listę — należy go jeszcze obniżyć."
+        },
+        {
+          "id": "D",
+          "text": "Embedding zapytania jest błędny, bo poprawny filtr metadanych nie może usunąć trafnego fragmentu."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Filtr metadanych zawęża zbiór przed/po podobieństwie: dopuszczając tylko typ „wymaganie”, wyciął DOC3 (typ „przypadek_testowy”) — to klasyczny kompromis precision ↑ / recall ↓ rozwiązywany poszerzeniem filtra.",
+      "feedbackIncorrect": "Pusty wynik tu wynika z konfiguracji filtra, nie z brakującego dokumentu czy progu — zbyt ostry filtr gubi trafne fragmenty. Powtórz filtrowanie metadanych (ekran M5.6).",
+      "references": [
+        "M5.6",
+        "M5.8"
+      ]
+    },
+    {
+      "id": "Q040",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L4",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik wybiera najlepszą korektę parametrów retrievalu, która usuwa przyczynę nietrafności bez psucia pozostałych wyników.",
+      "prompt": "Na zapytanie o reset hasła w NotkaApp retrieval zwraca DOC4 (FAQ marketingowe: zalety i cennik) z wysokim podobieństwem oraz urwany w połowie zdania fragment DOC2 (polityka haseł), a trafny DOC3 (reset hasła) ląduje dopiero na pozycji 6. Próg podobieństwa jest wyłączony, top-k=3, brak filtra. Która korekta najlepiej poprawi trafność wyników?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Dodać filtr metadanych odsiewający dokumenty marketingowe i poprawić granice chunków, a top-k podnieść tak, by DOC3 zmieścił się w wynikach — atakuje przyczyny (szum metadanych, zły chunk, za niskie top-k)."
+        },
+        {
+          "id": "B",
+          "text": "Tylko podnieść próg podobieństwa do bardzo wysokiej wartości — usunie to DOC4 i DOC2, ale ryzykuje też odcięcie DOC3 (recall ↓)."
+        },
+        {
+          "id": "C",
+          "text": "Zostawić ustawienia bez zmian i ręcznie wpisać DOC3 jako odpowiedź, bo skoro istnieje w korpusie, retrieval nie wymaga korekty."
+        },
+        {
+          "id": "D",
+          "text": "Obniżyć top-k do 1, żeby zwracać tylko najbardziej podobny fragment i wyeliminować szum."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Najlepsza korekta usuwa konkretne przyczyny: filtr metadanych tnie marketingowy DOC4, poprawa chunku ratuje urwany DOC2, a wyższe top-k wpuszcza trafny DOC3 — bez ryzyka utraty właściwego wyniku.",
+      "feedbackIncorrect": "Sam wysoki próg lub top-k=1 grozi odcięciem trafnego DOC3 (recall ↓), a ręczne wpisanie odpowiedzi nie naprawia retrievalu. Powtórz wpływ metadanych, chunków i top-k (ekrany M5.6–M5.9).",
+      "references": [
+        "M5.9",
+        "M5.6"
+      ]
+    }
+  ]
+}

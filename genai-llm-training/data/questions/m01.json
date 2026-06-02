@@ -1,0 +1,363 @@
+{
+  "_meta": {
+    "module": "M1",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M1. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q001",
+      "module": "M1",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Uczestnik odróżnia zadanie generatywne (GenAI) od klasyfikacyjnego (klasyczny ML) na podstawie tego, co system wytwarza na wyjściu.",
+      "prompt": "Tester pracuje w SklepDemo. Które z poniższych zadań jest typowym przykładem GenAI (a nie klasycznego ML)?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Oznaczenie przychodzącego zgłoszenia jako 'błąd', 'pytanie' albo 'życzenie'."
+        },
+        {
+          "id": "B",
+          "text": "Wygenerowanie szkicu przypadku testowego na podstawie opisu wymagania."
+        },
+        {
+          "id": "C",
+          "text": "Wykrycie anomalii w metrykach wydajności w stosunku do normy."
+        },
+        {
+          "id": "D",
+          "text": "Przewidzenie, czy nowe zgłoszenie należy do grupy 'pilne' czy 'zwykłe'."
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "feedbackCorrect": "GenAI tworzy nową treść (tu: tekst szkicu przypadku testowego), podczas gdy pozostałe zadania tylko przypisują etykietę z gotowego zbioru — to klasyczny ML.",
+      "feedbackIncorrect": "Odpowiedzi A, C i D przypisują etykietę lub przewidują wartość z gotowego zbioru — to klasyfikacja/predykcja (klasyczny ML). GenAI wytwarza nową treść. Powtórz mapę pojęć GenAI vs klasyczny ML.",
+      "references": [
+        "M1.2",
+        "M1.3"
+      ]
+    },
+    {
+      "id": "Q002",
+      "module": "M1",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik wyjaśnia relację między LLM a GenAI — że LLM to wyspecjalizowany w języku podzbiór GenAI.",
+      "prompt": "Jak najtrafniej opisać relację między LLM a GenAI?",
+      "options": [
+        {
+          "id": "A",
+          "text": "LLM i GenAI to dwa rozłączne podejścia — LLM nie należy do GenAI."
+        },
+        {
+          "id": "B",
+          "text": "GenAI to podzbiór LLM ograniczony do generowania tekstu."
+        },
+        {
+          "id": "C",
+          "text": "LLM to podzbiór GenAI wyspecjalizowany w języku; GenAI obejmuje też generowanie obrazów czy dźwięku."
+        },
+        {
+          "id": "D",
+          "text": "LLM i GenAI to dwie nazwy tego samego zbioru — każde GenAI to LLM."
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "feedbackCorrect": "LLM jest podzbiorem GenAI skupionym na języku, a GenAI obejmuje szerszą rodzinę generowania treści (np. obrazy), więc nie każde GenAI to LLM.",
+      "feedbackIncorrect": "Generowanie obrazka do prezentacji to GenAI, ale nie LLM — to dowodzi, że GenAI jest szersze. LLM jest podzbiorem GenAI, nie odwrotnie. Wróć do mapy pojęć (diagram zbiorów).",
+      "references": [
+        "M1.2",
+        "M1.3"
+      ]
+    },
+    {
+      "id": "Q003",
+      "module": "M1",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik rozpoznaje, że LLM zwraca najbardziej prawdopodobną odpowiedź, a nie gwarantowaną prawdę.",
+      "prompt": "Które stwierdzenie najlepiej opisuje naturę odpowiedzi zwracanej przez LLM?",
+      "options": [
+        {
+          "id": "A",
+          "text": "LLM wyszukuje i zwraca zweryfikowany fakt z bazy danych prawdziwych zdań."
+        },
+        {
+          "id": "B",
+          "text": "LLM przewiduje najbardziej prawdopodobny kolejny fragment tekstu na podstawie wzorców z treningu — co nie gwarantuje prawdziwości."
+        },
+        {
+          "id": "C",
+          "text": "LLM zawsze zwraca tę samą, jedyną poprawną odpowiedź dla danego pytania."
+        },
+        {
+          "id": "D",
+          "text": "LLM sprawdza odpowiedź w czasie rzeczywistym w internecie przed jej zwróceniem."
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "feedbackCorrect": "LLM generuje najbardziej prawdopodobną kontynuację tekstu według wzorców z treningu — to output probabilistyczny, więc prawdziwość nie jest gwarantowana.",
+      "feedbackIncorrect": "LLM nie jest wyszukiwarką prawdy ani bazą faktów — przewiduje prawdopodobny tekst, dlatego może brzmieć wiarygodnie i być błędny. Powtórz ekran 'Skąd bierze się odpowiedź LLM'.",
+      "references": [
+        "M1.4"
+      ]
+    },
+    {
+      "id": "Q004",
+      "module": "M1",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik rozumie rozróżnienie training vs inference — że model nie douczy się z pojedynczego promptu i nie zna zdarzeń po dacie treningu.",
+      "prompt": "Tester pyta model NotkaApp o zdarzenie, które wydarzyło się po dacie zakończenia treningu modelu, i poprawia go w jednym prompcie. Co jest tu prawdą o treningu i wnioskowaniu?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Model trwale zapamięta poprawkę z tego promptu i douczy się na przyszłość."
+        },
+        {
+          "id": "B",
+          "text": "Wnioskowanie (inference) tworzy odpowiedź na bieżące wejście, ale nie zmienia wytrenowanych wzorców — model nie zna zdarzeń po dacie treningu."
+        },
+        {
+          "id": "C",
+          "text": "Każde użycie modelu (inference) automatycznie aktualizuje jego wiedzę o nowych zdarzeniach."
+        },
+        {
+          "id": "D",
+          "text": "Trening i wnioskowanie to ten sam proces, więc prompt zawsze douczą model."
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "feedbackCorrect": "Trening jednorazowo ustala wzorce, a wnioskowanie tylko generuje odpowiedź na Twoje wejście — pojedynczy prompt nie douczy modelu ani nie da mu wiedzy o zdarzeniach po dacie treningu.",
+      "feedbackIncorrect": "Mylisz trening z wnioskowaniem: poprawka w prompcie działa tylko w bieżącej rozmowie, model jej trwale nie zapamiętuje. Powtórz ekran 'Trening vs. wnioskowanie'.",
+      "references": [
+        "M1.5"
+      ]
+    },
+    {
+      "id": "Q005",
+      "module": "M1",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Uczestnik przypisuje syntetyczne zadanie QA do właściwej z czterech kategorii rozwiązania (LLM / klasyczny ML / system regułowy / człowiek-ekspert).",
+      "prompt": "Dopasuj każde syntetyczne zadanie QA do najodpowiedniejszej kategorii rozwiązania.",
+      "pairs": [
+        {
+          "left": "Napisz szkic 5 przypadków testowych do wymagania logowania w NotkaApp",
+          "right": "LLM"
+        },
+        {
+          "left": "Oznacz przychodzące zgłoszenie jako 'błąd', 'pytanie' albo 'życzenie'",
+          "right": "Klasyczny ML"
+        },
+        {
+          "left": "Sprawdź, czy kod pocztowy ma format NN-NNN",
+          "right": "System regułowy"
+        },
+        {
+          "left": "Zdecyduj, czy wstrzymać wydanie z powodu ryzyka prawnego",
+          "right": "Człowiek-ekspert"
+        }
+      ],
+      "feedbackCorrect": "Każde zadanie trafiło do kategorii zgodnej z naturą wyniku: generowanie tekstu (LLM), etykieta z gotowego zbioru (ML), jawna deterministyczna reguła (regułowy), odpowiedzialny osąd (człowiek).",
+      "feedbackIncorrect": "Zwróć uwagę, co produkuje zadanie: nowa treść = LLM, etykieta z gotowego zbioru = klasyczny ML, w pełni przewidywalny wynik wg reguły = system regułowy, decyzja z odpowiedzialnością = człowiek. Powtórz ekran 'Klasyfikator zadań'.",
+      "references": [
+        "M1.6",
+        "M1.7"
+      ]
+    },
+    {
+      "id": "Q006",
+      "module": "M1",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik dopasowuje pojęcie z fundamentów GenAI/LLM do jego poprawnej definicji.",
+      "prompt": "Dopasuj każde pojęcie z fundamentów GenAI/LLM do poprawnej definicji.",
+      "pairs": [
+        {
+          "left": "GenAI",
+          "right": "Sztuczna inteligencja, która tworzy nową treść (tekst, obraz, kod)"
+        },
+        {
+          "left": "LLM",
+          "right": "Model językowy przewidujący najbardziej prawdopodobny kolejny fragment tekstu"
+        },
+        {
+          "left": "Klasyczny ML",
+          "right": "Model, który uczy się wzorca i przypisuje etykietę lub przewiduje wartość"
+        },
+        {
+          "left": "Halucynacja",
+          "right": "Wynik brzmiący wiarygodnie, ale nieuzasadniony danymi"
+        }
+      ],
+      "feedbackCorrect": "Definicje zgadzają się z mapą pojęć: GenAI tworzy, klasyczny ML klasyfikuje/przewiduje, LLM przewiduje prawdopodobny tekst, a halucynacja to wiarygodnie brzmiący, lecz nieuzasadniony wynik.",
+      "feedbackIncorrect": "Pomyliłeś co najmniej jedno pojęcie — kluczowe rozróżnienie to 'tworzy' (GenAI) vs 'klasyfikuje' (ML), a halucynacja dotyczy braku uzasadnienia, nie samego błędu formy. Powtórz mapę pojęć i ekran o output probabilistycznym.",
+      "references": [
+        "M1.2",
+        "M1.4"
+      ]
+    },
+    {
+      "id": "Q007",
+      "module": "M1",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik rozpoznaje zadanie deterministyczne i dobiera rozwiązanie regułowe zamiast LLM, gdzie probabilistyczny output jest niepożądany.",
+      "prompt": "W SklepDemo trzeba w pełni automatycznie sprawdzać, czy numer zamówienia ma poprawny format (np. ORD-TEST-777) — wynik musi być za każdym razem identyczny i jednoznaczny. Które rozwiązanie jest najwłaściwsze?",
+      "options": [
+        {
+          "id": "A",
+          "text": "LLM z promptem 'oceń, czy numer zamówienia jest poprawny' — bo rozumie kontekst."
+        },
+        {
+          "id": "B",
+          "text": "System regułowy z jawną regułą formatu (np. wyrażenie regularne) — wynik deterministyczny i powtarzalny."
+        },
+        {
+          "id": "C",
+          "text": "Klasyczny ML wytrenowany na przykładach numerów, aby przewidywał poprawność."
+        },
+        {
+          "id": "D",
+          "text": "LLM, ale z prośbą o wyjaśnienie decyzji, żeby zwiększyć pewność."
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "feedbackCorrect": "Walidacja formatu to zadanie deterministyczne — ten sam wejściowy daje zawsze ten sam wynik wg jawnej reguły, więc system regułowy jest pewny i powtarzalny, a output probabilistyczny LLM jest tu zbędnym ryzykiem.",
+      "feedbackIncorrect": "LLM zwraca output probabilistyczny, więc może dać różne odpowiedzi dla tego samego numeru — to dyskwalifikuje go w zadaniu deterministycznym. Powtórz typy zadań: deterministyczne należą do systemu regułowego.",
+      "references": [
+        "M1.6",
+        "M1.7"
+      ]
+    },
+    {
+      "id": "Q008",
+      "module": "M1",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik decyduje, że output LLM wymaga weryfikacji, zanim zostanie użyty jako fakt — bo jest probabilistyczny i może być halucynacją.",
+      "prompt": "LLM wygenerował podsumowanie wymagań NotkaApp i twierdzi: 'Blokada konta trwa 24 godziny'. Tester wie tylko, że taki output bywa zmyślony. Jaka decyzja jest najbezpieczniejsza?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Przyjąć stwierdzenie jako fakt — model brzmi pewnie i spójnie."
+        },
+        {
+          "id": "B",
+          "text": "Zweryfikować stwierdzenie wobec źródłowego wymagania przed użyciem, bo output LLM jest prawdopodobny, ale niegwarantowany."
+        },
+        {
+          "id": "C",
+          "text": "Odrzucić całe podsumowanie jako bezużyteczne, skoro jedno zdanie może być błędne."
+        },
+        {
+          "id": "D",
+          "text": "Zapytać ten sam model, czy jest pewny — i zaufać jego potwierdzeniu."
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "feedbackCorrect": "Output LLM jest probabilistyczny i może być halucynacją, więc twierdzenie liczbowe trzeba zweryfikować wobec źródła zanim posłuży jako fakt — to właściwa, ostrożna decyzja QA.",
+      "feedbackIncorrect": "Zaufanie pewnemu tonowi modelu (A, D) ignoruje naturę probabilistycznego outputu, a hurtowe odrzucenie (C) jest przesadą — weryfikacji wymaga konkretne, sprawdzalne stwierdzenie. Powtórz ekran o output probabilistycznym i halucynacji.",
+      "references": [
+        "M1.4",
+        "M1.6"
+      ]
+    }
+  ]
+}

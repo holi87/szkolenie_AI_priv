@@ -1,0 +1,546 @@
+{
+  "_meta": {
+    "module": "M8",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M8. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q061",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Uczestnik analizuje wygenerowany przez LLM zestaw przypadkow testowych i wskazuje brak w pokryciu (coverage gap) wzgledem wymagania.",
+      "prompt": "Wymaganie dla aplikacji NotkaApp (fikcyjna): uzytkownik resetuje haslo przez link e-mail wazny 30 minut; po 3 bledych probach logowania konto blokowane na 15 minut. LLM wygenerowal przypadki: TC1 — reset poprawny; TC2 — link wygasl po 30 min; TC3 — 3 bledne haslo -> blokada konta. Ktory brak w pokryciu jest tu najwazniejszy do uzupelnienia?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Brak przypadku ponownego uzycia tego samego linku resetu (link jednorazowy uzyty dwukrotnie)"
+        },
+        {
+          "id": "B",
+          "text": "Brak przypadku sprawdzajacego kolor przycisku Resetuj haslo"
+        },
+        {
+          "id": "C",
+          "text": "Brak przypadku z dokladnie 30-minutowym czasem trwania sesji administratora"
+        },
+        {
+          "id": "D",
+          "text": "Brak przypadku weryfikujacego logo aplikacji na stronie logowania"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Link resetu jest z natury jednorazowy i czasowy, wiec brak testu jego ponownego uzycia to realna luka bezpieczenstwa w pokryciu wymagania.",
+      "feedbackIncorrect": "Luka w pokryciu dotyczy zachowania zgodnego z wymaganiem (waznosc i jednorazowosc linku), a nie elementow kosmetycznych. Wroc do ekranu o brakach w pokryciu.",
+      "references": [
+        "M8.3",
+        "M8.2"
+      ]
+    },
+    {
+      "id": "Q062",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik rozpoznaje w outpucie LLM przypadek pozorny (asercja nic nie weryfikuje) i odroznia go od wartosciowego testu.",
+      "prompt": "W zestawie przypadkow dla NotkaApp znajdujesz: TC4 — 'Otworz formularz resetu hasla i sprawdz, ze formularz sie otwiera; oczekiwany rezultat: brak'. Jak nalezy zakwalifikowac TC4?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Test pozorny — brak zdefiniowanego oczekiwanego rezultatu, asercja faktycznie nic nie sprawdza"
+        },
+        {
+          "id": "B",
+          "text": "Poprawny przypadek negatywny dla scenariusza blokady konta"
+        },
+        {
+          "id": "C",
+          "text": "Poprawny przypadek graniczny dla waznosci linku 30 minut"
+        },
+        {
+          "id": "D",
+          "text": "Duplikat przypadku TC1 reset poprawny, ktory mozna od razu scalic"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Bez okreslonego oczekiwanego rezultatu test zawsze 'przejdzie' i niczego nie weryfikuje — to definicja testu pozornego.",
+      "feedbackIncorrect": "Kluczem jest brak oczekiwanego rezultatu, a nie typ scenariusza ani podobienstwo do innego TC. Powtorz ekran o duplikatach i testach pozornych.",
+      "references": [
+        "M8.4"
+      ]
+    },
+    {
+      "id": "Q063",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik ocenia, czy wygenerowany output LLM nadaje sie do dokumentacji QA, identyfikujac zmyslony fakt sprzeczny z wymaganiem.",
+      "prompt": "LLM wygenerowal opis przypadku dla NotkaApp z notatka: 'Po 3 bledych probach konto blokowane na 24 godziny, a link resetu jest wazny bezterminowo'. Wymaganie mowi: blokada 15 minut, link wazny 30 minut. Jaka decyzja kontroli merytorycznej jest najwlasciwsza przed wklejeniem do dokumentacji?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Odrzuc fragment — zawiera fakty sprzeczne z wymaganiem (zmyslone wartosci 24 h i bezterminowo), wymaga poprawy przed uzyciem"
+        },
+        {
+          "id": "B",
+          "text": "Dopusc bez zmian — LLM zwykle podaje wartosci blizsze rzeczywistosci niz wymaganie"
+        },
+        {
+          "id": "C",
+          "text": "Dopusc i dopisz adnotacje, ze wartosci moga sie roznic zaleznie od wersji aplikacji"
+        },
+        {
+          "id": "D",
+          "text": "Odrzuc caly modul testow resetu hasla, bo output zawiera jeden blad"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Output sprzeczny z wymaganiem zawiera zmyslone fakty (halucynacje) i nie moze trafic do dokumentacji bez poprawy — kontrola merytoryczna konczy sie decyzja 'popraw/odrzuc fragment'.",
+      "feedbackIncorrect": "Wymaganie jest zrodlem prawdy, nie output LLM; nie nalezy tez odrzucac calej pracy z powodu jednego fragmentu. Wroc do rubryki dopusc/popraw/odrzuc.",
+      "references": [
+        "M8.6"
+      ]
+    },
+    {
+      "id": "Q064",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik wyznacza granice human-in-the-loop, wskazujac zadanie QA, w ktorym LLM pozostaje asystentem, a decyzje podejmuje czlowiek.",
+      "prompt": "Zespol QA chce wykorzystac LLM przy testach NotkaApp. Ktora z propozycji najlepiej oddaje zasade 'asystent, nie decydent'?",
+      "options": [
+        {
+          "id": "A",
+          "text": "LLM generuje szkic przypadkow testowych i checkliste ryzyk, a tester zatwierdza zakres testow i decyduje o dopuszczeniu do release"
+        },
+        {
+          "id": "B",
+          "text": "LLM samodzielnie zatwierdza wydanie do produkcji, jesli wygenerowane testy przechodza"
+        },
+        {
+          "id": "C",
+          "text": "LLM ostatecznie ocenia ryzyko krytyczne i zamyka defekty bez udzialu testera"
+        },
+        {
+          "id": "D",
+          "text": "Tester przepisuje recznie kazdy przypadek, a LLM nie jest uzywany na zadnym etapie"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "LLM przyspiesza tworzenie szkicow i propozycji, ale decyzje o akceptacji, ryzyku krytycznym i release naleza do czlowieka (human-in-the-loop).",
+      "feedbackIncorrect": "Decyzje o release i ocenie ryzyka krytycznego nie moga byc oddane LLM, ale calkowita rezygnacja z asystenta marnuje jego wartosc. Powtorz ekran asystent vs decydent.",
+      "references": [
+        "M8.7",
+        "M8.1"
+      ]
+    },
+    {
+      "id": "Q065",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik wskazuje kategorie brakow w pokryciu, ktorych LLM czesto nie generuje bez wyraznego polecenia.",
+      "prompt": "Generujesz przypadki testowe dla funkcji resetu hasla w NotkaApp. Ktore kategorie sa najczesciej pomijane przez LLM i wymagaja swiadomego uzupelnienia? Wskaz wszystkie poprawne.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Przypadki graniczne (np. link uzyty dokladnie w 30. minucie)"
+        },
+        {
+          "id": "B",
+          "text": "Sciezki bledu i stany wyjatkowe (np. link uzyty po raz drugi, rownolegle sesje)"
+        },
+        {
+          "id": "C",
+          "text": "Happy path resetu hasla z poprawnymi danymi"
+        },
+        {
+          "id": "D",
+          "text": "Dane testowe dla wartosci skrajnych (np. e-mail o maksymalnej dlugosci)"
+        },
+        {
+          "id": "E",
+          "text": "Tytul okna przegladarki na stronie potwierdzenia"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "D"
+      ],
+      "feedbackCorrect": "LLM zwykle dobrze pokrywa happy path, a pomija przypadki graniczne, sciezki bledu i dane skrajne — to wlasnie tam szukamy luk w pokryciu.",
+      "feedbackIncorrect": "Happy path jest zwykle pokryty, a tytul okna to detal kosmetyczny; luki dotycza granic, sciezek bledu i danych skrajnych. Wroc do ekranu o brakach w pokryciu.",
+      "references": [
+        "M8.3",
+        "M8.2"
+      ]
+    },
+    {
+      "id": "Q066",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik rozpoznaje cechy duplikatu i testu pozornego w wygenerowanym zestawie przypadkow.",
+      "prompt": "Przegladasz wygenerowany zestaw przypadkow dla NotkaApp pod katem jakosci. Ktore stwierdzenia o duplikatach i testach pozornych sa prawdziwe? Wskaz wszystkie poprawne.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Dwa przypadki sprawdzajace te same warunki innym opisem to duplikat, mimo roznej tresci"
+        },
+        {
+          "id": "B",
+          "text": "Przypadek bez oczekiwanego rezultatu jest pozorny, bo jego asercja nic nie weryfikuje"
+        },
+        {
+          "id": "C",
+          "text": "Wieksza liczba wygenerowanych przypadkow zawsze oznacza lepsze pokrycie"
+        },
+        {
+          "id": "D",
+          "text": "Test z asercja 'true == true' niezwiazana z funkcja jest pozorny"
+        },
+        {
+          "id": "E",
+          "text": "Duplikat jest nieszkodliwy, bo dwa identyczne testy zwiekszaja pewnosc wyniku"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "D"
+      ],
+      "feedbackCorrect": "Duplikat to te same warunki opisane inaczej, a test pozorny ma asercje, ktora niczego nie weryfikuje; liczba przypadkow nie jest miara pokrycia.",
+      "feedbackIncorrect": "Wieksza liczba testow nie rowna sie lepszemu pokryciu, a duplikat zwieksza koszt utrzymania bez wartosci. Powtorz ekran o duplikatach i testach pozornych.",
+      "references": [
+        "M8.4"
+      ]
+    },
+    {
+      "id": "Q067",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik stosuje kryteria kontroli merytorycznej, ktore output LLM musi spelnic, by trafil do dokumentacji QA.",
+      "prompt": "Zanim wkleisz wygenerowany przez LLM zestaw przypadkow do oficjalnej dokumentacji QA SklepDemo (fikcyjny), ktore kryteria kontroli merytorycznej musza byc spelnione? Wskaz wszystkie poprawne.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Zgodnosc z wymaganiem (brak wartosci sprzecznych z kryteriami akceptacji)"
+        },
+        {
+          "id": "B",
+          "text": "Brak zmyslonych faktow (halucynacji) i weryfikowalnosc tresci"
+        },
+        {
+          "id": "C",
+          "text": "Brak danych wrazliwych i realnego PII w przykladach"
+        },
+        {
+          "id": "D",
+          "text": "Output ma byc jak najdluzszy, bo wieksza objetosc swiadczy o jakosci"
+        },
+        {
+          "id": "E",
+          "text": "Output ma byc zaakceptowany wylacznie dlatego, ze wygenerowal go nowszy model"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Dopuszczenie do dokumentacji wymaga zgodnosci z wymaganiem, braku halucynacji, weryfikowalnosci i braku danych wrazliwych — objetosc i wersja modelu nie sa kryteriami.",
+      "feedbackIncorrect": "Dlugosc tekstu i wersja modelu nie sa kryteriami jakosci; liczy sie zgodnosc, weryfikowalnosc i brak danych wrazliwych. Wroc do rubryki kontroli merytorycznej.",
+      "references": [
+        "M8.6"
+      ]
+    },
+    {
+      "id": "Q068",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik odroznia zadania QA, w ktorych LLM jest asystentem, od decyzji zarezerwowanych dla czlowieka.",
+      "prompt": "Ktore zadania QA mozna bezpiecznie powierzyc LLM jako asystentowi (z pozniejsza kontrola czlowieka)? Wskaz wszystkie poprawne.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Szkic przypadkow testowych z wymagania jako punkt wyjscia"
+        },
+        {
+          "id": "B",
+          "text": "Propozycja kategorii ryzyk do checklisty risk-based testing"
+        },
+        {
+          "id": "C",
+          "text": "Przeformulowanie i uporzadkowanie istniejacych opisow testow"
+        },
+        {
+          "id": "D",
+          "text": "Ostateczna decyzja o dopuszczeniu wydania do produkcji"
+        },
+        {
+          "id": "E",
+          "text": "Samodzielne zamkniecie defektu krytycznego bez weryfikacji testera"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Szkice, propozycje kategorii ryzyk i porzadkowanie tresci to praca asystenta; decyzje o release i defektach krytycznych nalezą do czlowieka.",
+      "feedbackIncorrect": "Decyzja o release i zamykanie defektow krytycznych to rola decydenta (czlowieka), a nie LLM. Powtorz ekran asystent vs decydent.",
+      "references": [
+        "M8.7",
+        "M8.1"
+      ]
+    },
+    {
+      "id": "Q069",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Uczestnik przypisuje funkcjonalnosc NotkaApp do wlasciwej kategorii ryzyka w checkliscie risk-based testing.",
+      "prompt": "Dopasuj funkcjonalnosc lub artefakt NotkaApp do najwlasciwszej kategorii ryzyka w checkliscie risk-based testing.",
+      "pairs": [
+        {
+          "left": "Blokada konta po 3 bledych probach logowania",
+          "right": "Bezpieczenstwo (ochrona przed atakiem brute-force)"
+        },
+        {
+          "left": "Przechowywanie e-maila uzytkownika w bazie",
+          "right": "Dane (ochrona danych osobowych i poufnosc)"
+        },
+        {
+          "left": "Czas generowania linku resetu przy duzym obciazeniu",
+          "right": "Wydajnosc (czas odpowiedzi pod obciazeniem)"
+        },
+        {
+          "left": "Obsluga formularza resetu przez czytnik ekranu",
+          "right": "Dostepnosc (zgodnosc z WCAG)"
+        }
+      ],
+      "feedbackCorrect": "Kazda funkcjonalnosc trafia do kategorii ryzyka, ktora najlepiej opisuje glowne zagrozenie — to rdzen checklisty risk-based testing.",
+      "feedbackIncorrect": "Kategorie myla sie, gdy patrzysz na technologie zamiast na glowne zagrozenie funkcji (bezpieczenstwo, dane, wydajnosc, dostepnosc). Powtorz ekran o checkliscie ryzyk.",
+      "references": [
+        "M8.5"
+      ]
+    },
+    {
+      "id": "Q070",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik przypisuje typowy defekt wygenerowanych przypadków testowych do jego konsekwencji w QA.",
+      "prompt": "Dopasuj typowy defekt przypadków testowych wygenerowanych przez LLM dla wymagania SklepDemo (fikcyjne) do jego głównej konsekwencji w QA.",
+      "pairs": [
+        {
+          "left": "Wygenerowany przypadek bez oczekiwanego wyniku",
+          "right": "Test pozorny — przechodzi zawsze, nie wykrywa defektu"
+        },
+        {
+          "left": "Dwa przypadki o tych samych krokach i danych",
+          "right": "Duplikat — rozdęcie zestawu bez nowego pokrycia"
+        },
+        {
+          "left": "Przypadek sprawdzający pole, którego nie ma w wymaganiu",
+          "right": "Halucynacja zakresu — test poza wymaganiem"
+        },
+        {
+          "left": "Brak przypadku dla ścieżki błędu opisanej w wymaganiu",
+          "right": "Luka pokrycia — nieprzetestowany scenariusz z wymagania"
+        }
+      ],
+      "feedbackCorrect": "Każdy defekt ma inną konsekwencję dla jakości zestawu: test pozorny nie wykrywa błędów, duplikat nie dodaje pokrycia, halucynacja zakresu testuje coś spoza wymagania, a luka pokrycia zostawia ryzyko nieprzetestowane.",
+      "feedbackIncorrect": "Rozróżnij defekty po skutku: brak oczekiwanego wyniku = test pozorny, te same kroki = duplikat, pole spoza wymagania = halucynacja zakresu, brak ścieżki błędu = luka pokrycia. Powtórz ekran QA workbench o brakach i testach pozornych.",
+      "references": [
+        "M8.6",
+        "M8.7"
+      ]
+    },
+    {
+      "id": "Q071",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik przypisuje konkretne ryzyko z funkcji NotkaApp do scenariusza testowego, ktory je weryfikuje.",
+      "prompt": "Dopasuj ryzyko zwiazane z funkcja resetu hasla NotkaApp do przypadku testowego, ktory je weryfikuje.",
+      "pairs": [
+        {
+          "left": "Ryzyko: link resetu dziala po wygasnieciu",
+          "right": "Test: proba uzycia linku po uplywie 30 minut"
+        },
+        {
+          "left": "Ryzyko: link jednorazowy dziala wielokrotnie",
+          "right": "Test: dwukrotne uzycie tego samego linku resetu"
+        },
+        {
+          "left": "Ryzyko: konto nie blokuje sie po bledych probach",
+          "right": "Test: 3 kolejne bledne proby logowania i sprawdzenie blokady"
+        },
+        {
+          "left": "Ryzyko: reset dziala dla nieistniejacego konta",
+          "right": "Test: zlecenie resetu dla niezarejestrowanego e-maila"
+        }
+      ],
+      "feedbackCorrect": "Kazde ryzyko jest weryfikowane przez przypadek, ktory bezposrednio probuje wywolac niepozadane zachowanie — to laczy risk-based testing z pokryciem.",
+      "feedbackIncorrect": "Test musi celowac dokladnie w zagrozenie opisane przez ryzyko (np. ponowne uzycie linku, brak blokady). Powtorz ekran o checkliscie ryzyk i brakach w pokryciu.",
+      "references": [
+        "M8.5",
+        "M8.3"
+      ]
+    },
+    {
+      "id": "Q072",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik przypisuje problem jakosci wygenerowanego outputu do wlasciwego dzialania kontrolnego testera.",
+      "prompt": "Dopasuj wykryty problem w wygenerowanym przez LLM artefakcie QA do wlasciwego dzialania kontrolnego.",
+      "pairs": [
+        {
+          "left": "Dwa przypadki sprawdzaja te same warunki innym opisem",
+          "right": "Scal duplikaty i pozostaw jeden przypadek"
+        },
+        {
+          "left": "Przypadek bez zdefiniowanego oczekiwanego rezultatu",
+          "right": "Usun lub uzupelnij asercje (test pozorny)"
+        },
+        {
+          "left": "Brak przypadku dla blokady konta po 3 probach",
+          "right": "Dodaj przypadek pokrywajacy luke w pokryciu"
+        },
+        {
+          "left": "Output podaje blokade 24 h zamiast 15 min",
+          "right": "Popraw fakt sprzeczny z wymaganiem przed uzyciem"
+        }
+      ],
+      "feedbackCorrect": "Kazdy typ problemu w outpucie ma adekwatne dzialanie: scalenie duplikatu, naprawe testu pozornego, uzupelnienie luki lub korekte zmyslonego faktu.",
+      "feedbackIncorrect": "Dzialanie kontrolne zalezy od rodzaju problemu — nie myl duplikatu z luka w pokryciu ani testu pozornego z halucynacja. Powtorz ekrany o duplikatach i kontroli outputu.",
+      "references": [
+        "M8.4",
+        "M8.6"
+      ]
+    }
+  ]
+}

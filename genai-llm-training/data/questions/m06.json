@@ -1,0 +1,412 @@
+{
+  "_meta": {
+    "module": "M6",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M6. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q041",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "kolejnosc_procesu",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Uczestnik układa pełny pipeline RAG od dokumentów źródłowych do odpowiedzi z cytatami w poprawnej kolejności.",
+      "prompt": "Ułóż w poprawnej kolejności kroki pełnego pipeline RAG (ang. Retrieval-Augmented Generation) — od przygotowania korpusu „SklepDemo” do gotowej odpowiedzi z cytatami.",
+      "sequence": [
+        "Podziel dokumenty źródłowe na fragmenty (chunking)",
+        "Wylicz osadzenia (embeddings) dla fragmentów",
+        "Zapisz fragmenty i osadzenia w indeksie / bazie wektorowej",
+        "Przyjmij zapytanie użytkownika",
+        "Wyszukaj najbliższe fragmenty (retrieval, top-k)",
+        "Wstrzyknij pobrany kontekst do promptu i wygeneruj odpowiedź z cytatami"
+      ],
+      "feedbackCorrect": "Fragmenty muszą najpierw powstać i trafić do indeksu (chunking → embeddings → indeks), zanim zapytanie uruchomi retrieval, a dopiero pobrany kontekst zasila generację z cytatami.",
+      "feedbackIncorrect": "Etap indeksowania (chunking, embeddings, indeks) jest niezależny od zapytania i zawsze go poprzedza; retrieval musi być przed generacją, bo dostarcza jej kontekst. Powtórz ekran „Pipeline RAG od końca do końca”.",
+      "references": [
+        "M6.2",
+        "M6.3"
+      ]
+    },
+    {
+      "id": "Q042",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "kolejnosc_procesu",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik porządkuje fazę budowy indeksu (offline) pipeline RAG na korpusie dokumentacji wymagań.",
+      "prompt": "Zespół przygotowuje indeks dla korpusu wymagań „SklepDemo”, zanim ktokolwiek zada pytanie. Ułóż kroki tej fazy indeksowania w poprawnej kolejności.",
+      "sequence": [
+        "Zbierz dokumenty źródłowe korpusu „SklepDemo”",
+        "Podziel każdy dokument na fragmenty (chunking) z zachowaniem nagłówków i identyfikatorów w metadanych",
+        "Wylicz osadzenia (embeddings) dla każdego fragmentu",
+        "Zapisz fragmenty wraz z osadzeniami i metadanymi w indeksie / bazie wektorowej"
+      ],
+      "feedbackCorrect": "Faza indeksowania działa na dokumentach (nie na zapytaniu): najpierw zbiór, potem podział na fragmenty, potem osadzenia, na końcu zapis do indeksu gotowego na retrieval.",
+      "feedbackIncorrect": "Osadzenia można policzyć dopiero dla istniejących fragmentów, a do indeksu trafia fragment razem z osadzeniem i metadanymi — kolejność jest wymuszona zależnością danych. Wróć do opisu chunkingu i embeddings.",
+      "references": [
+        "M6.2",
+        "M6.4"
+      ]
+    },
+    {
+      "id": "Q043",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "kolejnosc_procesu",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik porządkuje ścieżkę zapytania (query-time) z rerankingiem i kontrolą ugruntowania, rozpoznając miejsce każdego kroku.",
+      "prompt": "Indeks korpusu „SklepDemo” jest już gotowy. Ułóż kroki ścieżki obsługi pojedynczego zapytania użytkownika, włącznie z przesortowaniem wyników i kontrolą ugruntowania odpowiedzi.",
+      "sequence": [
+        "Przyjmij zapytanie użytkownika i wylicz jego osadzenie",
+        "Wyszukaj kandydujące fragmenty w indeksie (retrieval, top-k)",
+        "Przesortuj kandydatów według trafności (reranking)",
+        "Wstrzyknij najlepsze fragmenty jako kontekst do promptu",
+        "Wygeneruj odpowiedź z cytatami do fragmentów",
+        "Sprawdź ugruntowanie (grounding): czy każde zdanie ma oparcie w pobranym fragmencie"
+      ],
+      "feedbackCorrect": "Reranking działa na wynikach wstępnego retrievalu (więc po nim, a przed wstrzyknięciem kontekstu), a kontrola groundingu następuje po wygenerowaniu odpowiedzi — weryfikuje wytworzony tekst względem źródeł.",
+      "feedbackIncorrect": "Reranking nie ma czego sortować bez wcześniejszego retrievalu, a grounding ocenia gotową odpowiedź, więc jest ostatni. Powtórz pogłębienie inżynierskie o rerankingu i groundingu.",
+      "references": [
+        "M6.3",
+        "M6.9"
+      ]
+    },
+    {
+      "id": "Q044",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik rozpoznaje rolę zazębienia (overlap) przy dzieleniu dokumentacji wymagań na fragmenty.",
+      "prompt": "Przy dzieleniu dokumentacji wymagań na fragmenty (chunking) stosuje się zazębienie (ang. overlap) między sąsiednimi fragmentami. Po co?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Aby zdanie lub kryterium akceptacji na granicy cięcia nie zostało rozerwane i pozostało w spójnym kontekście co najmniej jednego fragmentu"
+        },
+        {
+          "id": "B",
+          "text": "Aby zmniejszyć liczbę fragmentów i tym samym rozmiar indeksu wektorowego"
+        },
+        {
+          "id": "C",
+          "text": "Aby model generujący odpowiedź nie musiał już cytować źródeł"
+        },
+        {
+          "id": "D",
+          "text": "Aby przyspieszyć liczenie osadzeń (embeddings) dla całego korpusu"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Overlap powiela fragment tekstu na granicy cięcia, dzięki czemu treść ucięta w jednym fragmencie (np. kryterium akceptacji) zachowuje kontekst w sąsiednim.",
+      "feedbackIncorrect": "Overlap zwiększa, a nie zmniejsza liczbę i objętość fragmentów; jego celem jest ochrona kontekstu na granicach cięcia, nie wydajność ani cytowanie. Powtórz ekran o chunkingu i parametrze overlap.",
+      "references": [
+        "M6.4"
+      ]
+    },
+    {
+      "id": "Q045",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik dobiera RAG zamiast fine-tuningu dla potrzeby świeżej, cytowalnej wiedzy faktograficznej.",
+      "prompt": "Zespół QA chce, by asystent odpowiadał na pytania o aktualne wymagania „SklepDemo” i przy każdej odpowiedzi wskazywał konkretny fragment specyfikacji. Specyfikacja zmienia się co sprint. Które podejście jest właściwe?",
+      "options": [
+        {
+          "id": "A",
+          "text": "RAG — bo potrzebna jest świeża, zmienna wiedza faktograficzna z możliwością cytowania źródła"
+        },
+        {
+          "id": "B",
+          "text": "Fine-tuning — bo dostrojenie modelu na specyfikacji nauczy go treści wymagań na stałe"
+        },
+        {
+          "id": "C",
+          "text": "Fine-tuning — bo tylko dostrojony model potrafi podawać cytaty do dokumentów"
+        },
+        {
+          "id": "D",
+          "text": "Ani RAG, ani fine-tuning — wystarczy dłuższy prompt z ogólnymi instrukcjami stylu"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "RAG dostarcza modelowi świeże fragmenty z aktualnej specyfikacji i pozwala je cytować; faktografia zmienna co sprint to klasyczny przypadek dla RAG, nie dostrajania.",
+      "feedbackIncorrect": "Fine-tuning utrwala styl/zachowanie, nie aktualną faktografię, i nie zapewnia cytatów do źródeł — przy zmiennej specyfikacji szybko byłby nieaktualny. Powtórz ekran „RAG czy fine-tuning” i anty-mit o uczeniu modelu dokumentacji.",
+      "references": [
+        "M6.6"
+      ]
+    },
+    {
+      "id": "Q046",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik rozróżnia sygnały błędu retrieval, generation i błędu źródłowego na podstawie odpowiedzi i pobranego kontekstu.",
+      "prompt": "Która sytuacja jednoznacznie wskazuje na błąd generacji (ang. generation), a nie na błąd wyszukiwania (retrieval) ani błąd źródłowy?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Do kontekstu pobrano właściwy fragment z poprawnym kryterium, a mimo to odpowiedź modelu jest z nim sprzeczna"
+        },
+        {
+          "id": "B",
+          "text": "Wśród pobranych fragmentów w ogóle nie ma tego, który zawiera odpowiedź na pytanie"
+        },
+        {
+          "id": "C",
+          "text": "Model zacytował fragment poprawnie, ale sama treść w dokumencie źródłowym była nieaktualna"
+        },
+        {
+          "id": "D",
+          "text": "Top-k ustawiono na 0, więc do promptu nie trafił żaden fragment"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Gdy właściwy fragment był w kontekście, lecz odpowiedź mu przeczy, zawiódł etap generacji — model źle wykorzystał poprawne źródło.",
+      "feedbackIncorrect": "Brak właściwego fragmentu (B, D) to błąd retrievalu, a poprawny cytat z błędną treścią dokumentu (C) to błąd źródłowy. Powtórz ekran „Trzy warstwy błędu w RAG”.",
+      "references": [
+        "M6.7",
+        "M6.8"
+      ]
+    },
+    {
+      "id": "Q047",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Uczestnik dobiera strategię chunkingu chroniącą kompletność pojedynczego wymagania wraz z identyfikatorem.",
+      "prompt": "W korpusie „SklepDemo” każde wymaganie ma identyfikator (np. „WYM-014”) i własne kryterium akceptacji, czasem długie na kilka zdań. Wcześniej arbitralne cięcie co stałą liczbę znaków powodowało, że kryterium bywało ucinane w połowie i retrieval zwracał fragment bez konkluzji. Jaką strategię chunkingu wybrać?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Dzielić po pojedynczym wymaganiu — jedno wymaganie z identyfikatorem i pełnym kryterium akceptacji = jeden spójny fragment, identyfikator w metadanych"
+        },
+        {
+          "id": "B",
+          "text": "Zostawić stałe cięcie co tę samą liczbę znaków, tylko zmniejszyć rozmiar fragmentu, żeby było ich więcej"
+        },
+        {
+          "id": "C",
+          "text": "Wrzucać cały dokument jako jeden fragment, by nic nie dało się uciąć"
+        },
+        {
+          "id": "D",
+          "text": "Dzielić losowo, ale zwiększyć top-k, licząc że właściwy kawałek i tak się trafi"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Granica logiczna „jedno wymaganie = jeden fragment” z identyfikatorem w metadanych zachowuje pełne kryterium i czytelne źródło cytatu — dokładnie tego brakowało przy stałym cięciu.",
+      "feedbackIncorrect": "Mniejsze stałe fragmenty tną kryteria jeszcze częściej, cały dokument jako fragment psuje trafność retrievalu, a losowy podział z dużym top-k nie gwarantuje kompletności wymagania. Powtórz regułę QA o chunkingu po wymaganiu.",
+      "references": [
+        "M6.4",
+        "M6.5"
+      ]
+    },
+    {
+      "id": "Q048",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik decyduje między RAG a fine-tuningiem, rozpoznając potrzebę stałego formatu wyjścia zamiast nowej faktografii.",
+      "prompt": "Asystent QA ma zawsze zwracać raport z wykonania testów w stałym, firmowym układzie sekcji i tonie, niezależnie od pytania. Treść raportu pochodzi z bieżących logów testów, ale chodzi o powtarzalny format i styl. Co wybrać dla samego wymogu formatu?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Fine-tuning (lub szablon w prompcie) — utrwalenie stałego stylu i formatu wyjścia to typowe zadanie dostrajania, nie nowa faktografia"
+        },
+        {
+          "id": "B",
+          "text": "RAG — bo tylko retrieval potrafi narzucić modelowi stały układ sekcji raportu"
+        },
+        {
+          "id": "C",
+          "text": "RAG na dokumencie opisującym format — bo każdy aspekt zachowania modelu należy rozwiązywać retrievalem"
+        },
+        {
+          "id": "D",
+          "text": "Nic z tego — formatu wyjścia w ogóle nie da się kontrolować w modelach LLM"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Stały styl i format wyjścia to zachowanie modelu, które utrwala fine-tuning (lub szablon promptu) — to nie jest świeża wiedza faktograficzna wymagająca RAG.",
+      "feedbackIncorrect": "RAG odpowiada za świeżą faktografię i cytaty, a nie za narzucanie formatu; mit „wszystko retrievalem” jest błędny, a format wyjścia jak najbardziej da się kontrolować. Powtórz rozróżnienie RAG vs fine-tuning.",
+      "references": [
+        "M6.6"
+      ]
+    },
+    {
+      "id": "Q049",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik rozpoznaje warstwę błędu na podstawie pobranego kontekstu i cytatu w odpowiedzi modelu.",
+      "prompt": "Na korpusie „NotkaApp” (DOC1: token sesji wygasa po 30 min; DOC3: link resetu hasła ważny 30 min, jednorazowy) pada pytanie „Po jakim czasie wygasa link resetu hasła?”. Model pobrał i zacytował tylko DOC1 i odpowiada: „Wygasa po 30 minutach bezczynności [DOC1]”. Liczba przypadkiem się zgadza, ale cytat dotyczy tokenu sesji, nie linku resetu. Która warstwa zawiodła?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Retrieval — pobrano podobny semantycznie, lecz niewłaściwy fragment (DOC1), a właściwego (DOC3) zabrakło w kontekście"
+        },
+        {
+          "id": "B",
+          "text": "Generation — kontekst miał DOC3, ale model i tak źle podsumował poprawny fragment"
+        },
+        {
+          "id": "C",
+          "text": "Błąd źródłowy — DOC3 zawiera nieprawidłową informację o czasie ważności linku"
+        },
+        {
+          "id": "D",
+          "text": "Brak błędu — skoro liczba „30 minut” jest zgodna, odpowiedź jest w pełni ugruntowana"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Cytat wskazuje DOC1 (token sesji), a nie właściwe DOC3 (link resetu) — to klasyczny similar-but-useless: zawiódł retrieval, mimo że liczba przypadkiem pasuje.",
+      "feedbackIncorrect": "DOC3 nie trafił do kontekstu, więc to nie błąd generacji ani źródłowy; przypadkowa zgodność liczby nie oznacza ugruntowania — cytat dotyczy złego dokumentu. Powtórz diagnozę warstw błędu i pułapkę similar-but-useless.",
+      "references": [
+        "M6.8",
+        "M6.7"
+      ]
+    },
+    {
+      "id": "Q050",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik wskazuje sygnały świadczące o błędzie wyszukiwania (retrieval) w odpowiedzi RAG.",
+      "prompt": "Które z poniższych sygnałów wskazują, że w pipeline RAG zawiódł etap wyszukiwania (ang. retrieval), a nie generacji? Zaznacz wszystkie poprawne.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Wśród pobranych fragmentów (top-k) nie ma w ogóle tego, który zawiera odpowiedź na pytanie"
+        },
+        {
+          "id": "B",
+          "text": "Właściwe źródło było wyłączone z indeksu, więc nie mogło zostać pobrane"
+        },
+        {
+          "id": "C",
+          "text": "Top-k ustawiono na zbyt małą wartość i właściwy fragment wypadł poza listę pobranych"
+        },
+        {
+          "id": "D",
+          "text": "Pobrano poprawny fragment z prawidłowym kryterium, lecz odpowiedź modelu mu przeczy"
+        },
+        {
+          "id": "E",
+          "text": "Pobrany i zacytowany fragment był poprawny, ale treść w samym dokumencie źródłowym jest nieaktualna"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Brak właściwego fragmentu w top-k, wyłączone źródło i zbyt małe top-k to wszystko sytuacje, w których właściwy kontekst nie dotarł do modelu — czyli błąd retrievalu.",
+      "feedbackIncorrect": "Sprzeczność mimo poprawnego kontekstu (D) to błąd generacji, a nieaktualna treść poprawnie zacytowanego dokumentu (E) to błąd źródłowy — żadne z nich nie dotyczy wyszukiwania. Powtórz trzy warstwy błędu w RAG.",
+      "references": [
+        "M6.7",
+        "M6.8"
+      ]
+    }
+  ]
+}
