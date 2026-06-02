@@ -291,7 +291,7 @@ Pracę należy realizować sekwencyjnie milestone po milestone. W ramach milesto
 
 ## Decyzje do potwierdzenia przed startem implementacji
 
-1. Czy wersja pilotażowa ma zostać statyczna z eksportem wyników, czy od razu budujemy backend wyników?
+1. **Rozstrzygnięte:** MVP/pilotaż jest statyczny na GitHub Pages z eksportem wyników (założenie architektoniczne #11). Otwarte pozostaje wyłącznie: czy i kiedy dodać **zewnętrzny backend raportowania wyników** (po pilotażu).
 2. Czy certyfikat ma mieć formalną wartość wewnętrzną, czy tylko informacyjną?
 3. Czy QualityCat ma gotową politykę użycia GenAI, czy trzeba przygotować konserwatywną wersję domyślną?
 4. Czy szkolenie ma działać offline/intranetowo?
