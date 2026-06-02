@@ -1,7 +1,7 @@
 <claude-mem-context>
 # Memory Context
 
-# [szkolenie_AI_priv] recent context, 2026-06-02 8:36pm GMT+2
+# [szkolenie_AI_priv] recent context, 2026-06-02 8:37pm GMT+2
 
 No previous sessions found.
 </claude-mem-context>
@@ -18,7 +18,8 @@ Lokalne zasady pracy dla repo `szkolenie_AI_priv`.
 - PR musi linkowac issue, ktore realizuje, np. `Closes #12`.
 - Po wystawieniu PR czekamy na zielone CI oraz review Codexa.
 - Nie zamykaj issue i nie uznawaj pracy za zakonczona, dopoki PR nie przejdzie CI i review.
-- Dla nowego issue zaczynaj od aktualnego `main`, a potem utworz branch w stylu `issue-12-krotki-opis`.
+- Przed rozpoczeciem nowego issue zawsze pobierz najnowszy `origin/main`: `git fetch origin`, `git switch main`, `git pull --ff-only origin main`.
+- Dla nowego issue zaczynaj od aktualnego `main`, a dopiero potem utworz branch w stylu `issue-12-krotki-opis`.
 - Jedno issue = jeden temat. Nie mieszaj refactoru, zmian tresci i zmian architektury w jednym PR, jesli nie sa konieczne do realizacji issue.
 
 ## Struktura kodu i plikow
