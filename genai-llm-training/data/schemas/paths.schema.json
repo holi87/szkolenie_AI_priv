@@ -1,0 +1,97 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "paths.schema.json",
+  "title": "Macierz ścieżek S1/S2/S3",
+  "description": "Kontrakt paths.json (issue #5). Gating ścieżka×moduł, progi, bramki zaliczenia.",
+  "type": "object",
+  "required": ["modules", "paths"],
+  "properties": {
+    "_meta": { "type": "object" },
+    "statusLegend": { "type": "object" },
+    "modules": {
+      "type": "object",
+      "patternProperties": {
+        "^M([1-9]|1[0-2])$": {
+          "type": "object",
+          "required": ["name", "timeFullMin", "questions"],
+          "properties": {
+            "name": { "type": "string" },
+            "timeFullMin": { "type": "integer", "minimum": 1 },
+            "questions": { "type": "integer", "minimum": 1 },
+            "criticalQuestions": { "type": "integer", "minimum": 0 }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "paths": {
+      "type": "object",
+      "required": ["S1", "S2", "S3"],
+      "patternProperties": {
+        "^S[123]$": {
+          "type": "object",
+          "required": ["name", "modules", "requiredModules", "finalTestQuestions", "passThresholdPct", "criticalQuestionsRequiredPct", "practicalTasks", "gates", "attempts"],
+          "properties": {
+            "name": { "type": "string" },
+            "modules": {
+              "type": "object",
+              "required": ["M1", "M2", "M3", "M4", "M5", "M6", "M7", "M8", "M9", "M10", "M11", "M12"],
+              "patternProperties": {
+                "^M([1-9]|1[0-2])$": {
+                  "type": "object",
+                  "required": ["required", "variant"],
+                  "properties": {
+                    "required": { "type": "boolean" },
+                    "variant": { "type": "string", "enum": ["full", "skrocony", "opcjonalny", "swiadomosciowy", "rozszerzony", "praktyczny"] }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "additionalProperties": false
+            },
+            "requiredModules": { "type": "array", "items": { "type": "string", "pattern": "^M([1-9]|1[0-2])$" } },
+            "estContentTimeMin": { "type": "integer" },
+            "estContentTimeNote": { "type": "string" },
+            "assumedPathTime": { "type": "string" },
+            "finalTestQuestions": { "type": "integer", "minimum": 1 },
+            "passThresholdPct": { "type": "integer", "minimum": 0, "maximum": 100 },
+            "criticalQuestionsRequiredPct": { "type": "integer", "minimum": 0, "maximum": 100 },
+            "practicalTasks": { "type": "integer", "minimum": 0 },
+            "extraPassConditions": { "type": "array", "items": { "type": "string" } },
+            "gates": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["type"],
+                "properties": {
+                  "type": { "type": "string", "enum": ["overallThreshold", "criticalQuestions", "practicalTask", "moduleMinScore"] },
+                  "minPct": { "type": "number", "minimum": 0, "maximum": 100 },
+                  "module": { "type": "string", "pattern": "^M([1-9]|1[0-2])$" },
+                  "rubric": { "type": "string" },
+                  "minScore": { "type": "number", "minimum": 0 },
+                  "maxScore": { "type": "number", "minimum": 0 }
+                },
+                "additionalProperties": false,
+                "allOf": [
+                  { "if": { "properties": { "type": { "const": "overallThreshold" } } },
+                    "then": { "required": ["minPct"] } },
+                  { "if": { "properties": { "type": { "const": "criticalQuestions" } } },
+                    "then": { "required": ["module", "minPct"] } },
+                  { "if": { "properties": { "type": { "const": "practicalTask" } } },
+                    "then": { "required": ["rubric", "minScore"] } },
+                  { "if": { "properties": { "type": { "const": "moduleMinScore" } } },
+                    "then": { "required": ["module", "minPct", "rubric"] } }
+                ]
+              }
+            },
+            "attempts": { "type": "integer", "minimum": 1 }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

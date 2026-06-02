@@ -1,0 +1,103 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "questions.schema.json",
+  "title": "Bank pytań szkolenia GenAI/LLM",
+  "description": "Kontrakt pojedynczego pliku banku pytań (data/questions/mNN.json — shard per moduł). Egzekwowany strukturalnie i agregatowo przez genai-llm-training/tests/schema-validation/validate.mjs (#13).",
+  "type": "object",
+  "required": ["questions"],
+  "properties": {
+    "_meta": { "type": "object" },
+    "questions": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/question" }
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "question": {
+      "type": "object",
+      "required": [
+        "id", "module", "pillar", "paths", "difficulty", "bloom", "type",
+        "isCritical", "golden", "points", "learningOutcome", "prompt",
+        "feedbackCorrect", "feedbackIncorrect", "references"
+      ],
+      "properties": {
+        "id": { "type": "string", "pattern": "^Q[0-9]{3}$" },
+        "module": { "type": "string", "pattern": "^M([1-9]|1[0-2])$" },
+        "pillar": { "type": "string", "enum": ["foundations_technical", "qa_practice", "security_governance"] },
+        "paths": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": { "type": "string", "enum": ["S1", "S2", "S3"] }
+        },
+        "difficulty": { "type": "string", "enum": ["L1", "L2", "L3", "L4"] },
+        "bloom": { "type": "string", "enum": ["remember", "understand", "apply", "analysis", "evaluation", "create"] },
+        "type": {
+          "type": "string",
+          "enum": ["single_choice", "multiple_choice", "dopasowanie", "kolejnosc_procesu", "scenariusz_decyzyjny", "scenariusz", "analiza_outputu"]
+        },
+        "isCritical": { "type": "boolean" },
+        "golden": { "type": "boolean" },
+        "points": { "type": "number", "minimum": 0 },
+        "learningOutcome": { "type": "string", "minLength": 5 },
+        "prompt": { "type": "string", "minLength": 5 },
+        "options": {
+          "type": "array", "minItems": 2,
+          "items": {
+            "type": "object",
+            "required": ["id", "text"],
+            "properties": { "id": { "type": "string" }, "text": { "type": "string", "minLength": 1 } },
+            "additionalProperties": false
+          }
+        },
+        "correct": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string" } },
+        "pairs": {
+          "type": "array", "minItems": 2,
+          "items": {
+            "type": "object",
+            "required": ["left", "right"],
+            "properties": { "left": { "type": "string", "minLength": 1 }, "right": { "type": "string", "minLength": 1 } },
+            "additionalProperties": false
+          }
+        },
+        "sequence": { "type": "array", "minItems": 2, "items": { "type": "string", "minLength": 1 } },
+        "feedbackCorrect": { "type": "string", "minLength": 5 },
+        "feedbackIncorrect": { "type": "string", "minLength": 5 },
+        "references": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "comment": "single/multiple/scenariusz -> options + correct",
+          "if": { "properties": { "type": { "enum": ["single_choice", "multiple_choice", "scenariusz_decyzyjny", "scenariusz"] } } },
+          "then": { "required": ["options", "correct"] }
+        },
+        {
+          "comment": "single/scenariusz_decyzyjny -> dokładnie 1 poprawna",
+          "if": { "properties": { "type": { "enum": ["single_choice", "scenariusz_decyzyjny"] } } },
+          "then": { "properties": { "correct": { "maxItems": 1 } } }
+        },
+        {
+          "comment": "multiple_choice -> co najmniej 2 poprawne",
+          "if": { "properties": { "type": { "const": "multiple_choice" } } },
+          "then": { "properties": { "correct": { "minItems": 2 } } }
+        },
+        {
+          "comment": "dopasowanie -> pairs",
+          "if": { "properties": { "type": { "const": "dopasowanie" } } },
+          "then": { "required": ["pairs"] }
+        },
+        {
+          "comment": "kolejnosc_procesu -> sequence",
+          "if": { "properties": { "type": { "const": "kolejnosc_procesu" } } },
+          "then": { "required": ["sequence"] }
+        },
+        {
+          "comment": "pytania krytyczne tylko w M10",
+          "if": { "properties": { "isCritical": { "const": true } } },
+          "then": { "properties": { "module": { "const": "M10" } } }
+        }
+      ]
+    }
+  }
+}

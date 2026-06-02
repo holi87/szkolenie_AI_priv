@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "golden-set.schema.json",
+  "title": "Golden set pytań referencyjnych",
+  "description": "Kontrakt golden-set.json. Lista referencji do pytań z questions.json (po id) + kompozycja. Pokrycie i rozkład weryfikuje validate.mjs (#13).",
+  "type": "object",
+  "required": ["goldenSet"],
+  "properties": {
+    "_meta": { "type": "object" },
+    "goldenSet": {
+      "type": "object",
+      "required": ["reference", "size", "questionIds"],
+      "properties": {
+        "reference": { "type": "boolean", "const": true, "description": "Zestaw referencyjny — nie eksponować stale uczestnikom" },
+        "size": { "type": "integer", "const": 24 },
+        "composition": {
+          "type": "object",
+          "properties": {
+            "perModule": { "type": "integer" },
+            "difficulty": {
+              "type": "object",
+              "properties": { "L1": { "type": "integer" }, "L2": { "type": "integer" }, "L3": { "type": "integer" }, "L4": { "type": "integer" } },
+              "additionalProperties": false
+            },
+            "minSecurity": { "type": "integer" },
+            "minQA": { "type": "integer" },
+            "minTechnical": { "type": "integer" }
+          },
+          "additionalProperties": false
+        },
+        "questionIds": {
+          "type": "array",
+          "minItems": 24, "maxItems": 24, "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^Q[0-9]{3}$" }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

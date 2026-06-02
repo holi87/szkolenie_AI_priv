@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "rubrics.schema.json",
+  "title": "Rubryki zadań praktycznych",
+  "description": "Kontrakt rubrics.json (issue #7). Bramki praktyczne w paths.json referują rubric id (R1-prompt, R2-rag, R3-eval) — walidator (#13) sprawdza rozwiązywalność referencji.",
+  "type": "object",
+  "required": ["rubrics"],
+  "properties": {
+    "_meta": { "type": "object" },
+    "rubrics": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "task", "module", "paths", "scaleMax", "passScope"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^R[0-9]+-[a-z-]+$" },
+          "task": { "type": "string", "minLength": 3 },
+          "module": { "type": "string", "pattern": "^M([1-9]|1[0-2])$" },
+          "paths": { "type": "array", "minItems": 1, "items": { "type": "string", "enum": ["S1", "S2", "S3"] } },
+          "scaleMax": { "type": "number", "minimum": 1 },
+          "passThreshold": { "type": ["number", "null"], "minimum": 0 },
+          "passScope": { "type": "string" },
+          "criteria": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id", "name", "points"],
+              "properties": {
+                "id": { "type": "string" },
+                "name": { "type": "string", "minLength": 1 },
+                "points": { "type": "number", "minimum": 0 }
+              },
+              "additionalProperties": false
+            }
+          },
+          "levels": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["points", "descriptor"],
+              "properties": {
+                "points": { "type": "number", "minimum": 0 },
+                "descriptor": { "type": "string", "minLength": 1 }
+              },
+              "additionalProperties": false
+            }
+          },
+          "belowThresholdFeedback": { "type": "string" }
+        },
+        "additionalProperties": false,
+        "anyOf": [
+          { "required": ["criteria"] },
+          { "required": ["levels"] }
+        ]
+      }
+    }
+  },
+  "additionalProperties": false
+}
