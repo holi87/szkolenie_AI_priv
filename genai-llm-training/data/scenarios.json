@@ -1,0 +1,122 @@
+{
+  "_meta": {
+    "issue": "#8 [08][M1] Przygotuj syntetyczne scenariusze szkoleniowe",
+    "version": "0.1",
+    "doc": "docs/scenariusze.md",
+    "dataPolicy": "WSZYSTKIE dane są SYNTETYCZNE i fikcyjne. Domena e-mail: przyklad.test (zarezerwowana). Produkty/firmy fikcyjne. Identyfikatory w formatach jawnie testowych. PESEL/numery to placeholdery nieprawidłowe. ZERO realnych danych klienta/PII.",
+    "source": "wymagania/06 (moduły, interakcje), wymagania/07 (typy pytań), docs/storyboard/"
+  },
+  "scenarios": [
+    {
+      "id": "SC-QA-01",
+      "title": "Generowanie przypadków testowych z wymagania",
+      "modules": ["M8"],
+      "paths": ["S2", "S3"],
+      "competency": "Generuje przypadki testowe i wykrywa braki pokrycia (E: M8)",
+      "usedBy": ["QA workbench", "pytania Q61-Q64"],
+      "data": {
+        "wymaganie": "Aplikacja NotkaApp (fikcyjna): użytkownik resetuje hasło przez link e-mail ważny 30 minut; po 3 błędnych próbach konto blokowane na 15 minut.",
+        "outputLLM": "Wygenerowane przypadki: TC1 reset poprawny; TC2 wygasły link; TC3 błędne hasło 3x → blokada. (brak: pusty e-mail, link użyty dwukrotnie, równoległe sesje)"
+      }
+    },
+    {
+      "id": "SC-PII-01",
+      "title": "Zgłoszenie z danymi osobowymi — decyzja o wklejeniu do LLM",
+      "modules": ["M10"],
+      "paths": ["S1", "S2", "S3"],
+      "competency": "Klasyfikuje dane jako dozwolone / wymagające anonimizacji / niedozwolone (E: M10, pytania krytyczne)",
+      "usedBy": ["Data safety gate", "pytania krytyczne Q81-Q85"],
+      "data": {
+        "zgloszenie": "Klient Jan Kowalski (jan.kowalski@przyklad.test, ID klienta KLI-000123, PESEL 00000000000 [syntetyczny, nieprawidłowy]) zgłasza błąd płatności w SklepDemo.",
+        "pytanie": "Czy wolno wkleić całe zgłoszenie do publicznego LLM, aby przeanalizować błąd?",
+        "poprawnaDecyzja": "Zanonimizować dane identyfikujące albo użyć zatwierdzonego narzędzia z kontrolami; nie wklejać surowych danych."
+      }
+    },
+    {
+      "id": "SC-PII-02",
+      "title": "Log aplikacji z fragmentami danych — co anonimizować",
+      "modules": ["M10"],
+      "paths": ["S2", "S3"],
+      "competency": "Wskazuje dane wymagające anonimizacji w logu (E: M10)",
+      "usedBy": ["Data safety gate", "pytania Q86-Q90"],
+      "data": {
+        "log": "2026-01-02 ERROR user=anna.nowak@przyklad.test ip=10.0.0.5 token=tok_test_ABC123 order=ORD-TEST-777 msg=payment_failed",
+        "doAnonimizacji": ["e-mail", "token", "potencjalnie order id w kontekście klienta"]
+      }
+    },
+    {
+      "id": "SC-RAG-01",
+      "title": "Mini-korpus dokumentacji QA do retrieval/RAG",
+      "modules": ["M4", "M5", "M6"],
+      "paths": ["S3"],
+      "competency": "Dobiera retrieval i diagnozuje similar-but-useless; układa pipeline RAG (E: M4/M5/M6)",
+      "usedBy": ["Mapa semantyczna", "Retrieval debugger", "Zbuduj pipeline RAG", "pytania Q33-Q50"],
+      "data": {
+        "korpus": [
+          { "id": "DOC1", "text": "Procedura logowania w NotkaApp: token sesji wygasa po 30 min bezczynności." },
+          { "id": "DOC2", "text": "Polityka haseł NotkaApp: min. 12 znaków, blokada po 3 błędach." },
+          { "id": "DOC3", "text": "Reset hasła: link e-mail ważny 30 min, jednorazowy." },
+          { "id": "DOC4", "text": "FAQ marketingowe NotkaApp: zalety produktu i cennik." }
+        ],
+        "zapytanie": "Po jakim czasie wygasa link resetu hasła?",
+        "pulapka": "DOC1 (token sesji 30 min) jest podobny semantycznie, ale poprawne źródło to DOC3 (link resetu)."
+      }
+    },
+    {
+      "id": "SC-AGENT-01",
+      "title": "Nadanie uprawnień agentowi QA",
+      "modules": ["M9"],
+      "paths": ["S3"],
+      "competency": "Projektuje minimalną kontrolę uprawnień, logi, human-in-the-loop, rollback (E: M9)",
+      "usedBy": ["Agent permission board", "pytania Q76-Q78"],
+      "data": {
+        "agent": "Agent uruchamiający testy regresyjne w środowisku TEST (fikcyjne CI 'PipeDemo').",
+        "zadania": ["uruchom testy", "odczytaj logi", "utwórz raport", "zgłoś defekt", "zmień konfigurację środowiska"],
+        "ryzyko": "Zmiana konfiguracji i zapis poza TEST wymagają zatwierdzenia człowieka i rollbacku; brak dostępu do produkcji."
+      }
+    },
+    {
+      "id": "SC-VERIFY-01",
+      "title": "Odpowiedź LLM z mieszanką treści uzasadnionych i halucynacji",
+      "modules": ["M11"],
+      "paths": ["S1", "S2", "S3"],
+      "competency": "Oznacza zdania jako poprawne / nieuzasadnione / wymagające źródła / ryzykowne (E: M11)",
+      "usedBy": ["Output verifier", "pytania Q95-Q98"],
+      "data": {
+        "odpowiedzLLM": [
+          "Reset hasła w NotkaApp używa linku ważnego 30 minut. [zgodne z DOC3]",
+          "Link można użyć wielokrotnie do skutku. [nieuzasadnione — sprzeczne z DOC3]",
+          "Blokada konta trwa 24 godziny. [wymaga źródła — niezgodne z wymaganiem 15 min]",
+          "NotkaApp ma certyfikat ISO 27001. [ryzykowne — brak źródła]"
+        ]
+      }
+    },
+    {
+      "id": "SC-PROMPT-01",
+      "title": "Wadliwy prompt do poprawy",
+      "modules": ["M7"],
+      "paths": ["S1", "S2", "S3"],
+      "competency": "Poprawia nieprecyzyjny prompt wg rubryki (E: M7)",
+      "usedBy": ["Prompt clinic", "pytania Q57-Q60", "rubryka R1"],
+      "data": {
+        "wadliwyPrompt": "Napisz testy do logowania.",
+        "braki": ["brak roli/celu", "brak kontekstu (jaka aplikacja, wymaganie)", "brak ograniczeń i kryteriów", "brak formatu wyjścia"]
+      }
+    },
+    {
+      "id": "SC-EVAL-01",
+      "title": "Rozjazd oceny człowieka i LLM-as-a-judge",
+      "modules": ["M12"],
+      "paths": ["S3"],
+      "competency": "Wykrywa bias/position bias i kalibruje rubrykę (E: M12)",
+      "usedBy": ["Judge calibration lab", "pytania Q113-Q116", "rubryka R3"],
+      "data": {
+        "przyklady": [
+          { "id": "EX1", "ocenaCzlowiek": 4, "ocenaJudge": 5, "uwaga": "judge faworyzuje dłuższą odpowiedź" },
+          { "id": "EX2", "ocenaCzlowiek": 2, "ocenaJudge": 4, "uwaga": "position bias — pierwsza odpowiedź" }
+        ],
+        "zadanie": "Wskaż źródło rozjazdu i popraw rubrykę."
+      }
+    }
+  ]
+}
