@@ -426,7 +426,7 @@ Golden set to zestaw pytań referencyjnych, które mają stabilnie mierzyć kluc
 |---|---|---|
 | Nawigacja modułowa | Menu boczne lub górne z modułami i statusem ukończenia | Uczestnik widzi ukończone, aktywne i zablokowane sekcje |
 | Ścieżki użytkownika | Wybór S1/S2/S3 na początku szkolenia | System pokazuje moduły obowiązkowe i opcjonalne dla wybranej ścieżki |
-| Progres | Zapisywanie postępu lokalnie lub w backendzie `[ZAŁOŻENIE]` | Po odświeżeniu strony uczestnik wraca do ostatniego miejsca |
+| Progres | Zapis lokalny (localStorage) w MVP; opcjonalny sync do zewnętrznego backendu po pilotażu | Po odświeżeniu strony uczestnik wraca do ostatniego miejsca |
 | Quiz inline | Pytania po sekcjach i modułach | Wynik i feedback pojawiają się od razu po odpowiedzi |
 | Test końcowy | Losowanie pytań z banku według ścieżki i trudności | Każdy test ma właściwą liczbę pytań i udział poziomów trudności |
 | Scoring | Liczenie punktów, progu, pytań krytycznych i zadań praktycznych | Wynik końcowy pokazuje: %, status, słabe obszary |
@@ -594,7 +594,7 @@ Wariant C (backend wyników) nie jest hostowany na GitHub Pages — pozostaje ze
 | Zależność | Wpływ | Decyzja wymagana przed |
 |---|---|---|
 | Polityka danych QualityCat | Kształt M10 i pytań krytycznych | F2 |
-| Decyzja backend vs statyczny HTML | Architektura progresu i raportowania | F4 |
+| Decyzja o zewnętrznym backendzie raportowania wyników (front statyczny GitHub Pages zdecydowany) | Architektura raportowania i certyfikatu | F4 |
 | Branding QualityCat | Wygląd certyfikatu i UI | F4 |
 | Lista narzędzi GenAI dozwolonych w firmie | Przykłady i governance | F2 |
 | Wymagany poziom audytu | Zakres logów i raportów | F4 |

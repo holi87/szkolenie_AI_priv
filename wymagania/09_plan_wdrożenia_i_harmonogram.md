@@ -45,7 +45,7 @@
 | Zależność | Wpływ | Decyzja wymagana przed |
 |---|---|---|
 | Polityka danych QualityCat | Kształt M10 i pytań krytycznych | F2 |
-| Decyzja backend vs statyczny HTML | Architektura progresu i raportowania | F4 |
+| Decyzja o zewnętrznym backendzie raportowania wyników (front statyczny GitHub Pages zdecydowany) | Architektura raportowania i certyfikatu | F4 |
 | Branding QualityCat | Wygląd certyfikatu i UI | F4 |
 | Lista narzędzi GenAI dozwolonych w firmie | Przykłady i governance | F2 |
 | Wymagany poziom audytu | Zakres logów i raportów | F4 |

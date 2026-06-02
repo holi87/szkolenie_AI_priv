@@ -8,7 +8,7 @@
 |---|---|---|
 | Nawigacja modułowa | Menu boczne lub górne z modułami i statusem ukończenia | Uczestnik widzi ukończone, aktywne i zablokowane sekcje |
 | Ścieżki użytkownika | Wybór S1/S2/S3 na początku szkolenia | System pokazuje moduły obowiązkowe i opcjonalne dla wybranej ścieżki |
-| Progres | Zapisywanie postępu lokalnie lub w backendzie `[ZAŁOŻENIE]` | Po odświeżeniu strony uczestnik wraca do ostatniego miejsca |
+| Progres | Zapis lokalny (localStorage) w MVP; opcjonalny sync do zewnętrznego backendu po pilotażu | Po odświeżeniu strony uczestnik wraca do ostatniego miejsca |
 | Quiz inline | Pytania po sekcjach i modułach | Wynik i feedback pojawiają się od razu po odpowiedzi |
 | Test końcowy | Losowanie pytań z banku według ścieżki i trudności | Każdy test ma właściwą liczbę pytań i udział poziomów trudności |
 | Scoring | Liczenie punktów, progu, pytań krytycznych i zadań praktycznych | Wynik końcowy pokazuje: %, status, słabe obszary |
