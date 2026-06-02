@@ -2,7 +2,7 @@
   "_meta": {
     "issue": "#5 [05][M1] Zamroź macierz ścieżek S1/S2/S3",
     "version": "0.1",
-    "status": "freeze-candidate (do recenzji M1)",
+    "status": "frozen — F1 (czasy) rozstrzygnięta decyzją Senior SA: realne czasy z curriculum, self-paced, bez trimu; do merge i recenzji",
     "source": "wymagania/06_program_curriculum.md (autorytatywne dla statusu i czasu modułów), wymagania/07 (testy i progi), wymagania/03 (persony)",
     "doc": "docs/macierz-sciezek.md",
     "notes": "Czas treści modułów wg curriculum (doc 06). Czas skrócony oznaczony jako szacunek do doprecyzowania w storyboard (#6). Progi i testy wg doc 07. Wagi wyniku: quiz inline 30% / test końcowy 60% / zadanie praktyczne 10%."

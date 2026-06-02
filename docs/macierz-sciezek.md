@@ -4,7 +4,7 @@
 |---|---|
 | Issue | `#5 [05][M1] Zamroź macierz ścieżek S1/S2/S3` |
 | Milestone | M1 Instructional design |
-| Status | Kandydat do zamrożenia (do recenzji M1) |
+| Status | Zamrożona (F1 rozstrzygnięta decyzją SA; do merge + recenzji) |
 | Kontrakt danych | `genai-llm-training/data/paths.json` |
 | Źródła | `wymagania/06` (status i czas modułów — autorytatywne), `wymagania/07` (testy, progi), `wymagania/03` (persony) |
 
@@ -58,7 +58,12 @@ Suma czasów modułów obowiązkowych (curriculum, doc 06) **przekracza** czasy 
 - S2 ≈ 7,7 h vs A4 6–7 h — **przekroczone** o ~40–100 min. ⚠️
 - S3 ≈ 11,7 h vs A4 9–10 h — **przekroczone** o ~1,7–2,7 h. ⚠️
 
-A4 jest `[ZAŁOŻENIE]`. Rekomendacja (do decyzji w M1, nie rozstrzygam tu): albo zaktualizować A4 do realnych czasów wynikających z curriculum, albo skrócić/uopcjonalnić część modułów S2/S3, albo rozbić długie ścieżki na sesje. **Nie zmieniam zakresu modułów ani A4 samodzielnie** — to decyzja sponsora/L&D.
+**Decyzja (Senior Solution Architect, delegacja właściciela) — flaga ROZSTRZYGNIĘTA:** A4 jest `[ZAŁOŻENIE]`, więc ustępuje realiom curriculum. Przyjęte:
+1. **Czasy z curriculum są wiążące** (źródło dla buildu: `paths.json`); A4 oznaczone jako superseded w `wymagania/12` i `00`.
+2. **Ścieżki są self-paced i wielosesyjne** — czas to suma skumulowana przez moduły (30–90 min każdy), nie jeden zasiad; dłuższe totalne czasy S2/S3 są akceptowalne dla samodzielnej nauki.
+3. **Bez przycinania modułów** — zakres 12 modułów jest uzasadniony efektami uczenia; trim pod arbitralny czas zaszkodziłby nauce.
+
+Realne orientacyjne czasy treści: **S1 ~4 h, S2 ~7,7 h, S3 ~11,7 h** (+ quizy inline, test końcowy, zadania praktyczne). Storyboard (#6) rozpisuje moduły jako samodzielne sesje, z jawnym czasem na moduł.
 
 ### F2 — doc 03 „priorytetowe moduły" vs doc 06 ścieżki (niski)
 Persony (`wymagania/03`) podają „priorytetowe moduły" rozbieżne z obowiązkowymi w curriculum:
@@ -76,4 +81,4 @@ Macierz przyjmuje **curriculum (doc 06) jako wiążące** (zgodnie z kryterium a
 - [x] Brak sprzeczności z curriculum M1-M12 — macierz wyprowadzona z `wymagania/06`; rozjazdy z A4/doc 03 oznaczone jako flagi (sekcja 3), curriculum ma pierwszeństwo.
 - [x] Macierz blokuje późniejszy gating modułów — `required: true/false` per moduł/ścieżka w `paths.json` jest kontraktem gatingu dla #15.
 
-> Zamrożenie macierzy zależy od decyzji w sprawie flagi **F1** (czasy S2/S3). Do tego czasu macierz jest kandydatem do zamrożenia; struktura modułów (status/gating) jest stabilna i może zasilać dalsze prace.
+> Flaga **F1 rozstrzygnięta** (decyzja Senior SA: realne czasy z curriculum, self-paced, bez trimu). Macierz jest **zamrożona** — struktura modułów (status/gating) i czasy są wiążące dla dalszych prac. **F2** (doc 03 vs curriculum) do kosmetycznego ujednolicenia przy storyboardzie (#6); nie blokuje.
