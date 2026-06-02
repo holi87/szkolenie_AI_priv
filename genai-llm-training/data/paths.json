@@ -5,7 +5,7 @@
     "status": "frozen — F1 (czasy) rozstrzygnięta decyzją Senior SA: realne czasy z curriculum, self-paced, bez trimu; do merge i recenzji",
     "source": "wymagania/06_program_curriculum.md (autorytatywne dla statusu i czasu modułów), wymagania/07 (testy i progi), wymagania/03 (persony)",
     "doc": "docs/macierz-sciezek.md",
-    "notes": "Czas treści modułów wg curriculum (doc 06). Czas skrócony oznaczony jako szacunek do doprecyzowania w storyboard (#6). Progi i testy wg doc 07. Wagi wyniku: quiz inline 30% / test końcowy 60% / zadanie praktyczne 10%."
+    "notes": "Czas treści modułów wg curriculum (doc 06). Czas skrócony oznaczony jako szacunek do doprecyzowania w storyboard (#6). Progi i testy wg doc 07. Wagi wyniku: quiz inline 30% / test końcowy 60% / zadanie praktyczne 10%. Bramki zaliczenia w polu `gates` (strukturalne, dla scoring engine — typy: overallThreshold, criticalQuestions, practicalTask, moduleMinScore); `extraPassConditions` to wersja czytelna. Wariant `full` = pełny zakres modułu."
   },
   "statusLegend": {
     "obowiazkowy": "wymagany do ukończenia ścieżki (gating: blokuje zaliczenie)",
@@ -54,6 +54,10 @@
       "criticalQuestionsRequiredPct": 100,
       "practicalTasks": 0,
       "extraPassConditions": ["100% pytań krytycznych M10"],
+      "gates": [
+        { "type": "overallThreshold", "minPct": 75 },
+        { "type": "criticalQuestions", "module": "M10", "minPct": 100 }
+      ],
       "attempts": 3
     },
     "S2": {
@@ -81,6 +85,11 @@
       "criticalQuestionsRequiredPct": 100,
       "practicalTasks": 1,
       "extraPassConditions": ["100% pytań krytycznych M10", "min. 4/5 w zadaniu promptowym"],
+      "gates": [
+        { "type": "overallThreshold", "minPct": 78 },
+        { "type": "criticalQuestions", "module": "M10", "minPct": 100 },
+        { "type": "practicalTask", "rubric": "R1-prompt", "minScore": 4, "maxScore": 5 }
+      ],
       "attempts": 3
     },
     "S3": {
@@ -91,7 +100,7 @@
         "M3":  { "required": true, "variant": "full" },
         "M4":  { "required": true, "variant": "full" },
         "M5":  { "required": true, "variant": "full" },
-        "M6":  { "required": true, "variant": "pelny" },
+        "M6":  { "required": true, "variant": "full" },
         "M7":  { "required": true, "variant": "full" },
         "M8":  { "required": true, "variant": "full" },
         "M9":  { "required": true, "variant": "full" },
@@ -108,6 +117,12 @@
       "criticalQuestionsRequiredPct": 100,
       "practicalTasks": 2,
       "extraPassConditions": ["100% pytań krytycznych M10", "min. 70% w M6 i M12"],
+      "gates": [
+        { "type": "overallThreshold", "minPct": 80 },
+        { "type": "criticalQuestions", "module": "M10", "minPct": 100 },
+        { "type": "moduleMinScore", "module": "M6", "minPct": 70, "rubric": "R2-rag" },
+        { "type": "moduleMinScore", "module": "M12", "minPct": 70, "rubric": "R3-eval" }
+      ],
       "attempts": 3
     }
   }

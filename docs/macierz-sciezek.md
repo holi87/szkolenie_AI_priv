@@ -23,7 +23,7 @@ Legenda: ✅ obowiązkowy · ✂️ obowiązkowy skrócony · ⭕ opcjonalny (ś
 | M3 Parametry | 30 | 7 | ⭕ | ✅ | ✅ |
 | M4 Embeddings | 50 | 8 | ⭕ | ⭕ r | ✅ |
 | M5 Vector DB | 55 | 8 | ⭕ | ⭕ | ✅ |
-| M6 RAG | 70 | 10 | ⭕ ś | ✅ (praktyczny) | ✅ (pełny) |
+| M6 RAG | 70 | 10 | ⭕ ś | ✅ (praktyczny) | ✅ (pełny zakres = `full`) |
 | M7 Prompt eng. | 65 | 10 | ✂️ | ✅ | ✅ |
 | M8 QA use cases | 75 | 12 | ⭕ | ✅ | ✅ |
 | M9 Agenty | 45 | 8 | ⭕ ś | ⭕ | ✅ |
