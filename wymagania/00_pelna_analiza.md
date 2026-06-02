@@ -426,14 +426,14 @@ Golden set to zestaw pytań referencyjnych, które mają stabilnie mierzyć kluc
 |---|---|---|
 | Nawigacja modułowa | Menu boczne lub górne z modułami i statusem ukończenia | Uczestnik widzi ukończone, aktywne i zablokowane sekcje |
 | Ścieżki użytkownika | Wybór S1/S2/S3 na początku szkolenia | System pokazuje moduły obowiązkowe i opcjonalne dla wybranej ścieżki |
-| Progres | Zapisywanie postępu lokalnie lub w backendzie `[ZAŁOŻENIE]` | Po odświeżeniu strony uczestnik wraca do ostatniego miejsca |
+| Progres | Zapis lokalny (localStorage) w MVP; opcjonalny sync do zewnętrznego backendu po pilotażu | Po odświeżeniu strony uczestnik wraca do ostatniego miejsca |
 | Quiz inline | Pytania po sekcjach i modułach | Wynik i feedback pojawiają się od razu po odpowiedzi |
 | Test końcowy | Losowanie pytań z banku według ścieżki i trudności | Każdy test ma właściwą liczbę pytań i udział poziomów trudności |
 | Scoring | Liczenie punktów, progu, pytań krytycznych i zadań praktycznych | Wynik końcowy pokazuje: %, status, słabe obszary |
 | Certyfikat/zaliczenie | Generowany ekran lub PDF zaliczenia `[ZAŁOŻENIE]` | Certyfikat zawiera imię, ścieżkę, datę, wynik i ID zaliczenia |
 | Responsywność | Działanie na desktopie, tablecie i telefonie | Brak poziomego scrolla dla szerokości 360 px |
 | Dostępność | WCAG 2.1 AA jako cel `[ZAŁOŻENIE]` | Nawigacja klawiaturą, kontrast, tekst alternatywny, focus states |
-| Brak backendu | Możliwa wersja statyczna z localStorage `[ZAŁOŻENIE]` | Szkolenie działa z plików statycznych lub hostingu bez serwera |
+| Hosting statyczny (GitHub Pages) | Wdrożenie jako GitHub Pages, wersja statyczna z localStorage — wiążące | Szkolenie działa ze statycznych plików serwowanych przez GitHub Pages, bez serwera |
 | Opcjonalny backend | API do zapisu wyników i certyfikatów `[ZAŁOŻENIE]` | Wyniki są zapisywane centralnie i możliwe do eksportu CSV |
 
 ### Zakres zależności od backendu
@@ -443,6 +443,21 @@ Golden set to zestaw pytań referencyjnych, które mają stabilnie mierzyć kluc
 | Wariant A: statyczny HTML + JS + localStorage | Progres i wynik zapisane lokalnie | Szybka budowa, brak infrastruktury | Brak centralnego raportowania, łatwiejsze manipulowanie wynikiem | Dobry dla pilotażu |
 | Wariant B: statyczny HTML + eksport wyniku | Lokalny wynik + pobieralny plik JSON/CSV/PDF | Nadal prosty, daje artefakt zaliczenia | Sponsor musi zebrać wyniki ręcznie | Dobry dla małej grupy |
 | Wariant C: backend wyników | Logowanie, zapis progresu, wyniki, certyfikaty, raporty | Audytowalność i raportowanie | Większy koszt i czas | Rekomendowany dla rollout firmowego |
+
+### Hosting i wdrożenie — GitHub Pages (wiążące)
+
+Docelowy i wiążący model hostingu to **GitHub Pages**. To ograniczenie jest nadrzędne wobec samego wyboru HTML — cała technologia musi działać jako statyczny hosting bez serwera. HTML/CSS/JS/localStorage to konsekwencja modelu Pages, nie cel sam w sobie.
+
+| Wymaganie | Kryterium akceptacji |
+|---|---|
+| Statyczny hosting | Aplikacja serwowana wyłącznie ze statycznych plików (HTML/CSS/JS/JSON); brak kodu serwerowego w runtime |
+| Ścieżki względne | Wszystkie linki do assetów, danych i modułów względne; działa z podścieżki `https://<user>.github.io/<repo>/` |
+| Brak backendu na Pages | Progres w `localStorage`; ewentualny backend wyników to zewnętrzny serwis poza Pages, wołany przez HTTPS API |
+| Deploy z repo | Publikacja przez branch + folder albo GitHub Actions → Pages; bez serwerowego kroku runtime |
+| Zgodność `file://` | Ładowanie `data/*.json` przez `fetch()` działa przez http(s); dla otwarcia przez `file://`/offline wymagany lokalny statyczny serwing lub inline danych |
+| Intranet | Dystrybucja wewnętrzna przez GitHub Enterprise Pages lub własny statyczny serwing |
+
+Wariant C (backend wyników) nie jest hostowany na GitHub Pages — pozostaje zewnętrznym serwisem konsumowanym przez statyczny front.
 
 ### Elementy interaktywne do zbudowania
 
@@ -579,7 +594,7 @@ Golden set to zestaw pytań referencyjnych, które mają stabilnie mierzyć kluc
 | Zależność | Wpływ | Decyzja wymagana przed |
 |---|---|---|
 | Polityka danych QualityCat | Kształt M10 i pytań krytycznych | F2 |
-| Decyzja backend vs statyczny HTML | Architektura progresu i raportowania | F4 |
+| Decyzja o zewnętrznym backendzie raportowania wyników (front statyczny GitHub Pages zdecydowany) | Architektura raportowania i certyfikatu | F4 |
 | Branding QualityCat | Wygląd certyfikatu i UI | F4 |
 | Lista narzędzi GenAI dozwolonych w firmie | Przykłady i governance | F2 |
 | Wymagany poziom audytu | Zakres logów i raportów | F4 |
@@ -639,6 +654,8 @@ Golden set to zestaw pytań referencyjnych, które mają stabilnie mierzyć kluc
 | Nadmierna liczba modułów obniży completion rate | Średnie | Średni | Ścieżki modułowe, progres, krótkie sekcje, jasne rozróżnienie obowiązkowe/opcjonalne |
 
 ## 12. **Założenia i pytania otwarte**
+
+> **Aktualizacja — decyzja hostingowa (rozstrzyga część poniższych pozycji).** Model hostingu jest zdecydowany: statyczny **GitHub Pages** jest wiążący (zob. sekcja 8 „Hosting i wdrożenie — GitHub Pages", `docs/karta-projektu.md` §4.1). W konsekwencji **A10** (statyczny HTML + localStorage) jest przyjęte jako wiążące, a część „statyczny vs backend" pytania **P2** jest rozstrzygnięta na rzecz statycznego MVP. **Otwarte pozostaje wyłącznie centralne raportowanie / backend wyników** (backendowa część P2, P10, A11) — jako zewnętrzny serwis poza Pages, opcjonalny po pilotażu. Wiersze A10/A11/P2 przy bramkowaniu prac czytać przez pryzmat tej decyzji.
 
 ### Zebrane założenia
 

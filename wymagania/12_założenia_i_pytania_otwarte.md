@@ -2,6 +2,8 @@
 
 ## 12. **Założenia i pytania otwarte**
 
+> **Aktualizacja — decyzja hostingowa (rozstrzyga część poniższych pozycji).** Model hostingu jest zdecydowany: statyczny **GitHub Pages** jest wiążący (zob. `08_specyfikacja_interaktywnego_szkolenia_html.md` sekcja „Hosting i wdrożenie — GitHub Pages", `docs/karta-projektu.md` §4.1). W konsekwencji **A10** (statyczny HTML + localStorage) jest przyjęte jako wiążące, a część „statyczny vs backend" pytania **P2** jest rozstrzygnięta na rzecz statycznego MVP. **Otwarte pozostaje wyłącznie centralne raportowanie / backend wyników** (backendowa część P2, P10, A11) — jako zewnętrzny serwis poza Pages, opcjonalny po pilotażu. Wiersze A10/A11/P2 przy bramkowaniu prac czytać przez pryzmat tej decyzji.
+
 ### Zebrane założenia
 
 | ID | Założenie | Miejsce użycia | Łatwość korekty |

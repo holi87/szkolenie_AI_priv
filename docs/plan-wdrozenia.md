@@ -37,6 +37,7 @@ Plan zakłada dostarczenie wersji pilotażowej jako statycznej aplikacji HTML/JS
 8. WCAG 2.1 AA jest celem jakościowym dla UI, focus states, kontrastu i obsługi klawiaturą.
 9. Treść modułów jest modularna, żeby można było utrzymywać ścieżki S1/S2/S3 bez duplikowania całego kursu.
 10. Backend raportowy jest osobnym strumieniem po decyzji sponsora, nie warunkiem startu pilotażu.
+11. **Wdrożenie jako GitHub Pages jest wiążącym ograniczeniem architektury** — cała technologia musi działać jako statyczny hosting bez serwera (ścieżki względne, brak runtime backendu na Pages, ewentualny backend jako zewnętrzny serwis konsumowany przez statyczny front). To ograniczenie jest nadrzędne wobec samego wyboru HTML.
 
 ## Docelowa struktura techniczna
 
@@ -79,7 +80,7 @@ genai-llm-training/
 
 ## Milestone'y GitHub
 
-Backlog został odwzorowany na GitHubie jako issues `#1`-`#32`, w tej samej kolejności co sekcja "Backlog wdrożeniowy". Każde issue ma milestone, label fazy, label typu pracy, priorytet i zależności do wcześniejszych issue.
+Backlog został odwzorowany na GitHubie jako issues `#1`-`#33`, w tej samej kolejności co sekcja "Backlog wdrożeniowy". Każde issue ma milestone, label fazy, label typu pracy, priorytet i zależności do wcześniejszych issue.
 
 | Milestone | Cel | Kryterium zamknięcia |
 |---|---|---|
@@ -235,6 +236,10 @@ Backlog został odwzorowany na GitHubie jako issues `#1`-`#32`, w tej samej kole
     - Cel: zdefiniować przegląd co 6 miesięcy, właścicieli i procedurę aktualizacji pytań.
     - Akceptacja: jest playbook aktualizacji OWASP/governance/narzędzi oraz reguła wymiany pytań deprecated.
 
+33. `[M6] Wdróż szkolenie na GitHub Pages`
+    - Cel: opublikować statyczną aplikację jako GitHub Pages, zgodnie z wiążącym modelem hostingu (założenie architektoniczne #11).
+    - Akceptacja: aplikacja działa pod adresem GitHub Pages, ścieżki są względne, dane ładują się przez http(s), brak zależności od serwera; opisany sposób deployu (branch + folder albo GitHub Actions → Pages) i obsługa podścieżki repo.
+
 ## Zależności krytyczne
 
 - Issue 1 blokuje decyzje P1-P15 i powinno być zamknięte przed budową treści i implementacji.
@@ -282,11 +287,11 @@ Pracę należy realizować sekwencyjnie milestone po milestone. W ramach milesto
 4. M3: issue 14-19.
 5. M4: issue 20-24.
 6. M5: issue 25-28.
-7. M6: issue 29-32.
+7. M6: issue 29-33.
 
 ## Decyzje do potwierdzenia przed startem implementacji
 
-1. Czy wersja pilotażowa ma zostać statyczna z eksportem wyników, czy od razu budujemy backend wyników?
+1. **Rozstrzygnięte:** MVP/pilotaż jest statyczny na GitHub Pages z eksportem wyników (założenie architektoniczne #11). Otwarte pozostaje wyłącznie: czy i kiedy dodać **zewnętrzny backend raportowania wyników** (po pilotażu).
 2. Czy certyfikat ma mieć formalną wartość wewnętrzną, czy tylko informacyjną?
 3. Czy QualityCat ma gotową politykę użycia GenAI, czy trzeba przygotować konserwatywną wersję domyślną?
 4. Czy szkolenie ma działać offline/intranetowo?
