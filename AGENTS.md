@@ -15,7 +15,7 @@ Lokalne zasady pracy dla repo `szkolenie_AI_priv`.
 - Kazdy GitHub issue musi byc realizowany na osobnym branchu.
 - Nie commituj bezposrednio do `main` i nic nie merguj lokalnie do `main`.
 - Kazda zmiana wdrozeniowa konczy sie pull requestem.
-- PR musi linkowac issue, ktore realizuje, np. `Closes #12`.
+- PR musi zamykac realizowane issue slowem kluczowym `Closes #<numer>` w opisie PR (np. `Closes #12`), zeby issue zamknelo sie automatycznie po merge. Dla wielu issue uzyj osobnej linii `Closes` na kazde issue.
 - Po wystawieniu PR czekamy na zielone CI oraz review Codexa.
 - Nie zamykaj issue i nie uznawaj pracy za zakonczona, dopoki PR nie przejdzie CI i review.
 - Przed rozpoczeciem nowego issue zawsze pobierz najnowszy `origin/main`: `git fetch origin`, `git switch main`, `git pull --ff-only origin main`.
