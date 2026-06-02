@@ -24,16 +24,17 @@
 
 ### 2.1 Ekran modułu
 ```
-+--------------------------------------------------+
-| [skip-link] Logo/slot | Ścieżka S? | Progres ▓▓░ |  ← header (sticky)
-+----------------+---------------------------------+
-| Nawigacja      | H1 tytuł modułu                 |
-| modułów        | treść: 1 koncepcja, ≤300 słów   |
-| (statusy)      | [interakcja / quiz inline]      |
-|                | Feedback / „następny krok →"    |
-+----------------+---------------------------------+
+| ⤷ skip-link „Przejdź do treści" — 1. element w tab order   |  ← przed headerem
++------------------------------------------------------------+
+| Logo/slot | Ścieżka S? | Progres ▓▓░                       |  ← header (sticky)
++----------------+-------------------------------------------+
+| Nawigacja      | H1 tytuł modułu                          |
+| modułów        | treść: 1 koncepcja, ≤300 słów            |
+| (statusy)      | [interakcja / quiz inline]               |
+|                | Feedback / „następny krok →"             |
++----------------+-------------------------------------------+
 ```
-- Desktop: nawigacja boczna. Mobile (≤360 px): nawigacja zwijana (przycisk „Moduły"), treść jednokolumnowa, **brak poziomego scrolla** (WCAG 1.4.10 reflow).
+- Desktop: nawigacja boczna. Mobile: nawigacja zwijana (przycisk „Moduły"), treść jednokolumnowa, **brak poziomego scrolla — reflow do 320 px** (WCAG 1.4.10), dodatkowo sprawdzane przy 360 px.
 
 ### 2.2 Ekran quizu / testu
 - Pytanie → opcje → przycisk zatwierdzenia → feedback.
@@ -49,9 +50,11 @@
 |---|---|---|---|
 | Ukończony | zielony znacznik | ikona ✓ + tekst „Ukończony" | `aria-label`, `aria-current` poza |
 | Aktywny | wyróżnione tło | ikona ● + tekst „W toku", `aria-current="page"` | fokusowalny |
-| Zablokowany | wyszarzony | ikona 🔒 + tekst „Zablokowany" + powód | `aria-disabled="true"` |
+| Zablokowany | wyszarzony | ikona 🔒 + tekst „Zablokowany" + powód | natywnie wyłączony (`disabled`) **albo** zablokowana aktywacja; dodatkowo `aria-disabled="true"` |
 
 Status **nigdy nie jest komunikowany samym kolorem** (WCAG 1.4.1) — zawsze ikona + tekst.
+
+> Element zablokowany musi być **rzeczywiście niemożliwy do aktywacji** myszą i klawiaturą — `aria-disabled="true"` tylko ogłasza stan czytnikom ekranu, nie blokuje kliknięcia ani Enter/Spacji. Użyj natywnego `disabled` (lub jawnego przechwycenia/usunięcia akcji) z zachowaniem tekstu powodu blokady.
 
 ---
 
@@ -69,8 +72,8 @@ Status **nigdy nie jest komunikowany samym kolorem** (WCAG 1.4.1) — zawsze iko
 - **Każdy** element interaktywny osiągalny i obsługiwalny z klawiatury (WCAG 2.1.1), bez pułapek fokusu (2.1.2).
 - **Widoczny focus** na każdym elemencie (2.4.7), kontrast obrysu ≥ 3:1.
 - Logiczna kolejność Tab zgodna z kolejnością czytania (2.4.3).
-- **Skip-link** „Przejdź do treści" na początku strony (2.4.1).
-- Kolejność: header → skip-link → nawigacja → treść → interakcja → następny krok.
+- **Skip-link** „Przejdź do treści" jest **pierwszym fokusowalnym elementem strony** — przed headerem i nawigacją (2.4.1), żeby użytkownik klawiatury mógł ominąć powtarzalne kontrolki headera, a nie przez nie przechodzić.
+- Kolejność fokusu: **skip-link → header → nawigacja → treść → interakcja → następny krok**.
 
 ---
 
@@ -112,7 +115,7 @@ Wszystkie warianty: fokusowalne, widoczny focus, **tekstowy feedback** (nie tylk
 - [ ] 1.4.1 Informacja nie jest przekazywana samym kolorem (statusy: ikona + tekst)
 - [ ] 1.4.3 Kontrast tekstu ≥ 4.5:1 (duży ≥ 3:1)
 - [ ] 1.4.4 Tekst skalowalny do 200% bez utraty treści
-- [ ] 1.4.10 Reflow — brak poziomego scrolla do 320 px (cel projektu: 360 px)
+- [ ] 1.4.10 Reflow — brak poziomego scrolla przy **320 px** (wymóg WCAG); 360 px = dodatkowy checkpoint projektu
 - [ ] 1.4.11 Kontrast elementów nietekstowych i stanów ≥ 3:1
 - [ ] 2.1.1 Pełna obsługa klawiaturą każdego elementu
 - [ ] 2.1.2 Brak pułapek fokusu
@@ -123,7 +126,7 @@ Wszystkie warianty: fokusowalne, widoczny focus, **tekstowy feedback** (nie tylk
 - [ ] 3.3.1 / 3.3.2 Błędy identyfikowane tekstem; pola mają etykiety i instrukcje
 - [ ] 4.1.2 Nazwa/rola/wartość (ARIA) dla komponentów (statusy, quiz, interakcje)
 
-> Cel projektu **360 px** jest ostrzejszy niż minimalne reflow WCAG (320 px) — sprawdzać oba.
+> Wymagany cel reflow to **320 px** (WCAG 1.4.10) — węższy ekran, więc warunek ostrzejszy niż 360 px. Layout musi działać bez poziomego scrolla już przy 320 px; 360 px z wymagań projektu jest dodatkowym, łagodniejszym punktem kontrolnym.
 
 ---
 
