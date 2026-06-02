@@ -420,6 +420,8 @@ Golden set to zestaw pytań referencyjnych, które mają stabilnie mierzyć kluc
 
 ## 8. **Specyfikacja interaktywnego szkolenia HTML**
 
+> **Deprecacja framingu „HTML" (decyzja Solution Architect, ADR-0002).** Określenie „interaktywne szkolenie **HTML**" / „musi być HTML" jest **zdeprecjonowane**. **Wiążące wymaganie:** strona szkolenia hostowana na **GitHub Pages** (domena **ai-slop.win**). HTML/CSS/JS to *output* i konsekwencja hostingu statycznego, nie wymaganie technologiczne. **Stack dobiera Solution Architect** — wybrany: vanilla static (HTML/CSS/JS/JSON, bez frameworka), zob. `docs/adr/0002-stack-technologiczny-strony.md`. Poniższe wymagania funkcjonalne, UX i dostępności pozostają aktualne niezależnie od technologii.
+
 ### Wymagane funkcje
 
 | Funkcja | Wymaganie minimalne | Kryterium akceptacji |
