@@ -11,7 +11,7 @@
 | A1 | QualityCat działa w obszarze QA/jakości | Sekcje 1–4 | Wysoka |
 | A2 | Odbiorcami są uczniowie, pracownicy i współpracownicy o zróżnicowanym poziomie technicznym | Sekcje 2–4 | Wysoka |
 | A3 | Program ma trzy ścieżki: nietechniczna, praktyk-użytkownik/QA, inżynier/techniczny QA | Sekcje 3–6 | Średnia |
-| A4 | Czas ścieżek: S1 3,5–4,5 h, S2 6–7 h, S3 9–10 h | Sekcje 3 i 6 | Wysoka |
+| A4 | Czas ścieżek — **superseded** (wiążące: `docs/macierz-sciezek.md` / `paths.json`, self-paced). Pierwotne `[ZAŁOŻENIE]`: S1 3,5–4,5 h, S2 6–7 h, S3 9–10 h. Realne z curriculum: S1 ~4 h, S2 ~7,7 h, S3 ~11,7 h treści | Sekcje 3 i 6 | Wysoka |
 | A5 | Cele ilościowe, np. completion rate >= 85%, pass rate 75–90%, NPS >= +30, są wartościami domyślnymi | Sekcje 2 i 10 | Wysoka |
 | A6 | Grupa pilotażowa ma 8–15 osób | Sekcje 7 i 9 | Wysoka |
 | A7 | Próg zaliczenia: S1 >= 75%, S2 >= 78%, S3 >= 80% | Sekcja 7 | Średnia |
