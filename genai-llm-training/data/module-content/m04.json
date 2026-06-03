@@ -1,0 +1,171 @@
+{
+  "_meta": {
+    "module": "M4",
+    "issue": "[M4] Wdroż treść modułu M4 — Embeddings i podobieństwo semantyczne",
+    "storyboard": "docs/storyboard/m04-embeddings.md",
+    "schema": "../schemas/module-content.schema.json",
+    "scenario": "SC-RAG-01 (mini-korpus DOC1-DOC4, pułapka: DOC1 token sesji 30 min podobny semantycznie, ale poprawne źródło to DOC3 link resetu)",
+    "interaction": "Mapa semantyczna (kind: classify)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (NotkaApp/SklepDemo/PipeDemo, domena przyklad.test, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pointa: wysokie podobieństwo semantyczne ≠ poprawność biznesowa. Zgodne z pulą Q25-Q32."
+  },
+  "module": "M4",
+  "intro": "Wyszukiwarka dokumentacji, deduplikacja zgłoszeń i RAG (moduły M5-M6) stoją na embeddingach i podobieństwie semantycznym. Tester, który rozumie, czemu fragment „podobny” bywa „błędny”, lepiej diagnozuje wyniki wyszukiwania i nie ufa rankingowi w ciemno. Ten moduł daje Ci intuicję embeddingów, cosine similarity i czterech pułapek podobieństwa, a na koniec ćwiczysz je na „Mapie semantycznej”.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Po co testerowi embeddings",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Coraz częściej wynik podaje Ci wyszukiwarka semantyczna: wpisujesz pytanie, a system zwraca „najbardziej pasujące” fragmenty dokumentacji. Pod spodem działają embeddings (wektory semantyczne, ang. embeddings) i miara podobieństwa. Jeśli nie wiesz, jak to liczy, łatwo uznać najwyższy wynik za poprawną odpowiedź." },
+        { "kind": "list", "items": [
+          "Wyjaśnisz, czym jest embedding jako liczbowa reprezentacja znaczenia.",
+          "Zinterpretujesz cosine similarity jako bliskość kierunku wektorów, nie długości tekstu.",
+          "Wskażesz 4 przypadki, gdy wysokie podobieństwo nie oznacza poprawnej odpowiedzi.",
+          "Dobierzesz zapytanie do wyszukiwania semantycznego, by trafić w intencję."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Element interaktywny", "text": "Na koniec wejdziesz na „Mapę semantyczną”: wybierzesz zapytanie i zobaczysz listę najbliższych fragmentów z wynikiem podobieństwa oraz oznaczeniem, czy wynik jest trafny biznesowo, czy to pułapka." }
+      ]
+    },
+    {
+      "id": "s2-slowo-jako-wektor",
+      "title": "Słowo jako wektor",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Embedding", "original": "embedding", "text": "liczbowa reprezentacja znaczenia tekstu — model zamienia frazę na wektor (ang. vector) liczb, w którym bliskie znaczenia leżą blisko siebie." },
+        { "kind": "paragraph", "text": "Model embeddingowy (ang. embedding model) nie liczy liter ani słów — koduje znaczenie. Dzięki temu „logowanie” i „uwierzytelnianie” lądują blisko, a „faktura” daleko, choć żadne z tych słów nie jest identyczne." },
+        { "kind": "diagram", "textAlt": "Na umownej mapie 2D trzy frazy z dokumentacji NotkaApp: „logowanie” w punkcie (0,8; 0,7) i „uwierzytelnianie” tuż obok w (0,9; 0,6) — blisko, bo znaczą prawie to samo. Fraza „faktura” leży daleko, w (0,1; 0,2). Wniosek: odległość na mapie odpowiada różnicy znaczeń, nie pisowni.", "ascii": "logowanie •      faktura\nuwierzytelnianie •\n                          •" }
+      ]
+    },
+    {
+      "id": "s3-cosine-similarity",
+      "title": "Cosine similarity — kierunek, nie długość",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Cosine similarity", "original": "cosine similarity", "text": "miara kąta między dwoma wektorami znaczenia; wynik od −1 do 1, w praktyce dla tekstu 0-1. Im bliżej 1, tym bardziej zgodny kierunek znaczenia." },
+        { "kind": "paragraph", "text": "Kluczowa intuicja: liczy się kierunek znaczenia, a nie długość czy „siła” tekstu. Krótki opis i długi, rozbudowany akapit o tej samej procedurze wskazują ten sam kierunek, więc ich podobieństwo jest wysokie mimo różnicy długości." },
+        { "kind": "table",
+          "caption": "Trzy syntetyczne pary fraz z dokumentacji NotkaApp i ich umowne podobieństwo",
+          "headers": ["Para fraz", "Cosine similarity", "Dlaczego"],
+          "rows": [
+            ["„Reset hasła: link e-mail ważny 30 min” vs długi akapit o tej samej procedurze", "0,94", "ten sam kierunek znaczenia, długość nie obniża wyniku"],
+            ["„logowanie działa” vs „logowanie nie działa”", "0,90", "wspólny temat „logowanie” dominuje nad negacją"],
+            ["„reset hasła” vs „cennik produktu”", "0,21", "różne tematy, rozbieżny kierunek wektorów"]
+          ],
+          "textAlt": "Krótki i długi opis tej samej procedury resetu mają podobieństwo 0,94 — długość nie obniża wyniku, bo liczy się kierunek. Para „logowanie działa” / „logowanie nie działa” ma aż 0,90, bo wspólny temat przeważa nad negacją. Para o różnych tematach (reset hasła vs cennik) ma tylko 0,21." }
+      ]
+    },
+    {
+      "id": "s4-ranking",
+      "title": "Jak czytać ranking podobieństwa",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Najbliżsi sąsiedzi", "original": "nearest neighbors", "text": "lista fragmentów najbardziej podobnych do zapytania, posortowana malejąco po wartości podobieństwa." },
+        { "kind": "paragraph", "text": "Wynik 0,91 jest „bliżej” niż 0,62, ale liczba nie jest procentem poprawności. Próg odcięcia (np. 0,75) jest umowny i zależny od korpusu — w innym zbiorze ta sama wartość może znaczyć co innego." },
+        { "kind": "list", "items": [
+          "Lista jest posortowana malejąco po podobieństwie — najwyżej najbliższy semantycznie.",
+          "Wysoka pozycja to sygnał trafności, nie dowód — treść trzeba zweryfikować.",
+          "Brak stałego, uniwersalnego progu; 0,62 nie znaczy „w 62% poprawne”."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Most do następnego ekranu", "text": "Skoro wysoka pozycja nie gwarantuje trafności, zobaczmy konkretne sytuacje, w których najwyższy wynik prowadzi do błędnej odpowiedzi." }
+      ]
+    },
+    {
+      "id": "s5-pulapka-4-przypadki",
+      "title": "Pułapka: podobne ≠ poprawne — 4 przypadki",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "To rdzeń modułu. Embedding koduje temat mocniej niż drobne, ale krytyczne różnice. Cztery typowe sytuacje, gdy wysokie podobieństwo myli:" },
+        { "kind": "list", "ordered": true, "items": [
+          "Negacja / antonim — „logowanie działa” i „logowanie nie działa” są semantycznie blisko, choć znaczą coś przeciwnego.",
+          "Ten sam temat, inna intencja — opis funkcji płatności w SklepDemo vs zgłoszenie błędu tej samej funkcji.",
+          "Wieloznaczność (polisemia) — „token” bezpieczeństwa vs „token” jako jednostka w LLM.",
+          "Nieaktualna wersja — stary i nowy zapis wymagania są bardzo podobne, ale poprawny jest tylko nowy."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Sedno", "text": "We wszystkich czterech przypadkach fragment jest semantycznie bliski, lecz biznesowo niepoprawny. Wysokie cosine similarity to nie to samo co poprawna odpowiedź." }
+      ]
+    },
+    {
+      "id": "s6-dlaczego-model-sie-myli",
+      "title": "Pogłębienie: dlaczego model się myli",
+      "type": "content",
+      "onlyForPaths": ["S2", "S3"],
+      "blocks": [
+        { "kind": "paragraph", "text": "Skąd biorą się te pułapki? Embedding uśrednia znaczenie całej frazy i koduje temat oraz styl silniej niż pojedyncze, drobne słowa. Negacja „nie”, numer wersji „v2” czy zmiana intencji to mała część wektora, więc giną na tle wspólnego tematu." },
+        { "kind": "list", "items": [
+          "Ranking podobieństwa to sygnał wspierający, a nie wyrok — wynik wymaga weryfikacji treści fragmentu.",
+          "Warto wesprzeć wyszukiwanie filtrowaniem po metadanych (np. wersja dokumentu, typ), by ograniczyć mylące trafienia.",
+          "Sztywne podniesienie progu (np. do 0,95) nie naprawia kierunku wektora — para z negacją bywa tak podobna, że żaden próg jej nie odsieje."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Most do dalszych modułów", "text": "Filtrowanie metadanych poznasz w M5 (Vector databases), a pełną checklistę weryfikacji outputu w M11." }
+      ]
+    },
+    {
+      "id": "s7-dobor-zapytania",
+      "title": "Dobór zapytania do wyszukiwania semantycznego",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Trafność zaczyna się od zapytania (ang. query). Im lepiej oddaje intencję i kluczowy obiekt, tym bardziej wektor zapytania celuje we właściwe znaczenie i oddala się od podobnych, lecz innych pojęć." },
+        { "kind": "table",
+          "caption": "Słabe vs lepsze zapytanie i wpływ na listę wyników (przykład syntetyczny, NotkaApp)",
+          "headers": ["Słabe zapytanie", "Lepsze zapytanie", "Efekt na wyniki"],
+          "rows": [
+            ["„hasło”", "„czas ważności linku resetu hasła”", "pełna fraza oddaje intencję, zamiast jednego ogólnego słowa"],
+            ["„reset”", "„reset hasła w NotkaApp v2”", "doprecyzowany kontekst i wersja podbijają aktualny zapis"],
+            ["„nie token sesji”", "„link resetu hasła, nie token sesji”", "kluczowy obiekt (link resetu) oddala wynik od tokenu sesji; sama negacja nie działa"]
+          ],
+          "textAlt": "Ogólne „hasło” zastępujemy pełną frazą „czas ważności linku resetu hasła”, bo oddaje intencję. „reset” zastępujemy „reset hasła w NotkaApp v2”, by trafić w aktualną wersję. Zapytania nie buduje się jako samej negacji „nie token sesji” — lepiej nazwać kluczowy obiekt „link resetu hasła”, by oddalić wynik od tokenu sesji." },
+        { "kind": "callout", "variant": "safe", "title": "Reguła kciuka", "text": "Pełna fraza + kontekst/wersja + kluczowy obiekt. Unikaj pojedynczego słowa i nie buduj zapytania z samej negacji." }
+      ]
+    },
+    {
+      "id": "s8-chcesz-poglebic",
+      "title": "Chcesz pogłębić?",
+      "type": "decision",
+      "blocks": [
+        { "kind": "paragraph", "text": "Masz już cztery pułapki i zasady doboru zapytania. Czas przećwiczyć je na „Mapie semantycznej”." },
+        { "kind": "list", "items": [
+          "Zalecane (S2 rozszerzony / S3): wejdź na pełną „Mapę semantyczną” z mini-korpusem NotkaApp i przypadkami diagnostycznymi.",
+          "Skrót (S1): przejdź do uproszczonej wersji i quizu, jeśli chcesz tylko utrwalić podstawy."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Następny najlepszy krok", "text": "Otwórz „Mapę semantyczną”: wybierz zapytanie o czas ważności linku resetu hasła i sprawdź, który fragment jest naprawdę trafny." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "m4-mapa-semantyczna",
+    "title": "Mapa semantyczna",
+    "intro": "Zapytanie: „Po jakim czasie wygasa link resetu hasła?” (mini-korpus NotkaApp). Każdy fragment ma podane podobieństwo do zapytania. Przypisz go do kategorii. Pointa: najwyższy wynik nie zawsze jest poprawną odpowiedzią — wysokie podobieństwo semantyczne ≠ poprawność biznesowa. Po sprawdzeniu zobaczysz uzasadnienie przy każdym fragmencie.",
+    "categories": [
+      { "id": "trafny", "label": "Trafny biznesowo", "desc": "odpowiada na zapytanie o link resetu hasła — poprawne źródło" },
+      { "id": "podobny_bledny", "label": "Podobny semantycznie, ale błędny", "desc": "podobny tematycznie, lecz dotyczy innego obiektu lub intencji — pułapka" },
+      { "id": "nietrafny", "label": "Niezwiązany", "desc": "niski wynik, inny temat — nie odpowiada na zapytanie" }
+    ],
+    "items": [
+      { "id": "doc3", "text": "DOC3: „Reset hasła: link e-mail ważny 30 min, jednorazowy.” (podobieństwo 0,71)", "correctCategory": "trafny", "rationale": "To poprawne źródło: dotyczy dokładnie linku resetu hasła i jego czasu ważności — trafne mimo niższego wyniku niż DOC1." },
+      { "id": "doc3b", "text": "Parafraza DOC3: „Link do zresetowania hasła przesyłany e-mailem przestaje działać po 30 minutach od wysłania.” (podobieństwo 0,69)", "correctCategory": "trafny", "rationale": "Dłuższy opis tej samej procedury wskazuje ten sam kierunek znaczenia, więc jest tak samo trafny — cosine similarity mierzy kierunek, nie długość." },
+      { "id": "doc1", "text": "DOC1: „Procedura logowania w NotkaApp: token sesji wygasa po 30 min bezczynności.” (podobieństwo 0,86 — najwyższy)", "correctCategory": "podobny_bledny", "rationale": "PUŁAPKA: dzieli z zapytaniem motyw „coś wygasa po 30 min”, ale dotyczy innego obiektu (token sesji, nie link resetu) — najwyższe podobieństwo, a jednak błędne źródło." },
+      { "id": "doc-akt", "text": "Fragment z innego procesu: „Link aktywacyjny konta wygasa po 30 min od rejestracji.” (podobieństwo 0,80)", "correctCategory": "podobny_bledny", "rationale": "Ten sam motyw „link wygasa po 30 min”, lecz inny obiekt (aktywacja konta, nie reset hasła) — wysokie podobieństwo myli, bo embedding koduje wspólny temat mocniej niż różnicę obiektu." },
+      { "id": "doc2", "text": "DOC2: „Polityka haseł NotkaApp: min. 12 znaków, blokada po 3 błędach.” (podobieństwo 0,55)", "correctCategory": "podobny_bledny", "rationale": "Wspólny temat „hasło”, ale dotyczy reguł długości i blokady, a nie czasu ważności linku resetu — bliskie, lecz nie odpowiada na zapytanie." },
+      { "id": "doc-neg", "text": "Zgłoszenie: „logowanie nie działa po aktualizacji v2”. (podobieństwo 0,58)", "correctCategory": "podobny_bledny", "rationale": "Pułapka innego obiektu i innej intencji: dotyczy logowania (nie resetu hasła) i jest zgłoszeniem błędu, a nie opisem czasu ważności linku — temat pokrewny, lecz nie odpowiada na zapytanie." },
+      { "id": "doc4", "text": "DOC4: „FAQ marketingowe NotkaApp: zalety produktu i cennik.” (podobieństwo 0,19)", "correctCategory": "nietrafny", "rationale": "Inny temat (marketing, cennik), rozbieżny kierunek wektora — niski wynik poprawnie sygnalizuje brak związku z zapytaniem." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Embedding to znaczenie tekstu zapisane jako wektor liczb — bliskie znaczenia dają bliskie wektory.",
+      "Cosine similarity mierzy kierunek znaczenia, nie długość tekstu — krótki i długi opis tej samej rzeczy są blisko.",
+      "Cztery pułapki podobieństwa: negacja, ten sam temat przy innej intencji, wieloznaczność i nieaktualna wersja.",
+      "Ranking podobieństwa to sygnał, nie wyrok — najwyższy wynik bywa biznesowo błędny, dlatego treść trzeba zweryfikować."
+    ],
+    "checklist": [
+      "Czy najwyższy wynik faktycznie dotyczy tego samego obiektu i intencji co moje zapytanie?",
+      "Czy fragment nie różni się od poprawnego tylko negacją albo numerem wersji?",
+      "Czy zapytanie oddaje intencję pełną frazą, z kontekstem i kluczowym obiektem?",
+      "Czy zweryfikowałem treść fragmentu, zamiast ufać samej pozycji w rankingu?"
+    ],
+    "checklistTitle": "Checklista — zanim zaufasz wynikowi wyszukiwania semantycznego",
+    "nextStep": "Następny krok: M5 — Vector databases i similarity search (filtrowanie metadanych i pipeline wyszukiwania)."
+  }
+}

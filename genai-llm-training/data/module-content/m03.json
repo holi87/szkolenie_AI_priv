@@ -1,0 +1,116 @@
+{
+  "_meta": {
+    "issue": "#21 [21][M4] Wdroż moduły M3-M6",
+    "storyboard": "docs/storyboard/m03-parametry.md",
+    "interaction": "Suwaki generacji (kind: tune)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (SklepDemo/NotkaApp). Output interakcji jest prerenderowany (nie z żywego modelu). ZERO PII.",
+    "note": "Egzemplarz referencyjny typu tune: parametry → autorskie efekty (dane) + scorowany checkpoint."
+  },
+  "module": "M3",
+  "intro": "Te same dane wejściowe i ten sam model mogą dać różne odpowiedzi, bo generacją sterują parametry. W QA powtarzalność wyniku to fundament wiarygodnej dokumentacji i regresji — niekontrolowane parametry dają nieprzewidywalny output.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Po co kontrolować generację?",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Trzy sterowniki decydują o kształcie odpowiedzi: temperature i top-p (losowość) oraz max tokens (długość). Zanim zaufasz outputowi w dokumentacji testowej, musisz wiedzieć, jak je ustawić." },
+        { "kind": "callout", "variant": "info", "title": "Deterministyczność pozorna", "text": "Niska temperatura zmniejsza losowość, ale nie gwarantuje identycznego wyniku przy każdym uruchomieniu — to nadal model probabilistyczny." }
+      ]
+    },
+    {
+      "id": "s2-temperature",
+      "title": "Temperature — od formalnego do kreatywnego",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Temperature", "original": "temperatura", "text": "sterownik losowości doboru kolejnego tokenu." },
+        { "kind": "list", "items": [
+          "Niska (~0,0–0,3): odpowiedzi zachowawcze, powtarzalne, formalne — do dokumentacji i kroków testowych.",
+          "Wysoka (~0,8–1,2): odpowiedzi różnorodne, kreatywne, mniej przewidywalne — do burzy pomysłów na dane testowe."
+        ] }
+      ]
+    },
+    {
+      "id": "s3-wysoka-losowosc",
+      "title": "Wysoka losowość a praca QA",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Wysoka temperatura w QA oznacza brak powtarzalności (dwa uruchomienia = dwa różne kroki), dryf treści, trudność w przeglądzie i audycie oraz ryzyko cichych zmian w regresji." },
+        { "kind": "callout", "variant": "warn", "title": "Reguła", "text": "Gdy liczy się powtarzalność i zgodność z wymaganiem — obniż losowość." }
+      ]
+    },
+    {
+      "id": "s4-top-p",
+      "title": "top-p — drugi sterownik losowości",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "top-p", "original": "nucleus sampling", "text": "próg kumulowanego prawdopodobieństwa — zawęża pulę kandydatów na kolejny token do najbardziej prawdopodobnych sumujących się do p." },
+        { "kind": "paragraph", "text": "Oba parametry sterują różnorodnością; zwykle reguluje się jeden naraz. Niskie top-p = węższy, bezpieczniejszy wybór (stabilny słownik terminów QA); wysokie = szersze, ryzykowne sformułowania." }
+      ]
+    },
+    {
+      "id": "s5-max-tokens",
+      "title": "max tokens — kiedy odpowiedź się urywa",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "max tokens", "original": "maksymalna liczba tokenów odpowiedzi", "text": "twardy limit długości outputu." },
+        { "kind": "paragraph", "text": "Przekroczenie limitu ucina odpowiedź w połowie zdania, tabeli albo listy — brakuje ostatnich kroków lub kryteriów akceptacji. Rozpoznasz to po urwanym zdaniu i niedomkniętej liście. Reakcja: zwiększ limit lub poproś o krótszy format." }
+      ]
+    },
+    {
+      "id": "s6-decyzja",
+      "title": "Które ustawienie do dokumentacji testowej?",
+      "type": "decision",
+      "blocks": [
+        { "kind": "paragraph", "text": "Porównaj dwa presety dla tego samego zadania (spisanie kroków przypadku testowego). Wariant A: temp 0,2 / top-p 0,3 / wysoki limit. Wariant B: temp 1,0 / top-p 0,95 / niski limit." },
+        { "kind": "paragraph", "text": "Dla dokumentacji wybierz niższą losowość i zapas na długość — to daje powtarzalność i brak ucięcia. Za chwilę sprawdzisz to suwakami." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "tune",
+    "id": "m3-suwaki",
+    "title": "Suwaki generacji",
+    "intro": "Ustaw parametry i zobacz, jak zmienia się symulowany output dla zadania „wypisz kroki testowe logowania w SklepDemo”. Następnie odpowiedz na checkpoint.",
+    "outputLabel": "Symulowany output dla wybranych ustawień:",
+    "controls": [
+      { "id": "temp", "label": "Temperature", "levels": [
+        { "value": "0.2", "label": "Niska (0,2)", "effect": "Formalność: wysoka. Kroki testowe powtarzalne, ten sam układ przy każdym uruchomieniu." },
+        { "value": "1.0", "label": "Wysoka (1,0)", "effect": "Formalność: niska. Kroki różnią się między uruchomieniami — brak powtarzalności, ryzyko dryfu treści." }
+      ] },
+      { "id": "topp", "label": "top-p", "levels": [
+        { "value": "0.3", "label": "Niskie (0,3)", "effect": "Słownik terminów QA stabilny i przewidywalny." },
+        { "value": "0.95", "label": "Wysokie (0,95)", "effect": "Szersze, czasem ryzykowne sformułowania — trudniejsze w przeglądzie." }
+      ] },
+      { "id": "maxtok", "label": "max tokens", "levels": [
+        { "value": "512", "label": "Wysoki limit (512)", "effect": "Kompletność: pełna. Wszystkie kroki i kryteria akceptacji się mieszczą." },
+        { "value": "64", "label": "Niski limit (64)", "effect": "⚠ Odpowiedź ucięta — lista kroków urywa się w połowie, brak podsumowania. Zwiększ limit." }
+      ] }
+    ],
+    "checkpoint": {
+      "prompt": "Dla spisania kroków przypadku testowego (liczy się powtarzalność i komplet) które ustawienie jest bezpieczniejsze?",
+      "type": "single_choice",
+      "options": [
+        { "id": "A", "text": "temp 0,2 / top-p 0,3 / wysoki limit — niska losowość i zapas długości" },
+        { "id": "B", "text": "temp 1,0 / top-p 0,95 / niski limit — kreatywnie i krótko" }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Dobrze: niska losowość daje powtarzalność, a wysoki limit chroni przed ucięciem listy kroków.",
+      "feedbackIncorrect": "Wysoka losowość psuje powtarzalność, a niski limit ucina kroki — to złe dla dokumentacji. Wybierz niską temperaturę i zapas długości."
+    }
+  },
+  "summary": {
+    "points": [
+      "Temperature i top-p sterują losowością; max tokens steruje długością odpowiedzi.",
+      "Dla QA preferuj niską losowość i zapas długości — powtarzalność i brak ucięcia.",
+      "Zawsze weryfikuj powtarzalność i kompletność outputu przed użyciem w dokumentacji."
+    ],
+    "checklist": [
+      "Czy obniżyłem losowość tam, gdzie liczy się powtarzalność?",
+      "Czy limit długości pomieści całą odpowiedź?",
+      "Czy output jest taki sam przy ponownym uruchomieniu?"
+    ],
+    "checklistTitle": "Checklista — kontrola generacji",
+    "nextStep": "Następny krok: M4 — embeddings i podobieństwo semantyczne (lub kolejny moduł obowiązkowy ścieżki)."
+  }
+}

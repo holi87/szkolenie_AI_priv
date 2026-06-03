@@ -1,0 +1,208 @@
+{
+  "_meta": {
+    "issue": "#23 [23][M4] Wdroż moduł M6 RAG",
+    "storyboard": "docs/storyboard/m06-rag.md",
+    "interaction": "Zbuduj pipeline RAG (kind: rubric, zadanie praktyczne R2-rag, warunek konieczny S3, próg 70% = 3.5/5)",
+    "scenario": "SC-RAG-01 (mini-korpus dokumentacji QA, korpus SklepDemo/NotkaApp)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (SklepDemo, NotkaApp, fikcyjne wymagania WYM-koszyk/WYM-zwroty). ZERO realnych danych klienta/PII.",
+    "note": "Wariant S1 ŚWIADOMOŚCIOWY: ekrany techniczne (chunking, ćwiczenia, pogłębienie inżynierskie) skrócone/pominięte przez onlyForPaths/hideForPaths. S2 PRAKTYCZNY i S3 PEŁNY: pełny przebieg. Treść rozróżnia błąd retrieval/generation/źródłowy oraz RAG vs fine-tuning (E3, E4)."
+  },
+  "module": "M6",
+  "intro": "LLM bez dostępu do firmowej dokumentacji zmyśla szczegóły wymagań. RAG (ang. Retrieval-Augmented Generation) pozwala modelowi szukać w Twoich dokumentach i odpowiadać na ich podstawie, z cytatami. W tym module ułożysz pipeline RAG, dobierzesz chunking, odróżnisz RAG od dostrajania modelu i nauczysz się rozpoznawać trzy warstwy błędu.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Po co testerowi RAG",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Model językowy nie zna Twojej firmowej specyfikacji. Zapytany o szczegół wymagania często zmyśla prawdopodobnie brzmiącą, ale nieprawdziwą odpowiedź. RAG (ang. Retrieval-Augmented Generation) to podejście „daj modelowi szukać w naszych dokumentach i odpowiadać na ich podstawie”." },
+        { "kind": "paragraph", "text": "Dla QA oznacza to konkretne korzyści: odpowiedzi o aktualnych wymaganiach, pomoc w pisaniu przypadków testowych z odwołaniem do specyfikacji, szybkie znalezienie kryterium akceptacji — zawsze z cytatem do źródła, który da się zweryfikować." },
+        { "kind": "callout", "variant": "info", "onlyForPaths": ["S1"], "title": "Kiedy w ogóle myśleć o RAG", "text": "Jeśli pytania dotyczą Waszej zmiennej dokumentacji i odpowiedź musi wskazać źródło — to przypadek dla RAG. Reszta modułu pokaże, jak to działa krok po kroku." },
+        { "kind": "list", "hideForPaths": ["S1"], "items": [
+          "E1 — ułożysz kroki pipeline RAG w poprawnej kolejności.",
+          "E2 — dobierzesz strategię dzielenia dokumentacji na fragmenty (chunking).",
+          "E3 — odróżnisz przypadek dla RAG od przypadku dla dostrajania modelu (fine-tuning).",
+          "E4 — rozpoznasz błąd wyszukiwania, błąd generacji i błąd źródłowy."
+        ] }
+      ]
+    },
+    {
+      "id": "s2-pipeline",
+      "title": "Pipeline RAG od końca do końca",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Cały proces na jednym ekranie. Faza budowy indeksu (offline) przygotowuje dokumenty, faza zapytania (online) obsługuje pytanie użytkownika. Kluczowa zasada: odpowiedź ma być ugruntowana (ang. grounding) w pobranych źródłach, nie w pamięci modelu." },
+        { "kind": "list", "ordered": true, "items": [
+          "Dokumenty źródłowe korpusu „SklepDemo” trafiają na wejście.",
+          "Dzielenie na fragmenty (ang. chunking) — dokument tnie się na mniejsze, spójne kawałki.",
+          "Osadzenia (ang. embeddings) — każdy fragment dostaje wektorową reprezentację znaczenia.",
+          "Indeks / baza wektorowa — fragmenty, osadzenia i metadane są zapisane do wyszukiwania.",
+          "Zapytanie użytkownika — np. „Jakie jest kryterium akceptacji dla limitu pozycji w koszyku?”.",
+          "Wyszukiwanie (ang. retrieval, top-k) — indeks zwraca najbliższe fragmenty.",
+          "Przesortowanie (ang. reranking) — opcjonalna poprawa trafności top-k.",
+          "Wstrzyknięcie pobranego kontekstu do promptu.",
+          "Generacja odpowiedzi z cytatami (ang. citations) wskazującymi fragment źródłowy."
+        ] },
+        { "kind": "diagram", "title": "Schemat pipeline RAG", "caption": "Faza indeksu (offline) i faza zapytania (online).", "textAlt": "Faza indeksu (offline): dokumenty źródłowe → chunking → embeddings → indeks/baza wektorowa. Faza zapytania (online): zapytanie użytkownika → retrieval (top-k) z indeksu → (opcjonalnie) reranking → wstrzyknięcie kontekstu do promptu → generacja odpowiedzi z cytatami. Indeks łączy obie fazy: powstaje offline, jest odpytywany online.", "onlyForPaths": ["S2", "S3"] },
+        { "kind": "diagram", "title": "Schemat poglądowy RAG", "caption": "Wersja uproszczona.", "textAlt": "Dokumenty → indeks → wyszukanie pasujących fragmentów na zapytanie → odpowiedź z cytatami opartymi na tych fragmentach.", "onlyForPaths": ["S1"] }
+      ]
+    },
+    {
+      "id": "s3-kolejnosc",
+      "title": "Kolejność kroków ma znaczenie",
+      "type": "content",
+      "onlyForPaths": ["S2", "S3"],
+      "blocks": [
+        { "kind": "paragraph", "text": "Kolejność nie jest dowolna — wymusza ją zależność danych. Chunking musi być przed osadzeniami, bo embeddings liczy się dla istniejących fragmentów. Indeks powstaje przed retrievalem, bo nie da się przeszukać czegoś, czego jeszcze nie zapisano. Retrieval musi być przed generacją, bo dostarcza jej kontekst." },
+        { "kind": "callout", "variant": "info", "title": "Dwie fazy", "text": "Faza indeksu (chunking → embeddings → indeks) działa na dokumentach i jest niezależna od pytania — wykonuje się raz, offline. Faza zapytania (retrieval → reranking → generacja) uruchamia się przy każdym pytaniu." },
+        { "kind": "callout", "variant": "warn", "title": "Najczęstszy błąd układania", "text": "Mylenie kolejności embeddings i chunkingu albo umieszczenie generacji przed retrievalem. Generacja bez wcześniejszego retrievalu to po prostu model zgadujący z pamięci — czyli to, czego RAG ma uniknąć." }
+      ]
+    },
+    {
+      "id": "s4-chunking",
+      "title": "Chunking dla dokumentacji wymagań",
+      "type": "content",
+      "onlyForPaths": ["S2", "S3"],
+      "blocks": [
+        { "kind": "definition", "term": "Chunking", "original": "dzielenie na fragmenty", "text": "podział dokumentu na mniejsze, spójne kawałki nadające się do osadzenia i wyszukania. Całego dokumentu nie da się wrzucić naraz — byłby za duży i nieprecyzyjny w retrievalu." },
+        { "kind": "list", "items": [
+          "Rozmiar fragmentu — ile tekstu mieści jeden kawałek.",
+          "Zazębienie (ang. overlap) — fragmenty częściowo się nakładają, by treść na granicy cięcia nie została rozerwana.",
+          "Granice logiczne — sekcja, pojedyncze wymaganie albo krok, zamiast cięcia w połowie zdania."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Reguła QA", "text": "Jedno wymaganie lub jeden scenariusz = jeden spójny fragment. Zachowaj nagłówki i identyfikatory (np. „WYM-koszyk §3”) w metadanych — to one robią z cytatu coś weryfikowalnego." },
+        { "kind": "paragraph", "text": "Skutki złego chunkingu w syntetycznym dokumencie „SklepDemo — koszyk”: arbitralne cięcie co stałą liczbę znaków ucina kryterium akceptacji w połowie, a retrieval zwraca fragment bez konkluzji. Overlap chroni granice; podział po wymaganiu chroni kompletność." }
+      ]
+    },
+    {
+      "id": "s5-dobierz-chunking",
+      "title": "Dobierz chunking — szybka decyzja",
+      "type": "decision",
+      "onlyForPaths": ["S2", "S3"],
+      "blocks": [
+        { "kind": "paragraph", "text": "Fragment specyfikacji „SklepDemo — koszyk”: każde wymaganie ma identyfikator (np. „WYM-koszyk-014”) i własne kryterium akceptacji długie czasem na kilka zdań. Wcześniej stałe cięcie co tę samą liczbę znaków ucinało kryterium w połowie. Którą strategię wybrać?" },
+        { "kind": "list", "items": [
+          "Po pojedynczym wymaganiu — jedno wymaganie z identyfikatorem i pełnym kryterium = jeden fragment, identyfikator w metadanych. WŁAŚCIWE.",
+          "Stały rozmiar bez overlapu, tylko mniejszy — tnie kryteria jeszcze częściej.",
+          "Cały dokument jako jeden fragment — psuje trafność retrievalu, model dostaje za dużo szumu."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Dlaczego po wymaganiu", "text": "Granica logiczna „jedno wymaganie = jeden fragment” zachowuje pełne kryterium i czytelne źródło cytatu — dokładnie tego brakowało przy stałym cięciu. To przygotowanie do pytań scenariuszowych modułu." }
+      ]
+    },
+    {
+      "id": "s6-rag-vs-finetuning",
+      "title": "RAG czy fine-tuning",
+      "type": "decision",
+      "blocks": [
+        { "kind": "paragraph", "text": "To kluczowe rozróżnienie. RAG dostarcza modelowi świeżą, zmienną wiedzę faktograficzną i pozwala ją cytować. Fine-tuning (dostrajanie) utrwala stały styl, format i zachowanie modelu — nie nową faktografię." },
+        { "kind": "table", "title": "RAG kontra fine-tuning", "headers": ["Wymiar", "RAG", "Fine-tuning"], "rows": [
+          ["Po co", "Świeża, zmienna wiedza faktograficzna", "Stały styl, format, zachowanie"],
+          ["Cytaty do źródła", "Tak — wskazuje pobrany fragment", "Nie — wiedza wtopiona w wagi modelu"],
+          ["Aktualizacja", "Podmień dokument w indeksie", "Wymaga ponownego dostrojenia"],
+          ["Typowy przypadek QA", "„Odpowiedzi muszą cytować aktualną specyfikację”", "„Raport zawsze w naszym układzie sekcji”"]
+        ], "textAlt": "Porównanie: RAG służy do świeżej, zmiennej wiedzy faktograficznej, daje cytaty do źródła, aktualizuje się przez podmianę dokumentu w indeksie; typowy przypadek QA to odpowiedzi cytujące aktualną specyfikację. Fine-tuning służy do utrwalenia stałego stylu i formatu, nie daje cytatów, aktualizacja wymaga ponownego dostrojenia; typowy przypadek QA to raport zawsze w stałym układzie sekcji." },
+        { "kind": "callout", "variant": "warn", "title": "Anty-mit", "text": "„Fine-tuning nauczy model naszej dokumentacji.” Nie. Do zmiennych faktów używaj RAG — dostrajanie utrwali styl, ale faktografia szybko się zdezaktualizuje i nie da cytatów." },
+        { "kind": "paragraph", "hideForPaths": ["S1"], "text": "Decyzje na syntetycznych przypadkach QA: „asystent ma cytować aktualne, zmieniane co sprint wymagania” → RAG; „asystent ma zawsze zwracać raport w firmowym układzie sekcji” → fine-tuning (lub szablon w prompcie)." }
+      ]
+    },
+    {
+      "id": "s7-trzy-warstwy",
+      "title": "Trzy warstwy błędu w RAG",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Ta sama zła odpowiedź może mieć różne źródła, a każde wymaga innej naprawy. Tester musi rozróżnić, która warstwa zawiodła, zanim zacznie cokolwiek poprawiać." },
+        { "kind": "definition", "term": "Błąd wyszukiwania (retrieval)", "text": "do kontekstu nie trafił właściwy fragment — bo top-k było za małe, właściwe źródło wyłączono z indeksu albo pobrano fragment tylko podobny semantycznie. Naprawa: lepszy retrieval (większe top-k, filtry metadanych, właściwe źródła)." },
+        { "kind": "definition", "term": "Błąd generacji (generation)", "text": "właściwy fragment był w kontekście, ale model i tak zmyślił lub źle go podsumował — odpowiedź przeczy poprawnemu źródłu. Naprawa: lepszy prompt, wymuszenie ugruntowania." },
+        { "kind": "definition", "term": "Błąd źródłowy", "text": "model pobrał i poprawnie zacytował fragment, ale sama treść w dokumencie była błędna lub nieaktualna. Naprawa: poprawa dokumentacji u źródła — żaden retrieval ani prompt tego nie naprawi." },
+        { "kind": "callout", "variant": "info", "onlyForPaths": ["S1"], "title": "W skrócie", "text": "Zanim uznasz, że „model się myli”, sprawdź: czy dostał właściwy fragment (retrieval), czy dobrze go użył (generation), czy sam dokument był poprawny (źródłowy)." }
+      ]
+    },
+    {
+      "id": "s8-diagnoza",
+      "title": "Diagnoza: która warstwa zawiodła",
+      "type": "decision",
+      "onlyForPaths": ["S2", "S3"],
+      "blocks": [
+        { "kind": "paragraph", "text": "Syntetyczny korpus „NotkaApp”: DOC1 — token sesji wygasa po 30 min bezczynności; DOC3 — link resetu hasła ważny 30 min, jednorazowy. Pytanie: „Po jakim czasie wygasa link resetu hasła?”. Czytaj sygnały z pobranego kontekstu i cytatu." },
+        { "kind": "table", "title": "Sygnały warstw błędu", "headers": ["Obserwacja", "Warstwa błędu"], "rows": [
+          ["Model pobrał i zacytował DOC1 (token sesji): „Wygasa po 30 minutach [DOC1]”. Liczba przypadkiem pasuje, ale cytat dotyczy złego dokumentu; DOC3 nie trafił do kontekstu", "Retrieval (similar-but-useless)"],
+          ["DOC3 był w kontekście, lecz odpowiedź modelu mu przeczy", "Generation"],
+          ["Model poprawnie zacytował DOC3, ale treść w DOC3 była nieaktualna", "Źródłowy"],
+          ["Każde zdanie odpowiedzi ma oparcie we właściwym, poprawnym cytacie", "Brak błędu"]
+        ], "textAlt": "Tabela sygnałów. Gdy zacytowano DOC1 (token sesji) zamiast DOC3 (link resetu), a właściwy fragment nie trafił do kontekstu — to błąd retrieval, pułapka similar-but-useless; przypadkowa zgodność liczby nie oznacza ugruntowania. Gdy DOC3 był w kontekście, ale odpowiedź mu przeczy — błąd generation. Gdy DOC3 poprawnie zacytowany, ale jego treść nieaktualna — błąd źródłowy. Gdy każde zdanie ma oparcie we właściwym poprawnym cytacie — brak błędu." },
+        { "kind": "callout", "variant": "warn", "title": "Pułapka", "text": "Przypadkowa zgodność liczby („30 minut”) nie oznacza ugruntowania, jeśli cytat wskazuje zły dokument. Zawsze sprawdzaj, czy cytowany fragment naprawdę odpowiada na pytanie." }
+      ]
+    },
+    {
+      "id": "s9-reranking-grounding",
+      "title": "Pogłębienie inżynierskie: reranking i grounding",
+      "type": "content",
+      "onlyForPaths": ["S3"],
+      "blocks": [
+        { "kind": "definition", "term": "Reranking", "original": "przesortowanie wyników", "text": "po wstępnym retrievalu drugi, dokładniejszy etap sortuje kandydatów według trafności. Działa na wynikach retrievalu — więc po nim, a przed wstrzyknięciem kontekstu. Poprawia jakość faktycznie użytego top-k." },
+        { "kind": "definition", "term": "Grounding", "original": "ugruntowanie", "text": "kontrola, że każde zdanie odpowiedzi ma oparcie w pobranym fragmencie. Następuje po wygenerowaniu odpowiedzi — weryfikuje wytworzony tekst względem źródeł i wymusza cytaty." },
+        { "kind": "paragraph", "text": "Praktyka weryfikacji: dla każdego zdania odpowiedzi wskaż fragment, z którego wynika. Zdanie bez oparcia w żadnym pobranym fragmencie to sygnał błędu generacji lub braku w retrievalu — w obu przypadkach odpowiedzi nie wolno uznać za ugruntowaną." },
+        { "kind": "callout", "variant": "info", "title": "Pomiar jakości RAG", "text": "Jak systematycznie mierzyć trafność retrievalu i jakość odpowiedzi — to temat M12 (ewaluacja). Tu wystarczy zasada: bez ugruntowania nie ma zaufanej odpowiedzi." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "rubric",
+    "id": "m6-pipeline-rag",
+    "title": "Zbuduj pipeline RAG",
+    "intro": "Korpus „SklepDemo” (specyfikacja koszyka WYM-koszyk, polityka zwrotów WYM-zwroty, checklisty płatności). Pytanie użytkownika: „Jakie jest kryterium akceptacji dla limitu pozycji w koszyku?”. Dla każdego kryterium rubryki zaznacz decyzję konfiguracji pipeline, która je spełnia. Ocena liczy się jako zadanie praktyczne R2-rag na ścieżce S3 i jest warunkiem koniecznym — próg zaliczenia to 70% (score ≥ 3,5 / 5).",
+    "rubricId": "R2-rag",
+    "recordsPractical": true,
+    "scaleMax": 5,
+    "passThreshold": 3.5,
+    "paths": ["S3"],
+    "criteria": [
+      { "id": "K1", "name": "Źródła i grounding", "points": 1, "hint": "Włącz tylko źródła odpowiadające na pytanie i ugruntuj odpowiedź w nich; włączenie wszystkiego dorzuca szum, pominięcie właściwego źródła uniemożliwia cytat.",
+        "options": [
+          { "id": "a", "text": "Włącz do indeksu źródło o koszyku (WYM-koszyk), bo to ono zawiera odpowiedź; wymuś, by odpowiedź była ugruntowana w pobranym fragmencie." },
+          { "id": "b", "text": "Wyłącz wszystkie źródła i pozwól modelowi odpowiedzieć z pamięci — będzie szybciej." },
+          { "id": "c", "text": "Włącz wszystkie źródła i dodatkowo poproś model, by nie cytował, żeby odpowiedź była krótsza." }
+        ], "correctOptionIds": ["a"] },
+      { "id": "K2", "name": "Chunking + overlap", "points": 1, "hint": "Tnij po pojedynczym wymaganiu z niewielkim overlapem i identyfikatorem w metadanych; stałe cięcie ucina kryterium akceptacji.",
+        "options": [
+          { "id": "a", "text": "Dziel po pojedynczym wymaganiu (jedno WYM = jeden fragment) z małym overlapem i identyfikatorem „WYM-koszyk-…” w metadanych." },
+          { "id": "b", "text": "Tnij co stałą liczbę znaków bez overlapu — prościej zaimplementować." },
+          { "id": "c", "text": "Wrzuć całą specyfikację koszyka jako jeden ogromny fragment, żeby nic się nie ucięło." }
+        ], "correctOptionIds": ["a"] },
+      { "id": "K3", "name": "Retrieval (top-k, filtry metadanych)", "points": 1, "hint": "Ustaw top-k > 0, dość duże, by właściwy fragment się zmieścił, i zawęź filtrem metadanych do dokumentu o koszyku; top-k = 0 nic nie pobierze.",
+        "options": [
+          { "id": "a", "text": "Ustaw top-k na kilka fragmentów i dodaj filtr metadanych ograniczający do dokumentu o koszyku, by trafny fragment na pewno wszedł do kontekstu." },
+          { "id": "b", "text": "Ustaw top-k = 0, żeby model nie rozpraszał się pobranymi fragmentami." },
+          { "id": "c", "text": "Ustaw top-k = 1 bez filtrów i licz, że jeden pobrany fragment akurat trafi." }
+        ], "correctOptionIds": ["a"] },
+      { "id": "K4", "name": "Cytaty / weryfikowalność", "points": 1, "hint": "Wymuś cytat z identyfikatorem fragmentu (np. „[WYM-koszyk §3]”), by odpowiedź dało się zweryfikować względem źródła.",
+        "options": [
+          { "id": "a", "text": "Wymuś przy każdym twierdzeniu cytat z identyfikatorem fragmentu, np. „[WYM-koszyk §3]”, żeby dało się go sprawdzić w źródle." },
+          { "id": "b", "text": "Poproś o płynny akapit bez cytatów — czyta się przyjemniej." },
+          { "id": "c", "text": "Pozwól modelowi wymyślać numery sekcji, jeśli pasują do tematu — i tak brzmią wiarygodnie." }
+        ], "correctOptionIds": ["a"] },
+      { "id": "K5", "name": "Diagnoza błędów (retrieval / generation / źródłowy)", "points": 1, "hint": "Najpierw sprawdź, czy właściwy fragment był w kontekście (retrieval), potem czy odpowiedź mu nie przeczy (generation), potem czy sam dokument jest poprawny (źródłowy) — każda warstwa ma inną naprawę.",
+        "options": [
+          { "id": "a", "text": "Gdy odpowiedź jest zła, ustal warstwę: brak właściwego fragmentu w kontekście = retrieval; fragment był dobry, lecz odpowiedź mu przeczy = generation; cytat poprawny, ale treść dokumentu błędna = źródłowy — i napraw właściwą warstwę." },
+          { "id": "b", "text": "Każdy zły wynik traktuj jednakowo i zawsze podkręcaj sam prompt, niezależnie od tego, co było w kontekście." },
+          { "id": "c", "text": "Jeśli liczba w odpowiedzi przypadkiem pasuje, uznaj odpowiedź za poprawną bez sprawdzania, którego dokumentu dotyczy cytat." }
+        ], "correctOptionIds": ["a"] }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Pipeline RAG ma wymuszoną kolejność: chunking → embeddings → indeks (offline), potem retrieval → reranking → generacja z cytatami (online).",
+      "Dla dokumentacji wymagań tnij po pojedynczym wymaganiu z overlapem i identyfikatorem w metadanych — chroni to kompletność kryterium i czytelność cytatu.",
+      "RAG = świeża, zmienna, cytowalna faktografia; fine-tuning = stały styl i format. „Fine-tuning nauczy model dokumentacji” to mit.",
+      "Trzy warstwy błędu mają trzy różne naprawy: retrieval (właściwy fragment nie dotarł), generation (dobry fragment, zła odpowiedź), źródłowy (poprawny cytat, błędny dokument)."
+    ],
+    "checklist": [
+      "Czy kroki pipeline są w poprawnej kolejności (retrieval przed generacją)?",
+      "Czy chunking zachowuje całe wymaganie i jego identyfikator w metadanych?",
+      "Czy to przypadek dla RAG (świeże fakty + cytaty), a nie dla fine-tuningu (stały format)?",
+      "Czy potrafię wskazać warstwę błędu: retrieval, generation czy źródłowy?"
+    ],
+    "checklistTitle": "Checklista — gotowy pipeline RAG dla QA",
+    "nextStep": "Następny krok: M7 — prompt engineering: jak napisać prompt korzystający z pobranego kontekstu."
+  }
+}
