@@ -1,0 +1,206 @@
+{
+  "_meta": {
+    "issue": "#23 [23][M4] Wdroż moduły M10-M12",
+    "storyboard": "docs/storyboard/m12-evaluation.md",
+    "interaction": "Judge calibration lab (kind: rubric, zadanie praktyczne R3-eval)",
+    "scenario": "SC-EVAL-01 (rozjazd oceny człowiek vs LLM-as-a-judge; EX1 length bias, EX2 position bias)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (SklepDemo, golden set GS-SklepDemo, odpowiedzi A1-A6, QA-ekspert anon.). ZERO realnych danych klienta/PII.",
+    "note": "Element interaktywny typu rubric = warunek konieczny S3, próg 70% (score >= 3,5 / 5). Wszystkie 9 ekranów wspólne dla S1/S2/S3; charakter ROZSZERZONY/pełny realizuje warstwa pogłębiona na ekranie 8 (onlyForPaths blokiem)."
+  },
+  "module": "M12",
+  "intro": "„Działa na oko” nie wystarcza: bez pomiaru nie wiesz, czy zmiana promptu lub pipeline RAG poprawiła, czy pogorszyła jakość. Ten moduł uczy mierzyć jakość LLM i RAG narzędziami testera: golden set, metryki, rubryka oceniającego, kalibracja z ekspertem i próg decyzji.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Po co testerowi ewaluacja LLM i RAG",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Bez pomiaru jakości każda zmiana promptu lub pipeline RAG to ruch w ciemno — nie wiadomo, czy poprawiła, czy pogorszyła odpowiedzi. Tester wnosi tu to, co umie najlepiej: kryteria akceptacji, powtarzalność i ochronę przed regresją." },
+        { "kind": "list", "items": [
+          "Golden set — zestaw wzorcowy, czyli „testy regresyjne dla odpowiedzi modelu”.",
+          "Metryki jakości — czym mierzyć dobrą odpowiedź.",
+          "Rubryka oceny dla modelu oceniającego (ang. LLM-as-a-judge).",
+          "Kalibracja z ekspertem i zgodność oceniaczy (ang. inter-rater agreement).",
+          "Próg akceptacji i decyzja „dalej / wstrzymaj” (ang. go / no-go)."
+        ] },
+        { "kind": "callout", "variant": "info", "text": "Czas modułu ok. 90 minut. Na końcu element interaktywny „Judge calibration lab”, który łączy rubrykę, bias i kalibrację w jednym przepływie." }
+      ]
+    },
+    {
+      "id": "s2-golden-set",
+      "title": "Golden set dla przypadku użycia",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Golden set (zestaw wzorcowy)", "original": "lista syntetycznych przypadków wejście → oczekiwana odpowiedź", "text": "udokumentowany zbiór: pytanie, poprawne oczekiwanie i źródło prawdy (ang. ground truth). Pełni rolę testów regresyjnych dla odpowiedzi modelu." },
+        { "kind": "paragraph", "text": "Dobry golden set zawiera pytania reprezentatywne dla przypadku użycia, przypadki brzegowe oraz znane pułapki. Syntetyczny przykład „GS-SklepDemo”: pytania o limit pozycji w koszyku, o politykę zwrotów i o kryterium akceptacji WYM-koszyk." },
+        { "kind": "callout", "variant": "warn", "title": "Czym golden set NIE jest", "text": "To nie zbiór losowych logów ani danych produkcyjnych. Pozycji bez rozstrzygalnego oczekiwania i bez źródła prawdy nie wkłada się do golden setu." }
+      ]
+    },
+    {
+      "id": "s3-ocen-projekt",
+      "title": "Oceń projekt golden setu",
+      "type": "decision",
+      "blocks": [
+        { "kind": "paragraph", "text": "Spójrz na kandydatów do golden setu „GS-SklepDemo” i rozstrzygnij, którzy nadają się do zestawu, a którzy są wadliwi. Wadą bywa: brak źródła prawdy, niejednoznaczne oczekiwanie, duplikat albo pytanie nietestowalne." },
+        { "kind": "list", "items": [
+          "Dobry: „Jaki jest limit pozycji w koszyku?” — oczekiwanie wynika z WYM-koszyk, źródło udokumentowane.",
+          "Wadliwy: „Czy aplikacja jest fajna?” — oczekiwanie niejednoznaczne, nietestowalne.",
+          "Wadliwy: pytanie bez wskazanego źródła prawdy — nie wiadomo, względem czego oceniać.",
+          "Wadliwy: kopia istniejącej pozycji — duplikat nie zwiększa pokrycia."
+        ] },
+        { "kind": "callout", "variant": "safe", "text": "Reguła: każda pozycja golden setu ma jednoznaczne oczekiwanie i udokumentowane źródło prawdy. Brak któregoś z nich = pozycja odpada." }
+      ]
+    },
+    {
+      "id": "s4-piec-metryk",
+      "title": "Pięć metryk jakości",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Do oceny odpowiedzi LLM i RAG używamy pięciu metryk. Każda mierzy inny wymiar jakości i ma typowy objaw braku." },
+        { "kind": "table",
+          "headers": ["Metryka", "Co mierzy", "Typowy objaw braku"],
+          "rows": [
+            ["trafność (accuracy)", "czy odpowiedź jest merytorycznie poprawna", "fałszywe twierdzenie podane jako fakt"],
+            ["wierność źródłom (faithfulness)", "czy odpowiedź jest zgodna ze źródłem", "zdanie sprzeczne z dokumentem źródłowym"],
+            ["ugruntowanie (groundedness)", "czy treść da się oprzeć na przekazanym kontekście", "twierdzenie bez oparcia w pobranym fragmencie"],
+            ["adekwatność (relevance)", "czy odpowiedź dotyczy zadanego pytania", "odpowiedź na inne pytanie niż zadane"],
+            ["kompletność (completeness)", "czy pokryto wszystkie wymagane warunki", "brak części warunków kryterium akceptacji"]
+          ],
+          "textAlt": "Pięć metryk jakości. Trafność (accuracy): czy odpowiedź jest merytorycznie poprawna; objaw braku to fałszywe twierdzenie podane jako fakt. Wierność źródłom (faithfulness): czy odpowiedź jest zgodna ze źródłem; objaw braku to zdanie sprzeczne z dokumentem źródłowym. Ugruntowanie (groundedness): czy treść da się oprzeć na przekazanym kontekście; objaw braku to twierdzenie bez oparcia w pobranym fragmencie. Adekwatność (relevance): czy odpowiedź dotyczy zadanego pytania; objaw braku to odpowiedź na inne pytanie niż zadane. Kompletność (completeness): czy pokryto wszystkie wymagane warunki; objaw braku to brak części warunków kryterium akceptacji."
+        },
+        { "kind": "callout", "variant": "info", "text": "Powiązanie z M6: niska faithfulness lub groundedness często wskazuje warstwę generacji RAG, a luki w pobranych źródłach — warstwę retrievalu." }
+      ]
+    },
+    {
+      "id": "s5-dobierz-metryke",
+      "title": "Dobierz metrykę do pytania",
+      "type": "decision",
+      "blocks": [
+        { "kind": "paragraph", "text": "Dla danego pytania jakościowego dobierz metrykę, która je rozstrzyga. Najczęstsza pułapka to mylenie adekwatności (relevance) z trafnością (accuracy)." },
+        { "kind": "list", "items": [
+          "„Czy odpowiedź jest zgodna z treścią źródła?” → faithfulness (i ugruntowanie / groundedness).",
+          "„Czy odpowiedź pokrywa wszystkie warunki kryterium akceptacji?” → completeness.",
+          "„Czy odpowiedź w ogóle dotyczy zadanego pytania?” → relevance.",
+          "„Czy podana wartość jest merytorycznie poprawna?” → accuracy."
+        ] },
+        { "kind": "callout", "variant": "warn", "text": "Pułapka: odpowiedź może być adekwatna (na temat), a mimo to sprzeczna ze źródłem. Relevance nie zastępuje faithfulness." }
+      ]
+    },
+    {
+      "id": "s6-rubryka",
+      "title": "Rubryka dla LLM-as-a-judge",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "LLM-as-a-judge", "original": "model językowy w roli oceniającego", "text": "model, który ocenia odpowiedzi innego modelu według rubryki. Bez rubryki odpowiada na ogólne „czy to dobre?” i ocena jest niepowtarzalna." },
+        { "kind": "paragraph", "text": "Dobra rubryka oceny (ang. evaluation rubric) ma: jasne kryterium, skalę (np. 0–2 lub 1–5), definicję każdego poziomu, przykłady kotwiczące (ang. anchor examples) oraz instrukcję „oceniaj wyłącznie względem źródła”." },
+        { "kind": "callout", "variant": "warn", "title": "Anty-mit", "text": "„Zapytaj model, czy odpowiedź jest dobra” bez rubryki daje ocenę zależną od kaprysu uruchomienia. Definicje poziomów i kotwice czynią ocenę powtarzalną." }
+      ]
+    },
+    {
+      "id": "s7-bias-position",
+      "title": "Stronniczość oceniającego i position bias",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Oceniający LLM ma stronniczości (ang. bias). Bez kontroli ocena automatyczna potrafi dać fałszywe „zielone”, czyli zaliczyć odpowiedź, która powinna odpaść." },
+        { "kind": "definition", "term": "Position bias (stronniczość pozycyjna)", "original": "preferencja pozycji w porównaniu parami", "text": "przy porównaniu dwóch odpowiedzi oceniający częściej wybiera tę pokazaną jako pierwsza, niezależnie od jej rzeczywistej jakości." },
+        { "kind": "list", "items": [
+          "Length bias: zawyżanie oceny dłuższej odpowiedzi tylko za jej długość.",
+          "Ocena „grzecznościowa”: zawyżona nota niezależnie od treści.",
+          "Rozbieżność z oceną człowieka: judge daje notę inną niż ekspert."
+        ] },
+        { "kind": "callout", "variant": "info", "text": "Mitygacje (rozwijane dalej): zamiana kolejności w porównaniach parami, jednoznaczna rubryka i kalibracja z ekspertem." }
+      ]
+    },
+    {
+      "id": "s8-kalibracja",
+      "title": "Kalibracja z ekspertem i zgodność oceniaczy",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Żeby ufać ocenie automatycznej, porównaj ją z oceną eksperta na tym samym golden secie i policz zgodność międzyoceniacza (ang. inter-rater agreement). Miejsca, w których oceny się rozjeżdżają, to sygnał do poprawy rubryki, a nie do ignorowania." },
+        { "kind": "list", "ordered": true, "items": [
+          "Oceń odpowiedzi oceniającym LLM według rubryki.",
+          "Porównaj z oceną eksperta na tym samym golden secie.",
+          "Znajdź rozjazd i zdiagnozuj przyczynę (bias czy luka w rubryce).",
+          "Popraw rubrykę i oceń ponownie."
+        ] },
+        { "kind": "callout", "variant": "warn", "onlyForPaths": ["S2", "S3"], "title": "Pogłębienie: dlaczego sama „% zgodności” myli", "text": "Przy silnie nierównym rozkładzie ocen (np. prawie wszystko „pass”) wysoki procent zgodności da się osiągnąć niemal losowo. Kluczowe jest, czy oceniający trafia w rzadkie, ryzykowne przypadki „fail”, a nie tylko zgadza się „na pass”." }
+      ]
+    },
+    {
+      "id": "s9-prog-go-nogo",
+      "title": "Próg akceptacji i decyzja go/no-go",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Próg akceptacji jakości (ang. acceptance threshold) ustala, kiedy jakość jest „dość dobra”. Przykład: „faithfulness ≥ 0,9 na golden secie ORAZ zero pozycji sprzecznych ze źródłem”. Próg dobiera się wg ryzyka przypadku użycia, kosztu błędu i wyniku poprzedniej wersji (baseline)." },
+        { "kind": "definition", "term": "Decyzja go / no-go („dalej / wstrzymaj”)", "original": "go / no-go decision", "text": "decyzja, czy wersję wolno wydać. Próg działa też w regresji: porównuje nową wersję z poprzednią." },
+        { "kind": "callout", "variant": "safe", "title": "Konserwatywne domyślne", "text": "Brak danych do oceny lub niespełniony warunek twardy (np. jedna pozycja sprzeczna ze źródłem) = no-go. Dobra średnia nie obchodzi warunku twardego." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "rubric",
+    "id": "m12-judge-calibration",
+    "title": "Judge calibration lab",
+    "intro": "Syntetyczny zestaw: odpowiedzi A1–A6 na pytania z golden setu „GS-SklepDemo”, ocenione przez QA-eksperta (anon.) i przez oceniającego LLM. Zawiera celowo wstrzyknięty position bias (para A3/A4) oraz zawyżenie (A2) i lukę rubryki (A5). Dla każdego kryterium rubryki R3-eval zaznacz decyzję projektową ewaluacji, która je spełnia. Ocena liczy się jako zadanie praktyczne R3-eval na ścieżce S3 i jest warunkiem koniecznym — próg zaliczenia to 70% (score ≥ 3,5 / 5).",
+    "rubricId": "R3-eval",
+    "recordsPractical": true,
+    "scaleMax": 5,
+    "passThreshold": 3.5,
+    "paths": ["S3"],
+    "criteria": [
+      { "id": "K1", "name": "Golden set adekwatny do use case", "points": 1, "hint": "Golden set ma reprezentatywne pytania, przypadki brzegowe i udokumentowane źródło prawdy — nie losowe logi.",
+        "prompt": "Jak zbudować golden set „GS-SklepDemo” dla oceny odpowiedzi o koszyku i zwrotach?",
+        "options": [
+          { "id": "a", "text": "Reprezentatywne pytania o WYM-koszyk i politykę zwrotów, przypadki brzegowe (pytanie poza zakresem źródła), każda pozycja z udokumentowanym źródłem prawdy." },
+          { "id": "b", "text": "Losowo zebrane logi produkcyjne z surowymi danymi klientów — będą najbardziej „prawdziwe”." },
+          { "id": "c", "text": "Same pytania ogólne typu „czy aplikacja jest dobra?”, bez wskazanego oczekiwania ani źródła." }
+        ], "correctOptionIds": ["a"] },
+      { "id": "K2", "name": "Metryki z uzasadnieniem", "points": 1, "hint": "Dobierz metryki do tego, co realnie sprawdza pytanie: pokrycie warunków = completeness, zgodność i oparcie w źródle = faithfulness/groundedness.",
+        "prompt": "Pytanie jakościowe: „Czy odpowiedź wymienia wszystkie warunki płatności ze źródła i nie dodaje warunków spoza źródła?”. Które metryki dobrać?",
+        "options": [
+          { "id": "a", "text": "completeness (pokrycie wszystkich warunków) oraz faithfulness i groundedness (brak treści spoza źródła i oparcie w kontekście) — każda uzasadniona wymiarem pytania." },
+          { "id": "b", "text": "Wyłącznie relevance, bo pytanie dotyczy płatności — to wystarczy do oceny treści." },
+          { "id": "c", "text": "Position bias jako metryka jakości treści, bo brzmi technicznie." }
+        ], "correctOptionIds": ["a"] },
+      { "id": "K3", "name": "Rubryka LLM-as-a-judge (jednoznaczna)", "points": 1, "hint": "Jednoznaczna rubryka ma jasne kryterium, skalę z definicją każdego poziomu, kotwice i instrukcję „oceniaj względem źródła”.",
+        "prompt": "Pozycja A5 (kompletność warunków płatności) rozjeżdża się, bo rubryka nie precyzuje, kiedy „brak 1 warunku” to już niższy poziom. Jak ją poprawić?",
+        "options": [
+          { "id": "a", "text": "Dopisać definicje poziomów skali (np. 2 = wszystkie warunki; 1 = brak jednego warunku; 0 = brak większości) z przykładami kotwiczącymi i instrukcją „oceniaj wyłącznie względem źródła”." },
+          { "id": "b", "text": "Zostawić rubrykę jako „oceń, czy odpowiedź jest dobra” i zaufać wyczuciu oceniającego." },
+          { "id": "c", "text": "Usunąć skalę i zbierać tylko swobodny komentarz oceniającego dla każdej pozycji." }
+        ], "correctOptionIds": ["a"] },
+      { "id": "K4", "name": "Bias/position bias + kalibracja z ekspertem", "points": 1, "hint": "Position bias potwierdza i neutralizuje zamiana kolejności (A3/A4); length bias to zawyżanie za długość; werdykt zawsze waliduj oceną eksperta na golden secie.",
+        "prompt": "Para A3/A4 (ten sam wariant WYM-koszyk) oraz pozycja, gdzie judge zawyża dłuższą odpowiedź — jak rzetelnie wykryć i ograniczyć bias przed ustaleniem progu?",
+        "options": [
+          { "id": "a", "text": "Powtórzyć ocenę A3/A4 z zamienioną kolejnością (i uśrednić oba ułożenia): odwrócenie werdyktu potwierdza position bias, więc zamianę kolejności wpisać do rubryki; nie premiować odpowiedzi za samą długość; każdą notę skalibrować względem oceny eksperta na golden secie." },
+          { "id": "b", "text": "Premiować dłuższą odpowiedź jako z założenia bardziej kompletną i ufać pierwszemu werdyktowi judge'a, bo ocena automatyczna jest szybsza i obiektywna." },
+          { "id": "c", "text": "Usunąć kłopotliwą parę A3/A4 z golden setu, żeby procent zgodności wzrósł, i pominąć porównanie z ekspertem." }
+        ], "correctOptionIds": ["a"] },
+      { "id": "K5", "name": "Próg akceptacji jakości", "points": 1, "hint": "Próg bywa koniunkcją: średnia ORAZ warunek twardy „zero sprzeczności”. Brak danych lub niespełniony warunek twardy = no-go (konserwatywne domyślne).",
+        "prompt": "Próg: „faithfulness ≥ 0,9 na golden secie ORAZ zero pozycji sprzecznych ze źródłem”. Nowa wersja ma średnią 0,93, ale pozycja A2 jest sprzeczna ze źródłem. Jaka decyzja?",
+        "options": [
+          { "id": "a", "text": "No-go: warunek twardy „zero sprzeczności” nie jest spełniony mimo dobrej średniej — najpierw usuń sprzeczność z A2, potem oceń ponownie; ocenę automatyczną dopuść po kalibracji i z okresową rekalibracją z ekspertem." },
+          { "id": "b", "text": "Go: średnia 0,93 przekracza 0,9, więc próg jest spełniony niezależnie od pojedynczej sprzecznej pozycji." },
+          { "id": "c", "text": "Go z obniżeniem progu do 0,85, skoro zawodzi tylko jedna pozycja — albo wdrożyć „na próbę” i monitorować." }
+        ], "correctOptionIds": ["a"] }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Golden set (zestaw wzorcowy) to testy regresyjne dla odpowiedzi modelu: reprezentatywne pytania, przypadki brzegowe, udokumentowane źródło prawdy.",
+      "Pięć metryk: trafność, wierność źródłom, ugruntowanie, adekwatność, kompletność — każdą dobieraj do wymiaru pytania.",
+      "Rubryka dla LLM-as-a-judge musi być jednoznaczna: kryterium, skala z definicją poziomów, kotwice, ocena względem źródła.",
+      "Oceniający ma bias (m.in. position bias i length bias) — wykrywaj go zamianą kolejności i kalibracją z ekspertem (zgodność oceniaczy).",
+      "Próg akceptacji bywa koniunkcją warunków; niespełniony warunek twardy lub brak danych = no-go."
+    ],
+    "checklist": [
+      "Czy golden set ma jednoznaczne oczekiwanie i źródło prawdy dla każdej pozycji?",
+      "Czy metryki są dobrane do tego, co realnie sprawdza pytanie?",
+      "Czy rubryka oceniającego ma definicje poziomów, kotwice i ocenę względem źródła?",
+      "Czy sprawdziłem position bias zamianą kolejności i skalibrowałem ocenę z ekspertem?",
+      "Czy próg akceptacji ma warunek twardy, a brak danych daje no-go?"
+    ],
+    "checklistTitle": "Checklista — gotowa ewaluacja LLM i RAG",
+    "nextStep": "Następny krok: dla S3 zwykle test końcowy i dodatki. Powtórz pętlę: golden set → metryki → rubryka → kalibracja → próg → decyzja."
+  }
+}
