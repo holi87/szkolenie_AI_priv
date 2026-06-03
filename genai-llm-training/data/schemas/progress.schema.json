@@ -27,6 +27,7 @@
           "properties": {
             "status": { "type": "string", "enum": ["locked", "available", "in_progress", "completed"] },
             "lastScreen": { "type": "string" },
+            "timeSpentSec": { "type": "integer", "minimum": 0, "description": "Realny czas w module (wymagania/10: dane progresu = moduł, status, czas, ścieżka; KPI Time to complete)." },
             "inlineQuizScorePct": { "type": "number", "minimum": 0, "maximum": 100 },
             "quizResults": {
               "type": "array",
@@ -40,6 +41,7 @@
                   "attempt": { "type": "integer", "minimum": 1 },
                   "scoreAwarded": { "type": "number", "minimum": 0 },
                   "feedbackShown": { "type": "boolean" },
+                  "feedback": { "type": "string", "description": "Treść feedbacku pokazanego uczestnikowi (wymagania/10: ID pytania, wynik, próba, feedback)." },
                   "answeredAt": { "type": "string" }
                 },
                 "additionalProperties": false
@@ -73,7 +75,9 @@
           "rubric": { "type": "string" },
           "score": { "type": "number", "minimum": 0 },
           "maxScore": { "type": "number", "minimum": 0 },
-          "passed": { "type": "boolean" }
+          "passed": { "type": "boolean" },
+          "comments": { "type": "string", "description": "Komentarz oceniającego (wymagania/10: zadania praktyczne = ocena 0-5, komentarze, obszary poprawy)." },
+          "areasForImprovement": { "type": "array", "items": { "type": "string" }, "description": "Obszary poprawy (wymagania/10)." }
         },
         "additionalProperties": false
       }

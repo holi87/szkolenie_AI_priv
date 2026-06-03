@@ -10,6 +10,7 @@
     "statusLegend": { "type": "object" },
     "modules": {
       "type": "object",
+      "required": ["M1", "M2", "M3", "M4", "M5", "M6", "M7", "M8", "M9", "M10", "M11", "M12"],
       "patternProperties": {
         "^M([1-9]|1[0-2])$": {
           "type": "object",

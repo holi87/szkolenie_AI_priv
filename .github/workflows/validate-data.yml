@@ -1,0 +1,30 @@
+name: validate-data
+
+# Walidacja kontraktów i pokrycia danych szkolenia (issue #13).
+# Pure Node, bez zależności — zgodne z ADR-0002 (statyczny hosting, brak buildu aplikacji).
+# Uwaga: workflow celowo dodany dopiero w #13 (szczyt stacka M2). Wcześniejsze PR-y stacka
+# (#9/#11/#10/#12) mają niekompletne dane i nie powinny być bramkowane agregatem.
+
+on:
+  pull_request:
+    paths:
+      - 'genai-llm-training/data/**'
+      - 'genai-llm-training/tests/schema-validation/**'
+      - '.github/workflows/validate-data.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'genai-llm-training/data/**'
+      - 'genai-llm-training/tests/schema-validation/**'
+      - '.github/workflows/validate-data.yml'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Walidacja danych i raport pokrycia
+        run: node genai-llm-training/tests/schema-validation/validate.mjs

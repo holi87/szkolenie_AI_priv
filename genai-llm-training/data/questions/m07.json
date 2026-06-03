@@ -1,0 +1,481 @@
+{
+  "_meta": {
+    "module": "M7",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M7. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q051",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Weryfikuje, czy uczestnik rozpoznaje element 'rola' (role) w prompcie i rozumie jego funkcję.",
+      "prompt": "W anatomii dobrego promptu jednym z siedmiu elementow jest 'rola' (role). Co ten element ustala w odpowiedzi modelu?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Perspektywe i kompetencje, z ktorych model ma odpowiadac (np. 'jestes inzynierem QA')"
+        },
+        {
+          "id": "B",
+          "text": "Strukture wyjscia, w jakiej ma byc zwrocona odpowiedz (np. tabela albo JSON)"
+        },
+        {
+          "id": "C",
+          "text": "Konkretny material do przetworzenia, np. fragment wymagania do analizy"
+        },
+        {
+          "id": "D",
+          "text": "Mierzalne kryteria, po ktorych poznamy, ze odpowiedz jest dobra"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Rola okresla z czyjej perspektywy i z jakimi kompetencjami model odpowiada, co nadaje ton i poziom szczegolowosci odpowiedzi.",
+      "feedbackIncorrect": "To opis innego elementu promptu: format wyjscia, dane wejsciowe albo kryteria jakosci. Powtorz anatomie 7 elementow promptu.",
+      "references": [
+        "M7.2",
+        "M7.3"
+      ]
+    },
+    {
+      "id": "Q052",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Weryfikuje, czy uczestnik rozumie role elementu 'kontekst' i odroznia go od danych wejsciowych oraz celu.",
+      "prompt": "Czym jest 'kontekst' jako element promptu, w odroznieniu od 'celu' i 'danych wejsciowych'?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Tlo i informacje, ktorych model nie zna z wlasnej wiedzy, np. fragment syntetycznego wymagania SklepDemo"
+        },
+        {
+          "id": "B",
+          "text": "Wynik, ktory ma powstac na koncu pracy modelu"
+        },
+        {
+          "id": "C",
+          "text": "Lista rzeczy, ktorych model ma NIE robic"
+        },
+        {
+          "id": "D",
+          "text": "Forma, w jakiej ma byc zwrocona odpowiedz, np. lista albo JSON"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Kontekst dostarcza tlo, ktorego model nie zna z treningu (np. konkretne wymaganie aplikacji), co bezposrednio podnosi trafnosc outputu.",
+      "feedbackIncorrect": "Mylisz kontekst z celem (B), ograniczeniami (C) lub formatem (D). Powtorz roznice miedzy celem, kontekstem i danymi wejsciowymi.",
+      "references": [
+        "M7.3",
+        "M7.2"
+      ]
+    },
+    {
+      "id": "Q053",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Weryfikuje, czy uczestnik odroznia 'ograniczenia' (constraints) od 'kryteriow jakosci' w prompcie.",
+      "prompt": "W prompcie do generowania przypadkow testowych dla SklepDemo dodajesz zdanie: 'Nie wymyslaj pol, ktorych nie ma w wymaganiu'. Ktorym elementem promptu jest to zdanie?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Ograniczeniem (constraint) — okresla, czego model ma NIE robic"
+        },
+        {
+          "id": "B",
+          "text": "Kryterium jakosci — mierzalnym warunkiem, po ktorym poznamy dobra odpowiedz"
+        },
+        {
+          "id": "C",
+          "text": "Formatem wyjscia — struktura zwracanej odpowiedzi"
+        },
+        {
+          "id": "D",
+          "text": "Rola — perspektywa, z ktorej odpowiada model"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Zakaz wymyslania pol to typowe ograniczenie (constraint): wprost zaweza, czego model ma nie robic, i ogranicza halucynacje.",
+      "feedbackIncorrect": "Kryterium jakosci mowi, jak ma wygladac dobry output (np. 'kazdy przypadek ma kroki i oczekiwany wynik'), a nie czego unikac. Powtorz roznice ograniczenia kontra kryteria.",
+      "references": [
+        "M7.4",
+        "M7.2"
+      ]
+    },
+    {
+      "id": "Q054",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Weryfikuje, czy uczestnik potrafi wskazac wszystkie brakujace elementy w wadliwym prompcie wzgledem anatomii 7 elementow.",
+      "prompt": "Prompt brzmi w calosci: 'Napisz testy do logowania.' Ktore z ponizszych elementow dobrego promptu w nim BRAKUJE? (zaznacz wszystkie)",
+      "options": [
+        {
+          "id": "A",
+          "text": "Rola i cel (z czyjej perspektywy i co dokladnie ma powstac)"
+        },
+        {
+          "id": "B",
+          "text": "Kontekst — jaka aplikacja i jakie wymaganie logowania"
+        },
+        {
+          "id": "C",
+          "text": "Ograniczenia i kryteria jakosci odpowiedzi"
+        },
+        {
+          "id": "D",
+          "text": "Format wyjscia — w jakiej strukturze zwrocic przypadki"
+        },
+        {
+          "id": "E",
+          "text": "Czasownik akcji okreslajacy zadanie do wykonania"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "feedbackCorrect": "Prompt ma czasownik akcji ('napisz'), ale brakuje roli/celu, kontekstu, ograniczen/kryteriow i formatu — to wlasnie cztery brakujace osie anatomii.",
+      "feedbackIncorrect": "Czasownik akcji ('napisz') jest obecny, wiec opcja E nie jest brakiem. Brakuja roli/celu, kontekstu, ograniczen/kryteriow i formatu. Powtorz anatomie 7 elementow.",
+      "references": [
+        "M7.2",
+        "M7.6"
+      ]
+    },
+    {
+      "id": "Q055",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Weryfikuje, czy uczestnik potrafi zdiagnozowac, ktore osie rubryki 5-osiowej narusza wadliwy prompt.",
+      "prompt": "Tester pisze prompt: 'Przeanalizuj blad platnosci w SklepDemo. Wklej tu prawdziwe dane uzytkownika z produkcji. Wypisz, co chcesz, w dowolnej formie.' Ktore osie rubryki oceny promptu (kompletnosc, bezpieczenstwo, weryfikowalnosc, format, ograniczenia) ten prompt NARUSZA? (zaznacz wszystkie)",
+      "options": [
+        {
+          "id": "A",
+          "text": "Bezpieczenstwo — zacheca do wklejenia prawdziwych danych uzytkownika"
+        },
+        {
+          "id": "B",
+          "text": "Format — 'w dowolnej formie' nie zapewnia weryfikowalnej struktury wyjscia"
+        },
+        {
+          "id": "C",
+          "text": "Ograniczenia — brak jakichkolwiek limitow i zasady danych syntetycznych"
+        },
+        {
+          "id": "D",
+          "text": "Weryfikowalnosc — brak kryteriow, po ktorych ocenimy poprawnosc outputu"
+        },
+        {
+          "id": "E",
+          "text": "Zadna os nie jest naruszona — prompt jest gotowy do uzycia w QA"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "feedbackCorrect": "Prompt lamie bezpieczenstwo (prawdziwe dane), format ('dowolna forma'), ograniczenia (brak limitow) i weryfikowalnosc (brak kryteriow) — cztery z pieciu osi rubryki.",
+      "feedbackIncorrect": "Opcja E jest bledna: prompt narusza az cztery osie i nie jest gotowy do uzycia. Powtorz rubryke 5 osi z ekranu naprawy promptu.",
+      "references": [
+        "M7.6",
+        "M7.4"
+      ]
+    },
+    {
+      "id": "Q056",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Weryfikuje, czy uczestnik rozpoznaje sytuacje, w ktorych uzasadnione jest zastosowanie few-shot.",
+      "prompt": "W ktorych sytuacjach zastosowanie few-shot (1-3 przyklady wejscie->wyjscie w prompcie) jest UZASADNIONE? (zaznacz wszystkie)",
+      "options": [
+        {
+          "id": "A",
+          "text": "Output ma trzymac staly, powtarzalny uklad przypadku testowego dla kolejnych pozycji"
+        },
+        {
+          "id": "B",
+          "text": "Potrzebny jest specyficzny styl odpowiedzi trudny do opisania samym opisem slownym"
+        },
+        {
+          "id": "C",
+          "text": "Model ma utrzymac konsekwentny format dla wielu elementow naraz"
+        },
+        {
+          "id": "D",
+          "text": "Brakuje w kontekscie faktow, ktorych model nie zna — przyklady maja 'dostarczyc wiedze'"
+        },
+        {
+          "id": "E",
+          "text": "Chcemy, zeby model zmyslil brakujace dane, byle output wygladal kompletnie"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Few-shot sluzy powtarzalnosci formatu i stylu (A, B, C). Nie zastepuje brakujacych danych ani nie usprawiedliwia zmyslania.",
+      "feedbackIncorrect": "Few-shot nie uzupelnia brakujacej wiedzy (D) ani nie sluzy zmyslaniu (E) — to zadanie kontekstu/zrodel. Powtorz zasade 'few-shot dla powtarzalnosci, nie dla braku wiedzy'.",
+      "references": [
+        "M7.5",
+        "M7.2"
+      ]
+    },
+    {
+      "id": "Q057",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Weryfikuje, czy uczestnik potrafi wskazac wlasciwa poprawke promptu na podstawie konkretnego bledu w outpucie.",
+      "prompt": "Dajesz prompt: 'Wygeneruj przypadki testowe logowania w SklepDemo.' Output to pojedynczy, dlugi akapit prozy bez podzialu na kroki, bez oczekiwanych wynikow — trudny do uzycia w QA. Jaka poprawka promptu zaadresuje TEN blad najlepiej?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Dodac format wyjscia i kryteria: 'Zwroc tabele: ID, kroki, dane wejsciowe, oczekiwany wynik; po jednym wierszu na przypadek'"
+        },
+        {
+          "id": "B",
+          "text": "Dodac zdanie 'badz bardziej szczegolowy i profesjonalny'"
+        },
+        {
+          "id": "C",
+          "text": "Powtorzyc ten sam prompt kilka razy, az model trafi w dobra forme"
+        },
+        {
+          "id": "D",
+          "text": "Usunac slowo 'logowania', zeby model mial wieksza swobode"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Blad dotyczy struktury outputu, wiec wlasciwa poprawka to dodanie jawnego formatu wyjscia i kryteriow — to czyni wynik weryfikowalnym.",
+      "feedbackIncorrect": "Ogolne 'badz szczegolowy', powtarzanie czy usuwanie zakresu nie naprawiaja braku struktury. Powtorz, jak diagnozowac blad i dobierac poprawke wg rubryki.",
+      "references": [
+        "M7.6",
+        "M7.4"
+      ]
+    },
+    {
+      "id": "Q058",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Weryfikuje, czy uczestnik decyduje o uzyciu few-shot, gdy wymagany jest powtarzalny format wyjscia.",
+      "prompt": "Masz wygenerowac 40 przypadkow testowych dla SklepDemo, ktore MUSZA trafic do istniejacego szablonu o stalym ukladzie kolumn (ID, krok, dane, oczekiwany wynik, priorytet). Pierwsze proby daja za kazdym razem inny uklad. Jak najlepiej zapewnic powtarzalny format?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Dac w prompcie 2 wzorcowe, poprawnie sformatowane przypadki (few-shot) i polecic trzymac dokladnie ten uklad dla kolejnych"
+        },
+        {
+          "id": "B",
+          "text": "Wydluzac prompt coraz dokladniejszym opisem slownym ukladu, bez zadnego przykladu"
+        },
+        {
+          "id": "C",
+          "text": "Wygenerowac przypadki w dowolnym formacie i recznie przepisac wszystkie 40 do szablonu"
+        },
+        {
+          "id": "D",
+          "text": "Podniesc 'temperature', zeby model byl bardziej kreatywny w doborze ukladu"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Gdy format musi byc powtarzalny, few-shot (kilka wzorcowych przykladow) jest najskuteczniejszy — model kopiuje uklad dla kolejnych pozycji.",
+      "feedbackIncorrect": "Sam opis slowny bywa niejednoznaczny, reczne przepisywanie marnuje czas, a wyzsza temperatura zwieksza rozrzut formatu. Powtorz, kiedy stosowac few-shot.",
+      "references": [
+        "M7.5",
+        "M7.6"
+      ]
+    },
+    {
+      "id": "Q059",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Weryfikuje, czy uczestnik rozpoznaje, ze prompt nie naprawi braku danych, i wybiera wlasciwe dzialanie zamiast 'dopieszczania' promptu.",
+      "prompt": "Pytasz model: 'Po jakim czasie wygasa link resetu hasla w NotkaApp?'. Wymaganie z ta liczba nie zostalo modelowi przekazane w kontekscie. Model podaje za kazdym razem inna liczbe minut, a kolejne wersje promptu nic nie zmieniaja. Co zrobic?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Dostarczyc modelowi zrodlo z ta informacja (wkleic wymaganie/dokument albo uzyc RAG) lub sprawdzic w dokumentacji — bo to brak danych, a nie zly prompt"
+        },
+        {
+          "id": "B",
+          "text": "Dalej dopieszczac prompt coraz dokladniejszymi instrukcjami, az model 'sam sobie przypomni' liczbe"
+        },
+        {
+          "id": "C",
+          "text": "Przyjac pierwsza podana przez model liczbe jako fakt i wpisac ja do testow"
+        },
+        {
+          "id": "D",
+          "text": "Poprosic model, zeby 'byl pewny swojej odpowiedzi' i nie zmienial zdania"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Zmienne odpowiedzi przy braku informacji w kontekscie to sygnal braku danych — zaden prompt nie wygeneruje prawdy, trzeba dostarczyc zrodlo.",
+      "feedbackIncorrect": "Dopieszczanie promptu, przyjmowanie pierwszej liczby czy proszenie o 'pewnosc' to drogi do halucynacji. Powtorz granice promptu — kiedy prompt nie pomoze (link do M11).",
+      "references": [
+        "M7.7",
+        "M7.6"
+      ]
+    },
+    {
+      "id": "Q060",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Weryfikuje, czy uczestnik potrafi uzupelnic wadliwy prompt o brakujace elementy anatomii, aby byl gotowy do uzycia w QA.",
+      "prompt": "Masz uczynic prompt 'Napisz testy do logowania.' gotowym do uzycia w QA dla SklepDemo. Ktora wersja NAJLEPIEJ uzupelnia brakujace elementy promptu?",
+      "options": [
+        {
+          "id": "A",
+          "text": "'Jako inzynier QA wygeneruj przypadki testowe logowania w SklepDemo na podstawie wymagania: <wklej wymaganie>. Nie wymyslaj pol spoza wymagania; uzywaj danych syntetycznych. Zwroc tabele: ID, kroki, dane, oczekiwany wynik. Kazdy przypadek ma byc weryfikowalny.'"
+        },
+        {
+          "id": "B",
+          "text": "'Napisz dobre i dokladne testy do logowania, postaraj sie bardzo i niczego nie pomin.'"
+        },
+        {
+          "id": "C",
+          "text": "'Napisz testy do logowania w SklepDemo.'"
+        },
+        {
+          "id": "D",
+          "text": "'Jestes ekspertem od wszystkiego. Wygeneruj kompletny zestaw testow dla calej aplikacji w dowolnym formacie.'"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Wersja A dodaje role/cel, kontekst (wymaganie), ograniczenia, kryterium weryfikowalnosci i format — komplet elementow potrzebnych do uzycia w QA.",
+      "feedbackIncorrect": "Ogolne zachety (B), brak kontekstu i ograniczen (C) czy zbyt szeroki zakres bez formatu (D) nie domykaja anatomii promptu. Powtorz 7 elementow dobrego promptu.",
+      "references": [
+        "M7.2",
+        "M7.4"
+      ]
+    }
+  ]
+}

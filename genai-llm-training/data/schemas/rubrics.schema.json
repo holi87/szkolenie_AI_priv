@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "rubrics.schema.json",
   "title": "Rubryki zadań praktycznych",
-  "description": "Kontrakt rubrics.json (issue #7). Bramki praktyczne w paths.json referują rubric id (R1-prompt, R2-rag, R3-eval) — walidator (#13) sprawdza rozwiązywalność referencji.",
+  "description": "Kontrakt rubrics.json (issue #7). Bramki praktyczne w paths.json referują rubric id (R1-prompt, R2-rag, R3-eval) — walidator (#13) sprawdza rozwiązywalność referencji. Relacja passThreshold <= scaleMax (próg osiągalny) jest wymogiem cross-field, którego draft-07 nie wyraża; egzekwuje ją walidator (#13).",
   "type": "object",
   "required": ["rubrics"],
   "properties": {
@@ -12,7 +12,7 @@
       "minItems": 1,
       "items": {
         "type": "object",
-        "required": ["id", "task", "module", "paths", "scaleMax", "passScope"],
+        "required": ["id", "task", "module", "paths", "scaleMax", "passScope", "belowThresholdFeedback"],
         "properties": {
           "id": { "type": "string", "pattern": "^R[0-9]+-[a-z-]+$" },
           "task": { "type": "string", "minLength": 3 },
@@ -23,6 +23,7 @@
           "passScope": { "type": "string" },
           "criteria": {
             "type": "array",
+            "minItems": 1,
             "items": {
               "type": "object",
               "required": ["id", "name", "points"],
@@ -36,6 +37,7 @@
           },
           "levels": {
             "type": "array",
+            "minItems": 1,
             "items": {
               "type": "object",
               "required": ["points", "descriptor"],

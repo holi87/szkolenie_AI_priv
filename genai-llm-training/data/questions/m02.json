@@ -1,0 +1,394 @@
+{
+  "_meta": {
+    "module": "M2",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M2. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q009",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Uczestnik poprawnie rozpoznaje, czym jest token w przetwarzaniu tekstu przez LLM (E1).",
+      "prompt": "W module „Architektura LLM” pokazano, że model nie pracuje na słowach, lecz na tokenach. Czym jest token (token)?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Fragmentem tekstu (część słowa, znak lub spacja), na który tekst jest rozbijany przed przetwarzaniem"
+        },
+        {
+          "id": "B",
+          "text": "Zawsze jednym pełnym słowem oddzielonym spacjami"
+        },
+        {
+          "id": "C",
+          "text": "Pojedynczą stroną dokumentu wczytaną do modelu"
+        },
+        {
+          "id": "D",
+          "text": "Parametrem modelu odpowiadającym za jakość odpowiedzi"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Token to fragment tekstu — część słowa, znak lub spacja — bo model przetwarza tekst po rozbiciu na tokeny (tokenizacja), a nie po słowach czy stronach.",
+      "feedbackIncorrect": "Token to nie całe słowo ani strona. Wróć do ekranu „Token i tokenizacja”: 1 token ≈ kilka znaków, a polski bywa „droższy” w tokenach niż angielski.",
+      "references": [
+        "M2.2"
+      ]
+    },
+    {
+      "id": "Q010",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik wyjaśnia, czym jest okno kontekstu i dlaczego długi dokument może się w nim nie zmieścić (E1).",
+      "prompt": "Czym jest okno kontekstu (context window) i co się dzieje, gdy dokument wraz z pytaniem i odpowiedzią je przekracza?",
+      "options": [
+        {
+          "id": "A",
+          "text": "To maksymalna liczba tokenów, jaką model widzi naraz; po jej przekroczeniu część wejścia musi wypaść"
+        },
+        {
+          "id": "B",
+          "text": "To liczba parametrów modelu; po jej przekroczeniu model działa wolniej, ale widzi cały dokument"
+        },
+        {
+          "id": "C",
+          "text": "To limit liczby plików, jaki można wgrać; tekst zawsze mieści się w całości"
+        },
+        {
+          "id": "D",
+          "text": "To rozmiar ekranu, na którym wyświetla się odpowiedź modelu"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Okno kontekstu to maksymalna liczba tokenów (wejście + odpowiedź), którą model „widzi” naraz — po przekroczeniu limitu część wejścia wypada, jak kartki spychane z biurka o stałej powierzchni.",
+      "feedbackIncorrect": "Okno kontekstu liczy się w tokenach, nie w plikach, parametrach czy pikselach ekranu. Powtórz ekran „Okno kontekstu” i analogię biurka.",
+      "references": [
+        "M2.3"
+      ]
+    },
+    {
+      "id": "Q011",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik stosuje wiedzę o oknie kontekstu, by ocenić, dlaczego wklejenie całego dokumentu nie gwarantuje, że model go przeczytał (E1).",
+      "prompt": "Tester wkleił do modelu całą 80-stronicową fikcyjną specyfikację SklepDemo i zadał pytanie o jeden wymóg. Model odpowiedział, pomijając kluczowy zapis. Jakie wyjaśnienie jest najtrafniejsze?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Dokument przekroczył okno kontekstu, więc część wejścia (w tym ten wymóg) wypadła i model jej nie „widział”"
+        },
+        {
+          "id": "B",
+          "text": "Model ma za mało parametrów, dlatego nie umie czytać długich dokumentów"
+        },
+        {
+          "id": "C",
+          "text": "Wklejenie całego dokumentu zawsze gwarantuje, że model przeczytał każdą stronę, więc to musi być błąd losowy"
+        },
+        {
+          "id": "D",
+          "text": "Tokenizacja usunęła spacje, przez co specyfikacja stała się nieczytelna dla modelu"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Poprawnie: „wkleiłem cały dokument” ≠ „model to przeczytał” — gdy tekst przekracza okno kontekstu, część wejścia wypada i może pominąć właśnie kluczowy wymóg.",
+      "feedbackIncorrect": "Przyczyną nie są parametry ani tokenizacja spacji — chodzi o przekroczenie okna kontekstu. Wróć do ekranu „Okno kontekstu” i wniosku, że wklejenie ≠ przeczytanie.",
+      "references": [
+        "M2.3"
+      ]
+    },
+    {
+      "id": "Q012",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik identyfikuje skutki zbyt małego kontekstu, gdy istotny fragment wypada z okna (E2).",
+      "prompt": "Które z poniższych są bezpośrednimi skutkami zbyt małego okna kontekstu, gdy istotny fragment wejścia wypada? Wskaż wszystkie poprawne.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Pominięcie informacji — model odpowiada bez uwzględnienia kluczowego wymogu"
+        },
+        {
+          "id": "B",
+          "text": "Niespójność — model „zapomina” wcześniejsze ustalenia w długiej rozmowie"
+        },
+        {
+          "id": "C",
+          "text": "Halucynacja/zgadywanie — brak danych zostaje zastąpiony zmyśleniem"
+        },
+        {
+          "id": "D",
+          "text": "Automatyczne pobranie brakującego fragmentu z internetu, by uzupełnić kontekst"
+        },
+        {
+          "id": "E",
+          "text": "Trwałe zwiększenie liczby parametrów modelu, by zmieścić cały dokument"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "To trzy skutki za małego kontekstu: pominięcie informacji, niespójność i halucynacja. Model nie dociąga sam brakujących danych ani nie zmienia swojej liczby parametrów.",
+      "feedbackIncorrect": "Model nie uzupełnia braków pobieraniem z sieci ani zwiększaniem parametrów. Powtórz ekran „Trzy skutki zbyt małego kontekstu”.",
+      "references": [
+        "M2.4"
+      ]
+    },
+    {
+      "id": "Q013",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik rozpoznaje sytuacje QA, w których za małe okno kontekstu jest realnym źródłem ryzyka dla jakości decyzji (E2).",
+      "prompt": "W których sytuacjach z pracy testera za małe okno kontekstu jest realnym źródłem ryzyka dla jakości decyzji? Wskaż wszystkie poprawne.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Długa rozmowa o defekcie ORD-TEST-777, w której model przestaje uwzględniać ustalenia z początku wątku"
+        },
+        {
+          "id": "B",
+          "text": "Analiza obszernej specyfikacji, gdzie kryterium akceptacji znajduje się w sekcji, która wypadła z okna"
+        },
+        {
+          "id": "C",
+          "text": "Pytanie o wymóg, na który model odpowiada pewnie, mimo że danych źródłowych nie było już w kontekście"
+        },
+        {
+          "id": "D",
+          "text": "Krótkie pytanie o jedną definicję, której pełna treść mieści się w oknie kontekstu"
+        },
+        {
+          "id": "E",
+          "text": "Zmiana koloru interfejsu narzędzia, w którym uruchamiany jest model"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Ryzyko pojawia się tam, gdzie istotny fragment wypada z okna: niespójność w długiej rozmowie, pominięte kryterium i pewna, lecz niepoparta danymi odpowiedź. Krótkie pytanie mieszczące się w oknie i kolor UI nie są tu zagrożeniem.",
+      "feedbackIncorrect": "Gdy treść mieści się w oknie lub zmiana dotyczy tylko UI, ryzyko za małego kontekstu nie występuje. Powtórz związek okna kontekstu z jego trzema skutkami (ekran „Trzy skutki…”).",
+      "references": [
+        "M2.4",
+        "M2.3"
+      ]
+    },
+    {
+      "id": "Q014",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "kolejnosc_procesu",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik układa we właściwej kolejności kroki przetwarzania tekstu przez LLM — od tekstu do odpowiedzi (E3).",
+      "prompt": "Ułóż we właściwej kolejności kroki, jakie wykonuje LLM od otrzymania tekstu do wygenerowania odpowiedzi.",
+      "sequence": [
+        "Tekst wejściowy zostaje rozbity na tokeny (tokenizacja)",
+        "Tokeny zostają umieszczone w oknie kontekstu modelu",
+        "Model wykorzystuje relacje między tokenami za pomocą uwagi (attention)",
+        "Model generuje kolejne tokeny odpowiedzi",
+        "Tokeny odpowiedzi zostają złożone z powrotem w czytelny tekst"
+      ],
+      "feedbackCorrect": "Poprawnie: tekst → tokeny → okno kontekstu → uwaga (attention) na relacjach → generowanie tokenów → złożenie w tekst. To intuicyjny przebieg „od tekstu do odpowiedzi”.",
+      "feedbackIncorrect": "Najpierw musi nastąpić tokenizacja, dopiero potem okno kontekstu i uwaga, a na końcu generowanie i złożenie odpowiedzi. Powtórz ekran „Transformer i uwaga — intuicja”.",
+      "references": [
+        "M2.5",
+        "M2.2"
+      ]
+    },
+    {
+      "id": "Q015",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "kolejnosc_procesu",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik porządkuje kroki przetwarzania, gdy wejście jest dłuższe niż okno kontekstu (E3, E1).",
+      "prompt": "Tester wkleja długi dokument, który przekracza okno kontekstu modelu. Ułóż kroki w kolejności, w jakiej model przetwarza takie zbyt długie wejście.",
+      "sequence": [
+        "Model przyjmuje wklejony dokument i pytanie testera",
+        "Tekst zostaje rozbity na tokeny (tokenizacja)",
+        "Liczba tokenów zostaje porównana z limitem okna kontekstu",
+        "Fragmenty przekraczające limit wypadają poza okno",
+        "Model przetwarza tylko tokeny mieszczące się w oknie",
+        "Model generuje odpowiedź na podstawie dostępnego kontekstu"
+      ],
+      "feedbackCorrect": "Poprawnie: przyjęcie tekstu → tokenizacja → porównanie z limitem okna → odcięcie nadmiaru → przetwarzanie tego, co zostało → odpowiedź. Dlatego część wejścia może wypaść, zanim model w ogóle zacznie liczyć uwagę.",
+      "feedbackIncorrect": "Odcięcie nadmiaru następuje po tokenizacji i porównaniu z limitem okna, a przetwarzanie obejmuje tylko to, co się zmieściło. Powtórz ekrany „Okno kontekstu” i „Transformer i uwaga”.",
+      "references": [
+        "M2.5",
+        "M2.3"
+      ]
+    },
+    {
+      "id": "Q016",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Uczestnik podejmuje bezpieczną decyzję QA, gdy dokument jest dłuższy niż okno kontekstu modelu (E1, E2).",
+      "prompt": "Masz przeanalizować fikcyjną specyfikację PipeDemo (ok. 120 stron), a wstępne sprawdzenie pokazuje, że jej tekst znacząco przekracza okno kontekstu modelu. Zależy Ci na poprawnej odpowiedzi o konkretne kryteria akceptacji. Co jest najlepszą decyzją?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Podzielić dokument i podać tylko sekcje istotne dla pytania (np. „Kryteria akceptacji”), tak by zmieściły się w oknie kontekstu"
+        },
+        {
+          "id": "B",
+          "text": "Wkleić całość naraz — skoro narzędzie przyjęło tekst, model na pewno uwzględni każdą stronę"
+        },
+        {
+          "id": "C",
+          "text": "Wkleić całość i zaufać odpowiedzi, bo dłuższe wejście zawsze daje pełniejszy obraz"
+        },
+        {
+          "id": "D",
+          "text": "Poprosić model o samodzielne dopisanie brakujących fragmentów specyfikacji, których nie zmieścił"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Gdy dokument przekracza okno, bezpiecznie jest podać tylko sekcje istotne dla pytania — dzięki temu kluczowe kryteria realnie znajdą się w kontekście i nie wypadną.",
+      "feedbackIncorrect": "Przyjęcie tekstu przez narzędzie nie znaczy, że model widział całość; nie wolno też prosić go o zmyślanie brakujących fragmentów. Wróć do ekranów „Okno kontekstu” i „Trzy skutki…”.",
+      "references": [
+        "M2.3",
+        "M2.4"
+      ]
+    },
+    {
+      "id": "Q017",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik ocenia wybór modelu, rozpoznając, że większa liczba parametrów nie jest samodzielną gwarancją jakości (E4).",
+      "prompt": "Zespół wybiera model do analizy fikcyjnego formatu ID defektu w SklepDemo. Model X ma znacznie więcej parametrów, ale w teście myli format ID; model Y ma mniej parametrów, lecz z dobrze dobranym kontekstem trafnie rozpoznaje format. Kolega proponuje: „Bierzemy X, bo ma więcej miliardów parametrów”. Jak najlepiej ocenić tę propozycję?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Odrzucić jako antywzorzec — o trafności decyduje dopasowanie do zadania i kontekst; skoro Y działa lepiej na tym zadaniu, wybrać Y (lub zweryfikować obie opcje na realnych przypadkach)"
+        },
+        {
+          "id": "B",
+          "text": "Przyjąć propozycję — większa liczba parametrów zawsze oznacza wyższą jakość odpowiedzi"
+        },
+        {
+          "id": "C",
+          "text": "Przyjąć X, ale skrócić okno kontekstu, żeby zrównać szanse modeli"
+        },
+        {
+          "id": "D",
+          "text": "Wybrać model z większą liczbą parametrów i pominąć testy, bo wynik jest przesądzony"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Liczba parametrów nie jest samodzielną gwarancją jakości — decyduje dopasowanie do zadania, jakość danych i kontekst. Skoro Y trafia na tym zadaniu, wybór „bo więcej miliardów parametrów” to antywzorzec.",
+      "feedbackIncorrect": "Więcej parametrów nie oznacza automatycznie lepszej jakości, a skracanie okna kontekstu pogarsza wyniki. Powtórz ekran „Więcej parametrów ≠ lepsza jakość”.",
+      "references": [
+        "M2.6"
+      ]
+    }
+  ]
+}

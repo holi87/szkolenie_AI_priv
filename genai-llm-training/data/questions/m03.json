@@ -1,0 +1,308 @@
+{
+  "_meta": {
+    "module": "M3",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M3. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q018",
+      "module": "M3",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Uczestnik dobiera zakres temperature do zadania wymagającego formalności i powtarzalności.",
+      "prompt": "Masz wygenerować kroki przypadku testowego do dokumentacji w NotkaApp — wynik ma być formalny i możliwie powtarzalny przy ponownym uruchomieniu. Jaki zakres temperature jest najwłaściwszy?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Niski, ok. 0,0-0,3"
+        },
+        {
+          "id": "B",
+          "text": "Średni, ok. 0,5-0,7"
+        },
+        {
+          "id": "C",
+          "text": "Wysoki, ok. 0,8-1,2"
+        },
+        {
+          "id": "D",
+          "text": "Maksymalny, ok. 1,3-1,5"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Niska temperature (~0,0-0,3) daje odpowiedzi zachowawcze i bardziej powtarzalne, czyli to, czego wymaga dokumentacja testowa.",
+      "feedbackIncorrect": "Im wyższa temperature, tym większa losowość i mniejsza powtarzalność — odwrotnie niż chcemy w dokumentacji. Powtórz ekran M3.2 o skali temperature.",
+      "references": [
+        "M3.2"
+      ]
+    },
+    {
+      "id": "Q019",
+      "module": "M3",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik wskazuje główne ryzyko wysokiej temperature w zadaniach QA.",
+      "prompt": "Zespół uruchamia ten sam prompt o przypadki testowe SklepDemo dwukrotnie przy temperature 1,1. Jakie ryzyko dla pracy QA jest tu najbardziej charakterystyczne?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Brak powtarzalności — dwa uruchomienia dają rozbieżne kroki, co utrudnia przegląd i regresję"
+        },
+        {
+          "id": "B",
+          "text": "Odpowiedź zawsze zostaje ucięta w połowie zdania"
+        },
+        {
+          "id": "C",
+          "text": "Odpowiedzi stają się krótsze i bardziej zwięzłe niż przy niskiej temperature"
+        },
+        {
+          "id": "D",
+          "text": "Wynik staje się identyczny przy każdym uruchomieniu"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Wysoka losowość powoduje dryf treści i brak powtarzalności między uruchomieniami, co podważa wiarygodność dokumentacji i regresji.",
+      "feedbackIncorrect": "Ucięcie odpowiada za max tokens, a powtarzalność maleje (nie rośnie) wraz z temperature. Powtórz ekran M3.3 o ryzyku wysokiej losowości w QA.",
+      "references": [
+        "M3.3"
+      ]
+    },
+    {
+      "id": "Q020",
+      "module": "M3",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik rozpoznaje objawy odpowiedzi uciętej przez limit max tokens.",
+      "prompt": "Po wygenerowaniu listy przypadków testowych odpowiedź kończy się urwanym zdaniem i niedomkniętą listą, bez podsumowania. Co najpewniej się stało?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Odpowiedź została ucięta po osiągnięciu limitu max tokens"
+        },
+        {
+          "id": "B",
+          "text": "Temperature była ustawiona zbyt nisko"
+        },
+        {
+          "id": "C",
+          "text": "top-p zawęził słownik terminów QA"
+        },
+        {
+          "id": "D",
+          "text": "Model uznał zadanie za niezgodne z polityką"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Urwane zdanie, niedomknięta lista i brak podsumowania to typowe objawy przekroczenia limitu max tokens.",
+      "feedbackIncorrect": "Temperature i top-p sterują losowością, a nie długością — to max tokens twardo ogranicza liczbę tokenów odpowiedzi. Powtórz ekran M3.5 o rozpoznawaniu ucięcia.",
+      "references": [
+        "M3.5"
+      ]
+    },
+    {
+      "id": "Q021",
+      "module": "M3",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik dopasowuje ustawienie losowości do charakteru zadania (kreatywne vs formalne).",
+      "prompt": "Tester ma dwa zadania: (1) burza pomysłów na nietypowe dane testowe do formularza w SklepDemo oraz (2) spisanie ostatecznych kroków przypadku testowego do dokumentacji. Jak rozsądnie ustawić temperature dla każdego z nich?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Zadanie 1 — wyższa temperature; zadanie 2 — niska temperature"
+        },
+        {
+          "id": "B",
+          "text": "Zadanie 1 — niska temperature; zadanie 2 — wyższa temperature"
+        },
+        {
+          "id": "C",
+          "text": "Oba zadania — maksymalna temperature dla bogatszego wyniku"
+        },
+        {
+          "id": "D",
+          "text": "Oba zadania — temperature 0,0, bo to zawsze najbezpieczniej"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Burza pomysłów korzysta z różnorodności (wyższa temperature), a dokumentacja wymaga powtarzalności i formalności (niska temperature).",
+      "feedbackIncorrect": "Dobór jest odwrotny: kreatywne zadanie zyskuje na wyższej losowości, a formalne na niskiej. Powtórz ekran M3.2 o mapowaniu temperature na typ zadania.",
+      "references": [
+        "M3.2"
+      ]
+    },
+    {
+      "id": "Q022",
+      "module": "M3",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik łączy ustawienie parametru z jego skutkiem na formalność, różnorodność i długość outputu.",
+      "prompt": "Dopasuj ustawienie parametru generacji do jego skutku na output.",
+      "pairs": [
+        {
+          "left": "Niska temperature",
+          "right": "Odpowiedź bardziej powtarzalna i formalna"
+        },
+        {
+          "left": "Wysoka temperature",
+          "right": "Odpowiedź bardziej różnorodna i kreatywna"
+        },
+        {
+          "left": "Niskie max tokens",
+          "right": "Odpowiedź ucięta przed końcem"
+        },
+        {
+          "left": "Niskie top-p",
+          "right": "Węższy, stabilny dobór kolejnych tokenów"
+        }
+      ],
+      "feedbackCorrect": "Temperature steruje formalnością/różnorodnością, max tokens długością, a top-p szerokością puli kandydatów na kolejny token.",
+      "feedbackIncorrect": "Pomyliły się role: losowość (temperature, top-p) to nie to samo co długość (max tokens). Powtórz ekrany M3.2 i M3.4 o sterownikach generacji.",
+      "references": [
+        "M3.2",
+        "M3.4"
+      ]
+    },
+    {
+      "id": "Q023",
+      "module": "M3",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik łączy ustawienie parametru z jego ryzykiem lub zastosowaniem w pracy QA.",
+      "prompt": "Dopasuj ustawienie parametru generacji do jego konsekwencji w kontekście dokumentacji testowej QA.",
+      "pairs": [
+        {
+          "left": "Wysoka temperature",
+          "right": "Rozjazd kroków między dwoma uruchomieniami tego samego promptu"
+        },
+        {
+          "left": "Niskie max tokens",
+          "right": "Brak ostatnich kroków lub kryteriów akceptacji w odpowiedzi"
+        },
+        {
+          "left": "Niskie top-p",
+          "right": "Stabilny, bezpieczny słownik terminów QA"
+        },
+        {
+          "left": "Wysokie top-p",
+          "right": "Szersze, bardziej ryzykowne sformułowania"
+        }
+      ],
+      "feedbackCorrect": "Wysoka losowość grozi brakiem powtarzalności, zbyt niski max tokens gubi końcówkę dokumentu, a top-p reguluje, jak szeroki i ryzykowny jest dobór słów.",
+      "feedbackIncorrect": "Zwróć uwagę, że to losowość (temperature/top-p) odpowiada za ryzyko treści, a max tokens za brak końcówki. Powtórz ekrany M3.3 i M3.4.",
+      "references": [
+        "M3.3",
+        "M3.4"
+      ]
+    },
+    {
+      "id": "Q024",
+      "module": "M3",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Uczestnik porównuje dwa presety generacji i wybiera bezpieczniejszy dla dokumentacji testowej.",
+      "prompt": "Masz spisać kroki przypadku testowego logowania do NotkaApp jako trwałą dokumentację. Do wyboru są dwa presety dla tego samego zadania:\nWariant A: temperature 0,2 / top-p 0,3 / max tokens wysokie.\nWariant B: temperature 1,0 / top-p 0,95 / max tokens niskie.\nKtóry wybór jest bezpieczniejszy i dlaczego?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Wariant A — niska losowość daje powtarzalność i formalność, a wysoki max tokens chroni przed ucięciem dokumentu"
+        },
+        {
+          "id": "B",
+          "text": "Wariant B — wysoka temperature i top-p dadzą bogatszy, bardziej szczegółowy opis kroków"
+        },
+        {
+          "id": "C",
+          "text": "Wariant B — niski max tokens wymusi zwięzłość, co zawsze jest lepsze w dokumentacji"
+        },
+        {
+          "id": "D",
+          "text": "Dowolny — parametry generacji nie wpływają na dokumentację testową"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Dla dokumentacji liczy się powtarzalność i kompletność: niska losowość (A) ogranicza dryf, a zapas max tokens chroni przed urwaniem kroków.",
+      "feedbackIncorrect": "Wysoka losowość zagraża powtarzalności, a niski max tokens grozi ucięciem dokumentu — to nie są zalety w dokumentacji. Powtórz ekran M3.6 o wyborze bezpieczniejszego presetu.",
+      "references": [
+        "M3.6"
+      ]
+    }
+  ]
+}
