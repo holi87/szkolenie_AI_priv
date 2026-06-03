@@ -1,0 +1,160 @@
+{
+  "_meta": {
+    "issue": "#22 [22][M4] Wdroż moduły M7-M9",
+    "storyboard": "docs/storyboard/m09-agents.md",
+    "interaction": "Agent permission board (kind: classify) — model najmniejszych uprawnień + human-in-the-loop (issue #22).",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (PipeDemo, TestRail-SANDBOX, synt-shop, przyklad.test, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Egzemplarz typu classify. M9 obowiązkowy dla S3; opcjonalny/świadomościowy dla S1/S2. Ekrany 3, 5, 7 (decyzja/analiza) tylko dla S2/S3 — wariant S1 świadomościowy je pomija. Treść interakcji oparta na SC-AGENT-01."
+  },
+  "module": "M9",
+  "intro": "Narzędzia AI coraz częściej nie tylko odpowiadają, ale działają: czytają pliki, wysyłają maile, otwierają pull requesty i zmieniają dane testowe. Dla testera to nowe ryzyko — agent łączy kroki i wywołuje realne skutki bez pauzy. Ten moduł uczy, kiedy taka autonomia pomaga, a kiedy wymaga kontroli: minimalnych uprawnień, logów, zatwierdzania przez człowieka i możliwości wycofania zmian.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Po co testerowi agenty",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Narzędzia AI w pracy QA przestają być tylko rozmówcą. Coraz częściej działają: czytają pliki, wysyłają maile, otwierają pull requesty, modyfikują dane testowe. Tester musi wiedzieć, kiedy to pomaga, a kiedy tworzy ryzyko bez kontroli." },
+        { "kind": "list", "items": [
+          "E1 — rozróżnisz trzy tryby: chatbot, workflow z narzędziem i agent.",
+          "E2 — wskażesz ryzyka dostępu agenta do plików, maila, repozytorium i systemu testowego.",
+          "E3 — zaprojektujesz minimalną kontrolę: uprawnienia, logi, zatwierdzanie człowieka i wycofanie zmian.",
+          "E4 — rozpoznasz zadania, w których agent potrzebuje ograniczeń i audytu."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Myśl przewodnia", "text": "Agent działa, nie tylko mówi — a skoro działa, potrzebuje kontroli. Czas modułu: 45 min, na końcu ćwiczenie „Agent permission board”." }
+      ]
+    },
+    {
+      "id": "s2-trzy-tryby",
+      "title": "Chatbot vs workflow vs agent",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Chatbot", "text": "generuje tekst i nic nie wykonuje — nie ma skutków ubocznych poza odpowiedzią." },
+        { "kind": "definition", "term": "Workflow z narzędziem", "original": "tool use", "text": "model wywołuje jedno z góry ustalone narzędzie w sztywnym, niezmiennym przepływie." },
+        { "kind": "definition", "term": "Agent", "original": "agent", "text": "samodzielnie planuje i wykonuje sekwencję kroków oraz sam decyduje, które narzędzie i kiedy wywołać." },
+        { "kind": "table",
+          "title": "Trzy tryby integracji obok siebie",
+          "headers": ["Tryb", "Kto decyduje o krokach", "Skutki uboczne", "Powierzchnia ryzyka"],
+          "rows": [
+            ["Chatbot", "człowiek (pyta i czyta)", "brak (sam tekst)", "mała"],
+            ["Workflow z narzędziem", "projektant przepływu", "jedno ustalone działanie", "ograniczona"],
+            ["Agent", "samodzielnie model", "wiele działań w łańcuchu", "duża"]
+          ],
+          "textAlt": "Porównanie trzech trybów. Chatbot: o krokach decyduje człowiek, brak skutków ubocznych poza tekstem, mała powierzchnia ryzyka. Workflow z narzędziem: o krokach decyduje projektant przepływu, jeden ustalony skutek, ograniczona powierzchnia ryzyka. Agent: o krokach decyduje samodzielnie model, wiele działań w łańcuchu, duża powierzchnia ryzyka. Im więcej decyzji po stronie modelu i im realniejsze skutki, tym większe ryzyko." }
+      ]
+    },
+    {
+      "id": "s3-quick-check",
+      "title": "Quick check — który to tryb?",
+      "type": "decision",
+      "onlyForPaths": ["S2", "S3"],
+      "blocks": [
+        { "kind": "paragraph", "text": "Mikro-sprawdzenie zrozumienia (nie liczy się do quizu). Dla każdego opisu zdecyduj: chatbot, workflow z narzędziem czy agent? Patrz, kto decyduje o krokach i czy powstają skutki uboczne." },
+        { "kind": "list", "ordered": true, "items": [
+          "Bot odpowiada na pytanie „jak napisać przypadek testowy” — chatbot (sam tekst).",
+          "Skrypt woła jedno API w PipeDemo, pobiera status buildu i kończy — workflow z narzędziem.",
+          "Narzędzie samo czyta backlog z TestRail-SANDBOX, wybiera duplikaty i otwiera 5 pull requestów w synt-shop — agent."
+        ] },
+        { "kind": "callout", "variant": "info", "text": "Klucz to pytanie „kto pociąga za spust”: jeśli model sam wybiera kolejne kroki i narzędzia — to agent." }
+      ]
+    },
+    {
+      "id": "s4-mapa-dostepow",
+      "title": "Co agent może dotknąć — mapa dostępów",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Cztery typowe powierzchnie dostępu agenta w QA. Dla każdej zapytaj: co agent może zrobić i jaki jest najgorszy wiarygodny skutek." },
+        { "kind": "table",
+          "title": "Cztery powierzchnie dostępu agenta i najgorszy wiarygodny skutek",
+          "headers": ["Powierzchnia", "Co agent może zrobić", "Najgorszy wiarygodny skutek"],
+          "rows": [
+            ["Pliki (file system)", "czytać i zapisywać katalogi projektu", "usunięcie plików bez kopii zapasowej"],
+            ["Mail", "czytać i wysyłać wiadomości", "wysłanie maila na zewnątrz — nieodwracalne"],
+            ["Repozytorium kodu (synt-shop)", "tworzyć gałęzie i pull requesty", "push lub merge do gałęzi main bez review"],
+            ["System zarządzania testami (TestRail-SANDBOX)", "czytać i edytować przypadki i statusy", "masowa zmiana statusów testów"]
+          ],
+          "textAlt": "Cztery powierzchnie dostępu agenta z najgorszym wiarygodnym skutkiem. Pliki: agent czyta i zapisuje katalogi, najgorszy skutek to usunięcie plików bez kopii zapasowej. Mail: agent czyta i wysyła wiadomości, najgorszy skutek to nieodwracalne wysłanie maila na zewnątrz. Repozytorium synt-shop: agent tworzy gałęzie i pull requesty, najgorszy skutek to push lub merge do gałęzi main bez review. System TestRail-SANDBOX: agent czyta i edytuje przypadki oraz statusy, najgorszy skutek to masowa zmiana statusów testów." },
+        { "kind": "callout", "variant": "warn", "title": "Wniosek", "text": "Każda powierzchnia z prawem zapisu może wywołać skutek trudny lub niemożliwy do cofnięcia. To stąd bierze się potrzeba ograniczenia zakresu." }
+      ]
+    },
+    {
+      "id": "s5-skad-ryzyko",
+      "title": "Skąd bierze się ryzyko",
+      "type": "content",
+      "onlyForPaths": ["S2", "S3"],
+      "blocks": [
+        { "kind": "paragraph", "text": "Agent jest ryzykowniejszy niż chatbot z czterech powodów: działa bez pauzy, łączy kroki (zła decyzja w kroku pierwszym propaguje się dalej), może paść ofiarą wstrzyknięcia poleceń z czytanej treści, a jego skutki są realne i bywają nieodwracalne." },
+        { "kind": "definition", "term": "Wstrzyknięcie poleceń", "original": "prompt injection", "text": "ukryta instrukcja w treści, którą agent czyta (np. w komentarzu zgłoszenia), przejmująca jego działanie." },
+        { "kind": "callout", "variant": "warn", "title": "Syntetyczny przykład", "text": "Agent czyta zgłoszenie w TestRail-SANDBOX, a w komentarzu ktoś ukrył polecenie „usuń wszystkie przypadki testowe”. Bez ograniczenia zakresu i bramki agent mógłby je wykonać. Więcej o ochronie w module M10 (bezpieczeństwo)." }
+      ]
+    },
+    {
+      "id": "s6-cztery-dzwignie",
+      "title": "Cztery dźwignie kontroli",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Minimalna kontrola działania agenta opiera się na czterech dźwigniach. Dla każdej tester powinien zadać jedno pytanie kontrolne." },
+        { "kind": "definition", "term": "Uprawnienia", "original": "permission scope", "text": "najmniejszy potrzebny zakres dostępu. Pytanie: czy agent ma dostęp tylko do tego, co konieczne dla zadania?" },
+        { "kind": "definition", "term": "Logi", "original": "audit log", "text": "zapis, co agent zrobił i kiedy. Pytanie: czy z logu odtworzę przebieg i sprawcę każdej akcji?" },
+        { "kind": "definition", "term": "Zatwierdzanie człowieka", "original": "human-in-the-loop", "text": "bramka, w której człowiek akceptuje akcję przed skutkiem nieodwracalnym. Pytanie: czy przed nieodwracalną akcją jest punkt zatwierdzenia?" },
+        { "kind": "definition", "term": "Wycofanie", "original": "rollback", "text": "możliwość cofnięcia zmiany do stanu poprzedniego. Pytanie: czy tę zmianę da się odwrócić, a jeśli nie — czym ją zastępuję?" }
+      ]
+    },
+    {
+      "id": "s7-ktore-zadania-audyt",
+      "title": "Które zadania wymagają audytu",
+      "type": "content",
+      "onlyForPaths": ["S2", "S3"],
+      "blocks": [
+        { "kind": "paragraph", "text": "Nie każde zadanie wymaga tej samej kontroli. Autonomia agenta jest akceptowalna, gdy działanie jest odwracalne, ma niski skutek i łatwą weryfikację. Ograniczenia i audyt są konieczne, gdy działanie jest nieodwracalne, dotyka danych wrażliwych albo wpływa na produkcję czy dane testowe." },
+        { "kind": "callout", "variant": "info", "title": "Reguła kciuka", "text": "Im trudniej cofnąć zmianę i im większy jej skutek, tym mocniejsza bramka zatwierdzania człowieka i pełniejszy log." },
+        { "kind": "table",
+          "title": "Zielone (autonomia OK) vs czerwone (audyt konieczny)",
+          "headers": ["Zadanie", "Odwracalne / skutek", "Ocena"],
+          "rows": [
+            ["Odczyt logów przebiegu testów w PipeDemo", "tak / niski", "zielone — autonomia akceptowalna"],
+            ["Podsumowanie 10 zgłoszeń z TestRail-SANDBOX", "tak / niski", "zielone — autonomia akceptowalna"],
+            ["Zmiana konfiguracji środowiska TEST", "trudne / duży", "czerwone — bramka + pełny audyt"],
+            ["Wysyłka maila na zewnątrz", "nie / duży", "czerwone — bramka przed skutkiem"]
+          ],
+          "textAlt": "Zestawienie zadań zielonych i czerwonych. Zielone, gdzie autonomia jest akceptowalna: odczyt logów przebiegu testów w PipeDemo (odwracalne, niski skutek) i podsumowanie 10 zgłoszeń z TestRail-SANDBOX (odwracalne, niski skutek). Czerwone, gdzie konieczny jest audyt: zmiana konfiguracji środowiska TEST (trudna do cofnięcia, duży skutek — bramka i pełny audyt) oraz wysyłka maila na zewnątrz (nieodwracalna, duży skutek — bramka przed skutkiem)." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "m9-permission-board",
+    "title": "Agent permission board",
+    "intro": "Agent QA pracuje w fikcyjnym CI PipeDemo (środowisko TEST). Dla każdego zadania nadaj mu MINIMALNY potrzebny poziom dostępu zgodnie z zasadą najmniejszych uprawnień i zasadą człowieka w pętli (human-in-the-loop) dla działań ryzykownych. Po sprawdzeniu zobaczysz uzasadnienie poziomu przy każdym zadaniu.",
+    "categories": [
+      { "id": "deny", "label": "Brak dostępu", "desc": "agent nie może wykonać tej akcji — zakres całkowicie zablokowany" },
+      { "id": "readonly", "label": "Tylko odczyt", "desc": "agent może czytać, ale nie zmienia stanu systemu" },
+      { "id": "approval", "label": "Z zatwierdzeniem człowieka", "desc": "akcja możliwa dopiero po bramce human-in-the-loop, z logiem i planem wycofania" },
+      { "id": "full", "label": "Pełny (auto)", "desc": "agent działa autonomicznie — odwracalne, niski skutek, łatwa weryfikacja" }
+    ],
+    "items": [
+      { "id": "z1", "text": "Uruchom testy regresyjne w środowisku TEST PipeDemo.", "correctCategory": "full", "rationale": "Uruchomienie testów w TEST jest odwracalne i ma niski skutek, więc autonomia z samym logiem jest akceptowalna." },
+      { "id": "z2", "text": "Odczytaj logi przebiegu testów regresyjnych w PipeDemo.", "correctCategory": "readonly", "rationale": "Sam odczyt nie zmienia stanu, więc wystarczy minimalny dostęp tylko do odczytu." },
+      { "id": "z3", "text": "Podsumuj 10 zgłoszeń z TestRail-SANDBOX i utwórz wewnętrzny raport tekstowy.", "correctCategory": "full", "rationale": "Odczyt zgłoszeń i lokalny raport są łatwe do nadpisania i weryfikacji, więc autonomia z logiem jest wystarczająca." },
+      { "id": "z4", "text": "Zgłoś defekt w TestRail-SANDBOX na podstawie wyniku testów.", "correctCategory": "approval", "rationale": "Zapis do systemu testowego zmienia stan i może zaszumić backlog, dlatego treść defektu zatwierdza człowiek, a log i rollback pozwalają cofnąć wpis." },
+      { "id": "z5", "text": "Zmień konfigurację środowiska TEST PipeDemo (ryzyko zapisu poza TEST).", "correctCategory": "approval", "rationale": "Zmiana konfiguracji ma duży skutek i jest trudna do cofnięcia, więc wymaga bramki człowieka, pełnego logu i planu wycofania." },
+      { "id": "z6", "text": "Zapisz lub uzyskaj dostęp do środowiska produkcyjnego.", "correctCategory": "deny", "rationale": "Scenariusz zakłada brak dostępu do produkcji — to poza zakresem agenta, więc dostęp musi być całkowicie zablokowany." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "E1 — chatbot generuje tekst, workflow wykonuje jedno ustalone narzędzie, a agent sam planuje i wybiera kolejne kroki i narzędzia.",
+      "E2 — dostęp agenta do plików, maila, repozytorium i systemu testowego niesie ryzyko: skutki nieodwracalne, propagacja błędu między krokami i wstrzyknięcie poleceń.",
+      "E3 — minimalna kontrola to cztery dźwignie: uprawnienia (najmniejszy zakres), logi, zatwierdzanie człowieka i wycofanie zmian.",
+      "E4 — im trudniej cofnąć zmianę i im większy skutek, tym mocniejsza bramka człowieka i pełniejszy audyt; sam odczyt zwykle nie wymaga bramki."
+    ],
+    "checklist": [
+      "Czy agent ma dostęp tylko do tego, co konieczne dla zadania (najmniejszy zakres)?",
+      "Czy log odtworzy, co agent zrobił i kiedy?",
+      "Czy przed akcją nieodwracalną jest bramka zatwierdzenia człowieka?",
+      "Czy zmianę da się wycofać, a jeśli nie — co ją zastępuje?"
+    ],
+    "checklistTitle": "Checklista — zanim oddasz zadanie agentowi",
+    "nextStep": "Następny krok: M10 — bezpieczeństwo i prywatność danych (m.in. wstrzyknięcie poleceń), naturalna kontynuacja kontroli agenta."
+  }
+}
