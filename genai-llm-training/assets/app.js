@@ -158,13 +158,13 @@ function start(data) {
       root.appendChild(el("ul", {}, (mod.learningOutcomes || []).map((o) => el("li", { text: o }))));
     }
 
-    // ----- Gating ukończenia: wymagamy zarówno quizu, jak i interakcji (jeśli istnieją) -----
+    // ----- Gating ukończenia: gatuje TYLKO quiz inline (self-paced). Interakcja renderuje się,
+    // daje feedback i zapisuje wynik, ale NIE blokuje ukończenia — jej `paths` dotyczą wyłącznie
+    // zapisu zadania praktycznego, a zaliczenie S2/S3 i tak wymusza bramka praktyczna w teście końcowym.
     const ixConfig = content && content.interaction;
-    let interactionDone = alreadyDone || Boolean(store.getProgress().modules[moduleId]?.interaction);
     const moduleResults = new Map(); // qid → { awarded, max } z ostatniego sprawdzenia (do % quizu inline)
     const quizComplete = () => pool.length === 0 || moduleResults.size === pool.length;
-    const interactionComplete = () => !ixConfig || interactionDone;
-    const updateCompleteState = () => { completeBtn.disabled = !alreadyDone && !(quizComplete() && interactionComplete()); };
+    const updateCompleteState = () => { completeBtn.disabled = !alreadyDone && !quizComplete(); };
 
     // ----- Interakcja modułowa -----
     if (ixConfig) {
@@ -181,8 +181,6 @@ function start(data) {
         if (ixConfig.kind === "rubric" && ixConfig.recordsPractical && ixConfig.rubricId && (!ixConfig.paths || ixConfig.paths.includes(pathId))) {
           store.recordPracticalTask({ rubric: ixConfig.rubricId, score: result.score, maxScore: result.max, passed: result.passed === true });
         }
-        interactionDone = true;
-        updateCompleteState();
       });
       root.appendChild(ix.node);
       root.appendChild(el("div", { class: "btn-row" }, [ixBtn]));
@@ -224,8 +222,8 @@ function start(data) {
     if (content && content.summary) root.appendChild(renderSummary(content.summary));
     const gateHint = !quizComplete() && pool.length > 0
       ? "Sprawdź wszystkie pytania quizu, aby zakończyć moduł."
-      : !interactionComplete()
-        ? "Wykonaj interakcję modułową, aby zakończyć moduł."
+      : ixConfig
+        ? "Wykonaj interakcję powyżej (feedback od razu), a potem oznacz moduł jako ukończony."
         : "Możesz oznaczyć moduł jako ukończony.";
     root.appendChild(el("div", { class: "next-step" }, [
       el("p", { text: content && content.summary && content.summary.nextStep ? content.summary.nextStep : gateHint }),
@@ -244,7 +242,9 @@ function start(data) {
         ? `Zadanie praktyczne zaliczone (${result.score}/${result.max}) — liczy się do zaliczenia ścieżki ${pathId}.`
         : `Zadanie praktyczne poniżej progu (${result.score}/${result.max}). Popraw kryteria i oceń ponownie — wynik liczy się do zaliczenia ścieżki ${pathId}.` }));
     }
-    return el("div", { class: `feedback ${result.passed === false ? "feedback--incorrect" : "feedback--correct"}` }, lines);
+    // passed: true→zielony, false→czerwony, null (rubryka bez progu, np. QA workbench)→neutralny (nie ogłaszaj „poprawnie").
+    const cls = result.passed === true ? " feedback--correct" : result.passed === false ? " feedback--incorrect" : "";
+    return el("div", { class: `feedback${cls}` }, lines);
   }
 
   function showFinalTest() {

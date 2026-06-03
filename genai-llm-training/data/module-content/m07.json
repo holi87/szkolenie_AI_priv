@@ -93,12 +93,12 @@
     "kind": "rubric",
     "id": "m7-prompt-clinic",
     "title": "Prompt clinic",
-    "intro": "Wadliwy prompt: „Napisz testy do logowania.” Dla każdej osi rubryki zaznacz poprawkę, która ją spełnia. Ocena liczy się jako zadanie praktyczne na ścieżkach S2 i S3 (próg 4/5).",
+    "intro": "Wadliwy prompt: „Napisz testy do logowania.” Dla każdej osi rubryki zaznacz poprawkę, która ją spełnia. Ocena liczy się jako zadanie praktyczne R1-prompt na ścieżce S2 (próg 4/5); na S3 to ćwiczenie z feedbackiem.",
     "rubricId": "R1-prompt",
     "recordsPractical": true,
     "scaleMax": 5,
     "passThreshold": 4,
-    "paths": ["S2", "S3"],
+    "paths": ["S2"],
     "criteria": [
       { "id": "K1", "name": "Rola i cel", "points": 1, "hint": "Dodaj rolę i jasny cel: kto odpowiada i co ma powstać.",
         "options": [

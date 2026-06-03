@@ -98,6 +98,19 @@ test("uszkodzony wpis w storage nie wywala store (konserwatywnie traktowany jak 
   assert.doesNotThrow(() => s.selectPath("S1"));
 });
 
+test("recordInteraction zapisuje wynik interakcji w module (kształt zgodny z progress.schema.json)", () => {
+  const s = makeStore();
+  s.selectPath("S3");
+  s.recordInteraction("M6", { kind: "rubric", score: 4, max: 5, pct: 80, passed: true });
+  const ix = s.getProgress().modules.M6.interaction;
+  assert.deepEqual(Object.keys(ix).sort(), ["completedAt", "kind", "max", "passed", "pct", "score"]);
+  assert.equal(ix.kind, "rubric");
+  assert.equal(ix.score, 4);
+  assert.equal(ix.max, 5);
+  assert.equal(ix.completedAt, fixedNow());
+  assert.equal(s.getProgress().modules.M6.status, "in_progress", "interakcja w pustym module ustawia in_progress");
+});
+
 test("certyfikat zapisuje się w progresie", () => {
   const s = makeStore();
   s.selectPath("S1");
