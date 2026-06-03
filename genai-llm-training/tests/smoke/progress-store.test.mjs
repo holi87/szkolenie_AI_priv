@@ -155,3 +155,26 @@ test("certyfikat zapisuje się w progresie", () => {
   assert.equal(c.completionId, "CERT-S1-20260603-ABC");
   assert.equal(c.issuedAt, fixedNow());
 });
+
+test("pseudonim (model C #63): tylko w pamięci sesji — NIE persystowany do localStorage", () => {
+  const adapter = createMemoryAdapter();
+  const s = makeStore(adapter);
+  s.setParticipant({ displayName: "Tester01" }); // bez wybranej ścieżki — nie rzuca
+  assert.deepEqual(s.getParticipant(), { displayName: "Tester01" });
+  s.selectPath("S2");
+  // nick NIE trafia do obiektu progresu ani do storage
+  assert.equal(s.getProgress().participant, undefined, "participant nie jest w persystowanym progresie");
+  const raw = adapter.get("genai-training:progress:S2") || "";
+  assert.ok(!raw.includes("Tester01"), "pseudonim nie może znaleźć się w localStorage");
+  // odświeżenie strony: świeży store nad tym samym storage → brak pseudonimu (żył tylko w sesji)
+  const s2 = makeStore(adapter);
+  assert.equal(s2.getParticipant(), null, "po odświeżeniu pseudonim znika (in-memory)");
+});
+
+test("reset czyści pseudonim sesji (#63)", () => {
+  const s = makeStore();
+  s.setParticipant({ displayName: "Tester01" });
+  s.selectPath("S1");
+  s.reset({ all: true });
+  assert.equal(s.getParticipant(), null, "reset all=true kasuje pseudonim sesji");
+});

@@ -7,15 +7,6 @@
   "required": ["version", "path", "modules", "updatedAt"],
   "properties": {
     "version": { "type": "string", "description": "Wersja schematu progresu (semver)" },
-    "participant": {
-      "type": "object",
-      "description": "Opcjonalne; anonimowość vs logowanie zależy od decyzji P3 (otwarte).",
-      "properties": {
-        "displayName": { "type": "string" },
-        "anonymousId": { "type": "string" }
-      },
-      "additionalProperties": false
-    },
     "path": { "type": "string", "enum": ["S1", "S2", "S3"] },
     "modules": {
       "type": "object",
