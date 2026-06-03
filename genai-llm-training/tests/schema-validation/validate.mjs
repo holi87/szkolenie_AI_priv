@@ -259,10 +259,35 @@ if (Qall) {
   report.push(`Krytyczne (M10): ${crit.map((q)=>q.id).join(",")}`);
   const pillarCount = {}; for (const q of Q) pillarCount[q.pillar] = (pillarCount[q.pillar]||0)+1;
   report.push(`Filary: ${Object.entries(pillarCount).map(([k,v])=>`${k}=${v}`).join(" ")}`);
-  // rozkład pozycji poprawnej (anti-gaming) — informacyjnie; rotacja opcji przy wyświetlaniu to wymóg engine (doc 07, M3 #17)
+  // rozkład pozycji poprawnej + lint klastrowania (anti-gaming, doc 07; RND-2 #67).
+  // „Pozycja" = indeks poprawnej opcji w q.options (litera A/B/C..; konwencja banku id==pozycja, ale liczymy z indeksu —
+  // odporne na ewentualne przyszłe pytanie z opcjami nie po kolei). Render RND-1 (#66) rotuje pozycje przy wyświetlaniu,
+  // więc skos danych NIE dociera do uczącego się; ten lint to higiena autorska + bezpiecznik dla pytań z lockOptionOrder.
+  // Klastrowanie daje OSTRZEŻENIE (warn.push), NIE błąd — estetyka autorska nie blokuje CI (AGENTS: fail-safe dotyczy scoringu/krytycznych/certyfikatu).
+  const POS_TYPES = new Set(["single_choice","scenariusz_decyzyjny","scenariusz"]);
+  const RUN_WARN = 4;     // >=4 ta sama pozycja z rzędu w module (literalna obawa: „3x A potem 3x B...")
+  const SKEW_WARN = 0.5;  // najczęstsza pozycja > 50% udziału w module
+  const posLetter = (q) => { const i = (q.options||[]).findIndex((o)=>o.id===(q.correct||[])[0]); return i>=0 ? String.fromCharCode(65+i) : "?"; };
   const posDist = {};
-  for (const q of Q) if (["single_choice","scenariusz_decyzyjny","scenariusz"].includes(q.type) && (q.correct||[]).length===1) posDist[q.correct[0]] = (posDist[q.correct[0]]||0)+1;
-  report.push(`Pozycje correct (1-poprawne): ${Object.entries(posDist).map(([k,v])=>`${k}=${v}`).join(" ")} — UWAGA: wyświetlanie MUSI rotować opcje (anti-gaming, doc 07; engine M3 #17)`);
+  const perMod = {};      // module -> [pozycje w naturalnej kolejności pliku]
+  for (const q of Q) {
+    if (!(POS_TYPES.has(q.type) && (q.correct||[]).length===1)) continue;
+    const p = posLetter(q);
+    posDist[p] = (posDist[p]||0)+1;
+    (perMod[q.module] || (perMod[q.module]=[])).push(p);
+  }
+  report.push(`Pozycje correct (1-poprawne): ${Object.entries(posDist).map(([k,v])=>`${k}=${v}`).join(" ")} — UWAGA: wyświetlanie MUSI rotować opcje (anti-gaming, doc 07; engine M3 #17, render RND-1 #66)`);
+  const clustered = [];
+  for (const [m, seq] of Object.entries(perMod)) {
+    if (seq.length < RUN_WARN) continue;
+    let maxRun = 1, run = 1, runPos = seq[0];
+    for (let i = 1; i < seq.length; i += 1) { if (seq[i] === seq[i-1]) { run += 1; if (run > maxRun) { maxRun = run; runPos = seq[i]; } } else run = 1; }
+    const cnt = {}; for (const p of seq) cnt[p] = (cnt[p]||0)+1;
+    const [topPos, topN] = Object.entries(cnt).sort((a,b)=>b[1]-a[1])[0];
+    const share = topN / seq.length;
+    if (maxRun >= RUN_WARN || share > SKEW_WARN) clustered.push(`${m}: seria ${runPos}=${maxRun}, skos ${topPos} ${(share*100).toFixed(0)}% (${topN}/${seq.length})`);
+  }
+  if (clustered.length) warn.push(`Klastrowanie pozycji poprawnej (RND-2 #67; próg: seria>=${RUN_WARN} lub skos>${SKEW_WARN*100}%): ${clustered.join(" | ")} — RND-1 (#66) rotuje pozycje przy renderze (niewidoczne dla uczącego się); to higiena autorska / bezpiecznik dla lockOptionOrder. Rozważ redystrybucję pozycji w danych.`);
 } else {
   fail("brak banku pytań (data/questions/mNN.json) — na etapie #13/CI bank 116 pytań jest wymagany (nie pomijać)");
 }

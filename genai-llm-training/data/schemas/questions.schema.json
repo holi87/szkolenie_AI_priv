@@ -38,6 +38,7 @@
         },
         "isCritical": { "type": "boolean" },
         "golden": { "type": "boolean" },
+        "lockOptionOrder": { "type": "boolean" },
         "points": { "type": "number", "minimum": 0 },
         "learningOutcome": { "type": "string", "minLength": 5 },
         "prompt": { "type": "string", "minLength": 5 },
