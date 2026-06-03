@@ -1,0 +1,149 @@
+{
+  "_meta": {
+    "issue": "#21 [21][M4] Wdroż moduły M3-M6",
+    "storyboard": "docs/storyboard/m05-vector-db.md",
+    "interaction": "Retrieval debugger (kind: tune)",
+    "scenario": "SC-RAG-01 — mini-korpus dokumentacji QA (DOC1-DOC4, NotkaApp)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (NotkaApp/SklepDemo/PipeDemo). Output interakcji jest prerenderowany (autorski lookup po poziomach), nie z żywego retrievalu. ZERO PII, ZERO realnych domen.",
+    "note": "Egzemplarz typu tune wg m03: kontrolki retrievalu → autorskie efekty (recall/precision) + scorowany checkpoint diagnostyczny. Storyboard 1-8 → screens; ekran 9 → interaction; ekran 10 (quiz) zasilany z questions/m05.json; ekran 11 → summary."
+  },
+  "module": "M5",
+  "intro": "Gdy zespół buduje wyszukiwarkę po dokumentacji testowej albo RAG, jakość odpowiedzi zależy od tego, CO retrieval w ogóle znalazł. Tester musi umieć ocenić, czy zwrócone fragmenty są trafne, i zdiagnozować, dlaczego nie. Ten moduł pokazuje rolę bazy wektorowej, kompromis exact vs ANN oraz wpływ indeksu, metadanych i chunków na wynik.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Po co testerowi baza wektorowa?",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Coraz częściej QA testuje funkcje oparte na wyszukiwaniu semantycznym: wyszukiwarkę po dokumentacji testowej albo asystenta RAG, który odpowiada na pytania o produkt. W obu przypadkach trafność końcowej odpowiedzi zaczyna się od retrievalu — od tego, jakie fragmenty zostały znalezione." },
+        { "kind": "paragraph", "text": "Twoje zadanie jako testera: ocenić, czy zwrócone fragmenty są trafne, i zdiagnozować, dlaczego czasem nie są. W tym module poznasz rolę bazy wektorowej, różnicę exact vs ANN, wpływ indeksu, metadanych i chunków, a na koniec użyjesz debugera wyszukiwania na syntetycznym korpusie NotkaApp." },
+        { "kind": "callout", "variant": "info", "title": "Co tu zbudujemy", "text": "Pracujemy na zmyślonym mini-korpusie dokumentacji QA aplikacji NotkaApp — wszystkie dane są syntetyczne, bez realnych klientów i bez PII." }
+      ]
+    },
+    {
+      "id": "s2-czym-jest",
+      "title": "Czym jest baza wektorowa",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Baza wektorowa", "original": "vector database", "text": "magazyn, który przechowuje embeddingi fragmentów (z M4) i pozwala szybko znaleźć wektory najbardziej podobne do embeddingu zapytania." },
+        { "kind": "paragraph", "text": "Wyszukiwanie semantyczne (semantic search) działa po znaczeniu, nie po literalnych słowach. Ścieżka jest stała: zapytanie → embedding zapytania → najbliższe wektory w bazie → powiązane fragmenty tekstu. Inaczej niż wyszukiwanie po słowach kluczowych, które dopasowuje te same słowa — tu liczy się bliskość znaczeniowa." },
+        { "kind": "diagram", "title": "Od zapytania do fragmentów", "caption": "Przepływ wyszukiwania semantycznego.", "textAlt": "Cztery kroki w jednym ciągu: (1) zapytanie tekstowe, na przykład „po jakim czasie wygasa link resetu hasła”, (2) model embeddingów zamienia je na wektor, (3) baza wektorowa porównuje ten wektor z embeddingami fragmentów i wybiera najbliższe, (4) zwraca powiązane fragmenty tekstu, na przykład DOC3 o resecie hasła." },
+        { "kind": "callout", "variant": "info", "title": "Mini-korpus NotkaApp", "text": "W tym module krąży 4-fragmentowy korpus: DOC1 — token sesji wygasa po 30 min bezczynności; DOC2 — polityka haseł (min. 12 znaków, blokada po 3 błędach); DOC3 — reset hasła: link e-mail ważny 30 min, jednorazowy; DOC4 — FAQ marketingowe (zalety i cennik)." }
+      ]
+    },
+    {
+      "id": "s3-dokladne-czy-przyblizone",
+      "title": "Dokładne czy przybliżone?",
+      "type": "decision",
+      "blocks": [
+        { "kind": "paragraph", "text": "Jedna decyzja przed wyborem podejścia. Masz dwa scenariusze na korpusie NotkaApp. Scenariusz A: mały korpus (kilkanaście fragmentów) i wymóg, by ŻADEN trafny fragment nie umknął przy weryfikacji pokrycia. Scenariusz B: korpus liczony w milionach fragmentów, gdzie liczy się przede wszystkim szybkość odpowiedzi." },
+        { "kind": "paragraph", "text": "Zastanów się: kiedy stać Cię na przejrzenie wszystkich wektorów (dokładnie, ale wolniej), a kiedy musisz iść na skróty przez indeks (szybciej, ale z ryzykiem pominięcia)? Za chwilę rozłożymy ten kompromis na czynniki." }
+      ]
+    },
+    {
+      "id": "s4-exact-vs-ann",
+      "title": "Exact vs ANN — kompromis",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Wyszukiwanie dokładne", "original": "exact / brute force", "text": "przegląda wszystkie wektory w bazie i zwraca naprawdę najbliższe — dokładne, ale wolne; opłacalne przy małym korpusie." },
+        { "kind": "definition", "term": "ANN", "original": "approximate nearest neighbor", "text": "wyszukiwanie przybliżonego najbliższego sąsiada; używa indeksu, by szukać szybciej kosztem ryzyka pominięcia części trafnych wyników." },
+        { "kind": "paragraph", "text": "Jakość retrievalu oceniamy parą miar. Recall (kompletność trafień) mówi, ile spośród wszystkich trafnych fragmentów faktycznie wróciło. Precision (czystość trafień) mówi, jaka część zwróconych fragmentów jest naprawdę trafna. Te miary zwykle idą w przeciwnych kierunkach: poszerzasz wyniki — rośnie recall, spada precision." },
+        { "kind": "table", "title": "Exact vs ANN", "caption": "Porównanie podejść.", "headers": ["Cecha", "Exact (brute force)", "ANN (z indeksem)"], "rows": [["Co robi", "przegląda wszystkie wektory", "przeszukuje skrót przez indeks"], ["Dokładność", "pełna — nic nie pomija", "przybliżona — może pominąć trafne"], ["Szybkość", "wolne, rośnie z korpusem", "szybkie, skaluje się na duże zbiory"], ["Kiedy używać", "mały korpus, wymóg pełnej trafności", "duży korpus, liczy się czas odpowiedzi"]], "textAlt": "Tabela porównuje dwa podejścia w czterech wymiarach. Exact (brute force) przegląda wszystkie wektory, daje pełną dokładność (nic nie pomija), jest wolne i rośnie z rozmiarem korpusu; stosuj przy małym korpusie i wymogu pełnej trafności. ANN przeszukuje skrót przez indeks, daje wynik przybliżony (może pominąć trafne), jest szybkie i skaluje się na duże zbiory; stosuj przy dużym korpusie, gdy liczy się czas odpowiedzi." }
+      ]
+    },
+    {
+      "id": "s5-indeks",
+      "title": "Indeks i jego wpływ",
+      "type": "content",
+      "hideForPaths": ["S1", "S2"],
+      "blocks": [
+        { "kind": "definition", "term": "Indeks", "original": "index", "text": "struktura danych przyspieszająca ANN; jego parametry przesuwają punkt między recall a szybkością i precision." },
+        { "kind": "paragraph", "text": "Bez matematyki: agresywny indeks (nastawiony na szybkość) przeszukuje mniejszy wycinek przestrzeni wektorów, więc bywa, że pomija trafny fragment, choć ten istnieje w bazie. Łagodniejszy indeks przeszukuje więcej — wolniej, ale rzadziej coś gubi." },
+        { "kind": "callout", "variant": "warn", "title": "Pułapka diagnozy", "text": "„Nic nie znaleziono” albo „brakuje znanego trafnego dokumentu” to często wina ustawień indeksu, nie danych. Zanim uznasz, że fragmentu nie ma w korpusie, sprawdź, czy ANN go po prostu nie pominął." }
+      ]
+    },
+    {
+      "id": "s6-metadane",
+      "title": "Filtrowanie metadanych",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Filtrowanie metadanych", "original": "metadata filtering", "text": "zawężenie zbioru kandydatów po atrybutach fragmentu (np. typ_dokumentu, modul, wersja) przed lub po liczeniu podobieństwa." },
+        { "kind": "paragraph", "text": "Filtr metadanych to potężna dźwignia precyzji. Dopuszczając tylko właściwe fragmenty (np. typ_dokumentu = wymaganie), odsiewasz szum — precision rośnie. Ale uwaga: zbyt ostry filtr potrafi wyciąć trafny fragment o innym typie, więc recall spada." },
+        { "kind": "callout", "variant": "warn", "title": "Przykład na NotkaApp", "text": "Trafny DOC3 (reset hasła) ma typ_dokumentu = przypadek_testowy. Jeśli włączysz filtr „tylko wymaganie”, DOC3 zniknie z wyników — filtr podniósł precision, ale zgubił właściwy fragment (recall spadł)." }
+      ]
+    },
+    {
+      "id": "s7-chunki",
+      "title": "Jakość chunków",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Chunk", "original": "chunk", "text": "fragment dokumentu zaindeksowany jako jedna jednostka i zamieniony na jeden wektor." },
+        { "kind": "paragraph", "text": "Granica chunku decyduje o znaczeniu wektora. Zła granica — urwane w połowie zdanie albo zlepek dwóch różnych wymagań — daje wektor o rozmytym znaczeniu, a w efekcie wynik podobny, ale bezużyteczny. Za duży chunk miesza wiele tematów; za mały gubi kontekst potrzebny do zrozumienia fragmentu." },
+        { "kind": "paragraph", "text": "To bezpośrednio łączy się z diagnozą „podobny, ale nieużyteczny”: fragment może mieć wysokie podobieństwo, a mimo to nie nadawać się na odpowiedź — bo jest urwany albo dotyczy obok-tematu. Podobieństwo to nie to samo co trafność." }
+      ]
+    },
+    {
+      "id": "s8-diagnoza",
+      "title": "Podobny, ale nieużyteczny — diagnoza",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Mini-ćwiczenie diagnostyczne (niepunktowane, na rozgrzewkę przed debugerem). Zapytanie do korpusu NotkaApp brzmi: „po jakim czasie wygasa link resetu hasła?”. Retrieval zwrócił trzy fragmenty z wysokim podobieństwem, ale tylko jeden jest użyteczny." },
+        { "kind": "list", "ordered": true, "items": [
+          "DOC1 (token sesji wygasa po 30 min bezczynności) — bardzo wysokie podobieństwo: nakładają się słowa „30 min” i „wygasa”, ale to inny temat (sesja, nie reset). Podobny, lecz nietrafny.",
+          "DOC3 (reset hasła: link e-mail ważny 30 min, jednorazowy) — to jest właściwe źródło odpowiedzi.",
+          "DOC4 (FAQ marketingowe: zalety i cennik) — wpadł do wyników jako szum tematyczny; nieużyteczny."
+        ] },
+        { "kind": "paragraph", "text": "Zanim sięgniesz po pierwszą pokrętkę, nazwij przyczynę nietrafności: zła granica chunku, brak filtra metadanych odsiewającego marketing, pominięcie lepszego fragmentu przez ANN, czy po prostu mylenie podobieństwa z trafnością. Na ekranie interakcji sprawdzisz, która korekta naprawdę pomaga." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "tune",
+    "id": "m5-retrieval-debugger",
+    "title": "Retrieval debugger",
+    "intro": "Dobierz parametry retrievalu dla zapytania „po jakim czasie wygasa link resetu hasła?” na korpusie NotkaApp (DOC1 sesja, DOC2 polityka haseł, DOC3 reset hasła — trafny, DOC4 FAQ marketingowe). Obserwuj, jak zmienia się zestaw zwróconych fragmentów oraz para recall/precision, a potem odpowiedz na checkpoint.",
+    "outputLabel": "Symulowany wynik retrievalu dla wybranych ustawień (zwrócone fragmenty + recall/precision):",
+    "controls": [
+      { "id": "topk", "label": "top-k (liczba zwracanych fragmentów)", "levels": [
+        { "value": "2", "label": "Niskie (2)", "effect": "Wracają tylko 2 najbardziej podobne fragmenty: DOC1 (sesja) i DOC3 (reset). Precision przyzwoita, ale recall kruchy — gdyby trafny DOC3 spadł w rankingu, wypadłby z dwójki i wynik byłby pusty." },
+        { "value": "6", "label": "Wysokie (6)", "effect": "Wracają niemal wszystkie fragmenty, w tym trafny DOC3 — recall wyższy. Ale do wyników wchodzi też podobny-ale-nieużyteczny DOC1 (sesja) oraz marketingowy DOC4 — precision niższa, więcej szumu do odsiania." }
+      ] },
+      { "id": "prog", "label": "Próg podobieństwa (similarity threshold)", "levels": [
+        { "value": "low", "label": "Niski (luźny)", "effect": "Przepuszcza fragmenty nawet o słabym podobieństwie — recall wysoki, ale precision niska: do wyników wpada szum (np. marketingowy DOC4)." },
+        { "value": "high", "label": "Wysoki (ostry)", "effect": "Wpuszcza tylko fragmenty o wysokim podobieństwie. Uwaga: podobny-ale-nietrafny DOC1 (sesja) ma wysoki wynik, więc próg go NIE usuwa — za to ryzykuje odcięcie trafnego DOC3, jeśli jego wynik jest niższy (recall spada)." }
+      ] },
+      { "id": "filtr", "label": "Filtr metadanych (typ_dokumentu)", "levels": [
+        { "value": "off", "label": "Wyłączony", "effect": "Brak filtra — w puli zostają wszystkie typy, łącznie z marketingowym DOC4 i fragmentami o obok-temacie. Precision niższa." },
+        { "value": "topic", "label": "Włączony: dopuść dokumentację produktową, odetnij marketing", "effect": "Filtr odsiewa marketingowy DOC4 i zawęża pulę do dokumentacji produktowej — celuje w temat „reset/konto”. Precision rośnie, a trafny DOC3 zostaje w wynikach. To dźwignia, która usuwa podobny-ale-nietrafny szum bez utraty właściwego fragmentu — pod warunkiem, że filtr nie jest zbyt wąski (zbyt ostry filtr wyciąłby DOC3)." }
+      ] }
+    ],
+    "checkpoint": {
+      "prompt": "Similarity search zwrócił na czele DOC1 (token sesji wygasa po 30 min) — fragment podobny do zapytania o reset hasła, ale nieużyteczny, bo dotyczy sesji. DOC1 ma WYSOKIE podobieństwo. Co najpierw zmienisz, żeby poprawić precyzję wyniku?",
+      "type": "single_choice",
+      "options": [
+        { "id": "A", "text": "Włączyć filtr metadanych celujący w temat (dokumentacja resetu/konta, odcięcie obok-tematów) — to sygnał ortogonalny do podobieństwa, więc odsiewa wysoko-podobny, ale nietrafny DOC1, nie ruszając trafnego DOC3." },
+        { "id": "B", "text": "Podnieść próg podobieństwa do bardzo wysokiej wartości — skoro DOC1 jest nietrafny, wystarczy odciąć słabsze wyniki." },
+        { "id": "C", "text": "Obniżyć top-k do 1 — wtedy wróci tylko najbardziej podobny fragment i szum zniknie." },
+        { "id": "D", "text": "Uznać DOC1 za poprawną odpowiedź, bo ma najwyższe podobieństwo do zapytania." }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Dobrze. DOC1 jest nietrafny mimo wysokiego podobieństwa, więc dźwignie oparte na samym wyniku podobieństwa zawiodą. Filtr metadanych to sygnał ortogonalny — odcina obok-tematy (sesja, marketing) niezależnie od tego, jak bardzo są „podobne”.",
+      "feedbackIncorrect": "Pułapka: DOC1 ma WYSOKIE podobieństwo, więc podniesienie progu go nie usunie (a grozi odcięciem trafnego DOC3 → recall spada), a top-k=1 zostawiłoby właśnie ten nietrafny fragment na szczycie. Podobieństwo to nie trafność — odsiej obok-temat filtrem metadanych (sygnał ortogonalny). Powtórz ekran o filtrowaniu metadanych."
+    }
+  },
+  "summary": {
+    "points": [
+      "Baza wektorowa decyduje, CO retrieval znalazł: przechowuje embeddingi i zwraca najbliższe wektory względem zapytania (wyszukiwanie semantyczne).",
+      "Exact vs ANN to kompromis: dokładnie i wolno (mały korpus, pełna trafność) kontra szybko z ryzykiem pominięcia (duży korpus).",
+      "Indeks, filtr metadanych, jakość chunków i próg podobieństwa sterują parą recall/precision — to dźwignie diagnozy retrievalu.",
+      "Podobny nie znaczy użyteczny: fragment o wysokim podobieństwie bywa nietrafny — odsiewasz go sygnałem ortogonalnym (filtr metadanych), nie samym progiem."
+    ],
+    "checklist": [
+      "Czy zwrócone fragmenty są naprawdę trafne, czy tylko podobne leksykalnie?",
+      "Czy pusty albo ubogi wynik to wina indeksu, filtra lub progu, a nie braku danych?",
+      "Czy mój filtr metadanych nie jest zbyt ostry i nie wyciął trafnego fragmentu (recall)?"
+    ],
+    "checklistTitle": "Checklista — diagnoza retrievalu",
+    "nextStep": "Następny krok: M6 — RAG: jak z dobrego retrievalu zbudować odpowiedź z cytatami i źródłami."
+  }
+}

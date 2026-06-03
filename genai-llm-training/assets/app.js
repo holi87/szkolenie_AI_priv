@@ -3,17 +3,20 @@
 // żyje w core/*, render w ui/*. Brak treści szkoleniowej tutaj (separacja — AGENTS / standardy-jakosci).
 import { loadTrainingData, questionsForModule } from "./core/data-loader.js";
 import { createProgressStore, createLocalStorageAdapter, createMemoryAdapter } from "./core/progress-store.js";
-import { pathModuleList, finalTestStatus, requiredModules, getPath, isFinalTestUnlocked } from "./core/paths.js";
+import { pathModuleList, finalTestStatus, requiredModules, getPath, isFinalTestUnlocked, requiredPracticalRubrics } from "./core/paths.js";
 import { selectFinalTest } from "./core/test-engine.js";
 import { scorePath } from "./core/scoring.js";
 import { scoreQuestion } from "./core/quiz-engine.js";
 import { buildCertificate } from "./core/certificate.js";
+import { evaluateInteraction } from "./core/interactions/index.js";
 import { el, mount } from "./ui/dom.js";
 import { renderPathSelect } from "./ui/path-select.js";
 import { updateHeader, renderNav } from "./ui/shell.js";
 import { renderQuestion, renderFeedback } from "./ui/quiz-view.js";
 import { renderTest } from "./ui/test-view.js";
 import { renderResult } from "./ui/certificate-view.js";
+import { renderScreens, renderSummary } from "./ui/module-view.js";
+import { renderInteraction } from "./ui/interactions/index.js";
 
 const INLINE_QUIZ_MAX = 8; // wymagania/07: 5–8 pytań z puli modułu
 const $ = (id) => document.getElementById(id);
@@ -134,20 +137,71 @@ function start(data) {
 
     const pathId = store.getActivePath();
     const mod = data.modules.modules.find((m) => m.id === moduleId);
+    const content = (data.moduleContent && data.moduleContent[moduleId]) || null;
     // Filtr po ścieżce: quiz inline pokazuje tylko pytania należące do aktywnej ścieżki (paths[]).
     const pool = questionsForModule(data.questions, moduleId).filter((q) => q.paths.includes(pathId)).slice(0, INLINE_QUIZ_MAX);
+    const alreadyDone = store.getProgress().modules[moduleId]?.status === "completed";
+
     const root = el("div", { class: "view__content" });
     root.appendChild(el("h1", { text: `${mod.id} — ${mod.name}` }));
     root.appendChild(el("p", { class: "muted", text: `Filar: ${mod.pillar} · poziom: ${mod.level} · czas: ~${mod.timeFullMin} min · interakcja: ${mod.interactiveElement}` }));
-    root.appendChild(el("p", { text: "Pełna treść interaktywna tego modułu powstaje w milestone M4. Poniżej kluczowe pojęcia, efekty uczenia i quiz inline (działający silnik quizów — M3)." }));
-    root.appendChild(el("h2", { text: "Kluczowe pojęcia" }));
-    root.appendChild(el("ul", {}, (mod.keyConcepts || []).map((c) => el("li", { text: c }))));
-    root.appendChild(el("h2", { text: "Czego się nauczysz" }));
-    root.appendChild(el("ul", {}, (mod.learningOutcomes || []).map((o) => el("li", { text: o }))));
 
-    root.appendChild(el("h2", { text: `Quiz inline (${pool.length} pytań)` }));
-    const alreadyDone = store.getProgress().modules[moduleId]?.status === "completed";
+    // ----- Treść (ekrany z danych, filtr po ścieżce — wariant S1 skrócony obsłużony przez onlyForPaths) -----
+    if (content) {
+      if (content.intro) root.appendChild(el("p", { text: content.intro }));
+      for (const sec of renderScreens(content.screens, pathId)) root.appendChild(sec);
+    } else {
+      // Fallback (brak pliku treści): kluczowe pojęcia + efekty z modules.json.
+      root.appendChild(el("h2", { text: "Kluczowe pojęcia" }));
+      root.appendChild(el("ul", {}, (mod.keyConcepts || []).map((c) => el("li", { text: c }))));
+      root.appendChild(el("h2", { text: "Czego się nauczysz" }));
+      root.appendChild(el("ul", {}, (mod.learningOutcomes || []).map((o) => el("li", { text: o }))));
+    }
+
+    // ----- Gating ukończenia: gatuje TYLKO quiz inline (self-paced). Interakcja renderuje się na każdej
+    // ścieżce, na której moduł jest widoczny (to ćwiczenie modułu — wg storyboardu np. S1 też robi Prompt clinic),
+    // daje feedback i zapisuje wynik, ale NIE blokuje ukończenia. Czy liczy się jako ZADANIE PRAKTYCZNE
+    // (recordPracticalTask) wynika z bramek paths.json (autorytatywne), nie z pola w treści.
+    const ixConfig = content && content.interaction;
+    const ixRecordsPractical = Boolean(
+      ixConfig && ixConfig.kind === "rubric" && ixConfig.recordsPractical && ixConfig.rubricId &&
+      requiredPracticalRubrics(data.paths, pathId).includes(ixConfig.rubricId),
+    );
     const moduleResults = new Map(); // qid → { awarded, max } z ostatniego sprawdzenia (do % quizu inline)
+    const quizComplete = () => pool.length === 0 || moduleResults.size === pool.length;
+    const stepHint = el("p", {});
+    const refreshHint = () => {
+      stepHint.textContent = !alreadyDone && pool.length > 0 && !quizComplete()
+        ? "Sprawdź wszystkie pytania quizu, aby odblokować ukończenie modułu."
+        : (content && content.summary && content.summary.nextStep) || "Możesz oznaczyć moduł jako ukończony.";
+    };
+    const updateCompleteState = () => { completeBtn.disabled = !alreadyDone && !quizComplete(); refreshHint(); };
+
+    // ----- Interakcja modułowa -----
+    if (ixConfig) {
+      root.appendChild(el("h2", { text: ixConfig.title || mod.interactiveElement }));
+      const ix = renderInteraction(ixConfig);
+      const ixFb = el("div");
+      const ixBtn = el("button", { class: "btn", type: "button", text: ixConfig.kind === "rubric" ? "Oceń" : "Sprawdź" });
+      ixBtn.addEventListener("click", () => {
+        const result = evaluateInteraction(ixConfig, ix.getResponse());
+        ix.showFeedback(result);
+        store.recordInteraction(moduleId, result);
+        mount(ixFb, interactionSummary(result, ixRecordsPractical, pathId));
+        // Zadanie praktyczne zapisywane tylko gdy rubryka jest bramką tej ścieżki → nie zaniża średniej praktyk
+        // na ścieżkach bez tej bramki (np. R1-prompt liczy się dla S2, a na S3 to tylko ćwiczenie).
+        if (ixRecordsPractical) {
+          store.recordPracticalTask({ rubric: ixConfig.rubricId, score: result.score, maxScore: result.max, passed: result.passed === true });
+          refreshHeaderAndNav(); // zapisana praktyka może odblokować test końcowy (gating)
+        }
+      });
+      root.appendChild(ix.node);
+      root.appendChild(el("div", { class: "btn-row" }, [ixBtn]));
+      root.appendChild(ixFb);
+    }
+
+    // ----- Quiz inline (zachowane wiring scoringu — setInlineQuizScore zasila 30% wyniku ścieżki) -----
+    root.appendChild(el("h2", { text: `Quiz inline (${pool.length} pytań)` }));
     pool.forEach((q) => {
       const block = el("div", { class: "quiz-question" });
       const rq = renderQuestion(q, { showMeta: true });
@@ -160,13 +214,13 @@ function start(data) {
         mount(fb, renderFeedback(result));
         store.recordQuizResult(moduleId, { questionId: q.id, correct: result.isCorrect === true, attempt: 1, scoreAwarded: result.awarded, feedbackShown: true, feedback: result.feedback });
         moduleResults.set(q.id, { awarded: result.awarded, max: result.max });
-        if (moduleResults.size === pool.length) completeBtn.disabled = false;
+        updateCompleteState();
       });
       mount(block, rq.node, el("div", { class: "btn-row" }, [check]), fb);
       root.appendChild(block);
     });
 
-    const completeBtn = el("button", { class: "btn", type: "button", text: "Oznacz moduł jako ukończony", disabled: pool.length > 0 && !alreadyDone, on: { click: () => {
+    const completeBtn = el("button", { class: "btn", type: "button", text: "Oznacz moduł jako ukończony", on: { click: () => {
       // % quizu inline zapisz tylko po komplecie odpowiedzi — nie nadpisuj wcześniejszego wyniku przy ponownej wizycie.
       if (pool.length > 0 && moduleResults.size === pool.length) {
         const tot = [...moduleResults.values()].reduce((a, r) => ({ awarded: a.awarded + r.awarded, max: a.max + r.max }), { awarded: 0, max: 0 });
@@ -175,12 +229,31 @@ function start(data) {
       store.setModuleStatus(moduleId, "completed");
       showMenu(); refreshHeaderAndNav(); focusView();
     } } });
+    updateCompleteState();
+
+    // ----- Podsumowanie + następny krok -----
+    if (content && content.summary) root.appendChild(renderSummary(content.summary));
+    refreshHint(); // hint zależny od stanu quizu (gdy completeBtn zablokowany → instrukcja, inaczej → następny krok)
     root.appendChild(el("div", { class: "next-step" }, [
-      el("p", { text: pool.length > 0 ? "Sprawdź wszystkie pytania quizu, aby zakończyć moduł." : "Ten moduł nie ma jeszcze pytań w banku." }),
+      stepHint,
       el("div", { class: "btn-row" }, [completeBtn, el("button", { class: "btn btn--ghost", type: "button", text: "Wróć do modułów", on: { click: () => { showMenu(); focusView(); } } })]),
     ]));
     mount(refs.view, root);
     focusView();
+  }
+
+  /** Zbiorczy feedback interakcji: wynik + (dla zadania praktycznego) próg i informacja, że liczy się do zaliczenia. */
+  function interactionSummary(result, recordsPractical, pathId) {
+    const lines = [el("p", { class: "feedback__head", text: result.summary })];
+    if (recordsPractical) {
+      const ok = result.passed === true;
+      lines.push(el("p", { attrs: { role: "status" }, text: ok
+        ? `Zadanie praktyczne zaliczone (${result.score}/${result.max}) — liczy się do zaliczenia ścieżki ${pathId}.`
+        : `Zadanie praktyczne poniżej progu (${result.score}/${result.max}). Popraw kryteria i oceń ponownie — wynik liczy się do zaliczenia ścieżki ${pathId}.` }));
+    }
+    // passed: true→zielony, false→czerwony, null (rubryka bez progu, np. QA workbench)→neutralny (nie ogłaszaj „poprawnie").
+    const cls = result.passed === true ? " feedback--correct" : result.passed === false ? " feedback--incorrect" : "";
+    return el("div", { class: `feedback${cls}` }, lines);
   }
 
   function showFinalTest() {
@@ -197,11 +270,17 @@ function start(data) {
     state.test = selection;
     refreshHeaderAndNav();
     const ft = prog.finalTest || { attempts: 0, maxAttempts: path.attempts || 3 };
+    // Moduły z zadaniem praktycznym tej ścieżki (z bramek rubrykowych) — gdzie ocena praktyczna powstaje.
+    const practicalModules = [...new Set((path.gates || [])
+      .filter((g) => g.rubric)
+      .map((g) => (data.rubrics.rubrics || []).find((r) => r.id === g.rubric))
+      .filter(Boolean)
+      .map((r) => r.module))];
     mount(refs.view, renderTest(selection, {
       pathName: pathName(data, pathId), path: pathId, passThresholdPct: path.passThresholdPct,
       attemptInfo: `Podejście ${(ft.attempts || 0) + 1} z ${ft.maxAttempts || path.attempts || 3}.`,
-      practicalNote: (path.practicalTasks || 0) > 0
-        ? "Pełne zaliczenie tej ścieżki wymaga też oceny zadania praktycznego — moduł wprowadzania zadań praktycznych dochodzi w M4."
+      practicalNote: practicalModules.length
+        ? `Pełne zaliczenie tej ścieżki wymaga też oceny zadania praktycznego — wykonaj interakcję w module: ${practicalModules.join(", ")} (interakcja zapisuje wynik praktyczny).`
         : null,
       onSubmit: ({ answers, rubricPointsById }) => finishTest(pathId, selection, answers, rubricPointsById),
     }));
@@ -211,8 +290,8 @@ function start(data) {
   function finishTest(pathId, selection, answers, rubricPointsById) {
     const prog = store.getProgress();
     // Wynik ścieżki = ważona kompozycja: quiz inline (z progresu) 30% + test 60% + zadania praktyczne 10%.
-    // UI wprowadzania zadań praktycznych dochodzi w M4 → dla S2/S3 practicalTasks jest puste i bramki praktyczne
-    // pozostają niespełnione (konserwatywnie), więc S2/S3 nie zaliczą się do czasu M4.
+    // Zadania praktyczne (M4): interakcje rubrykowe (M6/M7/M12) zapisują practicalTasks przez recordPracticalTask,
+    // więc bramki practicalTask/moduleMinScore mogą być spełnione i S2/S3 są realnie zaliczalne.
     const result = scorePath(pathId, selection.questions, answers, data.paths, {
       rubricPointsById,
       inlineQuizPct: inlineQuizPctFor(prog, requiredModules(data.paths, pathId)),

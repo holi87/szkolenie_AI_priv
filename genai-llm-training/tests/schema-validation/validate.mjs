@@ -321,6 +321,57 @@ if (paths && rubrics) {
   report.push(`Rubryki: ${rubrics.rubrics.length} (referencje bramek OK; progi <= skala)`);
 }
 
+// ---------------- Treść modułów (module-content/mNN.json) — schemat + integralność + lint syntetyczny ----------------
+// Treść modułów M4: po jednym pliku na moduł, walidowana przeciw module-content.schema.json.
+// Integralność: klucze interakcji wskazują na istniejące kategorie/opcje; zadanie praktyczne → istniejąca rubryka.
+function loadModuleContent() {
+  const CDIR = join(DATA, "module-content");
+  if (!existsSync(CDIR)) { fail("brak treści modułów (data/module-content/) — M4 wymaga 12 plików mNN.json"); return null; }
+  const schema = load(join(SCHEMAS, "module-content.schema.json"));
+  const rubricIds = new Set((rubrics ? rubrics.rubrics : []).map((r) => r.id));
+  const rubricById = new Map((rubrics ? rubrics.rubrics : []).map((r) => [r.id, r]));
+  const present = [];
+  for (let i = 1; i <= 12; i += 1) {
+    const f = `m${String(i).padStart(2, "0")}.json`;
+    const fp = join(CDIR, f);
+    if (!existsSync(fp)) { fail(`brak treści modułu: module-content/${f}`); continue; }
+    const c = load(fp);
+    validate(c, schema, schema, `module-content/${f}`).forEach((x) => fail(`[schema module-content/${f}] ${x}`));
+    const expectMod = "M" + i;
+    if (c.module !== expectMod) fail(`module-content/${f}: module=${c.module} != ${expectMod}`);
+    present.push(c.module);
+    // lint syntetyczny — cały obiekt treści (żadnych realnych PII/domen)
+    const blob = JSON.stringify(c);
+    for (const ff of FORBIDDEN_PATTERNS) if (ff.rx.test(blob)) fail(`module-content/${f}: ${ff.why} — dane muszą być syntetyczne`);
+    // integralność interakcji
+    const ix = c.interaction || {};
+    if (ix.kind === "classify") {
+      const catIds = new Set((ix.categories || []).map((k) => k.id));
+      for (const it of ix.items || []) if (!catIds.has(it.correctCategory)) fail(`module-content/${f}: item ${it.id} correctCategory "${it.correctCategory}" spoza categories`);
+    } else if (ix.kind === "rubric") {
+      for (const cr of ix.criteria || []) {
+        const optIds = new Set((cr.options || []).map((o) => o.id));
+        for (const ok of cr.correctOptionIds || []) if (!optIds.has(ok)) fail(`module-content/${f}: kryterium ${cr.id} correctOptionId "${ok}" spoza options`);
+      }
+      if (ix.recordsPractical) {
+        if (!ix.rubricId) fail(`module-content/${f}: recordsPractical=true wymaga rubricId`);
+        else if (!rubricIds.has(ix.rubricId)) fail(`module-content/${f}: rubricId "${ix.rubricId}" nie istnieje w rubrics.json`);
+        else if (rubricById.get(ix.rubricId).module !== c.module) fail(`module-content/${f}: rubryka ${ix.rubricId} należy do ${rubricById.get(ix.rubricId).module}, nie ${c.module}`);
+        if (typeof ix.scaleMax !== "number" || typeof ix.passThreshold !== "number") fail(`module-content/${f}: zadanie praktyczne wymaga scaleMax i passThreshold`);
+      }
+    } else if (ix.kind === "tune") {
+      const cp = ix.checkpoint || {};
+      const optIds = new Set((cp.options || []).map((o) => o.id));
+      for (const ck of cp.correct || []) if (!optIds.has(ck)) fail(`module-content/${f}: checkpoint correct "${ck}" spoza options`);
+      if (cp.type === "single_choice" && (cp.correct || []).length !== 1) fail(`module-content/${f}: checkpoint single_choice wymaga 1 poprawnej`);
+      if (cp.type === "multiple_choice" && (cp.correct || []).length < 1) fail(`module-content/${f}: checkpoint multiple_choice wymaga >=1 poprawnej`);
+    }
+  }
+  return present;
+}
+const contentMods = loadModuleContent();
+if (contentMods) report.push(`Treść modułów: ${contentMods.length}/12 (${contentMods.join(",")})`);
+
 // ---------------- Wynik ----------------
 console.log(report.join("\n"));
 if (warn.length) console.log("\n⚠️  OSTRZEŻENIA:\n - " + warn.join("\n - "));

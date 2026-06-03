@@ -5,6 +5,18 @@
 /** Shardy banku pytań: data/questions/m01.json … m12.json (po jednym na moduł). */
 export const QUESTION_SHARDS = Array.from({ length: 12 }, (_, i) => `m${String(i + 1).padStart(2, "0")}.json`);
 
+/** Shardy treści modułów: data/module-content/m01.json … m12.json (treść + config interakcji per moduł). */
+export const MODULE_CONTENT_SHARDS = Array.from({ length: 12 }, (_, i) => `m${String(i + 1).padStart(2, "0")}.json`);
+
+/** Scala pliki treści modułów w mapę { M1: {...}, … } po polu `module`. */
+export function mergeModuleContent(contentObjects) {
+  const map = {};
+  for (const c of contentObjects) {
+    if (c && c.module) map[c.module] = c;
+  }
+  return map;
+}
+
 /**
  * Scala shardy { questions: [...] } w jedną płaską tablicę pytań.
  * Wykrywa duplikaty id (konserwatywnie — rzuca, bo scoring zależy od unikalności).
@@ -48,13 +60,23 @@ export async function loadTrainingData(opts = {}) {
   const fetchImpl = opts.fetchImpl || globalThis.fetch;
   if (typeof fetchImpl !== "function") throw new Error("Brak fetch — podaj opts.fetchImpl");
 
-  const [modules, paths, rubrics, scenarios, ...shards] = await Promise.all([
+  // Dane wymagane (rzucają przy braku): kontrakty + bank pytań.
+  const [modules, paths, rubrics, scenarios, ...questionShards] = await Promise.all([
     fetchJson(`${base}modules.json`, fetchImpl),
     fetchJson(`${base}paths.json`, fetchImpl),
     fetchJson(`${base}rubrics.json`, fetchImpl),
     fetchJson(`${base}scenarios.json`, fetchImpl),
     ...QUESTION_SHARDS.map((f) => fetchJson(`${base}questions/${f}`, fetchImpl)),
   ]);
+  // Treść modułów jest TOLERANCYJNA: brak/niepoprawny plik nie wywala aplikacji — moduł dostaje fallback
+  // (kluczowe pojęcia z modules.json). Komplet 12 plików egzekwuje walidator danych (CI), nie runtime.
+  const contentShards = await Promise.all(
+    MODULE_CONTENT_SHARDS.map((f) => fetchJson(`${base}module-content/${f}`, fetchImpl).catch(() => null)),
+  );
 
-  return { modules, paths, rubrics, scenarios, questions: mergeQuestionBank(shards) };
+  return {
+    modules, paths, rubrics, scenarios,
+    questions: mergeQuestionBank(questionShards),
+    moduleContent: mergeModuleContent(contentShards.filter(Boolean)),
+  };
 }

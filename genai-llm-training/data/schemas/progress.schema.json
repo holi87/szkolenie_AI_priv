@@ -47,6 +47,20 @@
                 "additionalProperties": false
               }
             },
+            "interaction": {
+              "type": "object",
+              "description": "Wynik interakcji modułowej (M4): klasyfikator/rubryka/strojenie — feedback i zapis wyniku (#20).",
+              "required": ["kind", "score", "max"],
+              "properties": {
+                "kind": { "type": "string", "enum": ["classify", "rubric", "tune"] },
+                "score": { "type": "number", "minimum": 0 },
+                "max": { "type": "number", "minimum": 0 },
+                "pct": { "type": "number", "minimum": 0, "maximum": 100 },
+                "passed": { "type": "boolean" },
+                "completedAt": { "type": "string" }
+              },
+              "additionalProperties": false
+            },
             "completedAt": { "type": "string" }
           },
           "additionalProperties": false

@@ -1,0 +1,137 @@
+{
+  "_meta": {
+    "module": "M2",
+    "issue": "#20 [M2] Architektura LLM na poziomie praktycznym (z wariantem S1 skróconym)",
+    "storyboard": "docs/storyboard/m02-architektura.md",
+    "interaction": "Licznik kontekstu (kind: tune)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (PipeDemo/SklepDemo/NotkaApp, identyfikatory testowe). Output interakcji jest prerenderowany (lookup po poziomie), nie z żywego modelu. ZERO PII, ZERO realnych domen.",
+    "note": "6 ekranów treści + interakcja tune + podsumowanie. Wariant S1 SKRÓCONY realizowany przez onlyForPaths na blokach (token: przykład liczbowy S2/S3; transformer/attention: rdzeń S1 vs diagram S2/S3; inference cost S3). Quiz inline = pula questions/m02.json (Q14–Q15 mają paths S2/S3 — pominięcie kolejności dla S1 jest już tam wyegzekwowane)."
+  },
+  "module": "M2",
+  "intro": "Model nie „czyta” dokumentu jak człowiek — pracuje na tokenach i ma skończone okno kontekstu. Dla testera to nie ciekawostka: ucięty wymóg, pominięta sekcja specyfikacji albo halucynacja przy zbyt długim wejściu wprost psują jakość decyzji. Ten moduł daje intuicję (bez matematyki): token, okno kontekstu, transformer i uwaga, oraz dlaczego więcej parametrów nie znaczy lepiej.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Po co testerowi architektura LLM",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Zanim zaufasz odpowiedzi modelu na pytanie o specyfikację czy defekt, warto wiedzieć, jak model w ogóle „widzi” tekst. Nie czyta go jak człowiek — rozbija na tokeny i mieści tylko tyle, ile zmieści się w oknie kontekstu." },
+        { "kind": "list", "items": [
+          "Ucięty wymóg — model odpowiada bez fragmentu, który wypadł z okna.",
+          "Pominięta sekcja specyfikacji — kluczowe kryterium nigdy nie trafiło do kontekstu.",
+          "Halucynacja przy zbyt długim wejściu — brak danych zastąpiony zmyśleniem."
+        ] },
+        { "kind": "paragraph", "text": "Poznasz cztery rzeczy: czym jest token i okno kontekstu, trzy skutki za małego kontekstu, intuicję transformera i uwagi oraz to, że liczba parametrów nie jest gwarancją jakości. Na koniec sam zmniejszysz okno kontekstu w interakcji „Licznik kontekstu”." },
+        { "kind": "callout", "variant": "info", "onlyForPaths": ["S1"], "title": "Skrót dla Twojej ścieżki", "text": "Najważniejsze pytanie biznesowe brzmi: „czy ten dokument w ogóle zmieści się w oknie modelu?”. Jeśli nie — model i tak odpowie, ale może pominąć to, co istotne." }
+      ]
+    },
+    {
+      "id": "s2-token",
+      "title": "Token i tokenizacja",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Token", "original": "token", "text": "najmniejszy fragment tekstu, na którym pracuje model — to nie całe słowo, lecz część słowa, pojedynczy znak albo spacja." },
+        { "kind": "definition", "term": "Tokenizacja", "original": "tokenization", "text": "rozbicie tekstu na tokeny, które model wykonuje, zanim cokolwiek przetworzy." },
+        { "kind": "paragraph", "text": "Wniosek na co dzień: koszt i limity liczy się w tokenach, nie w słowach ani stronach. „Krótki” akapit po polsku potrafi zająć więcej tokenów, niż się wydaje." },
+        { "kind": "callout", "variant": "info", "onlyForPaths": ["S2", "S3"], "title": "Przykład orientacyjny", "text": "Zdanie z fikcyjnego raportu „Zlecenie ZX-204 nie przeszło walidacji” to orientacyjnie kilkanaście tokenów — bo „ZX-204” rozpada się na kilka fragmentów, a polskie końcówki dokładają kolejne. Reguła kciuka: 1 token ≈ kilka znaków, a polski bywa „droższy” w tokenach niż angielski." }
+      ]
+    },
+    {
+      "id": "s3-okno-kontekstu",
+      "title": "Okno kontekstu — dlaczego długi dokument nie wchodzi w całości",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Okno kontekstu", "original": "context window", "text": "maksymalna liczba tokenów, jaką model „widzi” naraz — obejmuje i wejście (dokument, pytanie), i generowaną odpowiedź." },
+        { "kind": "paragraph", "text": "Gdy dokument plus pytanie plus odpowiedź przekraczają ten limit, część wejścia musi wypaść — model jej po prostu nie zobaczy." },
+        { "kind": "callout", "variant": "info", "title": "Analogia biurka", "text": "Okno kontekstu to biurko o stałej powierzchni. Każda nowa kartka spycha najstarsze poza krawędź — nie znikają, bo „nieważne”, tylko dlatego, że zabrakło miejsca." },
+        { "kind": "callout", "variant": "warn", "title": "Zasada decyzyjna", "text": "„Wkleiłem cały dokument” nie znaczy „model to przeczytał”. Najpierw sprawdź, czy treść mieści się w oknie kontekstu." }
+      ]
+    },
+    {
+      "id": "s4-trzy-skutki",
+      "title": "Trzy skutki zbyt małego kontekstu",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Gdy istotny fragment wypadnie z okna, pojawiają się trzy typowe skutki — wszystkie groźne dla jakości decyzji testerskiej." },
+        { "kind": "list", "ordered": true, "items": [
+          "Pominięcie informacji — model odpowiada bez kluczowego wymogu, bo go nie widział.",
+          "Niespójność — w długiej rozmowie model „zapomina” wcześniejsze ustalenia, które wypadły z okna.",
+          "Halucynacja i zgadywanie — brak danych zostaje zastąpiony zmyśloną, lecz pewnie brzmiącą treścią."
+        ] },
+        { "kind": "paragraph", "onlyForPaths": ["S2", "S3"], "text": "Mini-przykłady QA: model streszcza specyfikację PipeDemo, ale pomija kryterium z sekcji, która wypadła (pominięcie); w długim wątku o defekcie ORD-TEST-777 zaczyna ignorować ustalenia z początku (niespójność); zapytany o nieistniejący już w kontekście wymóg, podaje go „z głowy” (halucynacja)." },
+        { "kind": "callout", "variant": "warn", "onlyForPaths": ["S1"], "title": "Dlaczego to ryzyko dla jakości", "text": "Każdy z tych skutków wygląda jak normalna odpowiedź — model nie ostrzega, że czegoś nie widział. Dlatego decyzja oparta na takiej odpowiedzi może być cicho błędna." }
+      ]
+    },
+    {
+      "id": "s5-transformer-uwaga",
+      "title": "Transformer i uwaga — intuicja",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "onlyForPaths": ["S1"], "text": "W uproszczeniu: model uczy się powiązań między fragmentami tekstu, dzięki czemu rozumie, że odległe słowa mogą się do siebie odnosić. To wszystko, co musisz tu zapamiętać." },
+        { "kind": "definition", "onlyForPaths": ["S2", "S3"], "term": "Transformer", "original": "transformer", "text": "architektura, która uczy się, które tokeny są ze sobą powiązane — niezależnie od tego, jak daleko leżą od siebie w tekście." },
+        { "kind": "definition", "onlyForPaths": ["S2", "S3"], "term": "Uwaga", "original": "attention", "text": "mechanizm „na co model patrzy” — pozwala połączyć np. zaimek z rzeczownikiem sprzed wielu zdań, ważąc powiązania między tokenami." },
+        { "kind": "diagram", "onlyForPaths": ["S2", "S3"], "textAlt": "Przepływ od tekstu do odpowiedzi w pięciu krokach: 1) tekst wejściowy zostaje rozbity na tokeny (tokenizacja); 2) tokeny trafiają do okna kontekstu; 3) model za pomocą uwagi waży powiązania między tokenami; 4) model generuje kolejne tokeny odpowiedzi; 5) tokeny odpowiedzi zostają złożone z powrotem w czytelny tekst.", "ascii": "tekst -> [tokenizacja] -> tokeny -> [okno kontekstu] -> [uwaga: powiazania] -> [generacja] -> tokeny odpowiedzi -> tekst" },
+        { "kind": "paragraph", "onlyForPaths": ["S3"], "text": "Pogłębienie: uwaga porównuje każdy token z innymi, więc jej koszt rośnie z długością wejścia. Bardzo długie okno kontekstu oznacza więcej obliczeń, czyli wyższy koszt inferencji (inference cost) i dłuższy czas odpowiedzi — to dodatkowy argument, by podawać tylko sekcje istotne dla pytania." }
+      ]
+    },
+    {
+      "id": "s6-parametry",
+      "title": "Więcej parametrów ≠ lepsza jakość",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Parametry", "original": "parameters", "text": "wewnętrzne wagi modelu — można je traktować jak „pojemność” modelu, ale sama ich liczba nie przesądza o trafności na konkretnym zadaniu QA." },
+        { "kind": "paragraph", "text": "O wyniku realnie decydują: dopasowanie modelu do zadania, jakość danych, długość okna kontekstu i sposób promptowania — a nie sama liczba miliardów parametrów." },
+        { "kind": "table", "onlyForPaths": ["S2", "S3"], "caption": "Co naprawdę wpływa na trafność odpowiedzi", "headers": ["Czynnik", "Wpływ na jakość"], "rows": [
+          ["Liczba parametrów", "Pomaga, ale nie gwarantuje trafności na konkretnym zadaniu"],
+          ["Dopasowanie do zadania", "Często ważniejsze niż rozmiar modelu"],
+          ["Okno kontekstu i dobór fragmentów", "Decyduje, czy model w ogóle widzi potrzebne dane"],
+          ["Sposób promptowania", "Wpływa na precyzję i powtarzalność odpowiedzi"]
+        ], "textAlt": "Tabela czterech czynników i ich wpływu na jakość: liczba parametrów pomaga, ale nie gwarantuje trafności; dopasowanie do zadania często ważniejsze niż rozmiar; okno kontekstu i dobór fragmentów decydują, czy model widzi potrzebne dane; sposób promptowania wpływa na precyzję i powtarzalność." },
+        { "kind": "callout", "variant": "warn", "title": "Antywzorzec", "text": "Wybór modelu „bo ma więcej miliardów parametrów”. Przykład syntetyczny: większy model myli fikcyjny format ID defektu w SklepDemo, a mniejszy z lepszym kontekstem trafia. Nie kupuj po liczbie parametrów — sprawdź na swoim zadaniu." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "tune",
+    "id": "m2-licznik-kontekstu",
+    "title": "Licznik kontekstu",
+    "intro": "Pracujesz z syntetyczną specyfikacją PipeDemo złożoną z sześciu sekcji ułożonych po kolei: (1) Zakres ZX-204, (2) Kryteria akceptacji, (3) Dane testowe, (4) Środowisko, (5) Ryzyka, (6) Słownik. Zmniejszaj okno kontekstu i obserwuj, które sekcje wypadają i na które pytania kontrolne nie da się już odpowiedzieć. Reguła: im mniejsze okno, tym wcześniej wypadają dalsze sekcje (najpierw Słownik, na końcu Zakres). Potem rozwiąż checkpoint.",
+    "outputLabel": "Stan dokumentu w oknie dla wybranego limitu:",
+    "controls": [
+      { "id": "limit", "label": "Limit kontekstu", "levels": [
+        { "value": "duzy", "label": "Duży", "effect": "W oknie mieszczą się wszystkie sześć sekcji (Zakres ZX-204, Kryteria akceptacji, Dane testowe, Środowisko, Ryzyka, Słownik). Każde pytanie kontrolne ma podstawę w dostępnej sekcji — wszystkie cztery pytania są możliwe do poprawnej odpowiedzi." },
+        { "value": "sredni", "label": "Średni", "effect": "W oknie zostają sekcje 1–3 (Zakres ZX-204, Kryteria akceptacji, Dane testowe). Poza kontekstem są: Środowisko, Ryzyka i Słownik. Tracą podstawę pytania o środowisko uruchomieniowe i o definicję ze słownika; pytania o zakres i o kryteria akceptacji nadal są możliwe." },
+        { "value": "maly", "label": "Mały", "effect": "W oknie zostaje tylko sekcja 1 (Zakres ZX-204). Poza kontekstem wypadają: Kryteria akceptacji, Dane testowe, Środowisko, Ryzyka i Słownik. Możliwe jest jedynie pytanie o zakres zlecenia; pytanie o kryteria akceptacji, o dane testowe, o środowisko i o słownik tracą podstawę — model odpowiadałby bez źródła." }
+      ] }
+    ],
+    "checkpoint": {
+      "prompt": "Ustawiasz limit kontekstu na „Mały” (w oknie zostaje tylko sekcja Zakres ZX-204). Na które z poniższych pytań kontrolnych model NIE odpowie poprawnie, bo jego sekcja wypadła z okna?",
+      "type": "single_choice",
+      "options": [
+        { "id": "A", "text": "Jakie są kryteria akceptacji zlecenia ZX-204?" },
+        { "id": "B", "text": "Czego dotyczy zakres zlecenia ZX-204?" },
+        { "id": "C", "text": "Jaki jest numer zlecenia opisanego w specyfikacji?" },
+        { "id": "D", "text": "Jak nazywa się analizowana specyfikacja?" }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Zgadza się: przy małym limicie w oknie zostaje tylko sekcja „Zakres ZX-204”. Sekcja „Kryteria akceptacji” wypadła, więc model nie ma na czym oprzeć odpowiedzi o kryteria — to typowy przykład pominięcia informacji.",
+      "feedbackIncorrect": "Pozostałe pytania da się odpowiedzieć z sekcji „Zakres ZX-204”, która została w oknie. Problemem jest pytanie o kryteria akceptacji — ta sekcja wypadła z okna przy małym limicie, więc model odpowiadałby bez źródła."
+    }
+  },
+  "summary": {
+    "points": [
+      "Model pracuje na tokenach, nie na słowach — koszt i limity liczy się w tokenach.",
+      "Okno kontekstu jest skończone; gdy dokument je przekracza, część wejścia wypada i model jej nie widzi.",
+      "Za małe okno daje trzy skutki: pominięcie informacji, niespójność i halucynację.",
+      "Transformer uczy się powiązań między tokenami (uwaga); liczba parametrów nie jest sama w sobie gwarancją jakości."
+    ],
+    "checklist": [
+      "Czy sprawdziłem, że dokument mieści się w oknie kontekstu modelu?",
+      "Czy podałem modelowi tylko sekcje istotne dla pytania, gdy całość była za długa?",
+      "Czy nie ufam odpowiedzi tylko dlatego, że narzędzie przyjęło cały tekst?",
+      "Czy oceniam model po dopasowaniu do zadania, a nie po samej liczbie parametrów?"
+    ],
+    "checklistTitle": "Checklista — okno kontekstu w praktyce QA",
+    "nextStep": "Następny krok: M3 — parametry generacji (temperature, top-p, max tokens)."
+  }
+}

@@ -1,0 +1,180 @@
+{
+  "_meta": {
+    "issue": "#22 [22][M4] Wdroż moduły M7-M9",
+    "storyboard": "docs/storyboard/m08-qa-use-cases.md",
+    "interaction": "QA workbench (kind: rubric, ĆWICZENIOWE — rubryka R4-qa-workbench, bez progu)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (NotkaApp, SklepDemo, przyklad.test, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Egzemplarz typu rubric ĆWICZENIOWY: pominięto passThreshold i recordsPractical (feedback bez bramki). M8 obowiązkowy S2/S3, opcjonalny S1 — bez wariantu skróconego, ten sam ciąg ekranów dla wszystkich ścieżek. Treść interakcji oparta na SC-QA-01 (reset hasła NotkaApp)."
+  },
+  "module": "M8",
+  "intro": "GenAI przyspiesza pracę QA: szkicuje przypadki testowe, checklisty ryzyk i przegląd dokumentacji. Ale LLM generuje najbardziej prawdopodobny tekst, nie zweryfikowaną prawdę — dlatego tester pozostaje decydentem, a model asystentem.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Po co GenAI w QA — i gdzie kończy się jego rola",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "LLM przyspiesza tworzenie i analizę artefaktów QA: przypadków testowych, checklist ryzyk, przeglądu dokumentacji. Generuje jednak najbardziej prawdopodobny tekst, a nie zweryfikowaną prawdę — to Ty oceniasz, co trafi do dokumentacji." },
+        { "kind": "list", "items": [
+          "E1 — generujesz przypadki testowe z wymagania i wskazujesz braki w pokryciu.",
+          "E2 — wykrywasz duplikaty i testy pozorne (bez realnej wartości weryfikacyjnej).",
+          "E3 — tworzysz checklistę ryzyk (risk-based testing).",
+          "E4 — oceniasz, czy output nadaje się do dokumentacji QA po kontroli merytorycznej.",
+          "E5 — wskazujesz, gdzie LLM jest asystentem, a gdzie decyzję podejmuje człowiek."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Czym to różni się od M7", "text": "M7 uczył pisania promptów. M8 skupia się na zastosowaniu LLM w realnych zadaniach QA i ocenie jego outputu. Zasada przewodnia: LLM jako asystent, tester jako decydent." }
+      ]
+    },
+    {
+      "id": "s2-generowanie",
+      "title": "Generowanie przypadków testowych z wymagania",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Z syntetycznego wymagania (np. „Pole hasła: min. 8 znaków, min. 1 cyfra”) prosisz LLM o przypadki testowe: poprawny, graniczny, negatywny. Dobry prompt podaje rolę, wymaganie i format wyjścia (tabela: ID | kroki | dane | oczekiwany wynik)." },
+        { "kind": "list", "items": [
+          "TC poprawny — hasło spełnia wszystkie reguły, rejestracja przechodzi.",
+          "TC graniczny — hasło o dokładnie minimalnej długości (8 znaków).",
+          "TC negatywny — hasło bez cyfry, oczekiwany komunikat o błędzie."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Wniosek", "text": "LLM daje szybki szkielet powiązany z kryteriami akceptacji (acceptance criteria) i śladem powiązań (traceability) wymaganie→test. To punkt startu, nie gotowy zestaw." }
+      ]
+    },
+    {
+      "id": "s3-braki-pokrycia",
+      "title": "Braki w pokryciu — czego LLM nie wymyślił",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Output czytaj pod kątem luk w pokryciu (coverage gaps): brak przypadków granicznych, brak ścieżek błędu, pominięte stany, brak danych testowych dla wartości skrajnych. Technika: zestaw wygenerowanych przypadków z listą kategorii ryzyka i szukaj pustych pól." },
+        { "kind": "callout", "variant": "warn", "title": "Syntetyczny przykład", "text": "Dla logowania LLM pokrył „happy path”, ale pominął lockout po 5 nieudanych próbach. Najczęściej brakuje granic, ścieżek błędu i danych skrajnych — tam szukaj luk." }
+      ]
+    },
+    {
+      "id": "s4-duplikaty-pozorne",
+      "title": "Duplikaty i testy pozorne",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Test pozorny", "original": "test bez realnej wartości weryfikacyjnej", "text": "przypadek, którego asercja niczego nie sprawdza — brak oczekiwanego rezultatu, „test zawsze przejdzie”." },
+        { "kind": "definition", "term": "Duplikat", "text": "dwa przypadki sprawdzające te same warunki innym opisem; rozdmuchują zestaw bez nowego pokrycia." },
+        { "kind": "callout", "variant": "warn", "title": "Wniosek", "text": "Większa liczba przypadków ≠ lepsze pokrycie. Duplikat zwiększa koszt utrzymania, a test pozorny daje fałszywe poczucie bezpieczeństwa." }
+      ]
+    },
+    {
+      "id": "s5-checklista-ryzyk",
+      "title": "Checklista ryzyk dla funkcjonalności",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "LLM szkicuje checklistę ryzyk (risk-based testing) wg kategorii: bezpieczeństwo, dane, wydajność, dostępność, zgodność. Każda pozycja: ryzyko + wpływ + obszar do testu." },
+        { "kind": "table",
+          "title": "Syntetyczna checklista — funkcja „reset hasła” NotkaApp",
+          "headers": ["Kategoria", "Ryzyko", "Obszar do testu"],
+          "rows": [
+            ["Bezpieczeństwo", "Link resetu działa po wygaśnięciu lub wielokrotnie", "Ważność 30 min, jednorazowość linku"],
+            ["Dane", "E-mail użytkownika ujawniony w komunikacie błędu", "Treść odpowiedzi przy nieznanym koncie"],
+            ["Dostępność", "Formularz nieobsługiwalny czytnikiem ekranu", "Zgodność z WCAG, focus i etykiety"]
+          ],
+          "textAlt": "Tabela checklisty ryzyk dla resetu hasła NotkaApp: kategoria Bezpieczeństwo — ryzyko działania linku po wygaśnięciu lub wielokrotnie, obszar to ważność 30 min i jednorazowość; kategoria Dane — ryzyko ujawnienia e-maila w błędzie, obszar to treść odpowiedzi przy nieznanym koncie; kategoria Dostępność — ryzyko braku obsługi czytnikiem ekranu, obszar to zgodność z WCAG, focus i etykiety." },
+        { "kind": "callout", "variant": "info", "text": "LLM proponuje kategorie, tester priorytetyzuje i odrzuca nietrafione." }
+      ]
+    },
+    {
+      "id": "s6-do-dokumentacji",
+      "title": "Czy ten output nadaje się do dokumentacji QA?",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Przed wklejeniem outputu do dokumentacji przejdź kontrolę merytoryczną (review checklist): zgodność z wymaganiem, kompletność, brak zmyślonych faktów (halucynacji), weryfikowalność, brak danych wrażliwych." },
+        { "kind": "list", "ordered": true, "items": [
+          "Dopuść — output zgodny z wymaganiem, kompletny, weryfikowalny, bez danych wrażliwych.",
+          "Popraw — drobne braki lub jeden zmyślony fakt do korekty wobec wymagania.",
+          "Odrzuć — fakty sprzeczne z wymaganiem albo dane wrażliwe; nie używaj bez przeróbki."
+        ] },
+        { "kind": "callout", "variant": "info", "text": "Łącznik do M11 (weryfikacja outputu) i M10 (dane i prywatność)." }
+      ]
+    },
+    {
+      "id": "s7-asystent-decydent",
+      "title": "Asystent czy decydent — gdzie postawić granicę",
+      "type": "decision",
+      "blocks": [
+        { "kind": "paragraph", "text": "LLM może wspierać zadania jako asystent: szkic przypadków, draft checklisty, burza pomysłów. Decyzję podejmuje człowiek (human-in-the-loop): akceptacja przypadków, ocena ryzyka krytycznego, zatwierdzenie do release." },
+        { "kind": "table",
+          "title": "Asystent vs decydent — 3 syntetyczne sytuacje",
+          "headers": ["Sytuacja", "Asystent (LLM)", "Decydent (człowiek)"],
+          "rows": [
+            ["Szkic przypadków testowych z wymagania", "Generuje propozycję", "Zatwierdza zakres"],
+            ["Ocena ryzyka krytycznego", "Proponuje kategorie", "Decyduje o priorytecie"],
+            ["Zatwierdzenie wydania do release", "Nie decyduje", "Podejmuje decyzję"]
+          ],
+          "textAlt": "Tabela trzech sytuacji QA z podziałem na rolę asystenta (LLM) i decydenta (człowiek): szkic przypadków testowych — LLM generuje propozycję, człowiek zatwierdza zakres; ocena ryzyka krytycznego — LLM proponuje kategorie, człowiek decyduje o priorytecie; zatwierdzenie wydania do release — LLM nie decyduje, człowiek podejmuje decyzję." },
+        { "kind": "callout", "variant": "safe", "title": "Granica", "text": "Im wyższa stawka decyzji (release, ryzyko krytyczne, zamknięcie defektu), tym mocniej rola należy do człowieka. LLM przyspiesza, ale nie zatwierdza." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "rubric",
+    "id": "m8-qa-workbench",
+    "title": "QA workbench",
+    "intro": "Wymaganie NotkaApp (fikcyjne): użytkownik resetuje hasło przez link e-mail ważny 30 minut; po 3 błędnych próbach logowania konto blokowane na 15 minut. LLM wygenerował przypadki: TC1 — reset poprawny; TC2 — link wygasł po 30 min; TC3 — 3 błędne hasło → blokada konta. Oceń ten output wg pięciu osi rubryki. To ćwiczenie w trybie nauki — dostajesz feedback, bez progu zaliczenia.",
+    "rubricId": "R4-qa-workbench",
+    "scaleMax": 5,
+    "criteria": [
+      { "id": "K1", "name": "Pokrycie testów", "points": 1,
+        "prompt": "Które zachowania z wymagania NotkaApp output LLM faktycznie POKRYWA (TC1–TC3)?",
+        "hint": "Output pokrywa happy path resetu, wygaśnięcie linku po 30 min i blokadę konta po 3 błędnych próbach.",
+        "options": [
+          { "id": "a", "text": "Poprawny reset (TC1), wygaśnięcie linku po 30 min (TC2) i blokadę konta po 3 błędnych próbach (TC3)." },
+          { "id": "b", "text": "Ponowne użycie tego samego linku resetu i równoległe sesje użytkownika." },
+          { "id": "c", "text": "Wyłącznie kosmetykę: kolor przycisku „Resetuj hasło” i logo na stronie logowania." }
+        ], "correctOptionIds": ["a"] },
+      { "id": "K2", "name": "Braki pokrycia", "points": 1,
+        "prompt": "Które przypadki BRAKUJĄ w output LLM wobec wymagania NotkaApp? Zaznacz dokładnie wszystkie luki.",
+        "hint": "Pominięto trzy luki: pusty e-mail, link jednorazowy użyty dwukrotnie oraz równoległe sesje. Wygaśnięcie linku (TC2) i blokada po 3 próbach (TC3) są już pokryte.",
+        "options": [
+          { "id": "a", "text": "Reset z pustym polem e-mail (walidacja danych wejściowych)." },
+          { "id": "b", "text": "Ponowne użycie tego samego linku resetu (link jednorazowy użyty dwukrotnie)." },
+          { "id": "c", "text": "Równoległe sesje resetu hasła dla tego samego konta." },
+          { "id": "d", "text": "Wygaśnięcie linku po 30 minutach — to już pokrywa TC2." }
+        ], "correctOptionIds": ["a", "b", "c"] },
+      { "id": "K3", "name": "Testy pozorne / duplikaty", "points": 1,
+        "prompt": "Do zestawu dopisano TC4: „Otwórz formularz resetu i sprawdź, że formularz się otwiera; oczekiwany rezultat: brak”. Jak go zakwalifikować?",
+        "hint": "Bez zdefiniowanego oczekiwanego rezultatu asercja niczego nie weryfikuje — to test pozorny, nie wartościowy przypadek graniczny.",
+        "options": [
+          { "id": "a", "text": "Test pozorny — brak oczekiwanego rezultatu, asercja faktycznie nic nie sprawdza." },
+          { "id": "b", "text": "Poprawny przypadek graniczny dla ważności linku 30 minut." },
+          { "id": "c", "text": "Wartościowy przypadek negatywny dla scenariusza blokady konta." }
+        ], "correctOptionIds": ["a"] },
+      { "id": "K4", "name": "Ryzyka / błędne założenia", "points": 1,
+        "prompt": "W notatce do outputu LLM napisał: „blokada konta trwa 24 godziny, a link resetu jest ważny bezterminowo”. Jak to ocenić wobec wymagania?",
+        "hint": "Wymaganie mówi: blokada 15 minut, link ważny 30 minut. Wartości 24 h i „bezterminowo” to zmyślone fakty (halucynacje) sprzeczne z wymaganiem — błędne założenia do odrzucenia lub poprawy.",
+        "options": [
+          { "id": "a", "text": "Błędne założenia sprzeczne z wymaganiem (zmyślone 24 h i „bezterminowo”) — popraw lub odrzuć przed użyciem." },
+          { "id": "b", "text": "Akceptowalne — LLM zwykle podaje wartości bliższe rzeczywistości niż wymaganie." },
+          { "id": "c", "text": "Dopuść z adnotacją, że wartości mogą się różnić zależnie od wersji aplikacji." }
+        ], "correctOptionIds": ["a"] },
+      { "id": "K5", "name": "Granica decyzji (weryfikacja człowieka)", "points": 1,
+        "prompt": "Jak rozdzielić role między LLM a testera przy tym zestawie zgodnie z zasadą „asystent, nie decydent”?",
+        "hint": "LLM szkicuje przypadki i checklistę ryzyk; akceptacja zakresu, ocena ryzyka krytycznego i decyzja o release należą do człowieka (human-in-the-loop).",
+        "options": [
+          { "id": "a", "text": "LLM generuje szkic przypadków i checklistę ryzyk, a tester zatwierdza zakres i decyduje o dopuszczeniu do release." },
+          { "id": "b", "text": "LLM samodzielnie zatwierdza wydanie do produkcji, jeśli wygenerowane testy przechodzą." },
+          { "id": "c", "text": "LLM ostatecznie ocenia ryzyko krytyczne i zamyka defekty bez udziału testera." }
+        ], "correctOptionIds": ["a"] }
+    ]
+  },
+  "summary": {
+    "points": [
+      "E1 — z wymagania generujesz szkic przypadków testowych i czytasz output pod kątem braków w pokryciu (granice, ścieżki błędu, dane skrajne).",
+      "E2 — rozpoznajesz duplikaty (te same warunki innym opisem) i testy pozorne (asercja bez oczekiwanego rezultatu); więcej przypadków ≠ lepsze pokrycie.",
+      "E3 — szkicujesz checklistę ryzyk (bezpieczeństwo, dane, wydajność, dostępność, zgodność), a sam priorytetyzujesz.",
+      "E4 — przed dokumentacją stosujesz kontrolę merytoryczną: dopuść / popraw / odrzuć (zgodność z wymaganiem, brak halucynacji, brak danych wrażliwych).",
+      "E5 — LLM jest asystentem; akceptacja, ryzyko krytyczne i release należą do człowieka (human-in-the-loop)."
+    ],
+    "checklist": [
+      "Czy output pokrywa happy path, granice i ścieżki błędu z wymagania?",
+      "Czy wskazałem braki w pokryciu oraz duplikaty i testy pozorne?",
+      "Czy sprawdziłem output pod kątem faktów sprzecznych z wymaganiem (halucynacji)?",
+      "Czy decyzje o ryzyku krytycznym i release zostały przy człowieku?"
+    ],
+    "checklistTitle": "Checklista — ocena outputu LLM w QA",
+    "nextStep": "Następny krok: M9 — integracje i agenty (dla S3 i opcjonalnie S2); dla S1 powrót do ścieżki obowiązkowej."
+  }
+}

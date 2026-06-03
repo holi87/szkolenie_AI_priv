@@ -8,11 +8,14 @@ import {
   isFinalTestUnlocked,
   finalTestStatus,
   moduleStatus,
+  requiredPracticalRubrics,
+  missingPracticalRubrics,
 } from "../../assets/core/paths.js";
 import { pathsData, modulesData } from "./_fixtures.mjs";
 
-const progressWith = (completed = []) => ({
+const progressWith = (completed = [], practicalTasks = []) => ({
   modules: Object.fromEntries(completed.map((id) => [id, { status: "completed" }])),
+  practicalTasks,
 });
 
 test("pathModuleList: 12 modułów w kolejności, flagi required zgodne z paths.json", () => {
@@ -55,10 +58,56 @@ test("pominięcie JEDNEGO wymaganego modułu wciąż blokuje test (nie da się z
   assert.ok(st.lockedReason.includes("M11"));
 });
 
-test("ukończenie wszystkich wymaganych → test odblokowany (moduły opcjonalne nie blokują)", () => {
+test("ukończenie wszystkich wymaganych → test odblokowany (S1 nie ma zadań praktycznych)", () => {
   const path = "S1";
   const p = progressWith(requiredModules(pathsData, path)); // tylko wymagane, bez opcjonalnych
   assert.deepEqual(pathCompletionBlockers(p, pathsData, path), []);
+  assert.deepEqual(requiredPracticalRubrics(pathsData, path), [], "S1 bez zadań praktycznych");
   assert.equal(isFinalTestUnlocked(p, pathsData, path), true);
   assert.equal(finalTestStatus(p, pathsData, path).status, "available");
+});
+
+test("rubryki praktyczne wymagane: S1 [], S2 [R1-prompt], S3 [R2-rag, R3-eval]", () => {
+  assert.deepEqual(requiredPracticalRubrics(pathsData, "S1"), []);
+  assert.deepEqual(requiredPracticalRubrics(pathsData, "S2"), ["R1-prompt"]);
+  assert.deepEqual(requiredPracticalRubrics(pathsData, "S3").sort(), ["R2-rag", "R3-eval"]);
+});
+
+test("S2: moduły wymagane done, ale BEZ zapisanej praktyki R1-prompt → test ZABLOKOWANY (nie marnuj podejść)", () => {
+  const p = progressWith(requiredModules(pathsData, "S2")); // brak practicalTasks
+  assert.deepEqual(pathCompletionBlockers(p, pathsData, "S2"), [], "moduły ukończone");
+  assert.deepEqual(missingPracticalRubrics(p, pathsData, "S2"), ["R1-prompt"]);
+  assert.equal(isFinalTestUnlocked(p, pathsData, "S2"), false, "brak praktyki blokuje test");
+  const st = finalTestStatus(p, pathsData, "S2");
+  assert.equal(st.status, "locked");
+  assert.ok(st.lockedReason.includes("R1-prompt"));
+});
+
+test("S2: po zapisaniu R1-prompt → test odblokowany", () => {
+  const p = progressWith(requiredModules(pathsData, "S2"), [{ rubric: "R1-prompt", score: 4, maxScore: 5 }]);
+  assert.deepEqual(missingPracticalRubrics(p, pathsData, "S2"), []);
+  assert.equal(isFinalTestUnlocked(p, pathsData, "S2"), true);
+});
+
+test("praktyka zapisana PONIŻEJ progu nadal blokuje test (nie marnuj podejść na pewną porażkę bramki)", () => {
+  // S2: R1-prompt 2/5 < próg 4
+  const s2low = progressWith(requiredModules(pathsData, "S2"), [{ rubric: "R1-prompt", score: 2, maxScore: 5 }]);
+  assert.deepEqual(missingPracticalRubrics(s2low, pathsData, "S2"), ["R1-prompt"]);
+  assert.equal(isFinalTestUnlocked(s2low, pathsData, "S2"), false);
+  // S3: R2-rag 3/5 = 60% < 70%
+  const s3low = progressWith(requiredModules(pathsData, "S3"), [
+    { rubric: "R2-rag", score: 3, maxScore: 5 },
+    { rubric: "R3-eval", score: 4, maxScore: 5 },
+  ]);
+  assert.deepEqual(missingPracticalRubrics(s3low, pathsData, "S3"), ["R2-rag"]);
+  assert.equal(isFinalTestUnlocked(s3low, pathsData, "S3"), false);
+});
+
+test("S3: wymaga zapisanych R2-rag i R3-eval; brak choćby jednej → zablokowany", () => {
+  const reqMods = requiredModules(pathsData, "S3");
+  const onlyOne = progressWith(reqMods, [{ rubric: "R2-rag", score: 4, maxScore: 5 }]);
+  assert.deepEqual(missingPracticalRubrics(onlyOne, pathsData, "S3"), ["R3-eval"]);
+  assert.equal(isFinalTestUnlocked(onlyOne, pathsData, "S3"), false);
+  const both = progressWith(reqMods, [{ rubric: "R2-rag", score: 4, maxScore: 5 }, { rubric: "R3-eval", score: 4, maxScore: 5 }]);
+  assert.equal(isFinalTestUnlocked(both, pathsData, "S3"), true);
 });
