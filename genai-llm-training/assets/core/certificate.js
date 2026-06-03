@@ -16,9 +16,12 @@ const yyyymmdd = (iso) => (iso || "").slice(0, 10).replace(/-/g, "");
 /**
  * Generuje ID zaliczenia. Deterministyczne dla tych samych danych wejściowych.
  * Format: CERT-<ścieżka>-<RRRRMMDD>-<hash>.
+ * PRYWATNOŚĆ (#61): pseudonim NIE wchodzi do preimage. Pełny znacznik czasu (dateIso, ms) sam zapewnia
+ * unikalność wydania, a brak nicku uniemożliwia odzyskanie pseudonimu z eksportu atakiem słownikowym po
+ * znanej liście uczestników (path/scorePct/data są jawne — nick był jedyną niewiadomą hasha).
  */
-export function generateCompletionId(pathId, dateIso, scorePct, label = "") {
-  return `CERT-${pathId}-${yyyymmdd(dateIso)}-${hash(`${pathId}|${dateIso}|${scorePct}|${label}`)}`;
+export function generateCompletionId(pathId, dateIso, scorePct) {
+  return `CERT-${pathId}-${yyyymmdd(dateIso)}-${hash(`${pathId}|${dateIso}|${scorePct}`)}`;
 }
 
 /** Mapuje słabe moduły na obiekty z nazwą (do listy "do powtórzenia"). */
@@ -57,7 +60,9 @@ export function buildCertificate(scoreResult, opts = {}) {
   }
   return {
     issued: true,
-    completionId: generateCompletionId(pathId, dateIso, scorePct, displayName || ""),
+    completionId: generateCompletionId(pathId, dateIso, scorePct),
+    // displayName (pseudonim) służy WYŁĄCZNIE do wyświetlenia na ekranie certyfikatu w trakcie sesji.
+    // Nie wchodzi do completionId (#61) ani do eksportu (buildReport go pomija) — pseudonim nie wycieka.
     ...(displayName ? { displayName } : {}),
     path: pathId,
     pathName: opts.pathName || null,
@@ -85,7 +90,10 @@ function buildReport(progress, opts = {}) {
     criticalQuestionsPassed: Boolean(ft.criticalQuestionsPassed),
     attempts: ft.attempts ?? 0,
     completionId: cert.completionId || null,
-    issuedAt: cert.issuedAt || null,
+    // PRYWATNOŚĆ (#61): w eksporcie skracamy znacznik do daty. Pełny timestamp ms + path + wyniki + czasy
+    // modułów byłby quasi-identyfikatorem deanonimizującym względem listy obecności. Pełny issuedAt zostaje
+    // tylko lokalnie/na ekranie, nie w pobieranym pliku.
+    issuedAt: cert.issuedAt ? String(cert.issuedAt).slice(0, 10) : null,
     weakModules: (ft.weakModules || []).slice(),
     practicalTasks: (progress.practicalTasks || []).map((t) => ({
       rubric: t.rubric,

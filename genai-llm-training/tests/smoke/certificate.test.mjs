@@ -6,11 +6,20 @@ import { modulesData } from "./_fixtures.mjs";
 
 const DATE = "2026-06-03T10:00:00.000Z";
 
-test("generateCompletionId: deterministyczne, w formacie CERT-<ścieżka>-<RRRRMMDD>-<hash>", () => {
-  const id = generateCompletionId("S1", DATE, 88, "Tester Testowy");
+test("generateCompletionId: deterministyczne, format CERT-<ścieżka>-<RRRRMMDD>-<hash>", () => {
+  const id = generateCompletionId("S1", DATE, 88);
   assert.match(id, /^CERT-S1-20260603-[0-9A-Z]+$/);
-  assert.equal(id, generateCompletionId("S1", DATE, 88, "Tester Testowy"), "te same dane → to samo ID");
-  assert.notEqual(id, generateCompletionId("S1", DATE, 89, "Tester Testowy"), "inny wynik → inne ID");
+  assert.equal(id, generateCompletionId("S1", DATE, 88), "te same dane → to samo ID");
+  assert.notEqual(id, generateCompletionId("S1", DATE, 89), "inny wynik → inne ID");
+});
+
+test("completionId NIE koduje pseudonimu — różne nicki → to samo ID (anty-deanonimizacja #61)", () => {
+  const mk = (name) => buildCertificate(
+    { pathId: "S1", scorePct: 88, passed: true, weakModules: [] },
+    { dateIso: DATE, participant: { displayName: name }, modulesData },
+  ).completionId;
+  assert.equal(mk("Anna Kowalska"), mk("ktoś zupełnie inny"),
+    "pseudonim nie może wpływać na completionId (inaczej odzyskuje się go brute-force po liście uczestników)");
 });
 
 test("certyfikat WYDANY tylko przy zaliczeniu: zawiera ścieżkę, datę, wynik i ID", () => {
@@ -60,8 +69,10 @@ test("eksport JSON: minimalny payload raportowy, parsowalny, BEZ PII", () => {
   assert.equal(obj.passed, true);
   assert.equal(obj.completionId, "CERT-S2-20260603-XYZ");
   assert.deepEqual(obj.weakModules, ["M8"]);
+  assert.equal(obj.issuedAt, "2026-06-03", "issuedAt skrócony do daty w eksporcie (#61, anty-quasi-identyfikator)");
   // brak danych wrażliwych: zero e-maili, brak imienia/displayName w eksporcie
   assert.ok(!json.includes("@"), "brak e-maila");
+  assert.ok(!json.includes("Tester"), "brak pseudonimu w eksporcie (nawet przez completionId — #61)");
   assert.equal(obj.displayName, undefined, "displayName nie trafia do eksportu raportowego");
   assert.equal(obj.participant, undefined);
   // praktyczne tylko jako rubric/score (bez komentarzy wrażliwych)
@@ -73,9 +84,10 @@ test("eksport CSV: nagłówek + 1 wiersz, bez PII, weakModules złączone", () =
   const lines = csv.split("\n");
   assert.equal(lines.length, 2);
   assert.equal(lines[0], "completionId,path,scorePct,passed,criticalQuestionsPassed,attempts,issuedAt,weakModules,totalTimeSec");
-  assert.ok(lines[1].startsWith("CERT-S2-20260603-XYZ,S2,84,true,true,2,"));
+  assert.ok(lines[1].startsWith("CERT-S2-20260603-XYZ,S2,84,true,true,2,2026-06-03,"), "issuedAt skrócony do daty w CSV (#61)");
   assert.ok(!csv.includes("@"), "brak e-maila");
   assert.ok(!csv.includes("Tester"), "brak imienia w eksporcie");
+  assert.ok(!csv.includes("T10:"), "brak pełnego znacznika czasu (ms) w eksporcie CSV (#61)");
 });
 
 test("eksport per-pytanie (#28): jeden wiersz na pytanie z 1. próby, anonimowo, bez PII", () => {
