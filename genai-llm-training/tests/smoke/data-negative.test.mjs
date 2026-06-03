@@ -70,3 +70,22 @@ test("niesyntetyczne dane (realna domena e-mail wstrzyknięta) → walidator FAI
   assert.notEqual(r.code, 0, "walidator MUSI failować na realnej domenie e-mail (dane muszą być syntetyczne)");
   assert.match(r.output, /syntetyczne|e-mail/, "raport powinien wskazać naruszenie polityki danych syntetycznych");
 });
+
+// Hardening lintera (#64): defense-in-depth dla PII/sekretów spoza wąskiej listy webmaili.
+for (const c of [
+  { name: "firmowy e-mail (spoza allowlisty domen)", inject: "kontakt: jan@mojafirma.io", rx: /e-mail|syntetyczne/ },
+  { name: "numer telefonu (PL)", inject: "tel: +48 601 234 567", rx: /telefon|syntetyczne/ },
+  { name: "IBAN", inject: "konto: PL61109010140000071219812874", rx: /IBAN|syntetyczne/ },
+  { name: "sekret/token API", inject: "klucz: sk-proj-abcdefghijklmnop12", rx: /sekret|token|syntetyczne/ },
+]) {
+  test(`niesyntetyczne dane: ${c.name} wstrzyknięte → walidator FAILUJE (#64)`, () => {
+    const dataDir = copyData();
+    const f = join(dataDir, "questions", "m01.json");
+    const doc = JSON.parse(readFileSync(f, "utf8"));
+    doc.questions[0].prompt = `${doc.questions[0].prompt} ${c.inject}`;
+    writeFileSync(f, JSON.stringify(doc, null, 2));
+    const r = runValidator(dataDir);
+    assert.notEqual(r.code, 0, `walidator MUSI failować na: ${c.name}`);
+    assert.match(r.output, c.rx, `raport powinien wskazać kategorię: ${c.name}`);
+  });
+}
