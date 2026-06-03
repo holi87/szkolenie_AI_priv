@@ -48,7 +48,9 @@ export function initLangSwitch(cfg) {
 
   // Popup menu (budowane raz). role=menu + menuitemradio (jeden aktywny).
   const items = [];
-  const menu = el("div", { class: "lang-switch__menu", attrs: { role: "menu", "aria-label": nameOf(cfg.getActive ? cfg.getActive() : "pl") } });
+  // aria-label = stała nazwa CELU menu (chooser języka), nie nazwa aktywnego locale — inaczej etykieta
+  // dezaktualizowałaby się przy zmianie języka (P1 review). Spójne z aria-label triggera w setActive().
+  const menu = el("div", { class: "lang-switch__menu", attrs: { role: "menu", "aria-label": cfg.ariaLabel || "Język / Language" } });
   menu.hidden = true;
   for (const loc of LOCALES) {
     const check = el("span", { class: "lang-switch__option-check", attrs: { "aria-hidden": "true" } }); // wypełniany ikoną gdy aktywny
