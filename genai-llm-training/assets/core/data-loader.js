@@ -42,6 +42,22 @@ export function questionsForModule(bank, moduleId) {
   return bank.filter((q) => q.module === moduleId).sort((a, b) => a.id.localeCompare(b.id));
 }
 
+/** Scala strukturę modułów (single-source) z etykietami per-locale po ID → kształt jak dawne modules.json. */
+export function applyModuleLabels(modulesStruct, labels = {}) {
+  return {
+    ...modulesStruct,
+    modules: (modulesStruct.modules || []).map((m) => ({ ...m, ...(labels[m.id] || {}) })),
+  };
+}
+
+/** Scala strukturę ścieżek (single-source) z etykietami per-locale po ID → kształt jak dawne paths.json. */
+export function applyPathLabels(pathsStruct, labels = {}) {
+  const labelPaths = (labels && labels.paths) || {};
+  const paths = {};
+  for (const [id, p] of Object.entries(pathsStruct.paths || {})) paths[id] = { ...p, ...(labelPaths[id] || {}) };
+  return { ...pathsStruct, paths };
+}
+
 async function fetchJson(url, fetchImpl) {
   const res = await fetchImpl(url);
   if (!res.ok) throw new Error(`Nie udało się załadować ${url}: HTTP ${res.status}`);
@@ -50,32 +66,41 @@ async function fetchJson(url, fetchImpl) {
 
 /**
  * Ładuje wszystkie dane szkolenia przez fetch (przeglądarka / serwer statyczny).
+ * Układ per-locale (ADR-0004): struktura WSPÓLNA w `${base}` (modules.json/paths.json), treść i etykiety
+ * w `${base}${locale}/`. Etykiety scalane po ID → kształt zwracany jak dawniej (UI bez zmian).
  * @param {object} [opts]
- * @param {string} [opts.basePath="data/"] - WZGLĘDNA baza do data/ (działa z podścieżki Pages)
+ * @param {string} [opts.basePath="data/"] - WZGLĘDNA baza danych (działa z podścieżki Pages)
+ * @param {string} [opts.locale="pl"] - locale treści/etykiet (katalog `${base}${locale}/`)
  * @param {Function} [opts.fetchImpl=fetch] - wstrzykiwalny fetch (testowalność)
- * @returns {Promise<{modules, paths, rubrics, scenarios, questions}>}
+ * @returns {Promise<{modules, paths, rubrics, scenarios, questions, moduleContent}>}
  */
 export async function loadTrainingData(opts = {}) {
   const base = opts.basePath || "data/";
+  const locale = opts.locale || "pl";
+  const loc = `${base}${locale}/`;
   const fetchImpl = opts.fetchImpl || globalThis.fetch;
   if (typeof fetchImpl !== "function") throw new Error("Brak fetch — podaj opts.fetchImpl");
 
-  // Dane wymagane (rzucają przy braku): kontrakty + bank pytań.
-  const [modules, paths, rubrics, scenarios, ...questionShards] = await Promise.all([
+  // Wymagane: struktura (wspólna) + etykiety i treść (per-locale) + bank pytań.
+  const [modulesStruct, pathsStruct, modulesLabels, pathsLabels, rubrics, scenarios, ...questionShards] = await Promise.all([
     fetchJson(`${base}modules.json`, fetchImpl),
     fetchJson(`${base}paths.json`, fetchImpl),
-    fetchJson(`${base}rubrics.json`, fetchImpl),
-    fetchJson(`${base}scenarios.json`, fetchImpl),
-    ...QUESTION_SHARDS.map((f) => fetchJson(`${base}questions/${f}`, fetchImpl)),
+    fetchJson(`${loc}modules.labels.json`, fetchImpl),
+    fetchJson(`${loc}paths.labels.json`, fetchImpl),
+    fetchJson(`${loc}rubrics.json`, fetchImpl),
+    fetchJson(`${loc}scenarios.json`, fetchImpl),
+    ...QUESTION_SHARDS.map((f) => fetchJson(`${loc}questions/${f}`, fetchImpl)),
   ]);
   // Treść modułów jest TOLERANCYJNA: brak/niepoprawny plik nie wywala aplikacji — moduł dostaje fallback
-  // (kluczowe pojęcia z modules.json). Komplet 12 plików egzekwuje walidator danych (CI), nie runtime.
+  // (kluczowe pojęcia z etykiet modułów). Komplet 12 plików egzekwuje walidator danych (CI), nie runtime.
   const contentShards = await Promise.all(
-    MODULE_CONTENT_SHARDS.map((f) => fetchJson(`${base}module-content/${f}`, fetchImpl).catch(() => null)),
+    MODULE_CONTENT_SHARDS.map((f) => fetchJson(`${loc}module-content/${f}`, fetchImpl).catch(() => null)),
   );
 
   return {
-    modules, paths, rubrics, scenarios,
+    modules: applyModuleLabels(modulesStruct, modulesLabels),
+    paths: applyPathLabels(pathsStruct, pathsLabels),
+    rubrics, scenarios,
     questions: mergeQuestionBank(questionShards),
     moduleContent: mergeModuleContent(contentShards.filter(Boolean)),
   };

@@ -8,7 +8,7 @@ import { dirname, join } from "node:path";
 import { evaluateInteraction, evaluateClassify, evaluateRubric, evaluateTune } from "../../assets/core/interactions/index.js";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const content = (m) => JSON.parse(readFileSync(join(HERE, "..", "..", "data", "module-content", `${m}.json`), "utf8"));
+const content = (m) => JSON.parse(readFileSync(join(HERE, "..", "..", "data", "pl", "module-content", `${m}.json`), "utf8"));
 
 // odpowiedzi „w pełni poprawne" wygenerowane z klucza danej interakcji
 const allCorrectClassify = (cfg) => Object.fromEntries(cfg.items.map((it) => [it.id, it.correctCategory]));

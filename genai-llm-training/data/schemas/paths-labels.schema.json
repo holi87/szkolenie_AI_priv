@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "paths-labels.schema.json",
+  "title": "Etykiety ścieżek per-locale",
+  "description": "Kontrakt data/<lang>/paths.labels.json — prose wyświetlana ścieżek, po ID (carve-out z paths.json, ADR-0004). Struktura/gates/progi single-source w data/paths.json.",
+  "type": "object",
+  "required": ["paths"],
+  "properties": {
+    "paths": {
+      "type": "object",
+      "required": ["S1", "S2", "S3"],
+      "patternProperties": {
+        "^S[123]$": {
+          "type": "object",
+          "required": ["name", "assumedPathTime"],
+          "properties": {
+            "name": { "type": "string", "minLength": 3 },
+            "assumedPathTime": { "type": "string" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

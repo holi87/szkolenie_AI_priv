@@ -1,0 +1,16 @@
+{
+  "paths": {
+    "S1": {
+      "name": "Nietechniczna / decyzyjna",
+      "assumedPathTime": "3.5-4.5 h (A4)"
+    },
+    "S2": {
+      "name": "Praktyk-użytkownik / QA",
+      "assumedPathTime": "6-7 h (A4)"
+    },
+    "S3": {
+      "name": "Inżynier / automatyzacja / techniczny QA",
+      "assumedPathTime": "9-10 h (A4)"
+    }
+  }
+}

@@ -219,8 +219,10 @@ export function renderReport(pilot, result) {
 function loadBankAndGolden(dataDir) {
   const read = (p) => JSON.parse(readFileSync(join(dataDir, p), "utf8"));
   const questionsById = new Map();
+  // Bank kanoniczny (PL) — pola scoringowe są parytetowo zamrożone między locale (ADR-0004), więc
+  // kalibracja trudności/golden działa na kanonie. golden-set.json jest wspólny (language-neutral).
   for (let i = 1; i <= 12; i += 1) {
-    for (const q of read(`questions/m${String(i).padStart(2, "0")}.json`).questions || []) {
+    for (const q of read(`pl/questions/m${String(i).padStart(2, "0")}.json`).questions || []) {
       questionsById.set(q.id, { difficulty: q.difficulty, isCritical: !!q.isCritical, golden: !!q.golden, module: q.module, paths: q.paths });
     }
   }

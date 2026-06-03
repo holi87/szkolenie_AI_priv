@@ -43,7 +43,7 @@ test("walidator PRZECHODZI na nietkniętych, realnych danych (sanity — kontrol
 test("pusty moduł treści (brak ekranów + module) → walidator FAILUJE (exit != 0)", () => {
   const dataDir = copyData();
   // Psujemy treść M5: usuwamy wymagane pola (module, screens) — symulacja "pustego modułu".
-  writeFileSync(join(dataDir, "module-content", "m05.json"), JSON.stringify({ _meta: { note: "pusty" } }, null, 2));
+  writeFileSync(join(dataDir, "pl", "module-content", "m05.json"), JSON.stringify({ _meta: { note: "pusty" } }, null, 2));
   const r = runValidator(dataDir);
   assert.notEqual(r.code, 0, "walidator MUSI failować na pustym module treści");
   assert.match(r.output, /m05|M5|module-content/, "raport błędu powinien wskazać uszkodzony moduł");
@@ -51,7 +51,7 @@ test("pusty moduł treści (brak ekranów + module) → walidator FAILUJE (exit 
 
 test("uszkodzony bank pytań (usunięte pytanie → zła liczba) → walidator FAILUJE", () => {
   const dataDir = copyData();
-  const f = join(dataDir, "questions", "m01.json");
+  const f = join(dataDir, "pl", "questions", "m01.json");
   const doc = JSON.parse(readFileSync(f, "utf8"));
   doc.questions = (doc.questions || []).slice(1); // usuń 1 pytanie → liczba per-moduł i total != target
   writeFileSync(f, JSON.stringify(doc, null, 2));
@@ -62,7 +62,7 @@ test("uszkodzony bank pytań (usunięte pytanie → zła liczba) → walidator F
 
 test("niesyntetyczne dane (realna domena e-mail wstrzyknięta) → walidator FAILUJE (lint syntetyczny)", () => {
   const dataDir = copyData();
-  const f = join(dataDir, "questions", "m01.json");
+  const f = join(dataDir, "pl", "questions", "m01.json");
   const doc = JSON.parse(readFileSync(f, "utf8"));
   if (doc.questions && doc.questions[0]) doc.questions[0].prompt = `${doc.questions[0].prompt} kontakt: ktos@gmail.com`;
   writeFileSync(f, JSON.stringify(doc, null, 2));
@@ -80,7 +80,7 @@ for (const c of [
 ]) {
   test(`niesyntetyczne dane: ${c.name} wstrzyknięte → walidator FAILUJE (#64)`, () => {
     const dataDir = copyData();
-    const f = join(dataDir, "questions", "m01.json");
+    const f = join(dataDir, "pl", "questions", "m01.json");
     const doc = JSON.parse(readFileSync(f, "utf8"));
     doc.questions[0].prompt = `${doc.questions[0].prompt} ${c.inject}`;
     writeFileSync(f, JSON.stringify(doc, null, 2));

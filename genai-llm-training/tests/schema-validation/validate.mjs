@@ -15,6 +15,18 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const DATA = process.env.VALIDATE_DATA_DIR || join(HERE, "..", "..", "data");
 const SCHEMAS = join(DATA, "schemas");
 
+// Układ per-locale (ADR-0004, #78): struktura WSPÓLNA w DATA/ (modules.json/paths.json/golden-set.json/schemas),
+// treść + etykiety per-locale w DATA/<lang>/. Locale = podkatalog z questions/ (kanoniczny "pl" musi istnieć).
+function discoverLocales() {
+  if (!existsSync(DATA)) return [];
+  return readdirSync(DATA, { withFileTypes: true })
+    .filter((e) => e.isDirectory() && existsSync(join(DATA, e.name, "questions")))
+    .map((e) => e.name)
+    .sort();
+}
+const LOCALES = discoverLocales();
+const CANON = LOCALES.includes("pl") ? "pl" : LOCALES[0]; // PL kanoniczny
+
 const load = (p) => JSON.parse(readFileSync(p, "utf8"));
 
 // ---------------- Minimalny walidator JSON Schema (subset draft-07) ----------------
@@ -135,10 +147,17 @@ function checkSchema(file, schemaFile) {
   return data;
 }
 
+if (!CANON) fail("brak kanonicznego locale danych (oczekiwano katalogu data/pl/ z questions/)");
+// Struktura WSPÓLNA (single-source): modules.json / paths.json. Treść + etykiety per-locale (kanon = CANON).
 const modules = checkSchema("modules.json", "modules.schema.json");
 const paths = checkSchema("paths.json", "paths.schema.json");
-const scenarios = checkSchema("scenarios.json", "scenarios.schema.json");
-const rubrics = checkSchema("rubrics.json", "rubrics.schema.json");
+const scenarios = CANON ? checkSchema(`${CANON}/scenarios.json`, "scenarios.schema.json") : null;
+const rubrics = CANON ? checkSchema(`${CANON}/rubrics.json`, "rubrics.schema.json") : null;
+// Etykiety per-locale (carve-out). Schemat wymusza komplet ID (M1..M12 / S1..S3) → brak etykiety = błąd.
+for (const lang of LOCALES) {
+  checkSchema(`${lang}/modules.labels.json`, "modules-labels.schema.json");
+  checkSchema(`${lang}/paths.labels.json`, "paths-labels.schema.json");
+}
 
 // Parsowalność WSZYSTKICH schematów objętych CI (kontrakt = data/schemas/**, także podkatalogi
 // i schematy bez pliku danych, np. progress) — malformowany kontrakt nie może przejść niezauważony.
@@ -158,8 +177,8 @@ for (const sp of walkSchemaFiles(SCHEMAS)) {
 // Bank pytań jest shardowany per moduł: data/questions/mNN.json (każdy <800 LOC).
 // Każdy plik waliduje się przeciw questions.schema.json (envelope {questions:[...]}).
 // Pytania scalamy w jeden zbiór do kontroli pokrycia/agregatów.
-function loadQuestions() {
-  const QDIR = join(DATA, "questions");
+function loadQuestions(locale) {
+  const QDIR = join(DATA, locale, "questions");
   if (!existsSync(QDIR)) return null;
   const files = readdirSync(QDIR).filter((f) => /^m\d{2}\.json$/.test(f)).sort();
   if (files.length === 0) return null;
@@ -167,16 +186,17 @@ function loadQuestions() {
   const all = [];
   for (const f of files) {
     const doc = load(join(QDIR, f));
-    validate(doc, schema, schema, `questions/${f}`).forEach((x) => fail(`[schema questions/${f}] ${x}`));
+    validate(doc, schema, schema, `${locale}/questions/${f}`).forEach((x) => fail(`[schema ${locale}/questions/${f}] ${x}`));
     const modFromName = "M" + String(parseInt(f.slice(1, 3), 10));
     for (const q of doc.questions || []) {
-      if (q.module !== modFromName) fail(`questions/${f}: ${q.id} ma module=${q.module} != ${modFromName} (plik ma zawierać tylko swój moduł)`);
+      if (q.module !== modFromName) fail(`${locale}/questions/${f}: ${q.id} ma module=${q.module} != ${modFromName} (plik ma zawierać tylko swój moduł)`);
     }
     all.push(...(doc.questions || []));
   }
   return all;
 }
-const Qall = loadQuestions();
+// Pokrycie/agregaty liczone na kanonicznym banku (PL). Parytet pozostałych locale = #80.
+const Qall = CANON ? loadQuestions(CANON) : null;
 const goldenDoc = existsSync(join(DATA, "golden-set.json")) ? checkSchema("golden-set.json", "golden-set.schema.json") : null;
 
 const report = [];
@@ -371,9 +391,9 @@ if (paths && rubrics) {
 // ---------------- Treść modułów (module-content/mNN.json) — schemat + integralność + lint syntetyczny ----------------
 // Treść modułów M4: po jednym pliku na moduł, walidowana przeciw module-content.schema.json.
 // Integralność: klucze interakcji wskazują na istniejące kategorie/opcje; zadanie praktyczne → istniejąca rubryka.
-function loadModuleContent() {
-  const CDIR = join(DATA, "module-content");
-  if (!existsSync(CDIR)) { fail("brak treści modułów (data/module-content/) — M4 wymaga 12 plików mNN.json"); return null; }
+function loadModuleContent(locale) {
+  const CDIR = join(DATA, locale, "module-content");
+  if (!existsSync(CDIR)) { fail(`brak treści modułów (data/${locale}/module-content/) — M4 wymaga 12 plików mNN.json`); return null; }
   const schema = load(join(SCHEMAS, "module-content.schema.json"));
   const rubricIds = new Set((rubrics ? rubrics.rubrics : []).map((r) => r.id));
   const rubricById = new Map((rubrics ? rubrics.rubrics : []).map((r) => [r.id, r]));
@@ -381,15 +401,15 @@ function loadModuleContent() {
   for (let i = 1; i <= 12; i += 1) {
     const f = `m${String(i).padStart(2, "0")}.json`;
     const fp = join(CDIR, f);
-    if (!existsSync(fp)) { fail(`brak treści modułu: module-content/${f}`); continue; }
+    if (!existsSync(fp)) { fail(`brak treści modułu: ${locale}/module-content/${f}`); continue; }
     const c = load(fp);
-    validate(c, schema, schema, `module-content/${f}`).forEach((x) => fail(`[schema module-content/${f}] ${x}`));
+    validate(c, schema, schema, `${locale}/module-content/${f}`).forEach((x) => fail(`[schema ${locale}/module-content/${f}] ${x}`));
     const expectMod = "M" + i;
-    if (c.module !== expectMod) fail(`module-content/${f}: module=${c.module} != ${expectMod}`);
+    if (c.module !== expectMod) fail(`${locale}/module-content/${f}: module=${c.module} != ${expectMod}`);
     present.push(c.module);
     // lint syntetyczny — cały obiekt treści (żadnych realnych PII/domen)
     const blob = JSON.stringify(c);
-    lintSynthetic(blob, `module-content/${f}`);
+    lintSynthetic(blob, `${locale}/module-content/${f}`);
     // integralność interakcji
     const ix = c.interaction || {};
     if (ix.kind === "classify") {
@@ -416,7 +436,7 @@ function loadModuleContent() {
   }
   return present;
 }
-const contentMods = loadModuleContent();
+const contentMods = CANON ? loadModuleContent(CANON) : null;
 if (contentMods) report.push(`Treść modułów: ${contentMods.length}/12 (${contentMods.join(",")})`);
 
 // ---------------- Próbka wyników pilotażu (kalibracja #28) — schemat + integralność + lint syntetyczny ----------------

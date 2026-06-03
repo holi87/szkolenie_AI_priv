@@ -36,7 +36,7 @@ function copyData() {
 // Ustawia pozycję poprawnej (correct) dla kolejnych single-correct pytań M1 wg `pick(i, options)`.
 // Zwraca liczbę zmodyfikowanych pytań (długość serii w teście klastra).
 function rewriteM1(dataDir, pick) {
-  const f = join(dataDir, "questions", "m01.json");
+  const f = join(dataDir, "pl", "questions", "m01.json");
   const doc = JSON.parse(readFileSync(f, "utf8"));
   let i = 0;
   for (const q of doc.questions) {
