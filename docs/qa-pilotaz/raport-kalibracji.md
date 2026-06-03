@@ -1,0 +1,92 @@
+# Kalibracja pytań po pilotażu (M5 #28)
+
+> **Status: narzędzie i metodyka gotowe; realna kalibracja czeka na dane z pilotażu.**
+> Issue **#28 pozostaje otwarte** do czasu przeprowadzenia pilotażu na 8–15 osobach — wszystkie kryteria
+> akceptacji #28 wymagają **realnych odpowiedzi uczestników** (odsetek poprawnych vs zakres trudności,
+> >10% niejasności pytań krytycznych, walidacja golden setu). Poniżej dostarczamy gotowe narzędzie, metodykę
+> i **raport demonstracyjny na danych syntetycznych** dowodzący, że proces działa end-to-end.
+
+## Co jest dostarczone (gotowe do uruchomienia na realnych danych)
+
+| Element | Plik |
+|---|---|
+| Narzędzie kalibracji (CLI + czysta funkcja) | `genai-llm-training/tools/calibration/calibrate.mjs` |
+| Kontrakt wejścia (wyniki pilotażu) | `genai-llm-training/data/schemas/pilot-results.schema.json` |
+| Przykład syntetyczny (demo) | `genai-llm-training/data/pilot/sample-pilot-results.json` |
+| Testy narzędzia | `genai-llm-training/tests/smoke/calibration.test.mjs` + `--self-test` w CI |
+
+## Metodyka (wymagania/07, proces kalibracji)
+
+Dla każdego pytania liczymy odsetek poprawnych odpowiedzi i porównujemy z zakresem dla poziomu trudności:
+
+| Poziom | Zakres poprawnych (pilotaż) | Poza zakresem → |
+|---|---|---|
+| L1 podstawowy | 80–95% | popraw lub przenieś poziom |
+| L2 zastosowanie | 55–80% | popraw lub przenieś poziom |
+| L3 analiza/ewaluacja | 35–65% | popraw lub przenieś poziom |
+| L4 ekspercki | 20–45% | popraw lub przenieś poziom |
+
+Zasady:
+- **Pytania krytyczne** są wyłączone z reklasyfikacji trudności (są 100%-bramkowane i konserwatywne — wysoki
+  odsetek poprawnych jest zamierzony). Dla nich liczy się **niejasność**: >10% zgłoszeń → pytanie do przepisania.
+- **Golden set**: oznaczany `validated` tylko gdy wszystkie pokryte pytania golden są w zakresie i mają
+  niejasność ≤ 5%; w przeciwnym razie `wymaga poprawek` (dryf trudności lub niejasność).
+- Pytania spoza banku w pliku pilotażu są raportowane jako `unknown` i pomijane (narzędzie nie wywala się).
+
+## Procedura po pilotażu
+
+1. Zbierz wyniki i ankiety (patrz `plan-komunikacji.md`).
+2. Zbuduj zagregowany plik wg `pilot-results.schema.json` (per pytanie: `attempts`, `correct`, `avgTimeSec`,
+   `ambiguityReports`; `synthetic: false`). **Dane zagregowane, bez PII.**
+3. Uruchom:
+   ```bash
+   cd genai-llm-training
+   node tools/calibration/calibrate.mjs ścieżka/do/pilot-results.json > docs/qa-pilotaz/raport-kalibracji-<data>.md
+   ```
+4. Zrealizuj wskazane akcje: popraw/przenieś pytania poza zakresem, przepisz krytyczne z >10% niejasności,
+   oznacz golden set (`validated` albo zgłoś poprawki). Każda zmiana banku → `node tests/schema-validation/validate.mjs`.
+5. Zamknij **#28** dopiero po wykonaniu kalibracji na realnych danych i naniesieniu wniosków.
+
+## Kryteria akceptacji #28 a stan obecny
+
+| Kryterium #28 | Stan | Czego brakuje |
+|---|---|---|
+| Pytania poza zakresem poprawione/przeniesione | ⏳ | realne % poprawnych z pilotażu |
+| Krytyczne z >10% niejasności przepisane | ⏳ | realne zgłoszenia niejasności |
+| Golden set oznaczony validated/wymaga poprawek | ⏳ | wynik golden na uczestnikach |
+| Raport kalibracji powstaje | ✅ (narzędzie) | uruchomienie na realnych danych |
+
+---
+
+## Raport demonstracyjny (DANE SYNTETYCZNE)
+
+Wygenerowany przez narzędzie na `data/pilot/sample-pilot-results.json` — pokazuje, że proces wykrywa wszystkie
+trzy typy problemów. **To nie są wyniki realnego pilotażu.**
+
+```
+# Raport kalibracji pytań (DANE SYNTETYCZNE / DEMO)
+
+- Uczestnicy: 12 · okno: demo (dane syntetyczne)
+- Pytań przeanalizowanych: 16 (z 16 w pliku)
+
+## Pytania poza zakresem trudności
+| Pytanie | Moduł | Poziom | % popr. | Zakres        | Diagnoza                       |
+|---------|-------|--------|--------:|---------------|--------------------------------|
+| Q017    | M2    | L3     |  25.0%  | 35.0%–65.0%   | za trudne → popraw lub przenieś |
+| Q032    | M4    | L3     |  91.7%  | 35.0%–65.0%   | za łatwe → popraw lub przenieś  |
+
+## Pytania krytyczne z niejasnością > 10% (do przepisania)
+| Pytanie | Moduł | % niejasności | % popr. |
+|---------|-------|--------------:|--------:|
+| Q083    | M10   |       16.7%   |  58.3%  |
+
+## Status golden setu
+- Pokrycie w pilotażu: 7/24
+- Status: wymaga poprawek
+  - Q009: niejasność 8.3% > 5%
+  - Q032: dryf trudności (za łatwe, 91.7%)
+```
+
+> Interpretacja demo: Q017 (L3) wyszło za trudne, Q032 (L3, golden) za łatwe (dryf golden setu), a krytyczne
+> Q083 ma 16,7% zgłoszeń niejasności → do przepisania. Na realnych danych analogiczny raport stanie się
+> podstawą zamknięcia #28.
