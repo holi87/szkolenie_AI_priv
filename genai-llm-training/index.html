@@ -3,26 +3,50 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
   <title>Szkolenie GenAI i LLM — QualityCat</title>
-  <!-- Style i logika dochodzą w M3 (assets/styles.css, assets/app.js). -->
+  <meta name="description" content="Interaktywne szkolenie z GenAI i LLM: ścieżki S1/S2/S3, quizy, test końcowy, certyfikat.">
+  <!-- Ścieżki WZGLĘDNE (wymóg GitHub Pages, ADR-0002). -->
+  <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
   <!-- Skip-link: pierwszy fokusowalny element (WCAG 2.4.1), przed headerem. -->
-  <a class="skip-link" href="#main">Przejdź do treści</a>
+  <a class="skip-link" href="#view">Przejdź do treści</a>
 
-  <header>
-    <!-- Logo/slot, wybór ścieżki, progres — implementacja w M3 (issue #14/#15). -->
-    <strong>Szkolenie GenAI i LLM</strong>
+  <header class="app-header">
+    <div class="app-header__bar">
+      <div class="brand">
+        <span class="brand__logo" aria-hidden="true">◆</span>
+        <span class="brand__name">Szkolenie GenAI i LLM</span>
+      </div>
+      <div class="app-header__meta">
+        <span id="path-indicator" class="path-badge" hidden></span>
+        <button id="nav-toggle" class="btn btn--ghost nav-toggle" type="button"
+                aria-expanded="false" aria-controls="module-nav" hidden>Moduły</button>
+        <button id="reset-btn" class="btn btn--ghost" type="button" hidden>Zacznij od nowa</button>
+      </div>
+    </div>
+    <div id="progress" class="progress" hidden>
+      <div class="progress__track" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+           aria-valuenow="0" aria-labelledby="progress-label">
+        <div id="progress-fill" class="progress__fill" style="width:0%"></div>
+      </div>
+      <span id="progress-label" class="progress__label">Postęp: 0%</span>
+    </div>
   </header>
 
-  <main id="main">
-    <h1>Szkolenie GenAI i LLM dla QualityCat</h1>
-    <p>
-      Szkielet aplikacji (issue #3). Shell, nawigacja ścieżek, ładowanie danych,
-      quiz engine, test końcowy i certyfikat są budowane w milestone M3.
-    </p>
-  </main>
+  <div class="layout">
+    <nav id="module-nav" class="module-nav" aria-label="Moduły szkolenia" hidden></nav>
+    <main id="view" class="view" tabindex="-1">
+      <p class="loading">Ładowanie szkolenia…</p>
+    </main>
+  </div>
 
-  <!-- Dane (data/*.json) ładowane przez fetch() po http(s); uruchom przez serwer statyczny, nie file://. -->
+  <footer class="app-footer">
+    <p>Szkolenie statyczne (GitHub Pages). Progres zapisywany lokalnie w tej przeglądarce.</p>
+  </footer>
+
+  <!-- Dane (data/*.json) ładowane przez fetch() po http(s) — uruchom przez serwer statyczny, nie file://. -->
+  <script type="module" src="assets/app.js"></script>
 </body>
 </html>
