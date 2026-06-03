@@ -1,10 +1,10 @@
 {
   "_meta": {
     "module": "M10",
-    "issue": "#11 [11][M2] Utwórz 5 pytań krytycznych M10",
+    "issue": "#10 [10][M2] Bank pytań — moduł M10 (pytania krytyczne Q081-Q085 z #11)",
     "schema": "../schemas/questions.schema.json",
     "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
-    "note": "5 pytań krytycznych (isCritical) — warunek konieczny zaliczenia, 100% poprawnych. Konserwatywne defaulty: 1 jednoznacznie bezpieczna odpowiedź, dystraktory = realne niebezpieczne zachowania, feedbackIncorrect od 'To jest błąd bezpieczeństwa.'. Pełny moduł M10 (14 pytań) dostarcza #10 (stack)."
+    "note": "Pytania modułu M10. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
   },
   "questions": [
     {
@@ -228,6 +228,431 @@
       "feedbackIncorrect": "To jest błąd bezpieczeństwa. Brak śladu lub zapis surowej treści zamiast metadanych łamie rozliczalność i higienę danych — ślad ma odtwarzać kto/kiedy/narzędzie/cel/kategorię/weryfikację; powtórz sekcję o śladzie audytowym.",
       "references": [
         "M10.8"
+      ]
+    },
+    {
+      "id": "Q086",
+      "module": "M10",
+      "pillar": "security_governance",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Weryfikuje, czy tester poprawnie sklasyfikuje fragment danych jako wymagający anonimizacji przed wklejeniem do modelu.",
+      "prompt": "Masz fragment logu: \"ERROR user=anna.nowak@przyklad.test order=ORD-TEST-777 msg=timeout\". Chcesz go wkleić do zatwierdzonego LLM, by zdiagnozować timeout. Jaka jest poprawna decyzja w bramce bezpieczeństwa danych?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Zanonimizować — zamienić e-mail (i powiązany identyfikator zamówienia) na placeholder, a potem wkleić sam komunikat błędu."
+        },
+        {
+          "id": "B",
+          "text": "Wkleić bez zmian — komunikat o timeoucie jest techniczny, więc e-mail w logu nie ma znaczenia."
+        },
+        {
+          "id": "C",
+          "text": "Uznać za całkowicie zakazane i w ogóle nie analizować tego błędu."
+        },
+        {
+          "id": "D",
+          "text": "Wkleić tylko e-mail, bo to on jest kluczem do zidentyfikowania błędnej sesji."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "E-mail to PII, a w kontekście klienta identyfikator zamówienia też. Fragment należy do kubełka \"zanonimizuj\": usuwasz dane identyfikujące, zachowujesz część techniczną.",
+      "feedbackIncorrect": "Błąd klasyfikacji: e-mail to PII, więc fragment nie jest \"dozwolony\" bez zmian; nie jest też w pełni zakazany — wystarczy anonimizacja. Powtórz regułę trzech kubełków danych (M10.6).",
+      "references": [
+        "M10.6",
+        "M10.5"
+      ]
+    },
+    {
+      "id": "Q087",
+      "module": "M10",
+      "pillar": "security_governance",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Weryfikuje, czy tester rozpozna dane w pełni syntetyczne jako dozwolone do wklejenia bez zmian.",
+      "prompt": "Wygenerowałeś w pełni syntetyczny zestaw danych testowych dla NotkaApp (zmyślone nazwy, adresy w domenie przyklad.test, nieprawidłowe placeholdery), bez powiązania z jakimkolwiek realnym klientem. Chcesz go wkleić do zatwierdzonego LLM. Jaka decyzja jest poprawna?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Dozwolone — dane są w pełni syntetyczne i nie zawierają realnego PII ani sekretów, więc można je wkleić bez anonimizacji."
+        },
+        {
+          "id": "B",
+          "text": "Zakazane — każde dane przypominające e-maile i nazwiska są niedozwolone niezależnie od pochodzenia."
+        },
+        {
+          "id": "C",
+          "text": "Zanonimizować ponownie, bo dane syntetyczne zawsze trzeba traktować jak realne PII."
+        },
+        {
+          "id": "D",
+          "text": "Dozwolone tylko po usunięciu wszystkich adresów w domenie przyklad.test, bo wyglądają jak prawdziwe."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Dane w pełni syntetyczne, bez realnego PII i sekretów, to kubełek \"dozwolone\". Nie wymagają anonimizacji, bo nie wskazują realnej osoby ani nie wynoszą tajemnic firmy.",
+      "feedbackIncorrect": "Błąd: dane syntetyczne bez realnego PII nie wymagają anonimizacji ani zakazu. Domena przyklad.test jest zarezerwowana i nie wskazuje realnej osoby. Powtórz regułę trzech kubełków danych (M10.6).",
+      "references": [
+        "M10.6"
+      ]
+    },
+    {
+      "id": "Q088",
+      "module": "M10",
+      "pillar": "security_governance",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Weryfikuje, czy tester rozpozna jailbreak i nie potraktuje go jako luki produktu ani narzędzia do obejścia polityki.",
+      "prompt": "Podczas testów namówiłeś asystenta AT, żeby \"wszedł w tryb dewelopera bez reguł\" i wtedy wypisał treści, których normalnie odmawia. Jak powinieneś to potraktować?",
+      "options": [
+        {
+          "id": "A",
+          "text": "To jailbreak — obejście reguł modelu; nie raportuję tego jako luki produktu testowanego i nie używam tej sztuczki do omijania polityki firmy."
+        },
+        {
+          "id": "B",
+          "text": "To poważna luka bezpieczeństwa w testowanej aplikacji — zakładam zgłoszenie defektu krytycznego z najwyższym priorytetem."
+        },
+        {
+          "id": "C",
+          "text": "Skoro \"tryb dewelopera\" działa, używam go odtąd do szybszej pracy z danymi klienta, omijając ograniczenia."
+        },
+        {
+          "id": "D",
+          "text": "Publikuję sposób na firmowym czacie jako przydatny trick dla całego zespołu."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Jailbreak celuje w reguły modelu, nie w testowany produkt — nie jest jego defektem. Nie wolno go też używać do obchodzenia polityki firmy ani propagować jako triku.",
+      "feedbackIncorrect": "Błąd: jailbreak to obejście reguł modelu, nie luka testowanej aplikacji, i nie wolno go używać do omijania polityki. Powtórz różnicę jailbreak vs prompt injection (M10.3).",
+      "references": [
+        "M10.3"
+      ]
+    },
+    {
+      "id": "Q089",
+      "module": "M10",
+      "pillar": "security_governance",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Weryfikuje, czy tester dobierze działanie zgodne z polityką, gdy jeden artefakt łączy dane poufne klienta i element techniczny.",
+      "prompt": "Chcesz przeanalizować błąd w SklepDemo. Materiał to fragment kontraktu klienta \"Firma ACME\" oznaczony jako poufny/IP, do którego dołączono krótki, generyczny stack trace bez danych osoby. Jak najlepiej postąpić zgodnie z polityką?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Oddzielam materiały: do modelu wklejam wyłącznie generyczny stack trace, a poufny kontrakt klienta (IP) zostawiam poza modelem jako dane zakazane."
+        },
+        {
+          "id": "B",
+          "text": "Wklejam całość, bo stack trace i tak jest potrzebny, a kontrakt to tylko kontekst."
+        },
+        {
+          "id": "C",
+          "text": "Anonimizuję kontrakt, zamieniając nazwę \"Firma ACME\" na placeholder, i wtedy wklejam całość — łącznie z treścią umowy."
+        },
+        {
+          "id": "D",
+          "text": "Rezygnuję z analizy, bo skoro w paczce jest poufny kontrakt, nic z tego materiału nie wolno użyć."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Generyczny stack trace bez danych osoby jest dozwolony, ale poufny kontrakt (IP klienta) jest zakazany nawet po zmianie nazwy. Rozdzielenie artefaktów pozwala bezpiecznie zanalizować błąd.",
+      "feedbackIncorrect": "Błąd: poufny kontrakt/IP klienta jest zakazany nawet po anonimizacji nazwy, ale generyczny stack trace bez PII można wykorzystać — nie trzeba rezygnować z całości. Powtórz klasyfikację danych i regułę kciuka (M10.6, M10.7).",
+      "references": [
+        "M10.6",
+        "M10.7"
+      ]
+    },
+    {
+      "id": "Q090",
+      "module": "M10",
+      "pillar": "security_governance",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Weryfikuje, czy tester oceni, że pozornie ostrożne obejście polityki nadal stanowi niedopuszczalne ryzyko, i wybierze działanie zgodne.",
+      "prompt": "Zespół chce przyspieszyć analizę i proponuje: surowy log produkcyjny SklepDemo (z e-mailami, tokenami, PESEL-placeholderami) wkleimy do niezatwierdzonego publicznego LLM, ale tylko \"na chwilę\", a po analizie usuniemy konwersację. Jak oceniasz tę propozycję?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Odrzucam — usunięcie konwersacji nie cofa wyniesienia danych ani potencjalnej retencji; należy zanonimizować log i użyć zatwierdzonego narzędzia."
+        },
+        {
+          "id": "B",
+          "text": "Akceptuję, bo skoro konwersacja zostanie usunięta po analizie, dane realnie nie wyciekają."
+        },
+        {
+          "id": "C",
+          "text": "Akceptuję, jeśli analiza potrwa krócej niż kilka minut — krótka ekspozycja nie liczy się jako wyciek."
+        },
+        {
+          "id": "D",
+          "text": "Akceptuję, pod warunkiem że dopiszemy modelowi prośbę o nieużywanie danych do treningu."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Z chwilą wklejenia surowych PII i sekretów do niezatwierdzonego modelu dochodzi do wyniesienia danych; późniejsze usunięcie czatu, krótki czas ani prośba o brak treningu tego nie cofają. Poprawnie: anonimizacja + zatwierdzone narzędzie.",
+      "feedbackIncorrect": "Błąd oceny ryzyka: wyciek następuje w momencie wklejenia danych do niezatwierdzonego modelu; usunięcie czatu, krótki czas czy prośba o brak treningu nie chronią danych. Powtórz data leakage i politykę akceptowalnego użycia (M10.5, M10.7).",
+      "references": [
+        "M10.5",
+        "M10.7"
+      ]
+    },
+    {
+      "id": "Q091",
+      "module": "M10",
+      "pillar": "security_governance",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Weryfikuje, czy tester wskaże wszystkie elementy logu, które są PII lub sekretem i wymagają anonimizacji przed wklejeniem do modelu.",
+      "prompt": "W logu: \"user=anna.nowak@przyklad.test ip=10.0.0.5 token=tok_test_ABC123 order=ORD-TEST-777 msg=payment_failed timestamp=2026-01-02\". Które elementy należy usunąć lub zanonimizować przed wklejeniem do publicznego modelu? (zaznacz wszystkie poprawne)",
+      "options": [
+        {
+          "id": "A",
+          "text": "Adres e-mail user=anna.nowak@przyklad.test (PII)."
+        },
+        {
+          "id": "B",
+          "text": "Token token=tok_test_ABC123 (sekret)."
+        },
+        {
+          "id": "C",
+          "text": "Identyfikator zamówienia order=ORD-TEST-777 w kontekście danych klienta."
+        },
+        {
+          "id": "D",
+          "text": "Generyczny komunikat msg=payment_failed (sam w sobie nie identyfikuje osoby)."
+        },
+        {
+          "id": "E",
+          "text": "Sam znacznik czasu timestamp=2026-01-02 bez powiązania z osobą."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "E-mail to PII, token to sekret, a identyfikator zamówienia wskazuje klienta — wszystkie wymagają anonimizacji. Generyczny komunikat błędu i sama data nie identyfikują osoby.",
+      "feedbackIncorrect": "Niepełny lub błędny zestaw: anonimizować trzeba e-mail (PII), token (sekret) i identyfikator zamówienia w kontekście klienta; generyczny komunikat i sama data nie są PII. Powtórz PII i data leakage (M10.5).",
+      "references": [
+        "M10.5",
+        "M10.6"
+      ]
+    },
+    {
+      "id": "Q092",
+      "module": "M10",
+      "pillar": "security_governance",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Weryfikuje, czy tester wskaże elementy składające się na minimalny ślad audytowy użycia GenAI.",
+      "prompt": "Które z poniższych należą do minimalnego śladu audytowego użycia GenAI w procesie QA? (zaznacz wszystkie poprawne)",
+      "options": [
+        {
+          "id": "A",
+          "text": "Kto użył narzędzia i kiedy."
+        },
+        {
+          "id": "B",
+          "text": "Jakie narzędzie i w jakim celu zostało użyte."
+        },
+        {
+          "id": "C",
+          "text": "Kategoria danych wejściowych (np. syntetyczne / zanonimizowane) oraz sposób weryfikacji wyniku."
+        },
+        {
+          "id": "D",
+          "text": "Pełna, surowa treść promptu wraz z niezanonimizowanymi danymi klienta."
+        },
+        {
+          "id": "E",
+          "text": "Prywatne hasło testera do firmowego konta."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Minimalny ślad to metadane i decyzja: kto, kiedy, narzędzie, cel, kategoria danych i sposób weryfikacji. Zapisywanie surowej treści z PII lub haseł samo tworzy ryzyko wycieku.",
+      "feedbackIncorrect": "Błąd: ślad audytowy obejmuje metadane (kto, kiedy, narzędzie, cel, kategoria danych, weryfikacja), a nie surową treść z PII ani hasła — to tworzyłoby wyciek. Powtórz minimalny ślad audytowy (M10.8).",
+      "references": [
+        "M10.8"
+      ]
+    },
+    {
+      "id": "Q093",
+      "module": "M10",
+      "pillar": "security_governance",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Weryfikuje, czy tester rozpozna sytuacje stanowiące realne ryzyko wycieku danych do modelu.",
+      "prompt": "Które z poniższych sytuacji stanowią realne ryzyko wycieku danych (data leakage) przy pracy z GenAI? (zaznacz wszystkie poprawne)",
+      "options": [
+        {
+          "id": "A",
+          "text": "Wklejenie surowego loga z PESEL-placeholderem 00000000000 osadzonym w realnych danych klienta do publicznego modelu."
+        },
+        {
+          "id": "B",
+          "text": "Wgranie poufnego kontraktu \"Firma ACME\" (IP) do niezatwierdzonego narzędzia online."
+        },
+        {
+          "id": "C",
+          "text": "Przekazanie do modelu tokenu tok_test_ABC123 z firmowego środowiska."
+        },
+        {
+          "id": "D",
+          "text": "Analiza w zatwierdzonym narzędziu w pełni syntetycznego zbioru danych bez realnego PII."
+        },
+        {
+          "id": "E",
+          "text": "Wklejenie generycznego stack trace bez danych osoby do zatwierdzonego narzędzia."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Surowe dane klienta, poufny kontrakt (IP) i token to wynoszenie wrażliwej treści poza kontrolowane środowisko. Dane syntetyczne i generyczny stack trace bez PII nie tworzą wycieku.",
+      "feedbackIncorrect": "Błąd: wyciek tworzą surowe dane klienta, poufny kontrakt (IP) i sekret/token w publicznym lub niezatwierdzonym modelu; dane syntetyczne i generyczny stack trace bez PII nie. Powtórz data leakage i politykę użycia (M10.5, M10.7).",
+      "references": [
+        "M10.5",
+        "M10.7"
+      ]
+    },
+    {
+      "id": "Q094",
+      "module": "M10",
+      "pillar": "security_governance",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Weryfikuje, czy tester rozpozna praktyki zgodne z polityką akceptowalnego użycia GenAI w QA.",
+      "prompt": "Które praktyki są zgodne z polityką akceptowalnego użycia GenAI w pracy QA? (zaznacz wszystkie poprawne)",
+      "options": [
+        {
+          "id": "A",
+          "text": "Używanie wyłącznie narzędzi z firmowej listy zatwierdzonych, ze znaną retencją danych."
+        },
+        {
+          "id": "B",
+          "text": "Anonimizacja PII i usunięcie sekretów przed wprowadzeniem danych do modelu."
+        },
+        {
+          "id": "C",
+          "text": "Przy braku pewności co do zgodności — zachowanie zachowawcze i zapytanie o akceptację przed wprowadzeniem danych."
+        },
+        {
+          "id": "D",
+          "text": "Używanie prywatnego konta w niezatwierdzonym narzędziu, by ominąć firmowe ograniczenia."
+        },
+        {
+          "id": "E",
+          "text": "Wklejanie surowych danych klienta do dowolnego popularnego narzędzia, jeśli analiza jest pilna."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Polityka dopuszcza zatwierdzone narzędzia ze znaną retencją, wymaga anonimizacji i sekretów out, a przy wątpliwościach — zachowania zachowawczego. Obejścia przez konto prywatne czy pilność łamią politykę.",
+      "feedbackIncorrect": "Błąd: zgodne są zatwierdzone narzędzia, anonimizacja oraz zachowawczość przy wątpliwościach; obejście przez konto prywatne lub pilność nie usprawiedliwia wynoszenia danych. Powtórz politykę akceptowalnego użycia (M10.7).",
+      "references": [
+        "M10.7"
       ]
     }
   ]

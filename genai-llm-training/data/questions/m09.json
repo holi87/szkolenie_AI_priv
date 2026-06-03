@@ -1,0 +1,370 @@
+{
+  "_meta": {
+    "module": "M9",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M9. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q073",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Uczestnik rozróżnia agenta od chatbota i workflow z narzędziem po tym, kto decyduje o kolejnych krokach i czy powstają skutki uboczne.",
+      "prompt": "Czym różni się agent od chatbota i od workflow z pojedynczym narzędziem (tool use)?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Agent samodzielnie planuje i wykonuje sekwencję kroków oraz sam decyduje, które narzędzie i kiedy wywołać."
+        },
+        {
+          "id": "B",
+          "text": "Agent to chatbot z ładniejszym interfejsem — generuje tylko tekst, nie wykonuje żadnych akcji."
+        },
+        {
+          "id": "C",
+          "text": "Agent zawsze wywołuje dokładnie jedno, z góry ustalone narzędzie w sztywnym, niezmiennym przepływie."
+        },
+        {
+          "id": "D",
+          "text": "Agent różni się od chatbota wyłącznie tym, że odpowiada szybciej i obsługuje dłuższy kontekst."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Tak — definicyjną cechą agenta jest samodzielne planowanie i wybór kolejnych kroków oraz narzędzi, czego nie robi ani chatbot, ani sztywny workflow.",
+      "feedbackIncorrect": "To opisy chatbota (sam tekst) lub workflow z tool use (jedno ustalone narzędzie). Powtórz ekran o trzech trybach integracji i zwróć uwagę, kto decyduje o krokach.",
+      "references": [
+        "M9.2"
+      ]
+    },
+    {
+      "id": "Q074",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik poprawnie rozpoznaje znaczenie dźwigni kontroli rollback w modelu minimalnej kontroli działania agenta.",
+      "prompt": "W modelu „4 dźwigni kontroli” działania agenta — co oznacza dźwignia rollback?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Możliwość cofnięcia zmiany wprowadzonej przez agenta do stanu sprzed jej wykonania."
+        },
+        {
+          "id": "B",
+          "text": "Zapis wszystkich akcji agenta wraz z czasem ich wykonania."
+        },
+        {
+          "id": "C",
+          "text": "Bramkę, w której człowiek zatwierdza akcję, zanim agent ją wykona."
+        },
+        {
+          "id": "D",
+          "text": "Ograniczenie agenta do najmniejszego potrzebnego zakresu dostępu."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Rollback to zdolność do wycofania zmiany — odróżnia akcje odwracalne od nieodwracalnych i decyduje o sile pozostałych zabezpieczeń.",
+      "feedbackIncorrect": "Mylisz dźwignie: B to audit log, C to human-in-the-loop, D to permission scope. Powtórz ekran o czterech dźwigniach kontroli.",
+      "references": [
+        "M9.6"
+      ]
+    },
+    {
+      "id": "Q075",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik klasyfikuje konkretny opis działania narzędzia AI jako agenta, a nie chatbota czy workflow, na podstawie samodzielnego łańcucha kroków.",
+      "prompt": "Narzędzie w środowisku TEST samo czyta backlog z TestRail-SANDBOX, decyduje które zgłoszenia są duplikatami, łączy je i otwiera 5 pull requestów w repozytorium synt-shop — bez podawania mu listy kroków. Który to tryb integracji?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Agent — samodzielnie planuje i wykonuje wiele kroków oraz dobiera narzędzia."
+        },
+        {
+          "id": "B",
+          "text": "Chatbot — tylko odpowiada tekstem na pytania o backlog."
+        },
+        {
+          "id": "C",
+          "text": "Workflow z tool use — jedno ustalone narzędzie w sztywnym przepływie."
+        },
+        {
+          "id": "D",
+          "text": "Zwykłe wyszukiwanie pełnotekstowe w systemie zarządzania testami."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Tak — narzędzie samo wybiera kroki (analiza, łączenie, otwarcie 5 PR) i różne narzędzia bez podanego scenariusza, co jest cechą agenta.",
+      "feedbackIncorrect": "Chatbot tylko generuje tekst, a workflow wykonuje jedno ustalone narzędzie. Tu narzędzie samo łączy wiele kroków i działa na repozytorium — to agent. Powtórz rozróżnienie trybów.",
+      "references": [
+        "M9.2",
+        "M9.3"
+      ]
+    },
+    {
+      "id": "Q076",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Uczestnik dobiera minimalny zakres dostępu i właściwą bramkę kontroli dla zadania o skutku nieodwracalnym (wysyłka maila).",
+      "prompt": "Delegujesz agentowi zadanie Z3: „Wyślij raport tygodniowy na qa-team@przyklad.test”. Wysłany mail jest nieodwracalny (nie da się go cofnąć). Jak skonfigurować uprawnienia i kontrolę dla tego zadania?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Dostęp do wysyłki maila + human-in-the-loop: człowiek zatwierdza treść przed wysłaniem."
+        },
+        {
+          "id": "B",
+          "text": "Pełny dostęp do skrzynki (odczyt i wysyłka) bez zatwierdzania, bo to tylko raport wewnętrzny."
+        },
+        {
+          "id": "C",
+          "text": "Dostęp do wysyłki bez bramki, ale za to z włączonym rollbackiem maila po wykryciu błędu."
+        },
+        {
+          "id": "D",
+          "text": "Brak dostępu do maila — agent zapisuje raport w repozytorium synt-shop i nigdy nic nie wysyła."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Akcja nieodwracalna (wysłany mail) wymaga bramki HITL przed skutkiem, przy minimalnym zakresie ograniczonym do wysyłki — dokładnie tego potrzebuje Z3.",
+      "feedbackIncorrect": "Maila nie da się cofnąć, więc rollback nie istnieje (C), a brak bramki przy nadmiarowym dostępie to wysokie ryzyko (B). D nie realizuje zadania. Powtórz dobór bramki dla akcji nieodwracalnych.",
+      "references": [
+        "M9.8",
+        "M9.6"
+      ]
+    },
+    {
+      "id": "Q077",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik dobiera minimalny zakres dostępu do repozytorium, ograniczając agenta do gałęzi roboczej z bramką review zamiast zapisu do main.",
+      "prompt": "Zadanie Z4: agent ma „Otworzyć pull request z poprawką w repozytorium synt-shop”. Który zakres dostępu jest minimalny i bezpieczny?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Zapis ograniczony do gałęzi roboczej z otwarciem PR; brak prawa zapisu (push/merge) do gałęzi main."
+        },
+        {
+          "id": "B",
+          "text": "Zapis do gałęzi main, żeby agent od razu scalił poprawkę bez czekania na review."
+        },
+        {
+          "id": "C",
+          "text": "Pełny dostęp administracyjny do repozytorium, w tym kasowanie gałęzi i zmiana ustawień."
+        },
+        {
+          "id": "D",
+          "text": "Tylko odczyt repozytorium — agent opisze poprawkę w komentarzu, ale nie otworzy PR."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Zapis do gałęzi roboczej + PR daje naturalną bramkę review, a brak prawa do main utrzymuje minimalny zakres potrzebny do zadania.",
+      "feedbackIncorrect": "Zapis do main lub dostęp admina to nadmiarowe uprawnienia z dużym skutkiem (B, C), a sam odczyt nie realizuje zadania (D). Powtórz zasadę najmniejszego potrzebnego zakresu i rolę PR jako bramki.",
+      "references": [
+        "M9.8",
+        "M9.7"
+      ]
+    },
+    {
+      "id": "Q078",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik ocenia, które z delegowanych zadań niesie największe ryzyko resztkowe i wymaga najmocniejszej kontroli, ważąc odwracalność i skutek.",
+      "prompt": "Agent w CI PipeDemo (środowisko TEST) ma do wykonania cztery zadania. Które wymaga NAJMOCNIEJSZEJ kontroli (bramka HITL + pełny log + ograniczenie zakresu), bo łączy największy skutek z najtrudniejszą odwracalnością?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Zmień konfigurację środowiska TEST PipeDemo (potencjalny zapis poza TEST, trudny do cofnięcia)."
+        },
+        {
+          "id": "B",
+          "text": "Podsumuj 10 zgłoszeń z TestRail-SANDBOX (sam odczyt, brak zmian)."
+        },
+        {
+          "id": "C",
+          "text": "Odczytaj logi przebiegu testów regresyjnych (sam odczyt)."
+        },
+        {
+          "id": "D",
+          "text": "Utwórz wewnętrzny raport tekstowy z wyników (zapis lokalny, łatwy do nadpisania)."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Zmiana konfiguracji środowiska ma duży skutek i ryzyko zapisu poza TEST, a jest trudna do cofnięcia — reguła kciuka „nieodwracalne + duży skutek = bramka + pełny audyt” wskazuje na nią.",
+      "feedbackIncorrect": "Operacje samego odczytu (B, C) nie zmieniają stanu, a raport lokalny łatwo nadpisać (D). Najmocniejszej kontroli wymaga akcja o dużym skutku i trudnej odwracalności. Powtórz klasyfikację zadań wymagających audytu.",
+      "references": [
+        "M9.7",
+        "M9.8"
+      ]
+    },
+    {
+      "id": "Q079",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik wskazuje wiele realnych ryzyk wynikających z nadania agentowi dostępu do plików, maila, repozytorium i systemu testowego.",
+      "prompt": "Które z poniższych są realnymi ryzykami nadania agentowi szerokiego dostępu do plików, maila, repozytorium i systemu zarządzania testami? Wskaż wszystkie poprawne.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Agent może paść ofiarą prompt injection ukrytego w czytanej treści (np. w komentarzu zgłoszenia) i wykonać niezamierzoną akcję."
+        },
+        {
+          "id": "B",
+          "text": "Błędna decyzja w pierwszym kroku propaguje się przez kolejne kroki, bo agent działa bez pauzy."
+        },
+        {
+          "id": "C",
+          "text": "Agent może wywołać skutek nieodwracalny, np. wysłać mail na zewnątrz albo usunąć pliki, których nie da się przywrócić."
+        },
+        {
+          "id": "D",
+          "text": "Samo nadanie szerokiego dostępu jest bezpieczne, dopóki agent korzysta z modelu z wyłączoną pamięcią rozmów."
+        },
+        {
+          "id": "E",
+          "text": "Szyfrowanie komunikacji end-to-end eliminuje ryzyka wynikające z akcji wykonywanych przez agenta."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Realne ryzyka to podatność na prompt injection, propagacja błędu między krokami i skutki nieodwracalne. Kontrolą jest ograniczanie zakresu i HITL — nie pamięć rozmów ani samo szyfrowanie.",
+      "feedbackIncorrect": "D i E to mylne obietnice: wyłączona pamięć rozmów nie ogranicza uprawnień, a szyfrowanie transportu nie powstrzymuje samej akcji agenta. Powtórz mapę dostępów i źródła ryzyka (M9.4–M9.5).",
+      "references": [
+        "M9.4",
+        "M9.5"
+      ]
+    },
+    {
+      "id": "Q080",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik wskazuje elementy minimalnej kontroli i audytu działania agenta, oddzielając je od pozornych zabezpieczeń.",
+      "prompt": "Które elementy realnie składają się na minimalną kontrolę i audyt działania agenta QA? Wskaż wszystkie poprawne.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Permission scope — ograniczenie agenta do najmniejszego potrzebnego zakresu dostępu."
+        },
+        {
+          "id": "B",
+          "text": "Audit log — zapis, co agent zrobił i kiedy, umożliwiający odtworzenie przebiegu."
+        },
+        {
+          "id": "C",
+          "text": "Human-in-the-loop — bramka zatwierdzenia przez człowieka przed skutkiem nieodwracalnym."
+        },
+        {
+          "id": "D",
+          "text": "Rollback — możliwość cofnięcia wprowadzonej zmiany do stanu poprzedniego."
+        },
+        {
+          "id": "E",
+          "text": "Nadanie agentowi pełnych uprawnień administratora, by nie blokować go brakiem dostępu."
+        },
+        {
+          "id": "F",
+          "text": "Wyłączenie logów, aby agent działał szybciej i nie zostawiał śladów."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "feedbackCorrect": "Cztery dźwignie kontroli to: zakres uprawnień, log audytowy, bramka HITL i rollback. Razem dają minimalną kontrolę i audytowalność.",
+      "feedbackIncorrect": "E i F to anty-wzorce: pełne uprawnienia administratora zwiększają ryzyko, a wyłączenie logów niszczy audyt. Powtórz model „4 dźwigni kontroli” i rolę audit logu (M9.6, M9.8).",
+      "references": [
+        "M9.6",
+        "M9.8"
+      ]
+    }
+  ]
+}

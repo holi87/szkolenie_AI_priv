@@ -1,0 +1,51 @@
+{
+  "_meta": {
+    "issue": "#12 [12][M2] Utwórz golden set 24 pytań",
+    "version": "0.1",
+    "schema": "schemas/golden-set.schema.json",
+    "source": "wymagania/07 (golden set: 24 pyt., po 2/moduł, 8L1/10L2/5L3/1L4, >=5 sec/4 QA/4 tech)",
+    "notes": "Zestaw referencyjny — kalibracja, porównanie edycji, kontrola dryfu trudności. Nie eksponować stale uczestnikom; używać w losowaniu kontrolnym/pilotażu. Pytania oznaczone golden:true w questions.json; tutaj lista id + kompozycja. Przegląd co 6 miesięcy (OWASP/governance)."
+  },
+  "goldenSet": {
+    "reference": true,
+    "size": 24,
+    "composition": {
+      "perModule": 2,
+      "difficulty": {
+        "L1": 8,
+        "L2": 10,
+        "L3": 5,
+        "L4": 1
+      },
+      "minSecurity": 5,
+      "minQA": 4,
+      "minTechnical": 4
+    },
+    "questionIds": [
+      "Q001",
+      "Q005",
+      "Q009",
+      "Q016",
+      "Q018",
+      "Q024",
+      "Q026",
+      "Q032",
+      "Q033",
+      "Q039",
+      "Q041",
+      "Q047",
+      "Q051",
+      "Q058",
+      "Q061",
+      "Q069",
+      "Q073",
+      "Q076",
+      "Q086",
+      "Q089",
+      "Q096",
+      "Q098",
+      "Q107",
+      "Q111"
+    ]
+  }
+}

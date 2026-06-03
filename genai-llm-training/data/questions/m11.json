@@ -1,0 +1,476 @@
+{
+  "_meta": {
+    "module": "M11",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M11. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q095",
+      "module": "M11",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik rozpoznaje w gotowym outputie LLM halucynację w postaci zmyślonego, nieistniejącego źródła.",
+      "prompt": "Tester pyta LLM, jak skonfigurować logowanie w dokumentacji `synt-API v2`. Model odpowiada pewnym tonem: \"Pełną konfigurację opisuje sekcja 7.4 dokumentacji `synt-API v2`\". Tester sprawdza dokumentację i widzi, że kończy się ona na sekcji 6 — sekcja 7.4 nie istnieje. Jak najtrafniej zakwalifikować to zdanie?",
+      "options": [
+        {
+          "id": "A",
+          "text": "To halucynacja — model podał wiarygodnie brzmiące, ale nieuzasadnione źródło (sekcja nie istnieje)."
+        },
+        {
+          "id": "B",
+          "text": "To poprawna odpowiedź, której tester tylko jeszcze nie zdążył zweryfikować."
+        },
+        {
+          "id": "C",
+          "text": "To błąd użytkownika — prompt był źle sformułowany, więc model nie zawinił."
+        },
+        {
+          "id": "D",
+          "text": "To sygnał niepewności — model jawnie zaznaczył, że nie jest pewien sekcji 7.4."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Pewnie brzmiące powołanie się na nieistniejącą sekcję to klasyczna halucynacja — output wygląda wiarygodnie, ale nie jest uzasadniony danymi.",
+      "feedbackIncorrect": "Model nie zasygnalizował niepewności ani nie zacytował realnego źródła — zmyślił sekcję. Powtórz definicję halucynacji (output wiarygodny, ale nieuzasadniony danymi).",
+      "references": [
+        "M11.2",
+        "M11.8"
+      ]
+    },
+    {
+      "id": "Q096",
+      "module": "M11",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Uczestnik wskazuje, że wymuszenie konkretnej odpowiedzi promptem (prompt pressure) jest przyczyną halucynacji, gdy model danej informacji nie ma.",
+      "prompt": "Tester pisze do LLM: \"Podaj dokładny numer wersji, w której NotkaApp dodała rotację logów — odpowiedz samym numerem.\" Model, mimo że nie ma tej informacji w kontekście, odpowiada: \"2.5\". Która przyczyna halucynacji odpowiada za ten wynik?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Presja promptu (prompt pressure) — prompt wymusił konkretną odpowiedź, której model nie miał, więc ją dopowiedział."
+        },
+        {
+          "id": "B",
+          "text": "Konflikt danych — w kontekście były dwie sprzeczne wersje numeru."
+        },
+        {
+          "id": "C",
+          "text": "Nieprecyzyjne źródła — model uśrednił kilka podobnych dokumentów o rotacji logów."
+        },
+        {
+          "id": "D",
+          "text": "Nieaktualny kontekst — pytanie dotyczyło stanu sprzed daty treningu modelu."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Polecenie \"podaj dokładny numer\" zmusza model do udzielenia konkretnej odpowiedzi mimo braku danych — to definicja presji promptu.",
+      "feedbackIncorrect": "W scenariuszu nie ma sprzecznych ani uśrednianych źródeł; problemem jest żądanie konkretu, którego model nie ma. Powtórz przyczynę 'presja promptu' z katalogu pięciu przyczyn.",
+      "references": [
+        "M11.4"
+      ]
+    },
+    {
+      "id": "Q097",
+      "module": "M11",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik nadaje zdaniu z outputu właściwą kategorię oznaczenia, odróżniając zdanie sprawdzalne bez cytatu od zdania jawnie sprzecznego z dokumentacją.",
+      "prompt": "W odpowiedzi LLM o NotkaApp pojawia się zdanie: \"Domyślny poziom logów to DEBUG.\" Twierdzenie jest konkretne i sprawdzalne, ale model nie podaje żadnego źródła, a tester nie ma pod ręką dokumentu, który by je potwierdzał ani obalał. Którą kategorię oznaczenia należy nadać temu zdaniu?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Wymagające źródła — twierdzenie jest sprawdzalne, ale brak cytatu, więc trzeba je potwierdzić w dokumentacji."
+        },
+        {
+          "id": "B",
+          "text": "Nieuzasadnione — zdanie jest wprost sprzeczne ze znanym wymaganiem."
+        },
+        {
+          "id": "C",
+          "text": "Do odrzucenia — zdanie powołuje się na nieistniejące źródło."
+        },
+        {
+          "id": "D",
+          "text": "Poprawne — twierdzenie brzmi rzeczowo, więc można je przyjąć bez dalszej weryfikacji."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Konkretne, sprawdzalne twierdzenie bez cytatu nie jest jeszcze błędne — trafia do kategorii 'wymagające źródła', dopóki nie potwierdzimy go w dokumentacji.",
+      "feedbackIncorrect": "Nic nie wskazuje, że zdanie jest sprzeczne czy zmyślone — po prostu nie ma cytatu. Powtórz różnicę między 'wymagające źródła' a 'nieuzasadnione'/'do odrzucenia'.",
+      "references": [
+        "M11.7",
+        "M11.8"
+      ]
+    },
+    {
+      "id": "Q098",
+      "module": "M11",
+      "pillar": "security_governance",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Uczestnik podejmuje decyzję governance o odrzuceniu LLM, gdy wynik jest jednocześnie niesprawdzalny i obarczony wysokim wpływem błędu.",
+      "prompt": "LLM doradza w odpowiedzi o NotkaApp: \"Możesz bezpiecznie wyłączyć logowanie błędów na produkcji, to nie wpłynie na zgodność.\" Tester nie ma sposobu, by zweryfikować to twierdzenie, a wyłączenie logów na produkcji jest decyzją trudną do odwrócenia i o wysokim wpływie. Jaka decyzja jest najbezpieczniejsza?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Nie polegać na LLM — wynik jest niesprawdzalny, a błąd ma wysoki wpływ; oznaczyć fragment jako ryzykowny i skierować decyzję do eksperta/źródła."
+        },
+        {
+          "id": "B",
+          "text": "Wdrożyć rekomendację — model wypowiedział się pewnym tonem i użył słowa \"bezpiecznie\"."
+        },
+        {
+          "id": "C",
+          "text": "Wdrożyć od razu na produkcji, a logi przywrócić tylko jeśli pojawią się problemy."
+        },
+        {
+          "id": "D",
+          "text": "Poprosić ten sam model o potwierdzenie własnej odpowiedzi i działać zgodnie z drugą odpowiedzią."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Reguła kciuka: brak weryfikowalności LUB wysoki wpływ błędu = nie polegaj na LLM. Tu zachodzą oba warunki, więc decyzję przejmuje człowiek/źródło.",
+      "feedbackIncorrect": "Pewny ton i autopotwierdzenie modelu nie są dowodem; przy niesprawdzalnym wyniku o wysokim wpływie nie wolno polegać na LLM. Powtórz regułę 'kiedy nie używać LLM'.",
+      "references": [
+        "M11.6",
+        "M11.7"
+      ]
+    },
+    {
+      "id": "Q099",
+      "module": "M11",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik odróżnia halucynację od odpowiedzi, w której model jawnie sygnalizuje niepewność.",
+      "prompt": "Które z poniższych najlepiej opisuje halucynację (hallucination) LLM?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Output brzmiący wiarygodnie i podany pewnym tonem, ale nieuzasadniony danymi (zmyślony fakt, nieistniejące źródło, błędny szczegół)."
+        },
+        {
+          "id": "B",
+          "text": "Odpowiedź, w której model wprost zaznacza, że nie ma pewności i prosi o doprecyzowanie."
+        },
+        {
+          "id": "C",
+          "text": "Każda odpowiedź, której użytkownik jeszcze nie zdążył sprawdzić w dokumentacji."
+        },
+        {
+          "id": "D",
+          "text": "Komunikat o błędzie zwracany przez API modelu, gdy prompt jest zbyt długi."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Halucynacja to treść wiarygodna w formie, lecz nieuzasadniona danymi — pewny ton nie oznacza poprawności.",
+      "feedbackIncorrect": "Jawna niepewność, brak weryfikacji czy błąd API to nie halucynacja. Powtórz definicję: wiarygodny ton + brak uzasadnienia w danych.",
+      "references": [
+        "M11.2"
+      ]
+    },
+    {
+      "id": "Q100",
+      "module": "M11",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik rozpoznaje nieaktualny kontekst (training cutoff) jako przyczynę halucynacji przy pytaniu o stan po dacie treningu.",
+      "prompt": "Tester pyta LLM o szczegóły funkcji wydanej w zeszłym tygodniu, już po dacie odcięcia danych treningowych modelu. Model mimo to opisuje rzekome działanie tej funkcji. Która przyczyna halucynacji jest tu główna?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Nieaktualny kontekst (training cutoff) — pytanie dotyczy stanu po dacie treningu modelu."
+        },
+        {
+          "id": "B",
+          "text": "Presja promptu — prompt sformułowano jako rozkaz, nie pytanie."
+        },
+        {
+          "id": "C",
+          "text": "Konflikt danych — w treningu były dwie sprzeczne wersje funkcji."
+        },
+        {
+          "id": "D",
+          "text": "Nieprecyzyjne źródła — model pomylił dwa podobne dokumenty."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Funkcja powstała po dacie odcięcia danych — model nie mógł jej znać i 'dopowiada', co jest przyczyną typu nieaktualny kontekst.",
+      "feedbackIncorrect": "Problemem nie jest forma promptu ani mieszanie źródeł, lecz brak wiedzy o zdarzeniach po training cutoff. Powtórz przyczynę 'nieaktualny kontekst'.",
+      "references": [
+        "M11.4"
+      ]
+    },
+    {
+      "id": "Q101",
+      "module": "M11",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik formułuje próg odrzucenia LLM w oparciu o weryfikowalność wyniku i wpływ błędu.",
+      "prompt": "Według reguły 'kiedy NIE używać LLM' — kiedy tester nie powinien polegać na odpowiedzi modelu?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Gdy wyniku nie da się sprawdzić LUB błąd miałby wysoki, trudny do odwrócenia wpływ."
+        },
+        {
+          "id": "B",
+          "text": "Tylko wtedy, gdy odpowiedź jest długa i zawiera dużo szczegółów technicznych."
+        },
+        {
+          "id": "C",
+          "text": "Tylko wtedy, gdy jednocześnie nie da się sprawdzić wyniku I błąd ma wysoki wpływ."
+        },
+        {
+          "id": "D",
+          "text": "Nigdy — odpowiedź LLM zawsze można przyjąć, jeśli model brzmi pewnie."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Reguła to alternatywa (LUB): wystarczy brak weryfikowalności albo wysoki wpływ błędu, by nie polegać na LLM.",
+      "feedbackIncorrect": "To nie koniunkcja — wystarczy jeden z warunków. Długość odpowiedzi i pewny ton nie są kryterium. Powtórz regułę kciuka z ekranu 'Kiedy NIE używać LLM'.",
+      "references": [
+        "M11.6"
+      ]
+    },
+    {
+      "id": "Q102",
+      "module": "M11",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik wskazuje wszystkie kroki checklisty weryfikacji outputu LLM.",
+      "prompt": "Które elementy należą do checklisty weryfikacji outputu LLM (co sprawdzić, zanim zaufasz odpowiedzi)? Zaznacz wszystkie poprawne.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Czy output zawiera konkretne, sprawdzalne twierdzenia (liczby, nazwy, cytaty, kroki)."
+        },
+        {
+          "id": "B",
+          "text": "Czy cytowane źródło istnieje i faktycznie mówi to, co twierdzi model."
+        },
+        {
+          "id": "C",
+          "text": "Czy treść nie jest przeterminowana względem aktualnego stanu."
+        },
+        {
+          "id": "D",
+          "text": "Czy w odpowiedzi nie ma wewnętrznych sprzeczności."
+        },
+        {
+          "id": "E",
+          "text": "Czy odpowiedź jest dłuższa i bardziej szczegółowa niż poprzednia wersja."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "feedbackCorrect": "Checklista sprawdza sprawdzalne twierdzenia, istnienie i zgodność źródła, aktualność oraz wewnętrzną spójność — nie długość odpowiedzi.",
+      "feedbackIncorrect": "Długość/szczegółowość nie jest kryterium jakości; reszta to kroki checklisty (a–d). Powtórz ekran 'Checklista weryfikacji outputu'.",
+      "references": [
+        "M11.5"
+      ]
+    },
+    {
+      "id": "Q103",
+      "module": "M11",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik rozpoznaje w outputie LLM sygnały ostrzegawcze mogące świadczyć o halucynacji.",
+      "prompt": "Które z poniższych są realnymi sygnałami ostrzegawczymi, że fragment odpowiedzi LLM może być halucynacją? Zaznacz wszystkie poprawne.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Powołanie się na sekcję lub dokument, którego nie da się odnaleźć w źródle."
+        },
+        {
+          "id": "B",
+          "text": "Konkretna liczba lub numer wersji podane bez żadnego cytatu czy odniesienia."
+        },
+        {
+          "id": "C",
+          "text": "Stwierdzenie sprzeczne z innym fragmentem tej samej odpowiedzi."
+        },
+        {
+          "id": "D",
+          "text": "Opis stanu rzeczy, który mógł powstać dopiero po dacie odcięcia danych modelu."
+        },
+        {
+          "id": "E",
+          "text": "Wyraźne zaznaczenie przez model: \"nie mam pewności, sprawdź w dokumentacji\"."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "feedbackCorrect": "Nieistniejące źródło, konkret bez cytatu, wewnętrzna sprzeczność i treść po training cutoff to typowe sygnały ostrzegawcze; jawna niepewność nie jest halucynacją.",
+      "feedbackIncorrect": "Jawne zaznaczenie niepewności jest uczciwym sygnałem, nie ostrzeżeniem o halucynacji. Powtórz sygnały ostrzegawcze przyczyn halucynacji.",
+      "references": [
+        "M11.4",
+        "M11.2"
+      ]
+    },
+    {
+      "id": "Q104",
+      "module": "M11",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik wskazuje fragmenty odpowiedzi, które należy oznaczyć jako wymagające źródła lub eksperta, zamiast akceptować lub odrzucać całość.",
+      "prompt": "W odpowiedzi LLM o NotkaApp znajdują się poniższe zdania. Które należy oznaczyć jako wymagające źródła lub eksperta (nie do natychmiastowej akceptacji)? Zaznacz wszystkie poprawne.",
+      "options": [
+        {
+          "id": "A",
+          "text": "\"Blokada konta trwa 24 godziny.\" — sprawdzalna liczba bez cytatu, do potwierdzenia w wymaganiu."
+        },
+        {
+          "id": "B",
+          "text": "\"NotkaApp ma certyfikat ISO 27001.\" — twierdzenie o wysokim wpływie, podane bez źródła."
+        },
+        {
+          "id": "C",
+          "text": "\"Możesz bezpiecznie wyłączyć logowanie błędów na produkcji.\" — decyzja krytyczna wymagająca eksperta."
+        },
+        {
+          "id": "D",
+          "text": "\"Reset hasła używa linku ważnego 30 minut.\" — zgodne z DOC3, potwierdzone w dokumentacji."
+        },
+        {
+          "id": "E",
+          "text": "\"NotkaApp to aplikacja do notatek.\" — ogólny, bezsporny opis produktu."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Sprawdzalne twierdzenia bez cytatu (A, B) wymagają źródła, a decyzja krytyczna (C) wymaga eksperta; zdania potwierdzone lub bezsporne nie wymagają oznaczenia.",
+      "feedbackIncorrect": "Zdanie zgodne z DOC3 i ogólny opis produktu nie wymagają oznaczenia; oznaczamy fragmenty sprawdzalne bez cytatu i decyzje krytyczne. Powtórz granulację oznaczeń (ekran 'Oznaczanie fragmentów').",
+      "references": [
+        "M11.7",
+        "M11.8"
+      ]
+    }
+  ]
+}

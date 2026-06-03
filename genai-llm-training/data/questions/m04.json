@@ -1,0 +1,371 @@
+{
+  "_meta": {
+    "module": "M4",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M4. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q025",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik wyjaśnia, czym jest embedding jako liczbowa reprezentacja znaczenia tekstu.",
+      "prompt": "Model embeddingowy zamienia frazę dokumentacji QA na embedding. Co tak naprawdę reprezentuje powstały wektor liczb?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Znaczenie semantyczne tekstu w postaci liczbowej — frazy o bliskim znaczeniu dają bliskie wektory."
+        },
+        {
+          "id": "B",
+          "text": "Liczbę słów we frazie oraz jej długość w znakach."
+        },
+        {
+          "id": "C",
+          "text": "Dokładny zapis kolejnych liter zakodowanych jako kody ASCII."
+        },
+        {
+          "id": "D",
+          "text": "Ocenę poprawności gramatycznej i stylistycznej tekstu w skali liczbowej."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Embedding koduje znaczenie tekstu jako wektor liczb, dzięki czemu bliskie znaczeniowo frazy (np. „logowanie” i „uwierzytelnianie”) lądują blisko siebie.",
+      "feedbackIncorrect": "Embedding nie liczy znaków, liter ani gramatyki — koduje znaczenie. Wróć do ekranu „Słowo jako wektor”.",
+      "references": [
+        "M4.1",
+        "M4.2"
+      ]
+    },
+    {
+      "id": "Q026",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Uczestnik interpretuje cosine similarity jako miarę kierunku wektorów, niezależną od długości tekstu.",
+      "prompt": "W korpusie NotkaApp masz krótki opis „Reset hasła: link e-mail ważny 30 min” oraz długi, rozbudowany akapit opisujący tę samą procedurę resetu. Dlaczego ich cosine similarity jest wysokie mimo dużej różnicy długości tekstów?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Cosine similarity mierzy kąt (kierunek) między wektorami znaczenia, a nie ich długość — oba teksty wskazują ten sam kierunek."
+        },
+        {
+          "id": "B",
+          "text": "Cosine similarity rośnie wraz z liczbą słów, więc dłuższy tekst zawsze ma wyższe podobieństwo."
+        },
+        {
+          "id": "C",
+          "text": "Cosine similarity porównuje liczbę wspólnych słów, a oba teksty zawierają słowo „reset”."
+        },
+        {
+          "id": "D",
+          "text": "Cosine similarity zawsze zwraca 1.0, gdy teksty dotyczą tego samego produktu."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Cosine similarity liczy kąt między wektorami, czyli zgodność kierunku znaczenia — długość/„siła” tekstu nie wpływa na wynik, więc krótki i długi opis tej samej rzeczy są blisko.",
+      "feedbackIncorrect": "To nie liczba słów ani wspólnych tokenów decyduje, lecz kierunek wektora znaczenia. Powtórz „Cosine similarity — kierunek, nie długość”.",
+      "references": [
+        "M4.3"
+      ]
+    },
+    {
+      "id": "Q027",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik poprawnie interpretuje ranking najbliższych sąsiadów i rozumie umowność progu podobieństwa.",
+      "prompt": "Wyszukiwarka semantyczna zwróciła listę nearest neighbors z wynikami: fragment A = 0.91, fragment B = 0.74, fragment C = 0.62. Jak tester powinien to zinterpretować?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Lista jest posortowana malejąco po podobieństwie, ale wysoka pozycja nie gwarantuje trafności biznesowej — treść trzeba zweryfikować."
+        },
+        {
+          "id": "B",
+          "text": "Fragment A z wynikiem 0.91 jest na pewno poprawną odpowiedzią, bo przekracza próg 0.9."
+        },
+        {
+          "id": "C",
+          "text": "Wyniki poniżej 0.75 są zawsze błędne i można je odrzucić bez sprawdzania."
+        },
+        {
+          "id": "D",
+          "text": "Wynik 0.62 oznacza, że fragment C jest dokładnie w 62% poprawny merytorycznie."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Ranking porządkuje wyniki malejąco, lecz próg jest umowny i zależny od korpusu — wysoka pozycja to sygnał, nie dowód trafności.",
+      "feedbackIncorrect": "Nie ma stałego, uniwersalnego progu, a wynik liczbowy nie jest „procentem poprawności”. Wróć do „Jak czytać ranking podobieństwa”.",
+      "references": [
+        "M4.4"
+      ]
+    },
+    {
+      "id": "Q028",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik dobiera cechy dobrego zapytania do wyszukiwania semantycznego.",
+      "prompt": "Chcesz znaleźć w dokumentacji NotkaApp informację o czasie ważności linku resetu hasła w aktualnej wersji. Które praktyki formułowania zapytania semantycznego zwiększą trafność wyników? Zaznacz wszystkie poprawne.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Użyć pełnej frazy oddającej intencję, np. „czas ważności linku resetu hasła”, zamiast pojedynczego słowa."
+        },
+        {
+          "id": "B",
+          "text": "Doprecyzować kontekst i wersję, np. „reset hasła w NotkaApp v2”, jeśli zależy nam na aktualnym zapisie."
+        },
+        {
+          "id": "C",
+          "text": "Sformułować zapytanie jako samą negację, np. „nie token sesji”, by odfiltrować inne wyniki."
+        },
+        {
+          "id": "D",
+          "text": "Wpisać jedno ogólne słowo „hasło”, licząc, że model sam odgadnie intencję."
+        },
+        {
+          "id": "E",
+          "text": "Zawrzeć kluczowy obiekt zapytania (link resetu), by oddalić się od podobnych, lecz innych pojęć (token sesji)."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "E"
+      ],
+      "feedbackCorrect": "Pełna fraza oddająca intencję, doprecyzowanie kontekstu/wersji i wskazanie kluczowego obiektu kierują wektor zapytania w stronę właściwego znaczenia.",
+      "feedbackIncorrect": "Pojedyncze słowo jest zbyt ogólne, a sama negacja słabo działa w wyszukiwaniu semantycznym (model i tak koduje temat „token sesji”). Powtórz „Dobór zapytania do wyszukiwania semantycznego”.",
+      "references": [
+        "M4.7"
+      ]
+    },
+    {
+      "id": "Q029",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik rozpoznaje sytuacje, w których wysokie podobieństwo nie oznacza poprawnej odpowiedzi.",
+      "prompt": "W których z poniższych sytuacji wysoki wynik cosine similarity może mylić, zwracając fragment semantycznie bliski, lecz biznesowo niepoprawny? Zaznacz wszystkie poprawne.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Fragment „logowanie nie działa” trafia jako bliski dla zapytania „logowanie działa” (negacja/antonim)."
+        },
+        {
+          "id": "B",
+          "text": "Opis funkcji płatności trafia jako bliski dla zgłoszenia błędu tej samej funkcji (ten sam temat, inna intencja)."
+        },
+        {
+          "id": "C",
+          "text": "Fragment o „tokenie” bezpieczeństwa trafia dla zapytania o „token” w sensie jednostki LLM (wieloznaczność/polisemia)."
+        },
+        {
+          "id": "D",
+          "text": "Stary zapis wymagania jest bardzo podobny do nowego, choć poprawny jest tylko nowy (nieaktualna wersja)."
+        },
+        {
+          "id": "E",
+          "text": "Dwa fragmenty opisujące dokładnie tę samą, aktualną procedurę resetu hasła dają wysokie podobieństwo."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "feedbackCorrect": "To cztery klasyczne pułapki podobieństwa: negacja, ta sama tematyka przy innej intencji, polisemia i nieaktualna wersja — embedding koduje temat mocniej niż drobne, krytyczne różnice.",
+      "feedbackIncorrect": "Opcja E to przypadek, gdy wysokie podobieństwo jest TRAFNE (dwa zgodne, aktualne opisy tej samej rzeczy). Powtórz „Pułapka: podobne ≠ poprawne — 4 przypadki”.",
+      "references": [
+        "M4.5",
+        "M4.6"
+      ]
+    },
+    {
+      "id": "Q030",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik ocenia, dlaczego embeddingi mylą krytyczne różnice, i wyciąga właściwy wniosek dla pracy QA.",
+      "prompt": "Dlaczego model embeddingowy myli pary takie jak „logowanie działa” / „logowanie nie działa” i jaki wniosek powinien z tego wyciągnąć tester? Zaznacz wszystkie trafne stwierdzenia.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Embedding silniej koduje temat i styl frazy niż drobne, lecz krytyczne różnice, takie jak negacja czy numer wersji."
+        },
+        {
+          "id": "B",
+          "text": "Ranking podobieństwa to sygnał wspierający, a nie wyrok — wynik wymaga weryfikacji treści fragmentu."
+        },
+        {
+          "id": "C",
+          "text": "Warto wesprzeć wyszukiwanie filtrowaniem po metadanych (np. wersja, typ dokumentu), by ograniczyć mylące trafienia."
+        },
+        {
+          "id": "D",
+          "text": "Skoro model myli te pary, należy całkowicie zrezygnować z wyszukiwania semantycznego w QA."
+        },
+        {
+          "id": "E",
+          "text": "Wystarczy podnieść próg podobieństwa do 0.95, by automatycznie wyeliminować wszystkie pułapki."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Embedding koduje temat mocniej niż negację czy wersję, dlatego ranking traktujemy jako sygnał wymagający weryfikacji treści, wspierany filtrowaniem metadanych.",
+      "feedbackIncorrect": "Rezygnacja z wyszukiwania (D) i sztywny próg (E) to fałszywe rozwiązania — para z negacją bywa tak podobna, że żaden próg jej nie odsieje. Powtórz „Pogłębienie: dlaczego model się myli”.",
+      "references": [
+        "M4.6",
+        "M4.5"
+      ]
+    },
+    {
+      "id": "Q031",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik diagnozuje na konkretnym przypadku, dlaczego wysokie podobieństwo zwróciło biznesowo niepoprawny fragment.",
+      "prompt": "W korpusie NotkaApp wpisujesz zapytanie „Po jakim czasie wygasa link resetu hasła?”. Wyszukiwarka jako najbliższy zwraca DOC1: „Procedura logowania: token sesji wygasa po 30 min bezczynności” (0.86), a dopiero niżej DOC3: „Reset hasła: link e-mail ważny 30 min, jednorazowy” (0.71). Co najlepiej tłumaczy ten wynik?",
+      "options": [
+        {
+          "id": "A",
+          "text": "DOC1 jest semantycznie blisko, bo dzieli z zapytaniem motyw „coś wygasa po 30 min”, ale dotyczy innego obiektu (token sesji), więc poprawnym źródłem jest DOC3 — to pułapka „podobne, lecz inne pojęcie” (ten sam motyw, inny obiekt)."
+        },
+        {
+          "id": "B",
+          "text": "DOC1 jest poprawną odpowiedzią, bo ma wyższy wynik podobieństwa niż DOC3."
+        },
+        {
+          "id": "C",
+          "text": "Wynik jest błędem modelu embeddingowego, który trzeba zgłosić jako defekt biblioteki."
+        },
+        {
+          "id": "D",
+          "text": "DOC3 jest niepoprawny, ponieważ jego wynik 0.71 jest poniżej uniwersalnego progu trafności 0.75."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Wspólny motyw „wygasa po 30 min” zbliża DOC1 do zapytania, choć dotyczy on tokenu sesji, a nie linku resetu — poprawnym źródłem jest DOC3, mimo niższego wyniku.",
+      "feedbackIncorrect": "Najwyższy wynik nie przesądza o trafności, a 0.75 to nie żaden uniwersalny próg — to klasyczna pułapka „podobne, lecz inne pojęcie”. Powtórz ekran „Pułapka: podobne ≠ poprawne” i „Mapa semantyczna”.",
+      "references": [
+        "M4.5",
+        "M4.9"
+      ]
+    },
+    {
+      "id": "Q032",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Uczestnik rozpoznaje pułapkę negacji w wynikach wyszukiwania i wybiera bezpieczną decyzję QA.",
+      "prompt": "Na „Mapie semantycznej” wpisujesz zapytanie „logowanie nie działa po aktualizacji”. Najbliższym fragmentem (0.89) okazuje się „logowanie działa poprawnie”, a fragment „znany błąd: logowanie blokuje się po update v2” jest dopiero trzeci (0.77). Jak najlepiej ocenić tę sytuację i zareagować?",
+      "options": [
+        {
+          "id": "A",
+          "text": "To pułapka negacji: embedding koduje wspólny temat „logowanie”, ale gubi „nie działa” vs „działa” — należy zweryfikować treść i wybrać fragment o znanym błędzie, mimo niższego wyniku."
+        },
+        {
+          "id": "B",
+          "text": "Przyjąć fragment „logowanie działa poprawnie”, bo ma najwyższe podobieństwo 0.89, i zamknąć analizę."
+        },
+        {
+          "id": "C",
+          "text": "Uznać oba fragmenty za równoważne, skoro oba dotyczą logowania, i nie rozstrzygać dalej."
+        },
+        {
+          "id": "D",
+          "text": "Obniżyć próg do 0.5, aby ranking automatycznie przesunął właściwy fragment na pierwszą pozycję."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "„Działa” i „nie działa” są semantycznie blisko, bo różni je tylko negacja — najwyższy wynik jest tu mylący, więc weryfikujemy treść i wybieramy fragment o znanym błędzie.",
+      "feedbackIncorrect": "Najwyższy wynik to pułapka negacji, a manipulacja progiem nie naprawia kierunku wektora — trzeba sprawdzić treść. Powtórz „Pułapka: podobne ≠ poprawne” i „Mapa semantyczna”.",
+      "references": [
+        "M4.5",
+        "M4.9"
+      ]
+    }
+  ]
+}
