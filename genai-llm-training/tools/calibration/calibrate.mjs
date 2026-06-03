@@ -113,6 +113,12 @@ export function validatePilot(pilot) {
   if (!okParticipants) e.push("pilot.participants musi być liczbą całkowitą >= 1");
   else if (participants < PILOT_MIN_PARTICIPANTS || participants > PILOT_MAX_PARTICIPANTS)
     e.push(`pilot.participants ${participants} poza zakresem grupy pilotażowej ${PILOT_MIN_PARTICIPANTS}–${PILOT_MAX_PARTICIPANTS} (wymagania/07)`);
+  // byPath (rozkład uczestników) musi sumować się do participants — inaczej kontrola pokrycia byłaby zafałszowana.
+  const byPath = pilot.pilot && pilot.pilot.byPath;
+  if (byPath && okParticipants) {
+    const sum = ["S1", "S2", "S3"].reduce((s, p) => s + (typeof byPath[p] === "number" ? byPath[p] : 0), 0);
+    if (sum !== participants) e.push(`byPath sumuje się do ${sum}, a uczestników jest ${participants} (rozkład niespójny)`);
+  }
   if (!Array.isArray(pilot.questions) || pilot.questions.length === 0) e.push("questions musi być niepustą tablicą");
   else {
     const seen = new Set();
@@ -126,6 +132,9 @@ export function validatePilot(pilot) {
       if (Number.isInteger(q.attempts) && Number.isInteger(q.correct) && q.correct > q.attempts) e.push(`${id}: correct ${q.correct} > attempts ${q.attempts} (>100%)`);
       if (okParticipants && Number.isInteger(q.attempts) && q.attempts > participants) e.push(`${id}: attempts ${q.attempts} > uczestników ${participants} (niemożliwe)`);
       if (q.ambiguityReports != null && (!Number.isInteger(q.ambiguityReports) || q.ambiguityReports < 0 || q.ambiguityReports > q.attempts)) e.push(`${id}: ambiguityReports musi być całkowite w [0, attempts]`);
+      // Metryki opcjonalne (jak w schemacie): avgTimeSec >= 0, discrimination w [-1, 1].
+      if (q.avgTimeSec != null && (typeof q.avgTimeSec !== "number" || q.avgTimeSec < 0)) e.push(`${id}: avgTimeSec musi być liczbą >= 0`);
+      if (q.discrimination != null && (typeof q.discrimination !== "number" || q.discrimination < -1 || q.discrimination > 1)) e.push(`${id}: discrimination musi być liczbą w [-1, 1]`);
     }
   }
   if (e.length) throw new Error("Niepoprawny plik wyników pilotażu:\n - " + e.join("\n - "));

@@ -122,6 +122,14 @@ test("validatePilot: odrzuca ułamkowe liczności (Codex #59 runda 3)", () => {
   );
 });
 
+test("validatePilot: byPath musi sumować się do participants; metryki opcjonalne walidowane (Codex #59 runda 4)", () => {
+  const base = (over) => ({ version: "x", pilot: { participants: 12, byPath: { S1: 0, S2: 0, S3: 12 }, ...over }, questions: [{ id: "Q001", attempts: 12, correct: 10 }] });
+  assert.throws(() => validatePilot({ ...base(), pilot: { participants: 12, byPath: { S1: 12, S2: 12, S3: 12 } }, questions: [{ id: "Q001", attempts: 12, correct: 10 }] }), /byPath sumuje się do 36/);
+  assert.throws(() => validatePilot({ version: "x", pilot: { participants: 12 }, questions: [{ id: "Q001", attempts: 12, correct: 10, discrimination: 2 }] }), /discrimination musi być/);
+  assert.throws(() => validatePilot({ version: "x", pilot: { participants: 12 }, questions: [{ id: "Q001", attempts: 12, correct: 10, avgTimeSec: -3 }] }), /avgTimeSec musi być/);
+  assert.equal(validatePilot(pilot), true, "syntetyczna próbka (byPath S3=12, metryki w zakresie) jest poprawna");
+});
+
 test("validatePilotCoverage: attempts > uprawnieni uczestnicy wg byPath (S3-only) → błąd (Codex #59 runda 3)", () => {
   const s3only = bank.find((q) => JSON.stringify(q.paths) === JSON.stringify(["S3"]));
   assert.ok(s3only, "w banku istnieje pytanie tylko-S3 (L4)");

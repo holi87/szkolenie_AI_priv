@@ -128,5 +128,7 @@ export function scorePath(pathId, testQuestions, answers, pathsData, opts = {}) 
     weakModules,
     perModule,
     criticalFails: quiz.criticalFails,
+    // Per-pytanie testu końcowego (sygnał kalibracyjny #28 — obejmuje pytania spoza puli quizu inline, w tym golden).
+    questionResults: quiz.perQuestion.map((r) => ({ questionId: r.id, module: r.module, correct: r.isCorrect === true })),
   };
 }

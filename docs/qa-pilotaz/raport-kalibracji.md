@@ -38,9 +38,11 @@ Zasady:
 
 1. Zbierz od uczestników **eksporty per-pytanie** `pytania-<ścieżka>.csv` (przycisk „Pobierz odpowiedzi pytań (CSV)"
    na ekranie wyniku — anonimowo, bez PII, źródło: quiz inline) oraz ankiety (zgłoszenia niejasności).
-   > Uwaga: zwykły `wynik-<ścieżka>.json/csv` zawiera tylko agregaty (wynik %, ścieżka, słabe moduły) — **nie**
-   > wystarcza do kalibracji. Per-pytanie `attempts`/`correct` pochodzą z eksportu `pytania-*.csv` (MVP: quiz inline;
-   > test końcowy nie przechowuje per-pytanie). `avgTimeSec` jest opcjonalny (MVP mierzy czas per moduł, nie per pytanie).
+   > Uwaga: zwykły `wynik-<ścieżka>.json/csv` zawiera agregaty (wynik %, ścieżka, słabe moduły, łączny czas) — **nie**
+   > wystarcza do kalibracji per-pytanie. Per-pytanie `attempts`/`correct` pochodzą z eksportu `pytania-*.csv`,
+   > który łączy quiz inline **oraz test końcowy** (per-pytanie) — dzięki temu łapane są też pytania widziane tylko
+   > w teście (w tym golden), co umożliwia walidację golden setu 24/24. `avgTimeSec` jest opcjonalny (MVP mierzy
+   > czas per moduł — w eksporcie wyniku — nie per pytanie).
 2. Zsumuj eksporty per-pytanie między uczestnikami i zbuduj plik wg `pilot-results.schema.json`
    (per pytanie: `attempts` = liczba uczestników, którzy odpowiedzieli; `correct` = liczba poprawnych z 1. próby;
    `ambiguityReports` z ankiet; `synthetic: false`; `byPath` = rozkład uczestników). **Dane zagregowane, bez PII.**

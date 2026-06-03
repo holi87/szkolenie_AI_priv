@@ -72,7 +72,7 @@ test("eksport CSV: nagłówek + 1 wiersz, bez PII, weakModules złączone", () =
   const csv = exportCsv(passedProgress, { pathName: "Praktyk QA" });
   const lines = csv.split("\n");
   assert.equal(lines.length, 2);
-  assert.equal(lines[0], "completionId,path,scorePct,passed,criticalQuestionsPassed,attempts,issuedAt,weakModules");
+  assert.equal(lines[0], "completionId,path,scorePct,passed,criticalQuestionsPassed,attempts,issuedAt,weakModules,totalTimeSec");
   assert.ok(lines[1].startsWith("CERT-S2-20260603-XYZ,S2,84,true,true,2,"));
   assert.ok(!csv.includes("@"), "brak e-maila");
   assert.ok(!csv.includes("Tester"), "brak imienia w eksporcie");
@@ -107,6 +107,31 @@ test("eksport per-pytanie (#28): jeden wiersz na pytanie z 1. próby, anonimowo,
 test("eksport per-pytanie: pusty progres → tylko nagłówek (brak wyjątku)", () => {
   assert.equal(exportQuestionStatsCsv({ path: "S1", modules: {} }), "questionId,module,attempts,correct,source");
   assert.deepEqual(buildQuestionStats({}), []);
+});
+
+test("eksport per-pytanie łączy quiz inline + test końcowy: test NADPISUje inline i łapie pytania spoza puli (#28, Codex runda 4)", () => {
+  const progress = {
+    path: "S2",
+    modules: { M3: { quizResults: [{ questionId: "Q018", correct: true, attempt: 1 }] } },
+    finalTest: { questionResults: [
+      { questionId: "Q018", module: "M3", correct: false }, // to samo pytanie z testu → nadpisuje inline (warunki testu)
+      { questionId: "Q069", module: "M8", correct: true },   // golden widziane TYLKO w teście → teraz złapane
+    ] },
+  };
+  const stats = buildQuestionStats(progress);
+  const q018 = stats.find((s) => s.questionId === "Q018");
+  assert.equal(q018.correct, 0, "wynik testu końcowego nadpisuje quiz inline");
+  assert.equal(q018.source, "final");
+  const q069 = stats.find((s) => s.questionId === "Q069");
+  assert.ok(q069, "pytanie tylko z testu końcowego jest w eksporcie (pokrycie golden 24/24 możliwe)");
+  assert.equal(q069.source, "final");
+});
+
+test("eksport wyniku zawiera czas modułów (KPI Time to complete, Codex runda 4)", () => {
+  const progress = { path: "S1", finalTest: { passed: false, attempts: 1 }, modules: { M1: { timeSpentSec: 120 }, M2: { timeSpentSec: 90 } } };
+  const obj = JSON.parse(exportJson(progress));
+  assert.equal(obj.totalTimeSec, 210);
+  assert.deepEqual(obj.moduleTimesSec, { M1: 120, M2: 90 });
 });
 
 test("niezaliczony progres: eksport nie zawiera completionId", () => {

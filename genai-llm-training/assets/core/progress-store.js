@@ -168,6 +168,10 @@ export function createProgressStore(adapter, opts = {}) {
         criticalQuestionsPassed: Boolean(result.criticalPassed),
         passed: Boolean(result.passed),
         weakModules: (result.weakModules || []).map((w) => (typeof w === "string" ? w : w.module)),
+        // Per-pytanie testu końcowego (kalibracja #28) — anonimowo: id + moduł + poprawność.
+        ...(Array.isArray(result.questionResults)
+          ? { questionResults: result.questionResults.map((q) => ({ questionId: q.questionId, module: q.module, correct: Boolean(q.correct) })) }
+          : {}),
       };
       persist();
       return progress.finalTest;

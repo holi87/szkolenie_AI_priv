@@ -63,6 +63,19 @@ test("finalTest: kolejne próby inkrementują attempts; limit podejść respekto
   assert.equal(s.canAttemptFinalTest(), false, "3/3 → brak kolejnych podejść");
 });
 
+test("recordFinalTest zapisuje per-pytanie (questionResults) zgodnie ze schematem (kalibracja #28)", () => {
+  const s = makeStore();
+  s.selectPath("S2");
+  s.recordFinalTest({
+    scorePct: 80, passed: true, criticalPassed: true, weakModules: [],
+    questionResults: [{ questionId: "Q069", module: "M8", correct: true }, { questionId: "Q018", module: "M3", correct: false }],
+  });
+  const ft = s.getProgress().finalTest;
+  assert.equal(ft.questionResults.length, 2);
+  assert.deepEqual(ft.questionResults[0], { questionId: "Q069", module: "M8", correct: true });
+  assert.equal(ft.questionResults[1].correct, false);
+});
+
 test("ostatnie miejsce: nowy store nad tym samym adapterem wraca do kursora i aktywnej ścieżki", () => {
   const adapter = createMemoryAdapter();
   const s1 = makeStore(adapter);
