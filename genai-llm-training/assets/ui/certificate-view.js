@@ -83,7 +83,7 @@ export function renderResult(cert, opts = {}) {
     const gFail = gatesBlock(opts.gates);
     root.appendChild(el("p", { attrs: { role: "alert" }, text: gFail
       ? `Wynik ścieżki: ${cert.scorePct}%. Aby zaliczyć, spełnij wszystkie bramki poniżej.`
-      : `Wynik ścieżki: ${cert.scorePct}%. Ścieżka niezaliczona — wróć i spełnij próg, 100% pytań krytycznych oraz wymagane zadania praktyczne.` }));
+      : `Wynik ścieżki: ${cert.scorePct}%. Ścieżka niezaliczona — wróć i spełnij wszystkie wymagane warunki zaliczenia tej ścieżki.` }));
     if (gFail) root.appendChild(gFail);
     const wa = weakAreasBlock(cert.weakAreas);
     if (wa) root.appendChild(wa);
