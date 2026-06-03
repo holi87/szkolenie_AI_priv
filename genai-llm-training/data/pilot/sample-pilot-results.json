@@ -3,6 +3,7 @@
     "issue": "#28 [28][M5] Skalibruj pytania po pilotażu",
     "schema": "../schemas/pilot-results.schema.json",
     "status": "SYNTETYCZNY / DEMONSTRACYJNY — to NIE są wyniki realnego pilotażu. Zbiór pokazuje działanie narzędzia kalibracji (tools/calibration/calibrate.mjs) i celowo zawiera przypadki poza zakresem trudności oraz pytanie krytyczne z niejasnością >10%. Realny plik powstaje PO pilotażu na 8–15 osobach (wymagania/07).",
+    "demoCohort": "Dla spójności attempts<=uprawnieni uczestnicy wszyscy uczestnicy demo są na ścieżce S3 (byPath S3=12), więc każde pytanie jest widziane przez 12 osób. Realny pilotaż ma mieszany rozkład S1/S2/S3.",
     "dataPolicy": "Dane ZAGREGOWANE per pytanie, bez PII. Uczestnicy anonimowi."
   },
   "version": "0.1-demo",
@@ -10,7 +11,7 @@
   "pilot": {
     "participants": 12,
     "window": "demo (dane syntetyczne)",
-    "byPath": { "S1": 5, "S2": 4, "S3": 3 }
+    "byPath": { "S1": 0, "S2": 0, "S3": 12 }
   },
   "questions": [
     { "id": "Q001", "attempts": 12, "correct": 11, "avgTimeSec": 28, "ambiguityReports": 0, "discrimination": 0.41 },

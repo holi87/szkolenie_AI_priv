@@ -36,15 +36,21 @@ Zasady:
 
 ## Procedura po pilotażu
 
-1. Zbierz wyniki i ankiety (patrz `plan-komunikacji.md`).
-2. Zbuduj zagregowany plik wg `pilot-results.schema.json` (per pytanie: `attempts`, `correct`, `avgTimeSec`,
-   `ambiguityReports`; `synthetic: false`). **Dane zagregowane, bez PII.** Narzędzie waliduje plik przed
-   kalibracją i odrzuca dane niemożliwe: liczność grupy poza 8–15 (wymagania/07), `correct > attempts` (>100%),
-   `attempts > uczestników`, duplikaty pytań, złe id — wtedy `exit 1` z opisem (zamiast mylącego raportu).
-3. Uruchom:
+1. Zbierz od uczestników **eksporty per-pytanie** `pytania-<ścieżka>.csv` (przycisk „Pobierz odpowiedzi pytań (CSV)"
+   na ekranie wyniku — anonimowo, bez PII, źródło: quiz inline) oraz ankiety (zgłoszenia niejasności).
+   > Uwaga: zwykły `wynik-<ścieżka>.json/csv` zawiera tylko agregaty (wynik %, ścieżka, słabe moduły) — **nie**
+   > wystarcza do kalibracji. Per-pytanie `attempts`/`correct` pochodzą z eksportu `pytania-*.csv` (MVP: quiz inline;
+   > test końcowy nie przechowuje per-pytanie). `avgTimeSec` jest opcjonalny (MVP mierzy czas per moduł, nie per pytanie).
+2. Zsumuj eksporty per-pytanie między uczestnikami i zbuduj plik wg `pilot-results.schema.json`
+   (per pytanie: `attempts` = liczba uczestników, którzy odpowiedzieli; `correct` = liczba poprawnych z 1. próby;
+   `ambiguityReports` z ankiet; `synthetic: false`; `byPath` = rozkład uczestników). **Dane zagregowane, bez PII.**
+   Narzędzie waliduje plik przed kalibracją i odrzuca dane niemożliwe: liczność grupy poza 8–15 (wymagania/07),
+   liczby ułamkowe, `correct > attempts` (>100%), `attempts > uczestników`, `attempts >` uprawnieni wg `byPath`,
+   duplikaty pytań, złe id — wtedy `exit 1` z opisem (zamiast mylącego raportu).
+3. Uruchom (z katalogu repo lub z `genai-llm-training/` z poprawną ścieżką wyjścia):
    ```bash
    cd genai-llm-training
-   node tools/calibration/calibrate.mjs ścieżka/do/pilot-results.json > docs/qa-pilotaz/raport-kalibracji-<data>.md
+   node tools/calibration/calibrate.mjs ścieżka/do/pilot-results.json > ../docs/qa-pilotaz/raport-kalibracji-<data>.md
    ```
 4. Zrealizuj wskazane akcje: popraw/przenieś pytania poza zakresem, przepisz krytyczne z >10% niejasności,
    oznacz golden set (`validated` albo zgłoś poprawki). Każda zmiana banku → `node tests/schema-validation/validate.mjs`.

@@ -6,7 +6,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { calibrate, renderReport, validatePilot, DIFFICULTY_BANDS } from "../../tools/calibration/calibrate.mjs";
+import { calibrate, renderReport, validatePilot, validatePilotCoverage, DIFFICULTY_BANDS } from "../../tools/calibration/calibrate.mjs";
 import { bank, goldenSetData } from "./_fixtures.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -14,7 +14,7 @@ const DATA = join(HERE, "..", "..", "data");
 const pilot = JSON.parse(readFileSync(join(DATA, "pilot", "sample-pilot-results.json"), "utf8"));
 
 const ctx = {
-  questionsById: new Map(bank.map((q) => [q.id, { difficulty: q.difficulty, isCritical: !!q.isCritical, golden: !!q.golden, module: q.module }])),
+  questionsById: new Map(bank.map((q) => [q.id, { difficulty: q.difficulty, isCritical: !!q.isCritical, golden: !!q.golden, module: q.module, paths: q.paths }])),
   goldenIds: goldenSetData.goldenSet.questionIds,
 };
 
@@ -109,6 +109,29 @@ test("validatePilot: odrzuca duplikaty pytań i attempts > uczestników (Codex #
     () => validatePilot({ version: "x", pilot: { participants: 12 }, questions: [{ id: "Q001", attempts: 20, correct: 10 }] }),
     /attempts 20 > uczestników 12/,
   );
+});
+
+test("validatePilot: odrzuca ułamkowe liczności (Codex #59 runda 3)", () => {
+  assert.throws(
+    () => validatePilot({ version: "x", pilot: { participants: 12 }, questions: [{ id: "Q001", attempts: 11.5, correct: 10 }] }),
+    /attempts musi być liczbą całkowitą/,
+  );
+  assert.throws(
+    () => validatePilot({ version: "x", pilot: { participants: 12 }, questions: [{ id: "Q001", attempts: 12, correct: 10.2 }] }),
+    /correct musi być liczbą całkowitą/,
+  );
+});
+
+test("validatePilotCoverage: attempts > uprawnieni uczestnicy wg byPath (S3-only) → błąd (Codex #59 runda 3)", () => {
+  const s3only = bank.find((q) => JSON.stringify(q.paths) === JSON.stringify(["S3"]));
+  assert.ok(s3only, "w banku istnieje pytanie tylko-S3 (L4)");
+  const pilotBad = { version: "t", pilot: { participants: 12, byPath: { S1: 5, S2: 4, S3: 3 } }, questions: [{ id: s3only.id, attempts: 10, correct: 5 }] };
+  assert.throws(() => validatePilotCoverage(pilotBad, ctx.questionsById), /uprawnieni uczestnicy 3/);
+  // spójny: attempts <= 3 dla S3-only przy byPath S3=3
+  const pilotOk = { version: "t", pilot: { participants: 12, byPath: { S1: 5, S2: 4, S3: 3 } }, questions: [{ id: s3only.id, attempts: 3, correct: 2 }] };
+  assert.equal(validatePilotCoverage(pilotOk, ctx.questionsById), true);
+  // próbka demo (wszyscy na S3) jest spójna
+  assert.equal(validatePilotCoverage(pilot, ctx.questionsById), true);
 });
 
 test("golden validated odporne na duplikaty rzędów — duplikat nie zastępuje brakującego id (Codex #59 runda 2)", () => {

@@ -120,14 +120,35 @@ export function validatePilot(pilot) {
       const id = q && q.id;
       if (typeof id !== "string" || !/^Q[0-9]{3}$/.test(id)) { e.push(`pytanie z nieprawidłowym id: ${JSON.stringify(id)}`); continue; }
       if (seen.has(id)) e.push(`zduplikowane pytanie ${id} (każde pytanie raz)`); else seen.add(id);
-      if (typeof q.attempts !== "number" || q.attempts < 1) e.push(`${id}: attempts musi być liczbą >= 1`);
-      if (typeof q.correct !== "number" || q.correct < 0) e.push(`${id}: correct musi być liczbą >= 0`);
-      if (typeof q.attempts === "number" && typeof q.correct === "number" && q.correct > q.attempts) e.push(`${id}: correct ${q.correct} > attempts ${q.attempts} (>100%)`);
-      if (okParticipants && typeof q.attempts === "number" && q.attempts > participants) e.push(`${id}: attempts ${q.attempts} > uczestników ${participants} (niemożliwe)`);
-      if (q.ambiguityReports != null && (typeof q.ambiguityReports !== "number" || q.ambiguityReports < 0 || q.ambiguityReports > q.attempts)) e.push(`${id}: ambiguityReports poza zakresem [0, attempts]`);
+      // Liczności muszą być CAŁKOWITE (liczba osób), nie ułamkowe — inaczej np. attempts=11.5 dałoby fałszywe %.
+      if (!Number.isInteger(q.attempts) || q.attempts < 1) e.push(`${id}: attempts musi być liczbą całkowitą >= 1`);
+      if (!Number.isInteger(q.correct) || q.correct < 0) e.push(`${id}: correct musi być liczbą całkowitą >= 0`);
+      if (Number.isInteger(q.attempts) && Number.isInteger(q.correct) && q.correct > q.attempts) e.push(`${id}: correct ${q.correct} > attempts ${q.attempts} (>100%)`);
+      if (okParticipants && Number.isInteger(q.attempts) && q.attempts > participants) e.push(`${id}: attempts ${q.attempts} > uczestników ${participants} (niemożliwe)`);
+      if (q.ambiguityReports != null && (!Number.isInteger(q.ambiguityReports) || q.ambiguityReports < 0 || q.ambiguityReports > q.attempts)) e.push(`${id}: ambiguityReports musi być całkowite w [0, attempts]`);
     }
   }
   if (e.length) throw new Error("Niepoprawny plik wyników pilotażu:\n - " + e.join("\n - "));
+  return true;
+}
+
+/**
+ * Sprawdza spójność attempts z liczbą uprawnionych uczestników wg byPath (Codex #59 runda 3):
+ * pytanie widoczne tylko na S3 nie może mieć więcej prób niż uczestników ścieżek, które je widzą.
+ * Pomijane, gdy brak byPath albo metadanych ścieżek pytania.
+ */
+export function validatePilotCoverage(pilot, questionsById) {
+  const byPath = pilot && pilot.pilot && pilot.pilot.byPath;
+  if (!byPath) return true;
+  const e = [];
+  for (const q of pilot.questions || []) {
+    const meta = questionsById.get(q.id);
+    if (!meta || !Array.isArray(meta.paths)) continue;
+    const eligible = meta.paths.reduce((s, p) => s + (byPath[p] || 0), 0);
+    if (Number.isInteger(q.attempts) && q.attempts > eligible)
+      e.push(`${q.id}: attempts ${q.attempts} > uprawnieni uczestnicy ${eligible} (ścieżki ${meta.paths.join("/")} wg byPath)`);
+  }
+  if (e.length) throw new Error("Niespójność attempts vs byPath:\n - " + e.join("\n - "));
   return true;
 }
 
@@ -184,7 +205,7 @@ function loadBankAndGolden(dataDir) {
   const questionsById = new Map();
   for (let i = 1; i <= 12; i += 1) {
     for (const q of read(`questions/m${String(i).padStart(2, "0")}.json`).questions || []) {
-      questionsById.set(q.id, { difficulty: q.difficulty, isCritical: !!q.isCritical, golden: !!q.golden, module: q.module });
+      questionsById.set(q.id, { difficulty: q.difficulty, isCritical: !!q.isCritical, golden: !!q.golden, module: q.module, paths: q.paths });
     }
   }
   const goldenIds = read("golden-set.json").goldenSet.questionIds || [];
@@ -199,8 +220,8 @@ function main(argv) {
   const fileArg = argv.find((a) => !a.startsWith("--"));
   const pilotPath = fileArg || join(DATA, "pilot", "sample-pilot-results.json");
   const pilot = JSON.parse(readFileSync(pilotPath, "utf8"));
-  // Walidacja kontraktu + integralności PRZED kalibracją (realny eksport może być uszkodzony — fail fast).
-  try { validatePilot(pilot); } catch (err) { process.stderr.write(`${err.message}\n`); process.exit(1); }
+  // Walidacja kontraktu + integralności + spójności ze ścieżkami PRZED kalibracją (fail fast na złych danych).
+  try { validatePilot(pilot); validatePilotCoverage(pilot, ctx.questionsById); } catch (err) { process.stderr.write(`${err.message}\n`); process.exit(1); }
   const result = calibrate(pilot, ctx);
 
   if (selfTest) {

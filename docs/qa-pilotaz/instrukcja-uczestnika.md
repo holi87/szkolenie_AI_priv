@@ -44,13 +44,15 @@ Po ukończeniu modułów wymaganych odblokuje się **test końcowy**:
 
 ## 5. Pobierz wynik (WAŻNE — przekaż koordynatorowi)
 
-Na ekranie wyniku kliknij **„Pobierz wynik (JSON)”** oraz **„Pobierz wynik (CSV)”**. Pobiorą się pliki
-`wynik-S1.json` / `wynik-S1.csv` (analogicznie S2/S3). **Odeślij oba pliki koordynatorowi** kanałem wskazanym
-w planie komunikacji.
+Na ekranie wyniku kliknij **„Pobierz wynik (JSON)”**, **„Pobierz wynik (CSV)”** oraz **„Pobierz odpowiedzi
+pytań (CSV)”**. Pobiorą się pliki `wynik-S1.json` / `wynik-S1.csv` oraz `pytania-S1.csv` (analogicznie S2/S3).
+**Odeślij wszystkie trzy pliki koordynatorowi** kanałem wskazanym w planie komunikacji. Plik `pytania-*.csv` jest
+potrzebny do kalibracji pytań po pilotażu.
 
-> Plik wyniku zawiera tylko: ścieżkę, wynik %, czy zaliczone, czy pytania krytyczne zaliczone, liczbę podejść,
-> ID zaliczenia, słabe moduły i wyniki zadań praktycznych. **Nie zawiera Twoich odpowiedzi ani danych
-> osobowych.** Imię na certyfikacie (jeśli podane) zostaje tylko w Twojej przeglądarce — nie ma go w eksporcie.
+> Plik `wynik-*` zawiera tylko: ścieżkę, wynik %, czy zaliczone, czy pytania krytyczne zaliczone, liczbę podejść,
+> ID zaliczenia, słabe moduły i wyniki zadań praktycznych. Plik `pytania-*.csv` zawiera, **anonimowo**, dla każdego
+> pytania z quizów: id pytania, moduł i 0/1 poprawności (z pierwszej próby). **Żaden plik nie zawiera danych
+> osobowych.** Imię na certyfikacie (jeśli podane) zostaje tylko w Twojej przeglądarce — nie ma go w eksportach.
 
 ## 6. Wypełnij ankietę feedbacku
 

@@ -116,3 +116,32 @@ export function exportCsv(progress, opts = {}) {
   ];
   return `${cols.join(",")}\n${row.map(csvCell).join(",")}`;
 }
+
+/**
+ * Per-pytanie (anonimowo) — sygnał kalibracyjny do pilotażu (#27/#28). Jeden wiersz na pytanie odpowiedziane
+ * w quizie inline: poprawność z PIERWSZEJ próby (tryb nauki — kolejne próby są po feedbacku). Agregat per
+ * uczestnik (attempts=1); koordynator sumuje między uczestnikami → pilot-results.json. BEZ PII (tylko id
+ * pytania, moduł, 0/1). Źródło: quiz inline (test końcowy nie przechowuje per-pytanie w MVP — raport-kalibracji.md).
+ */
+export function buildQuestionStats(progress) {
+  const byQ = new Map();
+  for (const [moduleId, m] of Object.entries((progress && progress.modules) || {})) {
+    for (const r of m.quizResults || []) {
+      if (!r || typeof r.questionId !== "string") continue;
+      if (!byQ.has(r.questionId)) byQ.set(r.questionId, { questionId: r.questionId, module: moduleId, attempts: 1, correct: r.correct === true ? 1 : 0, source: "inline" });
+    }
+  }
+  return [...byQ.values()].sort((a, b) => a.questionId.localeCompare(b.questionId));
+}
+
+/** Eksport JSON per-pytanie (anonimowy) — wejście do agregacji pilotażu (#28). */
+export function exportQuestionStatsJson(progress) {
+  return JSON.stringify({ path: (progress && progress.path) || null, source: "inline-quiz", questions: buildQuestionStats(progress) }, null, 2);
+}
+
+/** Eksport CSV per-pytanie (anonimowy). */
+export function exportQuestionStatsCsv(progress) {
+  const cols = ["questionId", "module", "attempts", "correct", "source"];
+  const rows = buildQuestionStats(progress).map((r) => [r.questionId, r.module, r.attempts, r.correct, r.source]);
+  return [cols.join(","), ...rows.map((row) => row.map(csvCell).join(","))].join("\n");
+}

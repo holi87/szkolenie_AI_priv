@@ -27,17 +27,24 @@ release 1.0; zebranie wyników, czasu, ścieżki i feedbacku do kalibracji (#28)
 ## Kanały
 
 - **Wsparcie techniczne/merytoryczne:** wskazany kanał (np. dedykowany wątek Slack/Teams lub adres koordynatora).
-- **Zbiórka wyników:** uczestnik odsyła `wynik-<ścieżka>.json` i `.csv` koordynatorowi (kanał jak wyżej).
+- **Zbiórka wyników:** uczestnik odsyła `wynik-<ścieżka>.json`, `.csv` **oraz** `pytania-<ścieżka>.csv`
+  (eksport per-pytanie, potrzebny do kalibracji) koordynatorowi (kanał jak wyżej).
 - **Ankieta:** link do formularza (z `formularz-feedbacku.md`) — anonimowa, identyfikator typu „P03”.
 
 ## Zbiórka i agregacja danych do kalibracji
 
-1. Koordynator zbiera pliki wyników (eksport z aplikacji) + ankiety.
+> Sam `wynik-*.json/csv` to agregaty (wynik %, ścieżka, słabe moduły) i **nie wystarcza** do kalibracji pytań.
+> Per-pytanie `attempts`/`correct` pochodzą z eksportu **`pytania-<ścieżka>.csv`** (anonimowo, źródło: quiz inline).
+
+1. Koordynator zbiera od każdego uczestnika `pytania-<ścieżka>.csv` (per-pytanie) + `wynik-*` + ankiety.
 2. Z ankiet (pole „pytania niejasne”) liczy **zgłoszenia niejasności per pytanie**.
-3. Buduje zagregowany `pilot-results.json` wg `genai-llm-training/data/schemas/pilot-results.schema.json`
-   (per pytanie: `attempts`, `correct`, `avgTimeSec`, `ambiguityReports`). **Dane zagregowane, bez PII.**
+3. **Sumuje eksporty per-pytanie między uczestnikami** i buduje `pilot-results.json` wg
+   `genai-llm-training/data/schemas/pilot-results.schema.json` (per pytanie: `attempts` = liczba odpowiadających,
+   `correct` = liczba poprawnych z 1. próby; `ambiguityReports` z ankiet; `byPath` = rozkład uczestników;
+   `synthetic: false`). **Dane zagregowane, bez PII.**
 4. Uruchamia `node genai-llm-training/tools/calibration/calibrate.mjs ścieżka/do/pilot-results.json` → raport
-   kalibracji (patrz `raport-kalibracji.md`).
+   kalibracji (patrz `raport-kalibracji.md`). Narzędzie najpierw waliduje plik (8–15 osób, liczby całkowite,
+   `correct<=attempts<=uczestnicy`, spójność z `byPath`) i przy niemożliwych danych kończy `exit 1`.
 
 ---
 
@@ -46,16 +53,18 @@ release 1.0; zebranie wyników, czasu, ścieżki i feedbacku do kalibracji (#28)
 > Do uzgodnienia ze sponsorem **przed startem**.
 
 **Zbieramy (zagregowane, na potrzeby walidacji szkolenia):**
-- Z eksportu aplikacji: ścieżka, wynik %, zaliczenie (tak/nie), zaliczenie pytań krytycznych, liczba podejść,
+- Z eksportu wyniku: ścieżka, wynik %, zaliczenie (tak/nie), zaliczenie pytań krytycznych, liczba podejść,
   ID zaliczenia (deterministyczny skrót, nie zawiera danych osobowych), słabe moduły, wyniki zadań praktycznych,
   czas spędzony w modułach (KPI Time to complete).
+- Z eksportu per-pytanie (`pytania-*.csv`): id pytania, moduł, 0/1 poprawności z 1. próby (anonimowo) — do kalibracji.
 - Z ankiety: NPS, przydatność, trudność, oceny per moduł, zgłoszenia niejasności pytań, komentarze, identyfikator
   anonimowy (np. „P03”).
 
 **NIE zbieramy:**
 - Nazwisk, e-maili, danych klienta ani żadnych PII. Imię na certyfikacie (opcjonalne) pozostaje **wyłącznie
-  w przeglądarce uczestnika** — nie ma go w eksporcie.
-- Pełnych odpowiedzi na pytania ani treści wpisywanej w polach (eksport zawiera wynik, nie odpowiedzi).
+  w przeglądarce uczestnika** — nie ma go w eksportach.
+- Treści odpowiedzi otwartych ani wpisywanych w polach. Eksport per-pytanie zawiera tylko id pytania i 0/1
+  poprawności (nie zawiera wybranych opcji ani treści).
 
 **Gdzie są dane:**
 - Postęp uczestnika: **localStorage** jego przeglądarki (MVP, bez backendu — ADR-0001). Uczestnik kontroluje
