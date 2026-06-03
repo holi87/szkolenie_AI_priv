@@ -3,9 +3,20 @@
 // Kontrakt certificate.js (issued/completionId/eksporty) NIETKNIĘTY — zmiana jest wyłącznie prezentacyjna.
 import { el } from "./dom.js";
 import { icon } from "./icon.js";
+import { t } from "../i18n/i18n.js";
 import { exportJson, exportCsv, exportQuestionStatsCsv } from "../core/certificate.js";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
+
+// Rozwiązanie KODU powodu niezaliczenia z core (certificate.js zwraca kod, nie prozę — ADR-0004, core zero-i18n).
+// Świadomie NIE renderowane (powód był i pozostaje niewidoczny — visible output bez regresji), ale obecne i testowalne.
+const CERT_REASON_LABEL = {
+  below_pass_threshold: () => t("cert.reason.below_pass_threshold"),
+};
+export function certReasonText(reasonCode) {
+  const resolve = CERT_REASON_LABEL[reasonCode];
+  return resolve ? resolve() : "";
+}
 
 function download(filename, content, mime) {
   const blob = new Blob([content], { type: mime });
@@ -40,10 +51,10 @@ function medal() {
 }
 
 const GATE_LABEL = {
-  overallThreshold: () => "Próg ogólny",
-  criticalQuestions: (g) => `Pytania krytyczne (${g.module})`,
-  practicalTask: (g) => `Zadanie praktyczne (${g.rubric})`,
-  moduleMinScore: (g) => `Wynik modułu ${g.module} (${g.rubric})`,
+  overallThreshold: () => t("cert.gate.overallThreshold"),
+  criticalQuestions: (g) => t("cert.gate.criticalQuestions", { module: g.module }),
+  practicalTask: (g) => t("cert.gate.practicalTask", { rubric: g.rubric }),
+  moduleMinScore: (g) => t("cert.gate.moduleMinScore", { module: g.module, rubric: g.rubric }),
 };
 
 /** Lista bramek zaliczenia ze statusem — pokazuje, dlaczego ścieżka (nie)zaliczona, mimo wyniku %.
@@ -51,12 +62,13 @@ const GATE_LABEL = {
 function gatesBlock(gates) {
   if (!gates || gates.length === 0) return null;
   return el("section", { class: "cert-gates" }, [
-    el("h2", { text: "Status bramek zaliczenia" }),
+    el("h2", { text: t("cert.gates.heading") }),
     el("ul", { class: "cert-gates__list" }, gates.map((g) => {
       const label = (GATE_LABEL[g.type] || (() => g.type))(g);
+      const status = g.passed ? t("cert.gate.status.ok") : t("cert.gate.status.fail");
       return el("li", { class: `cert-gate cert-gate--${g.passed ? "ok" : "fail"}` }, [
         el("span", { class: "cert-gate__icon", attrs: { "aria-hidden": "true" } }, [icon(g.passed ? "check" : "cross")]),
-        `${g.passed ? "spełniona" : "niespełniona"} — ${label}${g.detail ? `: ${g.detail}` : ""}`,
+        `${status} — ${label}${g.detail ? `: ${g.detail}` : ""}`,
       ]);
     })),
   ]);
@@ -65,21 +77,33 @@ function gatesBlock(gates) {
 function weakAreasBlock(weakAreas) {
   if (!weakAreas || weakAreas.length === 0) return null;
   return el("section", {}, [
-    el("h2", { text: "Do powtórzenia" }),
+    el("h2", { text: t("cert.weakAreas.heading") }),
     el("ul", { class: "weak-list" }, weakAreas.map((w) =>
       el("li", { text: `${w.module} — ${w.name}${w.pct != null ? ` (${w.pct}%)` : ""}` }))),
   ]);
 }
 
 function exportButtons(progress, pathName) {
-  const json = el("button", { class: "btn btn--ghost", type: "button", text: "Pobierz wynik (JSON)",
+  const json = el("button", { class: "btn btn--ghost", type: "button", text: t("action.exportJson"),
     on: { click: () => download(`wynik-${progress.path}.json`, exportJson(progress, { pathName }), "application/json") } });
-  const csv = el("button", { class: "btn btn--ghost", type: "button", text: "Pobierz wynik (CSV)",
+  const csv = el("button", { class: "btn btn--ghost", type: "button", text: t("action.exportCsv"),
     on: { click: () => download(`wynik-${progress.path}.csv`, exportCsv(progress, { pathName }), "text/csv") } });
   // Per-pytanie (anonimowo) — sygnał do kalibracji pilotażu (#28). Bez PII; do odesłania koordynatorowi.
-  const qstats = el("button", { class: "btn btn--ghost", type: "button", text: "Pobierz odpowiedzi pytań (CSV)",
+  const qstats = el("button", { class: "btn btn--ghost", type: "button", text: t("action.exportQuestionStatsCsv"),
     on: { click: () => download(`pytania-${progress.path}.csv`, exportQuestionStatsCsv(progress), "text/csv") } });
   return el("div", { class: "btn-row btn-row--export" }, [json, csv, qstats]);
+}
+
+// Notka wyniku niezaliczenia: szablon z placeholderem {score}, rozbity tak, by % zostało w <strong>
+// (kontrast/wizualnie jak dawniej), a kolejność słów była tłumaczalna (EN może mieć % w środku zdania).
+function failNotice(scorePct, hasGates) {
+  const tmpl = t(hasGates ? "cert.failed.notice.withGates" : "cert.failed.notice.noGates");
+  const [before, after = ""] = tmpl.split("{score}");
+  return el("div", { class: "result-notice result-notice--fail", attrs: { role: "alert" } }, [
+    before || null,
+    el("strong", { class: "result-notice__score", text: `${scorePct}%` }),
+    after ? el("span", { text: after }) : null,
+  ]);
 }
 
 /**
@@ -91,19 +115,19 @@ export function renderResult(cert, opts = {}) {
   const { progress, pathName } = opts;
 
   if (cert.issued) {
-    root.appendChild(el("h1", { text: "Gratulacje — ścieżka zaliczona" }));
+    root.appendChild(el("h1", { text: t("cert.passed.heading") }));
     // Karta-nagroda: gradientowa ramka (.certificate) + solidne wnętrze (.certificate__inner, kontrast tekstu OK).
     const inner = el("div", { class: "certificate__inner" }, [
       medal(),
-      el("p", { class: "certificate__eyebrow", text: "Certyfikat ukończenia" }),
+      el("p", { class: "certificate__eyebrow", text: t("cert.eyebrow") }),
       el("p", { class: "certificate__score" }, [
         el("strong", { class: "certificate__score-value", text: `${cert.scorePct}%` }),
-        el("span", { class: "certificate__score-label", text: "wynik ścieżki" }),
+        el("span", { class: "certificate__score-label", text: t("cert.score.label") }),
       ]),
-      cert.displayName ? el("div", { class: "cert-row" }, [el("span", { text: "Uczestnik" }), el("strong", { text: cert.displayName })]) : null,
-      el("div", { class: "cert-row" }, [el("span", { text: "Ścieżka" }), el("strong", { text: `${pathName || cert.path} (${cert.path})` })]),
-      el("div", { class: "cert-row" }, [el("span", { text: "Data" }), el("strong", { text: (cert.date || "").slice(0, 10) })]),
-      el("div", { class: "cert-row" }, [el("span", { text: "ID zaliczenia" }), el("span", { class: "certificate__id", text: cert.completionId })]),
+      cert.displayName ? el("div", { class: "cert-row" }, [el("span", { text: t("cert.row.participant") }), el("strong", { text: cert.displayName })]) : null,
+      el("div", { class: "cert-row" }, [el("span", { text: t("cert.row.path") }), el("strong", { text: `${pathName || cert.path} (${cert.path})` })]),
+      el("div", { class: "cert-row" }, [el("span", { text: t("cert.row.date") }), el("strong", { text: (cert.date || "").slice(0, 10) })]),
+      el("div", { class: "cert-row" }, [el("span", { text: t("cert.row.completionId") }), el("span", { class: "certificate__id", text: cert.completionId })]),
     ]);
     root.appendChild(el("section", { class: "certificate certificate--issued" }, [inner]));
     const gIssued = gatesBlock(opts.gates);
@@ -112,16 +136,11 @@ export function renderResult(cert, opts = {}) {
     const wa = weakAreasBlock(cert.weakAreas);
     if (wa) root.appendChild(wa);
   } else {
-    root.appendChild(el("h1", { text: "Ścieżka jeszcze niezaliczona" }));
+    root.appendChild(el("h1", { text: t("cert.failed.heading") }));
     // cert.scorePct to WAŻONY wynik ścieżki (quiz inline + test + praktyka), nie sam wynik testu.
     // "spełnij bramki poniżej" tylko gdy lista bramek faktycznie jest renderowana (gates dostępne).
     const gFail = gatesBlock(opts.gates);
-    root.appendChild(el("div", { class: "result-notice result-notice--fail", attrs: { role: "alert" } }, [
-      el("strong", { class: "result-notice__score", text: `${cert.scorePct}%` }),
-      el("span", { text: gFail
-        ? " — wynik ścieżki. Aby zaliczyć, spełnij wszystkie bramki poniżej."
-        : " — wynik ścieżki. Ścieżka niezaliczona — wróć i spełnij wszystkie wymagane warunki zaliczenia tej ścieżki." }),
-    ]));
+    root.appendChild(failNotice(cert.scorePct, Boolean(gFail)));
     if (gFail) root.appendChild(gFail);
     const wa = weakAreasBlock(cert.weakAreas);
     if (wa) root.appendChild(wa);
@@ -129,16 +148,16 @@ export function renderResult(cert, opts = {}) {
     if (opts.attemptInfo) root.appendChild(el("p", { class: "quiz-meta", text: opts.attemptInfo }));
     if (opts.canRetry && typeof opts.onRetry === "function") {
       root.appendChild(el("div", { class: "btn-row" }, [
-        el("button", { class: "btn", type: "button", text: "Podejdź ponownie", on: { click: opts.onRetry } }),
+        el("button", { class: "btn", type: "button", text: t("action.retry"), on: { click: opts.onRetry } }),
       ]));
     } else if (!opts.canRetry) {
-      root.appendChild(el("p", { class: "muted", text: "Wykorzystano wszystkie podejścia do testu." }));
+      root.appendChild(el("p", { class: "muted", text: t("test.allAttemptsUsed") }));
     }
   }
 
   if (typeof opts.onBack === "function") {
     root.appendChild(el("div", { class: "btn-row" }, [
-      el("button", { class: "btn btn--ghost", type: "button", text: "Wróć do modułów", on: { click: opts.onBack } }),
+      el("button", { class: "btn btn--ghost", type: "button", text: t("action.backToModules"), on: { click: opts.onBack } }),
     ]));
   }
   return root;

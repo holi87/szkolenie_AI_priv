@@ -1,7 +1,7 @@
 // quiz-engine.test.mjs — scoring per typ pytania, partial credit, pytania krytyczne (issue #17).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { scoreQuestion, scoreQuiz, CRITICAL_FAIL_MESSAGE } from "../../assets/core/quiz-engine.js";
+import { scoreQuestion, scoreQuiz } from "../../assets/core/quiz-engine.js";
 
 const single = { id: "T1", type: "single_choice", points: 1, correct: ["B"], isCritical: false, feedbackCorrect: "ok", feedbackIncorrect: "no" };
 const multi = { id: "T2", type: "multiple_choice", points: 2, correct: ["A", "C"], isCritical: false };
@@ -60,7 +60,7 @@ test("pytanie krytyczne: błędna/pusta odpowiedź → isCriticalFail", () => {
   assert.equal(scoreQuestion(crit, "A").isCriticalFail, false, "poprawne → brak fail");
   assert.equal(scoreQuestion(crit, "B").isCriticalFail, true, "błędne → fail");
   assert.equal(scoreQuestion(crit, null).isCriticalFail, true, "brak odpowiedzi → fail");
-  assert.ok(CRITICAL_FAIL_MESSAGE.includes("błąd bezpieczeństwa"));
+  // Komunikat krytyczny to teraz tekst UI z katalogu (i18n #77) — sprawdzany w i18n.test.mjs (renderFeedback).
 });
 
 test("scoreQuiz: agreguje wynik %, listę krytycznych porażek", () => {

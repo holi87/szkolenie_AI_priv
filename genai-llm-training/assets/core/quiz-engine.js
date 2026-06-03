@@ -3,10 +3,8 @@
 // Punktacja per typ pytania wg wymagania/07 (sekcja "Typy pytań").
 // Zasada AGENTS: konserwatywne zachowanie domyślne — brak odpowiedzi / niejasna odpowiedź = 0 pkt,
 // a błędne pytanie krytyczne zawsze sygnalizuje isCriticalFail.
-
-/** Komunikat dla błędnego pytania krytycznego (wymagania/07, "Feedback dla uczestnika"). */
-export const CRITICAL_FAIL_MESSAGE =
-  "To jest błąd bezpieczeństwa. Przed zaliczeniem wróć do sekcji higieny danych i prompt injection.";
+// i18n (ADR-0004): core jest zero-i18n. Komunikat dla błędu krytycznego NIE żyje tu jako proza —
+// flaga `result.isCriticalFail` JEST kodem semantycznym; tekst rozwiązuje UI przez t('feedback.criticalFail.*').
 
 /** Typy oceniane automatycznie przez wybór pojedynczej najlepszej opcji (1 poprawna). */
 const SINGLE_BEST = new Set(["single_choice", "scenariusz_decyzyjny", "scenariusz"]);

@@ -3,6 +3,7 @@
 // poziomów (aria-live — czytnik ekranu ogłasza zmianę). Checkpoint (radio/checkbox) jest scorowany.
 import { el } from "../dom.js";
 import { icon } from "../icon.js";
+import { t } from "../../i18n/i18n.js";
 
 export function renderTune(config) {
   const controls = config.controls || [];
@@ -14,12 +15,12 @@ export function renderTune(config) {
     const lines = selects.map(({ control, sel }) => {
       const lvl = (control.levels || [])[Number(sel.value)] || {};
       return el("div", { class: "tune-output__row" }, [
-        el("strong", { text: `${control.label}: ${lvl.label || "—"}` }),
+        el("strong", { text: t("interaction.tune.outputRow", { label: control.label, value: lvl.label || "—" }) }),
         lvl.effect ? el("p", { text: lvl.effect }) : null,
       ]);
     });
     outPanel.replaceChildren(
-      el("p", { class: "muted", text: config.outputLabel || "Wynik dla wybranych ustawień:" }),
+      el("p", { class: "muted", text: config.outputLabel || t("interaction.tune.outputLabel") }),
       ...lines,
     );
   };
@@ -46,7 +47,7 @@ export function renderTune(config) {
   });
   const cpFb = el("div", { class: "tune-checkpoint__fb" });
   const checkpointNode = el("fieldset", { class: "tune-checkpoint" }, [
-    el("legend", { class: "quiz-question__prompt", text: cp.prompt || "Checkpoint" }),
+    el("legend", { class: "quiz-question__prompt", text: cp.prompt || t("interaction.tune.checkpointFallback") }),
     el("ul", { class: "options" }, cpOptions),
     cpFb,
   ]);
@@ -71,7 +72,7 @@ export function renderTune(config) {
   const showFeedback = (result) => {
     const ok = result.checkpointCorrect;
     cpFb.replaceChildren(el("div", { class: `feedback ${ok ? "feedback--correct" : "feedback--incorrect"}`, attrs: { role: "status" } }, [
-      el("p", { class: "feedback__head" }, [el("span", { attrs: { "aria-hidden": "true" } }, [icon(ok ? "check" : "cross")]), ok ? "Poprawnie" : "Niepoprawnie"]),
+      el("p", { class: "feedback__head" }, [el("span", { attrs: { "aria-hidden": "true" } }, [icon(ok ? "check" : "cross")]), ok ? t("feedback.correct") : t("feedback.incorrect")]),
       el("p", { text: ok ? (cp.feedbackCorrect || "") : (cp.feedbackIncorrect || "") }),
     ]));
   };

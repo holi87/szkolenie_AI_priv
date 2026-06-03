@@ -11,9 +11,11 @@ import { buildCertificate } from "./core/certificate.js";
 import { evaluateInteraction } from "./core/interactions/index.js";
 import { el, mount } from "./ui/dom.js";
 import { icon } from "./ui/icon.js";
+import { t, registerCatalog, setLocale, resolveLang, persistLang, localeHasData } from "./i18n/i18n.js";
 import { renderPathSelect } from "./ui/path-select.js";
 import { updateHeader, renderNav } from "./ui/shell.js";
 import { initTheme, toggleTheme } from "./ui/theme.js";
+import { initLangSwitch } from "./ui/lang-switch.js";
 import { renderQuestion, renderFeedback } from "./ui/quiz-view.js";
 import { renderTest } from "./ui/test-view.js";
 import { renderResult } from "./ui/certificate-view.js";
@@ -50,13 +52,16 @@ function inlineQuizPctFor(prog, req) {
   return Math.round((sum / req.length) * 100) / 100;
 }
 
-function start(data) {
+function start(initialData, ctx = {}) {
+  let data = initialData;                 // mutable: zmiana języka może przeładować dane (gdy locale ma własne data/)
+  let dataLocale = ctx.dataLocale || "pl";
   const store = makeStore();
   const refs = {
     view: $("view"), nav: $("module-nav"), navToggle: $("nav-toggle"), resetBtn: $("reset-btn"),
     pathIndicator: $("path-indicator"), progress: $("progress"), progressFill: $("progress-fill"),
     progressTrack: document.querySelector(".progress__track"), progressLabel: $("progress-label"),
     themeToggle: $("theme-toggle"),
+    langWrap: $("lang-switch"), langBtn: $("lang-switch-btn"), langLabel: $("lang-switch-label"), langFlag: $("lang-switch-flag"),
   };
 
   // Motyw jasny/ciemny (UX-3): anty-flash skrypt w <head> ustawił już [data-theme]; tu synchronizujemy
@@ -65,6 +70,29 @@ function start(data) {
     const syncToggle = (theme) => refs.themeToggle.setAttribute("aria-pressed", String(theme === "light"));
     syncToggle(initTheme());
     refs.themeToggle.addEventListener("click", () => syncToggle(toggleTheme()));
+  }
+
+  // Przełącznik języka (I18N-3 #79). Zmiana: rejestruj katalog locale (jeśli trzeba), przeładuj dane TYLKO gdy
+  // zmienia się data-locale (locale z hasData), ustaw <html lang>, zapisz preferencję, odśwież ekran w miejscu.
+  let langApi = null;
+  async function setLanguage(code) {
+    setLocale(code);
+    persistLang(code);
+    if (globalThis.document && globalThis.document.documentElement) globalThis.document.documentElement.setAttribute("lang", code);
+    if (typeof ctx.ensureCatalog === "function") { try { await ctx.ensureCatalog(code); } catch { /* fallback PL */ } }
+    const nextDataLocale = localeHasData(code) ? code : "pl";
+    if (nextDataLocale !== dataLocale && typeof ctx.loadData === "function") {
+      try { data = await ctx.loadData(nextDataLocale); dataLocale = nextDataLocale; } catch { /* zostań przy obecnych danych */ }
+    }
+    if (langApi) langApi.setActive(code);
+    render();
+  }
+  if (refs.langBtn && refs.langWrap) {
+    langApi = initLangSwitch({
+      wrap: refs.langWrap, trigger: refs.langBtn, label: refs.langLabel, triggerFlag: refs.langFlag,
+      getActive: () => ctx.uiLocale || "pl",
+      onSelect: (code) => { setLanguage(code); },
+    });
   }
   const state = { screen: "menu", moduleId: null, test: null };
   // Imię na certyfikat może być wpisane PRZED wyborem ścieżki (gdy brak aktywnej ścieżki nie ma gdzie zapisać).
@@ -146,16 +174,16 @@ function start(data) {
     const passed = prog.finalTest && prog.finalTest.passed;
 
     let nextStep;
-    if (passed) nextStep = "Ścieżka zaliczona. Możesz pobrać wynik na ekranie testu.";
-    else if (nextReq) nextStep = `Następny krok: rozpocznij moduł ${nextReq}.`;
-    else if (unlocked) nextStep = "Następny krok: podejdź do testu końcowego.";
-    else nextStep = "Ukończ moduły wymagane, aby odblokować test.";
+    if (passed) nextStep = t("module.nextStep.passed");
+    else if (nextReq) nextStep = t("module.nextStep.startModule", { module: nextReq });
+    else if (unlocked) nextStep = t("module.nextStep.goToTest");
+    else nextStep = t("module.nextStep.completeRequired");
 
     mount(refs.view, el("div", { class: "view__content" }, [
-      el("h1", { text: `Ścieżka ${pathId} — ${pathName(data, pathId)}` }),
-      el("p", { text: "Wybierz moduł z listy po lewej. Po module rozwiąż quiz inline z natychmiastowym feedbackiem. Test końcowy odblokuje się po ukończeniu modułów wymaganych." }),
+      el("h1", { text: t("module.menu.heading", { pathId, pathName: pathName(data, pathId) }) }),
+      el("p", { text: t("module.menu.intro") }),
       el("div", { class: "next-step", attrs: { role: "status" } }, [el("span", { class: "next-step__icon", attrs: { "aria-hidden": "true" } }, [icon("info")]), nextStep]),
-      passed ? el("div", { class: "btn-row" }, [el("button", { class: "btn", type: "button", text: "Zobacz wynik / certyfikat", on: { click: showFinalTest } })]) : null,
+      passed ? el("div", { class: "btn-row" }, [el("button", { class: "btn", type: "button", text: t("action.viewResult"), on: { click: showFinalTest } })]) : null,
     ]));
   }
 
@@ -174,8 +202,8 @@ function start(data) {
     const alreadyDone = store.getProgress().modules[moduleId]?.status === "completed";
 
     const root = el("div", { class: "view__content" });
-    root.appendChild(el("h1", { text: `${mod.id} — ${mod.name}` }));
-    root.appendChild(el("p", { class: "muted", text: `Filar: ${mod.pillar} · poziom: ${mod.level} · czas: ~${mod.timeFullMin} min · interakcja: ${mod.interactiveElement}` }));
+    root.appendChild(el("h1", { text: t("module.title", { moduleId: mod.id, moduleName: mod.name }) }));
+    root.appendChild(el("p", { class: "muted", text: t("module.meta", { pillar: mod.pillar, level: mod.level, time: mod.timeFullMin, interaction: mod.interactiveElement }) }));
 
     // ----- Treść (ekrany z danych, filtr po ścieżce — wariant S1 skrócony obsłużony przez onlyForPaths) -----
     if (content) {
@@ -183,9 +211,9 @@ function start(data) {
       for (const sec of renderScreens(content.screens, pathId)) root.appendChild(sec);
     } else {
       // Fallback (brak pliku treści): kluczowe pojęcia + efekty z modules.json.
-      root.appendChild(el("h2", { text: "Kluczowe pojęcia" }));
+      root.appendChild(el("h2", { text: t("module.keyConcepts") }));
       root.appendChild(el("ul", {}, (mod.keyConcepts || []).map((c) => el("li", { text: c }))));
-      root.appendChild(el("h2", { text: "Czego się nauczysz" }));
+      root.appendChild(el("h2", { text: t("module.learningOutcomes") }));
       root.appendChild(el("ul", {}, (mod.learningOutcomes || []).map((o) => el("li", { text: o }))));
     }
 
@@ -203,8 +231,8 @@ function start(data) {
     const stepHint = el("p", {});
     const refreshHint = () => {
       stepHint.textContent = !alreadyDone && pool.length > 0 && !quizComplete()
-        ? "Sprawdź wszystkie pytania quizu, aby odblokować ukończenie modułu."
-        : (content && content.summary && content.summary.nextStep) || "Możesz oznaczyć moduł jako ukończony.";
+        ? t("module.hint.checkAllQuestions")
+        : (content && content.summary && content.summary.nextStep) || t("module.hint.canComplete");
     };
     const updateCompleteState = () => { completeBtn.disabled = !alreadyDone && !quizComplete(); refreshHint(); };
 
@@ -213,7 +241,7 @@ function start(data) {
       root.appendChild(el("h2", { text: ixConfig.title || mod.interactiveElement }));
       const ix = renderInteraction(ixConfig);
       const ixFb = el("div");
-      const ixBtn = el("button", { class: "btn", type: "button", text: ixConfig.kind === "rubric" ? "Oceń" : "Sprawdź" });
+      const ixBtn = el("button", { class: "btn", type: "button", text: ixConfig.kind === "rubric" ? t("action.evaluate") : t("action.check") });
       ixBtn.addEventListener("click", () => {
         const result = evaluateInteraction(ixConfig, ix.getResponse());
         ix.showFeedback(result);
@@ -232,14 +260,14 @@ function start(data) {
     }
 
     // ----- Quiz inline (zachowane wiring scoringu — setInlineQuizScore zasila 30% wyniku ścieżki) -----
-    root.appendChild(el("h2", { text: `Quiz inline (${pool.length} pytań)` }));
+    root.appendChild(el("h2", { text: t("quiz.inline.heading", { count: pool.length }) }));
     pool.forEach((q) => {
       // Wrapper grupujący pytanie+przycisk+feedback. Karta wizualna to fieldset.quiz-question (UX-4 #73);
       // osobna klasa, by nie dublować ramki/karty wokół fieldsetu.
       const block = el("div", { class: "quiz-item" });
       const rq = renderQuestion(q, { showMeta: true });
       const fb = el("div");
-      const check = el("button", { class: "btn", type: "button", text: "Sprawdź odpowiedź" });
+      const check = el("button", { class: "btn", type: "button", text: t("action.checkAnswer") });
       check.addEventListener("click", () => {
         const ans = rq.getAnswer();
         const rp = rq.getRubricPoints ? rq.getRubricPoints() : undefined;
@@ -253,7 +281,7 @@ function start(data) {
       root.appendChild(block);
     });
 
-    const completeBtn = el("button", { class: "btn", type: "button", text: "Oznacz moduł jako ukończony", on: { click: () => {
+    const completeBtn = el("button", { class: "btn", type: "button", text: t("action.markCompleted"), on: { click: () => {
       // % quizu inline zapisz tylko po komplecie odpowiedzi — nie nadpisuj wcześniejszego wyniku przy ponownej wizycie.
       if (pool.length > 0 && moduleResults.size === pool.length) {
         const tot = [...moduleResults.values()].reduce((a, r) => ({ awarded: a.awarded + r.awarded, max: a.max + r.max }), { awarded: 0, max: 0 });
@@ -269,7 +297,7 @@ function start(data) {
     refreshHint(); // hint zależny od stanu quizu (gdy completeBtn zablokowany → instrukcja, inaczej → następny krok)
     root.appendChild(el("div", { class: "next-step" }, [
       stepHint,
-      el("div", { class: "btn-row" }, [completeBtn, el("button", { class: "btn btn--ghost", type: "button", text: "Wróć do modułów", on: { click: () => { showMenu(); focusView(); } } })]),
+      el("div", { class: "btn-row" }, [completeBtn, el("button", { class: "btn btn--ghost", type: "button", text: t("action.backToModules"), on: { click: () => { showMenu(); focusView(); } } })]),
     ]));
     mount(refs.view, root);
     focusView();
@@ -281,8 +309,8 @@ function start(data) {
     if (recordsPractical) {
       const ok = result.passed === true;
       lines.push(el("p", { attrs: { role: "status" }, text: ok
-        ? `Zadanie praktyczne zaliczone (${result.score}/${result.max}) — liczy się do zaliczenia ścieżki ${pathId}.`
-        : `Zadanie praktyczne poniżej progu (${result.score}/${result.max}). Popraw kryteria i oceń ponownie — wynik liczy się do zaliczenia ścieżki ${pathId}.` }));
+        ? t("interaction.practical.passed", { score: result.score, max: result.max, pathId })
+        : t("interaction.practical.belowThreshold", { score: result.score, max: result.max, pathId }) }));
     }
     // passed: true→zielony, false→czerwony, null (rubryka bez progu, np. QA workbench)→neutralny (nie ogłaszaj „poprawnie").
     const cls = result.passed === true ? " feedback--correct" : result.passed === false ? " feedback--incorrect" : "";
@@ -312,9 +340,9 @@ function start(data) {
       .map((r) => r.module))];
     mount(refs.view, renderTest(selection, {
       pathName: pathName(data, pathId), path: pathId, passThresholdPct: path.passThresholdPct,
-      attemptInfo: `Podejście ${(ft.attempts || 0) + 1} z ${ft.maxAttempts || path.attempts || 3}.`,
+      attemptInfo: t("test.attemptInfo", { current: (ft.attempts || 0) + 1, max: ft.maxAttempts || path.attempts || 3 }),
       practicalNote: practicalModules.length
-        ? `Pełne zaliczenie tej ścieżki wymaga też oceny zadania praktycznego — wykonaj interakcję w module: ${practicalModules.join(", ")} (interakcja zapisuje wynik praktyczny).`
+        ? t("test.practicalNote", { modules: practicalModules.join(", ") })
         : null,
       onSubmit: ({ answers, rubricPointsById }) => finishTest(pathId, selection, answers, rubricPointsById),
     }));
@@ -353,7 +381,7 @@ function start(data) {
     mount(refs.view, renderResult(cert, {
       progress: store.getProgress(), pathName: pathName(data, pathId), gates,
       canRetry: !cert.issued && store.canAttemptFinalTest(),
-      attemptInfo: `Wykorzystane podejścia: ${(store.getProgress().finalTest || {}).attempts || 0}.`,
+      attemptInfo: t("test.attemptsUsed", { attempts: (store.getProgress().finalTest || {}).attempts || 0 }),
       onRetry: () => { showFinalTest(); focusView(); },
       onBack: () => { showMenu(); focusView(); },
     }));
@@ -363,7 +391,7 @@ function start(data) {
 
   // ----- Globalne kontrolki -----
   refs.resetBtn.addEventListener("click", () => {
-    if (globalThis.confirm("Zresetować cały postęp tej przeglądarki? Tej operacji nie można cofnąć.")) {
+    if (globalThis.confirm(t("action.resetConfirm"))) {
       timer.moduleId = null; timer.enterMs = 0; // porzuć licznik — reset i tak czyści progres
       store.reset({ all: true });
       pendingName = ""; // wyczyść pseudonim trzymany w UI (#63) — inaczej wróciłby na ekran wyboru i kolejny certyfikat
@@ -381,14 +409,42 @@ function start(data) {
 }
 
 // ----- Boot -----
-loadTrainingData()
-  .then(start)
-  .catch((err) => {
-    const view = $("view");
-    mount(view, el("div", { class: "view__content" }, [
-      el("h1", { text: "Nie udało się załadować szkolenia" }),
-      el("p", { text: "Dane (data/*.json) ładują się przez fetch() i wymagają serwera http(s) — nie otwieraj pliku przez file://." }),
-      el("p", { class: "muted", text: "Uruchom lokalnie: python3 -m http.server 8000 w katalogu genai-llm-training, potem otwórz http://localhost:8000" }),
-      el("pre", { class: "muted", text: String(err && err.message ? err.message : err) }),
-    ]));
-  });
+// Katalogi i18n ładowane przez fetch (jak dane) i rejestrowane PRZED renderem, żeby t() działało od pierwszego
+// ekranu. PL kanoniczny zawsze; aktywny locale dodatkowo (fallback PL przy braku/pustej wartości). Ścieżki
+// względne (Pages, ADR-0002). ensureCatalog jest idempotentne — używane też przy zmianie języka (#79).
+const catalogFetch = async (url) => {
+  const res = await globalThis.fetch(url);
+  if (!res.ok) throw new Error(`${url}: ${res.status}`);
+  return res.json();
+};
+const loadedCatalogs = new Set();
+async function ensureCatalog(code) {
+  if (loadedCatalogs.has(code)) return;
+  registerCatalog(code, await catalogFetch(`assets/i18n/${code}.json`));
+  loadedCatalogs.add(code);
+}
+const loadData = (locale) => loadTrainingData({ locale });
+
+function renderLoadError(err) {
+  // Edge file://: jeśli i NIE udało się pobrać katalogu i18n (ten sam fetch), t() zwróci klucze — ale <pre>
+  // z realnym błędem nadal wskazuje przyczynę. Na hostingu http(s) (Pages) katalog i dane ładują się poprawnie.
+  mount($("view"), el("div", { class: "view__content" }, [
+    el("h1", { text: t("error.load.heading") }),
+    el("p", { text: t("error.load.body") }),
+    el("p", { class: "muted", text: t("error.load.hint") }),
+    el("pre", { class: "muted", text: String(err && err.message ? err.message : err) }),
+  ]));
+}
+
+(async () => {
+  const uiLocale = resolveLang();                              // ?lang= (walidowany) > zapis > PL
+  const dataLocale = localeHasData(uiLocale) ? uiLocale : "pl"; // brak danych locale -> dane PL (bez crasha)
+  setLocale(uiLocale);
+  if (globalThis.document && globalThis.document.documentElement) globalThis.document.documentElement.setAttribute("lang", uiLocale);
+  try { await ensureCatalog("pl"); } catch { /* katalog niedostępny — t() zwróci klucze */ }
+  if (uiLocale !== "pl") { try { await ensureCatalog(uiLocale); } catch { /* fallback PL */ } }
+  try {
+    const data = await loadData(dataLocale);
+    start(data, { uiLocale, dataLocale, ensureCatalog, loadData });
+  } catch (err) { renderLoadError(err); }
+})();

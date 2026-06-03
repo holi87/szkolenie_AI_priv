@@ -35,18 +35,16 @@
         <span class="brand__name">Szkolenie GenAI i LLM</span>
       </div>
       <div class="app-header__meta">
-        <!-- Slot przełącznika języka (UX-2 #71): INERTNY do czasu I18N-3 (#79), który wepnie logikę w TEN slot.
-             aria-disabled (nie atrybut disabled) — pozostaje fokusowalny i opisany (WCAG), bez działania. -->
-        <button id="lang-switch" class="btn btn--ghost lang-switch" type="button"
-                aria-disabled="true" title="Wersja EN wkrótce / English coming soon"
-                aria-label="Język / Language: polski (wersja angielska wkrótce)">
-          <svg class="lang-switch__flag" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 14"
-               width="20" height="14" aria-hidden="true" focusable="false">
-            <rect width="20" height="14" rx="2" fill="#ffffff" stroke="#67718a" stroke-width="0.5"/>
-            <path d="M0 9 h20 v3 a2 2 0 0 1-2 2 H2 a2 2 0 0 1-2-2 Z" fill="#dc143c"/>
-          </svg>
-          <span class="lang-switch__label">PL</span>
-        </button>
+        <!-- Przełącznik języka (I18N-3 #79): trigger + popup-menu budowane przez assets/ui/lang-switch.js.
+             Flaga (dekoracyjna) ORAZ kod/nazwa (nośnik treści) — pełna obsługa klawiatury (arrows/Enter/Esc). -->
+        <div class="lang-switch" id="lang-switch">
+          <button id="lang-switch-btn" class="btn btn--ghost lang-switch__trigger" type="button"
+                  aria-haspopup="menu" aria-expanded="false" aria-label="Język / Language: polski">
+            <span class="lang-switch__flag-wrap" id="lang-switch-flag" aria-hidden="true"></span>
+            <span class="lang-switch__label" id="lang-switch-label">PL</span>
+            <span class="lang-switch__caret" aria-hidden="true">▾</span>
+          </button>
+        </div>
         <!-- Toggle motywu (UX-3 #72): aria-pressed odzwierciedla stan (true=jasny). Ikony inline SVG (bez CDN),
              CSS pokazuje właściwą dla aktywnego motywu. Tekst „Motyw" jest nośnikiem (nie sama ikona). -->
         <button id="theme-toggle" class="btn btn--ghost theme-toggle" type="button"

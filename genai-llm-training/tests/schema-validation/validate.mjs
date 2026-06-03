@@ -15,6 +15,21 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const DATA = process.env.VALIDATE_DATA_DIR || join(HERE, "..", "..", "data");
 const SCHEMAS = join(DATA, "schemas");
 
+// Układ per-locale (ADR-0004, #78): struktura WSPÓLNA w DATA/ (modules.json/paths.json/golden-set.json/schemas),
+// treść + etykiety per-locale w DATA/<lang>/. Locale = podkatalog z questions/ (kanoniczny "pl" musi istnieć).
+function discoverLocales() {
+  if (!existsSync(DATA)) return [];
+  return readdirSync(DATA, { withFileTypes: true })
+    .filter((e) => e.isDirectory() && existsSync(join(DATA, e.name, "questions")))
+    .map((e) => e.name)
+    .sort();
+}
+const LOCALES = discoverLocales();
+const CANON = LOCALES.includes("pl") ? "pl" : LOCALES[0]; // PL kanoniczny
+// Katalogi UI (assets/i18n) — niezależne od locale DANYCH (ADR-0004): walidujemy kompletność kluczy osobno.
+// VALIDATE_I18N_DIR pozwala wskazać inny katalog (test negatywny brakującego/sierocego klucza).
+const I18N_DIR = process.env.VALIDATE_I18N_DIR || join(DATA, "..", "assets", "i18n");
+
 const load = (p) => JSON.parse(readFileSync(p, "utf8"));
 
 // ---------------- Minimalny walidator JSON Schema (subset draft-07) ----------------
@@ -93,6 +108,11 @@ const DIFF_TARGET = { L1: 41, L2: 46, L3: 23, L4: 6 };
 const SCENARIO_TYPES = new Set(["scenariusz", "scenariusz_decyzyjny"]);
 const TECHNICAL_MODULES = new Set(["M4", "M5", "M6", "M12"]);
 const GOLDEN_DIFF = { L1: 8, L2: 10, L3: 5, L4: 1 };
+// Locale-aware prefiks konserwatywnego komunikatu pytania krytycznego (ADR-0004 D-policy; #80).
+// Treść jest tłumaczona per-locale, ale MUSI zaczynać się od ostrzeżenia bezpieczeństwa właściwego dla języka.
+const CRITICAL_PREFIX = { pl: "To jest błąd bezpieczeństwa.", en: "This is a security error." };
+// Pola SCORINGOWE pytania — muszą być IDENTYCZNE między locale (parytet strukturalny, PL kanon).
+const PARITY_FIELDS = ["correct", "difficulty", "points", "paths", "isCritical", "golden", "type", "module"];
 // Lint danych syntetycznych (#64): defense-in-depth, by realne PII/sekrety nie trafiły do repo.
 // E-mail egzekwowany ALLOWLISTĄ domen (nie denylistą webmaili) — każdy adres spoza listy = błąd.
 const EMAIL_RX = /[A-Za-z0-9._%+-]+@([A-Za-z0-9.-]+\.[A-Za-z]{2,})/g;
@@ -135,10 +155,17 @@ function checkSchema(file, schemaFile) {
   return data;
 }
 
+if (!CANON) fail("brak kanonicznego locale danych (oczekiwano katalogu data/pl/ z questions/)");
+// Struktura WSPÓLNA (single-source): modules.json / paths.json. Treść + etykiety per-locale (kanon = CANON).
 const modules = checkSchema("modules.json", "modules.schema.json");
 const paths = checkSchema("paths.json", "paths.schema.json");
-const scenarios = checkSchema("scenarios.json", "scenarios.schema.json");
-const rubrics = checkSchema("rubrics.json", "rubrics.schema.json");
+const scenarios = CANON ? checkSchema(`${CANON}/scenarios.json`, "scenarios.schema.json") : null;
+const rubrics = CANON ? checkSchema(`${CANON}/rubrics.json`, "rubrics.schema.json") : null;
+// Etykiety per-locale (carve-out). Schemat wymusza komplet ID (M1..M12 / S1..S3) → brak etykiety = błąd.
+for (const lang of LOCALES) {
+  checkSchema(`${lang}/modules.labels.json`, "modules-labels.schema.json");
+  checkSchema(`${lang}/paths.labels.json`, "paths-labels.schema.json");
+}
 
 // Parsowalność WSZYSTKICH schematów objętych CI (kontrakt = data/schemas/**, także podkatalogi
 // i schematy bez pliku danych, np. progress) — malformowany kontrakt nie może przejść niezauważony.
@@ -158,8 +185,8 @@ for (const sp of walkSchemaFiles(SCHEMAS)) {
 // Bank pytań jest shardowany per moduł: data/questions/mNN.json (każdy <800 LOC).
 // Każdy plik waliduje się przeciw questions.schema.json (envelope {questions:[...]}).
 // Pytania scalamy w jeden zbiór do kontroli pokrycia/agregatów.
-function loadQuestions() {
-  const QDIR = join(DATA, "questions");
+function loadQuestions(locale) {
+  const QDIR = join(DATA, locale, "questions");
   if (!existsSync(QDIR)) return null;
   const files = readdirSync(QDIR).filter((f) => /^m\d{2}\.json$/.test(f)).sort();
   if (files.length === 0) return null;
@@ -167,16 +194,17 @@ function loadQuestions() {
   const all = [];
   for (const f of files) {
     const doc = load(join(QDIR, f));
-    validate(doc, schema, schema, `questions/${f}`).forEach((x) => fail(`[schema questions/${f}] ${x}`));
+    validate(doc, schema, schema, `${locale}/questions/${f}`).forEach((x) => fail(`[schema ${locale}/questions/${f}] ${x}`));
     const modFromName = "M" + String(parseInt(f.slice(1, 3), 10));
     for (const q of doc.questions || []) {
-      if (q.module !== modFromName) fail(`questions/${f}: ${q.id} ma module=${q.module} != ${modFromName} (plik ma zawierać tylko swój moduł)`);
+      if (q.module !== modFromName) fail(`${locale}/questions/${f}: ${q.id} ma module=${q.module} != ${modFromName} (plik ma zawierać tylko swój moduł)`);
     }
     all.push(...(doc.questions || []));
   }
   return all;
 }
-const Qall = loadQuestions();
+// Pokrycie/agregaty liczone na kanonicznym banku (PL). Parytet pozostałych locale = #80.
+const Qall = CANON ? loadQuestions(CANON) : null;
 const goldenDoc = existsSync(join(DATA, "golden-set.json")) ? checkSchema("golden-set.json", "golden-set.schema.json") : null;
 
 const report = [];
@@ -203,14 +231,15 @@ if (Qall) {
   // scenario share
   const scn = Q.filter((q) => SCENARIO_TYPES.has(q.type)).length;
   if (scn / TOTAL < 0.35) fail(`pytania scenariuszowe/decyzyjne ${scn}/${TOTAL} = ${(scn/TOTAL*100).toFixed(1)}% < 35%`);
-  // criticals
+  // criticals — prefiks bezpieczeństwa LOCALE-AWARE (kanon); pozostałe locale sprawdza checkContentParity.
   const crit = Q.filter((q) => q.isCritical);
   if (crit.length !== 5) fail(`pytania krytyczne: ${crit.length} != 5`);
+  const canonPrefix = CRITICAL_PREFIX[CANON] || CRITICAL_PREFIX.pl;
   for (const q of crit) {
     if (q.module !== "M10") fail(`${q.id} krytyczne poza M10`);
     if (q.type !== "scenariusz_decyzyjny") warn.push(`${q.id} krytyczne nie jest scenariusz_decyzyjny`);
     if ((q.correct || []).length !== 1) fail(`${q.id} krytyczne musi mieć dokładnie 1 poprawną odpowiedź`);
-    if (!/^To jest błąd bezpieczeństwa\./.test(q.feedbackIncorrect || "")) fail(`${q.id} krytyczne: feedbackIncorrect musi zaczynać się od konserwatywnego komunikatu „To jest błąd bezpieczeństwa." (osłabiony komunikat bezpieczeństwa nie może przejść CI)`);
+    if (!(q.feedbackIncorrect || "").startsWith(canonPrefix)) fail(`${q.id} krytyczne: feedbackIncorrect musi zaczynać się od konserwatywnego komunikatu „${canonPrefix}" (osłabiony komunikat bezpieczeństwa nie może przejść CI)`);
     if (!q.paths.includes("S1") || !q.paths.includes("S2") || !q.paths.includes("S3")) fail(`${q.id} krytyczne musi obejmować wszystkie ścieżki`);
   }
   // type-specific answer integrity
@@ -334,6 +363,75 @@ if (goldenDoc) {
   fail("brak golden-set.json — na etapie #13/CI golden set 24 pytań jest wymaganym kontraktem (nie pomijać)");
 }
 
+// ---------------- Kompletność katalogów UI (assets/i18n) — D-policy #80 ----------------
+// Każdy locale musi mieć DOKŁADNIE ten sam ZBIÓR kluczy co PL (kanon): brak braków, brak sierot.
+// Sprawdzamy ZBIÓR KLUCZY, nie niepustość wartości — pusty szkielet en.json jest poprawny (fundament).
+function checkI18nCatalogs() {
+  if (!existsSync(I18N_DIR)) return; // brak katalogów UI (np. izolowany test danych) — pomiń
+  const files = readdirSync(I18N_DIR).filter((f) => /^[a-z]{2}\.json$/.test(f));
+  const catalogs = {};
+  for (const f of files) {
+    try { catalogs[f.slice(0, 2)] = load(join(I18N_DIR, f)); }
+    catch (e) { fail(`[i18n ${f}] niepoprawny JSON: ${e.message}`); }
+  }
+  const pl = catalogs.pl;
+  if (!pl) { fail("brak kanonicznego katalogu UI assets/i18n/pl.json"); return; }
+  const keySet = (o) => new Set(Object.keys(o).filter((k) => k !== "_meta"));
+  const plKeys = keySet(pl);
+  for (const [lang, cat] of Object.entries(catalogs)) {
+    if (lang === "pl") continue;
+    const k = keySet(cat);
+    for (const key of plKeys) if (!k.has(key)) fail(`i18n ${lang}.json: brak klucza UI "${key}" (locale niekompletny wzgl. pl)`);
+    for (const key of k) if (!plKeys.has(key)) fail(`i18n ${lang}.json: klucz-sierota "${key}" (nieobecny w pl.json)`);
+  }
+  report.push(`Katalogi UI: ${Object.keys(catalogs).sort().join(",")} | klucze PL=${plKeys.size} (kompletność zbioru wzgl. pl)`);
+}
+checkI18nCatalogs();
+
+// ---------------- Parytet strukturalny treści między locale (PL kanon) — D-policy #80 ----------------
+// Pola scoringowe pytań MUSZĄ być identyczne między locale (różni się tylko tekst). Twardy błąd (exit 1).
+function parityIdSet(file, idsOf, label) {
+  const canonPath = join(DATA, CANON, file);
+  if (!existsSync(canonPath)) return;
+  const canonIds = new Set(idsOf(load(canonPath)));
+  for (const lang of LOCALES) {
+    if (lang === CANON) continue;
+    const fp = join(DATA, lang, file);
+    if (!existsSync(fp)) { fail(`parytet ${lang}: brak ${file}`); continue; }
+    const ids = new Set(idsOf(load(fp)));
+    for (const id of canonIds) if (!ids.has(id)) fail(`parytet ${lang}: brak ${label} ${id} w ${file}`);
+    for (const id of ids) if (!canonIds.has(id)) fail(`parytet ${lang}: ${label} sierota ${id} w ${file} (spoza kanonu)`);
+  }
+}
+function checkContentParity() {
+  if (!Qall || !CANON) return;
+  const canonById = new Map(Qall.map((q) => [q.id, q]));
+  for (const lang of LOCALES) {
+    if (lang === CANON) continue;
+    const lq = loadQuestions(lang);
+    if (!lq) { fail(`parytet ${lang}: brak banku pytań`); continue; }
+    const lById = new Map(lq.map((q) => [q.id, q]));
+    for (const id of canonById.keys()) if (!lById.has(id)) fail(`parytet ${lang}: brak pytania ${id} (kanon ${CANON})`);
+    for (const q of lq) {
+      const c = canonById.get(q.id);
+      if (!c) { fail(`parytet ${lang}: pytanie ${q.id} spoza kanonu ${CANON}`); continue; }
+      for (const f of PARITY_FIELDS) {
+        if (JSON.stringify(q[f]) !== JSON.stringify(c[f]))
+          fail(`parytet ${lang}: ${q.id}.${f}=${JSON.stringify(q[f])} != kanon ${JSON.stringify(c[f])} (pole scoringowe musi być identyczne)`);
+      }
+    }
+    const prefix = CRITICAL_PREFIX[lang];
+    if (!prefix) fail(`parytet ${lang}: brak prefiksu krytycznego CRITICAL_PREFIX dla locale ${lang}`);
+    else for (const q of lq.filter((x) => x.isCritical)) {
+      if (!(q.feedbackIncorrect || "").startsWith(prefix)) fail(`parytet ${lang}: ${q.id} krytyczne feedbackIncorrect musi zaczynać się od „${prefix}" (locale-aware)`);
+    }
+    report.push(`Parytet ${lang}↔${CANON}: ${lq.length} pytań — pola scoringowe + prefiks krytyczny OK`);
+  }
+  parityIdSet("rubrics.json", (d) => (d.rubrics || []).map((r) => r.id), "rubryki");
+  parityIdSet("scenarios.json", (d) => (d.scenarios || []).map((s) => s.id), "scenariusza");
+}
+checkContentParity();
+
 // ---------------- Progi ścieżek (raport) ----------------
 if (paths) {
   for (const [pid, p] of Object.entries(paths.paths)) {
@@ -371,9 +469,9 @@ if (paths && rubrics) {
 // ---------------- Treść modułów (module-content/mNN.json) — schemat + integralność + lint syntetyczny ----------------
 // Treść modułów M4: po jednym pliku na moduł, walidowana przeciw module-content.schema.json.
 // Integralność: klucze interakcji wskazują na istniejące kategorie/opcje; zadanie praktyczne → istniejąca rubryka.
-function loadModuleContent() {
-  const CDIR = join(DATA, "module-content");
-  if (!existsSync(CDIR)) { fail("brak treści modułów (data/module-content/) — M4 wymaga 12 plików mNN.json"); return null; }
+function loadModuleContent(locale) {
+  const CDIR = join(DATA, locale, "module-content");
+  if (!existsSync(CDIR)) { fail(`brak treści modułów (data/${locale}/module-content/) — M4 wymaga 12 plików mNN.json`); return null; }
   const schema = load(join(SCHEMAS, "module-content.schema.json"));
   const rubricIds = new Set((rubrics ? rubrics.rubrics : []).map((r) => r.id));
   const rubricById = new Map((rubrics ? rubrics.rubrics : []).map((r) => [r.id, r]));
@@ -381,15 +479,15 @@ function loadModuleContent() {
   for (let i = 1; i <= 12; i += 1) {
     const f = `m${String(i).padStart(2, "0")}.json`;
     const fp = join(CDIR, f);
-    if (!existsSync(fp)) { fail(`brak treści modułu: module-content/${f}`); continue; }
+    if (!existsSync(fp)) { fail(`brak treści modułu: ${locale}/module-content/${f}`); continue; }
     const c = load(fp);
-    validate(c, schema, schema, `module-content/${f}`).forEach((x) => fail(`[schema module-content/${f}] ${x}`));
+    validate(c, schema, schema, `${locale}/module-content/${f}`).forEach((x) => fail(`[schema ${locale}/module-content/${f}] ${x}`));
     const expectMod = "M" + i;
-    if (c.module !== expectMod) fail(`module-content/${f}: module=${c.module} != ${expectMod}`);
+    if (c.module !== expectMod) fail(`${locale}/module-content/${f}: module=${c.module} != ${expectMod}`);
     present.push(c.module);
     // lint syntetyczny — cały obiekt treści (żadnych realnych PII/domen)
     const blob = JSON.stringify(c);
-    lintSynthetic(blob, `module-content/${f}`);
+    lintSynthetic(blob, `${locale}/module-content/${f}`);
     // integralność interakcji
     const ix = c.interaction || {};
     if (ix.kind === "classify") {
@@ -416,7 +514,7 @@ function loadModuleContent() {
   }
   return present;
 }
-const contentMods = loadModuleContent();
+const contentMods = CANON ? loadModuleContent(CANON) : null;
 if (contentMods) report.push(`Treść modułów: ${contentMods.length}/12 (${contentMods.join(",")})`);
 
 // ---------------- Próbka wyników pilotażu (kalibracja #28) — schemat + integralność + lint syntetyczny ----------------

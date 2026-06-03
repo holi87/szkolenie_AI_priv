@@ -3,17 +3,14 @@
 // renderQuestion zwraca { node, getAnswer } — getAnswer oddaje kształt odpowiedzi dla quiz-engine.
 import { el } from "./dom.js";
 import { icon } from "./icon.js";
-import { CRITICAL_FAIL_MESSAGE } from "../core/quiz-engine.js";
+import { t } from "../i18n/i18n.js";
 
-const TYPE_LABEL = {
-  single_choice: "Wybór jednokrotny",
-  multiple_choice: "Wybór wielokrotny",
-  dopasowanie: "Dopasowanie",
-  kolejnosc_procesu: "Ułóż kolejność",
-  scenariusz_decyzyjny: "Scenariusz decyzyjny",
-  scenariusz: "Scenariusz",
-  analiza_outputu: "Analiza outputu (rubryka)",
-};
+// Etykieta typu pytania z katalogu (klucz = identyfikator typu); fallback do surowego type dla nieznanych.
+function typeLabel(type) {
+  const key = `quiz.type.${type}`;
+  const label = t(key);
+  return label === key ? type : label;
+}
 
 // Fisher–Yates z wstrzykiwanym rng (czysty — nie mutuje wejścia), wzorzec test-engine.js:14-21.
 // Anti-gaming pozycji odpowiedzi (#66): tasujemy DANE przed map(), więc kolejność DOM = wizualna =
@@ -55,8 +52,8 @@ function matching(q, rng = Math.random) {
   const rights = shuffle([...new Set(q.pairs.map((p) => p.right))], rng);
   const selects = [];
   const rows = q.pairs.map((p, i) => {
-    const sel = el("select", { attrs: { "aria-label": `Dopasuj: ${p.left}` } }, [
-      el("option", { value: "", text: "— wybierz —" }),
+    const sel = el("select", { attrs: { "aria-label": t("quiz.matching.ariaLabel", { left: p.left }) } }, [
+      el("option", { value: "", text: t("quiz.matching.selectPlaceholder") }),
       ...rights.map((r) => el("option", { value: r, text: r })),
     ]);
     selects.push({ left: p.left, sel });
@@ -81,12 +78,12 @@ function sequence(q, rng = Math.random) {
   const selects = [];
   // Prezentujemy elementy w losowej kolejności; uczestnik nadaje pozycję (1..n) — wariant klawiaturowy.
   const rows = shuffledForDisplay(q.sequence, rng).map((label, i) => {
-    const sel = el("select", { attrs: { "aria-label": `Pozycja kroku: ${label}` } }, [
+    const sel = el("select", { attrs: { "aria-label": t("quiz.sequence.ariaLabel", { label }) } }, [
       el("option", { value: "", text: "—" }),
       ...Array.from({ length: n }, (_, k) => el("option", { value: String(k), text: String(k + 1) })),
     ]);
     selects.push({ label, sel });
-    return el("div", { class: "seq-row" }, [sel, el("span", { class: "seq-row__pos", text: `krok` }), el("span", { text: label })]);
+    return el("div", { class: "seq-row" }, [sel, el("span", { class: "seq-row__pos", text: t("quiz.sequence.stepLabel") }), el("span", { text: label })]);
   });
   const getAnswer = () => {
     const placed = selects.filter((s) => s.sel.value !== "").map((s) => ({ label: s.label, pos: Number(s.sel.value) }));
@@ -97,10 +94,10 @@ function sequence(q, rng = Math.random) {
 }
 
 function rubricSelfRate(q) {
-  const ta = el("textarea", { rows: 4, attrs: { "aria-label": "Twoja analiza outputu", style: "width:100%" } });
+  const ta = el("textarea", { rows: 4, attrs: { "aria-label": t("quiz.rubric.textareaAriaLabel"), style: "width:100%" } });
   const radios = [];
   const scale = el("fieldset", {}, [
-    el("legend", { text: "Samoocena wg rubryki (0–3)" }),
+    el("legend", { text: t("quiz.rubric.selfRateLegend") }),
     ...[0, 1, 2, 3].map((v) => {
       const id = `${q.id}-r${v}`;
       const input = el("input", { type: "radio", name: `${q.id}-rubric`, id, value: String(v) });
@@ -138,14 +135,14 @@ export function renderQuestion(question, opts = {}) {
 
   const header = [];
   if (opts.index != null && opts.total != null) {
-    header.push(el("p", { class: "quiz-meta", text: `Pytanie ${opts.index + 1} z ${opts.total}` }));
+    header.push(el("p", { class: "quiz-meta", text: t("quiz.questionCounter", { index: opts.index + 1, total: opts.total }) }));
   }
   if (opts.showMeta) {
     // Meta jako wizualne chipy (typ / trudność / punkty) — ta sama treść co dawne 'typ · trudność · pkt'.
     header.push(el("p", { class: "quiz-chips" }, [
-      el("span", { class: "quiz-chip", text: TYPE_LABEL[question.type] || question.type }),
+      el("span", { class: "quiz-chip", text: typeLabel(question.type) }),
       el("span", { class: "quiz-chip quiz-chip--difficulty", text: String(question.difficulty) }),
-      el("span", { class: "quiz-chip", text: `${question.points} pkt` }),
+      el("span", { class: "quiz-chip", text: t("quiz.chip.points", { points: question.points }) }),
     ]));
   }
 
@@ -162,8 +159,8 @@ export function renderQuestion(question, opts = {}) {
 export function renderFeedback(result) {
   if (result.isCriticalFail) {
     return el("div", { class: "feedback feedback--critical", attrs: { role: "alert" } }, [
-      el("p", { class: "feedback__head" }, [el("span", { attrs: { "aria-hidden": "true" } }, [icon("warn")]), "Błąd bezpieczeństwa"]),
-      el("p", { text: CRITICAL_FAIL_MESSAGE }),
+      el("p", { class: "feedback__head" }, [el("span", { attrs: { "aria-hidden": "true" } }, [icon("warn")]), t("feedback.criticalFail.head")]),
+      el("p", { text: t("feedback.criticalFail.body") }),
       result.feedback ? el("p", { text: result.feedback }) : null,
     ]);
   }
@@ -171,8 +168,8 @@ export function renderFeedback(result) {
   return el("div", { class: `feedback ${ok ? "feedback--correct" : "feedback--incorrect"}`, attrs: { role: "status" } }, [
     el("p", { class: "feedback__head" }, [
       el("span", { attrs: { "aria-hidden": "true" } }, [icon(ok ? "check" : "cross")]),
-      ok ? "Poprawnie" : "Niepoprawnie",
-      el("span", { class: "quiz-meta", text: `  (${result.awarded}/${result.max} pkt)` }),
+      t(ok ? "feedback.correct" : "feedback.incorrect"),
+      el("span", { class: "quiz-meta", text: t("feedback.score", { awarded: result.awarded, max: result.max }) }),
     ]),
     el("p", { text: result.feedback || "" }),
   ]);

@@ -3,6 +3,7 @@
 // Renderuje wszystkie wylosowane pytania, zbiera odpowiedzi, oddaje je do scoringu (callback onSubmit).
 import { el } from "./dom.js";
 import { icon } from "./icon.js";
+import { t } from "../i18n/i18n.js";
 import { renderQuestion } from "./quiz-view.js";
 
 /**
@@ -15,11 +16,11 @@ export function renderTest(selection, opts = {}) {
   const controls = [];
   const form = el("form", { class: "view__content", attrs: { novalidate: "" } });
 
-  form.appendChild(el("h1", { text: `Test końcowy — ${opts.pathName || selection.pathId}` }));
-  form.appendChild(el("p", { class: "muted", text: `${selection.count} pytań · próg zaliczenia ${opts.passThresholdPct ?? "?"}% · wszystkie pytania krytyczne muszą być poprawne.` }));
+  form.appendChild(el("h1", { text: t("test.heading", { pathName: opts.pathName || selection.pathId }) }));
+  form.appendChild(el("p", { class: "muted", text: t("test.meta", { count: selection.count, threshold: opts.passThresholdPct ?? "?" }) }));
   form.appendChild(el("p", { class: "locked-note", attrs: { role: "note" } }, [
     el("span", { class: "locked-note__icon", attrs: { "aria-hidden": "true" } }, [icon("info")]),
-    "Tryb testu: feedback i wynik pojawią się dopiero po zakończeniu podejścia.",
+    t("test.modeNote"),
   ]));
   if (opts.attemptInfo) form.appendChild(el("p", { class: "quiz-meta", text: opts.attemptInfo }));
   if (opts.practicalNote) {
@@ -36,7 +37,7 @@ export function renderTest(selection, opts = {}) {
   });
 
   const status = el("p", { class: "muted", attrs: { role: "status", "aria-live": "polite" } });
-  const submit = el("button", { class: "btn", type: "submit", text: "Zakończ podejście i sprawdź wynik" });
+  const submit = el("button", { class: "btn", type: "submit", text: t("action.finishAttempt") });
   form.appendChild(el("div", { class: "btn-row" }, [submit]));
   form.appendChild(status);
 
@@ -52,7 +53,7 @@ export function renderTest(selection, opts = {}) {
     ev.preventDefault();
     const answered = controls.filter(({ r }) => isAnswered(r)).length;
     if (answered < selection.count) {
-      const ok = globalThis.confirm(`Odpowiedziałeś na ${answered} z ${selection.count} pytań. Brakujące będą liczone jako błędne. Zakończyć podejście?`);
+      const ok = globalThis.confirm(t("test.submitConfirm", { answered, total: selection.count }));
       if (!ok) return;
     }
     const answers = {};

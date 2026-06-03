@@ -3,6 +3,7 @@
 // (design-baseline §6). Feedback per kryterium (ikona SVG + słowo + podpowiedź) + wynik zbiorczy z progiem (zadanie praktyczne).
 import { el } from "../dom.js";
 import { icon } from "../icon.js";
+import { t } from "../../i18n/i18n.js";
 
 export function renderRubric(config) {
   const criteria = config.criteria || [];
@@ -22,7 +23,7 @@ export function renderRubric(config) {
     const fbNode = el("div", { class: "rubric-crit__fb" });
     groups.push({ id: c.id, inputs, fbNode });
     return el("fieldset", { class: "rubric-crit" }, [
-      el("legend", { class: "rubric-crit__name" }, [el("strong", { text: `${i + 1}. ${c.name}` })]),
+      el("legend", { class: "rubric-crit__name" }, [el("strong", { text: t("interaction.rubric.criterionName", { index: i + 1, name: c.name }) })]),
       c.prompt ? el("p", { class: "rubric-crit__prompt", text: c.prompt }) : null,
       el("ul", { class: "options" }, opts),
       fbNode,
@@ -47,8 +48,8 @@ export function renderRubric(config) {
       if (!p) continue;
       const cls = p.satisfied ? "feedback feedback--correct" : "feedback feedback--incorrect";
       g.fbNode.replaceChildren(el("div", { class: cls, attrs: { role: "status" } }, [
-        el("p", { class: "feedback__head" }, [el("span", { attrs: { "aria-hidden": "true" } }, [icon(p.satisfied ? "check" : "cross")]), p.satisfied ? "Spełnione" : "Niespełnione"]),
-        p.satisfied ? null : el("p", { text: p.hint || "Dobierz właściwe elementy tego kryterium." }),
+        el("p", { class: "feedback__head" }, [el("span", { attrs: { "aria-hidden": "true" } }, [icon(p.satisfied ? "check" : "cross")]), p.satisfied ? t("feedback.satisfied") : t("feedback.notSatisfied")]),
+        p.satisfied ? null : el("p", { text: p.hint || t("interaction.rubric.defaultHint") }),
       ]));
     }
   };

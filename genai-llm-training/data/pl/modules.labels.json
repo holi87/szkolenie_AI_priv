@@ -1,0 +1,244 @@
+{
+  "M1": {
+    "name": "Fundamenty GenAI i LLM",
+    "level": "podstawowy",
+    "interactiveElement": "Klasyfikator zadań",
+    "keyConcepts": [
+      "GenAI",
+      "LLM",
+      "klasyczny ML",
+      "probabilistyczny output",
+      "training vs inference",
+      "halucynacja"
+    ],
+    "learningOutcomes": [
+      "Rozróżnia GenAI, LLM i klasyczny ML na przykładach",
+      "Wskazuje, że LLM generuje najbardziej prawdopodobną odpowiedź, nie gwarantowaną prawdę",
+      "Klasyfikuje zadania jako generatywne, klasyfikacyjne lub deterministyczne"
+    ]
+  },
+  "M2": {
+    "name": "Architektura LLM na poziomie praktycznym",
+    "level": "podstawowy/średni",
+    "interactiveElement": "Licznik kontekstu",
+    "keyConcepts": [
+      "token",
+      "tokenizacja",
+      "context window",
+      "parameters",
+      "transformer",
+      "attention",
+      "inference cost"
+    ],
+    "learningOutcomes": [
+      "Wyjaśnia, czym jest token i dlaczego długi dokument może przekroczyć context window",
+      "Wskazuje 3 skutki zbyt małego kontekstu",
+      "Opisuje transformer jako mechanizm uczenia relacji między tokenami (intuicja)",
+      "Rozpoznaje, że liczba parametrów nie jest samodzielną gwarancją jakości"
+    ]
+  },
+  "M3": {
+    "name": "Parametry generacji i kontrola wyniku",
+    "level": "podstawowy/średni",
+    "interactiveElement": "Suwaki generacji",
+    "keyConcepts": [
+      "temperature",
+      "top-p",
+      "max tokens",
+      "deterministyczność pozorna",
+      "powtarzalność",
+      "kreatywność"
+    ],
+    "learningOutcomes": [
+      "Dobiera temperature do zadania kreatywnego i formalnego",
+      "Wskazuje ryzyko zbyt wysokiej losowości w zadaniach QA",
+      "Rozpoznaje, kiedy max tokens ucina odpowiedź",
+      "Porównuje ustawienia generacji i wybiera bezpieczniejsze dla dokumentacji testowej"
+    ]
+  },
+  "M4": {
+    "name": "Embeddings i podobieństwo semantyczne",
+    "level": "średni",
+    "interactiveElement": "Mapa semantyczna",
+    "keyConcepts": [
+      "embeddings",
+      "vector",
+      "semantic similarity",
+      "cosine similarity",
+      "embedding model",
+      "nearest neighbors"
+    ],
+    "learningOutcomes": [
+      "Wyjaśnia embeddings jako liczbową reprezentację znaczenia tekstu",
+      "Interpretuje cosine similarity jako miarę bliskości kierunku wektorów",
+      "Wskazuje przypadki, w których wysoki wynik podobieństwa nie oznacza poprawnej odpowiedzi",
+      "Dobiera zapytanie do wyszukiwania semantycznego"
+    ]
+  },
+  "M5": {
+    "name": "Vector databases i similarity search",
+    "level": "średni/zaawansowany",
+    "interactiveElement": "Retrieval debugger",
+    "keyConcepts": [
+      "vector database",
+      "ANN",
+      "index",
+      "similarity search",
+      "metadata filtering",
+      "recall",
+      "precision",
+      "top-k"
+    ],
+    "learningOutcomes": [
+      "Opisuje rolę vector database w wyszukiwaniu semantycznym",
+      "Rozróżnia dokładne wyszukiwanie od approximate nearest neighbor",
+      "Wskazuje wpływ indeksu, filtrowania metadanych i jakości chunków na wynik",
+      "Diagnozuje, dlaczego similarity search zwrócił fragment podobny, ale nieużyteczny"
+    ]
+  },
+  "M6": {
+    "name": "RAG: Retrieval-Augmented Generation",
+    "level": "średni/zaawansowany",
+    "interactiveElement": "Zbuduj pipeline RAG",
+    "keyConcepts": [
+      "RAG",
+      "retrieval",
+      "generation",
+      "chunking",
+      "overlap",
+      "reranking",
+      "citations",
+      "grounding",
+      "fine-tuning"
+    ],
+    "learningOutcomes": [
+      "Układa kroki pipeline RAG w poprawnej kolejności",
+      "Dobiera strategię chunking dla dokumentacji wymagań",
+      "Rozróżnia przypadek wymagający RAG od przypadku wymagającego fine-tuning",
+      "Identyfikuje błąd retrieval, błąd generation i błąd źródłowy na podstawie odpowiedzi modelu"
+    ]
+  },
+  "M7": {
+    "name": "Prompt engineering w praktyce",
+    "level": "podstawowy/średni",
+    "interactiveElement": "Prompt clinic",
+    "keyConcepts": [
+      "prompt",
+      "rola",
+      "kontekst",
+      "few-shot",
+      "constraints",
+      "output format",
+      "rubryka oceny promptu"
+    ],
+    "learningOutcomes": [
+      "Tworzy prompt zawierający rolę, cel, kontekst, dane, ograniczenia, kryteria jakości i format wyjścia",
+      "Poprawia nieprecyzyjny prompt na podstawie błędnego outputu",
+      "Stosuje few-shot, gdy format lub styl odpowiedzi musi być powtarzalny",
+      "Wskazuje, kiedy prompt nie rozwiąże problemu braku danych"
+    ]
+  },
+  "M8": {
+    "name": "Zastosowania GenAI w QA i jakości",
+    "level": "średni",
+    "interactiveElement": "QA workbench",
+    "keyConcepts": [
+      "test case generation",
+      "test data ideas",
+      "risk-based testing",
+      "traceability",
+      "acceptance criteria",
+      "review checklist"
+    ],
+    "learningOutcomes": [
+      "Generuje przypadki testowe z wymagania i wskazuje braki w pokryciu",
+      "Wykrywa duplikaty i testy pozorne",
+      "Tworzy checklistę ryzyk dla funkcjonalności",
+      "Ocenia, czy output LLM nadaje się do dokumentacji QA po kontroli merytorycznej",
+      "Wskazuje zadania QA, gdzie LLM pełni funkcję asystenta, a nie decydenta"
+    ]
+  },
+  "M9": {
+    "name": "Integracje narzędzi i agenty",
+    "level": "średni",
+    "interactiveElement": "Agent permission board",
+    "keyConcepts": [
+      "tool use",
+      "agent",
+      "workflow",
+      "human-in-the-loop",
+      "permission scope",
+      "audit log",
+      "rollback"
+    ],
+    "learningOutcomes": [
+      "Rozróżnia chatbot, workflow z narzędziem i agenta wykonującego kroki",
+      "Wskazuje ryzyka nadania agentowi dostępu do plików, maila, repozytorium lub systemu testowego",
+      "Projektuje minimalną zasadę kontroli: uprawnienia, logi, zatwierdzanie człowieka, rollback",
+      "Identyfikuje zadania, w których agent wymaga ograniczeń i audytu"
+    ]
+  },
+  "M10": {
+    "name": "Bezpieczeństwo, higiena danych i governance",
+    "level": "podstawowy/średni",
+    "interactiveElement": "Data safety gate",
+    "keyConcepts": [
+      "prompt injection",
+      "jailbreak",
+      "data leakage",
+      "PII",
+      "IP",
+      "acceptable use",
+      "audit trail",
+      "OWASP LLM Top 10"
+    ],
+    "learningOutcomes": [
+      "Rozpoznaje prompt injection i jailbreak w scenariuszu",
+      "Klasyfikuje dane jako dozwolone, wymagające anonimizacji albo niedozwolone",
+      "Wskazuje ryzyko data leakage i PII",
+      "Stosuje politykę akceptowalnego użycia",
+      "Określa minimalny ślad audytowy dla użycia GenAI w procesie QA"
+    ]
+  },
+  "M11": {
+    "name": "Halucynacje, granice zastosowania i weryfikacja outputu",
+    "level": "podstawowy/średni",
+    "interactiveElement": "Output verifier",
+    "keyConcepts": [
+      "hallucination",
+      "verification",
+      "source checking",
+      "confidence",
+      "critical decision",
+      "human review"
+    ],
+    "learningOutcomes": [
+      "Wskazuje przyczyny halucynacji: brak danych, konflikt danych, presja promptu, nieaktualny kontekst, nieprecyzyjne źródła",
+      "Stosuje checklistę weryfikacji outputu",
+      "Odrzuca użycie LLM, gdy nie można sprawdzić wyniku lub gdy błąd ma wysoki wpływ",
+      "Oznacza fragmenty odpowiedzi wymagające źródła lub eksperta"
+    ]
+  },
+  "M12": {
+    "name": "Ewaluacja jakości LLM i RAG",
+    "level": "zaawansowany",
+    "interactiveElement": "Judge calibration lab",
+    "keyConcepts": [
+      "LLM-as-a-judge",
+      "golden set",
+      "evaluation rubric",
+      "bias",
+      "position bias",
+      "inter-rater agreement",
+      "groundedness",
+      "faithfulness"
+    ],
+    "learningOutcomes": [
+      "Definiuje golden set dla wybranego use case",
+      "Dobiera metryki: accuracy, faithfulness, groundedness, relevance, completeness",
+      "Projektuje rubrykę LLM-as-a-judge",
+      "Wskazuje ryzyka bias, position bias i niezgodności z oceną ludzką",
+      "Kalibruje ocenę automatyczną przez porównanie z oceną eksperta i ustala próg akceptacji"
+    ]
+  }
+}

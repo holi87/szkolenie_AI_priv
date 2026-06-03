@@ -3,6 +3,7 @@
 // z onlyForPaths). Tabele i diagramy MAJĄ wersję tekstową (WCAG 1.1.1, design-baseline §1).
 import { el } from "./dom.js";
 import { icon } from "./icon.js";
+import { t } from "../i18n/i18n.js";
 
 /** Czy element treści jest widoczny na danej ścieżce (onlyForPaths/hideForPaths). */
 function visibleForPath(item, pathId) {
@@ -35,7 +36,7 @@ function renderBlock(b, pathId) {
       // Diagram dekoracyjny (aria-hidden); NOŚNIKIEM treści jest opis tekstowy (WCAG 1.1.1).
       return el("figure", { class: "diagram" }, [
         b.ascii ? el("pre", { class: "diagram__ascii", attrs: { "aria-hidden": "true" }, text: b.ascii }) : null,
-        el("figcaption", { class: "diagram__alt" }, [el("strong", { text: "Opis: " }), b.textAlt]),
+        el("figcaption", { class: "diagram__alt" }, [el("strong", { text: t("module.diagram.descLabel") }), b.textAlt]),
       ]);
     default:
       return el("p", { text: b.text || "" });
@@ -56,7 +57,7 @@ function renderTable(b) {
     el("tbody", {}, rows.map((r) => el("tr", {}, r.map((cell) => el("td", { text: String(cell) }))))),
   ]);
   // Wersja tekstowa tabeli (WCAG 1.1.1) — krótki opis alternatywny pod tabelą.
-  return el("div", { class: "content-table__wrap" }, [table, b.textAlt ? el("p", { class: "muted", text: `Opis tabeli: ${b.textAlt}` }) : null]);
+  return el("div", { class: "content-table__wrap" }, [table, b.textAlt ? el("p", { class: "muted", text: t("module.table.descLabel", { alt: b.textAlt }) }) : null]);
 }
 
 /** Renderuje ekrany narracyjne modułu (filtr po ścieżce). Zwraca tablicę węzłów <section>. */
@@ -74,11 +75,11 @@ export function renderScreens(screens, pathId) {
 export function renderSummary(summary) {
   if (!summary) return null;
   return el("section", { class: "module-summary" }, [
-    el("h2", { text: "Podsumowanie" }),
+    el("h2", { text: t("module.summary.heading") }),
     ...((summary.points || []).length ? [el("ul", {}, summary.points.map((p) => el("li", { text: p })))] : []),
     (summary.checklist || []).length
       ? el("div", { class: "callout callout--safe", attrs: { role: "note" } }, [
-          el("p", { class: "callout__title" }, [el("span", { class: "callout__icon", attrs: { "aria-hidden": "true" } }, [icon("check")]), summary.checklistTitle || "Checklista — zanim użyjesz LLM"]),
+          el("p", { class: "callout__title" }, [el("span", { class: "callout__icon", attrs: { "aria-hidden": "true" } }, [icon("check")]), summary.checklistTitle || t("module.summary.checklistTitle")]),
           el("ul", {}, summary.checklist.map((c) => el("li", { text: c }))),
         ])
       : null,

@@ -36,15 +36,17 @@ test("karty zachowują CTA + szczegóły wymaganych modułów (treść nie znikn
   assert.match(snap, /INPUT\[[^\]]*id="participant-name"/, "zgubiono pole pseudonimu");
 });
 
-test("slot przełącznika języka (#71): inertny, ale FOKUSOWALNY (aria-disabled, nie disabled) i opisany", () => {
-  const tag = /<button[^>]*id="lang-switch"[^>]*>/.exec(appHtml);
-  assert.ok(tag, "brak slotu #lang-switch w app-header__meta");
+test("przełącznik języka (#79): AKTYWNY trigger (menu, fokusowalny), opisany, z flagą + kodem", () => {
+  assert.match(appHtml, /<div[^>]*class="lang-switch"[^>]*id="lang-switch"/, "brak kontenera #lang-switch");
+  const tag = /<button[^>]*id="lang-switch-btn"[^>]*>/.exec(appHtml);
+  assert.ok(tag, "brak triggera #lang-switch-btn w app-header__meta");
   const open = tag[0];
-  assert.match(open, /aria-disabled="true"/, "lang-switch powinien być aria-disabled (inertny do I18N-3)");
-  assert.match(open, /aria-label=/, "lang-switch bez aria-label (opisany dla SR)");
-  assert.ok(!open.replace(/aria-disabled="true"/, "").includes(" disabled"),
-    "lang-switch NIE może mieć atrybutu disabled — musi zostać w kolejności tab (fokusowalny)");
-  // Flaga PL inline (SVG, bez CDN) + tekstowy nośnik „PL".
-  assert.match(appHtml, /lang-switch__flag/, "brak inline flagi PL");
-  assert.match(appHtml, /lang-switch__label">PL</, "brak tekstu PL przy fladze");
+  assert.match(open, /aria-haspopup="menu"/, "trigger powinien mieć aria-haspopup=menu");
+  assert.match(open, /aria-expanded=/, "trigger bez aria-expanded");
+  assert.match(open, /aria-label=/, "trigger bez aria-label (opisany dla SR)");
+  assert.ok(!/aria-disabled/.test(open), "trigger nie jest już inertny (#79 wpięło logikę)");
+  assert.ok(!open.includes(" disabled"), "trigger musi zostać w kolejności tab (fokusowalny)");
+  // Flaga (slot wypełniany przez JS) + tekstowy nośnik kodu „PL" (a11y: nie sam kolor/emoji).
+  assert.match(appHtml, /lang-switch__flag-wrap/, "brak slotu flagi");
+  assert.match(appHtml, /lang-switch__label"[^>]*>PL</, "brak tekstu PL");
 });

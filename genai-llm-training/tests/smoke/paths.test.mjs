@@ -54,8 +54,8 @@ test("pominięcie JEDNEGO wymaganego modułu wciąż blokuje test (nie da się z
   const allButOne = requiredModules(pathsData, path).slice(0, -1); // brak M11
   const st = finalTestStatus(progressWith(allButOne), pathsData, path);
   assert.equal(st.status, "locked");
-  assert.deepEqual(st.blockers, ["M11"]);
-  assert.ok(st.lockedReason.includes("M11"));
+  assert.deepEqual(st.blockers, ["M11"]); // dane strukturalne (locale-neutral); tekst składa UI przez t()
+  assert.deepEqual(st.missingPractical, []);
 });
 
 test("ukończenie wszystkich wymaganych → test odblokowany (S1 nie ma zadań praktycznych)", () => {
@@ -80,7 +80,7 @@ test("S2: moduły wymagane done, ale BEZ zapisanej praktyki R1-prompt → test Z
   assert.equal(isFinalTestUnlocked(p, pathsData, "S2"), false, "brak praktyki blokuje test");
   const st = finalTestStatus(p, pathsData, "S2");
   assert.equal(st.status, "locked");
-  assert.ok(st.lockedReason.includes("R1-prompt"));
+  assert.deepEqual(st.missingPractical, ["R1-prompt"]); // dane strukturalne; tekst powodu składa shell.js przez t()
 });
 
 test("S2: po zapisaniu R1-prompt → test odblokowany", () => {

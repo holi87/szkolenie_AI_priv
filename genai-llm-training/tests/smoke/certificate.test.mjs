@@ -50,7 +50,7 @@ test("wynik poniżej progu NIE generuje certyfikatu zaliczenia", () => {
   );
   assert.equal(cert.issued, false);
   assert.equal(cert.completionId, undefined, "brak ID zaliczenia dla niezaliczonego");
-  assert.ok(cert.reason.includes("poniżej progu"));
+  assert.equal(cert.reason, "below_pass_threshold", "core zwraca KOD powodu (i18n #77), nie prozę");
   assert.equal(cert.weakAreas[0].module, "M10");
   assert.ok(cert.weakAreas[0].name.length > 0, "słaby obszar ma nazwę modułu");
 });
