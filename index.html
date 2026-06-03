@@ -3,64 +3,40 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Szkolenie GenAI i LLM — w budowie</title>
-  <meta name="description" content="Szkolenie z GenAI i LLM — strona w budowie.">
-  <meta name="robots" content="noindex">
+  <title>Szkolenie GenAI i LLM</title>
+  <meta name="description" content="Interaktywne szkolenie z GenAI i LLM — ścieżki S1/S2/S3, quizy, test końcowy, certyfikat.">
+  <!-- Strona główna domeny przekierowuje do statycznej aplikacji szkolenia.
+       Ścieżka WZGLĘDNA (bez wiodącego „/”) — wymóg GitHub Pages / ADR-0002, działa też z podścieżki repo. -->
+  <meta http-equiv="refresh" content="0; url=genai-llm-training/">
+  <link rel="canonical" href="genai-llm-training/">
   <style>
-    :root {
-      --bg: #0f1117;
-      --fg: #e8eaf0;
-      --muted: #a6adbb;
-      --accent: #6ea8fe;
-      --border: #2a2f3a;
-    }
+    :root { --bg:#0f1117; --fg:#e8eaf0; --muted:#a6adbb; --accent:#6ea8fe; --border:#2a2f3a; }
     * { box-sizing: border-box; }
     html, body { height: 100%; margin: 0; }
     body {
-      background: var(--bg);
-      color: var(--fg);
+      background: var(--bg); color: var(--fg);
       font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-      line-height: 1.6;
-      display: grid;
-      place-items: center;
-      padding: 1.5rem;
+      line-height: 1.6; display: grid; place-items: center; padding: 1.5rem;
     }
-    main {
-      max-width: 36rem;
-      text-align: center;
+    main { max-width: 36rem; text-align: center; }
+    h1 { font-size: clamp(1.5rem, 5vw, 2.3rem); margin: 0 0 0.75rem; }
+    p { color: var(--muted); margin: 0 auto 1rem; max-width: 32rem; }
+    a.cta {
+      display: inline-block; margin-top: 0.5rem; padding: 0.6rem 1.2rem;
+      color: var(--bg); background: var(--accent); text-decoration: none;
+      border-radius: 8px; font-weight: 600;
     }
-    .badge {
-      display: inline-block;
-      font-size: 0.8rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--accent);
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 0.35rem 0.9rem;
-      margin-bottom: 1.5rem;
-    }
-    h1 { font-size: clamp(1.6rem, 5vw, 2.6rem); margin: 0 0 0.75rem; }
-    p { color: var(--muted); margin: 0 auto 1rem; max-width: 30rem; }
-    .domain { color: var(--fg); font-weight: 600; }
-    footer { margin-top: 2rem; font-size: 0.85rem; color: var(--muted); }
     a { color: var(--accent); }
-    a:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+    a:focus-visible, a.cta:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
   </style>
 </head>
 <body>
   <main>
-    <span class="badge">W budowie</span>
     <h1>Szkolenie GenAI i&nbsp;LLM</h1>
-    <p>
-      Interaktywne szkolenie z generatywnej AI i&nbsp;dużych modeli językowych
-      jest w&nbsp;przygotowaniu. Wkrótce pojawi się tutaj, pod adresem
-      <span class="domain">ai-slop.win</span>.
-    </p>
-    <p>Trzy ścieżki — decyzyjna, praktyk QA i&nbsp;inżynierska — z&nbsp;quizami, testami i&nbsp;certyfikatem.</p>
-    <footer>
-      <p>Strona hostowana na GitHub Pages. Zajrzyj ponownie wkrótce.</p>
-    </footer>
+    <p>Przekierowuję do aplikacji szkolenia. Jeśli nic się nie dzieje, przejdź ręcznie:</p>
+    <p><a class="cta" href="genai-llm-training/">Otwórz szkolenie</a></p>
   </main>
+  <!-- Zapasowe przekierowanie JS (gdy meta-refresh zablokowany); link wyżej działa bez JS. -->
+  <script>window.location.replace("genai-llm-training/");</script>
 </body>
 </html>

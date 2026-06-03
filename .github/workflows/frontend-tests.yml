@@ -10,11 +10,17 @@ on:
   pull_request:
     paths:
       - 'genai-llm-training/**'
+      - 'index.html'   # root redirect → aplikacja (inwariant wdrożenia Pages #33, test pages-deploy)
+      - 'CNAME'
+      - '.nojekyll'
       - '.github/workflows/frontend-tests.yml'
   push:
     branches: [main]
     paths:
       - 'genai-llm-training/**'
+      - 'index.html'
+      - 'CNAME'
+      - '.nojekyll'
       - '.github/workflows/frontend-tests.yml'
 
 jobs:

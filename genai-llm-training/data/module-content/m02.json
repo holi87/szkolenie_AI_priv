@@ -43,6 +43,7 @@
       "blocks": [
         { "kind": "definition", "term": "Okno kontekstu", "original": "context window", "text": "maksymalna liczba tokenów, jaką model „widzi” naraz — obejmuje i wejście (dokument, pytanie), i generowaną odpowiedź." },
         { "kind": "paragraph", "text": "Gdy dokument plus pytanie plus odpowiedź przekraczają ten limit, część wejścia musi wypaść — model jej po prostu nie zobaczy." },
+        { "kind": "paragraph", "text": "Sam mechanizm bywa różny w zależności od narzędzia: jedne zwracają błąd „przekroczono limit”, inne po cichu ucinają najstarszą treść, jeszcze inne stosują okno przesuwne. Nawet gdy wszystko się zmieści, bardzo długi kontekst bywa słabiej wykorzystany w środku (efekt „lost in the middle”). Wniosek dla testera jest jednak ten sam: nie zakładaj, że model zobaczył i wykorzystał całość — zweryfikuj." },
         { "kind": "callout", "variant": "info", "title": "Analogia biurka", "text": "Okno kontekstu to biurko o stałej powierzchni. Każda nowa kartka spycha najstarsze poza krawędź — nie znikają, bo „nieważne”, tylko dlatego, że zabrakło miejsca." },
         { "kind": "callout", "variant": "warn", "title": "Zasada decyzyjna", "text": "„Wkleiłem cały dokument” nie znaczy „model to przeczytał”. Najpierw sprawdź, czy treść mieści się w oknie kontekstu." }
       ]
