@@ -2,6 +2,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createMemoryAdapter, createProgressStore } from "../../assets/core/progress-store.js";
+import { buildCertificate } from "../../assets/core/certificate.js";
+import { modulesData } from "./_fixtures.mjs";
 
 // Stały zegar — deterministyczne timestampy w testach.
 const fixedNow = () => "2026-06-03T10:00:00.000Z";
@@ -177,4 +179,32 @@ test("reset czyści pseudonim sesji (#63)", () => {
   s.selectPath("S1");
   s.reset({ all: true });
   assert.equal(s.getParticipant(), null, "reset all=true kasuje pseudonim sesji");
+});
+
+test("model C end-to-end (#63/#61): pseudonim sesji trafia na certyfikat, po odświeżeniu znika, completionId stały", () => {
+  const adapter = createMemoryAdapter();
+  const s = makeStore(adapter);
+  s.selectPath("S1");
+  s.setParticipant({ displayName: "Sesyjny01" });
+  const passResult = { pathId: "S1", scorePct: 88, passed: true, weakModules: [] };
+  // Dokładnie wiring z app.js: buildCertificate(result, { participant: store.getParticipant() }).
+  const inSession = buildCertificate(passResult, { dateIso: fixedNow(), participant: s.getParticipant(), pathName: "Decyzyjna", modulesData });
+  assert.equal(inSession.displayName, "Sesyjny01", "pseudonim z sesji widoczny na certyfikacie w trakcie sesji");
+  // Odświeżenie: świeży store nad tym samym storage → pseudonim zniknął (model C).
+  const s2 = makeStore(adapter);
+  s2.selectPath("S1");
+  const afterReload = buildCertificate(passResult, { dateIso: fixedNow(), participant: s2.getParticipant(), pathName: "Decyzyjna", modulesData });
+  assert.equal(afterReload.displayName, undefined, "po odświeżeniu certyfikat bez pseudonimu (model C)");
+  assert.equal(inSession.completionId, afterReload.completionId, "completionId niezależny od pseudonimu (#61)");
+});
+
+test("migracja (#63): starszy progres z participant.displayName jest czyszczony przy wczytaniu", () => {
+  const adapter = createMemoryAdapter({
+    "genai-training:cursor": JSON.stringify({ pathId: "S1", moduleId: null, screen: null }),
+    "genai-training:progress:S1": JSON.stringify({ version: "1.0", path: "S1", modules: {}, finalTest: { attempts: 0, maxAttempts: 3 }, practicalTasks: [], updatedAt: fixedNow(), participant: { displayName: "StaryNick" } }),
+  });
+  const s = makeStore(adapter);
+  assert.equal(s.getProgress().participant, undefined, "legacy participant usunięty przy wczytaniu");
+  s.selectPath("S1"); // persist() przepisuje storage bez participant
+  assert.ok(!(adapter.get("genai-training:progress:S1") || "").includes("StaryNick"), "pseudonim usunięty ze storage po persist");
 });

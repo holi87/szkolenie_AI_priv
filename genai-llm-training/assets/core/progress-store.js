@@ -65,10 +65,17 @@ export function createProgressStore(adapter, opts = {}) {
     }
   };
   const writeJson = (key, val) => adapter.set(key, JSON.stringify(val));
+  // Migracja prywatności (#63): starszy zapis (sprzed modelu C) mógł trzymać participant.displayName w localStorage.
+  // Nowy kod nigdy go nie czyta — usuwamy przy wczytaniu, a najbliższy persist() wyczyści go ze storage.
+  const loadProgress = (pathId) => {
+    const p = readJson(PROGRESS_KEY(pathId));
+    if (p && p.participant) delete p.participant;
+    return p;
+  };
 
   let cursor = readJson(CURSOR_KEY) || { pathId: null, moduleId: null, screen: null };
   let activePath = cursor.pathId;
-  let progress = activePath ? readJson(PROGRESS_KEY(activePath)) : null;
+  let progress = activePath ? loadProgress(activePath) : null;
   // Pseudonim trzymany TYLKO w pamięci sesji (model C, prywatność #63): nie trafia do localStorage ani do
   // obiektu progresu, więc znika po odświeżeniu/zamknięciu karty i po resecie. Eksporty i tak go nie zawierają.
   let sessionParticipant = null;
@@ -90,7 +97,7 @@ export function createProgressStore(adapter, opts = {}) {
     /** Wybiera/ustawia aktywną ścieżkę; ładuje (lub tworzy) jej progres. Zmiana ścieżki nie kasuje innych. */
     selectPath(pathId) {
       activePath = pathId;
-      progress = readJson(PROGRESS_KEY(pathId)) || newProgress(pathId, maxAttempts, now);
+      progress = loadProgress(pathId) || newProgress(pathId, maxAttempts, now);
       cursor = { ...cursor, pathId };
       persist();
       persistCursor();
