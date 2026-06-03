@@ -6,7 +6,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { t, registerCatalog, setLocale, hasKey } from "../../assets/i18n/i18n.js";
+import { t, registerCatalog, setLocale, hasKey, resolveLang, persistLang, LANG_KEY, LOCALES, isSupportedLocale, localeHasData } from "../../assets/i18n/i18n.js";
 import { scoreQuestion } from "../../assets/core/quiz-engine.js";
 import { renderFeedback } from "../../assets/ui/quiz-view.js";
 import { certReasonText } from "../../assets/ui/certificate-view.js";
@@ -115,6 +115,54 @@ test("render PL bez regresji: feedback niesie 'Poprawnie'/'Niepoprawnie' i NIE w
   assert.ok(noTxt.includes("Niepoprawnie"), "feedback błędny niesie PL 'Niepoprawnie'");
   // typo w kluczu -> t() oddaje sam klucz; pilnujemy, że klucz NIE pojawia się jako widoczny tekst
   for (const txt of [okTxt, noTxt]) assert.ok(!/feedback\.\w+/.test(txt), `wyciek surowego klucza: ${txt}`);
+});
+
+// --- Wybór locale: resolveLang / persistLang (#79, wstrzykiwalne storage+search) ---
+
+const fakeStorage = (init = {}) => ({ _v: { ...init }, getItem(k) { return k in this._v ? this._v[k] : null; }, setItem(k, v) { this._v[k] = String(v); } });
+const throwingStorage = { getItem() { throw new Error("prywatny"); }, setItem() { throw new Error("prywatny"); } };
+
+test("resolveLang: brak pref + brak ?lang= => 'pl'", () => {
+  assert.equal(resolveLang({ search: "", storage: fakeStorage() }), "pl");
+});
+
+test("resolveLang: ?lang=en => 'en' (boot-override)", () => {
+  assert.equal(resolveLang({ search: "?lang=en", storage: fakeStorage() }), "en");
+});
+
+test("resolveLang: zapis 'en', brak ?lang= => 'en'", () => {
+  assert.equal(resolveLang({ search: "", storage: fakeStorage({ [LANG_KEY]: "en" }) }), "en");
+});
+
+test("resolveLang: ?lang= MA PRIORYTET nad zapisem", () => {
+  assert.equal(resolveLang({ search: "?lang=pl", storage: fakeStorage({ [LANG_KEY]: "en" }) }), "pl");
+});
+
+test("resolveLang: ?lang= spoza listy locale => ignorowane, fallback do zapisu/PL (walidacja wejścia)", () => {
+  assert.equal(resolveLang({ search: "?lang=zz", storage: fakeStorage({ [LANG_KEY]: "en" }) }), "en");
+  assert.equal(resolveLang({ search: "?lang=../etc", storage: fakeStorage() }), "pl");
+});
+
+test("resolveLang: storage rzucający (tryb prywatny) => brak crasha, fallback 'pl'", () => {
+  let r;
+  assert.doesNotThrow(() => { r = resolveLang({ search: "", storage: throwingStorage }); });
+  assert.equal(r, "pl");
+});
+
+test("persistLang zapisuje wspierany locale pod LANG_KEY; resolveLang go odczytuje; niewspierany ignorowany", () => {
+  const s = fakeStorage();
+  persistLang("en", { storage: s });
+  assert.equal(s.getItem(LANG_KEY), "en");
+  assert.equal(resolveLang({ search: "", storage: s }), "en");
+  persistLang("zz", { storage: s }); // niewspierany — bez zapisu
+  assert.equal(s.getItem(LANG_KEY), "en");
+});
+
+test("konfiguracja locale deklaratywna: pl ma dane, en jest szkieletem (hasData=false)", () => {
+  assert.ok(LOCALES.some((l) => l.code === "pl") && LOCALES.some((l) => l.code === "en"));
+  assert.equal(localeHasData("pl"), true);
+  assert.equal(localeHasData("en"), false, "EN bez własnych danych na etapie fundamentu (#78)");
+  assert.equal(isSupportedLocale("zz"), false);
 });
 
 test("aktywny EN (szkielet pusty) renderuje treść PL przez fallback — pipeline end-to-end", () => {

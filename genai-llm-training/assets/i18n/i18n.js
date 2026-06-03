@@ -8,9 +8,56 @@
 // Klucze są PŁASKIE i namespaced kropką, np. "nav.progress", "feedback.correct".
 
 export const FALLBACK_LOCALE = "pl";
+export const LANG_KEY = "genai-training:lang";
+
+// Deklaratywna konfiguracja locale (#79). Dodanie języka = jeden wpis (+ pliki data/<lang>/ i <lang>.json).
+// hasData: czy istnieje komplet danych w data/<lang>/ (jeśli nie — UI w tym locale, ale dane z PL; ADR-0004).
+export const LOCALES = [
+  { code: "pl", name: "Polski", hasData: true },
+  { code: "en", name: "English", hasData: false },
+];
+export function isSupportedLocale(code) {
+  return LOCALES.some((l) => l.code === code);
+}
+export function localeHasData(code) {
+  const l = LOCALES.find((x) => x.code === code);
+  return Boolean(l && l.hasData);
+}
 
 const catalogs = Object.create(null); // { pl: {...}, en: {...} }
 let activeLocale = FALLBACK_LOCALE;
+
+// Storage bezpieczny (tryb prywatny / opaque origin nie może wywracać aplikacji) — jak w theme.js.
+function safeStorage() {
+  try { return globalThis.localStorage || null; } catch { return null; }
+}
+function safeGet(storage, key) {
+  try { return storage && typeof storage.getItem === "function" ? storage.getItem(key) : null; } catch { return null; }
+}
+function safeSet(storage, key, value) {
+  try { if (storage && typeof storage.setItem === "function") storage.setItem(key, value); } catch { /* zapis niedostępny */ }
+}
+
+/**
+ * Ustala aktywny locale przy starcie: ?lang= (boot-override, walidowany) > zapis > PL.
+ * @param {object} [deps] { search?: string, storage? } — wstrzykiwalne do testów.
+ */
+export function resolveLang(deps = {}) {
+  const search = deps.search != null ? deps.search : (globalThis.location ? globalThis.location.search : "");
+  const storage = "storage" in deps ? deps.storage : safeStorage();
+  let qp = null;
+  try { qp = new URLSearchParams(search || "").get("lang"); } catch { qp = null; }
+  if (qp && isSupportedLocale(qp)) return qp;            // ?lang= ma priorytet (boot-override), walidowany
+  const saved = safeGet(storage, LANG_KEY);
+  if (saved && isSupportedLocale(saved)) return saved;   // zapisana preferencja
+  return FALLBACK_LOCALE;                                  // konserwatywnie PL
+}
+
+/** Zapisuje wybór locale (tylko wspierany). */
+export function persistLang(code, deps = {}) {
+  const storage = "storage" in deps ? deps.storage : safeStorage();
+  if (isSupportedLocale(code)) safeSet(storage, LANG_KEY, code);
+}
 
 /** Rejestruje katalog dla locale (nadpisuje). */
 export function registerCatalog(locale, catalog) {

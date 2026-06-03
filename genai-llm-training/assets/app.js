@@ -11,10 +11,11 @@ import { buildCertificate } from "./core/certificate.js";
 import { evaluateInteraction } from "./core/interactions/index.js";
 import { el, mount } from "./ui/dom.js";
 import { icon } from "./ui/icon.js";
-import { t, registerCatalog, setLocale } from "./i18n/i18n.js";
+import { t, registerCatalog, setLocale, resolveLang, persistLang, localeHasData } from "./i18n/i18n.js";
 import { renderPathSelect } from "./ui/path-select.js";
 import { updateHeader, renderNav } from "./ui/shell.js";
 import { initTheme, toggleTheme } from "./ui/theme.js";
+import { initLangSwitch } from "./ui/lang-switch.js";
 import { renderQuestion, renderFeedback } from "./ui/quiz-view.js";
 import { renderTest } from "./ui/test-view.js";
 import { renderResult } from "./ui/certificate-view.js";
@@ -51,13 +52,16 @@ function inlineQuizPctFor(prog, req) {
   return Math.round((sum / req.length) * 100) / 100;
 }
 
-function start(data) {
+function start(initialData, ctx = {}) {
+  let data = initialData;                 // mutable: zmiana języka może przeładować dane (gdy locale ma własne data/)
+  let dataLocale = ctx.dataLocale || "pl";
   const store = makeStore();
   const refs = {
     view: $("view"), nav: $("module-nav"), navToggle: $("nav-toggle"), resetBtn: $("reset-btn"),
     pathIndicator: $("path-indicator"), progress: $("progress"), progressFill: $("progress-fill"),
     progressTrack: document.querySelector(".progress__track"), progressLabel: $("progress-label"),
     themeToggle: $("theme-toggle"),
+    langWrap: $("lang-switch"), langBtn: $("lang-switch-btn"), langLabel: $("lang-switch-label"), langFlag: $("lang-switch-flag"),
   };
 
   // Motyw jasny/ciemny (UX-3): anty-flash skrypt w <head> ustawił już [data-theme]; tu synchronizujemy
@@ -66,6 +70,29 @@ function start(data) {
     const syncToggle = (theme) => refs.themeToggle.setAttribute("aria-pressed", String(theme === "light"));
     syncToggle(initTheme());
     refs.themeToggle.addEventListener("click", () => syncToggle(toggleTheme()));
+  }
+
+  // Przełącznik języka (I18N-3 #79). Zmiana: rejestruj katalog locale (jeśli trzeba), przeładuj dane TYLKO gdy
+  // zmienia się data-locale (locale z hasData), ustaw <html lang>, zapisz preferencję, odśwież ekran w miejscu.
+  let langApi = null;
+  async function setLanguage(code) {
+    setLocale(code);
+    persistLang(code);
+    if (globalThis.document && globalThis.document.documentElement) globalThis.document.documentElement.setAttribute("lang", code);
+    if (typeof ctx.ensureCatalog === "function") { try { await ctx.ensureCatalog(code); } catch { /* fallback PL */ } }
+    const nextDataLocale = localeHasData(code) ? code : "pl";
+    if (nextDataLocale !== dataLocale && typeof ctx.loadData === "function") {
+      try { data = await ctx.loadData(nextDataLocale); dataLocale = nextDataLocale; } catch { /* zostań przy obecnych danych */ }
+    }
+    if (langApi) langApi.setActive(code);
+    render();
+  }
+  if (refs.langBtn && refs.langWrap) {
+    langApi = initLangSwitch({
+      wrap: refs.langWrap, trigger: refs.langBtn, label: refs.langLabel, triggerFlag: refs.langFlag,
+      getActive: () => ctx.uiLocale || "pl",
+      onSelect: (code) => { setLanguage(code); },
+    });
   }
   const state = { screen: "menu", moduleId: null, test: null };
   // Imię na certyfikat może być wpisane PRZED wyborem ścieżki (gdy brak aktywnej ścieżki nie ma gdzie zapisać).
@@ -382,22 +409,21 @@ function start(data) {
 }
 
 // ----- Boot -----
-// Ładuje katalogi i18n (fetch, jak dane) i rejestruje je PRZED renderem, żeby t() działało od pierwszego ekranu.
-// PL jest kanoniczny i ładowany zawsze; aktywny locale dodatkowo (fallback PL przy braku/pustej wartości).
-// #77: aktywny locale = "pl" (mechanizm przełączania dochodzi w #79). Ścieżki względne (Pages, ADR-0002).
-async function loadCatalogs(locale) {
-  const fetchJson = async (url) => {
-    const res = await globalThis.fetch(url);
-    if (!res.ok) throw new Error(`${url}: ${res.status}`);
-    return res.json();
-  };
-  registerCatalog("pl", await fetchJson("assets/i18n/pl.json"));
-  if (locale && locale !== "pl") {
-    try { registerCatalog(locale, await fetchJson(`assets/i18n/${locale}.json`)); }
-    catch { /* brak katalogu locale — fallback do PL (ADR-0004) */ }
-  }
-  setLocale(locale || "pl");
+// Katalogi i18n ładowane przez fetch (jak dane) i rejestrowane PRZED renderem, żeby t() działało od pierwszego
+// ekranu. PL kanoniczny zawsze; aktywny locale dodatkowo (fallback PL przy braku/pustej wartości). Ścieżki
+// względne (Pages, ADR-0002). ensureCatalog jest idempotentne — używane też przy zmianie języka (#79).
+const catalogFetch = async (url) => {
+  const res = await globalThis.fetch(url);
+  if (!res.ok) throw new Error(`${url}: ${res.status}`);
+  return res.json();
+};
+const loadedCatalogs = new Set();
+async function ensureCatalog(code) {
+  if (loadedCatalogs.has(code)) return;
+  registerCatalog(code, await catalogFetch(`assets/i18n/${code}.json`));
+  loadedCatalogs.add(code);
 }
+const loadData = (locale) => loadTrainingData({ locale });
 
 function renderLoadError(err) {
   // Edge file://: jeśli i NIE udało się pobrać katalogu i18n (ten sam fetch), t() zwróci klucze — ale <pre>
@@ -411,8 +437,14 @@ function renderLoadError(err) {
 }
 
 (async () => {
-  const locale = "pl"; // #79 wstrzyknie tu aktywny locale (resolveLang); na razie PL
-  try { await loadCatalogs(locale); } catch { /* katalog niedostępny — t() fallbackuje do kluczy */ }
-  try { start(await loadTrainingData()); }
-  catch (err) { renderLoadError(err); }
+  const uiLocale = resolveLang();                              // ?lang= (walidowany) > zapis > PL
+  const dataLocale = localeHasData(uiLocale) ? uiLocale : "pl"; // brak danych locale -> dane PL (bez crasha)
+  setLocale(uiLocale);
+  if (globalThis.document && globalThis.document.documentElement) globalThis.document.documentElement.setAttribute("lang", uiLocale);
+  try { await ensureCatalog("pl"); } catch { /* katalog niedostępny — t() zwróci klucze */ }
+  if (uiLocale !== "pl") { try { await ensureCatalog(uiLocale); } catch { /* fallback PL */ } }
+  try {
+    const data = await loadData(dataLocale);
+    start(data, { uiLocale, dataLocale, ensureCatalog, loadData });
+  } catch (err) { renderLoadError(err); }
 })();
