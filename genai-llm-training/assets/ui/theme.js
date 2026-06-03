@@ -15,6 +15,11 @@ function safeSet(storage, key, value) {
   try { if (storage && typeof storage.setItem === "function") storage.setItem(key, value); }
   catch { /* zapis niedostępny — wybór zadziała na czas sesji, bez crasha */ }
 }
+// UWAGA: sam DOSTĘP do globalThis.localStorage RZUCA w części środowisk (opaque origin, storage
+// zablokowany jako throwing getter) — dlatego czytamy go w try, nie tylko getItem/setItem (Codex P2).
+function safeStorage() {
+  try { return globalThis.localStorage || null; } catch { return null; }
+}
 function prefersDark(matchMedia) {
   try {
     if (typeof matchMedia !== "function") return true; // brak matchMedia => zostań przy domyślnym ciemnym
@@ -45,7 +50,7 @@ export function currentTheme(root) {
  * @returns {"dark"|"light"} ustalony motyw
  */
 export function initTheme(deps = {}) {
-  const storage = "storage" in deps ? deps.storage : globalThis.localStorage;
+  const storage = "storage" in deps ? deps.storage : safeStorage();
   const mm = "matchMedia" in deps ? deps.matchMedia : globalThis.matchMedia;
   const saved = safeGet(storage, THEME_KEY);
   const theme = VALID.has(saved) ? saved : (prefersDark(mm) ? "dark" : "light");
@@ -57,7 +62,7 @@ export function initTheme(deps = {}) {
  * Przełącza motyw i zapisuje wybór. @returns {"dark"|"light"} nowy motyw.
  */
 export function toggleTheme(deps = {}) {
-  const storage = "storage" in deps ? deps.storage : globalThis.localStorage;
+  const storage = "storage" in deps ? deps.storage : safeStorage();
   const next = currentTheme(deps.root) === "dark" ? "light" : "dark";
   applyTheme(deps.root, next);
   safeSet(storage, THEME_KEY, next);

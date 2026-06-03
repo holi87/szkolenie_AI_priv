@@ -56,3 +56,10 @@ test("brak matchMedia => domyślny ciemny (nie wywraca się)", () => {
   const r = makeRoot();
   assert.equal(initTheme({ storage: makeStorage(), matchMedia: undefined, root: r }), "dark");
 });
+
+test("brak wstrzykniętego storage => DOSTĘP do globalThis.localStorage nie wywraca initTheme/toggleTheme (Codex P2)", () => {
+  // Bez deps.storage helper czyta globalThis.localStorage przez safeStorage() (try/catch na samym dostępie).
+  const r = makeRoot();
+  assert.doesNotThrow(() => initTheme({ matchMedia: mm(true), root: r }), "initTheme bez storage nie może rzucać");
+  assert.doesNotThrow(() => toggleTheme({ root: r }), "toggleTheme bez storage nie może rzucać");
+});
