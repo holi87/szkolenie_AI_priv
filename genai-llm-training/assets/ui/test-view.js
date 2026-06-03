@@ -20,6 +20,11 @@ export function renderTest(selection, opts = {}) {
     "Tryb testu: feedback i wynik pojawią się dopiero po zakończeniu podejścia.",
   ]));
   if (opts.attemptInfo) form.appendChild(el("p", { class: "quiz-meta", text: opts.attemptInfo }));
+  if (opts.practicalNote) {
+    form.appendChild(el("p", { class: "locked-note", attrs: { role: "note" } }, [
+      el("span", { attrs: { "aria-hidden": "true" }, text: "⚠️ " }), opts.practicalNote,
+    ]));
+  }
 
   selection.questions.forEach((q, i) => {
     const r = renderQuestion(q, { index: i, total: selection.count, showMeta: true });
@@ -32,12 +37,17 @@ export function renderTest(selection, opts = {}) {
   form.appendChild(el("div", { class: "btn-row" }, [submit]));
   form.appendChild(status);
 
+  const isAnswered = (r) => {
+    const a = r.getAnswer();
+    if (Array.isArray(a)) return a.length > 0;
+    if (a && typeof a === "object") return Object.keys(a).length > 0; // puste dopasowanie {} = brak odpowiedzi
+    if (a != null) return true;
+    return r.getRubricPoints ? r.getRubricPoints() != null : false; // analiza_outputu: ocena rubryki
+  };
+
   form.addEventListener("submit", (ev) => {
     ev.preventDefault();
-    const answered = controls.filter(({ r }) => {
-      const a = r.getAnswer();
-      return Array.isArray(a) ? a.length > 0 : a != null || (r.getRubricPoints && r.getRubricPoints() != null);
-    }).length;
+    const answered = controls.filter(({ r }) => isAnswered(r)).length;
     if (answered < selection.count) {
       const ok = globalThis.confirm(`Odpowiedziałeś na ${answered} z ${selection.count} pytań. Brakujące będą liczone jako błędne. Zakończyć podejście?`);
       if (!ok) return;

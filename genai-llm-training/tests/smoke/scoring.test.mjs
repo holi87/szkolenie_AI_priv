@@ -48,38 +48,48 @@ const PRACTICAL = {
   ],
 };
 
-test("S1: komplet poprawnych → 100%, zaliczone, krytyczne ok, brak słabych modułów", () => {
+test("S1: komplet poprawnych (+ quizy inline 100%) → 100%, zaliczone, krytyczne ok, brak słabych modułów", () => {
   const sel = selectFinalTest(bank, pathsData, "S1", seededRng(11));
-  const r = scorePath("S1", sel.questions, allCorrect(sel.questions), pathsData);
-  assert.equal(r.scorePct, 100);
+  const r = scorePath("S1", sel.questions, allCorrect(sel.questions), pathsData, { inlineQuizPct: 100 });
+  assert.equal(r.scorePct, 100, "ważony: quiz inline 100 + test 100 = 100");
   assert.equal(r.passed, true);
   assert.equal(r.criticalPassed, true);
   assert.deepEqual(r.weakModules, []);
   assert.ok(r.gates.every((g) => g.passed));
 });
 
+test("waga quizu inline (30%): 100% testu, ale 0% quizów inline → poniżej progu S1, niezaliczone", () => {
+  const sel = selectFinalTest(bank, pathsData, "S1", seededRng(21));
+  const r = scorePath("S1", sel.questions, allCorrect(sel.questions), pathsData, { inlineQuizPct: 0 });
+  assert.equal(r.finalTestPct, 100, "sam test 100%");
+  assert.ok(r.scorePct < 75, `ważony ${r.scorePct}% < 75% bo quizy inline ważą 30%`);
+  assert.equal(r.gates.find((g) => g.type === "overallThreshold").passed, false);
+  assert.equal(r.passed, false, "nie da się zaliczyć pomijając quizy inline");
+});
+
 test("S2: bez oceny zadania praktycznego bramka practicalTask NIE zdana → niezaliczone", () => {
   const sel = selectFinalTest(bank, pathsData, "S2", seededRng(12));
-  const r = scorePath("S2", sel.questions, allCorrect(sel.questions), pathsData);
-  assert.equal(r.scorePct, 100);
+  const r = scorePath("S2", sel.questions, allCorrect(sel.questions), pathsData, { inlineQuizPct: 100 });
+  assert.equal(r.finalTestPct, 100);
+  assert.equal(r.scorePct, 90, "ważony: 0.3*100 + 0.6*100 + 0.1*0 (brak praktyki) = 90");
   const practicalGate = r.gates.find((g) => g.type === "practicalTask");
   assert.equal(practicalGate.passed, false, "brak oceny → konserwatywnie niespełniona");
   assert.equal(r.passed, false, "mimo 100% w teście brak praktyki blokuje zaliczenie");
 });
 
-test("S2: z oceną zadania promptowego >=4/5 → zaliczone", () => {
+test("S2: z oceną zadania promptowego >=4/5 (+ quizy inline) → zaliczone", () => {
   const sel = selectFinalTest(bank, pathsData, "S2", seededRng(13));
-  const r = scorePath("S2", sel.questions, allCorrect(sel.questions), pathsData, { practicalResults: PRACTICAL.S2 });
+  const r = scorePath("S2", sel.questions, allCorrect(sel.questions), pathsData, { practicalResults: PRACTICAL.S2, inlineQuizPct: 100 });
   assert.equal(r.passed, true);
 });
 
 test("S3: wymaga R2-rag i R3-eval >=70% — bez nich niezaliczone, z nimi zaliczone", () => {
   const sel = selectFinalTest(bank, pathsData, "S3", seededRng(14));
   const ans = allCorrect(sel.questions);
-  assert.equal(scorePath("S3", sel.questions, ans, pathsData).passed, false, "brak praktyk → fail");
-  const ok = scorePath("S3", sel.questions, ans, pathsData, { practicalResults: PRACTICAL.S3 });
+  assert.equal(scorePath("S3", sel.questions, ans, pathsData, { inlineQuizPct: 100 }).passed, false, "brak praktyk → fail");
+  const ok = scorePath("S3", sel.questions, ans, pathsData, { practicalResults: PRACTICAL.S3, inlineQuizPct: 100 });
   assert.equal(ok.passed, true);
-  assert.equal(ok.scorePct, 100);
+  assert.equal(ok.scorePct, 98, "ważony: 0.3*100 + 0.6*100 + 0.1*80 = 98");
 });
 
 test("krytyczne błędne → criticalQuestions gate fail, niezaliczone (warunek konieczny)", () => {

@@ -38,6 +38,13 @@ function progressPct(store, data, pathId) {
   return req.length ? (done / req.length) * 100 : 0;
 }
 
+/** Średni % quizów inline po modułach wymaganych (brak wyniku = 0, konserwatywnie) — wkład 30% do wyniku ścieżki. */
+function inlineQuizPctFor(prog, req) {
+  if (!req.length) return null;
+  const sum = req.reduce((a, id) => a + ((prog.modules[id] && prog.modules[id].inlineQuizScorePct) || 0), 0);
+  return Math.round((sum / req.length) * 100) / 100;
+}
+
 function start(data) {
   const store = makeStore();
   const refs = {
@@ -46,6 +53,8 @@ function start(data) {
     progressTrack: document.querySelector(".progress__track"), progressLabel: $("progress-label"),
   };
   const state = { screen: "menu", moduleId: null, test: null };
+  // Imię na certyfikat może być wpisane PRZED wyborem ścieżki (gdy brak aktywnej ścieżki nie ma gdzie zapisać).
+  let pendingName = (store.getProgress() && store.getProgress().participant && store.getProgress().participant.displayName) || "";
 
   const focusView = () => refs.view.focus();
 
@@ -54,6 +63,7 @@ function start(data) {
     if (!pathId) return;
     updateHeader(refs, { pathId, pathName: pathName(data, pathId), progressPct: progressPct(store, data, pathId) });
     refs.nav.hidden = false;
+    refs.navToggle.setAttribute("aria-expanded", "true"); // nav widoczny po wyborze ścieżki — spójny stan z toggle
     const modules = pathModuleList(data.paths, data.modules, pathId, store.getProgress());
     const ft = finalTestStatus(store.getProgress(), data.paths, pathId);
     ft.active = state.screen === "test";
@@ -80,9 +90,16 @@ function start(data) {
     refs.navToggle.hidden = true; refs.resetBtn.hidden = true;
     mount(refs.view, renderPathSelect(data.paths, data.modules, {
       currentPath: store.getActivePath(),
-      participantName: (store.getProgress() && store.getProgress().participant && store.getProgress().participant.displayName) || "",
-      onSelect: (pathId) => { store.selectPath(pathId); state.screen = "menu"; state.moduleId = null; render(); focusView(); },
-      onName: (name) => { if (store.getActivePath() && name) store.setParticipant({ displayName: name }); },
+      participantName: pendingName,
+      onSelect: (pathId) => {
+        store.selectPath(pathId);
+        if (pendingName) store.setParticipant({ displayName: pendingName }); // przenieś imię wpisane przed wyborem
+        state.screen = "menu"; state.moduleId = null; render(); focusView();
+      },
+      onName: (name) => {
+        pendingName = name;
+        if (store.getActivePath() && name) store.setParticipant({ displayName: name });
+      },
     }));
   }
 
@@ -115,8 +132,10 @@ function start(data) {
     store.setLastLocation(moduleId, "module");
     refreshHeaderAndNav();
 
+    const pathId = store.getActivePath();
     const mod = data.modules.modules.find((m) => m.id === moduleId);
-    const pool = questionsForModule(data.questions, moduleId).slice(0, INLINE_QUIZ_MAX);
+    // Filtr po ścieżce: quiz inline pokazuje tylko pytania należące do aktywnej ścieżki (paths[]).
+    const pool = questionsForModule(data.questions, moduleId).filter((q) => q.paths.includes(pathId)).slice(0, INLINE_QUIZ_MAX);
     const root = el("div", { class: "view__content" });
     root.appendChild(el("h1", { text: `${mod.id} — ${mod.name}` }));
     root.appendChild(el("p", { class: "muted", text: `Filar: ${mod.pillar} · poziom: ${mod.level} · czas: ~${mod.timeFullMin} min · interakcja: ${mod.interactiveElement}` }));
@@ -127,7 +146,8 @@ function start(data) {
     root.appendChild(el("ul", {}, (mod.learningOutcomes || []).map((o) => el("li", { text: o }))));
 
     root.appendChild(el("h2", { text: `Quiz inline (${pool.length} pytań)` }));
-    const answered = new Set();
+    const alreadyDone = store.getProgress().modules[moduleId]?.status === "completed";
+    const moduleResults = new Map(); // qid → { awarded, max } z ostatniego sprawdzenia (do % quizu inline)
     pool.forEach((q) => {
       const block = el("div", { class: "quiz-question" });
       const rq = renderQuestion(q, { showMeta: true });
@@ -139,14 +159,19 @@ function start(data) {
         const result = scoreQuestion(q, ans, { rubricPoints: rp });
         mount(fb, renderFeedback(result));
         store.recordQuizResult(moduleId, { questionId: q.id, correct: result.isCorrect === true, attempt: 1, scoreAwarded: result.awarded, feedbackShown: true, feedback: result.feedback });
-        answered.add(q.id);
-        if (answered.size === pool.length) completeBtn.disabled = false;
+        moduleResults.set(q.id, { awarded: result.awarded, max: result.max });
+        if (moduleResults.size === pool.length) completeBtn.disabled = false;
       });
       mount(block, rq.node, el("div", { class: "btn-row" }, [check]), fb);
       root.appendChild(block);
     });
 
-    const completeBtn = el("button", { class: "btn", type: "button", text: "Oznacz moduł jako ukończony", disabled: pool.length > 0, on: { click: () => {
+    const completeBtn = el("button", { class: "btn", type: "button", text: "Oznacz moduł jako ukończony", disabled: pool.length > 0 && !alreadyDone, on: { click: () => {
+      // % quizu inline zapisz tylko po komplecie odpowiedzi — nie nadpisuj wcześniejszego wyniku przy ponownej wizycie.
+      if (pool.length > 0 && moduleResults.size === pool.length) {
+        const tot = [...moduleResults.values()].reduce((a, r) => ({ awarded: a.awarded + r.awarded, max: a.max + r.max }), { awarded: 0, max: 0 });
+        store.setInlineQuizScore(moduleId, tot.max > 0 ? Math.round((tot.awarded / tot.max) * 10000) / 100 : 0);
+      }
       store.setModuleStatus(moduleId, "completed");
       showMenu(); refreshHeaderAndNav(); focusView();
     } } });
@@ -175,15 +200,24 @@ function start(data) {
     mount(refs.view, renderTest(selection, {
       pathName: pathName(data, pathId), path: pathId, passThresholdPct: path.passThresholdPct,
       attemptInfo: `Podejście ${(ft.attempts || 0) + 1} z ${ft.maxAttempts || path.attempts || 3}.`,
+      practicalNote: (path.practicalTasks || 0) > 0
+        ? "Pełne zaliczenie tej ścieżki wymaga też oceny zadania praktycznego — moduł wprowadzania zadań praktycznych dochodzi w M4."
+        : null,
       onSubmit: ({ answers, rubricPointsById }) => finishTest(pathId, selection, answers, rubricPointsById),
     }));
     focusView();
   }
 
   function finishTest(pathId, selection, answers, rubricPointsById) {
-    // Zadania praktyczne (S2/S3) nie są jeszcze zbierane w UI M3 → bramki praktyczne pozostają niespełnione
-    // (konserwatywnie). Wynik testu i bramki krytyczne/progowe liczone w pełni.
-    const result = scorePath(pathId, selection.questions, answers, data.paths, { rubricPointsById });
+    const prog = store.getProgress();
+    // Wynik ścieżki = ważona kompozycja: quiz inline (z progresu) 30% + test 60% + zadania praktyczne 10%.
+    // UI wprowadzania zadań praktycznych dochodzi w M4 → dla S2/S3 practicalTasks jest puste i bramki praktyczne
+    // pozostają niespełnione (konserwatywnie), więc S2/S3 nie zaliczą się do czasu M4.
+    const result = scorePath(pathId, selection.questions, answers, data.paths, {
+      rubricPointsById,
+      inlineQuizPct: inlineQuizPctFor(prog, requiredModules(data.paths, pathId)),
+      practicalResults: prog.practicalTasks,
+    });
     store.recordFinalTest(result);
     const cert = buildCertificate(result, { participant: store.getProgress().participant, pathName: pathName(data, pathId), modulesData: data.modules });
     if (cert.issued) store.recordCertificate({ issued: true, completionId: cert.completionId, scorePct: cert.scorePct });

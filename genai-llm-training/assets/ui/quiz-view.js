@@ -44,12 +44,24 @@ function matching(q) {
   return { node: el("div", {}, rows), getAnswer, focusFirst: () => selects[0]?.sel.focus() };
 }
 
+// Kolejność prezentacji ZDECYDOWANIE różna od klucza (q.sequence) — inaczej można odtworzyć
+// poprawną odpowiedź 1..n z góry na dół bez znajomości procesu (anti-gaming).
+function shuffledForDisplay(items) {
+  if (items.length < 2) return [...items];
+  const a = [...items];
+  for (let i = a.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  if (a.every((v, i) => v === items[i])) a.push(a.shift()); // gdy wypadła kolejność klucza — przesuń
+  return a;
+}
+
 function sequence(q) {
-  const items = q.sequence;
-  const n = items.length;
+  const n = q.sequence.length;
   const selects = [];
-  // Prezentujemy elementy w stałej kolejności; uczestnik nadaje pozycję (1..n) — wariant klawiaturowy.
-  const rows = items.map((label, i) => {
+  // Prezentujemy elementy w losowej kolejności; uczestnik nadaje pozycję (1..n) — wariant klawiaturowy.
+  const rows = shuffledForDisplay(q.sequence).map((label, i) => {
     const sel = el("select", { attrs: { "aria-label": `Pozycja kroku: ${label}` } }, [
       el("option", { value: "", text: "—" }),
       ...Array.from({ length: n }, (_, k) => el("option", { value: String(k), text: String(k + 1) })),
