@@ -57,7 +57,7 @@ function start(data) {
   };
   const state = { screen: "menu", moduleId: null, test: null };
   // Imię na certyfikat może być wpisane PRZED wyborem ścieżki (gdy brak aktywnej ścieżki nie ma gdzie zapisać).
-  let pendingName = (store.getProgress() && store.getProgress().participant && store.getProgress().participant.displayName) || "";
+  let pendingName = (store.getParticipant() && store.getParticipant().displayName) || ""; // pseudonim tylko z pamięci sesji (#63)
 
   const focusView = () => refs.view.focus();
 
@@ -319,7 +319,7 @@ function start(data) {
       practicalResults: prog.practicalTasks,
     });
     store.recordFinalTest(result);
-    const cert = buildCertificate(result, { participant: store.getProgress().participant, pathName: pathName(data, pathId), modulesData: data.modules });
+    const cert = buildCertificate(result, { participant: store.getParticipant(), pathName: pathName(data, pathId), modulesData: data.modules });
     if (cert.issued) store.recordCertificate({ issued: true, completionId: cert.completionId, scorePct: cert.scorePct });
     state.result = cert;
     showResult(cert, result.gates);
@@ -330,7 +330,7 @@ function start(data) {
     const ft = prog.finalTest || {};
     return buildCertificate(
       { pathId, scorePct: ft.lastScorePct ?? 0, passed: Boolean(ft.passed), weakModules: ft.weakModules || [] },
-      { participant: prog.participant, pathName: pathName(data, pathId), modulesData: data.modules },
+      { participant: store.getParticipant(), pathName: pathName(data, pathId), modulesData: data.modules },
     );
   }
 
@@ -353,6 +353,7 @@ function start(data) {
     if (globalThis.confirm("Zresetować cały postęp tej przeglądarki? Tej operacji nie można cofnąć.")) {
       timer.moduleId = null; timer.enterMs = 0; // porzuć licznik — reset i tak czyści progres
       store.reset({ all: true });
+      pendingName = ""; // wyczyść pseudonim trzymany w UI (#63) — inaczej wróciłby na ekran wyboru i kolejny certyfikat
       state.screen = "menu"; state.moduleId = null; state.result = null; state.test = null;
       render();
     }

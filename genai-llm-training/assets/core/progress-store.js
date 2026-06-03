@@ -65,10 +65,30 @@ export function createProgressStore(adapter, opts = {}) {
     }
   };
   const writeJson = (key, val) => adapter.set(key, JSON.stringify(val));
+  // Migracja prywatności (#63): starszy zapis (sprzed modelu C) mógł trzymać participant.displayName w localStorage.
+  // Nowy kod nigdy go nie czyta — usuwamy przy wczytaniu, a najbliższy persist() wyczyści go ze storage.
+  const loadProgress = (pathId) => {
+    const p = readJson(PROGRESS_KEY(pathId));
+    if (p && p.participant) {
+      delete p.participant;
+      writeJson(PROGRESS_KEY(pathId), p); // zapisz oczyszczony zapis OD RAZU — nie czekaj na następny persist()
+    }
+    return p;
+  };
+  // Sweep jednorazowy przy starcie: usuń legacy participant ze WSZYSTKICH zapisanych ścieżek (S1/S2/S3),
+  // nie tylko aktywnej — inaczej nieaktywne klucze trzymałyby pseudonim do czasu ich wyboru (Codex #65).
+  for (const k of adapter.keys()) {
+    if (!k.startsWith(`${PREFIX}:progress:`)) continue;
+    const p = readJson(k);
+    if (p && p.participant) { delete p.participant; writeJson(k, p); }
+  }
 
   let cursor = readJson(CURSOR_KEY) || { pathId: null, moduleId: null, screen: null };
   let activePath = cursor.pathId;
-  let progress = activePath ? readJson(PROGRESS_KEY(activePath)) : null;
+  let progress = activePath ? loadProgress(activePath) : null;
+  // Pseudonim trzymany TYLKO w pamięci sesji (model C, prywatność #63): nie trafia do localStorage ani do
+  // obiektu progresu, więc znika po odświeżeniu/zamknięciu karty i po resecie. Eksporty i tak go nie zawierają.
+  let sessionParticipant = null;
 
   const persist = () => {
     progress.updatedAt = now();
@@ -87,7 +107,7 @@ export function createProgressStore(adapter, opts = {}) {
     /** Wybiera/ustawia aktywną ścieżkę; ładuje (lub tworzy) jej progres. Zmiana ścieżki nie kasuje innych. */
     selectPath(pathId) {
       activePath = pathId;
-      progress = readJson(PROGRESS_KEY(pathId)) || newProgress(pathId, maxAttempts, now);
+      progress = loadProgress(pathId) || newProgress(pathId, maxAttempts, now);
       cursor = { ...cursor, pathId };
       persist();
       persistCursor();
@@ -97,11 +117,12 @@ export function createProgressStore(adapter, opts = {}) {
     getProgress: () => (progress ? JSON.parse(JSON.stringify(progress)) : null),
     hasProgress: () => Boolean(activePath && adapter.get(PROGRESS_KEY(activePath)) != null),
 
+    // Model C (#63): pseudonim żyje tylko w pamięci sesji — bez persist(), bez zapisu do progress/localStorage.
+    // Nie wymaga aktywnej ścieżki (można wpisać przed wyborem). Znika po odświeżeniu strony i po resecie.
     setParticipant(participant) {
-      ensureActive();
-      progress.participant = { ...(progress.participant || {}), ...participant };
-      persist();
+      sessionParticipant = { ...(sessionParticipant || {}), ...participant };
     },
+    getParticipant: () => (sessionParticipant ? { ...sessionParticipant } : null),
 
     setModuleStatus(moduleId, status) {
       ensureActive();
@@ -229,6 +250,7 @@ export function createProgressStore(adapter, opts = {}) {
 
     /** Reset progresu: aktywnej ścieżki lub (all=true) wszystkich ścieżek + kursora. */
     reset({ all = false } = {}) {
+      sessionParticipant = null; // pseudonim sesji znika przy każdym resecie (#63)
       if (all) {
         for (const k of adapter.keys().filter((x) => x.startsWith(`${PREFIX}:`))) adapter.remove(k);
         cursor = { pathId: null, moduleId: null, screen: null };

@@ -2,6 +2,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createMemoryAdapter, createProgressStore } from "../../assets/core/progress-store.js";
+import { buildCertificate } from "../../assets/core/certificate.js";
+import { modulesData } from "./_fixtures.mjs";
 
 // Stały zegar — deterministyczne timestampy w testach.
 const fixedNow = () => "2026-06-03T10:00:00.000Z";
@@ -154,4 +156,58 @@ test("certyfikat zapisuje się w progresie", () => {
   assert.equal(c.issued, true);
   assert.equal(c.completionId, "CERT-S1-20260603-ABC");
   assert.equal(c.issuedAt, fixedNow());
+});
+
+test("pseudonim (model C #63): tylko w pamięci sesji — NIE persystowany do localStorage", () => {
+  const adapter = createMemoryAdapter();
+  const s = makeStore(adapter);
+  s.setParticipant({ displayName: "Tester01" }); // bez wybranej ścieżki — nie rzuca
+  assert.deepEqual(s.getParticipant(), { displayName: "Tester01" });
+  s.selectPath("S2");
+  // nick NIE trafia do obiektu progresu ani do storage
+  assert.equal(s.getProgress().participant, undefined, "participant nie jest w persystowanym progresie");
+  const raw = adapter.get("genai-training:progress:S2") || "";
+  assert.ok(!raw.includes("Tester01"), "pseudonim nie może znaleźć się w localStorage");
+  // odświeżenie strony: świeży store nad tym samym storage → brak pseudonimu (żył tylko w sesji)
+  const s2 = makeStore(adapter);
+  assert.equal(s2.getParticipant(), null, "po odświeżeniu pseudonim znika (in-memory)");
+});
+
+test("reset czyści pseudonim sesji (#63)", () => {
+  const s = makeStore();
+  s.setParticipant({ displayName: "Tester01" });
+  s.selectPath("S1");
+  s.reset({ all: true });
+  assert.equal(s.getParticipant(), null, "reset all=true kasuje pseudonim sesji");
+});
+
+test("model C end-to-end (#63/#61): pseudonim sesji trafia na certyfikat, po odświeżeniu znika, completionId stały", () => {
+  const adapter = createMemoryAdapter();
+  const s = makeStore(adapter);
+  s.selectPath("S1");
+  s.setParticipant({ displayName: "Sesyjny01" });
+  const passResult = { pathId: "S1", scorePct: 88, passed: true, weakModules: [] };
+  // Dokładnie wiring z app.js: buildCertificate(result, { participant: store.getParticipant() }).
+  const inSession = buildCertificate(passResult, { dateIso: fixedNow(), participant: s.getParticipant(), pathName: "Decyzyjna", modulesData });
+  assert.equal(inSession.displayName, "Sesyjny01", "pseudonim z sesji widoczny na certyfikacie w trakcie sesji");
+  // Odświeżenie: świeży store nad tym samym storage → pseudonim zniknął (model C).
+  const s2 = makeStore(adapter);
+  s2.selectPath("S1");
+  const afterReload = buildCertificate(passResult, { dateIso: fixedNow(), participant: s2.getParticipant(), pathName: "Decyzyjna", modulesData });
+  assert.equal(afterReload.displayName, undefined, "po odświeżeniu certyfikat bez pseudonimu (model C)");
+  assert.equal(inSession.completionId, afterReload.completionId, "completionId niezależny od pseudonimu (#61)");
+});
+
+test("migracja (#63): legacy participant czyszczony z WSZYSTKICH ścieżek przy starcie, nie tylko aktywnej (Codex #65)", () => {
+  const legacy = (path, nick) => JSON.stringify({ version: "1.0", path, modules: {}, finalTest: { attempts: 0, maxAttempts: 3 }, practicalTasks: [], updatedAt: fixedNow(), participant: { displayName: nick } });
+  const adapter = createMemoryAdapter({
+    "genai-training:cursor": JSON.stringify({ pathId: "S1", moduleId: null, screen: null }), // aktywna: S1
+    "genai-training:progress:S1": legacy("S1", "NickS1"),
+    "genai-training:progress:S2": legacy("S2", "NickS2"), // NIEAKTYWNA — też musi zostać oczyszczona
+  });
+  const s = makeStore(adapter); // sweep startowy czyści i ZAPISUJE wszystkie progress:* od razu
+  assert.equal(s.getProgress().participant, undefined, "aktywna ścieżka bez participant");
+  assert.ok(!(adapter.get("genai-training:progress:S1") || "").includes("NickS1"), "S1 oczyszczona w storage od razu");
+  assert.ok(!(adapter.get("genai-training:progress:S2") || "").includes("NickS2"),
+    "NIEAKTYWNA S2 też oczyszczona w storage przy starcie (bez wybierania jej)");
 });

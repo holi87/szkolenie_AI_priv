@@ -93,12 +93,32 @@ const DIFF_TARGET = { L1: 41, L2: 46, L3: 23, L4: 6 };
 const SCENARIO_TYPES = new Set(["scenariusz", "scenariusz_decyzyjny"]);
 const TECHNICAL_MODULES = new Set(["M4", "M5", "M6", "M12"]);
 const GOLDEN_DIFF = { L1: 8, L2: 10, L3: 5, L4: 1 };
-// Lint danych syntetycznych: wzorce, które nie powinny wystąpić (realne PII/domeny).
+// Lint danych syntetycznych (#64): defense-in-depth, by realne PII/sekrety nie trafiły do repo.
+// E-mail egzekwowany ALLOWLISTĄ domen (nie denylistą webmaili) — każdy adres spoza listy = błąd.
+const EMAIL_RX = /[A-Za-z0-9._%+-]+@([A-Za-z0-9.-]+\.[A-Za-z]{2,})/g;
+const EMAIL_ALLOW = /^(przyklad\.test|example\.(com|org|net)|[A-Za-z0-9.-]+\.(invalid|localhost))$/i;
 const FORBIDDEN_PATTERNS = [
-  { rx: /@(gmail|outlook|yahoo|hotmail|wp|onet|interia|o2)\.(com|pl|net)/i, why: "realna domena e-mail" },
   { rx: /\b(?!00000000000)\d{11}\b/, why: "potencjalnie prawdziwy PESEL (11 cyfr inny niż placeholder)" },
   { rx: /\b\d{16}\b/, why: "potencjalny numer karty (16 cyfr)" },
+  { rx: /\bPL\d{26}\b/i, why: "potencjalny IBAN (PL + 26 cyfr)" },
+  // Telefon PL: grupowany (xxx xxx xxx / z prefiksem +48) lub samodzielne 9 cyfr; placeholdery „same cyfry" pomijane.
+  { rx: /(?:\+?48[ -]?)?(?<!\d)\d{3}[ -]\d{3}[ -]\d{3}(?!\d)/, why: "potencjalny numer telefonu (PL, grupowany)" },
+  { rx: /(?<!\d)(?!(\d)\1{8})\d{9}(?!\d)/, why: "potencjalny numer telefonu (PL, 9 cyfr)" },
+  // Sekrety/tokeny API — uwaga: dydaktyczne tok_test_* są dozwolone (nie pasują do tych wzorców).
+  { rx: /\b(sk-[A-Za-z0-9_-]{16,}|ghp_[A-Za-z0-9]{20,}|AKIA[0-9A-Z]{16}|xox[baprs]-[A-Za-z0-9-]{8,})\b/, why: "potencjalny sekret/token API" },
+  { rx: /\bBearer\s+[A-Za-z0-9._-]{16,}\b/, why: "potencjalny token Bearer" },
 ];
+
+/** Lint syntetyczny: denylist regexy + allowlista domen e-mail. Dopisuje błędy przez fail() z etykietą źródła. */
+function lintSynthetic(blob, label) {
+  for (const f of FORBIDDEN_PATTERNS) if (f.rx.test(blob)) fail(`${label}: ${f.why} — dane muszą być syntetyczne`);
+  for (const m of blob.matchAll(EMAIL_RX)) {
+    if (!EMAIL_ALLOW.test(m[1])) {
+      fail(`${label}: realna domena e-mail "${m[1]}" (dozwolone tylko przyklad.test / example.* / *.invalid / *.localhost) — dane muszą być syntetyczne`);
+      break;
+    }
+  }
+}
 
 const errs = [];
 const warn = [];
@@ -232,7 +252,7 @@ if (Qall) {
   // lint danych syntetycznych
   for (const q of Q) {
     const blob = JSON.stringify(q);
-    for (const f of FORBIDDEN_PATTERNS) if (f.rx.test(blob)) fail(`${q.id}: ${f.why} — dane muszą być syntetyczne`);
+    lintSynthetic(blob, q.id);
   }
   report.push(`Pytania: ${Q.length} | per-moduł OK | trudność L1=${D.L1}/L2=${D.L2}/L3=${D.L3}/L4=${D.L4}`);
   report.push(`Scenariuszowe/decyzyjne: ${scn}/${TOTAL} = ${(scn/TOTAL*100).toFixed(1)}%`);
@@ -300,7 +320,7 @@ if (paths) {
 if (scenarios) {
   for (const s of scenarios.scenarios) {
     const blob = JSON.stringify(s);
-    for (const f of FORBIDDEN_PATTERNS) if (f.rx.test(blob)) fail(`scenariusz ${s.id}: ${f.why} — dane muszą być syntetyczne`);
+    lintSynthetic(blob, `scenariusz ${s.id}`);
   }
   report.push(`Scenariusze: ${scenarios.scenarios.length}`);
 }
@@ -344,7 +364,7 @@ function loadModuleContent() {
     present.push(c.module);
     // lint syntetyczny — cały obiekt treści (żadnych realnych PII/domen)
     const blob = JSON.stringify(c);
-    for (const ff of FORBIDDEN_PATTERNS) if (ff.rx.test(blob)) fail(`module-content/${f}: ${ff.why} — dane muszą być syntetyczne`);
+    lintSynthetic(blob, `module-content/${f}`);
     // integralność interakcji
     const ix = c.interaction || {};
     if (ix.kind === "classify") {
@@ -393,7 +413,7 @@ if (contentMods) report.push(`Treść modułów: ${contentMods.length}/12 (${con
     if (Qall && !Qall.some((bq) => bq.id === q.id)) warn.push(`pilot: ${q.id} nie istnieje w banku (zostanie zignorowane przy kalibracji)`);
   }
   const blob = JSON.stringify(doc);
-  for (const f of FORBIDDEN_PATTERNS) if (f.rx.test(blob)) fail(`pilot/sample-pilot-results.json: ${f.why} — dane muszą być syntetyczne`);
+  lintSynthetic(blob, "pilot/sample-pilot-results.json");
   report.push(`Pilotaż (próbka syntetyczna): ${(doc.questions || []).length} pytań, ${doc.pilot?.participants ?? "?"} uczestników`);
 })();
 

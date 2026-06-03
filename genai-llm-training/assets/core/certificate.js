@@ -16,9 +16,15 @@ const yyyymmdd = (iso) => (iso || "").slice(0, 10).replace(/-/g, "");
 /**
  * Generuje ID zaliczenia. Deterministyczne dla tych samych danych wejściowych.
  * Format: CERT-<ścieżka>-<RRRRMMDD>-<hash>.
+ * PRYWATNOŚĆ (#61, doprecyzowane po review): preimage zawiera tylko dane JAWNE w eksporcie — ścieżkę, DZIEŃ
+ * (RRRRMMDD, nie pełny timestamp ms) i wynik. Dzięki temu z completionId nie da się odzyskać nic ponad to,
+ * co i tak jest w pliku: ani pseudonimu (poza preimage), ani dokładnego czasu ukończenia (gdyby hashować pełny
+ * dateIso, odbiorca mógłby brute-force'ować ms w obrębie dnia i odtworzyć quasi-identyfikator). Skutek uboczny:
+ * dwie osoby o tej samej ścieżce/dniu/wyniku mogą mieć to samo ID — to akceptowalne dla markera zaliczenia.
  */
-export function generateCompletionId(pathId, dateIso, scorePct, label = "") {
-  return `CERT-${pathId}-${yyyymmdd(dateIso)}-${hash(`${pathId}|${dateIso}|${scorePct}|${label}`)}`;
+export function generateCompletionId(pathId, dateIso, scorePct) {
+  const day = yyyymmdd(dateIso);
+  return `CERT-${pathId}-${day}-${hash(`${pathId}|${day}|${scorePct}`)}`;
 }
 
 /** Mapuje słabe moduły na obiekty z nazwą (do listy "do powtórzenia"). */
@@ -57,7 +63,9 @@ export function buildCertificate(scoreResult, opts = {}) {
   }
   return {
     issued: true,
-    completionId: generateCompletionId(pathId, dateIso, scorePct, displayName || ""),
+    completionId: generateCompletionId(pathId, dateIso, scorePct),
+    // displayName (pseudonim) służy WYŁĄCZNIE do wyświetlenia na ekranie certyfikatu w trakcie sesji.
+    // Nie wchodzi do completionId (#61) ani do eksportu (buildReport go pomija) — pseudonim nie wycieka.
     ...(displayName ? { displayName } : {}),
     path: pathId,
     pathName: opts.pathName || null,
@@ -85,7 +93,10 @@ function buildReport(progress, opts = {}) {
     criticalQuestionsPassed: Boolean(ft.criticalQuestionsPassed),
     attempts: ft.attempts ?? 0,
     completionId: cert.completionId || null,
-    issuedAt: cert.issuedAt || null,
+    // PRYWATNOŚĆ (#61): w eksporcie skracamy znacznik do daty. Pełny timestamp ms + path + wyniki + czasy
+    // modułów byłby quasi-identyfikatorem deanonimizującym względem listy obecności. Pełny issuedAt zostaje
+    // tylko lokalnie/na ekranie, nie w pobieranym pliku.
+    issuedAt: cert.issuedAt ? String(cert.issuedAt).slice(0, 10) : null,
     weakModules: (ft.weakModules || []).slice(),
     practicalTasks: (progress.practicalTasks || []).map((t) => ({
       rubric: t.rubric,

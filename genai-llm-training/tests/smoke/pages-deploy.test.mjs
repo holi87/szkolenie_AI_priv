@@ -45,6 +45,18 @@ test("app index.html: aplety (CSS/JS) ładowane WZGLĘDNIE, bez korzenia „/”
   assert.doesNotMatch(appHtml, /(?:href|src)=["']\/[^/]/, "app index.html zawiera absolutną ścieżkę z korzeniem /");
 });
 
+test("strona Prywatność (#62): istnieje, noindex, względne zasoby, brak zewnętrznych hostów, link powrotny", () => {
+  const priv = read(join(APP, "prywatnosc.html"));
+  assert.match(priv, /<html[^>]*\blang="pl"/, "prywatnosc.html bez lang=pl");
+  assert.match(priv, /name="robots"[^>]*noindex/, "prywatnosc.html bez noindex");
+  assert.match(priv, /href=["']assets\/styles\.css["']/, "styl ładowany względnie");
+  assert.match(priv, /href=["']index\.html["']/, "brak linku powrotnego do aplikacji");
+  assert.doesNotMatch(priv, /(?:href|src)=["']\/[^/]/, "prywatnosc.html zawiera absolutną ścieżkę z korzeniem /");
+  assert.doesNotMatch(priv, /https?:\/\/(?!www\.w3\.org)/i, "prywatnosc.html nie może ładować zasobów z zewnętrznych hostów");
+  // Aplikacja i strona główna linkują do Prywatności (transparentność dostępna z UI).
+  assert.match(appHtml, /href=["']prywatnosc\.html["']/, "stopka aplikacji bez linku do Prywatności");
+});
+
 test("konfiguracja GitHub Pages: CNAME (domena) i .nojekyll obecne w korzeniu", () => {
   const cnamePath = join(ROOT, "CNAME");
   assert.ok(existsSync(cnamePath), "brak pliku CNAME w korzeniu repo");
