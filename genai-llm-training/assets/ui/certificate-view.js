@@ -78,8 +78,12 @@ export function renderResult(cert, opts = {}) {
     if (wa) root.appendChild(wa);
   } else {
     root.appendChild(el("h1", { text: "Ścieżka jeszcze niezaliczona" }));
-    root.appendChild(el("p", { attrs: { role: "alert" }, text: `Wynik testu: ${cert.scorePct}%. Aby zaliczyć ścieżkę, spełnij wszystkie bramki poniżej.` }));
+    // cert.scorePct to WAŻONY wynik ścieżki (quiz inline + test + praktyka), nie sam wynik testu.
+    // "spełnij bramki poniżej" tylko gdy lista bramek faktycznie jest renderowana (gates dostępne).
     const gFail = gatesBlock(opts.gates);
+    root.appendChild(el("p", { attrs: { role: "alert" }, text: gFail
+      ? `Wynik ścieżki: ${cert.scorePct}%. Aby zaliczyć, spełnij wszystkie bramki poniżej.`
+      : `Wynik ścieżki: ${cert.scorePct}%. Ścieżka niezaliczona — wróć i spełnij wszystkie wymagane warunki zaliczenia tej ścieżki.` }));
     if (gFail) root.appendChild(gFail);
     const wa = weakAreasBlock(cert.weakAreas);
     if (wa) root.appendChild(wa);

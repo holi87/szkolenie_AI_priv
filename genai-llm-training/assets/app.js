@@ -121,7 +121,7 @@ function start(data) {
     mount(refs.view, el("div", { class: "view__content" }, [
       el("h1", { text: `Ścieżka ${pathId} — ${pathName(data, pathId)}` }),
       el("p", { text: "Wybierz moduł z listy po lewej. Po module rozwiąż quiz inline z natychmiastowym feedbackiem. Test końcowy odblokuje się po ukończeniu modułów wymaganych." }),
-      el("div", { class: "next-step", attrs: { role: "status" } }, [el("strong", { text: "🧭 " }), nextStep]),
+      el("div", { class: "next-step", attrs: { role: "status" } }, [el("span", { attrs: { "aria-hidden": "true" }, text: "🧭 " }), nextStep]),
       passed ? el("div", { class: "btn-row" }, [el("button", { class: "btn", type: "button", text: "Zobacz wynik / certyfikat", on: { click: showFinalTest } })]) : null,
     ]));
   }
