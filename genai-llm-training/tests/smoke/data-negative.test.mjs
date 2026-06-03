@@ -13,13 +13,14 @@ import { dirname, join } from "node:path";
 const HERE = dirname(fileURLToPath(import.meta.url));
 const APP = join(HERE, "..", "..");
 const DATA = join(APP, "data");
+const I18N = join(APP, "assets", "i18n");
 const VALIDATOR = join(APP, "tests", "schema-validation", "validate.mjs");
 
-// Uruchamia walidator na wskazanym katalogu danych; zwraca { code, output }.
-function runValidator(dataDir) {
+// Uruchamia walidator na wskazanym katalogu danych; zwraca { code, output }. extraEnv = np. VALIDATE_I18N_DIR.
+function runValidator(dataDir, extraEnv = {}) {
   try {
     const out = execFileSync(process.execPath, [VALIDATOR], {
-      env: { ...process.env, VALIDATE_DATA_DIR: dataDir },
+      env: { ...process.env, VALIDATE_DATA_DIR: dataDir, ...extraEnv },
       encoding: "utf8",
       stdio: ["ignore", "pipe", "pipe"],
     });
@@ -33,6 +34,29 @@ function copyData() {
   const dir = mkdtempSync(join(tmpdir(), "genai-data-"));
   cpSync(DATA, join(dir, "data"), { recursive: true });
   return join(dir, "data");
+}
+
+// Kopia katalogów UI (assets/i18n) do modyfikacji w teście kompletności kluczy (#80).
+function copyI18n() {
+  const dir = mkdtempSync(join(tmpdir(), "genai-i18n-"));
+  cpSync(I18N, join(dir, "i18n"), { recursive: true });
+  return join(dir, "i18n");
+}
+
+// Fabrykuje drugi locale data/en/ z kanonu pl (parytet). fixPrefix: dopasuj prefiks krytyczny do EN.
+function fabricateEn(dataDir, { fixPrefix = true, mutate } = {}) {
+  cpSync(join(dataDir, "pl"), join(dataDir, "en"), { recursive: true });
+  if (fixPrefix) {
+    const m10 = join(dataDir, "en", "questions", "m10.json");
+    const doc = JSON.parse(readFileSync(m10, "utf8"));
+    for (const q of doc.questions || []) {
+      if (q.isCritical && typeof q.feedbackIncorrect === "string") {
+        q.feedbackIncorrect = q.feedbackIncorrect.replace(/^To jest błąd bezpieczeństwa\./, "This is a security error.");
+      }
+    }
+    writeFileSync(m10, JSON.stringify(doc, null, 2));
+  }
+  if (typeof mutate === "function") mutate(dataDir);
 }
 
 test("walidator PRZECHODZI na nietkniętych, realnych danych (sanity — kontrola odniesienia)", () => {
@@ -89,3 +113,56 @@ for (const c of [
     assert.match(r.output, c.rx, `raport powinien wskazać kategorię: ${c.name}`);
   });
 }
+
+// ---------------- #80: kompletność katalogów UI + parytet strukturalny treści ----------------
+
+test("kompletność UI: BRAKUJĄCY klucz w en.json (obecny w pl) → walidator FAILUJE", () => {
+  const i18nDir = copyI18n();
+  const enPath = join(i18nDir, "en.json");
+  const en = JSON.parse(readFileSync(enPath, "utf8"));
+  delete en["feedback.correct"]; // klucz obecny w pl.json
+  writeFileSync(enPath, JSON.stringify(en, null, 2));
+  const r = runValidator(DATA, { VALIDATE_I18N_DIR: i18nDir });
+  assert.notEqual(r.code, 0, "brakujący klucz UI w locale MUSI failować");
+  assert.match(r.output, /brak klucza UI|feedback\.correct/, "raport powinien wskazać brakujący klucz");
+});
+
+test("kompletność UI: klucz-SIEROTA w en.json (nieobecny w pl) → walidator FAILUJE", () => {
+  const i18nDir = copyI18n();
+  const enPath = join(i18nDir, "en.json");
+  const en = JSON.parse(readFileSync(enPath, "utf8"));
+  en["x.orphan.key"] = "";
+  writeFileSync(enPath, JSON.stringify(en, null, 2));
+  const r = runValidator(DATA, { VALIDATE_I18N_DIR: i18nDir });
+  assert.notEqual(r.code, 0, "klucz-sierota w locale MUSI failować");
+  assert.match(r.output, /sierota|x\.orphan\.key/, "raport powinien wskazać sierotę");
+});
+
+test("parytet KONTROLA ODNIESIENIA: poprawnie sfabrykowany en (parzysty, EN-prefiks) → exit 0", () => {
+  const dataDir = copyData();
+  fabricateEn(dataDir); // identyczna struktura + EN-prefiks krytyczny
+  const r = runValidator(dataDir);
+  assert.equal(r.code, 0, `parzysty en powinien przejść, a zwrócił ${r.code}:\n${r.output}`);
+  assert.match(r.output, /Parytet en/, "raport powinien potwierdzić sprawdzenie parytetu");
+});
+
+test("parytet: zmiana pola scoringowego (correct) w data/en/ względem pl → walidator FAILUJE", () => {
+  const dataDir = copyData();
+  fabricateEn(dataDir, { mutate: (d) => {
+    const f = join(d, "en", "questions", "m01.json");
+    const doc = JSON.parse(readFileSync(f, "utf8"));
+    doc.questions[0].correct = [...(doc.questions[0].options || [{ id: "x" }])].slice(-1).map((o) => o.id); // inna odpowiedź niż pl
+    writeFileSync(f, JSON.stringify(doc, null, 2));
+  } });
+  const r = runValidator(dataDir);
+  assert.notEqual(r.code, 0, "rozjazd correct między locale MUSI failować (silent scoring bug)");
+  assert.match(r.output, /parytet/, "raport powinien wskazać rozjazd parytetu");
+});
+
+test("locale-aware prefiks: krytyczne en z PL-prefiksem (zamiast EN) → walidator FAILUJE", () => {
+  const dataDir = copyData();
+  fabricateEn(dataDir, { fixPrefix: false }); // en kopiuje PL-prefiks „To jest błąd bezpieczeństwa."
+  const r = runValidator(dataDir);
+  assert.notEqual(r.code, 0, "EN krytyczne MUSI używać EN-prefiksu (locale-aware)");
+  assert.match(r.output, /prefiks|krytyczne|security error/, "raport powinien wskazać niezgodność prefiksu");
+});

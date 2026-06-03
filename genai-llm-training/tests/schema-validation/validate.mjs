@@ -26,6 +26,9 @@ function discoverLocales() {
 }
 const LOCALES = discoverLocales();
 const CANON = LOCALES.includes("pl") ? "pl" : LOCALES[0]; // PL kanoniczny
+// Katalogi UI (assets/i18n) — niezależne od locale DANYCH (ADR-0004): walidujemy kompletność kluczy osobno.
+// VALIDATE_I18N_DIR pozwala wskazać inny katalog (test negatywny brakującego/sierocego klucza).
+const I18N_DIR = process.env.VALIDATE_I18N_DIR || join(DATA, "..", "assets", "i18n");
 
 const load = (p) => JSON.parse(readFileSync(p, "utf8"));
 
@@ -105,6 +108,11 @@ const DIFF_TARGET = { L1: 41, L2: 46, L3: 23, L4: 6 };
 const SCENARIO_TYPES = new Set(["scenariusz", "scenariusz_decyzyjny"]);
 const TECHNICAL_MODULES = new Set(["M4", "M5", "M6", "M12"]);
 const GOLDEN_DIFF = { L1: 8, L2: 10, L3: 5, L4: 1 };
+// Locale-aware prefiks konserwatywnego komunikatu pytania krytycznego (ADR-0004 D-policy; #80).
+// Treść jest tłumaczona per-locale, ale MUSI zaczynać się od ostrzeżenia bezpieczeństwa właściwego dla języka.
+const CRITICAL_PREFIX = { pl: "To jest błąd bezpieczeństwa.", en: "This is a security error." };
+// Pola SCORINGOWE pytania — muszą być IDENTYCZNE między locale (parytet strukturalny, PL kanon).
+const PARITY_FIELDS = ["correct", "difficulty", "points", "paths", "isCritical", "golden", "type", "module"];
 // Lint danych syntetycznych (#64): defense-in-depth, by realne PII/sekrety nie trafiły do repo.
 // E-mail egzekwowany ALLOWLISTĄ domen (nie denylistą webmaili) — każdy adres spoza listy = błąd.
 const EMAIL_RX = /[A-Za-z0-9._%+-]+@([A-Za-z0-9.-]+\.[A-Za-z]{2,})/g;
@@ -223,14 +231,15 @@ if (Qall) {
   // scenario share
   const scn = Q.filter((q) => SCENARIO_TYPES.has(q.type)).length;
   if (scn / TOTAL < 0.35) fail(`pytania scenariuszowe/decyzyjne ${scn}/${TOTAL} = ${(scn/TOTAL*100).toFixed(1)}% < 35%`);
-  // criticals
+  // criticals — prefiks bezpieczeństwa LOCALE-AWARE (kanon); pozostałe locale sprawdza checkContentParity.
   const crit = Q.filter((q) => q.isCritical);
   if (crit.length !== 5) fail(`pytania krytyczne: ${crit.length} != 5`);
+  const canonPrefix = CRITICAL_PREFIX[CANON] || CRITICAL_PREFIX.pl;
   for (const q of crit) {
     if (q.module !== "M10") fail(`${q.id} krytyczne poza M10`);
     if (q.type !== "scenariusz_decyzyjny") warn.push(`${q.id} krytyczne nie jest scenariusz_decyzyjny`);
     if ((q.correct || []).length !== 1) fail(`${q.id} krytyczne musi mieć dokładnie 1 poprawną odpowiedź`);
-    if (!/^To jest błąd bezpieczeństwa\./.test(q.feedbackIncorrect || "")) fail(`${q.id} krytyczne: feedbackIncorrect musi zaczynać się od konserwatywnego komunikatu „To jest błąd bezpieczeństwa." (osłabiony komunikat bezpieczeństwa nie może przejść CI)`);
+    if (!(q.feedbackIncorrect || "").startsWith(canonPrefix)) fail(`${q.id} krytyczne: feedbackIncorrect musi zaczynać się od konserwatywnego komunikatu „${canonPrefix}" (osłabiony komunikat bezpieczeństwa nie może przejść CI)`);
     if (!q.paths.includes("S1") || !q.paths.includes("S2") || !q.paths.includes("S3")) fail(`${q.id} krytyczne musi obejmować wszystkie ścieżki`);
   }
   // type-specific answer integrity
@@ -353,6 +362,75 @@ if (goldenDoc) {
 } else {
   fail("brak golden-set.json — na etapie #13/CI golden set 24 pytań jest wymaganym kontraktem (nie pomijać)");
 }
+
+// ---------------- Kompletność katalogów UI (assets/i18n) — D-policy #80 ----------------
+// Każdy locale musi mieć DOKŁADNIE ten sam ZBIÓR kluczy co PL (kanon): brak braków, brak sierot.
+// Sprawdzamy ZBIÓR KLUCZY, nie niepustość wartości — pusty szkielet en.json jest poprawny (fundament).
+function checkI18nCatalogs() {
+  if (!existsSync(I18N_DIR)) return; // brak katalogów UI (np. izolowany test danych) — pomiń
+  const files = readdirSync(I18N_DIR).filter((f) => /^[a-z]{2}\.json$/.test(f));
+  const catalogs = {};
+  for (const f of files) {
+    try { catalogs[f.slice(0, 2)] = load(join(I18N_DIR, f)); }
+    catch (e) { fail(`[i18n ${f}] niepoprawny JSON: ${e.message}`); }
+  }
+  const pl = catalogs.pl;
+  if (!pl) { fail("brak kanonicznego katalogu UI assets/i18n/pl.json"); return; }
+  const keySet = (o) => new Set(Object.keys(o).filter((k) => k !== "_meta"));
+  const plKeys = keySet(pl);
+  for (const [lang, cat] of Object.entries(catalogs)) {
+    if (lang === "pl") continue;
+    const k = keySet(cat);
+    for (const key of plKeys) if (!k.has(key)) fail(`i18n ${lang}.json: brak klucza UI "${key}" (locale niekompletny wzgl. pl)`);
+    for (const key of k) if (!plKeys.has(key)) fail(`i18n ${lang}.json: klucz-sierota "${key}" (nieobecny w pl.json)`);
+  }
+  report.push(`Katalogi UI: ${Object.keys(catalogs).sort().join(",")} | klucze PL=${plKeys.size} (kompletność zbioru wzgl. pl)`);
+}
+checkI18nCatalogs();
+
+// ---------------- Parytet strukturalny treści między locale (PL kanon) — D-policy #80 ----------------
+// Pola scoringowe pytań MUSZĄ być identyczne między locale (różni się tylko tekst). Twardy błąd (exit 1).
+function parityIdSet(file, idsOf, label) {
+  const canonPath = join(DATA, CANON, file);
+  if (!existsSync(canonPath)) return;
+  const canonIds = new Set(idsOf(load(canonPath)));
+  for (const lang of LOCALES) {
+    if (lang === CANON) continue;
+    const fp = join(DATA, lang, file);
+    if (!existsSync(fp)) { fail(`parytet ${lang}: brak ${file}`); continue; }
+    const ids = new Set(idsOf(load(fp)));
+    for (const id of canonIds) if (!ids.has(id)) fail(`parytet ${lang}: brak ${label} ${id} w ${file}`);
+    for (const id of ids) if (!canonIds.has(id)) fail(`parytet ${lang}: ${label} sierota ${id} w ${file} (spoza kanonu)`);
+  }
+}
+function checkContentParity() {
+  if (!Qall || !CANON) return;
+  const canonById = new Map(Qall.map((q) => [q.id, q]));
+  for (const lang of LOCALES) {
+    if (lang === CANON) continue;
+    const lq = loadQuestions(lang);
+    if (!lq) { fail(`parytet ${lang}: brak banku pytań`); continue; }
+    const lById = new Map(lq.map((q) => [q.id, q]));
+    for (const id of canonById.keys()) if (!lById.has(id)) fail(`parytet ${lang}: brak pytania ${id} (kanon ${CANON})`);
+    for (const q of lq) {
+      const c = canonById.get(q.id);
+      if (!c) { fail(`parytet ${lang}: pytanie ${q.id} spoza kanonu ${CANON}`); continue; }
+      for (const f of PARITY_FIELDS) {
+        if (JSON.stringify(q[f]) !== JSON.stringify(c[f]))
+          fail(`parytet ${lang}: ${q.id}.${f}=${JSON.stringify(q[f])} != kanon ${JSON.stringify(c[f])} (pole scoringowe musi być identyczne)`);
+      }
+    }
+    const prefix = CRITICAL_PREFIX[lang];
+    if (!prefix) fail(`parytet ${lang}: brak prefiksu krytycznego CRITICAL_PREFIX dla locale ${lang}`);
+    else for (const q of lq.filter((x) => x.isCritical)) {
+      if (!(q.feedbackIncorrect || "").startsWith(prefix)) fail(`parytet ${lang}: ${q.id} krytyczne feedbackIncorrect musi zaczynać się od „${prefix}" (locale-aware)`);
+    }
+    report.push(`Parytet ${lang}↔${CANON}: ${lq.length} pytań — pola scoringowe + prefiks krytyczny OK`);
+  }
+  parityIdSet("rubrics.json", (d) => (d.rubrics || []).map((r) => r.id), "rubryki");
+  parityIdSet("scenarios.json", (d) => (d.scenarios || []).map((s) => s.id), "scenariusza");
+}
+checkContentParity();
 
 // ---------------- Progi ścieżek (raport) ----------------
 if (paths) {
