@@ -1,7 +1,10 @@
-// certificate.test.mjs — ekran zaliczenia i eksport wyniku (issue #19).
+// certificate.test.mjs — ekran zaliczenia i eksport wyniku (issue #19) + redesign struktury (UX-5 #74).
+import "./_dom-stub.mjs"; // instaluje document (renderResult używa createElementNS dla medalu)
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { buildCertificate, generateCompletionId, exportJson, exportCsv, weakAreas, buildQuestionStats, exportQuestionStatsCsv } from "../../assets/core/certificate.js";
+import { renderResult } from "../../assets/ui/certificate-view.js";
+import { queryAll } from "./_dom-stub.mjs";
 import { modulesData } from "./_fixtures.mjs";
 
 const DATE = "2026-06-03T10:00:00.000Z";
@@ -157,4 +160,36 @@ test("niezaliczony progres: eksport nie zawiera completionId", () => {
   const obj = JSON.parse(exportJson(failProgress));
   assert.equal(obj.passed, false);
   assert.equal(obj.completionId, null);
+});
+
+// ----- UX-5 (#74): struktura ekranu certyfikatu (kontrakt certificate.js niezmieniony) -----
+test("UX-5: certyfikat WYDANY renderuje medal (figure + inline SVG aria-hidden) i duży wynik %", () => {
+  const cert = buildCertificate(
+    { pathId: "S2", scorePct: 88, passed: true, weakModules: [] },
+    { dateIso: DATE, participant: { displayName: "Tester" }, pathName: "Praktyk QA", modulesData },
+  );
+  const node = renderResult(cert, { progress: { path: "S2", finalTest: { passed: true }, practicalTasks: [] }, pathName: "Praktyk QA", gates: [], onBack: () => {} });
+  assert.ok(queryAll(node, (n) => n.tagName === "FIGURE").length >= 1, "brak figure medalu");
+  const svgs = queryAll(node, (n) => n.tagName === "SVG");
+  assert.ok(svgs.length >= 1, "brak inline SVG medalu");
+  assert.ok(svgs.every((s) => s.getAttribute("aria-hidden") === "true"), "medal SVG musi być aria-hidden (dekoracyjny)");
+  assert.ok(node.textContent.includes("88%"), "brak dużego wyniku %");
+  assert.ok(node.textContent.includes(cert.completionId), "zgubiono completionId (kontrakt)");
+});
+
+test("UX-5: certyfikat NIEZALICZONY zachowuje role=alert, retry, powrót i eksporty (kontrakt)", () => {
+  const cert = buildCertificate(
+    { pathId: "S1", scorePct: 60, passed: false, weakModules: [{ module: "M10", pct: 40 }] },
+    { dateIso: DATE, modulesData },
+  );
+  const node = renderResult(cert, {
+    progress: { path: "S1", finalTest: { attempts: 1 }, practicalTasks: [] },
+    gates: [{ type: "overallThreshold", passed: false, minPct: 75 }],
+    canRetry: true, attemptInfo: "Wykorzystane podejścia: 1.", onRetry: () => {}, onBack: () => {},
+  });
+  assert.ok(queryAll(node, (n) => n.getAttribute && n.getAttribute("role") === "alert").length > 0, "niezaliczony bez role=alert");
+  const texts = queryAll(node, (n) => n.tagName === "BUTTON").map((b) => b.textContent);
+  assert.ok(texts.some((t) => t.includes("Podejdź ponownie")), "brak przycisku retry");
+  assert.ok(texts.some((t) => t.includes("Wróć do modułów")), "brak przycisku powrotu");
+  assert.ok(texts.some((t) => t.includes("JSON")) && texts.some((t) => t.includes("CSV")), "brak przycisków eksportu");
 });

@@ -1,7 +1,10 @@
-// certificate-view.js — ekran zaliczenia i eksport wyniku (issue #19).
+// certificate-view.js — ekran zaliczenia jako NAGRODA + eksport wyniku (issue #19, redesign UX-5 #74).
 // Certyfikat tylko przy zaliczeniu (model z core/certificate.js). Eksport JSON/CSV jako pobranie pliku.
+// Kontrakt certificate.js (issued/completionId/eksporty) NIETKNIĘTY — zmiana jest wyłącznie prezentacyjna.
 import { el } from "./dom.js";
 import { exportJson, exportCsv, exportQuestionStatsCsv } from "../core/certificate.js";
+
+const SVG_NS = "http://www.w3.org/2000/svg";
 
 function download(filename, content, mime) {
   const blob = new Blob([content], { type: mime });
@@ -13,6 +16,28 @@ function download(filename, content, mime) {
   URL.revokeObjectURL(url);
 }
 
+/** Dekoracyjny medal (inline SVG, aria-hidden, zero CDN). Kolor przez currentColor (CSS: akcent). */
+function medal() {
+  const svg = document.createElementNS(SVG_NS, "svg");
+  svg.setAttribute("viewBox", "0 0 48 48");
+  svg.setAttribute("width", "60");
+  svg.setAttribute("height", "60");
+  svg.setAttribute("aria-hidden", "true");
+  svg.setAttribute("focusable", "false");
+  svg.setAttribute("class", "certificate__medal-svg");
+  const add = (tag, attrs) => {
+    const n = document.createElementNS(SVG_NS, tag);
+    for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v);
+    svg.appendChild(n);
+    return n;
+  };
+  add("path", { d: "M17 27 L11 45 L20 41 L24 47 L28 41 L37 45 L31 27 Z", fill: "currentColor", opacity: "0.45" }); // wstążki
+  add("circle", { cx: "24", cy: "18", r: "15", fill: "currentColor" });                                          // krążek
+  add("circle", { cx: "24", cy: "18", r: "11", fill: "none", stroke: "#ffffff", "stroke-width": "1.4", opacity: "0.7" });
+  add("path", { d: "M24 9 l2.9 6 6.6 .9 -4.8 4.6 1.2 6.5 -5.9 -3.1 -5.9 3.1 1.2 -6.5 -4.8 -4.6 6.6 -.9 Z", fill: "#ffffff" }); // gwiazda
+  return el("figure", { class: "certificate__medal", attrs: { "aria-hidden": "true" } }, [svg]);
+}
+
 const GATE_LABEL = {
   overallThreshold: () => "Próg ogólny",
   criticalQuestions: (g) => `Pytania krytyczne (${g.module})`,
@@ -20,15 +45,16 @@ const GATE_LABEL = {
   moduleMinScore: (g) => `Wynik modułu ${g.module} (${g.rubric})`,
 };
 
-/** Lista bramek zaliczenia ze statusem — pokazuje, dlaczego ścieżka (nie)zaliczona, mimo wyniku %. */
+/** Lista bramek zaliczenia ze statusem — pokazuje, dlaczego ścieżka (nie)zaliczona, mimo wyniku %.
+    Status niesie ikona + SŁOWO (spełniona/niespełniona); kolor to wzmocnienie, nie jedyny nośnik (WCAG 1.4.1). */
 function gatesBlock(gates) {
   if (!gates || gates.length === 0) return null;
-  return el("section", {}, [
+  return el("section", { class: "cert-gates" }, [
     el("h2", { text: "Status bramek zaliczenia" }),
-    el("ul", { class: "weak-list" }, gates.map((g) => {
+    el("ul", { class: "cert-gates__list" }, gates.map((g) => {
       const label = (GATE_LABEL[g.type] || (() => g.type))(g);
-      return el("li", {}, [
-        el("span", { attrs: { "aria-hidden": "true" }, text: g.passed ? "✓ " : "✗ " }),
+      return el("li", { class: `cert-gate cert-gate--${g.passed ? "ok" : "fail"}` }, [
+        el("span", { class: "cert-gate__icon", attrs: { "aria-hidden": "true" }, text: g.passed ? "✓ " : "✗ " }),
         `${g.passed ? "spełniona" : "niespełniona"} — ${label}${g.detail ? `: ${g.detail}` : ""}`,
       ]);
     })),
@@ -52,7 +78,7 @@ function exportButtons(progress, pathName) {
   // Per-pytanie (anonimowo) — sygnał do kalibracji pilotażu (#28). Bez PII; do odesłania koordynatorowi.
   const qstats = el("button", { class: "btn btn--ghost", type: "button", text: "Pobierz odpowiedzi pytań (CSV)",
     on: { click: () => download(`pytania-${progress.path}.csv`, exportQuestionStatsCsv(progress), "text/csv") } });
-  return el("div", { class: "btn-row" }, [json, csv, qstats]);
+  return el("div", { class: "btn-row btn-row--export" }, [json, csv, qstats]);
 }
 
 /**
@@ -65,15 +91,20 @@ export function renderResult(cert, opts = {}) {
 
   if (cert.issued) {
     root.appendChild(el("h1", { text: "Gratulacje — ścieżka zaliczona" }));
-    const card = el("section", { class: "certificate" }, [
-      el("p", { class: "muted", text: "Certyfikat ukończenia" }),
+    // Karta-nagroda: gradientowa ramka (.certificate) + solidne wnętrze (.certificate__inner, kontrast tekstu OK).
+    const inner = el("div", { class: "certificate__inner" }, [
+      medal(),
+      el("p", { class: "certificate__eyebrow", text: "Certyfikat ukończenia" }),
+      el("p", { class: "certificate__score" }, [
+        el("strong", { class: "certificate__score-value", text: `${cert.scorePct}%` }),
+        el("span", { class: "certificate__score-label", text: "wynik ścieżki" }),
+      ]),
       cert.displayName ? el("div", { class: "cert-row" }, [el("span", { text: "Uczestnik" }), el("strong", { text: cert.displayName })]) : null,
       el("div", { class: "cert-row" }, [el("span", { text: "Ścieżka" }), el("strong", { text: `${pathName || cert.path} (${cert.path})` })]),
-      el("div", { class: "cert-row" }, [el("span", { text: "Wynik" }), el("strong", { text: `${cert.scorePct}%` })]),
       el("div", { class: "cert-row" }, [el("span", { text: "Data" }), el("strong", { text: (cert.date || "").slice(0, 10) })]),
       el("div", { class: "cert-row" }, [el("span", { text: "ID zaliczenia" }), el("span", { class: "certificate__id", text: cert.completionId })]),
     ]);
-    root.appendChild(card);
+    root.appendChild(el("section", { class: "certificate certificate--issued" }, [inner]));
     const gIssued = gatesBlock(opts.gates);
     if (gIssued) root.appendChild(gIssued);
     if (progress) root.appendChild(exportButtons(progress, pathName));
@@ -84,9 +115,12 @@ export function renderResult(cert, opts = {}) {
     // cert.scorePct to WAŻONY wynik ścieżki (quiz inline + test + praktyka), nie sam wynik testu.
     // "spełnij bramki poniżej" tylko gdy lista bramek faktycznie jest renderowana (gates dostępne).
     const gFail = gatesBlock(opts.gates);
-    root.appendChild(el("p", { attrs: { role: "alert" }, text: gFail
-      ? `Wynik ścieżki: ${cert.scorePct}%. Aby zaliczyć, spełnij wszystkie bramki poniżej.`
-      : `Wynik ścieżki: ${cert.scorePct}%. Ścieżka niezaliczona — wróć i spełnij wszystkie wymagane warunki zaliczenia tej ścieżki.` }));
+    root.appendChild(el("div", { class: "result-notice result-notice--fail", attrs: { role: "alert" } }, [
+      el("strong", { class: "result-notice__score", text: `${cert.scorePct}%` }),
+      el("span", { text: gFail
+        ? " — wynik ścieżki. Aby zaliczyć, spełnij wszystkie bramki poniżej."
+        : " — wynik ścieżki. Ścieżka niezaliczona — wróć i spełnij wszystkie wymagane warunki zaliczenia tej ścieżki." }),
+    ]));
     if (gFail) root.appendChild(gFail);
     const wa = weakAreasBlock(cert.weakAreas);
     if (wa) root.appendChild(wa);

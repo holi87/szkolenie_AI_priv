@@ -244,11 +244,44 @@ select { max-width: 100%; } /* długie opcje (np. dopasowanie) nie rozpychają l
 /* Locked notice */
 .locked-note { display: flex; gap: 0.5rem; align-items: baseline; color: var(--color-muted); border: 1px dashed var(--color-border); border-radius: 8px; padding: 0.7rem 0.9rem; }
 
-/* Certificate */
-.certificate { border: 2px solid var(--color-accent); border-radius: var(--radius); padding: 1.5rem; background: var(--color-surface-2); }
-.certificate__id { font-family: ui-monospace, monospace; color: var(--color-muted); font-size: 0.85rem; }
-.cert-row { display: flex; justify-content: space-between; gap: 1rem; padding: 0.3rem 0; border-bottom: 1px solid var(--color-border); }
+/* Certificate — karta-nagroda: gradientowa ramka (wrapper) + solidne wnętrze (kontrast tekstu OK). UX-5 #74. */
+.certificate { background: var(--grad-accent); border-radius: var(--radius); padding: 3px; box-shadow: var(--shadow-lg); margin: var(--sp-4) 0; }
+.certificate--issued { animation: cert-reveal var(--dur-slow) var(--ease); }
+.certificate__inner { background: var(--color-surface); border-radius: calc(var(--radius) - 2px); padding: var(--sp-5); text-align: center; }
+.certificate__medal { margin: 0 auto var(--sp-2); color: var(--color-accent); }
+.certificate__medal-svg { display: block; margin: 0 auto; }
+.certificate__eyebrow { margin: 0; color: var(--color-muted); text-transform: uppercase; letter-spacing: 0.08em; font-size: var(--fs-300); }
+.certificate__score { margin: var(--sp-1) 0 var(--sp-4); display: flex; flex-direction: column; align-items: center; gap: 0.1rem; }
+.certificate__score-value { font-size: var(--fs-800); line-height: 1; color: var(--color-accent); }
+.certificate__score-label { color: var(--color-muted); font-size: var(--fs-400); }
+.certificate__id { font-family: var(--font-mono); color: var(--color-muted); font-size: var(--fs-300); word-break: break-all; }
+.cert-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.3rem 1rem; padding: 0.45rem 0; border-bottom: 1px solid var(--color-border); text-align: left; }
+.cert-row:last-child { border-bottom: 0; }
 .weak-list { padding-left: 1.1rem; }
+@keyframes cert-reveal { from { opacity: 0; transform: translateY(10px) scale(0.985); } to { opacity: 1; transform: none; } }
+
+/* Bramki zaliczenia: ikona + słowo, kolor jako WZMOCNIENIE; niespełnione wyróżnione (WCAG 1.4.1). */
+.cert-gates__list { list-style: none; margin: 0.4rem 0; padding: 0; display: grid; gap: 0.4rem; }
+.cert-gate { padding: 0.4rem 0.7rem; border: 1px solid var(--color-border); border-left-width: 4px; border-radius: 6px; }
+.cert-gate--ok { border-left-color: var(--color-ok); }
+.cert-gate--fail { border-left-color: var(--color-bad); background: rgba(248, 113, 113, 0.08); }
+.cert-gate__icon { font-weight: var(--fw-bold); }
+.cert-gate--ok .cert-gate__icon { color: var(--color-ok); }
+.cert-gate--fail .cert-gate__icon { color: var(--color-bad); }
+
+/* Niezaliczone — spójny, ostrzegawczy panel (JS zachowuje role=alert). */
+.result-notice { margin: var(--sp-4) 0; padding: var(--sp-3) var(--sp-4); border-radius: var(--radius); border: 1px solid var(--color-border); border-left: 4px solid var(--color-warn); background: var(--color-surface); }
+.result-notice__score { font-size: var(--fs-700); color: var(--color-fg); }
+
+/* Druk/zrzut: certyfikat jako czytelny statyczny obraz — chowamy nawigację/przyciski, wymuszamy jasne tło i ciemny tekst. */
+@media print {
+  .app-header, .app-footer, .module-nav, .btn-row { display: none !important; }
+  .certificate { box-shadow: none; }
+  .certificate__inner { background: #ffffff; color: #111111; }
+  .certificate__score-value, .certificate__medal { color: #1d4ed8; }
+  .certificate__eyebrow, .certificate__score-label, .certificate__id { color: #444444; }
+  .cert-row { border-color: #cccccc; }
+}
 
 /* ---- Treść modułu (M4) ---- */
 .module-screen { margin: 1.4rem 0; padding-bottom: 0.6rem; border-bottom: 1px solid var(--color-border); }
