@@ -12,6 +12,7 @@ import { evaluateInteraction } from "./core/interactions/index.js";
 import { el, mount } from "./ui/dom.js";
 import { renderPathSelect } from "./ui/path-select.js";
 import { updateHeader, renderNav } from "./ui/shell.js";
+import { initTheme, toggleTheme } from "./ui/theme.js";
 import { renderQuestion, renderFeedback } from "./ui/quiz-view.js";
 import { renderTest } from "./ui/test-view.js";
 import { renderResult } from "./ui/certificate-view.js";
@@ -54,7 +55,16 @@ function start(data) {
     view: $("view"), nav: $("module-nav"), navToggle: $("nav-toggle"), resetBtn: $("reset-btn"),
     pathIndicator: $("path-indicator"), progress: $("progress"), progressFill: $("progress-fill"),
     progressTrack: document.querySelector(".progress__track"), progressLabel: $("progress-label"),
+    themeToggle: $("theme-toggle"),
   };
+
+  // Motyw jasny/ciemny (UX-3): anty-flash skrypt w <head> ustawił już [data-theme]; tu synchronizujemy
+  // stan przycisku (aria-pressed) i wpinamy toggle. Storage ma priorytet nad prefers-color-scheme (theme.js).
+  if (refs.themeToggle) {
+    const syncToggle = (theme) => refs.themeToggle.setAttribute("aria-pressed", String(theme === "light"));
+    syncToggle(initTheme());
+    refs.themeToggle.addEventListener("click", () => syncToggle(toggleTheme()));
+  }
   const state = { screen: "menu", moduleId: null, test: null };
   // Imię na certyfikat może być wpisane PRZED wyborem ścieżki (gdy brak aktywnej ścieżki nie ma gdzie zapisać).
   let pendingName = (store.getParticipant() && store.getParticipant().displayName) || ""; // pseudonim tylko z pamięci sesji (#63)

@@ -73,6 +73,28 @@ test("reduced-motion utwardzony: blok gasi ZARÓWNO transition JAK I animation (
   assert.match(block, /animation:\s*none/, "reduced-motion bez animation:none (utwardzenie pod keyframe UX-4/UX-5)");
 });
 
+// ----- UX-3 (#72): toggle motywu, anty-flash, gradientowy progress -----
+test("toggle motywu: button#theme-toggle z aria-pressed + aria-label (fokusowalny, opisany)", () => {
+  const tag = /<button[^>]*id="theme-toggle"[^>]*>/.exec(appHtml);
+  assert.ok(tag, "brak przycisku #theme-toggle w headerze");
+  assert.match(tag[0], /aria-pressed=/, "theme-toggle bez aria-pressed (stan motywu dla SR)");
+  assert.match(tag[0], /aria-label=/, "theme-toggle bez aria-label");
+  assert.ok(!tag[0].replace(/aria-pressed="[^"]*"/, "").includes(" disabled"), "theme-toggle nie może być disabled");
+});
+
+test("anty-flash motywu: inline script ustawia [data-theme] zanim namaluje CSS (#72)", () => {
+  // Skrypt musi być PRZED <link rel=stylesheet> (kolejność = brak mrugnięcia złym motywem).
+  const scriptIdx = appHtml.indexOf('setAttribute("data-theme"');
+  const cssIdx = appHtml.indexOf('href="assets/styles.css"');
+  assert.ok(scriptIdx > -1, "brak anty-flash skryptu ustawiającego data-theme");
+  assert.ok(scriptIdx < cssIdx, "anty-flash skrypt musi być przed arkuszem stylów (inaczej flash)");
+  assert.match(appHtml, /prefers-color-scheme/, "anty-flash nie respektuje prefers-color-scheme");
+});
+
+test("styles.css: pasek postępu ma gradientowe wypełnienie (UX-3)", () => {
+  assert.match(css, /\.progress__fill\s*\{[^}]*var\(--grad-accent\)/, "progress__fill bez gradientu --grad-accent");
+});
+
 test("tokens.css: istnieje, definiuje :root z drugim akcentem i gradientem (fundament design systemu #68)", () => {
   assert.match(tokensCss, /:root\s*\{/, "tokens.css bez bloku :root");
   assert.match(tokensCss, /--color-accent-2\s*:/, "brak tokenu --color-accent-2");
