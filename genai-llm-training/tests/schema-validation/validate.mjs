@@ -9,8 +9,10 @@ import { fileURLToPath } from "node:url";
 import { dirname, join, relative } from "node:path";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-// validate.mjs leży w genai-llm-training/tests/schema-validation/ -> dane dwa poziomy wyżej w data/
-const DATA = join(HERE, "..", "..", "data");
+// validate.mjs leży w genai-llm-training/tests/schema-validation/ -> dane dwa poziomy wyżej w data/.
+// VALIDATE_DATA_DIR pozwala wskazać inny katalog danych (test negatywny #25: walidacja MUSI failować
+// na pustym module / błędnych danych — kopiujemy dane, psujemy jeden plik i sprawdzamy exit != 0).
+const DATA = process.env.VALIDATE_DATA_DIR || join(HERE, "..", "..", "data");
 const SCHEMAS = join(DATA, "schemas");
 
 const load = (p) => JSON.parse(readFileSync(p, "utf8"));
@@ -371,6 +373,29 @@ function loadModuleContent() {
 }
 const contentMods = loadModuleContent();
 if (contentMods) report.push(`Treść modułów: ${contentMods.length}/12 (${contentMods.join(",")})`);
+
+// ---------------- Próbka wyników pilotażu (kalibracja #28) — schemat + integralność + lint syntetyczny ----------------
+// W repo trzymamy WYŁĄCZNIE syntetyczny przykład (realne wyniki pilotażu powstają poza repo).
+// Walidujemy go, by narzędzie kalibracji (tools/calibration) miało stabilny, poprawny kontrakt wejścia.
+(function checkPilotSample() {
+  const fp = join(DATA, "pilot", "sample-pilot-results.json");
+  if (!existsSync(fp)) return; // próbka opcjonalna
+  const sp = join(SCHEMAS, "pilot-results.schema.json");
+  if (!existsSync(sp)) { fail("brak schematu pilot-results.schema.json (wymagany, gdy istnieje próbka pilotażu)"); return; }
+  const doc = load(fp), schema = load(sp);
+  validate(doc, schema, schema, "pilot/sample-pilot-results.json").forEach((x) => fail(`[schema pilot] ${x}`));
+  if (doc.synthetic !== true) fail("pilot/sample-pilot-results.json: musi mieć synthetic:true (w repo tylko dane syntetyczne)");
+  for (const q of doc.questions || []) {
+    if (typeof q.correct === "number" && typeof q.attempts === "number" && q.correct > q.attempts)
+      fail(`pilot: ${q.id} correct ${q.correct} > attempts ${q.attempts}`);
+    if (typeof q.ambiguityReports === "number" && typeof q.attempts === "number" && q.ambiguityReports > q.attempts)
+      fail(`pilot: ${q.id} ambiguityReports ${q.ambiguityReports} > attempts ${q.attempts}`);
+    if (Qall && !Qall.some((bq) => bq.id === q.id)) warn.push(`pilot: ${q.id} nie istnieje w banku (zostanie zignorowane przy kalibracji)`);
+  }
+  const blob = JSON.stringify(doc);
+  for (const f of FORBIDDEN_PATTERNS) if (f.rx.test(blob)) fail(`pilot/sample-pilot-results.json: ${f.why} — dane muszą być syntetyczne`);
+  report.push(`Pilotaż (próbka syntetyczna): ${(doc.questions || []).length} pytań, ${doc.pilot?.participants ?? "?"} uczestników`);
+})();
 
 // ---------------- Wynik ----------------
 console.log(report.join("\n"));

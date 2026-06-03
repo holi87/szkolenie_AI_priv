@@ -1,8 +1,9 @@
 name: frontend-tests
 
-# Testy jednostkowe/smoke silników frontendu szkolenia (milestone M3, issue #14-#19).
-# Pure Node (node:test), zero zależności — zgodne z ADR-0002 (statyczny hosting, brak buildu aplikacji).
-# validate-data.yml bramkuje data/**; ten workflow bramkuje logikę w assets/ i jej testy.
+# Testy jednostkowe/smoke silników frontendu szkolenia (M3 #14-#19; M5 #25 dokłada smoke render,
+# kontrole a11y, test negatywny danych i kalibrację). Pure Node (node:test), zero zależności —
+# zgodne z ADR-0002 (statyczny hosting, brak buildu). validate-data.yml bramkuje data/**;
+# ten workflow bramkuje logikę w assets/, narzędzia w tools/ i wszystkie testy w tests/smoke/.
 # Filtr ścieżek obejmuje cały katalog aplikacji, żeby PR dotykające assets/ realnie miały zielone CI.
 
 on:
@@ -24,5 +25,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Testy silników (node:test, pure Node)
+      - name: Testy silników + smoke render + a11y + dane negatywne (node:test, pure Node)
         run: node --test genai-llm-training/tests/smoke/*.test.mjs
+      - name: Self-test narzędzia kalibracji (CLI na danych syntetycznych, #28)
+        run: node genai-llm-training/tools/calibration/calibrate.mjs --self-test

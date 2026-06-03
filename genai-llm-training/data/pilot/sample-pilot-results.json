@@ -1,0 +1,34 @@
+{
+  "_meta": {
+    "issue": "#28 [28][M5] Skalibruj pytania po pilotażu",
+    "schema": "../schemas/pilot-results.schema.json",
+    "status": "SYNTETYCZNY / DEMONSTRACYJNY — to NIE są wyniki realnego pilotażu. Zbiór pokazuje działanie narzędzia kalibracji (tools/calibration/calibrate.mjs) i celowo zawiera przypadki poza zakresem trudności oraz pytanie krytyczne z niejasnością >10%. Realny plik powstaje PO pilotażu na 8–15 osobach (wymagania/07).",
+    "dataPolicy": "Dane ZAGREGOWANE per pytanie, bez PII. Uczestnicy anonimowi."
+  },
+  "version": "0.1-demo",
+  "synthetic": true,
+  "pilot": {
+    "participants": 12,
+    "window": "demo (dane syntetyczne)",
+    "byPath": { "S1": 5, "S2": 4, "S3": 3 }
+  },
+  "questions": [
+    { "id": "Q001", "attempts": 12, "correct": 11, "avgTimeSec": 28, "ambiguityReports": 0, "discrimination": 0.41 },
+    { "id": "Q002", "attempts": 12, "correct": 10, "avgTimeSec": 31, "ambiguityReports": 0 },
+    { "id": "Q005", "attempts": 12, "correct": 10, "avgTimeSec": 35, "ambiguityReports": 0 },
+    { "id": "Q007", "attempts": 12, "correct": 8, "avgTimeSec": 52, "ambiguityReports": 0, "discrimination": 0.33 },
+    { "id": "Q009", "attempts": 12, "correct": 11, "avgTimeSec": 27, "ambiguityReports": 1 },
+    { "id": "Q016", "attempts": 12, "correct": 9, "avgTimeSec": 58, "ambiguityReports": 0 },
+    { "id": "Q017", "attempts": 12, "correct": 3, "avgTimeSec": 96, "ambiguityReports": 1, "discrimination": 0.12 },
+    { "id": "Q018", "attempts": 12, "correct": 10, "avgTimeSec": 30, "ambiguityReports": 0 },
+    { "id": "Q024", "attempts": 12, "correct": 8, "avgTimeSec": 61, "ambiguityReports": 0 },
+    { "id": "Q032", "attempts": 12, "correct": 11, "avgTimeSec": 44, "ambiguityReports": 0 },
+    { "id": "Q040", "attempts": 12, "correct": 4, "avgTimeSec": 110, "ambiguityReports": 0, "discrimination": 0.28 },
+    { "id": "Q081", "attempts": 12, "correct": 11, "avgTimeSec": 49, "ambiguityReports": 0 },
+    { "id": "Q082", "attempts": 12, "correct": 12, "avgTimeSec": 41, "ambiguityReports": 0 },
+    { "id": "Q083", "attempts": 12, "correct": 7, "avgTimeSec": 73, "ambiguityReports": 2 },
+    { "id": "Q084", "attempts": 12, "correct": 12, "avgTimeSec": 38, "ambiguityReports": 0 },
+    { "id": "Q085", "attempts": 12, "correct": 12, "avgTimeSec": 40, "ambiguityReports": 1 }
+  ],
+  "notes": "Demo: Q017 (L3) poniżej zakresu (za trudne), Q032 (L3, golden) powyżej zakresu (za łatwe → dryf golden setu), Q083 (krytyczne) z 2/12 = 16,7% zgłoszeń niejasności → wymaga przepisania. Pozostałe w zakresie."
+}

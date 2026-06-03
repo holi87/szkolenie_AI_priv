@@ -3,7 +3,7 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { mergeQuestionBank } from "../../assets/core/data-loader.js";
+import { mergeQuestionBank, mergeModuleContent } from "../../assets/core/data-loader.js";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const DATA = join(HERE, "..", "..", "data");
@@ -12,8 +12,14 @@ const read = (p) => JSON.parse(readFileSync(join(DATA, p), "utf8"));
 export const pathsData = read("paths.json");
 export const modulesData = read("modules.json");
 export const rubricsData = read("rubrics.json");
+export const scenariosData = read("scenarios.json");
+export const goldenSetData = read("golden-set.json");
 export const bank = mergeQuestionBank(
   Array.from({ length: 12 }, (_, i) => read(`questions/m${String(i + 1).padStart(2, "0")}.json`)),
+);
+// Treść modułów scalona po id (M1..M12) — tak jak konsumuje ją app.js (data.moduleContent[id]).
+export const moduleContent = mergeModuleContent(
+  Array.from({ length: 12 }, (_, i) => read(`module-content/m${String(i + 1).padStart(2, "0")}.json`)),
 );
 
 /** Deterministyczny RNG (mulberry32) — powtarzalne losowanie testu w testach. */

@@ -61,6 +61,23 @@ function start(data) {
 
   const focusView = () => refs.view.focus();
 
+  // ----- Czas w module (KPI "Time to complete", wymagania/10) -----
+  // Mierzymy realny czas spędzony w module i zapisujemy go przy WYJŚCIU z modułu (zmiana ekranu).
+  // Minimalnie: jeden aktywny licznik; bez detekcji bezczynności. store.addModuleTime klamruje wartości ujemne.
+  const timer = { moduleId: null, enterMs: 0 };
+  function flushModuleTime() {
+    if (timer.moduleId && timer.enterMs) {
+      try { store.addModuleTime(timer.moduleId, (Date.now() - timer.enterMs) / 1000); } catch { /* brak aktywnej ścieżki — pomiń */ }
+    }
+    timer.moduleId = null; timer.enterMs = 0;
+  }
+  function startModuleTimer(moduleId) {
+    flushModuleTime(); // domknij poprzedni moduł, zanim zacznie się nowy
+    timer.moduleId = moduleId; timer.enterMs = Date.now();
+  }
+  // Zamknięcie/przeładowanie karty w trakcie modułu — domknij czas, by nie zgubić pomiaru.
+  if (globalThis.addEventListener) globalThis.addEventListener("beforeunload", flushModuleTime);
+
   function refreshHeaderAndNav() {
     const pathId = store.getActivePath();
     if (!pathId) return;
@@ -89,6 +106,7 @@ function start(data) {
 
   // ----- Ekrany -----
   function showPathSelect() {
+    flushModuleTime();
     refs.pathIndicator.hidden = true; refs.progress.hidden = true; refs.nav.hidden = true;
     refs.navToggle.hidden = true; refs.resetBtn.hidden = true;
     mount(refs.view, renderPathSelect(data.paths, data.modules, {
@@ -107,6 +125,7 @@ function start(data) {
   }
 
   function showMenu() {
+    flushModuleTime(); // wyjście z modułu → zapisz czas
     state.screen = "menu"; state.moduleId = null;
     const pathId = store.getActivePath();
     const prog = store.getProgress();
@@ -131,6 +150,7 @@ function start(data) {
 
   function showModule(moduleId) {
     state.screen = "module"; state.moduleId = moduleId;
+    startModuleTimer(moduleId); // start pomiaru czasu w module (KPI Time to complete)
     if (store.getProgress().modules[moduleId]?.status !== "completed") store.setModuleStatus(moduleId, "in_progress");
     store.setLastLocation(moduleId, "module");
     refreshHeaderAndNav();
@@ -257,6 +277,7 @@ function start(data) {
   }
 
   function showFinalTest() {
+    flushModuleTime(); // wejście do testu z modułu → zapisz czas modułu
     const pathId = store.getActivePath();
     const prog = store.getProgress();
     if (!isFinalTestUnlocked(prog, data.paths, pathId)) { showMenu(); return; }
@@ -330,6 +351,7 @@ function start(data) {
   // ----- Globalne kontrolki -----
   refs.resetBtn.addEventListener("click", () => {
     if (globalThis.confirm("Zresetować cały postęp tej przeglądarki? Tej operacji nie można cofnąć.")) {
+      timer.moduleId = null; timer.enterMs = 0; // porzuć licznik — reset i tak czyści progres
       store.reset({ all: true });
       state.screen = "menu"; state.moduleId = null; state.result = null; state.test = null;
       render();

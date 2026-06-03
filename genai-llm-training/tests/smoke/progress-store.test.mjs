@@ -111,6 +111,16 @@ test("recordInteraction zapisuje wynik interakcji w module (kształt zgodny z pr
   assert.equal(s.getProgress().modules.M6.status, "in_progress", "interakcja w pustym module ustawia in_progress");
 });
 
+test("addModuleTime akumuluje czas modułu (KPI Time to complete) i klamruje wartości ujemne", () => {
+  const s = makeStore();
+  s.selectPath("S2");
+  s.addModuleTime("M3", 30);
+  s.addModuleTime("M3", 15.4); // Math.round → 15
+  assert.equal(s.getProgress().modules.M3.timeSpentSec, 45);
+  s.addModuleTime("M3", -100); // czas ujemny (np. zegar systemowy) → bez zmiany (Math.max(0, …))
+  assert.equal(s.getProgress().modules.M3.timeSpentSec, 45);
+});
+
 test("certyfikat zapisuje się w progresie", () => {
   const s = makeStore();
   s.selectPath("S1");
