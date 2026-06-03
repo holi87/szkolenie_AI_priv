@@ -6,7 +6,8 @@ import { renderQuestion } from "./quiz-view.js";
 
 /**
  * @param {object} selection - wynik selectFinalTest
- * @param {object} opts - { pathName, path, passThresholdPct, attemptInfo, onSubmit({answers, rubricPointsById}) }
+ * @param {object} opts - { pathName, path, passThresholdPct, attemptInfo, rng?, onSubmit({answers, rubricPointsById}) }
+ *   rng opcjonalny — wstrzykiwalny generator do deterministycznego tasowania pozycji opcji w testach (#66).
  * @returns {HTMLElement}
  */
 export function renderTest(selection, opts = {}) {
@@ -26,8 +27,9 @@ export function renderTest(selection, opts = {}) {
     ]));
   }
 
+  const rng = typeof opts.rng === "function" ? opts.rng : undefined; // domyślnie natywny (renderQuestion -> Math.random)
   selection.questions.forEach((q, i) => {
-    const r = renderQuestion(q, { index: i, total: selection.count, showMeta: true });
+    const r = renderQuestion(q, { index: i, total: selection.count, showMeta: true, rng });
     controls.push({ q, r });
     form.appendChild(r.node);
   });

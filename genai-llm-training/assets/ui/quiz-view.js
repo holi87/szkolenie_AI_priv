@@ -14,9 +14,28 @@ const TYPE_LABEL = {
   analiza_outputu: "Analiza outputu (rubryka)",
 };
 
-function choiceList(q, multiple) {
+// Fisher–Yates z wstrzykiwanym rng (czysty — nie mutuje wejścia), wzorzec test-engine.js:14-21.
+// Anti-gaming pozycji odpowiedzi (#66): tasujemy DANE przed map(), więc kolejność DOM = wizualna =
+// focus/tab/odczyt SR (a11y zachowane). Scoring jest po ID opcji (quiz-engine), więc niezależny od pozycji.
+function shuffle(arr, rng) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(rng() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// Tasuj pozycje opcji, chyba że pytanie ma lockOptionOrder (np. opcje typu „wszystkie powyższe")
+// albo opcji <2 / któraś bez id (konserwatywnie: brak tasowania, bez wyjątku).
+function ordered(opts, q, rng) {
+  if (q.lockOptionOrder || opts.length < 2 || !opts.every((o) => o && typeof o.id === "string" && o.id.length)) return [...opts];
+  return shuffle(opts, rng);
+}
+
+function choiceList(q, multiple, rng = Math.random) {
   const inputs = [];
-  const list = el("ul", { class: "options" }, (q.options || []).map((opt) => {
+  const list = el("ul", { class: "options" }, ordered(q.options || [], q, rng).map((opt) => {
     const id = `${q.id}-${opt.id}`;
     const input = el("input", { type: multiple ? "checkbox" : "radio", name: q.id, id, value: opt.id });
     inputs.push(input);
@@ -29,8 +48,10 @@ function choiceList(q, multiple) {
   return { node: list, getAnswer, focusFirst: () => inputs[0]?.focus() };
 }
 
-function matching(q) {
-  const rights = [...new Set(q.pairs.map((p) => p.right))];
+function matching(q, rng = Math.random) {
+  // Tasuj kolejność „rights" w dropdownie — bez tego wiersz i-ty ma poprawną odpowiedź na i-tej pozycji
+  // (gaming po przekątnej). Mapowanie left->right w getAnswer jest po wartości, więc niezależne od kolejności.
+  const rights = shuffle([...new Set(q.pairs.map((p) => p.right))], rng);
   const selects = [];
   const rows = q.pairs.map((p, i) => {
     const sel = el("select", { attrs: { "aria-label": `Dopasuj: ${p.left}` } }, [
@@ -46,22 +67,19 @@ function matching(q) {
 
 // Kolejność prezentacji ZDECYDOWANIE różna od klucza (q.sequence) — inaczej można odtworzyć
 // poprawną odpowiedź 1..n z góry na dół bez znajomości procesu (anti-gaming).
-function shuffledForDisplay(items) {
+// Tasujemy tym samym wstrzykiwanym rng co reszta renderu (#66) — bez podwajania tasowania.
+function shuffledForDisplay(items, rng) {
   if (items.length < 2) return [...items];
-  const a = [...items];
-  for (let i = a.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
+  const a = shuffle(items, rng);
   if (a.every((v, i) => v === items[i])) a.push(a.shift()); // gdy wypadła kolejność klucza — przesuń
   return a;
 }
 
-function sequence(q) {
+function sequence(q, rng = Math.random) {
   const n = q.sequence.length;
   const selects = [];
   // Prezentujemy elementy w losowej kolejności; uczestnik nadaje pozycję (1..n) — wariant klawiaturowy.
-  const rows = shuffledForDisplay(q.sequence).map((label, i) => {
+  const rows = shuffledForDisplay(q.sequence, rng).map((label, i) => {
     const sel = el("select", { attrs: { "aria-label": `Pozycja kroku: ${label}` } }, [
       el("option", { value: "", text: "—" }),
       ...Array.from({ length: n }, (_, k) => el("option", { value: String(k), text: String(k + 1) })),
@@ -98,20 +116,23 @@ function rubricSelfRate(q) {
 }
 
 /**
- * Renderuje pytanie. opts: { index, total, showMeta }.
+ * Renderuje pytanie. opts: { index, total, showMeta, rng }.
+ * rng (domyślnie Math.random) — wstrzykiwalny generator do tasowania pozycji opcji (#66);
+ * jedno losowanie na instancję pytania (renderQuestion wołane raz), stabilne przy re-renderze feedbacku.
  * @returns {{node, getAnswer, getRubricPoints?, focusFirst}}
  */
 export function renderQuestion(question, opts = {}) {
+  const rng = typeof opts.rng === "function" ? opts.rng : Math.random;
   let control;
   switch (question.type) {
-    case "multiple_choice": control = choiceList(question, true); break;
+    case "multiple_choice": control = choiceList(question, true, rng); break;
     case "single_choice":
     case "scenariusz":
-    case "scenariusz_decyzyjny": control = choiceList(question, false); break;
-    case "dopasowanie": control = matching(question); break;
-    case "kolejnosc_procesu": control = sequence(question); break;
+    case "scenariusz_decyzyjny": control = choiceList(question, false, rng); break;
+    case "dopasowanie": control = matching(question, rng); break;
+    case "kolejnosc_procesu": control = sequence(question, rng); break;
     case "analiza_outputu": control = rubricSelfRate(question); break;
-    default: control = choiceList(question, false);
+    default: control = choiceList(question, false, rng);
   }
 
   const header = [];
