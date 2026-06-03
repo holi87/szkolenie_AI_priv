@@ -76,6 +76,18 @@ test("recordFinalTest zapisuje per-pytanie (questionResults) zgodnie ze schemate
   assert.equal(ft.questionResults[1].correct, false);
 });
 
+test("recordFinalTest zachowuje per-pytanie z PIERWSZEGO podejścia (kalibracja agreguje 1. próbę; Codex #59 r5)", () => {
+  const s = makeStore();
+  s.selectPath("S1");
+  s.recordFinalTest({ scorePct: 60, passed: false, criticalPassed: true, weakModules: ["M10"], questionResults: [{ questionId: "Q081", module: "M10", correct: false }] });
+  // 2. podejście: poprawił → ale per-pytanie kalibracji zostaje z 1. próby (false), agregaty z najnowszego.
+  s.recordFinalTest({ scorePct: 90, passed: true, criticalPassed: true, weakModules: [], questionResults: [{ questionId: "Q081", module: "M10", correct: true }] });
+  const ft = s.getProgress().finalTest;
+  assert.equal(ft.attempts, 2);
+  assert.equal(ft.lastScorePct, 90, "agregat (wynik) z najnowszego podejścia");
+  assert.equal(ft.questionResults[0].correct, false, "per-pytanie zachowane z 1. podejścia (nie zawyża % popr.)");
+});
+
 test("ostatnie miejsce: nowy store nad tym samym adapterem wraca do kursora i aktywnej ścieżki", () => {
   const adapter = createMemoryAdapter();
   const s1 = makeStore(adapter);

@@ -113,11 +113,18 @@ export function validatePilot(pilot) {
   if (!okParticipants) e.push("pilot.participants musi być liczbą całkowitą >= 1");
   else if (participants < PILOT_MIN_PARTICIPANTS || participants > PILOT_MAX_PARTICIPANTS)
     e.push(`pilot.participants ${participants} poza zakresem grupy pilotażowej ${PILOT_MIN_PARTICIPANTS}–${PILOT_MAX_PARTICIPANTS} (wymagania/07)`);
-  // byPath (rozkład uczestników) musi sumować się do participants — inaczej kontrola pokrycia byłaby zafałszowana.
+  // byPath (rozkład uczestników): każda ścieżka całkowita >= 0 i suma == participants (inaczej kontrola
+  // pokrycia byłaby zafałszowana — np. ujemna liczność „domyka" sumę przy zawyżeniu innej ścieżki).
   const byPath = pilot.pilot && pilot.pilot.byPath;
   if (byPath && okParticipants) {
-    const sum = ["S1", "S2", "S3"].reduce((s, p) => s + (typeof byPath[p] === "number" ? byPath[p] : 0), 0);
-    if (sum !== participants) e.push(`byPath sumuje się do ${sum}, a uczestników jest ${participants} (rozkład niespójny)`);
+    let badCounts = false;
+    for (const p of ["S1", "S2", "S3"]) {
+      if (byPath[p] != null && (!Number.isInteger(byPath[p]) || byPath[p] < 0)) { e.push(`byPath.${p} musi być liczbą całkowitą >= 0`); badCounts = true; }
+    }
+    if (!badCounts) {
+      const sum = ["S1", "S2", "S3"].reduce((s, p) => s + (Number.isInteger(byPath[p]) ? byPath[p] : 0), 0);
+      if (sum !== participants) e.push(`byPath sumuje się do ${sum}, a uczestników jest ${participants} (rozkład niespójny)`);
+    }
   }
   if (!Array.isArray(pilot.questions) || pilot.questions.length === 0) e.push("questions musi być niepustą tablicą");
   else {

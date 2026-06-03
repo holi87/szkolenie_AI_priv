@@ -125,6 +125,8 @@ test("validatePilot: odrzuca ułamkowe liczności (Codex #59 runda 3)", () => {
 test("validatePilot: byPath musi sumować się do participants; metryki opcjonalne walidowane (Codex #59 runda 4)", () => {
   const base = (over) => ({ version: "x", pilot: { participants: 12, byPath: { S1: 0, S2: 0, S3: 12 }, ...over }, questions: [{ id: "Q001", attempts: 12, correct: 10 }] });
   assert.throws(() => validatePilot({ ...base(), pilot: { participants: 12, byPath: { S1: 12, S2: 12, S3: 12 } }, questions: [{ id: "Q001", attempts: 12, correct: 10 }] }), /byPath sumuje się do 36/);
+  // ujemne/niecałkowite liczności byPath odrzucone PRZED sumą (Codex #59 r5): {S1:-1,S2:13,S3:0} sum=12, ale nieprawidłowe
+  assert.throws(() => validatePilot({ version: "x", pilot: { participants: 12, byPath: { S1: -1, S2: 13, S3: 0 } }, questions: [{ id: "Q001", attempts: 12, correct: 10 }] }), /byPath\.S1 musi być liczbą całkowitą >= 0/);
   assert.throws(() => validatePilot({ version: "x", pilot: { participants: 12 }, questions: [{ id: "Q001", attempts: 12, correct: 10, discrimination: 2 }] }), /discrimination musi być/);
   assert.throws(() => validatePilot({ version: "x", pilot: { participants: 12 }, questions: [{ id: "Q001", attempts: 12, correct: 10, avgTimeSec: -3 }] }), /avgTimeSec musi być/);
   assert.equal(validatePilot(pilot), true, "syntetyczna próbka (byPath S3=12, metryki w zakresie) jest poprawna");

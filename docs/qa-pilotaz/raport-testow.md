@@ -18,7 +18,7 @@ Exit 0 = OK; exit 1 = błąd (czytelny opis w wyjściu). Brak Node? `setup-node@
 
 | Bramka | Wynik |
 |---|---|
-| `node --test tests/smoke/*.test.mjs` | **102 testy, 102 pass, 0 fail** (12 plików) |
+| `node --test tests/smoke/*.test.mjs` | **116 pass, 0 fail** (12 plików; liczba testów rośnie wraz z dodawanymi — porównuj `fail 0`, nie konkretną liczbę) |
 | `validate.mjs` | **✅ WALIDACJA OK** — 116 pytań, trudność 41/46/23/6, 5 krytycznych, golden 24, treść 12/12, próbka pilotażu OK |
 | `calibrate.mjs --self-test` | **✅ self-test kalibracji OK** |
 
