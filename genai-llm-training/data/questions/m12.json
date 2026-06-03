@@ -37,14 +37,14 @@
         },
         {
           "id": "D",
-          "text": "accuracy rozumiana wyłącznie jako poprawność gramatyczna"
+          "text": "accuracy rozumiana jako ogólna poprawność faktograficzna odpowiedzi, niezależnie od źródła"
         }
       ],
       "correct": [
         "A"
       ],
       "feedbackCorrect": "Sprzeczność odpowiedzi z treścią źródła to klasyczny objaw niskiej faithfulness — odpowiedź nie jest wierna źródłu, na którym powinna się opierać.",
-      "feedbackIncorrect": "Tu nie chodzi o trafność tematu (relevance) ani o brak części odpowiedzi (completeness), lecz o zgodność ze źródłem. Powtórz definicję faithfulness na ekranie metryk jakości.",
+      "feedbackIncorrect": "Tu nie chodzi o trafność tematu (relevance), o brak części odpowiedzi (completeness) ani o ogólną poprawność faktograficzną (accuracy) — odpowiedź mogłaby brzmieć „poprawnie”, a i tak być sprzeczna z konkretnym źródłem. Chodzi o zgodność ze źródłem, czyli faithfulness. Powtórz definicję na ekranie metryk jakości.",
       "references": [
         "M12.4",
         "M12.5"
@@ -161,7 +161,7 @@
         },
         {
           "id": "C",
-          "text": "Bo zgodność międzyoceniacza dotyczy tylko relevance, a nie faithfulness"
+          "text": "Bo przy nierównym rozkładzie klas wskaźnik zgodności trzeba odrzucić i opierać ocenę wyłącznie na werdykcie eksperta"
         },
         {
           "id": "D",
@@ -172,7 +172,7 @@
         "A"
       ],
       "feedbackCorrect": "Gdy prawie wszystko jest 'pass', zgadzanie się 'na pass' jest tanie — kluczowe jest, czy oceniający trafia w rzadkie, ryzykowne przypadki 'fail'.",
-      "feedbackIncorrect": "Problemem nie jest sama wartość progu ani zakres metryki — to efekt nierównego rozkładu klas. Wróć do ekranu o kalibracji i zgodności międzyoceniacza.",
+      "feedbackIncorrect": "Problemem nie jest sama wartość progu (B) ani odrzucenie wskaźnika zgodności na rzecz wyłącznie eksperta (C) — to efekt nierównego rozkładu klas: przy przewadze 'pass' wysoki % zgodności jest tani, więc trzeba sprawdzić trafność na rzadkich przypadkach 'fail'. Wróć do ekranu o kalibracji i zgodności międzyoceniacza.",
       "references": [
         "M12.8"
       ]

@@ -133,6 +133,12 @@
           "kind": "callout",
           "variant": "info",
           "text": "Powiązanie z M6: niska faithfulness lub groundedness często wskazuje warstwę generacji RAG, a luki w pobranych źródłach — warstwę retrievalu."
+        },
+        {
+          "kind": "callout",
+          "variant": "info",
+          "title": "Nota: faithfulness vs groundedness",
+          "text": "W wielu źródłach „wierność źródłom” i „ugruntowanie” bywają traktowane łącznie — jako jedna miara „czy odpowiedź trzyma się przekazanego kontekstu”. Rozdzielamy je tu dydaktycznie: faithfulness pyta, czy odpowiedź nie zaprzecza źródłu, a groundedness — czy każde twierdzenie ma oparcie w pobranym fragmencie. W praktyce zwykle sprawdza się oba naraz."
         }
       ]
     },

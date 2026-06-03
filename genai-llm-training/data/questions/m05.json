@@ -129,7 +129,7 @@
       "correct": [
         "A"
       ],
-      "feedbackCorrect": "Większe top-k poszerza zbiór kandydatów, więc rośnie szansa złapania trafnych (recall ↑), a do wyników wpada też więcej szumu (precision ↓). Poluzowanie indeksu ANN w stronę szybkości działa na recall przeciwnie (może pominąć trafne), jednak netto przy top-k 3→8 dominuje wzrost recall — stąd odpowiedź A.",
+      "feedbackCorrect": "Większe top-k poszerza zbiór kandydatów, więc rośnie szansa złapania trafnych (recall ↑), a do wyników wpada też więcej szumu (precision ↓). Poluzowanie indeksu ANN w stronę szybkości działa na recall przeciwnie (może pominąć trafne). Oba efekty ciągną w przeciwne strony i o wyniku netto decyduje skala zmian — dlatego A opisuje najbardziej prawdopodobny kierunek (recall ↑, precision ↓), ale realny bilans trzeba zmierzyć, nie zakładać.",
       "feedbackIncorrect": "Recall i precision zwykle idą w przeciwnych kierunkach przy poszerzaniu wyników; większe top-k nie zawęża zbioru. Powtórz definicje recall/precision i wpływ indeksu (ekrany M5.4–M5.5).",
       "references": [
         "M5.5",
