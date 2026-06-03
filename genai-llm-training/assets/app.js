@@ -3,7 +3,7 @@
 // żyje w core/*, render w ui/*. Brak treści szkoleniowej tutaj (separacja — AGENTS / standardy-jakosci).
 import { loadTrainingData, questionsForModule } from "./core/data-loader.js";
 import { createProgressStore, createLocalStorageAdapter, createMemoryAdapter } from "./core/progress-store.js";
-import { pathModuleList, finalTestStatus, requiredModules, getPath, isFinalTestUnlocked } from "./core/paths.js";
+import { pathModuleList, finalTestStatus, requiredModules, getPath, isFinalTestUnlocked, requiredPracticalRubrics } from "./core/paths.js";
 import { selectFinalTest } from "./core/test-engine.js";
 import { scorePath } from "./core/scoring.js";
 import { scoreQuestion } from "./core/quiz-engine.js";
@@ -158,13 +158,24 @@ function start(data) {
       root.appendChild(el("ul", {}, (mod.learningOutcomes || []).map((o) => el("li", { text: o }))));
     }
 
-    // ----- Gating ukończenia: gatuje TYLKO quiz inline (self-paced). Interakcja renderuje się,
-    // daje feedback i zapisuje wynik, ale NIE blokuje ukończenia — jej `paths` dotyczą wyłącznie
-    // zapisu zadania praktycznego, a zaliczenie S2/S3 i tak wymusza bramka praktyczna w teście końcowym.
+    // ----- Gating ukończenia: gatuje TYLKO quiz inline (self-paced). Interakcja renderuje się na każdej
+    // ścieżce, na której moduł jest widoczny (to ćwiczenie modułu — wg storyboardu np. S1 też robi Prompt clinic),
+    // daje feedback i zapisuje wynik, ale NIE blokuje ukończenia. Czy liczy się jako ZADANIE PRAKTYCZNE
+    // (recordPracticalTask) wynika z bramek paths.json (autorytatywne), nie z pola w treści.
     const ixConfig = content && content.interaction;
+    const ixRecordsPractical = Boolean(
+      ixConfig && ixConfig.kind === "rubric" && ixConfig.recordsPractical && ixConfig.rubricId &&
+      requiredPracticalRubrics(data.paths, pathId).includes(ixConfig.rubricId),
+    );
     const moduleResults = new Map(); // qid → { awarded, max } z ostatniego sprawdzenia (do % quizu inline)
     const quizComplete = () => pool.length === 0 || moduleResults.size === pool.length;
-    const updateCompleteState = () => { completeBtn.disabled = !alreadyDone && !quizComplete(); };
+    const stepHint = el("p", {});
+    const refreshHint = () => {
+      stepHint.textContent = !alreadyDone && pool.length > 0 && !quizComplete()
+        ? "Sprawdź wszystkie pytania quizu, aby odblokować ukończenie modułu."
+        : (content && content.summary && content.summary.nextStep) || "Możesz oznaczyć moduł jako ukończony.";
+    };
+    const updateCompleteState = () => { completeBtn.disabled = !alreadyDone && !quizComplete(); refreshHint(); };
 
     // ----- Interakcja modułowa -----
     if (ixConfig) {
@@ -176,10 +187,12 @@ function start(data) {
         const result = evaluateInteraction(ixConfig, ix.getResponse());
         ix.showFeedback(result);
         store.recordInteraction(moduleId, result);
-        mount(ixFb, interactionSummary(result, ixConfig, pathId));
-        // Zadanie praktyczne: zapis dla ścieżek, których rubryka dotyczy → odblokowuje zaliczenie S2/S3 (scoring konsumuje practicalTasks).
-        if (ixConfig.kind === "rubric" && ixConfig.recordsPractical && ixConfig.rubricId && (!ixConfig.paths || ixConfig.paths.includes(pathId))) {
+        mount(ixFb, interactionSummary(result, ixRecordsPractical, pathId));
+        // Zadanie praktyczne zapisywane tylko gdy rubryka jest bramką tej ścieżki → nie zaniża średniej praktyk
+        // na ścieżkach bez tej bramki (np. R1-prompt liczy się dla S2, a na S3 to tylko ćwiczenie).
+        if (ixRecordsPractical) {
           store.recordPracticalTask({ rubric: ixConfig.rubricId, score: result.score, maxScore: result.max, passed: result.passed === true });
+          refreshHeaderAndNav(); // zapisana praktyka może odblokować test końcowy (gating)
         }
       });
       root.appendChild(ix.node);
@@ -220,13 +233,9 @@ function start(data) {
 
     // ----- Podsumowanie + następny krok -----
     if (content && content.summary) root.appendChild(renderSummary(content.summary));
-    const gateHint = !quizComplete() && pool.length > 0
-      ? "Sprawdź wszystkie pytania quizu, aby zakończyć moduł."
-      : ixConfig
-        ? "Wykonaj interakcję powyżej (feedback od razu), a potem oznacz moduł jako ukończony."
-        : "Możesz oznaczyć moduł jako ukończony.";
+    refreshHint(); // hint zależny od stanu quizu (gdy completeBtn zablokowany → instrukcja, inaczej → następny krok)
     root.appendChild(el("div", { class: "next-step" }, [
-      el("p", { text: content && content.summary && content.summary.nextStep ? content.summary.nextStep : gateHint }),
+      stepHint,
       el("div", { class: "btn-row" }, [completeBtn, el("button", { class: "btn btn--ghost", type: "button", text: "Wróć do modułów", on: { click: () => { showMenu(); focusView(); } } })]),
     ]));
     mount(refs.view, root);
@@ -234,9 +243,9 @@ function start(data) {
   }
 
   /** Zbiorczy feedback interakcji: wynik + (dla zadania praktycznego) próg i informacja, że liczy się do zaliczenia. */
-  function interactionSummary(result, config, pathId) {
+  function interactionSummary(result, recordsPractical, pathId) {
     const lines = [el("p", { class: "feedback__head", text: result.summary })];
-    if (config.kind === "rubric" && config.recordsPractical && config.rubricId && (!config.paths || config.paths.includes(pathId))) {
+    if (recordsPractical) {
       const ok = result.passed === true;
       lines.push(el("p", { attrs: { role: "status" }, text: ok
         ? `Zadanie praktyczne zaliczone (${result.score}/${result.max}) — liczy się do zaliczenia ścieżki ${pathId}.`

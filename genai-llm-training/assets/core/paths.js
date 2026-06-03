@@ -65,22 +65,41 @@ export function pathCompletionBlockers(progress, pathsData, pathId) {
   return requiredModules(pathsData, pathId).filter((id) => moduleStatus(progress, id) !== "completed");
 }
 
-/** Czy test końcowy jest odblokowany (wszystkie moduły wymagane ukończone). */
+/** Rubryki zadań praktycznych wymagane przez ścieżkę (z bramek practicalTask/moduleMinScore w paths.json). */
+export function requiredPracticalRubrics(pathsData, pathId) {
+  return (getPath(pathsData, pathId).gates || [])
+    .filter((g) => (g.type === "practicalTask" || g.type === "moduleMinScore") && g.rubric)
+    .map((g) => g.rubric);
+}
+
+/**
+ * Wymagane rubryki praktyczne BEZ zapisanego wyniku. Konserwatywnie blokują test końcowy:
+ * bez zapisanej praktyki każde podejście i tak nie zaliczy bramki praktycznej, a zużyłoby limit prób
+ * (po wyczerpaniu prób certyfikat byłby nieosiągalny). Lepiej zablokować test do czasu wykonania praktyki.
+ */
+export function missingPracticalRubrics(progress, pathsData, pathId) {
+  const recorded = new Set(((progress && progress.practicalTasks) || []).map((t) => t.rubric));
+  return requiredPracticalRubrics(pathsData, pathId).filter((r) => !recorded.has(r));
+}
+
+/** Czy test końcowy jest odblokowany (moduły wymagane ukończone ORAZ wymagane praktyki zapisane). */
 export function isFinalTestUnlocked(progress, pathsData, pathId) {
-  return pathCompletionBlockers(progress, pathsData, pathId).length === 0;
+  return pathCompletionBlockers(progress, pathsData, pathId).length === 0
+    && missingPracticalRubrics(progress, pathsData, pathId).length === 0;
 }
 
 /**
  * Status sekcji testu końcowego dla nawigacji: locked | available.
- * lockedReason wymienia brakujące moduły wymagane (czytelne oznaczenie blokady — design-baseline §3).
+ * lockedReason wymienia brakujące moduły wymagane i/lub niewykonane zadania praktyczne (design-baseline §3).
  */
 export function finalTestStatus(progress, pathsData, pathId) {
   const blockers = pathCompletionBlockers(progress, pathsData, pathId);
-  return blockers.length === 0
-    ? { status: "available", lockedReason: null, blockers: [] }
-    : {
-        status: "locked",
-        lockedReason: `Ukończ moduły wymagane: ${blockers.join(", ")}`,
-        blockers,
-      };
+  const missingPractical = missingPracticalRubrics(progress, pathsData, pathId);
+  if (blockers.length === 0 && missingPractical.length === 0) {
+    return { status: "available", lockedReason: null, blockers: [], missingPractical: [] };
+  }
+  const reasons = [];
+  if (blockers.length) reasons.push(`ukończ moduły wymagane: ${blockers.join(", ")}`);
+  if (missingPractical.length) reasons.push(`wykonaj zadania praktyczne: ${missingPractical.join(", ")}`);
+  return { status: "locked", lockedReason: reasons.join("; "), blockers, missingPractical };
 }
