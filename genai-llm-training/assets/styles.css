@@ -58,8 +58,14 @@ a { color: var(--color-accent); }
 /* Przełącznik języka (I18N-3 #79): trigger + popup-menu. Flaga (dekoracyjna) + kod/nazwa (nośnik treści). */
 .lang-switch { position: relative; display: inline-flex; }
 .lang-switch__trigger { gap: 0.4rem; padding: 0.4rem 0.7rem; }
-.lang-switch__flag-wrap { display: inline-flex; }
-.lang-switch__flag { display: block; flex: none; border-radius: 2px; }
+/* Obwódka flagi: biała połowa (PL) zlewa się z jasnym tłem bez ramki (bug: „flaga ma dół ucięty").
+   Inset 1px ring na wrapie (pewny render, w odróżnieniu od box-shadow na inline SVG) wyodrębnia flagę na
+   obu motywach; overflow+radius przycina rogi SVG do zaokrąglenia. Dotyczy triggera ORAZ opcji menu. */
+.lang-switch__flag-wrap, .lang-switch__option-flag {
+  display: inline-flex; border-radius: 2px; overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(90, 100, 120, 0.7);
+}
+.lang-switch__flag { display: block; flex: none; }
 .lang-switch__label { font-weight: var(--fw-medium); font-size: var(--fs-400); }
 .lang-switch__caret { font-size: 0.7em; opacity: 0.8; }
 .lang-switch__menu {
