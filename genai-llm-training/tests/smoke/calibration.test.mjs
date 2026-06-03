@@ -86,11 +86,40 @@ test("krytyczne poza zakresem raportowane jako dryf (osobno), ale NIE reklasyfik
 
 test("validatePilot: odrzuca correct > attempts (>100%) i akceptuje poprawną próbkę (Codex #59)", () => {
   assert.throws(
-    () => validatePilot({ version: "x", pilot: { participants: 5 }, questions: [{ id: "Q001", attempts: 5, correct: 9 }] }),
-    /correct 9 > attempts 5/,
+    () => validatePilot({ version: "x", pilot: { participants: 12 }, questions: [{ id: "Q001", attempts: 12, correct: 99 }] }),
+    /correct 99 > attempts 12/,
   );
   assert.throws(() => validatePilot({ version: "x", pilot: { participants: 0 }, questions: [] }), /participants|niepustą/);
   assert.equal(validatePilot(pilot), true, "syntetyczna próbka jest poprawna");
+});
+
+test("validatePilot: egzekwuje liczność grupy 8–15 (wymagania/07) — Codex #59 runda 2", () => {
+  const qs = [{ id: "Q001", attempts: 5, correct: 4 }];
+  assert.throws(() => validatePilot({ version: "x", pilot: { participants: 5 }, questions: qs }), /poza zakresem grupy pilotażowej 8–15/);
+  const qsBig = [{ id: "Q001", attempts: 15, correct: 10 }];
+  assert.throws(() => validatePilot({ version: "x", pilot: { participants: 30 }, questions: qsBig }), /poza zakresem grupy pilotażowej 8–15/);
+});
+
+test("validatePilot: odrzuca duplikaty pytań i attempts > uczestników (Codex #59 runda 2)", () => {
+  assert.throws(
+    () => validatePilot({ version: "x", pilot: { participants: 12 }, questions: [{ id: "Q001", attempts: 12, correct: 6 }, { id: "Q001", attempts: 12, correct: 7 }] }),
+    /zduplikowane pytanie Q001/,
+  );
+  assert.throws(
+    () => validatePilot({ version: "x", pilot: { participants: 12 }, questions: [{ id: "Q001", attempts: 20, correct: 10 }] }),
+    /attempts 20 > uczestników 12/,
+  );
+});
+
+test("golden validated odporne na duplikaty rzędów — duplikat nie zastępuje brakującego id (Codex #59 runda 2)", () => {
+  // Dwa rzędy Q001 (golden) + brak Q002 (golden): coveredGoldenIds={Q001}, missingGolden zawiera Q002 → NIE validated.
+  const dup = { synthetic: true, version: "t", pilot: { participants: 10 }, questions: [
+    { id: "Q001", attempts: 10, correct: 9, ambiguityReports: 0 },
+    { id: "Q001", attempts: 10, correct: 9, ambiguityReports: 0 },
+  ] };
+  const r = calibrate(dup, ctx);
+  assert.equal(r.goldenStatus.validated, false, "duplikat jednego golden nie może udawać pełnego pokrycia");
+  assert.ok(r.goldenStatus.missingGolden.length >= 22);
 });
 
 test("pytania spoza banku są raportowane jako unknown, nie wywalają narzędzia", () => {

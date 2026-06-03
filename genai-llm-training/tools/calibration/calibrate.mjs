@@ -78,7 +78,8 @@ export function calibrate(pilot, ctx) {
     totalGolden: goldenSet.size,
     missingGolden,
     offenders: goldenOffenders.map((q) => ({ id: q.id, reason: !q.inBand ? `dryf trudności (${q.direction}, ${pct(q.pCorrect)})` : `niejasność ${pct(q.ambiguityPct)} > 5%` })),
-    validated: goldenSet.size > 0 && goldenCovered.length === goldenSet.size && goldenOffenders.length === 0,
+    // validated wymaga PEŁNEGO, UNIKALNEGO pokrycia (missingGolden liczone z Set id → odporne na duplikaty rzędów).
+    validated: goldenSet.size > 0 && missingGolden.length === 0 && goldenOffenders.length === 0,
   };
 
   return {
@@ -94,23 +95,37 @@ export function calibrate(pilot, ctx) {
   };
 }
 
+// Rozmiar grupy pilotażowej (wymagania/07: pilotaż na grupie 8–15 osób).
+export const PILOT_MIN_PARTICIPANTS = 8;
+export const PILOT_MAX_PARTICIPANTS = 15;
+
 /**
  * Waliduje plik wyników pilotażu PRZED kalibracją (Codex #59: realny eksport musi przejść kontrolę kontraktu
- * i integralności, inaczej np. correct>attempts dałoby >100% i mylący raport z exit 0). Rzuca na naruszeniu.
+ * i integralności, inaczej dane niemożliwe — >100%, attempts > uczestników, duplikaty, zła liczność grupy —
+ * dałyby mylący raport z exit 0). Rzuca na naruszeniu.
  */
 export function validatePilot(pilot) {
   const e = [];
   if (!pilot || typeof pilot !== "object" || Array.isArray(pilot)) throw new Error("Niepoprawny plik wyników pilotażu: nie jest obiektem");
   if (typeof pilot.version !== "string") e.push("brak/nieprawidłowe pole version");
-  if (!pilot.pilot || typeof pilot.pilot.participants !== "number" || pilot.pilot.participants < 1) e.push("pilot.participants musi być liczbą >= 1");
+  const participants = pilot.pilot && pilot.pilot.participants;
+  const okParticipants = typeof participants === "number" && Number.isInteger(participants) && participants >= 1;
+  if (!okParticipants) e.push("pilot.participants musi być liczbą całkowitą >= 1");
+  else if (participants < PILOT_MIN_PARTICIPANTS || participants > PILOT_MAX_PARTICIPANTS)
+    e.push(`pilot.participants ${participants} poza zakresem grupy pilotażowej ${PILOT_MIN_PARTICIPANTS}–${PILOT_MAX_PARTICIPANTS} (wymagania/07)`);
   if (!Array.isArray(pilot.questions) || pilot.questions.length === 0) e.push("questions musi być niepustą tablicą");
-  else for (const q of pilot.questions) {
-    const id = q && q.id;
-    if (typeof id !== "string" || !/^Q[0-9]{3}$/.test(id)) { e.push(`pytanie z nieprawidłowym id: ${JSON.stringify(id)}`); continue; }
-    if (typeof q.attempts !== "number" || q.attempts < 1) e.push(`${id}: attempts musi być liczbą >= 1`);
-    if (typeof q.correct !== "number" || q.correct < 0) e.push(`${id}: correct musi być liczbą >= 0`);
-    if (typeof q.attempts === "number" && typeof q.correct === "number" && q.correct > q.attempts) e.push(`${id}: correct ${q.correct} > attempts ${q.attempts} (>100%)`);
-    if (q.ambiguityReports != null && (typeof q.ambiguityReports !== "number" || q.ambiguityReports < 0 || q.ambiguityReports > q.attempts)) e.push(`${id}: ambiguityReports poza zakresem [0, attempts]`);
+  else {
+    const seen = new Set();
+    for (const q of pilot.questions) {
+      const id = q && q.id;
+      if (typeof id !== "string" || !/^Q[0-9]{3}$/.test(id)) { e.push(`pytanie z nieprawidłowym id: ${JSON.stringify(id)}`); continue; }
+      if (seen.has(id)) e.push(`zduplikowane pytanie ${id} (każde pytanie raz)`); else seen.add(id);
+      if (typeof q.attempts !== "number" || q.attempts < 1) e.push(`${id}: attempts musi być liczbą >= 1`);
+      if (typeof q.correct !== "number" || q.correct < 0) e.push(`${id}: correct musi być liczbą >= 0`);
+      if (typeof q.attempts === "number" && typeof q.correct === "number" && q.correct > q.attempts) e.push(`${id}: correct ${q.correct} > attempts ${q.attempts} (>100%)`);
+      if (okParticipants && typeof q.attempts === "number" && q.attempts > participants) e.push(`${id}: attempts ${q.attempts} > uczestników ${participants} (niemożliwe)`);
+      if (q.ambiguityReports != null && (typeof q.ambiguityReports !== "number" || q.ambiguityReports < 0 || q.ambiguityReports > q.attempts)) e.push(`${id}: ambiguityReports poza zakresem [0, attempts]`);
+    }
   }
   if (e.length) throw new Error("Niepoprawny plik wyników pilotażu:\n - " + e.join("\n - "));
   return true;

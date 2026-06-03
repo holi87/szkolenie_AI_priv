@@ -38,7 +38,9 @@ Zasady:
 
 1. Zbierz wyniki i ankiety (patrz `plan-komunikacji.md`).
 2. Zbuduj zagregowany plik wg `pilot-results.schema.json` (per pytanie: `attempts`, `correct`, `avgTimeSec`,
-   `ambiguityReports`; `synthetic: false`). **Dane zagregowane, bez PII.**
+   `ambiguityReports`; `synthetic: false`). **Dane zagregowane, bez PII.** Narzędzie waliduje plik przed
+   kalibracją i odrzuca dane niemożliwe: liczność grupy poza 8–15 (wymagania/07), `correct > attempts` (>100%),
+   `attempts > uczestników`, duplikaty pytań, złe id — wtedy `exit 1` z opisem (zamiast mylącego raportu).
 3. Uruchom:
    ```bash
    cd genai-llm-training
