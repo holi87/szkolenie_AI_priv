@@ -80,7 +80,7 @@
   --color-accent: #1d4ed8;     /* ciemny niebieski: link-na-jasnym-tle >=4.5:1 ORAZ wypełnienie z białym tekstem */
   --color-accent-fg: #ffffff;
   --color-accent-2: #7c3aed;
-  --color-ok: #15803d;
+  --color-ok: #127334;        /* status "Ukończony" jako TEKST: >=4.5:1 też na surface-2 (aktywny/hover pill) */
   --color-warn: #b45309;
   --color-bad: #b91c1c;
   --color-locked: #6b7280;

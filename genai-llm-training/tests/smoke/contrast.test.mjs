@@ -28,8 +28,15 @@ const TEXT_PAIRS = [
   ["--color-accent-fg", "--color-accent"], // tekst na wypełnieniu akcentu (przyciski .btn)
   ["--color-accent", "--color-bg"],        // akcent jako LINK na tle — styles.css `a { color: var(--color-accent) }`
   ["--color-accent", "--color-surface"],
+  ["--color-accent", "--color-surface-2"], // status "W toku" (.status--in_progress) jako TEKST na aktywnym/hover module (tło -> surface-2)
   ["--color-muted", "--color-bg"],
   ["--color-muted", "--color-surface"],
+  // Kolory statusu używane jako TEKST (M9: pille statusu nav). Pill nie ma własnego tła → pokazuje tło
+  // przycisku, które na hover/aria-current robi się surface-2 (styles.css) — dlatego asercja też na surface-2.
+  ["--color-ok", "--color-surface"],       // .status--completed .nav-item__status (TEKST "Ukończony")
+  ["--color-ok", "--color-surface-2"],
+  // UWAGA: --color-locked jako tekst statusu jest ZWOLNIONY z 1.4.3 — występuje wyłącznie na komponencie
+  // nieaktywnym (button[disabled]/[aria-disabled], shell.js test końcowy; moduły nie osiągają stanu locked).
 ];
 // Pary UI (granice/ikony) — wymóg >=3:1 (WCAG 1.4.11). [ui, bg].
 const UI_PAIRS = [
