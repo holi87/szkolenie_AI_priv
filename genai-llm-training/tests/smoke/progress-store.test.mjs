@@ -198,13 +198,16 @@ test("model C end-to-end (#63/#61): pseudonim sesji trafia na certyfikat, po od�
   assert.equal(inSession.completionId, afterReload.completionId, "completionId niezależny od pseudonimu (#61)");
 });
 
-test("migracja (#63): starszy progres z participant.displayName jest czyszczony przy wczytaniu", () => {
+test("migracja (#63): legacy participant czyszczony z WSZYSTKICH ścieżek przy starcie, nie tylko aktywnej (Codex #65)", () => {
+  const legacy = (path, nick) => JSON.stringify({ version: "1.0", path, modules: {}, finalTest: { attempts: 0, maxAttempts: 3 }, practicalTasks: [], updatedAt: fixedNow(), participant: { displayName: nick } });
   const adapter = createMemoryAdapter({
-    "genai-training:cursor": JSON.stringify({ pathId: "S1", moduleId: null, screen: null }),
-    "genai-training:progress:S1": JSON.stringify({ version: "1.0", path: "S1", modules: {}, finalTest: { attempts: 0, maxAttempts: 3 }, practicalTasks: [], updatedAt: fixedNow(), participant: { displayName: "StaryNick" } }),
+    "genai-training:cursor": JSON.stringify({ pathId: "S1", moduleId: null, screen: null }), // aktywna: S1
+    "genai-training:progress:S1": legacy("S1", "NickS1"),
+    "genai-training:progress:S2": legacy("S2", "NickS2"), // NIEAKTYWNA — też musi zostać oczyszczona
   });
-  const s = makeStore(adapter); // cursor wskazuje S1 → loadProgress w konstruktorze czyści i ZAPISUJE od razu
-  assert.equal(s.getProgress().participant, undefined, "legacy participant usunięty przy wczytaniu");
-  assert.ok(!(adapter.get("genai-training:progress:S1") || "").includes("StaryNick"),
-    "pseudonim usunięty ze storage OD RAZU przy wczytaniu (bez czekania na kolejny persist — Codex #65)");
+  const s = makeStore(adapter); // sweep startowy czyści i ZAPISUJE wszystkie progress:* od razu
+  assert.equal(s.getProgress().participant, undefined, "aktywna ścieżka bez participant");
+  assert.ok(!(adapter.get("genai-training:progress:S1") || "").includes("NickS1"), "S1 oczyszczona w storage od razu");
+  assert.ok(!(adapter.get("genai-training:progress:S2") || "").includes("NickS2"),
+    "NIEAKTYWNA S2 też oczyszczona w storage przy starcie (bez wybierania jej)");
 });

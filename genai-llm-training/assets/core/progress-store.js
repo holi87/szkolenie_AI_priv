@@ -75,6 +75,13 @@ export function createProgressStore(adapter, opts = {}) {
     }
     return p;
   };
+  // Sweep jednorazowy przy starcie: usuń legacy participant ze WSZYSTKICH zapisanych ścieżek (S1/S2/S3),
+  // nie tylko aktywnej — inaczej nieaktywne klucze trzymałyby pseudonim do czasu ich wyboru (Codex #65).
+  for (const k of adapter.keys()) {
+    if (!k.startsWith(`${PREFIX}:progress:`)) continue;
+    const p = readJson(k);
+    if (p && p.participant) { delete p.participant; writeJson(k, p); }
+  }
 
   let cursor = readJson(CURSOR_KEY) || { pathId: null, moduleId: null, screen: null };
   let activePath = cursor.pathId;
