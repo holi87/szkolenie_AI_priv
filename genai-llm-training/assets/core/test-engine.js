@@ -92,6 +92,9 @@ export function selectFinalTest(questions, pathsData, pathId, rng = Math.random)
     final = [...keepCritical, ...trimmable].slice(0, Math.max(n, keepCritical.length));
   }
 
+  // Wymieszaj kolejność prezentacji — żeby pytania krytyczne (na początku) nie były rozpoznawalne po pozycji.
+  final = shuffle(final, rng);
+
   const difficultyCounts = { L1: 0, L2: 0, L3: 0, L4: 0 };
   for (const q of final) if (difficultyCounts[q.difficulty] != null) difficultyCounts[q.difficulty] += 1;
 

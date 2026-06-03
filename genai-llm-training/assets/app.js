@@ -162,8 +162,8 @@ function start(data) {
     const pathId = store.getActivePath();
     const prog = store.getProgress();
     if (!isFinalTestUnlocked(prog, data.paths, pathId)) { showMenu(); return; }
-    // Jeśli już zaliczony — pokaż wynik zamiast nowego podejścia.
-    if (prog.finalTest && prog.finalTest.passed && state.result) { showResult(state.result); return; }
+    // Już zaliczony — pokaż wynik, bez kolejnego podejścia (działa też po odświeżeniu strony).
+    if (prog.finalTest && prog.finalTest.passed) { showResult(state.result || buildResultFromProgress(prog, pathId)); return; }
     if (!store.canAttemptFinalTest()) { showResult(state.result || buildResultFromProgress(prog, pathId)); return; }
 
     state.screen = "test"; state.moduleId = null;
@@ -188,7 +188,7 @@ function start(data) {
     const cert = buildCertificate(result, { participant: store.getProgress().participant, pathName: pathName(data, pathId), modulesData: data.modules });
     if (cert.issued) store.recordCertificate({ issued: true, completionId: cert.completionId, scorePct: cert.scorePct });
     state.result = cert;
-    showResult(cert);
+    showResult(cert, result.gates);
     refreshHeaderAndNav();
   }
 
@@ -200,11 +200,11 @@ function start(data) {
     );
   }
 
-  function showResult(cert) {
+  function showResult(cert, gates) {
     state.screen = "result";
     const pathId = store.getActivePath();
     mount(refs.view, renderResult(cert, {
-      progress: store.getProgress(), pathName: pathName(data, pathId),
+      progress: store.getProgress(), pathName: pathName(data, pathId), gates,
       canRetry: !cert.issued && store.canAttemptFinalTest(),
       attemptInfo: `Wykorzystane podejścia: ${(store.getProgress().finalTest || {}).attempts || 0}.`,
       onRetry: () => { showFinalTest(); focusView(); },

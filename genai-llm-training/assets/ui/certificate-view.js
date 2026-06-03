@@ -13,6 +13,28 @@ function download(filename, content, mime) {
   URL.revokeObjectURL(url);
 }
 
+const GATE_LABEL = {
+  overallThreshold: () => "Próg ogólny",
+  criticalQuestions: (g) => `Pytania krytyczne (${g.module})`,
+  practicalTask: (g) => `Zadanie praktyczne (${g.rubric})`,
+  moduleMinScore: (g) => `Wynik modułu ${g.module} (${g.rubric})`,
+};
+
+/** Lista bramek zaliczenia ze statusem — pokazuje, dlaczego ścieżka (nie)zaliczona, mimo wyniku %. */
+function gatesBlock(gates) {
+  if (!gates || gates.length === 0) return null;
+  return el("section", {}, [
+    el("h2", { text: "Status bramek zaliczenia" }),
+    el("ul", { class: "weak-list" }, gates.map((g) => {
+      const label = (GATE_LABEL[g.type] || (() => g.type))(g);
+      return el("li", {}, [
+        el("span", { attrs: { "aria-hidden": "true" }, text: g.passed ? "✓ " : "✗ " }),
+        `${g.passed ? "spełniona" : "niespełniona"} — ${label}${g.detail ? `: ${g.detail}` : ""}`,
+      ]);
+    })),
+  ]);
+}
+
 function weakAreasBlock(weakAreas) {
   if (!weakAreas || weakAreas.length === 0) return null;
   return el("section", {}, [
@@ -49,12 +71,16 @@ export function renderResult(cert, opts = {}) {
       el("div", { class: "cert-row" }, [el("span", { text: "ID zaliczenia" }), el("span", { class: "certificate__id", text: cert.completionId })]),
     ]);
     root.appendChild(card);
+    const gIssued = gatesBlock(opts.gates);
+    if (gIssued) root.appendChild(gIssued);
     if (progress) root.appendChild(exportButtons(progress, pathName));
     const wa = weakAreasBlock(cert.weakAreas);
     if (wa) root.appendChild(wa);
   } else {
-    root.appendChild(el("h1", { text: "Wynik poniżej progu" }));
-    root.appendChild(el("p", { attrs: { role: "alert" }, text: `${cert.reason} Twój wynik: ${cert.scorePct}%.` }));
+    root.appendChild(el("h1", { text: "Ścieżka jeszcze niezaliczona" }));
+    root.appendChild(el("p", { attrs: { role: "alert" }, text: `Wynik testu: ${cert.scorePct}%. Aby zaliczyć ścieżkę, spełnij wszystkie bramki poniżej.` }));
+    const gFail = gatesBlock(opts.gates);
+    if (gFail) root.appendChild(gFail);
     const wa = weakAreasBlock(cert.weakAreas);
     if (wa) root.appendChild(wa);
     if (progress) root.appendChild(exportButtons(progress, pathName));
