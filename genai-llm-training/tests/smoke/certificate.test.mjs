@@ -13,6 +13,12 @@ test("generateCompletionId: deterministyczne, format CERT-<ścieżka>-<RRRRMMDD>
   assert.notEqual(id, generateCompletionId("S1", DATE, 89), "inny wynik → inne ID");
 });
 
+test("completionId koduje tylko DZIEŃ, nie ms — różne znaczniki tego samego dnia → to samo ID (#61 review)", () => {
+  const a = generateCompletionId("S1", "2026-06-03T10:00:00.000Z", 88);
+  const b = generateCompletionId("S1", "2026-06-03T23:59:59.999Z", 88);
+  assert.equal(a, b, "dokładny czas (ms) nie może być odzyskiwalny z completionId — preimage tylko do dnia");
+});
+
 test("completionId NIE koduje pseudonimu — różne nicki → to samo ID (anty-deanonimizacja #61)", () => {
   const mk = (name) => buildCertificate(
     { pathId: "S1", scorePct: 88, passed: true, weakModules: [] },

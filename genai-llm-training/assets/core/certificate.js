@@ -16,12 +16,15 @@ const yyyymmdd = (iso) => (iso || "").slice(0, 10).replace(/-/g, "");
 /**
  * Generuje ID zaliczenia. Deterministyczne dla tych samych danych wejściowych.
  * Format: CERT-<ścieżka>-<RRRRMMDD>-<hash>.
- * PRYWATNOŚĆ (#61): pseudonim NIE wchodzi do preimage. Pełny znacznik czasu (dateIso, ms) sam zapewnia
- * unikalność wydania, a brak nicku uniemożliwia odzyskanie pseudonimu z eksportu atakiem słownikowym po
- * znanej liście uczestników (path/scorePct/data są jawne — nick był jedyną niewiadomą hasha).
+ * PRYWATNOŚĆ (#61, doprecyzowane po review): preimage zawiera tylko dane JAWNE w eksporcie — ścieżkę, DZIEŃ
+ * (RRRRMMDD, nie pełny timestamp ms) i wynik. Dzięki temu z completionId nie da się odzyskać nic ponad to,
+ * co i tak jest w pliku: ani pseudonimu (poza preimage), ani dokładnego czasu ukończenia (gdyby hashować pełny
+ * dateIso, odbiorca mógłby brute-force'ować ms w obrębie dnia i odtworzyć quasi-identyfikator). Skutek uboczny:
+ * dwie osoby o tej samej ścieżce/dniu/wyniku mogą mieć to samo ID — to akceptowalne dla markera zaliczenia.
  */
 export function generateCompletionId(pathId, dateIso, scorePct) {
-  return `CERT-${pathId}-${yyyymmdd(dateIso)}-${hash(`${pathId}|${dateIso}|${scorePct}`)}`;
+  const day = yyyymmdd(dateIso);
+  return `CERT-${pathId}-${day}-${hash(`${pathId}|${day}|${scorePct}`)}`;
 }
 
 /** Mapuje słabe moduły na obiekty z nazwą (do listy "do powtórzenia"). */

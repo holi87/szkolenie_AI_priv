@@ -69,7 +69,10 @@ export function createProgressStore(adapter, opts = {}) {
   // Nowy kod nigdy go nie czyta — usuwamy przy wczytaniu, a najbliższy persist() wyczyści go ze storage.
   const loadProgress = (pathId) => {
     const p = readJson(PROGRESS_KEY(pathId));
-    if (p && p.participant) delete p.participant;
+    if (p && p.participant) {
+      delete p.participant;
+      writeJson(PROGRESS_KEY(pathId), p); // zapisz oczyszczony zapis OD RAZU — nie czekaj na następny persist()
+    }
     return p;
   };
 

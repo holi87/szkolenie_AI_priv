@@ -203,8 +203,8 @@ test("migracja (#63): starszy progres z participant.displayName jest czyszczony 
     "genai-training:cursor": JSON.stringify({ pathId: "S1", moduleId: null, screen: null }),
     "genai-training:progress:S1": JSON.stringify({ version: "1.0", path: "S1", modules: {}, finalTest: { attempts: 0, maxAttempts: 3 }, practicalTasks: [], updatedAt: fixedNow(), participant: { displayName: "StaryNick" } }),
   });
-  const s = makeStore(adapter);
+  const s = makeStore(adapter); // cursor wskazuje S1 → loadProgress w konstruktorze czyści i ZAPISUJE od razu
   assert.equal(s.getProgress().participant, undefined, "legacy participant usunięty przy wczytaniu");
-  s.selectPath("S1"); // persist() przepisuje storage bez participant
-  assert.ok(!(adapter.get("genai-training:progress:S1") || "").includes("StaryNick"), "pseudonim usunięty ze storage po persist");
+  assert.ok(!(adapter.get("genai-training:progress:S1") || "").includes("StaryNick"),
+    "pseudonim usunięty ze storage OD RAZU przy wczytaniu (bez czekania na kolejny persist — Codex #65)");
 });

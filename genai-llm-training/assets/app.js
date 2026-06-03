@@ -353,6 +353,7 @@ function start(data) {
     if (globalThis.confirm("Zresetować cały postęp tej przeglądarki? Tej operacji nie można cofnąć.")) {
       timer.moduleId = null; timer.enterMs = 0; // porzuć licznik — reset i tak czyści progres
       store.reset({ all: true });
+      pendingName = ""; // wyczyść pseudonim trzymany w UI (#63) — inaczej wróciłby na ekran wyboru i kolejny certyfikat
       state.screen = "menu"; state.moduleId = null; state.result = null; state.test = null;
       render();
     }
