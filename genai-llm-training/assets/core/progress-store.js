@@ -142,6 +142,22 @@ export function createProgressStore(adapter, opts = {}) {
       persist();
     },
 
+    /** Zapis wyniku interakcji modułowej (klasyfikator / rubryka / strojenie) — "feedback i zapis wyniku" (#20). */
+    recordInteraction(moduleId, result) {
+      ensureActive();
+      const m = ensureModule(moduleId);
+      m.interaction = {
+        kind: result.kind,
+        score: result.score,
+        max: result.max,
+        ...(result.pct != null ? { pct: result.pct } : {}),
+        ...(result.passed != null ? { passed: result.passed } : {}),
+        completedAt: now(),
+      };
+      if (m.status === "available") m.status = "in_progress";
+      persist();
+    },
+
     recordFinalTest(result) {
       ensureActive();
       const prev = progress.finalTest || { attempts: 0, maxAttempts };
