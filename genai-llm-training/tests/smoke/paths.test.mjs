@@ -89,6 +89,20 @@ test("S2: po zapisaniu R1-prompt → test odblokowany", () => {
   assert.equal(isFinalTestUnlocked(p, pathsData, "S2"), true);
 });
 
+test("praktyka zapisana PONIŻEJ progu nadal blokuje test (nie marnuj podejść na pewną porażkę bramki)", () => {
+  // S2: R1-prompt 2/5 < próg 4
+  const s2low = progressWith(requiredModules(pathsData, "S2"), [{ rubric: "R1-prompt", score: 2, maxScore: 5 }]);
+  assert.deepEqual(missingPracticalRubrics(s2low, pathsData, "S2"), ["R1-prompt"]);
+  assert.equal(isFinalTestUnlocked(s2low, pathsData, "S2"), false);
+  // S3: R2-rag 3/5 = 60% < 70%
+  const s3low = progressWith(requiredModules(pathsData, "S3"), [
+    { rubric: "R2-rag", score: 3, maxScore: 5 },
+    { rubric: "R3-eval", score: 4, maxScore: 5 },
+  ]);
+  assert.deepEqual(missingPracticalRubrics(s3low, pathsData, "S3"), ["R2-rag"]);
+  assert.equal(isFinalTestUnlocked(s3low, pathsData, "S3"), false);
+});
+
 test("S3: wymaga zapisanych R2-rag i R3-eval; brak choćby jednej → zablokowany", () => {
   const reqMods = requiredModules(pathsData, "S3");
   const onlyOne = progressWith(reqMods, [{ rubric: "R2-rag", score: 4, maxScore: 5 }]);

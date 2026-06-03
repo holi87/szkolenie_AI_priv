@@ -72,14 +72,34 @@ export function requiredPracticalRubrics(pathsData, pathId) {
     .map((g) => g.rubric);
 }
 
+/** Zapisany wynik zadania praktycznego dla danej rubryki (lub null). */
+function practicalResultFor(progress, rubric) {
+  return ((progress && progress.practicalTasks) || []).find((t) => t.rubric === rubric) || null;
+}
+
+/** Czy zapisany wynik praktyczny SPEŁNIA próg swojej bramki (autorytatywnie wg paths.json, nie wg flagi passed). */
+function practicalGateSatisfied(gate, result) {
+  if (!result || typeof result.score !== "number") return false; // brak wyniku → niespełniona
+  if (gate.type === "practicalTask") return result.score >= gate.minScore;
+  if (gate.type === "moduleMinScore") {
+    const max = result.maxScore || gate.maxScore;
+    const pct = max ? (result.score / max) * 100 : 0;
+    return pct >= gate.minPct;
+  }
+  return false;
+}
+
 /**
- * Wymagane rubryki praktyczne BEZ zapisanego wyniku. Konserwatywnie blokują test końcowy:
- * bez zapisanej praktyki każde podejście i tak nie zaliczy bramki praktycznej, a zużyłoby limit prób
- * (po wyczerpaniu prób certyfikat byłby nieosiągalny). Lepiej zablokować test do czasu wykonania praktyki.
+ * Wymagane rubryki praktyczne, których bramka NIE jest jeszcze SPEŁNIONA (brak wyniku ALBO wynik poniżej progu).
+ * Konserwatywnie blokują test końcowy: dopóki bramka praktyczna nie przejdzie, każde podejście i tak nie zaliczy
+ * ścieżki, a zużyłoby limit prób (po wyczerpaniu prób certyfikat byłby nieosiągalny). Zadanie praktyczne można
+ * powtarzać bez limitu, więc lepiej zablokować test do czasu zaliczenia praktyki niż marnować podejścia do testu.
  */
 export function missingPracticalRubrics(progress, pathsData, pathId) {
-  const recorded = new Set(((progress && progress.practicalTasks) || []).map((t) => t.rubric));
-  return requiredPracticalRubrics(pathsData, pathId).filter((r) => !recorded.has(r));
+  return (getPath(pathsData, pathId).gates || [])
+    .filter((g) => (g.type === "practicalTask" || g.type === "moduleMinScore") && g.rubric)
+    .filter((g) => !practicalGateSatisfied(g, practicalResultFor(progress, g.rubric)))
+    .map((g) => g.rubric);
 }
 
 /** Czy test końcowy jest odblokowany (moduły wymagane ukończone ORAZ wymagane praktyki zapisane). */
@@ -100,6 +120,6 @@ export function finalTestStatus(progress, pathsData, pathId) {
   }
   const reasons = [];
   if (blockers.length) reasons.push(`ukończ moduły wymagane: ${blockers.join(", ")}`);
-  if (missingPractical.length) reasons.push(`wykonaj zadania praktyczne: ${missingPractical.join(", ")}`);
+  if (missingPractical.length) reasons.push(`zalicz zadania praktyczne (wymagany próg): ${missingPractical.join(", ")}`);
   return { status: "locked", lockedReason: reasons.join("; "), blockers, missingPractical };
 }
