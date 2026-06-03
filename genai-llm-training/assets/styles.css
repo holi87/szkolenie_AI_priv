@@ -296,6 +296,16 @@ select { max-width: 100%; } /* długie opcje (np. dopasowanie) nie rozpychają l
 .callout--warn { border-color: var(--color-warn); background: rgba(251, 191, 36, 0.10); }
 .callout--safe { border-color: var(--color-ok); background: rgba(74, 222, 128, 0.08); }
 .callout--info { border-color: var(--color-accent); }
+.callout--warn .callout__icon { color: var(--color-warn); }
+.callout--safe .callout__icon { color: var(--color-ok); }
+.callout--info .callout__icon { color: var(--color-accent); }
+
+/* Ikony inline SVG (UX-6 #75): dziedziczą kolor (currentColor) i rozmiar (em) z kontekstu. */
+.icon { flex: none; vertical-align: -0.125em; }
+.brand__logo svg { display: block; width: 1em; height: 1em; }
+.callout__title { align-items: center; }
+.callout__icon svg, .locked-note__icon svg, .next-step__icon svg, .cert-gate__icon svg { width: 1.1em; height: 1.1em; flex: none; vertical-align: -0.1em; }
+.next-step__icon, .locked-note__icon { color: var(--color-accent); }
 
 /* Tabela treści + diagram (wersja tekstowa obowiązkowa) */
 .content-table__wrap { overflow-x: auto; margin: 0.8rem 0; }

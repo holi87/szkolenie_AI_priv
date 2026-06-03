@@ -7,7 +7,7 @@
   <title>Szkolenie GenAI i LLM — QualityCat</title>
   <meta name="description" content="Interaktywne szkolenie z GenAI i LLM: ścieżki S1/S2/S3, quizy, test końcowy, certyfikat.">
   <!-- Favicon inline (SVG data-URI) — bez dodatkowego żądania, brak 404 /favicon.ico. -->
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230f1117'/%3E%3Ctext x='8' y='12' font-size='12' text-anchor='middle' fill='%236ea8fe'%3E%E2%97%86%3C/text%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230f1117'/%3E%3Cpath d='M8 3 13 8 8 13 3 8Z' fill='%236ea8fe'/%3E%3C/svg%3E">
   <!-- Anty-flash motywu (UX-3 #72): ustaw [data-theme] PRZED CSS, żeby nie mrugnąć złym motywem.
        Inline + synchronicznie, zero zależności; klucz spójny z assets/ui/theme.js (THEME_KEY). -->
   <script>
@@ -29,7 +29,9 @@
   <header class="app-header">
     <div class="app-header__bar">
       <div class="brand">
-        <span class="brand__logo" aria-hidden="true">◆</span>
+        <span class="brand__logo" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" focusable="false"><path d="M8 1.5 14.5 8 8 14.5 1.5 8Z" fill="currentColor"/></svg>
+        </span>
         <span class="brand__name">Szkolenie GenAI i LLM</span>
       </div>
       <div class="app-header__meta">

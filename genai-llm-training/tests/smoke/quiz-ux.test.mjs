@@ -32,18 +32,22 @@ test("brak meta gdy showMeta=false (tryb minimalny) — chipy się nie pojawiaj�
   assert.equal(chips(renderQuestion(q, {}).node).length, 0);
 });
 
-test("3 stany feedbacku rozróżnialne SŁOWEM + role (nie samym kolorem)", () => {
+test("3 stany feedbacku rozróżnialne SŁOWEM + role (nie samym kolorem); ikona to inline SVG (UX-6)", () => {
+  const svgCount = (n) => queryAll(n, isTag("SVG")).length;
   const ok = renderFeedback({ isCorrect: true, awarded: 2, max: 2, feedback: "ok" });
   assert.ok(ok.textContent.includes("Poprawnie"), "correct bez słowa 'Poprawnie'");
   assert.equal(roleOf(ok, "status").length, 1, "correct powinien mieć role=status");
+  assert.ok(svgCount(ok) >= 1, "correct: ikona to inline SVG (nie emoji)");
 
   const bad = renderFeedback({ isCorrect: false, awarded: 0, max: 2, feedback: "x" });
   assert.ok(bad.textContent.includes("Niepoprawnie"), "incorrect bez słowa 'Niepoprawnie'");
   assert.equal(roleOf(bad, "status").length, 1, "incorrect powinien mieć role=status");
+  assert.ok(svgCount(bad) >= 1, "incorrect: ikona to inline SVG");
 
   const crit = renderFeedback({ isCriticalFail: true, feedback: "x" });
   assert.ok(crit.textContent.includes("Błąd bezpieczeństwa"), "critical bez słowa 'Błąd bezpieczeństwa'");
   assert.equal(roleOf(crit, "alert").length, 1, "critical MUSI mieć role=alert (krytyczne)");
+  assert.ok(svgCount(crit) >= 1, "critical: ikona to inline SVG");
 });
 
 test("a11y/static: feedback animuje transform/opacity (keyframe) i jest gaszony reduced-motion", () => {

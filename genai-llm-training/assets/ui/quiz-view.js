@@ -2,6 +2,7 @@
 // Każdy typ ma w pełni klawiaturowy wariant (design-baseline §6): radio/checkbox/select.
 // renderQuestion zwraca { node, getAnswer } — getAnswer oddaje kształt odpowiedzi dla quiz-engine.
 import { el } from "./dom.js";
+import { icon } from "./icon.js";
 import { CRITICAL_FAIL_MESSAGE } from "../core/quiz-engine.js";
 
 const TYPE_LABEL = {
@@ -161,7 +162,7 @@ export function renderQuestion(question, opts = {}) {
 export function renderFeedback(result) {
   if (result.isCriticalFail) {
     return el("div", { class: "feedback feedback--critical", attrs: { role: "alert" } }, [
-      el("p", { class: "feedback__head" }, [el("span", { attrs: { "aria-hidden": "true" }, text: "⚠️ " }), "Błąd bezpieczeństwa"]),
+      el("p", { class: "feedback__head" }, [el("span", { attrs: { "aria-hidden": "true" } }, [icon("warn")]), "Błąd bezpieczeństwa"]),
       el("p", { text: CRITICAL_FAIL_MESSAGE }),
       result.feedback ? el("p", { text: result.feedback }) : null,
     ]);
@@ -169,7 +170,7 @@ export function renderFeedback(result) {
   const ok = result.isCorrect === true;
   return el("div", { class: `feedback ${ok ? "feedback--correct" : "feedback--incorrect"}`, attrs: { role: "status" } }, [
     el("p", { class: "feedback__head" }, [
-      el("span", { attrs: { "aria-hidden": "true" }, text: ok ? "✓ " : "✗ " }),
+      el("span", { attrs: { "aria-hidden": "true" } }, [icon(ok ? "check" : "cross")]),
       ok ? "Poprawnie" : "Niepoprawnie",
       el("span", { class: "quiz-meta", text: `  (${result.awarded}/${result.max} pkt)` }),
     ]),

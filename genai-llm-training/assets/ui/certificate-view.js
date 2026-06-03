@@ -2,6 +2,7 @@
 // Certyfikat tylko przy zaliczeniu (model z core/certificate.js). Eksport JSON/CSV jako pobranie pliku.
 // Kontrakt certificate.js (issued/completionId/eksporty) NIETKNIĘTY — zmiana jest wyłącznie prezentacyjna.
 import { el } from "./dom.js";
+import { icon } from "./icon.js";
 import { exportJson, exportCsv, exportQuestionStatsCsv } from "../core/certificate.js";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
@@ -54,7 +55,7 @@ function gatesBlock(gates) {
     el("ul", { class: "cert-gates__list" }, gates.map((g) => {
       const label = (GATE_LABEL[g.type] || (() => g.type))(g);
       return el("li", { class: `cert-gate cert-gate--${g.passed ? "ok" : "fail"}` }, [
-        el("span", { class: "cert-gate__icon", attrs: { "aria-hidden": "true" }, text: g.passed ? "✓ " : "✗ " }),
+        el("span", { class: "cert-gate__icon", attrs: { "aria-hidden": "true" } }, [icon(g.passed ? "check" : "cross")]),
         `${g.passed ? "spełniona" : "niespełniona"} — ${label}${g.detail ? `: ${g.detail}` : ""}`,
       ]);
     })),

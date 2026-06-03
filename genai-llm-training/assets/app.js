@@ -10,6 +10,7 @@ import { scoreQuestion } from "./core/quiz-engine.js";
 import { buildCertificate } from "./core/certificate.js";
 import { evaluateInteraction } from "./core/interactions/index.js";
 import { el, mount } from "./ui/dom.js";
+import { icon } from "./ui/icon.js";
 import { renderPathSelect } from "./ui/path-select.js";
 import { updateHeader, renderNav } from "./ui/shell.js";
 import { initTheme, toggleTheme } from "./ui/theme.js";
@@ -153,7 +154,7 @@ function start(data) {
     mount(refs.view, el("div", { class: "view__content" }, [
       el("h1", { text: `Ścieżka ${pathId} — ${pathName(data, pathId)}` }),
       el("p", { text: "Wybierz moduł z listy po lewej. Po module rozwiąż quiz inline z natychmiastowym feedbackiem. Test końcowy odblokuje się po ukończeniu modułów wymaganych." }),
-      el("div", { class: "next-step", attrs: { role: "status" } }, [el("span", { attrs: { "aria-hidden": "true" }, text: "🧭 " }), nextStep]),
+      el("div", { class: "next-step", attrs: { role: "status" } }, [el("span", { class: "next-step__icon", attrs: { "aria-hidden": "true" } }, [icon("info")]), nextStep]),
       passed ? el("div", { class: "btn-row" }, [el("button", { class: "btn", type: "button", text: "Zobacz wynik / certyfikat", on: { click: showFinalTest } })]) : null,
     ]));
   }

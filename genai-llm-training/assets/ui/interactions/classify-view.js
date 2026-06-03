@@ -1,7 +1,8 @@
 // classify-view.js — render interakcji "klasyfikacja" (M4). Wariant w pełni klawiaturowy:
 // każdy element to lista z grupą radio kategorii (design-baseline §6 — alternatywa dla drag&drop).
-// Feedback tekstowy per element (nie sam kolor, WCAG 1.4.1): ✓/✗ + uzasadnienie.
+// Feedback tekstowy per element (nie sam kolor, WCAG 1.4.1): ikona SVG + słowo + uzasadnienie.
 import { el } from "../dom.js";
+import { icon } from "../icon.js";
 
 export function renderClassify(config) {
   const items = config.items || [];
@@ -58,9 +59,10 @@ export function renderClassify(config) {
       const p = byId.get(g.itemId);
       if (!p) continue;
       const cls = p.chosen == null ? "feedback" : p.isCorrect ? "feedback feedback--correct" : "feedback feedback--incorrect";
-      const head = p.chosen == null ? "○ Brak wyboru" : p.isCorrect ? "✓ Poprawnie" : "✗ Niepoprawnie";
+      const word = p.chosen == null ? "Brak wyboru" : p.isCorrect ? "Poprawnie" : "Niepoprawnie";
+      const iconName = p.chosen == null ? "circle" : p.isCorrect ? "check" : "cross";
       g.fbNode.replaceChildren(el("div", { class: cls, attrs: { role: "status" } }, [
-        el("p", { class: "feedback__head" }, [el("span", { attrs: { "aria-hidden": "true" }, text: p.chosen == null ? "○ " : p.isCorrect ? "✓ " : "✗ " }), head]),
+        el("p", { class: "feedback__head" }, [el("span", { attrs: { "aria-hidden": "true" } }, [icon(iconName)]), word]),
         el("p", { text: p.chosen != null && !p.isCorrect ? `Poprawna kategoria: ${labelOf(p.correct)}. ${p.rationale || ""}` : (p.rationale || `Poprawna kategoria: ${labelOf(p.correct)}.`) }),
       ]));
     }
