@@ -1,0 +1,28 @@
+name: frontend-tests
+
+# Testy jednostkowe/smoke silników frontendu szkolenia (milestone M3, issue #14-#19).
+# Pure Node (node:test), zero zależności — zgodne z ADR-0002 (statyczny hosting, brak buildu aplikacji).
+# validate-data.yml bramkuje data/**; ten workflow bramkuje logikę w assets/ i jej testy.
+# Filtr ścieżek obejmuje cały katalog aplikacji, żeby PR dotykające assets/ realnie miały zielone CI.
+
+on:
+  pull_request:
+    paths:
+      - 'genai-llm-training/**'
+      - '.github/workflows/frontend-tests.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'genai-llm-training/**'
+      - '.github/workflows/frontend-tests.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Testy silników (node:test, pure Node)
+        run: node --test genai-llm-training/tests/smoke/*.test.mjs
