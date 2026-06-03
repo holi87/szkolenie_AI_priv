@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Prywatność — Szkolenie GenAI i LLM</title>
+  <meta name="description" content="Informacja o prywatności: co i gdzie przechowuje statyczne szkolenie GenAI/LLM. Brak cookies, brak wysyłki danych.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230f1117'/%3E%3Ctext x='8' y='12' font-size='12' text-anchor='middle' fill='%236ea8fe'%3E%E2%97%86%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#tresc">Przejdź do treści</a>
+  <header class="app-header">
+    <div class="app-header__bar">
+      <div class="brand"><span class="brand__logo" aria-hidden="true">◆</span><span class="brand__name">Prywatność</span></div>
+      <div class="app-header__meta"><a class="btn btn--ghost" href="index.html">← Wróć do szkolenia</a></div>
+    </div>
+  </header>
+
+  <main id="tresc" class="view" tabindex="-1">
+    <div class="view__content">
+      <h1>Prywatność</h1>
+      <p>To szkolenie jest <strong>w pełni statyczne</strong> i <strong>nie wysyła żadnych Twoich danych na serwer</strong> —
+        nie ma backendu, analityki, <strong>cookies</strong> ani narzędzi zewnętrznych. Wszystko działa w Twojej przeglądarce.</p>
+
+      <h2>Co przechowujemy lokalnie w Twojej przeglądarce</h2>
+      <p>W pamięci <code>localStorage</code> (na Twoim urządzeniu) zapisujemy tylko to, co potrzebne, żeby szkolenie
+        działało i pamiętało Twój postęp:</p>
+      <ul>
+        <li>wybraną ścieżkę, status i czas modułów, ostatnie miejsce,</li>
+        <li>wyniki quizów i testu końcowego oraz dane certyfikatu zaliczenia,</li>
+        <li>klucze: <code>genai-training:progress:&lt;ścieżka&gt;</code> i <code>genai-training:cursor</code>.</li>
+      </ul>
+      <p><strong>Pseudonim na certyfikat NIE jest zapisywany.</strong> Trzymamy go wyłącznie w pamięci tej sesji —
+        znika po odświeżeniu lub zamknięciu karty. Prosimy też, byś podawał pseudonim, nie prawdziwe imię i nazwisko.</p>
+
+      <h2>Dane nie opuszczają Twojego urządzenia</h2>
+      <p>Niczego nie przesyłamy. Pliki, które możesz pobrać (JSON/CSV z wynikami) i ewentualnie wysłać koordynatorowi,
+        <strong>nie zawierają Twojego pseudonimu</strong> — zawierają tylko anonimowe identyfikatory (ID zaliczenia bez
+        nicku), wyniki i czasy; data zaliczenia jest skrócona do dnia, by nie tworzyć identyfikatora.</p>
+
+      <h2>Jak usunąć swoje dane</h2>
+      <p>W każdej chwili użyj przycisku <strong>„Zacznij od nowa”</strong> w aplikacji (czyści cały zapisany postęp tej
+        przeglądarki) albo wyczyść dane witryny w ustawieniach przeglądarki.</p>
+
+      <h2>Cookies i podstawa prawna</h2>
+      <p>Nie używamy <strong>żadnych cookies</strong> ani śledzenia, więc <strong>nie ma i nie potrzeba banera zgody
+        na cookies</strong>. Lokalny zapis postępu jest niezbędny do działania usługi, o którą sam prosisz (przejście
+        szkolenia i wydanie certyfikatu) — to wyjątek „ściśle niezbędne” z art. 5(3) dyrektywy ePrivacy (2002/58/WE),
+        dlatego nie pytamy o zgodę. Tę stronę traktuj jako informację w rozumieniu art. 13 RODO.</p>
+
+      <p class="muted"><a href="index.html">← Wróć do szkolenia</a></p>
+    </div>
+  </main>
+</body>
+</html>

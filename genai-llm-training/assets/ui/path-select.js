@@ -36,13 +36,19 @@ export function renderPathSelect(pathsData, modulesData, opts = {}) {
     root.appendChild(el("p", { class: "path-badge", text: `Aktualna ścieżka: ${opts.currentPath}` }));
   }
 
-  // Opcjonalne imię uczestnika (do certyfikatu) — bez danych wrażliwych.
+  // Opcjonalny PSEUDONIM na certyfikat (#63 model C): trzymany tylko w pamięci sesji — NIE zapisywany.
+  // Label celowo mówi „pseudonim", nie „imię" — minimalizacja danych (RODO art. 5(1)(c)), bez prawdziwego nazwiska.
   const nameInput = el("input", { type: "text", id: "participant-name", value: opts.participantName || "",
-    attrs: { maxlength: "60", autocomplete: "off", placeholder: "np. Tester Testowy" } });
+    attrs: { maxlength: "60", autocomplete: "off", placeholder: "np. Tester01 — nie podawaj prawdziwego nazwiska" } });
   if (typeof opts.onName === "function") nameInput.addEventListener("change", () => opts.onName(nameInput.value.trim()));
   root.appendChild(el("div", { class: "match-row" }, [
-    el("label", { attrs: { for: "participant-name" }, text: "Imię na certyfikacie (opcjonalnie):" }),
+    el("label", { attrs: { for: "participant-name" }, text: "Pseudonim na certyfikacie (opcjonalnie):" }),
     nameInput,
+  ]));
+  // Nota informacyjna (nie zgoda): pseudonim sesyjny + lokalny zapis postępu. Bez cookies, nic nie wysyłamy.
+  root.appendChild(el("p", { class: "muted privacy-note" }, [
+    el("span", { text: "Pseudonim widać tylko na certyfikacie w tej sesji — nie zapisujemy go. Postęp i wyniki zapisują się lokalnie w Twojej przeglądarce; nic nie wysyłamy na serwer i nie używamy cookies. " }),
+    el("a", { href: "prywatnosc.html", text: "Szczegóły: Prywatność" }),
   ]));
 
   root.appendChild(el("div", { class: "path-cards" }, PATH_IDS.map((id) => pathCard(pathsData, modulesData, id, opts.onSelect))));
