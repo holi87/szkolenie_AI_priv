@@ -76,7 +76,21 @@
         "lastScorePct": { "type": "number", "minimum": 0, "maximum": 100 },
         "criticalQuestionsPassed": { "type": "boolean" },
         "passed": { "type": "boolean" },
-        "weakModules": { "type": "array", "items": { "type": "string", "pattern": "^M([1-9]|1[0-2])$" } }
+        "weakModules": { "type": "array", "items": { "type": "string", "pattern": "^M([1-9]|1[0-2])$" } },
+        "questionResults": {
+          "type": "array",
+          "description": "Per-pytanie testu końcowego (anonimowo) — sygnał kalibracyjny #28; obejmuje pytania spoza puli quizu inline (w tym golden).",
+          "items": {
+            "type": "object",
+            "required": ["questionId", "correct"],
+            "properties": {
+              "questionId": { "type": "string", "pattern": "^Q[0-9]{3}$" },
+              "module": { "type": "string", "pattern": "^M([1-9]|1[0-2])$" },
+              "correct": { "type": "boolean" }
+            },
+            "additionalProperties": false
+          }
+        }
       },
       "additionalProperties": false
     },

@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "pilot-results.schema.json",
+  "title": "Zagregowane wyniki pilotażu (wejście do kalibracji pytań)",
+  "description": "Kontrakt danych zbieranych w pilotażu (issue #27) i konsumowanych przez narzędzie kalibracji (issue #28). Statystyki SĄ ZAGREGOWANE per pytanie — bez danych osobowych uczestników (zgodnie z polityką: dane syntetyczne/anonimowe, eksport wyniku bez PII). Plik z realnymi wynikami pilotażu powstaje PO przeprowadzeniu pilotażu; w repo trzymamy syntetyczny przykład demonstrujący działanie narzędzia.",
+  "type": "object",
+  "required": ["version", "pilot", "questions"],
+  "properties": {
+    "_meta": { "type": "object", "description": "Metadane pliku (issue, status, polityka danych) — pomijane przez narzędzia." },
+    "version": { "type": "string" },
+    "synthetic": { "type": "boolean", "description": "true = zbiór demonstracyjny/syntetyczny, nie realny pilotaż." },
+    "pilot": {
+      "type": "object",
+      "required": ["participants"],
+      "properties": {
+        "participants": { "type": "integer", "minimum": 1 },
+        "window": { "type": "string", "description": "Okno czasowe pilotażu (opis)." },
+        "byPath": {
+          "type": "object",
+          "properties": {
+            "S1": { "type": "integer", "minimum": 0 },
+            "S2": { "type": "integer", "minimum": 0 },
+            "S3": { "type": "integer", "minimum": 0 }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "questions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "attempts", "correct"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^Q[0-9]{3}$" },
+          "attempts": { "type": "integer", "minimum": 1, "description": "Liczba uczestników, którzy odpowiedzieli na pytanie." },
+          "correct": { "type": "integer", "minimum": 0, "description": "Liczba poprawnych odpowiedzi (<= attempts)." },
+          "avgTimeSec": { "type": "number", "minimum": 0, "description": "Średni czas odpowiedzi w sekundach." },
+          "ambiguityReports": { "type": "integer", "minimum": 0, "description": "Liczba zgłoszeń niejasności pytania." },
+          "discrimination": { "type": "number", "minimum": -1, "maximum": 1, "description": "Moc dyskryminacyjna (korelacja punktowo-biserialna), opcjonalnie." }
+        },
+        "additionalProperties": false
+      }
+    },
+    "notes": { "type": "string" }
+  },
+  "additionalProperties": false
+}

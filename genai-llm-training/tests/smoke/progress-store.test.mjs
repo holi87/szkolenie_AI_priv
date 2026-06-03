@@ -63,6 +63,31 @@ test("finalTest: kolejne próby inkrementują attempts; limit podejść respekto
   assert.equal(s.canAttemptFinalTest(), false, "3/3 → brak kolejnych podejść");
 });
 
+test("recordFinalTest zapisuje per-pytanie (questionResults) zgodnie ze schematem (kalibracja #28)", () => {
+  const s = makeStore();
+  s.selectPath("S2");
+  s.recordFinalTest({
+    scorePct: 80, passed: true, criticalPassed: true, weakModules: [],
+    questionResults: [{ questionId: "Q069", module: "M8", correct: true }, { questionId: "Q018", module: "M3", correct: false }],
+  });
+  const ft = s.getProgress().finalTest;
+  assert.equal(ft.questionResults.length, 2);
+  assert.deepEqual(ft.questionResults[0], { questionId: "Q069", module: "M8", correct: true });
+  assert.equal(ft.questionResults[1].correct, false);
+});
+
+test("recordFinalTest zachowuje per-pytanie z PIERWSZEGO podejścia (kalibracja agreguje 1. próbę; Codex #59 r5)", () => {
+  const s = makeStore();
+  s.selectPath("S1");
+  s.recordFinalTest({ scorePct: 60, passed: false, criticalPassed: true, weakModules: ["M10"], questionResults: [{ questionId: "Q081", module: "M10", correct: false }] });
+  // 2. podejście: poprawił → ale per-pytanie kalibracji zostaje z 1. próby (false), agregaty z najnowszego.
+  s.recordFinalTest({ scorePct: 90, passed: true, criticalPassed: true, weakModules: [], questionResults: [{ questionId: "Q081", module: "M10", correct: true }] });
+  const ft = s.getProgress().finalTest;
+  assert.equal(ft.attempts, 2);
+  assert.equal(ft.lastScorePct, 90, "agregat (wynik) z najnowszego podejścia");
+  assert.equal(ft.questionResults[0].correct, false, "per-pytanie zachowane z 1. podejścia (nie zawyża % popr.)");
+});
+
 test("ostatnie miejsce: nowy store nad tym samym adapterem wraca do kursora i aktywnej ścieżki", () => {
   const adapter = createMemoryAdapter();
   const s1 = makeStore(adapter);
@@ -109,6 +134,16 @@ test("recordInteraction zapisuje wynik interakcji w module (kształt zgodny z pr
   assert.equal(ix.max, 5);
   assert.equal(ix.completedAt, fixedNow());
   assert.equal(s.getProgress().modules.M6.status, "in_progress", "interakcja w pustym module ustawia in_progress");
+});
+
+test("addModuleTime akumuluje czas modułu (KPI Time to complete) i klamruje wartości ujemne", () => {
+  const s = makeStore();
+  s.selectPath("S2");
+  s.addModuleTime("M3", 30);
+  s.addModuleTime("M3", 15.4); // Math.round → 15
+  assert.equal(s.getProgress().modules.M3.timeSpentSec, 45);
+  s.addModuleTime("M3", -100); // czas ujemny (np. zegar systemowy) → bez zmiany (Math.max(0, …))
+  assert.equal(s.getProgress().modules.M3.timeSpentSec, 45);
 });
 
 test("certyfikat zapisuje się w progresie", () => {

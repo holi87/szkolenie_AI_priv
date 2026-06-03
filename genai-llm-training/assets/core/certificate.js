@@ -71,6 +71,12 @@ export function buildCertificate(scoreResult, opts = {}) {
 function buildReport(progress, opts = {}) {
   const ft = progress.finalTest || {};
   const cert = progress.certificate || {};
+  // Czas per moduł (KPI Time to complete) — bez tego eksport nie pozwala policzyć KPI z pobranych plików.
+  const moduleTimesSec = {};
+  let totalTimeSec = 0;
+  for (const [moduleId, m] of Object.entries(progress.modules || {})) {
+    if (typeof m.timeSpentSec === "number" && m.timeSpentSec > 0) { moduleTimesSec[moduleId] = m.timeSpentSec; totalTimeSec += m.timeSpentSec; }
+  }
   return {
     path: progress.path,
     pathName: opts.pathName || null,
@@ -87,6 +93,8 @@ function buildReport(progress, opts = {}) {
       maxScore: t.maxScore ?? null,
       passed: Boolean(t.passed),
     })),
+    moduleTimesSec,
+    totalTimeSec,
   };
 }
 
@@ -103,7 +111,7 @@ const csvCell = (v) => {
 /** Eksport CSV (string, nagłówek + 1 wiersz) — pola złożone łączone "; ", bez PII. */
 export function exportCsv(progress, opts = {}) {
   const r = buildReport(progress, opts);
-  const cols = ["completionId", "path", "scorePct", "passed", "criticalQuestionsPassed", "attempts", "issuedAt", "weakModules"];
+  const cols = ["completionId", "path", "scorePct", "passed", "criticalQuestionsPassed", "attempts", "issuedAt", "weakModules", "totalTimeSec"];
   const row = [
     r.completionId,
     r.path,
@@ -113,6 +121,44 @@ export function exportCsv(progress, opts = {}) {
     r.attempts,
     r.issuedAt,
     r.weakModules.join("; "),
+    r.totalTimeSec,
   ];
   return `${cols.join(",")}\n${row.map(csvCell).join(",")}`;
+}
+
+/**
+ * Per-pytanie (anonimowo) — sygnał kalibracyjny do pilotażu (#27/#28). Jeden wiersz na pytanie: poprawność
+ * z quizu inline (1. próba) ORAZ z testu końcowego (test nadpisuje inline — warunki oceny, i obejmuje pytania
+ * spoza puli quizu, w tym golden → walidacja golden 24/24). Agregat per uczestnik (attempts=1); koordynator
+ * sumuje między uczestnikami → pilot-results.json. BEZ PII (tylko id pytania, moduł, 0/1, źródło).
+ */
+export function buildQuestionStats(progress) {
+  const byQ = new Map();
+  // 1) Quiz inline — poprawność z pierwszej próby.
+  for (const [moduleId, m] of Object.entries((progress && progress.modules) || {})) {
+    for (const r of m.quizResults || []) {
+      if (!r || typeof r.questionId !== "string") continue;
+      if (!byQ.has(r.questionId)) byQ.set(r.questionId, { questionId: r.questionId, module: moduleId, attempts: 1, correct: r.correct === true ? 1 : 0, source: "inline" });
+    }
+  }
+  // 2) Test końcowy — sygnał oceny; NADPISUJE inline (warunki testu) i obejmuje pytania spoza puli quizu
+  //    (w tym golden widziane tylko w teście), dzięki czemu możliwa jest walidacja golden setu 24/24.
+  for (const qr of (progress && progress.finalTest && progress.finalTest.questionResults) || []) {
+    if (!qr || typeof qr.questionId !== "string") continue;
+    const prev = byQ.get(qr.questionId);
+    byQ.set(qr.questionId, { questionId: qr.questionId, module: qr.module || (prev && prev.module) || null, attempts: 1, correct: qr.correct === true ? 1 : 0, source: "final" });
+  }
+  return [...byQ.values()].sort((a, b) => a.questionId.localeCompare(b.questionId));
+}
+
+/** Eksport JSON per-pytanie (anonimowy) — wejście do agregacji pilotażu (#28). */
+export function exportQuestionStatsJson(progress) {
+  return JSON.stringify({ path: (progress && progress.path) || null, source: "inline-quiz", questions: buildQuestionStats(progress) }, null, 2);
+}
+
+/** Eksport CSV per-pytanie (anonimowy). */
+export function exportQuestionStatsCsv(progress) {
+  const cols = ["questionId", "module", "attempts", "correct", "source"];
+  const rows = buildQuestionStats(progress).map((r) => [r.questionId, r.module, r.attempts, r.correct, r.source]);
+  return [cols.join(","), ...rows.map((row) => row.map(csvCell).join(","))].join("\n");
 }

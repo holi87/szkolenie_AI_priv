@@ -1,7 +1,7 @@
 // certificate-view.js — ekran zaliczenia i eksport wyniku (issue #19).
 // Certyfikat tylko przy zaliczeniu (model z core/certificate.js). Eksport JSON/CSV jako pobranie pliku.
 import { el } from "./dom.js";
-import { exportJson, exportCsv } from "../core/certificate.js";
+import { exportJson, exportCsv, exportQuestionStatsCsv } from "../core/certificate.js";
 
 function download(filename, content, mime) {
   const blob = new Blob([content], { type: mime });
@@ -49,7 +49,10 @@ function exportButtons(progress, pathName) {
     on: { click: () => download(`wynik-${progress.path}.json`, exportJson(progress, { pathName }), "application/json") } });
   const csv = el("button", { class: "btn btn--ghost", type: "button", text: "Pobierz wynik (CSV)",
     on: { click: () => download(`wynik-${progress.path}.csv`, exportCsv(progress, { pathName }), "text/csv") } });
-  return el("div", { class: "btn-row" }, [json, csv]);
+  // Per-pytanie (anonimowo) — sygnał do kalibracji pilotażu (#28). Bez PII; do odesłania koordynatorowi.
+  const qstats = el("button", { class: "btn btn--ghost", type: "button", text: "Pobierz odpowiedzi pytań (CSV)",
+    on: { click: () => download(`pytania-${progress.path}.csv`, exportQuestionStatsCsv(progress), "text/csv") } });
+  return el("div", { class: "btn-row" }, [json, csv, qstats]);
 }
 
 /**

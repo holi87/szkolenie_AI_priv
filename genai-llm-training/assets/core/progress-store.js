@@ -168,6 +168,14 @@ export function createProgressStore(adapter, opts = {}) {
         criticalQuestionsPassed: Boolean(result.criticalPassed),
         passed: Boolean(result.passed),
         weakModules: (result.weakModules || []).map((w) => (typeof w === "string" ? w : w.module)),
+        // Per-pytanie testu końcowego (kalibracja #28) — anonimowo: id + moduł + poprawność.
+        // Zachowujemy wynik PIERWSZEGO podejścia: kalibracja agreguje 1. próbę; kolejne podejścia (po
+        // powtórce słabych modułów) zawyżałyby % poprawnych. Agregaty (wynik, weakModules) idą z najnowszego.
+        ...(Array.isArray(prev.questionResults) && prev.questionResults.length
+          ? { questionResults: prev.questionResults }
+          : Array.isArray(result.questionResults)
+            ? { questionResults: result.questionResults.map((q) => ({ questionId: q.questionId, module: q.module, correct: Boolean(q.correct) })) }
+            : {}),
       };
       persist();
       return progress.finalTest;
