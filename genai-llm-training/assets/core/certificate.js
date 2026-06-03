@@ -42,7 +42,8 @@ export function weakAreas(weakModules, modulesData) {
  * Buduje model certyfikatu / ekranu zaliczenia.
  * @returns {{issued:boolean, completionId?:string, displayName?:string, path:string, pathName?:string,
  *            date:string, scorePct:number, weakAreas:object[], reason?:string}}
- * Gdy nie zaliczono — issued:false, brak completionId, zwraca powód i obszary do powtórzenia.
+ * Gdy nie zaliczono — issued:false, brak completionId, zwraca KOD powodu (i18n: ADR-0004, core zero-i18n;
+ * certificate-view rozwiązuje kod przez t('cert.reason.<kod>')) i obszary do powtórzenia.
  */
 export function buildCertificate(scoreResult, opts = {}) {
   const { pathId, scorePct, passed, weakModules } = scoreResult;
@@ -58,7 +59,7 @@ export function buildCertificate(scoreResult, opts = {}) {
       date: dateIso,
       scorePct,
       weakAreas: wa,
-      reason: "Wynik poniżej progu zaliczenia — certyfikat nie został wydany.",
+      reason: "below_pass_threshold",
     };
   }
   return {

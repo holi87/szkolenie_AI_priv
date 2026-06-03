@@ -3,6 +3,7 @@
 // Feedback tekstowy per element (nie sam kolor, WCAG 1.4.1): ikona SVG + słowo + uzasadnienie.
 import { el } from "../dom.js";
 import { icon } from "../icon.js";
+import { t } from "../../i18n/i18n.js";
 
 export function renderClassify(config) {
   const items = config.items || [];
@@ -12,7 +13,7 @@ export function renderClassify(config) {
 
   const legend = categories.length
     ? el("div", { class: "classify-legend" }, [
-        el("p", { class: "muted", text: "Kategorie:" }),
+        el("p", { class: "muted", text: t("interaction.classify.categoriesLabel") }),
         el("ul", {}, categories.map((c) => el("li", {}, [el("strong", { text: c.label }), c.desc ? ` — ${c.desc}` : null]))),
       ])
     : null;
@@ -30,8 +31,8 @@ export function renderClassify(config) {
     const fbNode = el("div", { class: "classify-item__fb" });
     groups.push({ itemId: it.id, inputs, fbNode });
     return el("fieldset", { class: "classify-item" }, [
-      el("legend", { class: "classify-item__text", text: `${i + 1}. ${it.text}` }),
-      el("div", { class: "classify-item__opts", attrs: { role: "radiogroup", "aria-label": `Kategoria dla: ${it.text}` } }, opts),
+      el("legend", { class: "classify-item__text", text: t("interaction.classify.itemLabel", { index: i + 1, text: it.text }) }),
+      el("div", { class: "classify-item__opts", attrs: { role: "radiogroup", "aria-label": t("interaction.classify.itemAriaLabel", { text: it.text }) } }, opts),
       fbNode,
     ]);
   });
@@ -59,11 +60,13 @@ export function renderClassify(config) {
       const p = byId.get(g.itemId);
       if (!p) continue;
       const cls = p.chosen == null ? "feedback" : p.isCorrect ? "feedback feedback--correct" : "feedback feedback--incorrect";
-      const word = p.chosen == null ? "Brak wyboru" : p.isCorrect ? "Poprawnie" : "Niepoprawnie";
+      const word = p.chosen == null ? t("feedback.noSelection") : p.isCorrect ? t("feedback.correct") : t("feedback.incorrect");
       const iconName = p.chosen == null ? "circle" : p.isCorrect ? "check" : "cross";
       g.fbNode.replaceChildren(el("div", { class: cls, attrs: { role: "status" } }, [
         el("p", { class: "feedback__head" }, [el("span", { attrs: { "aria-hidden": "true" } }, [icon(iconName)]), word]),
-        el("p", { text: p.chosen != null && !p.isCorrect ? `Poprawna kategoria: ${labelOf(p.correct)}. ${p.rationale || ""}` : (p.rationale || `Poprawna kategoria: ${labelOf(p.correct)}.`) }),
+        el("p", { text: p.chosen != null && !p.isCorrect
+          ? t("interaction.classify.correctCategoryWithRationale", { category: labelOf(p.correct), rationale: p.rationale || "" })
+          : (p.rationale || t("interaction.classify.correctCategory", { category: labelOf(p.correct) })) }),
       ]));
     }
   };

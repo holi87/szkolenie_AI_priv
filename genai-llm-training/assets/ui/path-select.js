@@ -1,6 +1,7 @@
 // path-select.js — ekran startowy: hero (pierwsze wrażenie) + wybór ścieżki S1/S2/S3 (issue #15, redesign UX-2 #71).
 // Pokazuje zakres ścieżki (wymagane/opcjonalne moduły, czas, próg) i zapisuje wybór (callback onSelect).
 import { el } from "./dom.js";
+import { t } from "../i18n/i18n.js";
 import { PATH_IDS, getPath } from "../core/paths.js";
 
 // Źródło rekomendacji: stała (paths.json jest "frozen" + schema additionalProperties:false, więc nie
@@ -16,28 +17,30 @@ function pathCard(pathsData, modulesData, pathId, onSelect) {
 
   return el("article", { class: `path-card${recommended ? " path-card--recommended" : ""}` }, [
     // Pasek + plakietka rekomendacji (gradient = sygnał wizualny, słowo = nośnik treści, WCAG 1.4.1).
-    recommended ? el("p", { class: "path-card__badge", text: "Rekomendowana" }) : null,
-    el("h3", { class: "path-card__name", text: `${pathId} — ${p.name}` }),
-    el("p", { class: "path-card__meta", text: `Czas: ${p.assumedPathTime || "—"} · Test: ${p.finalTestQuestions} pytań · Próg: ${p.passThresholdPct}%` }),
-    el("p", { class: "path-card__meta", text: `Moduły wymagane: ${(p.requiredModules || []).length}/12 · opcjonalne: ${optionalCount}` }),
+    recommended ? el("p", { class: "path-card__badge", text: t("path.badge.recommended") }) : null,
+    el("h3", { class: "path-card__name", text: t("path.card.name", { pathId, pathName: p.name }) }),
+    el("p", { class: "path-card__meta", text: t("path.card.meta.timeTestThreshold", { time: p.assumedPathTime || "—", questions: p.finalTestQuestions, threshold: p.passThresholdPct }) }),
+    el("p", { class: "path-card__meta", text: t("path.card.meta.modules", { required: (p.requiredModules || []).length, optional: optionalCount }) }),
     el("details", { class: "path-card__details" }, [
-      el("summary", { text: "Pokaż moduły wymagane" }),
+      el("summary", { text: t("path.card.showRequired") }),
       el("ul", { class: "path-card__list" }, requiredNames.map((n) => el("li", { text: n }))),
     ]),
-    p.practicalTasks ? el("p", { class: "path-card__meta", text: `Zadania praktyczne: ${p.practicalTasks}` }) : null,
-    el("button", { class: "btn path-card__cta", type: "button", text: `Wybierz ${pathId}`, on: { click: () => onSelect(pathId) } }),
+    p.practicalTasks ? el("p", { class: "path-card__meta", text: t("path.card.meta.practicalTasks", { tasks: p.practicalTasks }) }) : null,
+    el("button", { class: "btn path-card__cta", type: "button", text: t("path.card.cta", { pathId }), on: { click: () => onSelect(pathId) } }),
   ]);
 }
 
-/** Sekcja hero — pierwsze wrażenie. Tytuł z gradientowym akcentem na słowie kluczowym (fallback solid color w CSS). */
+/** Sekcja hero — pierwsze wrażenie. Tytuł z gradientowym akcentem na słowie kluczowym (fallback solid color w CSS).
+    Szablon z placeholderem {accent} rozbity tak, by akcent został w <span> (styl), a kolejność słów była tłumaczalna. */
 function hero() {
+  const [before, after = ""] = t("path.hero.title.template").split("{accent}");
   return el("section", { class: "hero" }, [
     el("h1", { class: "hero__title" }, [
-      "Opanuj ",
-      el("span", { class: "hero__accent", text: "GenAI i LLM" }),
-      " w pracy QA",
+      before || null,
+      el("span", { class: "hero__accent", text: t("path.hero.title.accent") }),
+      after || null,
     ]),
-    el("p", { class: "hero__lead", text: "Interaktywne, samodzielne szkolenie: ścieżka dopasowana do Twojej roli, quizy z natychmiastowym feedbackiem i certyfikat na koniec. Wszystko w przeglądarce — bez kont, bez wysyłki danych." }),
+    el("p", { class: "hero__lead", text: t("path.hero.lead") }),
   ]);
 }
 
@@ -48,28 +51,26 @@ export function renderPathSelect(pathsData, modulesData, opts = {}) {
   const root = el("div", { class: "view__content" });
   root.appendChild(hero());
 
-  root.appendChild(el("h2", { class: "path-select__heading", text: "Wybierz swoją ścieżkę" }));
-  root.appendChild(el("p", {
-    text: "Ścieżka określa, które moduły są obowiązkowe, ile pytań ma test końcowy i jaki jest próg zaliczenia. Możesz ją później zmienić — postęp każdej ścieżki zapisuje się osobno.",
-  }));
+  root.appendChild(el("h2", { class: "path-select__heading", text: t("path.select.heading") }));
+  root.appendChild(el("p", { text: t("path.select.intro") }));
 
   if (opts.currentPath) {
-    root.appendChild(el("p", { class: "path-badge", text: `Aktualna ścieżka: ${opts.currentPath}` }));
+    root.appendChild(el("p", { class: "path-badge", text: t("path.select.currentPath", { pathId: opts.currentPath }) }));
   }
 
   // Opcjonalny PSEUDONIM na certyfikat (#63 model C): trzymany tylko w pamięci sesji — NIE zapisywany.
   // Label celowo mówi „pseudonim", nie „imię" — minimalizacja danych (RODO art. 5(1)(c)), bez prawdziwego nazwiska.
   const nameInput = el("input", { type: "text", id: "participant-name", value: opts.participantName || "",
-    attrs: { maxlength: "60", autocomplete: "off", placeholder: "np. Tester01 — nie podawaj prawdziwego nazwiska" } });
+    attrs: { maxlength: "60", autocomplete: "off", placeholder: t("path.name.placeholder") } });
   if (typeof opts.onName === "function") nameInput.addEventListener("change", () => opts.onName(nameInput.value.trim()));
   root.appendChild(el("div", { class: "match-row" }, [
-    el("label", { attrs: { for: "participant-name" }, text: "Pseudonim na certyfikacie (opcjonalnie):" }),
+    el("label", { attrs: { for: "participant-name" }, text: t("path.name.label") }),
     nameInput,
   ]));
   // Nota informacyjna (nie zgoda): pseudonim sesyjny + lokalny zapis postępu. Bez cookies, nic nie wysyłamy.
   root.appendChild(el("p", { class: "muted privacy-note" }, [
-    el("span", { text: "Pseudonim widać tylko na certyfikacie w tej sesji — nie zapisujemy go. Postęp i wyniki zapisują się lokalnie w Twojej przeglądarce; nic nie wysyłamy na serwer i nie używamy cookies. " }),
-    el("a", { href: "prywatnosc.html", text: "Szczegóły: Prywatność" }),
+    el("span", { text: t("path.privacy.note") }),
+    el("a", { href: "prywatnosc.html", text: t("path.privacy.link") }),
   ]));
 
   root.appendChild(el("div", { class: "path-cards" }, PATH_IDS.map((id) => pathCard(pathsData, modulesData, id, opts.onSelect))));

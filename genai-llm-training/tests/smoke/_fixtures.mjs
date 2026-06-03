@@ -4,10 +4,18 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { mergeQuestionBank, mergeModuleContent } from "../../assets/core/data-loader.js";
+import { registerCatalog, setLocale } from "../../assets/i18n/i18n.js";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const DATA = join(HERE, "..", "..", "data");
 const read = (p) => JSON.parse(readFileSync(join(DATA, p), "utf8"));
+
+// i18n (#77): rejestruj realne katalogi i ustaw PL, żeby render-testy widziały te same teksty co aplikacja.
+// Side-effect importu — wykonuje się raz, przed ciałami testów importujących _fixtures (kolejność ESM).
+const I18N = join(HERE, "..", "..", "assets", "i18n");
+registerCatalog("pl", JSON.parse(readFileSync(join(I18N, "pl.json"), "utf8")));
+registerCatalog("en", JSON.parse(readFileSync(join(I18N, "en.json"), "utf8")));
+setLocale("pl");
 
 export const pathsData = read("paths.json");
 export const modulesData = read("modules.json");

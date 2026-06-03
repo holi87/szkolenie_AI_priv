@@ -110,16 +110,13 @@ export function isFinalTestUnlocked(progress, pathsData, pathId) {
 
 /**
  * Status sekcji testu końcowego dla nawigacji: locked | available.
- * lockedReason wymienia brakujące moduły wymagane i/lub niewykonane zadania praktyczne (design-baseline §3).
+ * Zwraca DANE STRUKTURALNE (blockers = brakujące moduły wymagane, missingPractical = niewykonane
+ * zadania praktyczne; design-baseline §3) — same ID, locale-neutral. i18n (ADR-0004): core zostaje
+ * zero-i18n, czytelny powód blokady składa UI (shell.js) z tych pól przez t('test.lockedReason.*').
  */
 export function finalTestStatus(progress, pathsData, pathId) {
   const blockers = pathCompletionBlockers(progress, pathsData, pathId);
   const missingPractical = missingPracticalRubrics(progress, pathsData, pathId);
-  if (blockers.length === 0 && missingPractical.length === 0) {
-    return { status: "available", lockedReason: null, blockers: [], missingPractical: [] };
-  }
-  const reasons = [];
-  if (blockers.length) reasons.push(`ukończ moduły wymagane: ${blockers.join(", ")}`);
-  if (missingPractical.length) reasons.push(`zalicz zadania praktyczne (wymagany próg): ${missingPractical.join(", ")}`);
-  return { status: "locked", lockedReason: reasons.join("; "), blockers, missingPractical };
+  const status = blockers.length === 0 && missingPractical.length === 0 ? "available" : "locked";
+  return { status, blockers, missingPractical };
 }
