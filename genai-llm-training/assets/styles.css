@@ -1,32 +1,11 @@
-/* styles.css — wygląd szkolenia (issue #14). Tokeny neutralne i PODMIENNE (design-baseline §7, P14):
-   branding QualityCat zmienia się przez edycję :root, bez zmian struktury/logiki.
-   Dostępność: statusy nie samym kolorem (ikona+tekst), kontrast >=4.5:1 tekst / >=3:1 UI, widoczny focus,
-   reflow bez poziomego scrolla do 320 px (WCAG 1.4.10). */
+/* styles.css — reguły komponentowe szkolenia (issue #14; design system M9 #68).
+   Tokeny (kolory/typografia/spacing/elevation/motion) mieszkają w tokens.css i są PODMIENNE
+   (design-baseline §7, P14): rebranding QualityCat = edycja tokens.css, bez zmian tych reguł ani logiki.
+   Dostępność: statusy nie samym kolorem (ikona+tekst), kontrast >=4.5:1 tekst / >=3:1 UI (QA-1, oba motywy),
+   widoczny focus, reflow bez poziomego scrolla do 320 px (WCAG 1.4.10). */
 
-:root {
-  /* Kolory (neutralna paleta MVP) */
-  --color-bg: #0f1117;
-  --color-surface: #171a22;
-  --color-surface-2: #1f2330;
-  --color-fg: #e8eaf0;
-  --color-muted: #a6adbb;
-  --color-border: #2e3340;
-  --color-accent: #6ea8fe;
-  --color-accent-fg: #07101f;
-  --color-ok: #4ade80;
-  --color-warn: #fbbf24;
-  --color-bad: #f87171;
-  --color-locked: #6b7280;
-  /* Typografia */
-  --font-base: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --fs-base: 1rem;
-  --lh: 1.6;
-  /* Wymiary */
-  --maxw-content: 70ch;
-  --radius: 10px;
-  --gap: 1rem;
-  --focus: 3px solid var(--color-accent);
-}
+/* @import musi być PIERWSZĄ regułą (spec CSS). Ścieżka WZGLĘDNA — GitHub Pages, ADR-0002, brak CDN. */
+@import "tokens.css";
 
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
@@ -235,6 +214,11 @@ select { max-width: 100%; } /* długie opcje (np. dopasowanie) nie rozpychają l
   overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
 }
 
+/* Utwardzenie pod keyframe z UX-4/UX-5: gasimy ZARÓWNO transition JAK I animation (oraz smooth-scroll). */
 @media (prefers-reduced-motion: reduce) {
-  * { transition: none !important; }
+  *, *::before, *::after {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
 }
