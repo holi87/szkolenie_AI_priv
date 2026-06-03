@@ -233,7 +233,9 @@ function start(data) {
     // ----- Quiz inline (zachowane wiring scoringu — setInlineQuizScore zasila 30% wyniku ścieżki) -----
     root.appendChild(el("h2", { text: `Quiz inline (${pool.length} pytań)` }));
     pool.forEach((q) => {
-      const block = el("div", { class: "quiz-question" });
+      // Wrapper grupujący pytanie+przycisk+feedback. Karta wizualna to fieldset.quiz-question (UX-4 #73);
+      // osobna klasa, by nie dublować ramki/karty wokół fieldsetu.
+      const block = el("div", { class: "quiz-item" });
       const rq = renderQuestion(q, { showMeta: true });
       const fb = el("div");
       const check = el("button", { class: "btn", type: "button", text: "Sprawdź odpowiedź" });

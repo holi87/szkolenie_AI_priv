@@ -190,13 +190,32 @@ a { color: var(--color-accent); }
 /* Quiz */
 fieldset { min-width: 0; } /* fieldset ma domyślnie min-width:min-content — blokuje reflow 320 px */
 legend { max-width: 100%; } /* legend nie zawija się domyślnie — długi prompt rozpychał stronę (reflow 320 px) */
-.quiz-question { margin: 1.2rem 0; border: 1px solid var(--color-border); border-radius: 8px; padding: 0.8rem 1rem; }
-.quiz-question__prompt { font-weight: 600; margin-bottom: 0.7rem; }
-.quiz-meta { font-size: 0.78rem; color: var(--color-muted); }
+/* Wrapper inline-quiz (app.js): tylko grupuje pytanie + przycisk + feedback; karta to fieldset poniżej. */
+.quiz-item { margin: var(--sp-5) 0; }
+.quiz-item .quiz-question { margin: 0; }
+.quiz-question {
+  margin: var(--sp-5) 0; border: 1px solid var(--color-border); border-radius: var(--radius);
+  padding: var(--sp-4); background: var(--color-surface); box-shadow: var(--shadow-sm);
+}
+.quiz-question__prompt { font-weight: var(--fw-medium); font-size: var(--fs-600); margin-bottom: var(--sp-3); }
+.quiz-meta { font-size: var(--fs-300); color: var(--color-muted); }
+/* Chipy meta pytania (typ/trudność/punkty) */
+.quiz-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.2rem 0 var(--sp-3); }
+.quiz-chip {
+  font-size: var(--fs-300); padding: 0.1rem 0.55rem; border: 1px solid var(--color-border);
+  border-radius: 999px; color: var(--color-muted); background: var(--color-surface-2);
+}
+.quiz-chip--difficulty { text-transform: uppercase; letter-spacing: 0.03em; }
 .options { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
-.option { display: flex; align-items: flex-start; gap: 0.6rem; padding: 0.55rem 0.7rem; border: 1px solid var(--color-border); border-radius: 8px; background: var(--color-surface-2); min-width: 0; }
+.option {
+  display: flex; align-items: flex-start; gap: 0.6rem; padding: 0.55rem 0.7rem;
+  border: 1px solid var(--color-border); border-radius: 8px; background: var(--color-surface-2); min-width: 0;
+  transition: border-color var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease);
+}
 .option label { min-width: 0; } /* etykieta zawija się; element flex/grid kurczy się poniżej treści (reflow 320 px) */
-.option:focus-within { border-color: var(--color-accent); }
+.option:hover { border-color: var(--color-accent); }
+.option:focus-within { border-color: var(--color-accent); box-shadow: var(--ring-accent); } /* fallback dla :has */
+.option:has(input:checked) { border-color: var(--color-accent); box-shadow: inset 0 0 0 1px var(--color-accent); }
 .option input { margin-top: 0.25rem; }
 .match-row { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; margin: 0.4rem 0; }
 .match-row label { flex: 1 1 12ch; min-width: 0; }
@@ -205,12 +224,22 @@ select { max-width: 100%; } /* długie opcje (np. dopasowanie) nie rozpychają l
 .seq-row { display: flex; align-items: center; gap: 0.5rem; margin: 0.35rem 0; }
 .seq-row__pos { width: 2rem; color: var(--color-muted); }
 
-/* Feedback (nie samym kolorem: ikona + słowo) */
-.feedback { margin-top: 0.8rem; padding: 0.7rem 0.9rem; border-radius: 8px; border: 1px solid var(--color-border); }
+/* Feedback (nie samym kolorem: ikona + słowo + pasek stanu; WCAG 1.4.1).
+   Lewy pasek 4px w kolorze stanu; wejście transform/opacity (keyframe), gaszone reduced-motion. */
+.feedback {
+  margin-top: var(--sp-3); padding: 0.7rem 0.9rem; border-radius: 8px;
+  border: 1px solid var(--color-border); border-left-width: 4px;
+  animation: feedback-in var(--dur-base) var(--ease);
+}
 .feedback--correct { border-color: var(--color-ok); background: rgba(74, 222, 128, 0.08); }
 .feedback--incorrect { border-color: var(--color-bad); background: rgba(248, 113, 113, 0.08); }
 .feedback--critical { border-color: var(--color-warn); background: rgba(251, 191, 36, 0.12); }
-.feedback__head { font-weight: 700; display: flex; gap: 0.4rem; align-items: center; }
+.feedback__head { font-weight: var(--fw-bold); display: flex; gap: 0.4rem; align-items: center; }
+.feedback__head svg { width: 1.1em; height: 1.1em; flex: none; }
+@keyframes feedback-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
 /* Locked notice */
 .locked-note { display: flex; gap: 0.5rem; align-items: baseline; color: var(--color-muted); border: 1px dashed var(--color-border); border-radius: 8px; padding: 0.7rem 0.9rem; }

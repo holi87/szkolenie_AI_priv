@@ -140,7 +140,12 @@ export function renderQuestion(question, opts = {}) {
     header.push(el("p", { class: "quiz-meta", text: `Pytanie ${opts.index + 1} z ${opts.total}` }));
   }
   if (opts.showMeta) {
-    header.push(el("p", { class: "quiz-meta", text: `${TYPE_LABEL[question.type] || question.type} · ${question.difficulty} · ${question.points} pkt` }));
+    // Meta jako wizualne chipy (typ / trudność / punkty) — ta sama treść co dawne 'typ · trudność · pkt'.
+    header.push(el("p", { class: "quiz-chips" }, [
+      el("span", { class: "quiz-chip", text: TYPE_LABEL[question.type] || question.type }),
+      el("span", { class: "quiz-chip quiz-chip--difficulty", text: String(question.difficulty) }),
+      el("span", { class: "quiz-chip", text: `${question.points} pkt` }),
+    ]));
   }
 
   const fieldset = el("fieldset", { class: "quiz-question" }, [
