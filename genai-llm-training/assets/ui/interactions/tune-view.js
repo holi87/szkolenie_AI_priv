@@ -2,6 +2,7 @@
 // (klawiatura: strzałki; design-baseline §6). Panel outputu aktualizuje się na żywo z AUTORSKICH efektów
 // poziomów (aria-live — czytnik ekranu ogłasza zmianę). Checkpoint (radio/checkbox) jest scorowany.
 import { el } from "../dom.js";
+import { icon } from "../icon.js";
 
 export function renderTune(config) {
   const controls = config.controls || [];
@@ -70,7 +71,7 @@ export function renderTune(config) {
   const showFeedback = (result) => {
     const ok = result.checkpointCorrect;
     cpFb.replaceChildren(el("div", { class: `feedback ${ok ? "feedback--correct" : "feedback--incorrect"}`, attrs: { role: "status" } }, [
-      el("p", { class: "feedback__head" }, [el("span", { attrs: { "aria-hidden": "true" }, text: ok ? "✓ " : "✗ " }), ok ? "Poprawnie" : "Niepoprawnie"]),
+      el("p", { class: "feedback__head" }, [el("span", { attrs: { "aria-hidden": "true" } }, [icon(ok ? "check" : "cross")]), ok ? "Poprawnie" : "Niepoprawnie"]),
       el("p", { text: ok ? (cp.feedbackCorrect || "") : (cp.feedbackIncorrect || "") }),
     ]));
   };

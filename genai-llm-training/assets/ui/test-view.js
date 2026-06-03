@@ -2,6 +2,7 @@
 // Tryb testu (design-baseline §2.2): BRAK feedbacku i podpowiedzi do zakończenia podejścia.
 // Renderuje wszystkie wylosowane pytania, zbiera odpowiedzi, oddaje je do scoringu (callback onSubmit).
 import { el } from "./dom.js";
+import { icon } from "./icon.js";
 import { renderQuestion } from "./quiz-view.js";
 
 /**
@@ -17,13 +18,13 @@ export function renderTest(selection, opts = {}) {
   form.appendChild(el("h1", { text: `Test końcowy — ${opts.pathName || selection.pathId}` }));
   form.appendChild(el("p", { class: "muted", text: `${selection.count} pytań · próg zaliczenia ${opts.passThresholdPct ?? "?"}% · wszystkie pytania krytyczne muszą być poprawne.` }));
   form.appendChild(el("p", { class: "locked-note", attrs: { role: "note" } }, [
-    el("span", { attrs: { "aria-hidden": "true" }, text: "ℹ️ " }),
+    el("span", { class: "locked-note__icon", attrs: { "aria-hidden": "true" } }, [icon("info")]),
     "Tryb testu: feedback i wynik pojawią się dopiero po zakończeniu podejścia.",
   ]));
   if (opts.attemptInfo) form.appendChild(el("p", { class: "quiz-meta", text: opts.attemptInfo }));
   if (opts.practicalNote) {
     form.appendChild(el("p", { class: "locked-note", attrs: { role: "note" } }, [
-      el("span", { attrs: { "aria-hidden": "true" }, text: "⚠️ " }), opts.practicalNote,
+      el("span", { class: "locked-note__icon", attrs: { "aria-hidden": "true" } }, [icon("warn")]), opts.practicalNote,
     ]));
   }
 

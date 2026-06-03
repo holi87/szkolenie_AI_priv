@@ -10,8 +10,10 @@ import { scoreQuestion } from "./core/quiz-engine.js";
 import { buildCertificate } from "./core/certificate.js";
 import { evaluateInteraction } from "./core/interactions/index.js";
 import { el, mount } from "./ui/dom.js";
+import { icon } from "./ui/icon.js";
 import { renderPathSelect } from "./ui/path-select.js";
 import { updateHeader, renderNav } from "./ui/shell.js";
+import { initTheme, toggleTheme } from "./ui/theme.js";
 import { renderQuestion, renderFeedback } from "./ui/quiz-view.js";
 import { renderTest } from "./ui/test-view.js";
 import { renderResult } from "./ui/certificate-view.js";
@@ -54,7 +56,16 @@ function start(data) {
     view: $("view"), nav: $("module-nav"), navToggle: $("nav-toggle"), resetBtn: $("reset-btn"),
     pathIndicator: $("path-indicator"), progress: $("progress"), progressFill: $("progress-fill"),
     progressTrack: document.querySelector(".progress__track"), progressLabel: $("progress-label"),
+    themeToggle: $("theme-toggle"),
   };
+
+  // Motyw jasny/ciemny (UX-3): anty-flash skrypt w <head> ustawił już [data-theme]; tu synchronizujemy
+  // stan przycisku (aria-pressed) i wpinamy toggle. Storage ma priorytet nad prefers-color-scheme (theme.js).
+  if (refs.themeToggle) {
+    const syncToggle = (theme) => refs.themeToggle.setAttribute("aria-pressed", String(theme === "light"));
+    syncToggle(initTheme());
+    refs.themeToggle.addEventListener("click", () => syncToggle(toggleTheme()));
+  }
   const state = { screen: "menu", moduleId: null, test: null };
   // Imię na certyfikat może być wpisane PRZED wyborem ścieżki (gdy brak aktywnej ścieżki nie ma gdzie zapisać).
   let pendingName = (store.getParticipant() && store.getParticipant().displayName) || ""; // pseudonim tylko z pamięci sesji (#63)
@@ -143,7 +154,7 @@ function start(data) {
     mount(refs.view, el("div", { class: "view__content" }, [
       el("h1", { text: `Ścieżka ${pathId} — ${pathName(data, pathId)}` }),
       el("p", { text: "Wybierz moduł z listy po lewej. Po module rozwiąż quiz inline z natychmiastowym feedbackiem. Test końcowy odblokuje się po ukończeniu modułów wymaganych." }),
-      el("div", { class: "next-step", attrs: { role: "status" } }, [el("span", { attrs: { "aria-hidden": "true" }, text: "🧭 " }), nextStep]),
+      el("div", { class: "next-step", attrs: { role: "status" } }, [el("span", { class: "next-step__icon", attrs: { "aria-hidden": "true" } }, [icon("info")]), nextStep]),
       passed ? el("div", { class: "btn-row" }, [el("button", { class: "btn", type: "button", text: "Zobacz wynik / certyfikat", on: { click: showFinalTest } })]) : null,
     ]));
   }
@@ -223,7 +234,9 @@ function start(data) {
     // ----- Quiz inline (zachowane wiring scoringu — setInlineQuizScore zasila 30% wyniku ścieżki) -----
     root.appendChild(el("h2", { text: `Quiz inline (${pool.length} pytań)` }));
     pool.forEach((q) => {
-      const block = el("div", { class: "quiz-question" });
+      // Wrapper grupujący pytanie+przycisk+feedback. Karta wizualna to fieldset.quiz-question (UX-4 #73);
+      // osobna klasa, by nie dublować ramki/karty wokół fieldsetu.
+      const block = el("div", { class: "quiz-item" });
       const rq = renderQuestion(q, { showMeta: true });
       const fb = el("div");
       const check = el("button", { class: "btn", type: "button", text: "Sprawdź odpowiedź" });

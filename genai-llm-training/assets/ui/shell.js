@@ -2,12 +2,14 @@
 // Statusy modułów ZAWSZE ikona + tekst (WCAG 1.4.1, design-baseline §3), nie sam kolor.
 // Element zablokowany jest realnie nieaktywny (disabled) + ma powód blokady.
 import { el, mount } from "./dom.js";
+import { icon } from "./icon.js";
 
+// icon = NAZWA ikony SVG (icon.js), nie glif. Informacja zawsze w `text` — ikona dekoracyjna (WCAG 1.4.1).
 const STATUS_META = {
-  completed: { icon: "✓", text: "Ukończony" },
-  in_progress: { icon: "●", text: "W toku" },
-  available: { icon: "○", text: "Dostępny" },
-  locked: { icon: "🔒", text: "Zablokowany" },
+  completed: { icon: "check", text: "Ukończony" },
+  in_progress: { icon: "dot", text: "W toku" },
+  available: { icon: "circle", text: "Dostępny" },
+  locked: { icon: "lock", text: "Zablokowany" },
 };
 
 /** Aktualizuje header: ścieżka + pasek postępu (z ARIA). */
@@ -34,7 +36,7 @@ function moduleButton(mod, { activeModuleId, onSelectModule }) {
     attrs: { "aria-current": isActive ? "page" : null },
     on: { click: () => onSelectModule(mod.id) },
   }, [
-    el("span", { class: "nav-item__icon", attrs: { "aria-hidden": "true" }, text: meta.icon }),
+    el("span", { class: "nav-item__icon", attrs: { "aria-hidden": "true" } }, [icon(meta.icon)]),
     el("span", { class: "nav-item__label" }, [
       el("span", { text: `${mod.id} ${mod.name}` }),
       el("span", { class: "nav-item__variant", text: mod.required ? " · wymagany" : " · opcjonalny" }),
@@ -50,7 +52,7 @@ function finalTestItem(finalTest, onSelectFinalTest) {
       class: "nav-item__btn status--locked", type: "button", disabled: true,
       attrs: { "aria-disabled": "true", title: finalTest.lockedReason },
     }, [
-      el("span", { class: "nav-item__icon", attrs: { "aria-hidden": "true" }, text: "🔒" }),
+      el("span", { class: "nav-item__icon", attrs: { "aria-hidden": "true" } }, [icon("lock")]),
       el("span", { class: "nav-item__label", text: "Test końcowy" }),
       el("span", { class: "nav-item__status", text: "Zablokowany" }),
     ]);
@@ -62,7 +64,7 @@ function finalTestItem(finalTest, onSelectFinalTest) {
       attrs: { "aria-current": finalTest.active ? "page" : null },
       on: { click: onSelectFinalTest },
     }, [
-      el("span", { class: "nav-item__icon", attrs: { "aria-hidden": "true" }, text: "▶" }),
+      el("span", { class: "nav-item__icon", attrs: { "aria-hidden": "true" } }, [icon("play")]),
       el("span", { class: "nav-item__label", text: "Test końcowy" }),
       el("span", { class: "nav-item__status", text: "Dostępny" }),
     ]),

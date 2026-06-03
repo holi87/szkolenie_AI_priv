@@ -1,7 +1,8 @@
 // rubric-view.js — render interakcji "rubryka" (M6/M7/M8/M12). Każde kryterium to fieldset z legendą
 // (pytanie) i polami wyboru (checkbox — kryterium może mieć wiele poprawnych opcji). W pełni klawiaturowe
-// (design-baseline §6). Feedback per kryterium (✓/✗ + podpowiedź) + wynik zbiorczy z progiem (zadanie praktyczne).
+// (design-baseline §6). Feedback per kryterium (ikona SVG + słowo + podpowiedź) + wynik zbiorczy z progiem (zadanie praktyczne).
 import { el } from "../dom.js";
+import { icon } from "../icon.js";
 
 export function renderRubric(config) {
   const criteria = config.criteria || [];
@@ -46,7 +47,7 @@ export function renderRubric(config) {
       if (!p) continue;
       const cls = p.satisfied ? "feedback feedback--correct" : "feedback feedback--incorrect";
       g.fbNode.replaceChildren(el("div", { class: cls, attrs: { role: "status" } }, [
-        el("p", { class: "feedback__head" }, [el("span", { attrs: { "aria-hidden": "true" }, text: p.satisfied ? "✓ " : "✗ " }), p.satisfied ? "Spełnione" : "Niespełnione"]),
+        el("p", { class: "feedback__head" }, [el("span", { attrs: { "aria-hidden": "true" } }, [icon(p.satisfied ? "check" : "cross")]), p.satisfied ? "Spełnione" : "Niespełnione"]),
         p.satisfied ? null : el("p", { text: p.hint || "Dobierz właściwe elementy tego kryterium." }),
       ]));
     }

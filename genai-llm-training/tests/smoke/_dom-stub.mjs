@@ -109,6 +109,9 @@ class El {
 export function makeDocument() {
   const doc = {
     createElement: (tag) => new El(tag),
+    // createElementNS: rendery SVG (medal certyfikatu #74, ikony #75) muszą używać NS w przeglądarce.
+    // Stub ignoruje namespace — zwraca El o tym samym tagu (tagName w UPPERCASE jak createElement).
+    createElementNS: (_ns, tag) => new El(tag),
     createTextNode: (t) => new TextNode(t),
     getElementById: () => new El("div"),
     querySelector: () => new El("div"),

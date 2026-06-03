@@ -1,0 +1,94 @@
+/* tokens.css — fundament design systemu (issue #68, M9). Jedyne źródło prawdy dla designu.
+   ADR-0002: czysty CSS, zero buildu/zależności, ścieżki względne (GitHub Pages).
+   PODMIENNOŚĆ (design-baseline §7, P14): rebranding QualityCat = edycja tych zmiennych,
+   bez dotykania reguł komponentowych (te zostają w styles.css) ani logiki.
+   Kontrast: pary tekst/tło >=4.5:1, UI/tło >=3:1 weryfikowane automatycznie (QA-1, tests/smoke/contrast.test.mjs)
+   dla OBU motywów. Gradient (--grad-accent) i półprzezroczyste tła = weryfikacja ręczna. */
+
+:root {
+  /* ----- Kolory: motyw ciemny (domyślny) ----- */
+  --color-bg: #0f1117;
+  --color-surface: #171a22;
+  --color-surface-2: #1f2330;
+  --color-fg: #e8eaf0;
+  --color-muted: #a6adbb;
+  --color-border: #67718a;     /* jaśniejszy niż MVP (#2e3340 dawał ~1.5:1) — granice UI >=3:1 na tle/surface (WCAG 1.4.11) */
+  --color-accent: #6ea8fe;     /* pełni rolę linku-na-tle ORAZ wypełnienia (accent-fg to tekst na wypełnieniu) */
+  --color-accent-fg: #07101f;
+  --color-accent-2: #a78bfa;   /* drugi akcent — tylko do gradientu/dekoracji (nie jako tekst) */
+  --color-ok: #4ade80;
+  --color-warn: #fbbf24;
+  --color-bad: #f87171;
+  --color-locked: #6b7280;
+  --grad-accent: linear-gradient(135deg, var(--color-accent), var(--color-accent-2));
+
+  /* ----- Typografia ----- */
+  --font-base: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --fs-300: 0.8rem;
+  --fs-400: 0.9rem;
+  --fs-500: 1rem;
+  --fs-600: 1.2rem;
+  --fs-700: 1.6rem;
+  --fs-800: 2.2rem;
+  --fw-normal: 400;
+  --fw-medium: 600;
+  --fw-bold: 700;
+  --lh-tight: 1.25;
+  /* Aliasy zgodności (reguły MVP nadal ich używają — NIE usuwać) */
+  --fs-base: var(--fs-500);
+  --lh: 1.6;
+
+  /* ----- Spacing ----- */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.5rem;
+  --sp-6: 2rem;
+  --sp-7: 3rem;
+  --sp-8: 4rem;
+
+  /* ----- Elevation ----- */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.30);
+  --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.38);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.50);
+  --ring-accent: 0 0 0 3px rgba(110, 168, 254, 0.38);
+
+  /* ----- Motion (utwardzane przez prefers-reduced-motion w styles.css) ----- */
+  --dur-fast: 120ms;
+  --dur-base: 240ms;
+  --dur-slow: 480ms;
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ----- Wymiary (zgodność z MVP — NIE zmieniać nazw) ----- */
+  --maxw-content: 70ch;
+  --radius: 10px;
+  --gap: var(--sp-4);
+  --focus: 3px solid var(--color-accent);
+}
+
+/* ----- Kolory: motyw jasny (toggle = UX-3 #72; tu tylko tokeny). ----- */
+/* Pełny override neutrali + akcentu/akcent-fg (akcent jako tekst-na-tle musi pociemnieć na jasnym tle). */
+:root[data-theme="light"] {
+  --color-bg: #f7f8fb;
+  --color-surface: #ffffff;
+  --color-surface-2: #eceff5;
+  --color-fg: #1a1d26;
+  --color-muted: #545b69;      /* >=4.5:1 na tle — tekst drugorzędny pozostaje czytelny */
+  --color-border: #7c8493;     /* mid-gray — hairline (#e5e7eb) dałby ~1.4:1; granice UI >=3:1 (WCAG 1.4.11) */
+  --color-accent: #1d4ed8;     /* ciemny niebieski: link-na-jasnym-tle >=4.5:1 ORAZ wypełnienie z białym tekstem */
+  --color-accent-fg: #ffffff;
+  --color-accent-2: #7c3aed;
+  --color-ok: #127334;        /* status "Ukończony" jako TEKST: >=4.5:1 też na surface-2 (aktywny/hover pill) */
+  --color-warn: #b45309;
+  --color-bad: #b91c1c;
+  --color-locked: #6b7280;
+  --grad-accent: linear-gradient(135deg, var(--color-accent), var(--color-accent-2));
+
+  /* Cienie lżejsze na jasnym tle (czarne na białym mniej agresywne) */
+  --shadow-sm: 0 1px 2px rgba(15, 17, 23, 0.10);
+  --shadow-md: 0 6px 18px rgba(15, 17, 23, 0.12);
+  --shadow-lg: 0 16px 40px rgba(15, 17, 23, 0.18);
+  --ring-accent: 0 0 0 3px rgba(29, 78, 216, 0.30);
+}

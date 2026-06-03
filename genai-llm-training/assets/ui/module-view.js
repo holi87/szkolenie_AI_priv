@@ -2,6 +2,7 @@
 // (AGENTS: treść oddzielnie od logiki). Ekrany i bloki filtrowane po ścieżce (wariant S1 skrócony: bloki/ekrany
 // z onlyForPaths). Tabele i diagramy MAJĄ wersję tekstową (WCAG 1.1.1, design-baseline §1).
 import { el } from "./dom.js";
+import { icon } from "./icon.js";
 
 /** Czy element treści jest widoczny na danej ścieżce (onlyForPaths/hideForPaths). */
 function visibleForPath(item, pathId) {
@@ -25,7 +26,7 @@ function renderBlock(b, pathId) {
       ]);
     case "callout":
       return el("div", { class: `callout callout--${b.variant || "info"}`, attrs: { role: "note" } }, [
-        b.title ? el("p", { class: "callout__title" }, [el("span", { attrs: { "aria-hidden": "true" }, text: calloutIcon(b.variant) }), b.title]) : null,
+        b.title ? el("p", { class: "callout__title" }, [el("span", { class: "callout__icon", attrs: { "aria-hidden": "true" } }, [icon(calloutIcon(b.variant))]), b.title]) : null,
         el("p", { text: b.text }),
       ]);
     case "table":
@@ -41,8 +42,9 @@ function renderBlock(b, pathId) {
   }
 }
 
+// Zwraca NAZWĘ ikony SVG (icon.js) dla wariantu calloutu — informacja nadal w tytule/treści (WCAG 1.4.1).
 function calloutIcon(variant) {
-  return variant === "warn" ? "⚠️ " : variant === "safe" ? "✓ " : "ℹ️ ";
+  return variant === "warn" ? "warn" : variant === "safe" ? "check" : "info";
 }
 
 function renderTable(b) {
@@ -76,7 +78,7 @@ export function renderSummary(summary) {
     ...((summary.points || []).length ? [el("ul", {}, summary.points.map((p) => el("li", { text: p })))] : []),
     (summary.checklist || []).length
       ? el("div", { class: "callout callout--safe", attrs: { role: "note" } }, [
-          el("p", { class: "callout__title", text: summary.checklistTitle || "Checklista — zanim użyjesz LLM" }),
+          el("p", { class: "callout__title" }, [el("span", { class: "callout__icon", attrs: { "aria-hidden": "true" } }, [icon("check")]), summary.checklistTitle || "Checklista — zanim użyjesz LLM"]),
           el("ul", {}, summary.checklist.map((c) => el("li", { text: c }))),
         ])
       : null,
