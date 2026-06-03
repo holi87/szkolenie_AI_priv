@@ -6,7 +6,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { calibrate, renderReport, DIFFICULTY_BANDS } from "../../tools/calibration/calibrate.mjs";
+import { calibrate, renderReport, validatePilot, DIFFICULTY_BANDS } from "../../tools/calibration/calibrate.mjs";
 import { bank, goldenSetData } from "./_fixtures.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -56,11 +56,41 @@ test("golden set: status 'wymaga poprawek' gdy są offenderzy (dryf trudności l
   assert.ok(offIds.includes("Q032"), "Q032 (golden, za łatwe) jest offenderem");
 });
 
-test("golden set: status 'validated' gdy brak offenderów (kontrola pozytywna)", () => {
-  // Zbiór sztuczny: jedno golden pytanie L1 idealnie w zakresie, bez niejasności.
-  const clean = { synthetic: true, pilot: { participants: 10 }, questions: [{ id: "Q001", attempts: 10, correct: 9, ambiguityReports: 0 }] };
-  const r = calibrate(clean, ctx);
+test("golden set: PEŁNE pokrycie 24/24 bez offenderów → validated (kontrola pozytywna)", () => {
+  // Pilotaż pokrywający WSZYSTKIE 24 golden id, każdy w środku swojego zakresu, 0 niejasności.
+  const mid = { L1: 0.875, L2: 0.675, L3: 0.5, L4: 0.325 };
+  const byId = new Map(bank.map((q) => [q.id, q]));
+  const questions = ctx.goldenIds.map((id) => {
+    const d = byId.get(id).difficulty;
+    return { id, attempts: 40, correct: Math.round(mid[d] * 40), ambiguityReports: 0 };
+  });
+  const r = calibrate({ synthetic: true, version: "t", pilot: { participants: 40 }, questions }, ctx);
+  assert.equal(r.goldenStatus.coveredCount, 24);
+  assert.deepEqual(r.goldenStatus.missingGolden, []);
   assert.equal(r.goldenStatus.validated, true);
+});
+
+test("golden set: pełne pokrycie WYMAGANE — podzbiór bez offenderów NIE jest validated (Codex #59)", () => {
+  const clean = { synthetic: true, version: "t", pilot: { participants: 10 }, questions: [{ id: "Q001", attempts: 10, correct: 9, ambiguityReports: 0 }] };
+  const r = calibrate(clean, ctx);
+  assert.equal(r.goldenStatus.validated, false, "1/24 pokrycia nie może być validated");
+  assert.equal(r.goldenStatus.missingGolden.length, 23);
+});
+
+test("krytyczne poza zakresem raportowane jako dryf (osobno), ale NIE reklasyfikowane (Codex #59)", () => {
+  const r = calibrate(pilot, ctx);
+  assert.ok(r.criticalDrift.map((q) => q.id).includes("Q083"), "Q083 (L1, 58,3% — za trudne) w dryfie krytycznych");
+  assert.ok(r.criticalDrift.every((q) => q.isCritical), "sekcja dryfu zawiera tylko krytyczne");
+  assert.ok(r.outOfBand.every((q) => !q.isCritical), "krytyczne nadal poza reklasyfikacją (outOfBand)");
+});
+
+test("validatePilot: odrzuca correct > attempts (>100%) i akceptuje poprawną próbkę (Codex #59)", () => {
+  assert.throws(
+    () => validatePilot({ version: "x", pilot: { participants: 5 }, questions: [{ id: "Q001", attempts: 5, correct: 9 }] }),
+    /correct 9 > attempts 5/,
+  );
+  assert.throws(() => validatePilot({ version: "x", pilot: { participants: 0 }, questions: [] }), /participants|niepustą/);
+  assert.equal(validatePilot(pilot), true, "syntetyczna próbka jest poprawna");
 });
 
 test("pytania spoza banku są raportowane jako unknown, nie wywalają narzędzia", () => {

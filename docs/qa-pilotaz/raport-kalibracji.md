@@ -29,8 +29,9 @@ Dla każdego pytania liczymy odsetek poprawnych odpowiedzi i porównujemy z zakr
 Zasady:
 - **Pytania krytyczne** są wyłączone z reklasyfikacji trudności (są 100%-bramkowane i konserwatywne — wysoki
   odsetek poprawnych jest zamierzony). Dla nich liczy się **niejasność**: >10% zgłoszeń → pytanie do przepisania.
-- **Golden set**: oznaczany `validated` tylko gdy wszystkie pokryte pytania golden są w zakresie i mają
-  niejasność ≤ 5%; w przeciwnym razie `wymaga poprawek` (dryf trudności lub niejasność).
+- **Golden set**: oznaczany `validated` tylko gdy **pełne pokrycie 24/24** w pilotażu, wszystkie golden w
+  zakresie i niejasność ≤ 5%; w przeciwnym razie `wymaga poprawek` (niepełne pokrycie, dryf trudności lub
+  niejasność). Niepełny pilotaż golden setu nie może raportować ✅ (kontrola dryfu wymaga kompletu — Codex #59).
 - Pytania spoza banku w pliku pilotażu są raportowane jako `unknown` i pomijane (narzędzie nie wywala się).
 
 ## Procedura po pilotażu
@@ -80,13 +81,26 @@ trzy typy problemów. **To nie są wyniki realnego pilotażu.**
 |---------|-------|--------------:|--------:|
 | Q083    | M10   |       16.7%   |  58.3%  |
 
+## Pytania krytyczne poza zakresem trudności (do przeglądu, nie reklasyfikacji)
+> Krytyczne są 100%-bramkowane — wysoki odsetek poprawnych jest zwykle zamierzony. Sekcja informacyjna.
+| Pytanie | Moduł | Poziom | % popr. | Zakres      | Kierunek  |
+|---------|-------|--------|--------:|-------------|-----------|
+| Q081    | M10   | L2     |  91.7%  | 55.0%–80.0% | za łatwe  |
+| Q082    | M10   | L2     | 100.0%  | 55.0%–80.0% | za łatwe  |
+| Q083    | M10   | L1     |  58.3%  | 80.0%–95.0% | za trudne |
+| Q084    | M10   | L1     | 100.0%  | 80.0%–95.0% | za łatwe  |
+| Q085    | M10   | L1     | 100.0%  | 80.0%–95.0% | za łatwe  |
+
 ## Status golden setu
-- Pokrycie w pilotażu: 7/24
+- Pokrycie w pilotażu: 7/24 (brakuje 17 pytań golden)
 - Status: wymaga poprawek
+  - niepełne pokrycie golden setu (7/24) — validated wymaga 24/24
   - Q009: niejasność 8.3% > 5%
   - Q032: dryf trudności (za łatwe, 91.7%)
 ```
 
-> Interpretacja demo: Q017 (L3) wyszło za trudne, Q032 (L3, golden) za łatwe (dryf golden setu), a krytyczne
-> Q083 ma 16,7% zgłoszeń niejasności → do przepisania. Na realnych danych analogiczny raport stanie się
+> Interpretacja demo: Q017 (L3) za trudne, Q032 (L3, golden) za łatwe (dryf golden setu); krytyczne Q083 ma
+> 16,7% niejasności → do przepisania, a wszystkie krytyczne są wypisane w sekcji dryfu do potwierdzenia, że ich
+> trudność jest celowa (nie reklasyfikujemy ich automatycznie). Golden set NIE jest `validated` — wymaga pełnego
+> pokrycia 24/24 (tu pilotaż objął tylko 7) oraz braku offenderów. Na realnych danych analogiczny raport będzie
 > podstawą zamknięcia #28.
