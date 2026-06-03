@@ -1,0 +1,104 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "progress.schema.json",
+  "title": "Model progresu uczestnika",
+  "description": "Kontrakt progresu zapisywanego lokalnie (localStorage, MVP) i transferowalnego do zewnętrznego backendu po pilotażu (issue #2/ADR-0001). Definiuje kształt, nie implementację — progress-store (#16) i certyfikat (#19) konsumują ten kształt; backend wyników może przyjąć ten sam payload.",
+  "type": "object",
+  "required": ["version", "path", "modules", "updatedAt"],
+  "properties": {
+    "version": { "type": "string", "description": "Wersja schematu progresu (semver)" },
+    "participant": {
+      "type": "object",
+      "description": "Opcjonalne; anonimowość vs logowanie zależy od decyzji P3 (otwarte).",
+      "properties": {
+        "displayName": { "type": "string" },
+        "anonymousId": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "path": { "type": "string", "enum": ["S1", "S2", "S3"] },
+    "modules": {
+      "type": "object",
+      "description": "Stan per moduł (klucz = id modułu).",
+      "patternProperties": {
+        "^M([1-9]|1[0-2])$": {
+          "type": "object",
+          "required": ["status"],
+          "properties": {
+            "status": { "type": "string", "enum": ["locked", "available", "in_progress", "completed"] },
+            "lastScreen": { "type": "string" },
+            "inlineQuizScorePct": { "type": "number", "minimum": 0, "maximum": 100 },
+            "quizResults": {
+              "type": "array",
+              "description": "Wyniki quizu inline per pytanie (wymagania/10: ID pytania, wynik, próba, feedback) — pozwala odtworzyć próby, pokazać poprzedni feedback i audytować słabe pytania.",
+              "items": {
+                "type": "object",
+                "required": ["questionId", "correct", "attempt"],
+                "properties": {
+                  "questionId": { "type": "string", "pattern": "^Q[0-9]{3}$" },
+                  "correct": { "type": "boolean" },
+                  "attempt": { "type": "integer", "minimum": 1 },
+                  "scoreAwarded": { "type": "number", "minimum": 0 },
+                  "feedbackShown": { "type": "boolean" },
+                  "answeredAt": { "type": "string" }
+                },
+                "additionalProperties": false
+              }
+            },
+            "completedAt": { "type": "string" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "finalTest": {
+      "type": "object",
+      "properties": {
+        "attempts": { "type": "integer", "minimum": 0 },
+        "maxAttempts": { "type": "integer", "minimum": 1 },
+        "lastScorePct": { "type": "number", "minimum": 0, "maximum": 100 },
+        "criticalQuestionsPassed": { "type": "boolean" },
+        "passed": { "type": "boolean" },
+        "weakModules": { "type": "array", "items": { "type": "string", "pattern": "^M([1-9]|1[0-2])$" } }
+      },
+      "additionalProperties": false
+    },
+    "practicalTasks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["rubric", "score"],
+        "properties": {
+          "rubric": { "type": "string" },
+          "score": { "type": "number", "minimum": 0 },
+          "maxScore": { "type": "number", "minimum": 0 },
+          "passed": { "type": "boolean" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "certificate": {
+      "type": "object",
+      "properties": {
+        "issued": { "type": "boolean" },
+        "completionId": { "type": "string" },
+        "scorePct": { "type": "number" },
+        "issuedAt": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "scoreWeights": {
+      "type": "object",
+      "description": "Wagi wyniku ścieżki (zgodne z macierzą): quiz inline 30% / test końcowy 60% / zadanie praktyczne 10%.",
+      "properties": {
+        "inlineQuiz": { "type": "number" },
+        "finalTest": { "type": "number" },
+        "practicalTask": { "type": "number" }
+      },
+      "additionalProperties": false
+    },
+    "updatedAt": { "type": "string", "description": "ISO 8601 timestamp ostatniej aktualizacji" }
+  },
+  "additionalProperties": false
+}
