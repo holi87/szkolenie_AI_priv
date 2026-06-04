@@ -5,8 +5,12 @@
 /** Shardy banku pytań: data/questions/m01.json … m12.json (po jednym na moduł). */
 export const QUESTION_SHARDS = Array.from({ length: 12 }, (_, i) => `m${String(i + 1).padStart(2, "0")}.json`);
 
-/** Shardy treści modułów: data/module-content/m01.json … m12.json (treść + config interakcji per moduł). */
-export const MODULE_CONTENT_SHARDS = Array.from({ length: 12 }, (_, i) => `m${String(i + 1).padStart(2, "0")}.json`);
+/** Shardy treści modułów: data/module-content/m01.json … m12.json + msh.json (moduł diagnostyczny Skali Holaka,
+ * M14/ADR-0008 — treść + config interakcji maturity-check; bez puli pytań). */
+export const MODULE_CONTENT_SHARDS = [
+  ...Array.from({ length: 12 }, (_, i) => `m${String(i + 1).padStart(2, "0")}.json`),
+  "msh.json",
+];
 
 /** Scala pliki treści modułów w mapę { M1: {...}, … } po polu `module`. */
 export function mergeModuleContent(contentObjects) {

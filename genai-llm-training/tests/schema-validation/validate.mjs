@@ -104,6 +104,11 @@ function validate(data, schema, root, path) {
 // ---------------- Stałe domenowe (wymagania 06/07) ----------------
 const EXPECTED_COUNTS = { M1:8,M2:9,M3:7,M4:8,M5:8,M6:10,M7:10,M8:12,M9:8,M10:14,M11:10,M12:12 };
 const TOTAL = 116;
+// M14/ADR-0008: moduł diagnostyczny (scope="diagnostic", np. MSH/Skala Holaka) NIE ma puli pytań — wykluczamy go
+// z kontroli zależnych od pytań. EXPECTED_COUNTS/golden/per-module iterują po kluczach EXPECTED_COUNTS (MSH tam
+// nieobecny → exempt-by-construction); scope-checki iterują po Q (MSH ma 0 pytań → nieosiągalny). Jedyna pętla
+// wymagająca JAWNEJ bramki to questionRange (czyta m.questionRange.count, którego diagnostyczny moduł nie ma).
+const hasBankQuestions = (m) => Boolean(m) && m.scope !== "diagnostic";
 const DIFF_TARGET = { L1: 41, L2: 46, L3: 23, L4: 6 };
 const SCENARIO_TYPES = new Set(["scenariusz", "scenariusz_decyzyjny"]);
 const TECHNICAL_MODULES = new Set(["M4", "M5", "M6", "M12"]);
@@ -262,6 +267,7 @@ if (Qall) {
     if (new Set(orders).size !== orders.length) fail(`modules.json: zduplikowane order`);
     for (const id of Object.keys(EXPECTED_COUNTS)) if (!mids.includes(id)) fail(`modules.json: brak modułu ${id}`);
     for (const m of modules.modules) {
+      if (!hasBankQuestions(m) || !m.questionRange) continue; // diagnostyczny (MSH) — bez puli; malformowany core/dedicated bez questionRange łapie schemat (czysty błąd, nie crash) (M14/ADR-0008)
       const inMod = Q.filter((q) => q.module === m.id).map((q) => q.id).sort();
       if (inMod.length !== m.questionRange.count) fail(`${m.id}: questionRange.count ${m.questionRange.count} != ${inMod.length}`);
       if (inMod.length) {
@@ -523,18 +529,21 @@ if (paths && rubrics) {
 // Integralność: klucze interakcji wskazują na istniejące kategorie/opcje; zadanie praktyczne → istniejąca rubryka.
 function loadModuleContent(locale) {
   const CDIR = join(DATA, locale, "module-content");
-  if (!existsSync(CDIR)) { fail(`brak treści modułów (data/${locale}/module-content/) — M4 wymaga 12 plików mNN.json`); return null; }
+  if (!existsSync(CDIR)) { fail(`brak treści modułów (data/${locale}/module-content/) — wymaga 12 plików mNN.json + msh.json`); return null; }
   const schema = load(join(SCHEMAS, "module-content.schema.json"));
   const rubricIds = new Set((rubrics ? rubrics.rubrics : []).map((r) => r.id));
   const rubricById = new Map((rubrics ? rubrics.rubrics : []).map((r) => [r.id, r]));
   const present = [];
-  for (let i = 1; i <= 12; i += 1) {
-    const f = `m${String(i).padStart(2, "0")}.json`;
+  // 12 modułów kursu (m01..m12 → M1..M12) + 1 moduł diagnostyczny (msh.json → MSH; M14/ADR-0008, bez puli pytań).
+  const contentFiles = [
+    ...Array.from({ length: 12 }, (_, i) => ({ f: `m${String(i + 1).padStart(2, "0")}.json`, expectMod: "M" + (i + 1) })),
+    { f: "msh.json", expectMod: "MSH" },
+  ];
+  for (const { f, expectMod } of contentFiles) {
     const fp = join(CDIR, f);
     if (!existsSync(fp)) { fail(`brak treści modułu: ${locale}/module-content/${f}`); continue; }
     const c = load(fp);
     validate(c, schema, schema, `${locale}/module-content/${f}`).forEach((x) => fail(`[schema ${locale}/module-content/${f}] ${x}`));
-    const expectMod = "M" + i;
     if (c.module !== expectMod) fail(`${locale}/module-content/${f}: module=${c.module} != ${expectMod}`);
     present.push(c.module);
     // lint syntetyczny — cały obiekt treści (żadnych realnych PII/domen)
@@ -562,12 +571,25 @@ function loadModuleContent(locale) {
       for (const ck of cp.correct || []) if (!optIds.has(ck)) fail(`module-content/${f}: checkpoint correct "${ck}" spoza options`);
       if (cp.type === "single_choice" && (cp.correct || []).length !== 1) fail(`module-content/${f}: checkpoint single_choice wymaga 1 poprawnej`);
       if (cp.type === "multiple_choice" && (cp.correct || []).length < 1) fail(`module-content/${f}: checkpoint multiple_choice wymaga >=1 poprawnej`);
+    } else if (ix.kind === "maturity-check") {
+      // Integralność autodiagnozy (M14/ADR-0008): KAŻDY poziom 0..max każdej skali musi trafić do DOKŁADNIE jednej
+      // bandy (feedback „gdzie jesteś / jak wejść wyżej" zawsze rozwiązywalny, bez luk i nakładek). Ostrzeż, gdy
+      // liczba zdań < max (najwyższy poziom skali nieosiągalny przy punktacji = liczba zaznaczeń).
+      for (const sc of ix.scales || []) {
+        const maxLvl = typeof sc.max === "number" ? sc.max : (sc.statements || []).length;
+        for (let lvl = 0; lvl <= maxLvl; lvl += 1) {
+          const hit = (sc.bands || []).filter((b) => lvl >= b.min && lvl <= b.max).length;
+          if (hit === 0) fail(`module-content/${f}: skala ${sc.id} — poziom ${lvl} bez bandy (feedback nierozwiązywalny)`);
+          if (hit > 1) fail(`module-content/${f}: skala ${sc.id} — poziom ${lvl} w ${hit} bandach (zakresy band nakładają się)`);
+        }
+        if ((sc.statements || []).length < maxLvl) warn.push(`module-content/${f}: skala ${sc.id} ma ${(sc.statements || []).length} zdań < max ${maxLvl} (najwyższy poziom nieosiągalny)`);
+      }
     }
   }
   return present;
 }
 const contentMods = CANON ? loadModuleContent(CANON) : null;
-if (contentMods) report.push(`Treść modułów: ${contentMods.length}/12 (${contentMods.join(",")})`);
+if (contentMods) report.push(`Treść modułów: ${contentMods.length}/13 (${contentMods.join(",")})`);
 
 // ---------------- Próbka wyników pilotażu (kalibracja #28) — schemat + integralność + lint syntetyczny ----------------
 // W repo trzymamy WYŁĄCZNIE syntetyczny przykład (realne wyniki pilotażu powstają poza repo).

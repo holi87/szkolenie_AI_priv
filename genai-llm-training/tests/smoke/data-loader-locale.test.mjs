@@ -22,8 +22,8 @@ function diskFetch(url) {
 test("loader czyta układ per-locale (pl) bez 404 — ścieżki loadera == układ na dysku", async () => {
   const data = await loadTrainingData({ basePath: `${DATA}/`, locale: "pl", fetchImpl: diskFetch });
   assert.equal(data.questions.length, 116, "kompletny bank z data/pl/questions/");
-  assert.equal(Object.keys(data.moduleContent).length, 12, "12 plików treści z data/pl/module-content/");
-  assert.equal(data.modules.modules.length, 12);
+  assert.equal(Object.keys(data.moduleContent).length, 13, "12 modułów kursu + MSH (diagnostyczny) z data/pl/module-content/");
+  assert.equal(data.modules.modules.length, 13);
   assert.ok(data.scenarios && data.scenarios.scenarios, "scenariusze z data/pl/");
   assert.ok(data.rubrics && data.rubrics.rubrics, "rubryki z data/pl/");
 });
@@ -39,7 +39,11 @@ test("merge etykiet == snapshot sprzed carve (modules/paths bez utraty danych)",
 test("każdy moduł po merge ma name/level/keyConcepts/learningOutcomes; każda ścieżka name/assumedPathTime", async () => {
   const data = await loadTrainingData({ basePath: `${DATA}/`, locale: "pl", fetchImpl: diskFetch });
   for (const m of data.modules.modules) {
-    for (const k of ["name", "level", "interactiveElement", "keyConcepts", "learningOutcomes", "questionRange", "pillar", "order"]) {
+    // Moduł diagnostyczny (MSH, M14/ADR-0008) nie ma puli pytań → bez questionRange. Reszta pól obowiązuje wszystkich.
+    const keys = m.scope === "diagnostic"
+      ? ["name", "level", "interactiveElement", "keyConcepts", "learningOutcomes", "pillar", "order"]
+      : ["name", "level", "interactiveElement", "keyConcepts", "learningOutcomes", "questionRange", "pillar", "order"];
+    for (const k of keys) {
       assert.ok(m[k] != null, `${m.id}: brak ${k} po merge`);
     }
   }

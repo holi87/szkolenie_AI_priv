@@ -6,8 +6,9 @@
 import { evaluateClassify } from "./classify.js";
 import { evaluateRubric } from "./rubric.js";
 import { evaluateTune } from "./tune.js";
+import { evaluateMaturityCheck } from "./maturity-check.js";
 
-const EVALUATORS = { classify: evaluateClassify, rubric: evaluateRubric, tune: evaluateTune };
+const EVALUATORS = { classify: evaluateClassify, rubric: evaluateRubric, tune: evaluateTune, "maturity-check": evaluateMaturityCheck };
 
 /** Ocena interakcji wg config.kind. Nieznany kind → błąd (nie przepuszczać po cichu — konserwatywnie). */
 export function evaluateInteraction(config, response) {
@@ -16,4 +17,4 @@ export function evaluateInteraction(config, response) {
   return fn(config, response);
 }
 
-export { evaluateClassify, evaluateRubric, evaluateTune };
+export { evaluateClassify, evaluateRubric, evaluateTune, evaluateMaturityCheck };

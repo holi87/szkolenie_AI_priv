@@ -287,7 +287,7 @@ function start(initialData, ctx = {}) {
       root.appendChild(el("h2", { text: ixConfig.title || mod.interactiveElement }));
       const ix = renderInteraction(ixConfig);
       const ixFb = el("div");
-      const ixBtn = el("button", { class: "btn", type: "button", text: ixConfig.kind === "rubric" ? t("action.evaluate") : t("action.check") });
+      const ixBtn = el("button", { class: "btn", type: "button", text: ixConfig.kind === "rubric" ? t("action.evaluate") : ixConfig.kind === "maturity-check" ? t("maturity.action") : t("action.check") });
       ixBtn.addEventListener("click", () => {
         const result = evaluateInteraction(ixConfig, ix.getResponse());
         ix.showFeedback(result);
@@ -306,7 +306,9 @@ function start(initialData, ctx = {}) {
     }
 
     // ----- Quiz inline (zachowane wiring scoringu — setInlineQuizScore zasila 30% wyniku ścieżki) -----
-    root.appendChild(el("h2", { text: t("quiz.inline.heading", { count: pool.length }) }));
+    // Moduł diagnostyczny (MSH, M14) nie ma puli pytań — pomijamy nagłówek „Quiz (0 pytań)"; completeBtn działa
+    // dalej (quizComplete() zwraca true dla pustej puli), więc moduł da się normalnie oznaczyć jako ukończony.
+    if (pool.length > 0) root.appendChild(el("h2", { text: t("quiz.inline.heading", { count: pool.length }) }));
     pool.forEach((q) => {
       // Wrapper grupujący pytanie+przycisk+feedback. Karta wizualna to fieldset.quiz-question (UX-4 #73);
       // osobna klasa, by nie dublować ramki/karty wokół fieldsetu.

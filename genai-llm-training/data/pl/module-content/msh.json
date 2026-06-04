@@ -1,0 +1,122 @@
+{
+  "_meta": {
+    "issue": "#102-#106 [M14] Moduł Skali Holaka (MSH)",
+    "adr": "docs/adr/0008-modul-skali-holaka-msh.md",
+    "interaction": "Self-check dojrzałości (kind: maturity-check) — NON-gating, neutralny framing",
+    "source": "Model dojrzałości adopcji AI „Skala Holaka”: v2.1e (organizacja, 0–11) + v2.1p (osoba, 0–11). Atrybucja: quality-blog.eu/pl/blog/skala-holaka oraz quality-blog.eu/pl/blog/skala-holaka-private.",
+    "dataPolicy": "WSZYSTKIE zdania self-checku SYNTETYCZNE i ogólne (zero realnych danych/PII). Diagnoza orientacyjna — NIE da się jej „oblać”. Heurystyka punktacji uproszczona (liczba zaznaczeń → poziom 0–11) do weryfikacji przez eksperta dziedzinowego (SME)."
+  },
+  "module": "MSH",
+  "intro": "Skala Holaka to model dojrzałości adopcji AI: pomaga nazwać, gdzie jesteś dziś i jaki jest realny następny krok. Ten moduł to autodiagnoza — nie test. Nie ma wyniku „zaliczone/oblane”; jest orientacyjny poziom i wskazówka, jak wejść wyżej.",
+  "screens": [
+    {
+      "id": "msh-s1-czym-jest",
+      "title": "Czym jest Skala Holaka",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Skala Holaka opisuje dojrzałość korzystania z AI na 12 poziomach (0–11) — od pojedynczych eksperymentów po świadomą, mierzoną i ciągle doskonaloną praktykę. Pomaga uniknąć dwóch pułapek: „używamy AI, więc jesteśmy dojrzali” oraz „to tylko zabawka”." },
+        { "kind": "list", "items": [
+          "Wersja organizacyjna (v2.1e) — dojrzałość adopcji AI w zespole lub firmie.",
+          "Wersja osobista (v2.1p) — dojrzałość Twojej własnej praktyki pracy z AI.",
+          "Oba wymiary oceniamy osobno: organizacja może być wyżej lub niżej niż pojedyncza osoba."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Skąd ten model", "text": "Skala Holaka: quality-blog.eu/pl/blog/skala-holaka (organizacja) i quality-blog.eu/pl/blog/skala-holaka-private (osoba). Tu używamy jej jako narzędzia autorefleksji, nie certyfikacji." }
+      ]
+    },
+    {
+      "id": "msh-s2-osie-i-granice",
+      "title": "Po czym poznać poziom: osie oceny i granice",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Wyższe poziomy poznasz nie po liczbie narzędzi, ale po tym, JAK używasz AI. Kluczowe osie (od poziomu ~4 w górę): zarządzanie kontekstem, świadomość ograniczeń modelu, oszczędność tokenów, weryfikowalność outputu, odwracalność decyzji oraz bezpieczeństwo i prywatność danych." },
+        { "kind": "list", "items": [
+          "Bariera — co blokuje wejście na dany poziom.",
+          "Sukces — co naprawdę działa, gdy poziom jest osiągnięty.",
+          "Pułapka — fałszywe poczucie dojrzałości, które cofa rozwój."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Dwie krytyczne granice", "text": "Granica 8→9: przejście od „indywidualnej dobrej praktyki” do wpięcia AI w proces z jasnym podziałem asystent/decydent i śladem audytowym. Granica 10→11: od pojedynczych usprawnień do ciągłego doskonalenia i kalibracji własnego użycia AI." }
+      ]
+    },
+    {
+      "id": "msh-s3-jak-czytac",
+      "title": "Jak czytać swój wynik",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Za chwilę zaznaczysz zdania, które są dziś prawdziwe — osobno dla organizacji i dla siebie. Liczba zaznaczeń daje orientacyjny poziom 0–11 na każdej skali oraz wskazówkę „gdzie jesteś / jak wejść wyżej”. Zaznaczaj uczciwie tylko to, co faktycznie jest wdrożone." },
+        { "kind": "callout", "variant": "safe", "title": "To diagnoza, nie ocena", "text": "Nie ma tu poprawnych i błędnych odpowiedzi ani progu zaliczenia. Wynik nie wpływa na ukończenie ścieżki ani na test końcowy — to lustro, nie egzamin." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "maturity-check",
+    "id": "msh-selfcheck",
+    "title": "Skala Holaka — autodiagnoza dojrzałości AI",
+    "intro": "Zaznacz zdania prawdziwe dziś. Osobno dla organizacji (v2.1e) i dla siebie (v2.1p). Po sprawdzeniu zobaczysz orientacyjny poziom 0–11 i następny krok — bez ocen pass/fail.",
+    "scales": [
+      {
+        "id": "org",
+        "label": "Organizacja (Skala Holaka v2.1e)",
+        "intro": "Jak dojrzała jest adopcja AI w Twoim zespole/firmie? Zaznacz to, co realnie wdrożone.",
+        "max": 11,
+        "statements": [
+          { "id": "org-1", "text": "Są osoby, które używają AI do pojedynczych zadań." },
+          { "id": "org-2", "text": "Istnieje nieformalna wymiana dobrych praktyk korzystania z AI." },
+          { "id": "org-3", "text": "Spisano politykę akceptowalnego użycia AI (dane, prywatność, IP)." },
+          { "id": "org-4", "text": "Wybrane procesy mają zdefiniowane, dozwolone zastosowania AI." },
+          { "id": "org-5", "text": "Outputy AI w procesach krytycznych są obowiązkowo weryfikowane przez człowieka." },
+          { "id": "org-6", "text": "Zespoły mierzą wpływ AI na jakość i czas, a nie tylko fakt użycia." },
+          { "id": "org-7", "text": "Jest świadome zarządzanie kontekstem i kosztem tokenów w powtarzalnych zadaniach." },
+          { "id": "org-8", "text": "Decyzje wspierane przez AI są odwracalne i zostawiają ślad audytowy." },
+          { "id": "org-9", "text": "AI jest wpięte w procesy z jasnym podziałem: asystent vs decydent." },
+          { "id": "org-10", "text": "Organizacja regularnie kalibruje i audytuje własne użycie AI." },
+          { "id": "org-11", "text": "Adopcja AI jest elementem strategii i ciągłego doskonalenia, nie jednorazową inicjatywą." }
+        ],
+        "bands": [
+          { "min": 0, "max": 2, "label": "Poziom 0–2: Eksperymenty oddolne", "advice": "Bariera: brak wspólnych zasad i celu. Następny krok: spisz prostą politykę akceptowalnego użycia AI (dane, prywatność) i wskaż 1–2 procesy pilotażowe." },
+          { "min": 3, "max": 5, "label": "Poziom 3–5: Pierwsze ramy", "advice": "Sukces: są zasady i dozwolone zastosowania. Następny krok: wprowadź obowiązkową weryfikację outputów w procesach krytycznych i zacznij mierzyć wpływ." },
+          { "min": 6, "max": 8, "label": "Poziom 6–8: Świadome procesy", "advice": "Sukces: mierzysz wpływ i zarządzasz kontekstem. Granica 8→9: wpnij AI w proces z jasnym podziałem asystent/decydent oraz śladem audytowym dla decyzji." },
+          { "min": 9, "max": 11, "label": "Poziom 9–11: Dojrzała adopcja", "advice": "Pułapka: uznanie dojrzałości za stan gotowy, nie za ciągłe doskonalenie. Granica 10→11: uczyń kalibrację i audyt użycia AI elementem strategii i rutyny zespołu." }
+        ]
+      },
+      {
+        "id": "person",
+        "label": "Osoba (Skala Holaka v2.1p)",
+        "intro": "Jak dojrzała jest Twoja własna praktyka pracy z AI? Zaznacz to, co robisz na co dzień.",
+        "max": 11,
+        "statements": [
+          { "id": "per-1", "text": "Używam AI do konkretnych, powtarzalnych zadań." },
+          { "id": "per-2", "text": "Świadomie formułuję prompt: rola, cel, kontekst, format wyjścia." },
+          { "id": "per-3", "text": "Rozpoznaję, że output bywa błędny mimo wiarygodnej formy." },
+          { "id": "per-4", "text": "Weryfikuję krytyczne odpowiedzi wobec źródła, zanim ich użyję." },
+          { "id": "per-5", "text": "Dobieram narzędzie/model do zadania, nie używam jednego do wszystkiego." },
+          { "id": "per-6", "text": "Zarządzam kontekstem: podaję tylko to, co potrzebne, dbam o koszt." },
+          { "id": "per-7", "text": "Wiem, kiedy NIE używać AI: brak danych, wysokie ryzyko, nieodwracalność." },
+          { "id": "per-8", "text": "Projektuję pracę tak, by decyzje wsparte AI były odwracalne i sprawdzalne." },
+          { "id": "per-9", "text": "Dzielę się praktykami i wspólnie z innymi kalibruję ocenę outputu." },
+          { "id": "per-10", "text": "Mierzę realny wpływ AI na moją jakość i czas, koryguję podejście." },
+          { "id": "per-11", "text": "Traktuję pracę z AI jako ciągłe doskonalenie własnego warsztatu." }
+        ],
+        "bands": [
+          { "min": 0, "max": 2, "label": "Poziom 0–2: Pierwsze użycia", "advice": "Bariera: traktowanie AI jak wyroczni. Następny krok: zacznij świadomie formułować prompt i sprawdzać każdą odpowiedź, której chcesz użyć." },
+          { "min": 3, "max": 5, "label": "Poziom 3–5: Świadomy użytkownik", "advice": "Sukces: weryfikujesz output i dobierasz narzędzie do zadania. Następny krok: naucz się zarządzać kontekstem i kosztem oraz rozpoznawać, kiedy NIE używać AI." },
+          { "min": 6, "max": 8, "label": "Poziom 6–8: Praktyk", "advice": "Sukces: znasz granice i zarządzasz kontekstem. Granica 8→9: projektuj pracę tak, by decyzje były odwracalne i sprawdzalne, i dziel się praktykami z zespołem." },
+          { "min": 9, "max": 11, "label": "Poziom 9–11: Mistrzostwo warsztatu", "advice": "Pułapka: rutyna bez pomiaru i refleksji. Granica 10→11: mierz realny wpływ AI na swoją pracę i traktuj warsztat jako ciągłe doskonalenie." }
+        ]
+      }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Skala Holaka mierzy JAK używasz AI (kontekst, weryfikowalność, odwracalność), nie liczbę narzędzi.",
+      "Organizację (v2.1e) i osobę (v2.1p) oceniasz osobno — mogą być na różnych poziomach.",
+      "To diagnoza orientacyjna: bez pass/fail, bez wpływu na zaliczenie — ma wskazać następny krok."
+    ],
+    "checklist": [
+      "Czy nazwałeś swój orientacyjny poziom dla organizacji i dla siebie?",
+      "Czy wiesz, jaka jest najbliższa bariera do pokonania?",
+      "Czy znasz jeden konkretny następny krok wejścia wyżej?"
+    ],
+    "checklistTitle": "Checklista — po autodiagnozie",
+    "nextStep": "Następny krok: wybierz jedną barierę z wyższego poziomu i zaplanuj jeden mały, odwracalny eksperyment."
+  }
+}

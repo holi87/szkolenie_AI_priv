@@ -16,7 +16,7 @@
         "properties": {
           "id": { "type": "string", "pattern": "^R[0-9]+-[a-z-]+$" },
           "task": { "type": "string", "minLength": 3 },
-          "module": { "type": "string", "pattern": "^M([1-9]|1[0-2])$" },
+          "module": { "type": "string", "pattern": "^M([1-9]|1[0-2]|SH)$" },
           "paths": { "type": "array", "minItems": 1, "items": { "type": "string", "enum": ["S1", "S2", "S3"] } },
           "scaleMax": { "type": "number", "minimum": 1 },
           "passThreshold": { "type": ["number", "null"], "minimum": 0 },

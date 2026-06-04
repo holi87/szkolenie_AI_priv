@@ -156,6 +156,13 @@
         "to": "Q116",
         "count": 12
       }
+    },
+    {
+      "id": "MSH",
+      "order": 13,
+      "timeFullMin": 20,
+      "pillar": "security_governance",
+      "scope": "diagnostic"
     }
   ]
 }
