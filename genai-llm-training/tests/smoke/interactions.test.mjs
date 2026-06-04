@@ -5,7 +5,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { evaluateInteraction, evaluateClassify, evaluateRubric, evaluateTune } from "../../assets/core/interactions/index.js";
+import { evaluateInteraction, evaluateClassify, evaluateRubric, evaluateTune, evaluateMaturityCheck } from "../../assets/core/interactions/index.js";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const content = (m) => JSON.parse(readFileSync(join(HERE, "..", "..", "data", "pl", "module-content", `${m}.json`), "utf8"));
@@ -62,6 +62,57 @@ test("tune: ocenia tylko checkpoint; poprawny → 1, błędny → 0, niekompletn
 
 test("dispatcher: nieznany kind rzuca (nie przepuszcza po cichu)", () => {
   assert.throws(() => evaluateInteraction({ kind: "nope" }, {}), /Nieznany typ interakcji/);
+});
+
+// ---------------- M14 (#105): maturity-check (Skala Holaka) — NEUTRALNY, non-gating ----------------
+
+test("maturity-check: passed ZAWSZE null (neutralne); poziom = liczba zaznaczeń; 2 skale agregują się", () => {
+  const cfg = { kind: "maturity-check", scales: [
+    { id: "org", label: "Org", max: 3, statements: [{ id: "o1", text: "" }, { id: "o2", text: "" }, { id: "o3", text: "" }],
+      bands: [{ min: 0, max: 1, label: "niski", advice: "a" }, { min: 2, max: 3, label: "wysoki", advice: "b" }] },
+    { id: "person", label: "Os", max: 2, statements: [{ id: "p1", text: "" }, { id: "p2", text: "" }],
+      bands: [{ min: 0, max: 2, label: "ok", advice: "c" }] },
+  ] };
+  const r = evaluateMaturityCheck(cfg, { org: { o1: true, o3: true }, person: { p1: true } });
+  assert.equal(r.passed, null, "diagnoza nigdy nie ma pass/fail (neutralna)");
+  assert.equal(r.kind, "maturity-check");
+  const org = r.scales.find((s) => s.id === "org");
+  const per = r.scales.find((s) => s.id === "person");
+  assert.equal(org.level, 2, "2 zaznaczenia = poziom 2");
+  assert.equal(org.band.label, "wysoki", "poziom 2 → banda 'wysoki'");
+  assert.equal(per.level, 1);
+  assert.equal(r.score, 3, "suma poziomów 2+1");
+  assert.equal(r.max, 5, "suma max 3+2");
+});
+
+test("maturity-check: zaznaczenie ponad max klamruje poziom do max; brak odpowiedzi → poziom 0, banda dolna", () => {
+  const cfg = { kind: "maturity-check", scales: [
+    { id: "s", label: "S", max: 2, statements: [{ id: "a", text: "" }, { id: "b", text: "" }, { id: "c", text: "" }],
+      bands: [{ min: 0, max: 2, label: "x", advice: "y" }] },
+  ] };
+  assert.equal(evaluateMaturityCheck(cfg, { s: { a: true, b: true, c: true } }).scales[0].level, 2, "3 zaznaczenia → clamp do max 2");
+  const empty = evaluateInteraction(cfg, {});
+  assert.equal(empty.scales[0].level, 0);
+  assert.equal(empty.scales[0].band.label, "x", "poziom 0 ma bandę (feedback rozwiązywalny)");
+  assert.equal(empty.passed, null);
+});
+
+test("integralność MSH (maturity-check): obie skale dają poziom + bandę z własnego klucza, passed null", () => {
+  const msh = content("msh").interaction;
+  assert.equal(msh.kind, "maturity-check");
+  const empty = evaluateInteraction(msh, {});
+  assert.equal(empty.passed, null, "MSH: diagnoza neutralna (nigdy pass/fail)");
+  assert.equal(empty.scales.length, 2, "MSH: skala organizacja + osoba");
+  for (const s of empty.scales) {
+    assert.equal(s.level, 0, "brak zaznaczeń → poziom 0");
+    assert.ok(s.band && s.band.label && s.band.advice, `skala ${s.id}: poziom 0 ma bandę z label+advice`);
+  }
+  const org = msh.scales.find((s) => s.id === "org");
+  const allOrg = Object.fromEntries(org.statements.map((st) => [st.id, true]));
+  const full = evaluateInteraction(msh, { org: allOrg });
+  const orgRes = full.scales.find((s) => s.id === "org");
+  assert.equal(orgRes.level, orgRes.max, "komplet zaznaczeń org → poziom = max skali");
+  assert.equal(full.passed, null, "nawet komplet nie daje 'zaliczone'");
 });
 
 test("integralność egzemplarzy: M1 (classify), M3 (tune), M7 (rubric) oceniają się z własnego klucza", () => {

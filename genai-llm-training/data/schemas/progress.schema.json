@@ -12,7 +12,7 @@
       "type": "object",
       "description": "Stan per moduł (klucz = id modułu).",
       "patternProperties": {
-        "^M([1-9]|1[0-2])$": {
+        "^M([1-9]|1[0-2]|SH)$": {
           "type": "object",
           "required": ["status"],
           "properties": {
@@ -43,7 +43,7 @@
               "description": "Wynik interakcji modułowej (M4): klasyfikator/rubryka/strojenie — feedback i zapis wyniku (#20).",
               "required": ["kind", "score", "max"],
               "properties": {
-                "kind": { "type": "string", "enum": ["classify", "rubric", "tune"] },
+                "kind": { "type": "string", "enum": ["classify", "rubric", "tune", "maturity-check"] },
                 "score": { "type": "number", "minimum": 0 },
                 "max": { "type": "number", "minimum": 0 },
                 "pct": { "type": "number", "minimum": 0, "maximum": 100 },

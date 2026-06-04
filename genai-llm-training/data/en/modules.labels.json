@@ -240,5 +240,23 @@
       "Identifies the risks of bias, position bias, and disagreement with human judgment",
       "Calibrates automated scoring by comparing it with expert judgment and sets an acceptance threshold"
     ]
+  },
+  "MSH": {
+    "name": "Holak Scale — AI maturity self-check",
+    "level": "all levels",
+    "interactiveElement": "Maturity self-check (Holak Scale)",
+    "keyConcepts": [
+      "AI adoption maturity",
+      "Holak Scale v2.1e (organization)",
+      "Holak Scale v2.1p (individual)",
+      "context management",
+      "output verifiability",
+      "decision reversibility"
+    ],
+    "learningOutcomes": [
+      "Estimates an indicative AI adoption maturity level for an organization (0–11)",
+      "Estimates an indicative maturity level of their own AI practice (0–11)",
+      "Identifies the barrier and the next step to reach a higher level"
+    ]
   }
 }

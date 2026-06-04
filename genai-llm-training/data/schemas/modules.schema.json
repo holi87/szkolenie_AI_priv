@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "modules.schema.json",
   "title": "Metadane modułów kursu (struktura, single-source)",
-  "description": "Kontrakt modules.json — kanoniczna struktura 12 modułów. Prose wyświetlana (name/level/interactiveElement/keyConcepts/learningOutcomes) wydzielona per-locale do data/<lang>/modules.labels.json (ADR-0004).",
+  "description": "Kontrakt modules.json — kanoniczna struktura modułów. 12 modułów kursu M1..M12 (z pulą pytań) + 1 moduł diagnostyczny MSH (Skala Holaka, M14/ADR-0008) bez puli pytań. Prose wyświetlana (name/level/interactiveElement/keyConcepts/learningOutcomes) wydzielona per-locale do data/<lang>/modules.labels.json (ADR-0004).",
   "type": "object",
   "required": ["modules"],
   "properties": {
@@ -10,16 +10,16 @@
     "pillars": { "type": "object" },
     "modules": {
       "type": "array",
-      "minItems": 12, "maxItems": 12,
+      "minItems": 13, "maxItems": 13,
       "items": {
         "type": "object",
-        "required": ["id", "order", "timeFullMin", "pillar", "scope", "questionRange"],
+        "required": ["id", "order", "timeFullMin", "pillar", "scope"],
         "properties": {
-          "id": { "type": "string", "pattern": "^M([1-9]|1[0-2])$" },
-          "order": { "type": "integer", "minimum": 1, "maximum": 12 },
+          "id": { "type": "string", "pattern": "^M([1-9]|1[0-2]|SH)$" },
+          "order": { "type": "integer", "minimum": 1, "maximum": 13 },
           "timeFullMin": { "type": "integer", "minimum": 1 },
           "pillar": { "type": "string", "enum": ["foundations_technical", "qa_practice", "security_governance"] },
-          "scope": { "type": "string", "enum": ["core", "dedicated"], "description": "M13/ADR-0006: core = pula wspólna wszystkim ścieżkom; dedicated = pula dzielona per persona (1 ścieżka/pytanie)." },
+          "scope": { "type": "string", "enum": ["core", "dedicated", "diagnostic"], "description": "M13/ADR-0006: core = pula wspólna wszystkim ścieżkom; dedicated = pula dzielona per persona (1 ścieżka/pytanie). M14/ADR-0008: diagnostic = moduł bez puli pytań (Skala Holaka, formatywny, non-gating) — wykluczony z questionRange/EXPECTED_COUNTS/golden." },
           "questionRange": {
             "type": "object",
             "required": ["from", "to", "count"],
@@ -32,7 +32,10 @@
           },
           "criticalQuestions": { "type": "integer", "minimum": 0 }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "allOf": [
+          { "if": { "required": ["scope"], "properties": { "scope": { "enum": ["core", "dedicated"] } } }, "then": { "required": ["questionRange"] } }
+        ]
       }
     }
   },

@@ -127,6 +127,10 @@
         "M12": {
           "required": false,
           "variant": "opcjonalny"
+        },
+        "MSH": {
+          "required": false,
+          "variant": "diagnostyczny"
         }
       },
       "requiredModules": [
@@ -208,6 +212,10 @@
         "M12": {
           "required": false,
           "variant": "rozszerzony"
+        },
+        "MSH": {
+          "required": false,
+          "variant": "diagnostyczny"
         }
       },
       "requiredModules": [
@@ -299,6 +307,10 @@
         "M12": {
           "required": true,
           "variant": "full"
+        },
+        "MSH": {
+          "required": false,
+          "variant": "diagnostyczny"
         }
       },
       "requiredModules": [

@@ -38,12 +38,12 @@
               "type": "object",
               "required": ["M1", "M2", "M3", "M4", "M5", "M6", "M7", "M8", "M9", "M10", "M11", "M12"],
               "patternProperties": {
-                "^M([1-9]|1[0-2])$": {
+                "^M([1-9]|1[0-2]|SH)$": {
                   "type": "object",
                   "required": ["required", "variant"],
                   "properties": {
                     "required": { "type": "boolean" },
-                    "variant": { "type": "string", "enum": ["full", "skrocony", "opcjonalny", "swiadomosciowy", "rozszerzony", "praktyczny"] }
+                    "variant": { "type": "string", "enum": ["full", "skrocony", "opcjonalny", "swiadomosciowy", "rozszerzony", "praktyczny", "diagnostyczny"] }
                   },
                   "additionalProperties": false
                 }

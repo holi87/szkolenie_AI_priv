@@ -374,6 +374,29 @@
         "Wskazuje ryzyka bias, position bias i niezgodności z oceną ludzką",
         "Kalibruje ocenę automatyczną przez porównanie z oceną eksperta i ustala próg akceptacji"
       ]
+    },
+    {
+      "id": "MSH",
+      "order": 13,
+      "timeFullMin": 20,
+      "pillar": "security_governance",
+      "scope": "diagnostic",
+      "name": "Skala Holaka — autodiagnoza dojrzałości AI",
+      "level": "wszystkie poziomy",
+      "interactiveElement": "Self-check dojrzałości (Skala Holaka)",
+      "keyConcepts": [
+        "dojrzałość adopcji AI",
+        "Skala Holaka v2.1e (organizacja)",
+        "Skala Holaka v2.1p (osoba)",
+        "zarządzanie kontekstem",
+        "weryfikowalność outputu",
+        "odwracalność decyzji"
+      ],
+      "learningOutcomes": [
+        "Określa orientacyjny poziom dojrzałości adopcji AI w organizacji (0–11)",
+        "Określa orientacyjny poziom dojrzałości własnej praktyki AI (0–11)",
+        "Wskazuje barierę i następny krok wejścia na wyższy poziom"
+      ]
     }
   ]
 }

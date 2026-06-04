@@ -1,13 +1,13 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Treść modułu szkolenia (M4)",
-  "description": "Treść narracyjna + config interakcji per moduł. Treść oddzielona od logiki (AGENTS). Interakcja: jeden z trzech typów (classify/rubric/tune). Wszystkie przykłady danych SYNTETYCZNE.",
+  "description": "Treść narracyjna + config interakcji per moduł. Treść oddzielona od logiki (AGENTS). Interakcja: jeden z czterech typów (classify/rubric/tune/maturity-check; M14/ADR-0008). Wszystkie przykłady danych SYNTETYCZNE.",
   "type": "object",
   "required": ["module", "screens", "interaction", "summary"],
   "additionalProperties": false,
   "properties": {
     "_meta": { "type": "object" },
-    "module": { "type": "string", "pattern": "^M([1-9]|1[0-2])$" },
+    "module": { "type": "string", "pattern": "^M([1-9]|1[0-2]|SH)$" },
     "intro": { "type": "string" },
     "screens": { "type": "array", "minItems": 1, "items": { "$ref": "#/definitions/screen" } },
     "interaction": { "$ref": "#/definitions/interaction" },
@@ -63,7 +63,7 @@
       "required": ["kind", "title"],
       "additionalProperties": false,
       "properties": {
-        "kind": { "type": "string", "enum": ["classify", "rubric", "tune"] },
+        "kind": { "type": "string", "enum": ["classify", "rubric", "tune", "maturity-check"] },
         "id": { "type": "string" },
         "title": { "type": "string" },
         "intro": { "type": "string" },
@@ -112,12 +112,35 @@
             "feedbackCorrect": { "type": "string" },
             "feedbackIncorrect": { "type": "string" }
           }
+        },
+        "scales": {
+          "type": "array", "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["id", "label", "max", "statements", "bands"],
+            "additionalProperties": false,
+            "properties": {
+              "id": { "type": "string" },
+              "label": { "type": "string" },
+              "intro": { "type": "string" },
+              "max": { "type": "integer", "minimum": 1 },
+              "statements": {
+                "type": "array", "minItems": 1,
+                "items": { "type": "object", "required": ["id", "text"], "additionalProperties": false, "properties": { "id": { "type": "string" }, "text": { "type": "string" } } }
+              },
+              "bands": {
+                "type": "array", "minItems": 1,
+                "items": { "type": "object", "required": ["min", "max", "label", "advice"], "additionalProperties": false, "properties": { "min": { "type": "integer", "minimum": 0 }, "max": { "type": "integer", "minimum": 0 }, "label": { "type": "string" }, "advice": { "type": "string" } } }
+              }
+            }
+          }
         }
       },
       "allOf": [
         { "if": { "properties": { "kind": { "const": "classify" } } }, "then": { "required": ["categories", "items"] } },
         { "if": { "properties": { "kind": { "const": "rubric" } } }, "then": { "required": ["criteria"] } },
-        { "if": { "properties": { "kind": { "const": "tune" } } }, "then": { "required": ["controls", "checkpoint"] } }
+        { "if": { "properties": { "kind": { "const": "tune" } } }, "then": { "required": ["controls", "checkpoint"] } },
+        { "if": { "properties": { "kind": { "const": "maturity-check" } } }, "then": { "required": ["scales"] } }
       ]
     },
     "summary": {

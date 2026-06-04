@@ -10,6 +10,7 @@ import {
   moduleStatus,
   requiredPracticalRubrics,
   missingPracticalRubrics,
+  pathVisibleModuleIds,
 } from "../../assets/core/paths.js";
 import { pathsData, modulesData } from "./_fixtures.mjs";
 
@@ -18,10 +19,10 @@ const progressWith = (completed = [], practicalTasks = []) => ({
   practicalTasks,
 });
 
-test("pathModuleList: 12 modułów w kolejności, flagi required zgodne z paths.json", () => {
+test("pathModuleList: 13 modułów (12 kursu + MSH) w kolejności, flagi required zgodne z paths.json", () => {
   for (const pathId of ["S1", "S2", "S3"]) {
     const list = pathModuleList(pathsData, modulesData, pathId, progressWith());
-    assert.equal(list.length, 12);
+    assert.equal(list.length, 13);
     assert.deepEqual(list.map((m) => m.order), [...list.map((m) => m.order)].sort((a, b) => a - b));
     const req = new Set(requiredModules(pathsData, pathId));
     for (const m of list) assert.equal(m.required, req.has(m.id), `${pathId}/${m.id} required mismatch`);
@@ -110,4 +111,31 @@ test("S3: wymaga zapisanych R2-rag i R3-eval; brak choćby jednej → zablokowan
   assert.equal(isFinalTestUnlocked(onlyOne, pathsData, "S3"), false);
   const both = progressWith(reqMods, [{ rubric: "R2-rag", score: 4, maxScore: 5 }, { rubric: "R3-eval", score: 4, maxScore: 5 }]);
   assert.equal(isFinalTestUnlocked(both, pathsData, "S3"), true);
+});
+
+// ---------------- M14 (#106): moduł diagnostyczny MSH (Skala Holaka) — non-gating ----------------
+
+test("MSH NIEWRAŻLIWY na gating (#106): isFinalTestUnlocked bez zmian niezależnie od statusu MSH; MSH nigdy blokerem", () => {
+  const practicalsByPath = {
+    S1: [],
+    S2: [{ rubric: "R1-prompt", score: 5, maxScore: 5 }],
+    S3: [{ rubric: "R2-rag", score: 5, maxScore: 5 }, { rubric: "R3-eval", score: 5, maxScore: 5 }],
+  };
+  for (const pathId of ["S1", "S2", "S3"]) {
+    const req = requiredModules(pathsData, pathId);
+    const practicals = practicalsByPath[pathId];
+    const baseline = isFinalTestUnlocked(progressWith(req, practicals), pathsData, pathId);
+    const withMsh = isFinalTestUnlocked(progressWith([...req, "MSH"], practicals), pathsData, pathId);
+    assert.equal(baseline, true, `${pathId}: wymagane + praktyki → odblokowany (kontrola odniesienia)`);
+    assert.equal(withMsh, baseline, `${pathId}: ukończenie/pominięcie MSH NIE może zmieniać odblokowania testu`);
+    assert.ok(!pathCompletionBlockers(progressWith(req, practicals), pathsData, pathId).includes("MSH"),
+      `${pathId}: MSH nie może być blokerem zaliczenia`);
+  }
+});
+
+test("MSH widoczny w persona-set każdej ścieżki, ale poza requiredModules (non-gating)", () => {
+  for (const pathId of ["S1", "S2", "S3"]) {
+    assert.ok(pathVisibleModuleIds(pathsData, pathId).has("MSH"), `${pathId}: MSH widoczny w hubie/nav (variant != opcjonalny)`);
+    assert.ok(!requiredModules(pathsData, pathId).includes("MSH"), `${pathId}: MSH poza requiredModules (nie bramkuje)`);
+  }
 });

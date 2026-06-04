@@ -3,8 +3,9 @@
 import { renderClassify } from "./classify-view.js";
 import { renderRubric } from "./rubric-view.js";
 import { renderTune } from "./tune-view.js";
+import { renderMaturityCheck } from "./maturity-check-view.js";
 
-const RENDERERS = { classify: renderClassify, rubric: renderRubric, tune: renderTune };
+const RENDERERS = { classify: renderClassify, rubric: renderRubric, tune: renderTune, "maturity-check": renderMaturityCheck };
 
 /** Renderuje interakcję wg config.kind. Nieznany kind → błąd (spójnie z evaluateInteraction). */
 export function renderInteraction(config) {
