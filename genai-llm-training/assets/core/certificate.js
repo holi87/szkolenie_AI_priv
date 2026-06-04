@@ -1,31 +1,8 @@
-// certificate.js — ekran zaliczenia i eksport wyniku (issue #19).
-// Pure logic, zero DOM. Konserwatywnie (AGENTS): certyfikat zaliczenia powstaje WYŁĄCZNIE gdy passed.
-// Eksport = minimalny payload raportowy do pilotażu, BEZ danych wrażliwych (zero e-mail/PII).
-
-const round2 = (n) => Math.round(n * 100) / 100;
-
-/** Deterministyczny skrót (djb2) — stabilne ID zaliczenia bez losowości i bez kolizji wejścia. */
-function hash(str) {
-  let h = 5381;
-  for (let i = 0; i < str.length; i += 1) h = ((h << 5) + h + str.charCodeAt(i)) >>> 0;
-  return h.toString(36).toUpperCase();
-}
-
-const yyyymmdd = (iso) => (iso || "").slice(0, 10).replace(/-/g, "");
-
-/**
- * Generuje ID zaliczenia. Deterministyczne dla tych samych danych wejściowych.
- * Format: CERT-<ścieżka>-<RRRRMMDD>-<hash>.
- * PRYWATNOŚĆ (#61, doprecyzowane po review): preimage zawiera tylko dane JAWNE w eksporcie — ścieżkę, DZIEŃ
- * (RRRRMMDD, nie pełny timestamp ms) i wynik. Dzięki temu z completionId nie da się odzyskać nic ponad to,
- * co i tak jest w pliku: ani pseudonimu (poza preimage), ani dokładnego czasu ukończenia (gdyby hashować pełny
- * dateIso, odbiorca mógłby brute-force'ować ms w obrębie dnia i odtworzyć quasi-identyfikator). Skutek uboczny:
- * dwie osoby o tej samej ścieżce/dniu/wyniku mogą mieć to samo ID — to akceptowalne dla markera zaliczenia.
- */
-export function generateCompletionId(pathId, dateIso, scorePct) {
-  const day = yyyymmdd(dateIso);
-  return `CERT-${pathId}-${day}-${hash(`${pathId}|${day}|${scorePct}`)}`;
-}
+// certificate.js — model ekranu WYNIKU ścieżki i eksport (issue #19; M12-2 #93: certyfikat usunięty).
+// Pure logic, zero DOM. M12-2: zniesiono artefakt certyfikatu (medal, completionId, pseudonim/displayName) —
+// szkolenie jest self-assessment, nie certyfikacyjne (ADR-0005). Zostaje wartość formatywna: wynik %, słabe
+// obszary, status bramek, retry, eksport ANONIMOWY. Nazwa pliku zachowana dla stabilności importów.
+// Eksport = minimalny payload raportowy do pilotażu, BEZ danych wrażliwych (zero e-mail/PII, zero pseudonimu).
 
 /** Mapuje słabe moduły na obiekty z nazwą (do listy "do powtórzenia"). */
 export function weakAreas(weakModules, modulesData) {
@@ -39,47 +16,27 @@ export function weakAreas(weakModules, modulesData) {
 }
 
 /**
- * Buduje model certyfikatu / ekranu zaliczenia.
- * @returns {{issued:boolean, completionId?:string, displayName?:string, path:string, pathName?:string,
- *            date:string, scorePct:number, weakAreas:object[], reason?:string}}
- * Gdy nie zaliczono — issued:false, brak completionId, zwraca KOD powodu (i18n: ADR-0004, core zero-i18n;
- * certificate-view rozwiązuje kod przez t('cert.reason.<kod>')) i obszary do powtórzenia.
+ * Buduje model ekranu WYNIKU ścieżki.
+ * @returns {{passed:boolean, path:string, pathName?:string, scorePct:number, weakAreas:object[], reason?:string}}
+ * Gdy nie zaliczono — passed:false + KOD powodu (i18n: ADR-0004, core zero-i18n; certificate-view rozwiązuje
+ * kod przez t('result.reason.<kod>')) i obszary do powtórzenia. Brak completionId/pseudonimu (M12-2 #93).
  */
-export function buildCertificate(scoreResult, opts = {}) {
+export function buildResult(scoreResult, opts = {}) {
   const { pathId, scorePct, passed, weakModules } = scoreResult;
-  const dateIso = opts.dateIso || new Date().toISOString();
-  const displayName = (opts.participant && opts.participant.displayName) || null;
   const wa = weakAreas(weakModules, opts.modulesData);
-
-  if (!passed) {
-    return {
-      issued: false,
-      path: pathId,
-      pathName: opts.pathName || null,
-      date: dateIso,
-      scorePct,
-      weakAreas: wa,
-      reason: "below_pass_threshold",
-    };
-  }
   return {
-    issued: true,
-    completionId: generateCompletionId(pathId, dateIso, scorePct),
-    // displayName (pseudonim) służy WYŁĄCZNIE do wyświetlenia na ekranie certyfikatu w trakcie sesji.
-    // Nie wchodzi do completionId (#61) ani do eksportu (buildReport go pomija) — pseudonim nie wycieka.
-    ...(displayName ? { displayName } : {}),
+    passed: Boolean(passed),
     path: pathId,
     pathName: opts.pathName || null,
-    date: dateIso,
     scorePct,
     weakAreas: wa,
+    ...(passed ? {} : { reason: "below_pass_threshold" }),
   };
 }
 
-/** Minimalny obiekt raportowy do eksportu (bez PII). */
+/** Minimalny obiekt raportowy do eksportu (bez PII, bez pseudonimu, bez completionId — M12-2 #93). */
 function buildReport(progress, opts = {}) {
   const ft = progress.finalTest || {};
-  const cert = progress.certificate || {};
   // Czas per moduł (KPI Time to complete) — bez tego eksport nie pozwala policzyć KPI z pobranych plików.
   const moduleTimesSec = {};
   let totalTimeSec = 0;
@@ -93,11 +50,6 @@ function buildReport(progress, opts = {}) {
     passed: Boolean(ft.passed),
     criticalQuestionsPassed: Boolean(ft.criticalQuestionsPassed),
     attempts: ft.attempts ?? 0,
-    completionId: cert.completionId || null,
-    // PRYWATNOŚĆ (#61): w eksporcie skracamy znacznik do daty. Pełny timestamp ms + path + wyniki + czasy
-    // modułów byłby quasi-identyfikatorem deanonimizującym względem listy obecności. Pełny issuedAt zostaje
-    // tylko lokalnie/na ekranie, nie w pobieranym pliku.
-    issuedAt: cert.issuedAt ? String(cert.issuedAt).slice(0, 10) : null,
     weakModules: (ft.weakModules || []).slice(),
     practicalTasks: (progress.practicalTasks || []).map((t) => ({
       rubric: t.rubric,
@@ -123,15 +75,13 @@ const csvCell = (v) => {
 /** Eksport CSV (string, nagłówek + 1 wiersz) — pola złożone łączone "; ", bez PII. */
 export function exportCsv(progress, opts = {}) {
   const r = buildReport(progress, opts);
-  const cols = ["completionId", "path", "scorePct", "passed", "criticalQuestionsPassed", "attempts", "issuedAt", "weakModules", "totalTimeSec"];
+  const cols = ["path", "scorePct", "passed", "criticalQuestionsPassed", "attempts", "weakModules", "totalTimeSec"];
   const row = [
-    r.completionId,
     r.path,
     r.scorePct,
     r.passed,
     r.criticalQuestionsPassed,
     r.attempts,
-    r.issuedAt,
     r.weakModules.join("; "),
     r.totalTimeSec,
   ];

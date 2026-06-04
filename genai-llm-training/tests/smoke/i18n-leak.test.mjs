@@ -7,7 +7,7 @@ import assert from "node:assert/strict";
 import { bank, pathsData, modulesData, rubricsData, moduleContent } from "./_fixtures.mjs"; // rejestruje katalogi PL
 import { PATH_IDS, pathModuleList, finalTestStatus, getPath } from "../../assets/core/paths.js";
 import { scoreQuestion } from "../../assets/core/quiz-engine.js";
-import { buildCertificate } from "../../assets/core/certificate.js";
+import { buildResult } from "../../assets/core/certificate.js";
 import { selectFinalTest } from "../../assets/core/test-engine.js";
 import { renderPathSelect } from "../../assets/ui/path-select.js";
 import { renderQuestion, renderFeedback } from "../../assets/ui/quiz-view.js";
@@ -25,7 +25,7 @@ function assertClean(node, label) {
 }
 
 test("path-select: brak wycieku placeholderów/kluczy (hero, karty, currentPath, privacy)", () => {
-  const node = renderPathSelect(pathsData, modulesData, { currentPath: "S2", participantName: "Tester" });
+  const node = renderPathSelect(pathsData, modulesData, { currentPath: "S2" });
   assertClean(node, "path-select");
 });
 
@@ -57,15 +57,15 @@ test("nav (locked + available) i test-view: brak wycieku", () => {
   }
 });
 
-test("certyfikat (issued + failed): brak wycieku", () => {
-  const issued = buildCertificate({ pathId: "S2", scorePct: 90, passed: true, weakModules: [] },
-    { dateIso: "2024-01-01T00:00:00.000Z", pathName: "Praktyk", modulesData });
-  assertClean(renderResult(issued, { pathName: "Praktyk", gates: [{ type: "overallThreshold", passed: true }] }), "cert-issued");
+test("ekran Wynik (zaliczony + niezaliczony): brak wycieku", () => {
+  const passed = buildResult({ pathId: "S2", scorePct: 90, passed: true, weakModules: [] },
+    { pathName: "Praktyk", modulesData });
+  assertClean(renderResult(passed, { pathName: "Praktyk", gates: [{ type: "overallThreshold", passed: true }] }), "result-passed");
 
-  const failed = buildCertificate({ pathId: "S2", scorePct: 50, passed: false, weakModules: [{ module: "M10", pct: 40 }] },
-    { dateIso: "2024-01-01T00:00:00.000Z", pathName: "Praktyk", modulesData });
-  assertClean(renderResult(failed, { pathName: "Praktyk", gates: [{ type: "overallThreshold", passed: false }], attemptInfo: "Wykorzystane podejścia: 1." }), "cert-failed");
-  assertClean(renderResult(failed, { pathName: "Praktyk" }), "cert-failed-noGates"); // wariant noGates
+  const failed = buildResult({ pathId: "S2", scorePct: 50, passed: false, weakModules: [{ module: "M10", pct: 40 }] },
+    { pathName: "Praktyk", modulesData });
+  assertClean(renderResult(failed, { pathName: "Praktyk", gates: [{ type: "overallThreshold", passed: false }], attemptInfo: "Wykorzystane podejścia: 1." }), "result-failed");
+  assertClean(renderResult(failed, { pathName: "Praktyk" }), "result-failed-noGates"); // wariant noGates
 });
 
 void rubricsData; void moduleContent; // dostępne dla rozszerzeń; nie wymagane w tym guardzie

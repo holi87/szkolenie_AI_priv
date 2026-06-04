@@ -82,3 +82,25 @@ Macierz przyjmuje **curriculum (doc 06) jako wiążące** (zgodnie z kryterium a
 - [x] Macierz blokuje późniejszy gating modułów — `required: true/false` per moduł/ścieżka w `paths.json` jest kontraktem gatingu dla #15.
 
 > Flaga **F1 rozstrzygnięta** (decyzja Senior SA: realne czasy z curriculum, self-paced, bez trimu). Macierz jest **zamrożona** — struktura modułów (status/gating) i czasy są wiążące dla dalszych prac. **F2** (doc 03 vs curriculum) do kosmetycznego ujednolicenia przy storyboardzie (#6); nie blokuje.
+
+---
+
+## 5. M13 — model hybrydowy: rdzeń vs dedykowane (docelowy, patrz ADR-0006)
+
+> Dokładka M13 (#94) do zamrożonej macierzy #5: **NIE zmienia** sekcji 1–4 (status/gating/progi pozostają kontraktem). Dokłada warstwę: które moduły mają **identyczną** treść+pytania we wszystkich ścieżkach (rdzeń), a które **realnie różną** treść i **rozłączną pulę pytań** per persona (dedykowane). Design, reprezentacja danych i inwariant „dedykowane": **ADR-0006**.
+
+| Moduł | Rdzeń / dedykowany | Uzasadnienie (persona-efekt) |
+|---|---|---|
+| M1 Fundamenty | **rdzeń** | wspólny fundament pojęciowy dla każdej persony |
+| M10 Bezpieczeństwo (5 kryt.) | **rdzeń** | bezpieczeństwo + pytania krytyczne identyczne dla wszystkich (warunek konieczny) |
+| M11 Weryfikacja/halucynacje | **rdzeń** | higiena weryfikacji outputu uniwersalna |
+| M2 Architektura | dedykowany | S1 świadomość ograniczeń vs S2/S3 głębia techniczna |
+| M3 Parametry | dedykowany | S2 praktyczne strojenie vs S3 pełny zakres |
+| M4 Embeddings / M5 Vector DB | dedykowany (gł. S3) | wewnętrzne szczegóły tylko dla inżyniera |
+| M6 RAG | dedykowany | S1 świadomościowy · S2 praktyczny · S3 pełny |
+| M7 Prompt eng. | dedykowany | S1 skrócony/decyzyjny vs S2/S3 warsztatowy |
+| M8 QA use cases | dedykowany | nacisk QA (S2) vs automatyzacja (S3) |
+| M9 Agenty | dedykowany (gł. S3) | architektura agentowa dla inżyniera |
+| M12 Ewaluacja | dedykowany (gł. S3) | ewaluacja LLM/RAG techniczna |
+
+**Docelowy efekt:** S1 (decyzyjna), S2 (praktyk/QA), S3 (inżynier) dostają w modułach dedykowanych **inną treść i osobne pytania**, nie podzbiór wspólnego banku. Rozłączność pul, liczby per (moduł×ścieżka), golden i bramki per ścieżka — domykane w M13-2…M13-6 (#95–#99); patrz ADR-0006 „Konsekwencje" (zmiana ALL-OR-NOTHING).

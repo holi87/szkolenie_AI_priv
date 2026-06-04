@@ -13,7 +13,7 @@ import { renderPathSelect } from "../../assets/ui/path-select.js";
 const HERE = dirname(fileURLToPath(import.meta.url));
 const appHtml = readFileSync(join(HERE, "..", "..", "index.html"), "utf8");
 
-const node = renderPathSelect(pathsData, modulesData, { onSelect: () => {}, onName: () => {} });
+const node = renderPathSelect(pathsData, modulesData, { onSelect: () => {} });
 const snap = serializeTree(node);
 const occ = (re) => (snap.match(re) || []).length;
 
@@ -32,8 +32,8 @@ test("3 karty ścieżek; dokładnie JEDNA rekomendowana z plakietką", () => {
 test("karty zachowują CTA + szczegóły wymaganych modułów (treść nie zniknęła po restylizacji)", () => {
   assert.equal(occ(/path-card__cta/g), 3, "każda karta ma przycisk wyboru");
   assert.match(snap, /path-card__details/, "karta bez szczegółów modułów");
-  // Pseudonim: kontrolka z etykietą nadal obecna (a11y, #63).
-  assert.match(snap, /INPUT\[[^\]]*id="participant-name"/, "zgubiono pole pseudonimu");
+  // M12-2 (#93): pole pseudonimu USUNIĘTE (certyfikat zniesiony) — asercja ODWRÓCONA: input nie może istnieć.
+  assert.doesNotMatch(snap, /id="participant-name"/, "pole pseudonimu powinno zniknąć (#93)");
 });
 
 test("przełącznik języka (#79): AKTYWNY trigger (menu, fokusowalny), opisany, z flagą + kodem", () => {

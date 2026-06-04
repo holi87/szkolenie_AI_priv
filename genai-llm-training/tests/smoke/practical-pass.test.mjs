@@ -1,11 +1,11 @@
 // practical-pass.test.mjs — DOWÓD odblokowania M4: zadania praktyczne (recordPracticalTask) sprawiają,
 // że S2 i S3 są realnie zaliczalne (do M3 bramki praktyczne pozostawały niespełnione, więc S2/S3 nie zaliczały).
-// Łańcuch: recordPracticalTask → scorePath (bramki) → buildCertificate → certificate.issued === true.
+// Łańcuch: recordPracticalTask → scorePath (bramki) → buildResult → result.passed === true (M12-2 #93).
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { selectFinalTest } from "../../assets/core/test-engine.js";
 import { scorePath } from "../../assets/core/scoring.js";
-import { buildCertificate } from "../../assets/core/certificate.js";
+import { buildResult } from "../../assets/core/certificate.js";
 import { createMemoryAdapter, createProgressStore } from "../../assets/core/progress-store.js";
 import { bank, pathsData, modulesData, seededRng } from "./_fixtures.mjs";
 
@@ -33,16 +33,16 @@ test("S2 zaliczalne: zadanie praktyczne R1-prompt 4/5 (przez recordPracticalTask
   const r = scorePath("S2", sel.questions, allCorrect(sel.questions), pathsData, { practicalResults, inlineQuizPct: 100 });
   assert.equal(r.criticalPassed, true);
   assert.equal(r.passed, true, "S2 z praktyką + 100% testu + quizy inline = zaliczone");
-  const cert = buildCertificate(r, { participant: { displayName: "Tester S2" }, pathName: "Praktyk", modulesData });
-  assert.equal(cert.issued, true, "certyfikat wydany dopiero gdy ścieżka zaliczona");
+  const res = buildResult(r, { pathName: "Praktyk", modulesData });
+  assert.equal(res.passed, true, "ścieżka zaliczona dopiero gdy spełnione bramki (M12-2 #93)");
 });
 
 test("S2 bez zadania praktycznego → bramka practicalTask niespełniona → certyfikat NIE wydany", () => {
   const sel = selectFinalTest(bank, pathsData, "S2", seededRng(32));
   const r = scorePath("S2", sel.questions, allCorrect(sel.questions), pathsData, { inlineQuizPct: 100 });
   assert.equal(r.passed, false, "brak praktyki blokuje S2 (konserwatywnie)");
-  const cert = buildCertificate(r, { participant: { displayName: "Tester S2" }, pathName: "Praktyk", modulesData });
-  assert.equal(cert.issued, false);
+  const res = buildResult(r, { pathName: "Praktyk", modulesData });
+  assert.equal(res.passed, false);
 });
 
 test("S3 zaliczalne: R2-rag i R3-eval >=70% (M6/M12) → certyfikat wydany", () => {
@@ -55,8 +55,8 @@ test("S3 zaliczalne: R2-rag i R3-eval >=70% (M6/M12) → certyfikat wydany", () 
   const sel = selectFinalTest(bank, pathsData, "S3", seededRng(33));
   const r = scorePath("S3", sel.questions, allCorrect(sel.questions), pathsData, { practicalResults, inlineQuizPct: 100 });
   assert.equal(r.passed, true, "S3 z dwoma zadaniami praktycznymi + 100% testu = zaliczone");
-  const cert = buildCertificate(r, { participant: { displayName: "Inżynier S3" }, pathName: "Inżynier", modulesData });
-  assert.equal(cert.issued, true);
+  const res = buildResult(r, { pathName: "Inżynier", modulesData });
+  assert.equal(res.passed, true);
 });
 
 test("S3 z R2-rag poniżej progu (2/5=40%) → moduleMinScore niespełniona → niezaliczone", () => {

@@ -99,7 +99,7 @@ test("certificate-view rozwiązuje KOD reason z core przez t() (niepusty)", () =
   const pl = readJson("assets/i18n/pl.json");
   registerCatalog("pl", pl);
   setLocale("pl");
-  assert.equal(certReasonText("below_pass_threshold"), pl["cert.reason.below_pass_threshold"]);
+  assert.equal(certReasonText("below_pass_threshold"), pl["result.reason.below_pass_threshold"]);
   assert.notEqual(certReasonText("below_pass_threshold"), "");
   assert.equal(certReasonText("nieznany_kod"), ""); // nieznany kod -> pusty (brak prozy w core)
 });

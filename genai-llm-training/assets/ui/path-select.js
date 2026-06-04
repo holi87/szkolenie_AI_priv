@@ -45,7 +45,7 @@ function hero() {
 }
 
 /**
- * @param {object} opts - { onSelect(pathId), currentPath, participantName, onName(name) }
+ * @param {object} opts - { onSelect(pathId), currentPath }
  */
 export function renderPathSelect(pathsData, modulesData, opts = {}) {
   const root = el("div", { class: "view__content" });
@@ -58,16 +58,8 @@ export function renderPathSelect(pathsData, modulesData, opts = {}) {
     root.appendChild(el("p", { class: "path-badge", text: t("path.select.currentPath", { pathId: opts.currentPath }) }));
   }
 
-  // Opcjonalny PSEUDONIM na certyfikat (#63 model C): trzymany tylko w pamięci sesji — NIE zapisywany.
-  // Label celowo mówi „pseudonim", nie „imię" — minimalizacja danych (RODO art. 5(1)(c)), bez prawdziwego nazwiska.
-  const nameInput = el("input", { type: "text", id: "participant-name", value: opts.participantName || "",
-    attrs: { maxlength: "60", autocomplete: "off", placeholder: t("path.name.placeholder") } });
-  if (typeof opts.onName === "function") nameInput.addEventListener("change", () => opts.onName(nameInput.value.trim()));
-  root.appendChild(el("div", { class: "match-row" }, [
-    el("label", { attrs: { for: "participant-name" }, text: t("path.name.label") }),
-    nameInput,
-  ]));
-  // Nota informacyjna (nie zgoda): pseudonim sesyjny + lokalny zapis postępu. Bez cookies, nic nie wysyłamy.
+  // Nota informacyjna (nie zgoda): lokalny zapis postępu w przeglądarce. Bez cookies, nic nie wysyłamy.
+  // M12-2 (#93): zniesiono input pseudonimu (certyfikat usunięty) — nota prywatności i link zostają.
   root.appendChild(el("p", { class: "muted privacy-note" }, [
     el("span", { text: t("path.privacy.note") }),
     el("a", { href: privacyHref(), text: t("path.privacy.link") }),
