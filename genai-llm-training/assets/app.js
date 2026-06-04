@@ -100,15 +100,27 @@ function start(initialData, ctx = {}) {
   // Przełącznik języka (I18N-3 #79). Zmiana: rejestruj katalog locale (jeśli trzeba), przeładuj dane TYLKO gdy
   // zmienia się data-locale (locale z hasData), ustaw <html lang>, zapisz preferencję, odśwież ekran w miejscu.
   let langApi = null;
+  // Token przełączenia języka (Codex P2): EN jest data-backed (hasData), więc setLanguage robi async loadData/ensureCatalog.
+  // Gdy użytkownik szybko przełączy z powrotem, nieaktualna kontynuacja nie może nadpisać data/dataLocale ani UI —
+  // każde wejście dostaje numer; po każdym await porzucamy bieg, jeśli pojawiło się nowsze przełączenie (tylko ostatnie wygrywa).
+  let langReq = 0;
   async function setLanguage(code) {
+    const reqId = (langReq += 1);
     setLocale(code);
     persistLang(code);
     if (globalThis.document && globalThis.document.documentElement) globalThis.document.documentElement.setAttribute("lang", code);
     if (typeof ctx.ensureCatalog === "function") { try { await ctx.ensureCatalog(code); } catch { /* fallback PL */ } }
+    if (reqId !== langReq) return; // nowsze przełączenie wygrało — porzuć nieaktualną kontynuację
     const nextDataLocale = localeHasData(code) ? code : "pl";
     if (nextDataLocale !== dataLocale && typeof ctx.loadData === "function") {
-      try { data = await ctx.loadData(nextDataLocale); dataLocale = nextDataLocale; } catch { /* zostań przy obecnych danych */ }
+      try {
+        const loaded = await ctx.loadData(nextDataLocale);
+        if (reqId !== langReq) return;   // sprawdź ponownie po async loadData — inaczej dane EN trafiłyby pod UI PL
+        data = loaded;
+        dataLocale = nextDataLocale;
+      } catch { /* zostań przy obecnych danych */ }
     }
+    if (reqId !== langReq) return;
     if (langApi) langApi.setActive(code);
     setChrome(); // przetłumacz chrome headera + <title>/<meta>/<html lang> na nowy język (#81)
     render();
