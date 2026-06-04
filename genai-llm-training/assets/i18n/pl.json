@@ -4,7 +4,6 @@
     "name": "Polski",
     "note": "Katalog kanoniczny (PL). en.json ma identyczny zbiór kluczy. Klucze płaskie, namespaced kropką. {param} = interpolacja w t()."
   },
-
   "nav.heading.modules": "Moduły",
   "nav.progress": "Postęp: {pct}%",
   "nav.header.pathIndicator": "Ścieżka {pathId}",
@@ -16,7 +15,6 @@
   "nav.status.inProgress": "W toku",
   "nav.status.available": "Dostępny",
   "nav.status.locked": "Zablokowany",
-
   "action.viewResult": "Zobacz wynik / certyfikat",
   "action.evaluate": "Oceń",
   "action.check": "Sprawdź",
@@ -29,13 +27,11 @@
   "action.exportQuestionStatsCsv": "Pobierz odpowiedzi pytań (CSV)",
   "action.retry": "Podejdź ponownie",
   "action.finishAttempt": "Zakończ podejście i sprawdź wynik",
-
   "error.load.heading": "Nie udało się załadować szkolenia",
   "error.load.body": "Dane (data/*.json) ładują się przez fetch() i wymagają serwera http(s) — nie otwieraj pliku przez file://.",
   "error.load.hint": "Uruchom lokalnie: python3 -m http.server 8000 w katalogu genai-llm-training, potem otwórz http://localhost:8000",
-
   "module.menu.heading": "Ścieżka {pathId} — {pathName}",
-  "module.menu.intro": "Wybierz moduł z listy po lewej. Po module rozwiąż quiz inline z natychmiastowym feedbackiem. Test końcowy odblokuje się po ukończeniu modułów wymaganych.",
+  "module.menu.intro": "Wybierz moduł, aby przejść do treści i quizu z natychmiastowym feedbackiem. Test końcowy odblokuje się po ukończeniu modułów wymaganych.",
   "module.title": "{moduleId} — {moduleName}",
   "module.meta": "Filar: {pillar} · poziom: {level} · czas: ~{time} min · interakcja: {interaction}",
   "module.keyConcepts": "Kluczowe pojęcia",
@@ -50,7 +46,6 @@
   "module.table.descLabel": "Opis tabeli: {alt}",
   "module.summary.heading": "Podsumowanie",
   "module.summary.checklistTitle": "Checklista — zanim użyjesz LLM",
-
   "quiz.inline.heading": "Quiz inline ({count} pytań)",
   "quiz.questionCounter": "Pytanie {index} z {total}",
   "quiz.chip.points": "{points} pkt",
@@ -67,7 +62,6 @@
   "quiz.sequence.stepLabel": "krok",
   "quiz.rubric.textareaAriaLabel": "Twoja analiza outputu",
   "quiz.rubric.selfRateLegend": "Samoocena wg rubryki (0–3)",
-
   "feedback.correct": "Poprawnie",
   "feedback.incorrect": "Niepoprawnie",
   "feedback.noSelection": "Brak wyboru",
@@ -76,7 +70,6 @@
   "feedback.score": "  ({awarded}/{max} pkt)",
   "feedback.criticalFail.head": "Błąd bezpieczeństwa",
   "feedback.criticalFail.body": "To jest błąd bezpieczeństwa. Przed zaliczeniem wróć do sekcji higieny danych i prompt injection.",
-
   "interaction.practical.passed": "Zadanie praktyczne zaliczone ({score}/{max}) — liczy się do zaliczenia ścieżki {pathId}.",
   "interaction.practical.belowThreshold": "Zadanie praktyczne poniżej progu ({score}/{max}). Popraw kryteria i oceń ponownie — wynik liczy się do zaliczenia ścieżki {pathId}.",
   "interaction.classify.categoriesLabel": "Kategorie:",
@@ -89,7 +82,6 @@
   "interaction.tune.outputRow": "{label}: {value}",
   "interaction.tune.outputLabel": "Wynik dla wybranych ustawień:",
   "interaction.tune.checkpointFallback": "Checkpoint",
-
   "test.heading": "Test końcowy — {pathName}",
   "test.meta": "{count} pytań · próg zaliczenia {threshold}% · wszystkie pytania krytyczne muszą być poprawne.",
   "test.modeNote": "Tryb testu: feedback i wynik pojawią się dopiero po zakończeniu podejścia.",
@@ -100,7 +92,6 @@
   "test.submitConfirm": "Odpowiedziałeś na {answered} z {total} pytań. Brakujące będą liczone jako błędne. Zakończyć podejście?",
   "test.lockedReason.modules": "ukończ moduły wymagane: {modules}",
   "test.lockedReason.practical": "zalicz zadania praktyczne (wymagany próg): {rubrics}",
-
   "path.hero.title.template": "Opanuj {accent} w pracy QA",
   "path.hero.title.accent": "GenAI i LLM",
   "path.hero.lead": "Interaktywne, samodzielne szkolenie: ścieżka dopasowana do Twojej roli, quizy z natychmiastowym feedbackiem i certyfikat na koniec. Wszystko w przeglądarce — bez kont, bez wysyłki danych.",
@@ -118,7 +109,6 @@
   "path.name.placeholder": "np. Tester01 — nie podawaj prawdziwego nazwiska",
   "path.privacy.note": "Pseudonim widać tylko na certyfikacie w tej sesji — nie zapisujemy go. Postęp i wyniki zapisują się lokalnie w Twojej przeglądarce; nic nie wysyłamy na serwer i nie używamy cookies. ",
   "path.privacy.link": "Szczegóły: Prywatność",
-
   "cert.eyebrow": "Certyfikat ukończenia",
   "cert.passed.heading": "Gratulacje — ścieżka zaliczona",
   "cert.score.label": "wynik ścieżki",
@@ -137,5 +127,17 @@
   "cert.failed.heading": "Ścieżka jeszcze niezaliczona",
   "cert.failed.notice.withGates": "{score} — wynik ścieżki. Aby zaliczyć, spełnij wszystkie bramki poniżej.",
   "cert.failed.notice.noGates": "{score} — wynik ścieżki. Ścieżka niezaliczona — wróć i spełnij wszystkie wymagane warunki zaliczenia tej ścieżki.",
-  "cert.reason.below_pass_threshold": "Wynik poniżej progu zaliczenia — certyfikat nie został wydany."
+  "cert.reason.below_pass_threshold": "Wynik poniżej progu zaliczenia — certyfikat nie został wydany.",
+  "module.hub.card.required": "Wymagany",
+  "module.hub.card.optional": "Opcjonalny",
+  "module.hub.card.meta": "{variant} · Filar: {pillar} · ~{time} min",
+  "module.hub.card.quiz": "Wynik quizu: {pct}%",
+  "module.hub.cta.start": "Rozpocznij",
+  "module.hub.cta.continue": "Kontynuuj",
+  "module.hub.cta.review": "Przejrzyj ponownie",
+  "module.hub.cta.aria": "{cta}: moduł {moduleId} {moduleName}",
+  "module.hub.finalTest.cta": "Przejdź do testu końcowego",
+  "module.pillar.foundations_technical": "Fundamenty techniczne",
+  "module.pillar.qa_practice": "Praktyka QA",
+  "module.pillar.security_governance": "Bezpieczeństwo i governance"
 }
