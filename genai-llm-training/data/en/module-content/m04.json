@@ -1,0 +1,171 @@
+{
+  "_meta": {
+    "module": "M4",
+    "issue": "[M4] Wdroż treść modułu M4 — Embeddings i podobieństwo semantyczne",
+    "storyboard": "docs/storyboard/m04-embeddings.md",
+    "schema": "../schemas/module-content.schema.json",
+    "scenario": "SC-RAG-01 (mini-korpus DOC1-DOC4, pułapka: DOC1 token sesji 30 min podobny semantycznie, ale poprawne źródło to DOC3 link resetu)",
+    "interaction": "Mapa semantyczna (kind: classify)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (NotkaApp/SklepDemo/PipeDemo, domena przyklad.test, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pointa: wysokie podobieństwo semantyczne ≠ poprawność biznesowa. Zgodne z pulą Q25-Q32."
+  },
+  "module": "M4",
+  "intro": "A documentation search engine, ticket deduplication, and RAG (modules M5-M6) all stand on embeddings and semantic similarity. A tester who understands why a \"similar\" passage can be the \"wrong\" one diagnoses search results better and does not trust the ranking blindly. This module gives you an intuition for embeddings, cosine similarity, and four similarity traps, and at the end you practice them on the \"Semantic map\".",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Why a tester needs embeddings",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "More and more often a semantic search engine gives you the result: you type a question, and the system returns the \"best-matching\" documentation passages. Underneath, embeddings (semantic vectors) and a similarity measure are at work. If you do not know how it computes this, it is easy to take the top result as the correct answer." },
+        { "kind": "list", "items": [
+          "Explain what an embedding is as a numeric representation of meaning.",
+          "Interpret cosine similarity as closeness of vector direction, not text length.",
+          "Identify 4 cases where high similarity does not mean a correct answer.",
+          "Tune a query for semantic search so it hits the intent."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Interactive element", "text": "At the end you will enter the \"Semantic map\": you will pick a query and see a list of the nearest passages with their similarity score and a marker showing whether the result is relevant for the business, or a trap." }
+      ]
+    },
+    {
+      "id": "s2-slowo-jako-wektor",
+      "title": "A word as a vector",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Embedding", "original": "embedding", "text": "a numeric representation of the meaning of text — the model turns a phrase into a vector of numbers in which close meanings lie close together." },
+        { "kind": "paragraph", "text": "An embedding model does not count letters or words — it encodes meaning. Thanks to this, \"login\" and \"authentication\" land close together, while \"invoice\" lands far away, even though none of these words are identical." },
+        { "kind": "diagram", "textAlt": "On a notional 2D map, three phrases from the NotkaApp documentation: \"login\" at point (0.8, 0.7) and \"authentication\" right next to it at (0.9, 0.6) — close, because they mean almost the same thing. The phrase \"invoice\" lies far away, at (0.1, 0.2). Conclusion: distance on the map corresponds to a difference in meaning, not in spelling.", "ascii": "login •          invoice\nauthentication •\n                          •" }
+      ]
+    },
+    {
+      "id": "s3-cosine-similarity",
+      "title": "Cosine similarity — direction, not length",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Cosine similarity", "original": "cosine similarity", "text": "a measure of the angle between two meaning vectors; the result ranges from −1 to 1, in practice 0-1 for text. The closer to 1, the more aligned the direction of meaning." },
+        { "kind": "paragraph", "text": "The key intuition: what counts is the direction of meaning, not the length or \"strength\" of the text. A short description and a long, elaborate paragraph about the same procedure point in the same direction, so their similarity is high despite the difference in length." },
+        { "kind": "table",
+          "caption": "Three synthetic phrase pairs from the NotkaApp documentation and their notional similarity",
+          "headers": ["Phrase pair", "Cosine similarity", "Why"],
+          "rows": [
+            ["\"Password reset: e-mail link valid for 30 min\" vs. a long paragraph about the same procedure", "0.94", "the same direction of meaning, length does not lower the result"],
+            ["\"login works\" vs. \"login does not work\"", "0.90", "the shared topic \"login\" dominates over the negation"],
+            ["\"password reset\" vs. \"product pricing\"", "0.21", "different topics, divergent vector direction"]
+          ],
+          "textAlt": "A short and a long description of the same reset procedure have a similarity of 0.94 — length does not lower the result, because direction is what counts. The pair \"login works\" / \"login does not work\" has as much as 0.90, because the shared topic outweighs the negation. The pair on different topics (password reset vs. pricing) has only 0.21." }
+      ]
+    },
+    {
+      "id": "s4-ranking",
+      "title": "How to read a similarity ranking",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Nearest neighbors", "original": "nearest neighbors", "text": "a list of the passages most similar to the query, sorted in descending order by similarity value." },
+        { "kind": "paragraph", "text": "A score of 0.91 is \"closer\" than 0.62, but the number is not a percentage of correctness. The cutoff threshold (e.g. 0.75) is arbitrary and depends on the corpus — in another set the same value can mean something else." },
+        { "kind": "list", "items": [
+          "The list is sorted in descending order by similarity — the most semantically similar is at the top.",
+          "A high position is a signal of relevance, not proof — the content must be verified.",
+          "There is no fixed, universal threshold; 0.62 does not mean \"62% correct\"."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Bridge to the next screen", "text": "Since a high position does not guarantee relevance, let us look at concrete situations in which the top result leads to a wrong answer." }
+      ]
+    },
+    {
+      "id": "s5-pulapka-4-przypadki",
+      "title": "Trap: similar ≠ correct — 4 cases",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "This is the core of the module. An embedding encodes the topic more strongly than small but critical differences. Four typical situations where high similarity misleads:" },
+        { "kind": "list", "ordered": true, "items": [
+          "Negation / antonym — \"login works\" and \"login does not work\" are semantically close, even though they mean the opposite.",
+          "Same topic, different intent — a description of the payment feature in SklepDemo vs. a bug report about the same feature.",
+          "Ambiguity (polysemy) — a security \"token\" vs. \"token\" as a unit in an LLM.",
+          "Outdated version — the old and new wording of a requirement are very similar, but only the new one is correct."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "The crux", "text": "In all four cases the passage is semantically close, yet incorrect for the business. High cosine similarity is not the same as a correct answer." }
+      ]
+    },
+    {
+      "id": "s6-dlaczego-model-sie-myli",
+      "title": "Going deeper: why the model gets it wrong",
+      "type": "content",
+      "onlyForPaths": ["S2", "S3"],
+      "blocks": [
+        { "kind": "paragraph", "text": "Where do these traps come from? An embedding averages the meaning of the whole phrase and encodes topic and style more strongly than single, small words. The negation \"not\", the version number \"v2\", or a change of intent is a small part of the vector, so it gets lost against the shared topic." },
+        { "kind": "list", "items": [
+          "A similarity ranking is a supporting signal, not a verdict — the result requires verifying the content of the passage.",
+          "It is worth supporting search with metadata filtering (e.g. document version, type) to limit misleading hits.",
+          "Rigidly raising the threshold (e.g. to 0.95) does not fix the vector direction — a pair with a negation can be so similar that no threshold filters it out."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Bridge to later modules", "text": "You will learn metadata filtering in M5 (Vector databases), and the full output verification checklist in M11." }
+      ]
+    },
+    {
+      "id": "s7-dobor-zapytania",
+      "title": "Tuning the query for semantic search",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Relevance starts with the query. The better it captures the intent and the key object, the more the query vector aims at the right meaning and moves away from similar but different concepts." },
+        { "kind": "table",
+          "caption": "Weak vs. better query and the effect on the result list (synthetic example, NotkaApp)",
+          "headers": ["Weak query", "Better query", "Effect on results"],
+          "rows": [
+            ["\"password\"", "\"validity period of the password reset link\"", "the full phrase conveys the intent, instead of a single generic word"],
+            ["\"reset\"", "\"password reset in NotkaApp v2\"", "the clarified context and version boost the current wording"],
+            ["\"not the session token\"", "\"password reset link, not the session token\"", "the key object (the reset link) moves the result away from the session token; negation alone does not work"]
+          ],
+          "textAlt": "We replace the generic \"password\" with the full phrase \"validity period of the password reset link\", because it conveys the intent. We replace \"reset\" with \"password reset in NotkaApp v2\" to hit the current version. You do not build a query as a mere negation \"not the session token\" — better to name the key object \"password reset link\" to move the result away from the session token." },
+        { "kind": "callout", "variant": "safe", "title": "Rule of thumb", "text": "Full phrase + context/version + key object. Avoid a single word and do not build the query out of a negation alone." }
+      ]
+    },
+    {
+      "id": "s8-chcesz-poglebic",
+      "title": "Want to go deeper?",
+      "type": "decision",
+      "blocks": [
+        { "kind": "paragraph", "text": "You already have the four traps and the rules for tuning a query. Time to practice them on the \"Semantic map\"." },
+        { "kind": "list", "items": [
+          "Recommended (S2 extended / S3): enter the full \"Semantic map\" with the NotkaApp mini-corpus and diagnostic cases.",
+          "Shortcut (S1): go to the simplified version and the quiz if you only want to reinforce the basics."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Next best step", "text": "Open the \"Semantic map\": pick a query about the validity period of the password reset link and check which passage is truly relevant." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "m4-mapa-semantyczna",
+    "title": "Semantic map",
+    "intro": "Query: \"After how long does the password reset link expire?\" (NotkaApp mini-corpus). Each passage has a stated similarity to the query. Assign it to a category. The point: the top result is not always the correct answer — high semantic similarity ≠ business correctness. After checking, you will see the rationale next to each passage.",
+    "categories": [
+      { "id": "trafny", "label": "Relevant for the business", "desc": "answers the query about the password reset link — the correct source" },
+      { "id": "podobny_bledny", "label": "Semantically similar, but wrong", "desc": "similar in topic, yet about a different object or intent — a trap" },
+      { "id": "nietrafny", "label": "Unrelated", "desc": "low score, different topic — does not answer the query" }
+    ],
+    "items": [
+      { "id": "doc3", "text": "DOC3: \"Password reset: e-mail link valid for 30 min, single-use.\" (similarity 0.71)", "correctCategory": "trafny", "rationale": "This is the correct source: it is about exactly the password reset link and its validity period — relevant despite a lower score than DOC1." },
+      { "id": "doc3b", "text": "Paraphrase of DOC3: \"The link to reset the password sent by e-mail stops working 30 minutes after it is sent.\" (similarity 0.69)", "correctCategory": "trafny", "rationale": "A longer description of the same procedure points in the same direction of meaning, so it is just as relevant — cosine similarity measures direction, not length." },
+      { "id": "doc1", "text": "DOC1: \"Login procedure in NotkaApp: the session token expires after 30 min of inactivity.\" (similarity 0.86 — the highest)", "correctCategory": "podobny_bledny", "rationale": "TRAP: it shares with the query the theme \"something expires after 30 min\", but it is about a different object (the session token, not the reset link) — the highest similarity, yet the wrong source." },
+      { "id": "doc-akt", "text": "Passage from a different process: \"The account activation link expires 30 min after registration.\" (similarity 0.80)", "correctCategory": "podobny_bledny", "rationale": "The same theme \"link expires after 30 min\", but a different object (account activation, not password reset) — high similarity misleads, because the embedding encodes the shared topic more strongly than the difference in object." },
+      { "id": "doc2", "text": "DOC2: \"NotkaApp password policy: min. 12 characters, lockout after 3 failed attempts.\" (similarity 0.55)", "correctCategory": "podobny_bledny", "rationale": "A shared topic \"password\", but it is about length rules and lockout, not the validity period of the reset link — close, yet it does not answer the query." },
+      { "id": "doc-neg", "text": "Ticket: \"login does not work after the v2 update\". (similarity 0.58)", "correctCategory": "podobny_bledny", "rationale": "A trap of a different object and a different intent: it is about login (not password reset) and it is a bug report, not a description of the link's validity period — a related topic, yet it does not answer the query." },
+      { "id": "doc4", "text": "DOC4: \"NotkaApp marketing FAQ: product benefits and pricing.\" (similarity 0.19)", "correctCategory": "nietrafny", "rationale": "A different topic (marketing, pricing), a divergent vector direction — the low score correctly signals no relation to the query." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "An embedding is the meaning of text recorded as a vector of numbers — close meanings give close vectors.",
+      "Cosine similarity measures the direction of meaning, not the length of the text — a short and a long description of the same thing are close.",
+      "Four similarity traps: negation, the same topic with a different intent, ambiguity, and an outdated version.",
+      "A similarity ranking is a signal, not a verdict — the top result can be wrong for the business, which is why the content must be verified."
+    ],
+    "checklist": [
+      "Does the top result actually concern the same object and intent as my query?",
+      "Does the passage differ from the correct one only by a negation or a version number?",
+      "Does the query convey the intent with a full phrase, including context and the key object?",
+      "Did I verify the content of the passage, instead of trusting the ranking position alone?"
+    ],
+    "checklistTitle": "Checklist — before you trust a semantic search result",
+    "nextStep": "Next step: M5 — Vector databases and similarity search (metadata filtering and the search pipeline)."
+  }
+}

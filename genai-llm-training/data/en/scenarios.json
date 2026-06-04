@@ -1,0 +1,122 @@
+{
+  "_meta": {
+    "issue": "#8 [08][M1] Przygotuj syntetyczne scenariusze szkoleniowe",
+    "version": "0.1",
+    "doc": "docs/scenariusze.md",
+    "dataPolicy": "WSZYSTKIE dane są SYNTETYCZNE i fikcyjne. Domena e-mail: przyklad.test (zarezerwowana). Produkty/firmy fikcyjne. Identyfikatory w formatach jawnie testowych. PESEL/numery to placeholdery nieprawidłowe. ZERO realnych danych klienta/PII.",
+    "source": "wymagania/06 (moduły, interakcje), wymagania/07 (typy pytań), docs/storyboard/"
+  },
+  "scenarios": [
+    {
+      "id": "SC-QA-01",
+      "title": "Generating test cases from a requirement",
+      "modules": ["M8"],
+      "paths": ["S2", "S3"],
+      "competency": "Generates test cases and detects coverage gaps (E: M8)",
+      "usedBy": ["QA workbench", "pytania Q61-Q64"],
+      "data": {
+        "wymaganie": "The NotkaApp application (fictional): a user resets their password through an email link valid for 30 minutes; after 3 failed attempts the account is locked for 15 minutes.",
+        "outputLLM": "Generated test cases: TC1 successful reset; TC2 expired link; TC3 wrong password 3x → lockout. (missing: empty email, link used twice, concurrent sessions)"
+      }
+    },
+    {
+      "id": "SC-PII-01",
+      "title": "A support ticket containing personal data — deciding whether to paste it into an LLM",
+      "modules": ["M10"],
+      "paths": ["S1", "S2", "S3"],
+      "competency": "Classifies data as allowed / requiring anonymization / not allowed (E: M10, critical questions)",
+      "usedBy": ["Data safety gate", "pytania krytyczne Q81-Q85"],
+      "data": {
+        "zgloszenie": "Customer Jan Kowalski (jan.kowalski@przyklad.test, customer ID KLI-000123, PESEL 00000000000 [synthetic, invalid]) reports a payment error in SklepDemo.",
+        "pytanie": "Is it allowed to paste the entire ticket into a public LLM in order to analyze the error?",
+        "poprawnaDecyzja": "Anonymize the identifying data or use an approved tool with controls; do not paste raw data."
+      }
+    },
+    {
+      "id": "SC-PII-02",
+      "title": "An application log with fragments of data — what to anonymize",
+      "modules": ["M10"],
+      "paths": ["S2", "S3"],
+      "competency": "Identifies the data requiring anonymization in a log (E: M10)",
+      "usedBy": ["Data safety gate", "pytania Q86-Q90"],
+      "data": {
+        "log": "2026-01-02 ERROR user=anna.nowak@przyklad.test ip=10.0.0.5 token=tok_test_ABC123 order=ORD-TEST-777 msg=payment_failed",
+        "doAnonimizacji": ["email", "token", "potentially the order id in a customer context"]
+      }
+    },
+    {
+      "id": "SC-RAG-01",
+      "title": "A mini-corpus of QA documentation for retrieval/RAG",
+      "modules": ["M4", "M5", "M6"],
+      "paths": ["S3"],
+      "competency": "Selects retrieval and diagnoses similar-but-useless results; designs a RAG pipeline (E: M4/M5/M6)",
+      "usedBy": ["Mapa semantyczna", "Retrieval debugger", "Zbuduj pipeline RAG", "pytania Q33-Q50"],
+      "data": {
+        "korpus": [
+          { "id": "DOC1", "text": "NotkaApp login procedure: the session token expires after 30 min of inactivity." },
+          { "id": "DOC2", "text": "NotkaApp password policy: min. 12 characters, lockout after 3 failures." },
+          { "id": "DOC3", "text": "Password reset: email link valid for 30 min, single-use." },
+          { "id": "DOC4", "text": "NotkaApp marketing FAQ: product benefits and pricing." }
+        ],
+        "zapytanie": "After how long does the password reset link expire?",
+        "pulapka": "DOC1 (session token 30 min) is semantically similar, but the correct source is DOC3 (reset link)."
+      }
+    },
+    {
+      "id": "SC-AGENT-01",
+      "title": "Granting permissions to a QA agent",
+      "modules": ["M9"],
+      "paths": ["S3"],
+      "competency": "Designs minimal permission control, logging, human-in-the-loop, and rollback (E: M9)",
+      "usedBy": ["Agent permission board", "pytania Q76-Q78"],
+      "data": {
+        "agent": "An agent that runs regression tests in the TEST environment (fictional CI 'PipeDemo').",
+        "zadania": ["run tests", "read logs", "create a report", "report a defect", "change the environment configuration"],
+        "ryzyko": "Changing configuration and writing outside TEST require human approval and rollback; no access to production."
+      }
+    },
+    {
+      "id": "SC-VERIFY-01",
+      "title": "An LLM response with a mix of justified content and hallucinations",
+      "modules": ["M11"],
+      "paths": ["S1", "S2", "S3"],
+      "competency": "Flags sentences as correct / unsupported / requiring a source / risky (E: M11)",
+      "usedBy": ["Output verifier", "pytania Q95-Q98"],
+      "data": {
+        "odpowiedzLLM": [
+          "Password reset in NotkaApp uses a link valid for 30 minutes. [consistent with DOC3]",
+          "The link can be used repeatedly until it works. [unsupported — contradicts DOC3]",
+          "The account lockout lasts 24 hours. [requires a source — inconsistent with the 15 min requirement]",
+          "NotkaApp holds an ISO 27001 certificate. [risky — no source]"
+        ]
+      }
+    },
+    {
+      "id": "SC-PROMPT-01",
+      "title": "A flawed prompt to improve",
+      "modules": ["M7"],
+      "paths": ["S1", "S2", "S3"],
+      "competency": "Improves an imprecise prompt according to the rubric (E: M7)",
+      "usedBy": ["Prompt clinic", "pytania Q57-Q60", "rubryka R1"],
+      "data": {
+        "wadliwyPrompt": "Write tests for the login.",
+        "braki": ["no role/goal", "no context (which application, which requirement)", "no constraints or criteria", "no output format"]
+      }
+    },
+    {
+      "id": "SC-EVAL-01",
+      "title": "Divergence between human evaluation and LLM-as-a-judge",
+      "modules": ["M12"],
+      "paths": ["S3"],
+      "competency": "Detects bias/position bias and calibrates the rubric (E: M12)",
+      "usedBy": ["Judge calibration lab", "pytania Q113-Q116", "rubryka R3"],
+      "data": {
+        "przyklady": [
+          { "id": "EX1", "ocenaCzlowiek": 4, "ocenaJudge": 5, "uwaga": "the judge favors the longer answer" },
+          { "id": "EX2", "ocenaCzlowiek": 2, "ocenaJudge": 4, "uwaga": "position bias — the first answer" }
+        ],
+        "zadanie": "Identify the source of the divergence and fix the rubric."
+      }
+    }
+  ]
+}

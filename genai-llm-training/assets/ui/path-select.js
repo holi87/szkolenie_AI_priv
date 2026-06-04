@@ -1,7 +1,7 @@
 // path-select.js — ekran startowy: hero (pierwsze wrażenie) + wybór ścieżki S1/S2/S3 (issue #15, redesign UX-2 #71).
 // Pokazuje zakres ścieżki (wymagane/opcjonalne moduły, czas, próg) i zapisuje wybór (callback onSelect).
 import { el } from "./dom.js";
-import { t } from "../i18n/i18n.js";
+import { t, privacyHref } from "../i18n/i18n.js";
 import { PATH_IDS, getPath } from "../core/paths.js";
 
 // Źródło rekomendacji: stała (paths.json jest "frozen" + schema additionalProperties:false, więc nie
@@ -70,7 +70,7 @@ export function renderPathSelect(pathsData, modulesData, opts = {}) {
   // Nota informacyjna (nie zgoda): pseudonim sesyjny + lokalny zapis postępu. Bez cookies, nic nie wysyłamy.
   root.appendChild(el("p", { class: "muted privacy-note" }, [
     el("span", { text: t("path.privacy.note") }),
-    el("a", { href: "prywatnosc.html", text: t("path.privacy.link") }),
+    el("a", { href: privacyHref(), text: t("path.privacy.link") }),
   ]));
 
   root.appendChild(el("div", { class: "path-cards" }, PATH_IDS.map((id) => pathCard(pathsData, modulesData, id, opts.onSelect))));

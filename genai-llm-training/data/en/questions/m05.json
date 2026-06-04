@@ -1,0 +1,369 @@
+{
+  "_meta": {
+    "module": "M5",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M5. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q033",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "The participant describes the role of a vector database in semantic search and the sequence of steps from a query to the returned fragments.",
+      "prompt": "A team is building a search tool over the NotkaApp test documentation, based on a vector database. What is its main role in semantic search?",
+      "options": [
+        {
+          "id": "A",
+          "text": "It stores embeddings of fragments and lets you quickly find the vectors most similar to the query embedding, in order to return the related text fragments."
+        },
+        {
+          "id": "B",
+          "text": "It matches the query to fragments solely through exact matching of the same keywords, ignoring meaning."
+        },
+        {
+          "id": "C",
+          "text": "It generates a natural-language answer based on the query, replacing the language model in the pipeline."
+        },
+        {
+          "id": "D",
+          "text": "It stores raw documents as files and exposes them through full-text search over phrases."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "A vector database holds embeddings and finds the nearest vectors relative to the query embedding, so search works by meaning rather than by literal words.",
+      "feedbackIncorrect": "This confuses it with keyword search or with the role of the generating model. Review what semantic search is and what a vector database does (screen M5.2).",
+      "references": [
+        "M5.2",
+        "M5.1"
+      ]
+    },
+    {
+      "id": "Q034",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "The participant matches exact or approximate (ANN) search to the characteristics of the corpus and the requirements.",
+      "prompt": "A tester has a synthetic corpus of ~12 QA documentation fragments and needs to be certain that NO relevant fragment is missed when verifying coverage. Which approach is appropriate here?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Exact (brute-force) search — with a small corpus, scanning all vectors is cheap and guarantees full relevance."
+        },
+        {
+          "id": "B",
+          "text": "Approximate nearest neighbor (ANN) with an aggressive index — because it is always faster and never misses hits."
+        },
+        {
+          "id": "C",
+          "text": "ANN with a very low top-k, to return only a single result and avoid mistakes."
+        },
+        {
+          "id": "D",
+          "text": "Keyword search instead of vector search, because it is deterministic."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "With a small corpus the cost of scanning all vectors is low, and exact search guarantees that no relevant fragment is missed — which is what matters when full relevance is required.",
+      "feedbackIncorrect": "ANN speeds things up at the risk of missing relevant results, so it does not guarantee completeness; a low top-k only truncates the results. Review the exact vs ANN trade-off (screens M5.3–M5.4).",
+      "references": [
+        "M5.4",
+        "M5.3"
+      ]
+    },
+    {
+      "id": "Q035",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "The participant analyzes how ANN and top-k settings translate into the recall and precision pair of metrics.",
+      "prompt": "In the search debugger a tester raises top-k from 3 to 8 and at the same time loosens the ANN index parameters toward speed. What is the most likely effect on recall and precision?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Recall usually rises (more relevant items can enter the results), but precision drops, because more loosely related fragments make it into the results."
+        },
+        {
+          "id": "B",
+          "text": "Recall and precision rise simultaneously, because a larger top-k always improves both metrics at once."
+        },
+        {
+          "id": "C",
+          "text": "Recall drops and precision rises, because a larger top-k narrows the result set."
+        },
+        {
+          "id": "D",
+          "text": "Neither recall nor precision will change, because top-k and the index do not affect result quality."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "A larger top-k widens the candidate set, so the chance of catching relevant items rises (recall ↑), while more noise also enters the results (precision ↓). Loosening the ANN index toward speed works against recall (it may miss relevant items). The two effects pull in opposite directions, and the net outcome is decided by the scale of the changes — which is why A describes the most likely direction (recall ↑, precision ↓), but the real balance has to be measured, not assumed.",
+      "feedbackIncorrect": "Recall and precision usually move in opposite directions when the results are widened; a larger top-k does not narrow the set. Review the definitions of recall/precision and the influence of the index (screens M5.4–M5.5).",
+      "references": [
+        "M5.5",
+        "M5.4"
+      ]
+    },
+    {
+      "id": "Q036",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant identifies the retrieval factors that genuinely affect the set of returned fragments and its quality.",
+      "prompt": "Which of the following factors directly affect WHICH fragments a similarity search returns and how good the result will be? Select all correct answers.",
+      "options": [
+        {
+          "id": "A",
+          "text": "ANN index parameters — they shift the point between recall and speed/precision."
+        },
+        {
+          "id": "B",
+          "text": "Metadata filtering — it narrows the candidate set (precision ↑), but too strict a filter loses relevant items (recall ↓)."
+        },
+        {
+          "id": "C",
+          "text": "Chunk quality — a bad fragment boundary yields a vector with blurred meaning and a result that is similar yet unusable."
+        },
+        {
+          "id": "D",
+          "text": "Similarity threshold — set too high, it cuts off relevant fragments (recall ↓)."
+        },
+        {
+          "id": "E",
+          "text": "The order in which documents are added to the database — fragments inserted earlier are always returned higher."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "feedbackCorrect": "The index, the metadata filter, chunk quality, and the similarity threshold are the actual levers that control the result set and the recall/precision pair.",
+      "feedbackIncorrect": "The order in which documents are added does not determine the ranking — what counts is vector similarity and the retrieval settings. Review the influence of the index, metadata, and chunks (screens M5.5–M5.7).",
+      "references": [
+        "M5.6",
+        "M5.5"
+      ]
+    },
+    {
+      "id": "Q037",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant links an observed retrieval symptom to its most likely cause among the index, metadata, chunks, and threshold.",
+      "prompt": "A tester is diagnosing results on a synthetic QA corpus. Which statements correctly link the symptom to its cause? Select all correct answers.",
+      "options": [
+        {
+          "id": "A",
+          "text": "The search returned zero fragments even though a relevant document exists — the culprit may be too strict a metadata filter or too high a similarity threshold, not the data itself."
+        },
+        {
+          "id": "B",
+          "text": "A returned fragment has high similarity but breaks off mid-sentence and cannot be used — this is a symptom of a bad chunk boundary."
+        },
+        {
+          "id": "C",
+          "text": "A relevant fragment exists in the corpus but did not make it into the ANN results — it is possible that an aggressive index skipped it in favor of speed."
+        },
+        {
+          "id": "D",
+          "text": "A drop in recall always means the embeddings are computed incorrectly and the embedding model must be changed."
+        },
+        {
+          "id": "E",
+          "text": "If the results are relevant but there are too many of them with a lot of noise, one remedy is to narrow them down with a metadata filter or a lower top-k."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "E"
+      ],
+      "feedbackCorrect": "Each of these statements correctly links a symptom (zero results, a truncated chunk, an ANN omission, excess noise) to a retrieval lever (filter/threshold, chunk, index, top-k).",
+      "feedbackIncorrect": "A drop in recall most often stems from the index, the filter, or the threshold, not automatically from incorrect embeddings — that is an overinterpretation. Review the diagnosis from screens M5.5–M5.8.",
+      "references": [
+        "M5.7",
+        "M5.6"
+      ]
+    },
+    {
+      "id": "Q038",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant diagnoses a case where a high-similarity fragment is not relevant, even though the database is working correctly.",
+      "prompt": "The NotkaApp vector database contains, among others, the fragments: DOC1 \"the session token expires after 30 min of inactivity\", DOC3 \"the password reset link is valid for 30 min, single-use\". For the query \"After how long does the password reset link expire?\", retrieval returned DOC1 in first place with very high similarity. How is this result best diagnosed?",
+      "options": [
+        {
+          "id": "A",
+          "text": "DOC1 is semantically similar (both mention \"30 min\" and expiration), but it concerns the session, not the password reset — high similarity does not equal relevance; the right source is DOC3."
+        },
+        {
+          "id": "B",
+          "text": "The vector database is malfunctioning and should be rebuilt, because it returned an irrelevant document."
+        },
+        {
+          "id": "C",
+          "text": "DOC1 is the correct answer because it has the highest similarity, so the topic matches the query."
+        },
+        {
+          "id": "D",
+          "text": "The problem goes away by simply raising top-k to 10, because then DOC1 will stop being returned."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "This is a textbook \"similar but unusable\" case: overlapping words (30 min, expiration) raise DOC1's similarity, even though the relevant source is DOC3 — similarity is not relevance.",
+      "feedbackIncorrect": "High similarity does not prove relevance, and the database is not malfunctioning — DOC1 simply overlaps lexically with the query. Review the \"similar ≠ usable\" diagnosis (screens M5.7–M5.8).",
+      "references": [
+        "M5.8",
+        "M5.7"
+      ]
+    },
+    {
+      "id": "Q039",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "The participant evaluates why a relevant fragment disappeared from the results and links it to the metadata filter configuration.",
+      "prompt": "A tester searches for an answer to \"After how long does the password reset link expire?\" in the NotkaApp corpus, where DOC3 (password reset) has the metadata typ_dokumentu=\"przypadek_testowy\". To reduce noise, the tester enables the metadata filter typ_dokumentu=\"wymaganie\". The search now returns 0 relevant fragments. What is the best diagnosis?",
+      "options": [
+        {
+          "id": "A",
+          "text": "The metadata filter cut off DOC3, because it has a different typ_dokumentu than the one allowed by the filter — too strict a filter raised precision but lost the relevant result (recall ↓); the filter should be widened."
+        },
+        {
+          "id": "B",
+          "text": "DOC3 no longer exists in the database and must be reindexed, otherwise it will never appear."
+        },
+        {
+          "id": "C",
+          "text": "The similarity threshold is too low and that is why an empty list was returned — it should be lowered even further."
+        },
+        {
+          "id": "D",
+          "text": "The query embedding is wrong, because a correct metadata filter cannot remove a relevant fragment."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "The metadata filter narrows the set before/after similarity: by allowing only the \"wymaganie\" type, it cut out DOC3 (\"przypadek_testowy\" type) — this is the classic precision ↑ / recall ↓ trade-off, resolved by widening the filter.",
+      "feedbackIncorrect": "The empty result here stems from the filter configuration, not from a missing document or the threshold — too strict a filter loses relevant fragments. Review metadata filtering (screen M5.6).",
+      "references": [
+        "M5.6",
+        "M5.8"
+      ]
+    },
+    {
+      "id": "Q040",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L4",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant chooses the best correction to the retrieval parameters that removes the cause of irrelevance without breaking the other results.",
+      "prompt": "For a query about password reset in NotkaApp, retrieval returns DOC4 (a marketing FAQ: benefits and pricing) with high similarity, plus a fragment of DOC2 (password policy) truncated mid-sentence, while the relevant DOC3 (password reset) lands only in position 6. The similarity threshold is disabled, top-k=3, no filter. Which correction will best improve the relevance of the results?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Add a metadata filter that screens out marketing documents and fix the chunk boundaries, and raise top-k so that DOC3 fits within the results — this attacks the causes (metadata noise, a bad chunk, too low a top-k)."
+        },
+        {
+          "id": "B",
+          "text": "Only raise the similarity threshold to a very high value — this will remove DOC4 and DOC2, but also risks cutting off DOC3 (recall ↓)."
+        },
+        {
+          "id": "C",
+          "text": "Leave the settings unchanged and manually enter DOC3 as the answer, because since it exists in the corpus, retrieval needs no correction."
+        },
+        {
+          "id": "D",
+          "text": "Lower top-k to 1, to return only the most similar fragment and eliminate noise."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "The best correction removes the specific causes: the metadata filter cuts the marketing DOC4, fixing the chunk rescues the truncated DOC2, and a higher top-k lets the relevant DOC3 in — without the risk of losing the right result.",
+      "feedbackIncorrect": "A high threshold alone or top-k=1 risks cutting off the relevant DOC3 (recall ↓), and manually entering the answer does not fix retrieval. Review the influence of metadata, chunks, and top-k (screens M5.6–M5.9).",
+      "references": [
+        "M5.9",
+        "M5.6"
+      ]
+    }
+  ]
+}

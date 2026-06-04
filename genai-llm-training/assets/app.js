@@ -11,10 +11,10 @@ import { buildCertificate } from "./core/certificate.js";
 import { evaluateInteraction } from "./core/interactions/index.js";
 import { el, mount } from "./ui/dom.js";
 import { icon } from "./ui/icon.js";
-import { t, registerCatalog, setLocale, resolveLang, persistLang, localeHasData } from "./i18n/i18n.js";
+import { t, registerCatalog, setLocale, resolveLang, persistLang, localeHasData, privacyHref } from "./i18n/i18n.js";
 import { renderPathSelect } from "./ui/path-select.js";
 import { updateHeader, renderNav } from "./ui/shell.js";
-import { renderModuleHub } from "./ui/module-hub.js";
+import { renderModuleHub, pillarLabel } from "./ui/module-hub.js";
 import { initTheme, toggleTheme } from "./ui/theme.js";
 import { initLangSwitch } from "./ui/lang-switch.js";
 import { renderQuestion, renderFeedback } from "./ui/quiz-view.js";
@@ -63,7 +63,31 @@ function start(initialData, ctx = {}) {
     progressTrack: document.querySelector(".progress__track"), progressLabel: $("progress-label"),
     themeToggle: $("theme-toggle"),
     langWrap: $("lang-switch"), langBtn: $("lang-switch-btn"), langLabel: $("lang-switch-label"), langFlag: $("lang-switch-flag"),
+    // Statyczny „chrome" headera lokalizowany przez setChrome() (#81) — inaczej na EN zostałby po polsku.
+    skipLink: document.querySelector(".skip-link"), brandName: document.querySelector(".brand__name"),
+    themeLabel: document.querySelector(".theme-toggle__label"), metaDesc: document.querySelector('meta[name="description"]'),
+    footerNote: $("footer-note"), footerPrivacy: $("footer-privacy-link"),
   };
+
+  // Lokalizuje statyczne stringi chrome (skip-link, marka, etykiety przycisków, <title>, meta, aria) przez t().
+  // Wołane na boot ORAZ przy zmianie języka (#81). Stringi w index.html to tylko fallback przed/bez JS.
+  function setChrome() {
+    const set = (node, txt) => { if (node) node.textContent = txt; };
+    set(refs.skipLink, t("chrome.skipLink"));
+    set(refs.brandName, t("chrome.brand"));
+    set(refs.themeLabel, t("chrome.theme.label"));
+    set(refs.navToggle, t("nav.heading.modules"));
+    set(refs.resetBtn, t("chrome.reset"));
+    if (globalThis.document) globalThis.document.title = t("chrome.title");
+    if (refs.themeToggle) { refs.themeToggle.setAttribute("aria-label", t("chrome.theme.toggle")); refs.themeToggle.setAttribute("title", t("chrome.theme.toggle")); }
+    if (refs.nav) refs.nav.setAttribute("aria-label", t("chrome.nav.aria"));
+    if (refs.metaDesc) refs.metaDesc.setAttribute("content", t("chrome.metaDescription"));
+    // Footer (zawsze widoczny): tekst + link prywatności z href locale-aware (#81 — inaczej EN dostaje PL stronę).
+    set(refs.footerNote, t("chrome.footer.note"));
+    set(refs.footerPrivacy, t("chrome.footer.privacy"));
+    if (refs.footerPrivacy) refs.footerPrivacy.setAttribute("href", privacyHref());
+  }
+  setChrome();
 
   // Motyw jasny/ciemny (UX-3): anty-flash skrypt w <head> ustawił już [data-theme]; tu synchronizujemy
   // stan przycisku (aria-pressed) i wpinamy toggle. Storage ma priorytet nad prefers-color-scheme (theme.js).
@@ -76,16 +100,29 @@ function start(initialData, ctx = {}) {
   // Przełącznik języka (I18N-3 #79). Zmiana: rejestruj katalog locale (jeśli trzeba), przeładuj dane TYLKO gdy
   // zmienia się data-locale (locale z hasData), ustaw <html lang>, zapisz preferencję, odśwież ekran w miejscu.
   let langApi = null;
+  // Token przełączenia języka (Codex P2): EN jest data-backed (hasData), więc setLanguage robi async loadData/ensureCatalog.
+  // Gdy użytkownik szybko przełączy z powrotem, nieaktualna kontynuacja nie może nadpisać data/dataLocale ani UI —
+  // każde wejście dostaje numer; po każdym await porzucamy bieg, jeśli pojawiło się nowsze przełączenie (tylko ostatnie wygrywa).
+  let langReq = 0;
   async function setLanguage(code) {
+    const reqId = (langReq += 1);
     setLocale(code);
     persistLang(code);
     if (globalThis.document && globalThis.document.documentElement) globalThis.document.documentElement.setAttribute("lang", code);
     if (typeof ctx.ensureCatalog === "function") { try { await ctx.ensureCatalog(code); } catch { /* fallback PL */ } }
+    if (reqId !== langReq) return; // nowsze przełączenie wygrało — porzuć nieaktualną kontynuację
     const nextDataLocale = localeHasData(code) ? code : "pl";
     if (nextDataLocale !== dataLocale && typeof ctx.loadData === "function") {
-      try { data = await ctx.loadData(nextDataLocale); dataLocale = nextDataLocale; } catch { /* zostań przy obecnych danych */ }
+      try {
+        const loaded = await ctx.loadData(nextDataLocale);
+        if (reqId !== langReq) return;   // sprawdź ponownie po async loadData — inaczej dane EN trafiłyby pod UI PL
+        data = loaded;
+        dataLocale = nextDataLocale;
+      } catch { /* zostań przy obecnych danych */ }
     }
+    if (reqId !== langReq) return;
     if (langApi) langApi.setActive(code);
+    setChrome(); // przetłumacz chrome headera + <title>/<meta>/<html lang> na nowy język (#81)
     render();
   }
   if (refs.langBtn && refs.langWrap) {
@@ -226,7 +263,7 @@ function start(initialData, ctx = {}) {
 
     const root = el("div", { class: "view__content" });
     root.appendChild(el("h1", { text: t("module.title", { moduleId: mod.id, moduleName: mod.name }) }));
-    root.appendChild(el("p", { class: "muted", text: t("module.meta", { pillar: mod.pillar, level: mod.level, time: mod.timeFullMin, interaction: mod.interactiveElement }) }));
+    root.appendChild(el("p", { class: "muted", text: t("module.meta", { pillar: pillarLabel(mod.pillar), level: mod.level, time: mod.timeFullMin, interaction: mod.interactiveElement }) }));
 
     // ----- Treść (ekrany z danych, filtr po ścieżce — wariant S1 skrócony obsłużony przez onlyForPaths) -----
     if (content) {

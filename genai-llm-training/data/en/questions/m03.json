@@ -1,0 +1,308 @@
+{
+  "_meta": {
+    "module": "M3",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M3. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q018",
+      "module": "M3",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "The participant selects a temperature range for a task requiring formality and repeatability.",
+      "prompt": "You need to generate test case steps for documentation in NotkaApp — the result should be formal and as repeatable as possible when run again. Which temperature range is most appropriate?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Low, about 0.0-0.3"
+        },
+        {
+          "id": "B",
+          "text": "Medium, about 0.5-0.7"
+        },
+        {
+          "id": "C",
+          "text": "High, about 0.8-1.2"
+        },
+        {
+          "id": "D",
+          "text": "Maximum, about 1.3-1.5"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "A low temperature (~0.0-0.3) produces conservative, more repeatable responses, which is exactly what test documentation requires.",
+      "feedbackIncorrect": "The higher the temperature, the greater the randomness and the lower the repeatability — the opposite of what we want in documentation. Review screen M3.2 on the temperature scale.",
+      "references": [
+        "M3.2"
+      ]
+    },
+    {
+      "id": "Q019",
+      "module": "M3",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "The participant identifies the main risk of a high temperature in QA tasks.",
+      "prompt": "A team runs the same prompt about SklepDemo test cases twice at temperature 1.1. Which risk to QA work is most characteristic here?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Lack of repeatability — two runs produce divergent steps, which hampers review and regression"
+        },
+        {
+          "id": "B",
+          "text": "The response always gets cut off mid-sentence"
+        },
+        {
+          "id": "C",
+          "text": "Responses become shorter and more concise than at a low temperature"
+        },
+        {
+          "id": "D",
+          "text": "The result becomes identical on every run"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "High randomness causes content drift and a lack of repeatability between runs, which undermines the reliability of documentation and regression.",
+      "feedbackIncorrect": "Cut-off output is caused by max tokens, and repeatability decreases (not increases) as temperature rises. Review screen M3.3 on the risk of high randomness in QA.",
+      "references": [
+        "M3.3"
+      ]
+    },
+    {
+      "id": "Q020",
+      "module": "M3",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "The participant recognizes the symptoms of a response cut off by the max tokens limit.",
+      "prompt": "After generating a list of test cases, the response ends with an unfinished sentence and an unclosed list, with no summary. What most likely happened?",
+      "options": [
+        {
+          "id": "A",
+          "text": "The response was cut off after reaching the max tokens limit"
+        },
+        {
+          "id": "B",
+          "text": "The temperature was set too low"
+        },
+        {
+          "id": "C",
+          "text": "top-p narrowed the vocabulary of QA terms"
+        },
+        {
+          "id": "D",
+          "text": "The model deemed the task non-compliant with policy"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "An unfinished sentence, an unclosed list, and the absence of a summary are typical symptoms of exceeding the max tokens limit.",
+      "feedbackIncorrect": "Temperature and top-p control randomness, not length — it is max tokens that hard-limits the number of response tokens. Review screen M3.5 on recognizing cut-off output.",
+      "references": [
+        "M3.5"
+      ]
+    },
+    {
+      "id": "Q021",
+      "module": "M3",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "The participant matches the randomness setting to the nature of the task (creative vs. formal).",
+      "prompt": "A tester has two tasks: (1) brainstorming unusual test data for a form in SklepDemo, and (2) writing the final test case steps for documentation. How should the temperature reasonably be set for each of them?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Task 1 — higher temperature; task 2 — low temperature"
+        },
+        {
+          "id": "B",
+          "text": "Task 1 — low temperature; task 2 — higher temperature"
+        },
+        {
+          "id": "C",
+          "text": "Both tasks — maximum temperature for a richer result"
+        },
+        {
+          "id": "D",
+          "text": "Both tasks — temperature 0.0, because that is always the safest"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Brainstorming benefits from diversity (higher temperature), while documentation requires repeatability and formality (low temperature).",
+      "feedbackIncorrect": "The choice is reversed: a creative task benefits from higher randomness, and a formal one from low randomness. Review screen M3.2 on mapping temperature to task type.",
+      "references": [
+        "M3.2"
+      ]
+    },
+    {
+      "id": "Q022",
+      "module": "M3",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "The participant links a generation parameter setting to its effect on the formality, diversity, and length of the output.",
+      "prompt": "Match the generation parameter setting to its effect on the output.",
+      "pairs": [
+        {
+          "left": "Low temperature",
+          "right": "A more repeatable and formal response"
+        },
+        {
+          "left": "High temperature",
+          "right": "A more diverse and creative response"
+        },
+        {
+          "left": "Low max tokens",
+          "right": "A response cut off before the end"
+        },
+        {
+          "left": "Low top-p",
+          "right": "A narrower, more stable selection of subsequent tokens"
+        }
+      ],
+      "feedbackCorrect": "Temperature controls formality/diversity, max tokens controls length, and top-p controls the breadth of the pool of candidates for the next token.",
+      "feedbackIncorrect": "The roles got mixed up: randomness (temperature, top-p) is not the same as length (max tokens). Review screens M3.2 and M3.4 on the generation controls.",
+      "references": [
+        "M3.2",
+        "M3.4"
+      ]
+    },
+    {
+      "id": "Q023",
+      "module": "M3",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "The participant links a generation parameter setting to its risk or use in QA work.",
+      "prompt": "Match the generation parameter setting to its consequence in the context of QA test documentation.",
+      "pairs": [
+        {
+          "left": "High temperature",
+          "right": "Steps diverging between two runs of the same prompt"
+        },
+        {
+          "left": "Low max tokens",
+          "right": "Missing final steps or acceptance criteria in the response"
+        },
+        {
+          "left": "Low top-p",
+          "right": "A stable, safe vocabulary of QA terms"
+        },
+        {
+          "left": "High top-p",
+          "right": "Broader, riskier phrasings"
+        }
+      ],
+      "feedbackCorrect": "High randomness risks a lack of repeatability, too low a max tokens loses the end of the document, and top-p regulates how broad and risky the word selection is.",
+      "feedbackIncorrect": "Note that it is randomness (temperature/top-p) that is responsible for content risk, and max tokens for the missing ending. Review screens M3.3 and M3.4.",
+      "references": [
+        "M3.3",
+        "M3.4"
+      ]
+    },
+    {
+      "id": "Q024",
+      "module": "M3",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "The participant compares two generation presets and chooses the safer one for test documentation.",
+      "prompt": "You need to write the test case steps for logging into NotkaApp as persistent documentation. There are two presets to choose from for the same task:\nVariant A: temperature 0.2 / top-p 0.3 / high max tokens.\nVariant B: temperature 1.0 / top-p 0.95 / low max tokens.\nWhich choice is safer and why?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Variant A — low randomness gives repeatability and formality, and high max tokens protects against cutting off the document"
+        },
+        {
+          "id": "B",
+          "text": "Variant B — high temperature and top-p will give a richer, more detailed description of the steps"
+        },
+        {
+          "id": "C",
+          "text": "Variant B — low max tokens will force conciseness, which is always better in documentation"
+        },
+        {
+          "id": "D",
+          "text": "Either one — generation parameters do not affect test documentation"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "For documentation, repeatability and completeness matter: low randomness (A) limits drift, and a margin of max tokens protects against the steps being cut off.",
+      "feedbackIncorrect": "High randomness threatens repeatability, and low max tokens risks cutting off the document — these are not advantages in documentation. Review screen M3.6 on choosing the safer preset.",
+      "references": [
+        "M3.6"
+      ]
+    }
+  ]
+}

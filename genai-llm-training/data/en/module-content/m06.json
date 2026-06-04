@@ -1,0 +1,500 @@
+{
+  "_meta": {
+    "issue": "#23 [23][M4] Wdroż moduł M6 RAG",
+    "storyboard": "docs/storyboard/m06-rag.md",
+    "interaction": "Zbuduj pipeline RAG (kind: rubric, zadanie praktyczne R2-rag, warunek konieczny S3, próg 70% = 3.5/5)",
+    "scenario": "SC-RAG-01 (mini-korpus dokumentacji QA, korpus SklepDemo/NotkaApp)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (SklepDemo, NotkaApp, fikcyjne wymagania WYM-koszyk/WYM-zwroty). ZERO realnych danych klienta/PII.",
+    "note": "Wariant S1 ŚWIADOMOŚCIOWY: ekrany techniczne (chunking, ćwiczenia, pogłębienie inżynierskie) skrócone/pominięte przez onlyForPaths/hideForPaths. S2 PRAKTYCZNY i S3 PEŁNY: pełny przebieg. Treść rozróżnia błąd retrieval/generation/źródłowy oraz RAG vs fine-tuning (E3, E4)."
+  },
+  "module": "M6",
+  "intro": "An LLM with no access to your company documentation makes up requirement details. RAG (Retrieval-Augmented Generation) lets the model search your documents and answer based on them, with citations. In this module you will assemble a RAG pipeline, choose a chunking strategy, tell RAG apart from fine-tuning the model, and learn to recognize the three layers of error.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Why a tester needs RAG",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "A language model does not know your company specification. Asked about a requirement detail, it often fabricates a plausible-sounding but untrue answer. RAG (Retrieval-Augmented Generation) is the approach of \"let the model search our documents and answer based on them.\""
+        },
+        {
+          "kind": "paragraph",
+          "text": "For QA this brings concrete benefits: answers about current requirements, help with writing test cases that reference the specification, and quick retrieval of an acceptance criterion — always with a citation to the source that can be verified."
+        },
+        {
+          "kind": "callout",
+          "variant": "info",
+          "onlyForPaths": [
+            "S1"
+          ],
+          "title": "When to consider RAG at all",
+          "text": "If the questions concern your changing documentation and the answer has to point to a source — that is a case for RAG. The rest of the module shows how it works step by step."
+        },
+        {
+          "kind": "list",
+          "hideForPaths": [
+            "S1"
+          ],
+          "items": [
+            "E1 — you will arrange the RAG pipeline steps in the correct order.",
+            "E2 — you will choose a strategy for splitting documentation into fragments (chunking).",
+            "E3 — you will tell a RAG case apart from a fine-tuning case.",
+            "E4 — you will recognize a retrieval error, a generation error, and a source error."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s2-pipeline",
+      "title": "The RAG pipeline end to end",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "The whole process on one screen. The index-building phase (offline) prepares the documents; the query phase (online) handles the user's question. The key principle: the answer must be grounded in the retrieved sources, not in the model's memory."
+        },
+        {
+          "kind": "list",
+          "ordered": true,
+          "items": [
+            "Source documents from the \"SklepDemo\" corpus arrive at the input.",
+            "Chunking — the document is cut into smaller, coherent pieces.",
+            "Embeddings — each fragment gets a vector representation of its meaning.",
+            "Index / vector database — fragments, embeddings, and metadata are stored for searching.",
+            "User query — e.g. \"What is the acceptance criterion for the cart item limit?\".",
+            "Retrieval (top-k) — the index returns the nearest fragments.",
+            "Reranking — an optional improvement to the relevance of the top-k.",
+            "Injection of the retrieved context into the prompt.",
+            "Generation of the answer with citations pointing to the source fragment."
+          ]
+        },
+        {
+          "kind": "diagram",
+          "title": "RAG pipeline diagram",
+          "caption": "Index phase (offline) and query phase (online).",
+          "textAlt": "Index phase (offline): source documents → chunking → embeddings → index/vector database. Query phase (online): user query → retrieval (top-k) from the index → (optionally) reranking → injection of context into the prompt → generation of the answer with citations. The index links both phases: it is built offline and queried online.",
+          "onlyForPaths": [
+            "S2",
+            "S3"
+          ]
+        },
+        {
+          "kind": "diagram",
+          "title": "Conceptual RAG diagram",
+          "caption": "Simplified version.",
+          "textAlt": "Documents → index → finding the fragments that match the query → answer with citations based on those fragments.",
+          "onlyForPaths": [
+            "S1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s3-kolejnosc",
+      "title": "The order of steps matters",
+      "type": "content",
+      "onlyForPaths": [
+        "S2",
+        "S3"
+      ],
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "The order is not arbitrary — it is forced by data dependency. Chunking must come before embeddings, because embeddings are computed for existing fragments. The index is built before retrieval, because you cannot search something that has not been stored yet. Retrieval must come before generation, because it supplies the context for it."
+        },
+        {
+          "kind": "callout",
+          "variant": "info",
+          "title": "Two phases",
+          "text": "The index phase (chunking → embeddings → index) operates on the documents and is independent of the question — it runs once, offline. The query phase (retrieval → reranking → generation) runs on every question."
+        },
+        {
+          "kind": "callout",
+          "variant": "warn",
+          "title": "The most common ordering mistake",
+          "text": "Mixing up the order of embeddings and chunking, or placing generation before retrieval. Generation without prior retrieval is simply a model guessing from memory — exactly what RAG is meant to avoid."
+        }
+      ]
+    },
+    {
+      "id": "s4-chunking",
+      "title": "Chunking for requirements documentation",
+      "type": "content",
+      "onlyForPaths": [
+        "S2",
+        "S3"
+      ],
+      "blocks": [
+        {
+          "kind": "definition",
+          "term": "Chunking",
+          "original": "splitting into fragments",
+          "text": "dividing a document into smaller, coherent pieces suitable for embedding and retrieval. You cannot feed the whole document at once — it would be too large and imprecise for retrieval."
+        },
+        {
+          "kind": "list",
+          "items": [
+            "Fragment size — how much text one piece holds.",
+            "Overlap — fragments partially overlap so that content at the cut boundary is not torn apart.",
+            "Logical boundaries — a section, a single requirement, or a step, rather than a cut in the middle of a sentence."
+          ]
+        },
+        {
+          "kind": "callout",
+          "variant": "safe",
+          "title": "QA rule",
+          "text": "One requirement or one scenario = one coherent fragment. Keep headings and identifiers (e.g. \"WYM-koszyk §3\") in the metadata — they are what makes a citation verifiable."
+        },
+        {
+          "kind": "paragraph",
+          "text": "The effects of bad chunking in the synthetic document \"SklepDemo — cart\": an arbitrary cut every fixed number of characters truncates an acceptance criterion mid-way, and retrieval returns a fragment with no conclusion. Overlap protects boundaries; splitting by requirement protects completeness."
+        }
+      ]
+    },
+    {
+      "id": "s5-dobierz-chunking",
+      "title": "Choose the chunking — a quick decision",
+      "type": "decision",
+      "onlyForPaths": [
+        "S2",
+        "S3"
+      ],
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "A fragment of the \"SklepDemo — cart\" specification: each requirement has an identifier (e.g. \"WYM-koszyk-014\") and its own acceptance criterion, sometimes several sentences long. Previously, a fixed cut every same number of characters truncated the criterion mid-way. Which strategy should you choose?"
+        },
+        {
+          "kind": "list",
+          "items": [
+            "By single requirement — one requirement with its identifier and full criterion = one fragment, identifier in the metadata. CORRECT.",
+            "Fixed size without overlap, just smaller — it cuts criteria even more often.",
+            "The whole document as one fragment — it ruins retrieval relevance, the model gets too much noise."
+          ]
+        },
+        {
+          "kind": "callout",
+          "variant": "safe",
+          "title": "Why by requirement",
+          "text": "The logical boundary \"one requirement = one fragment\" preserves the full criterion and a clear citation source — exactly what was missing with the fixed cut. This is preparation for the module's scenario questions."
+        }
+      ]
+    },
+    {
+      "id": "s6-rag-vs-finetuning",
+      "title": "RAG or fine-tuning",
+      "type": "decision",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "This is a key distinction. RAG supplies the model with fresh, changing factual knowledge and lets it cite that knowledge. Fine-tuning fixes a stable style, format, and behavior of the model — not new facts."
+        },
+        {
+          "kind": "table",
+          "title": "RAG versus fine-tuning",
+          "headers": [
+            "Dimension",
+            "RAG",
+            "Fine-tuning"
+          ],
+          "rows": [
+            [
+              "Purpose",
+              "Fresh, changing factual knowledge",
+              "Stable style, format, behavior"
+            ],
+            [
+              "Citations to source",
+              "Yes — points to the retrieved fragment",
+              "No — knowledge baked into the model weights"
+            ],
+            [
+              "Updating",
+              "Swap the document in the index",
+              "Requires re-tuning"
+            ],
+            [
+              "Typical QA case",
+              "\"Answers must cite the current specification\"",
+              "\"The report always in our section layout\""
+            ]
+          ],
+          "textAlt": "Comparison: RAG serves fresh, changing factual knowledge, provides citations to source, and updates by swapping the document in the index; a typical QA case is answers that cite the current specification. Fine-tuning serves to fix a stable style and format, provides no citations, and updating requires re-tuning; a typical QA case is a report always in a fixed section layout."
+        },
+        {
+          "kind": "callout",
+          "variant": "warn",
+          "title": "Anti-myth",
+          "text": "\"Fine-tuning will teach the model our documentation.\" No. For changing facts, use RAG — fine-tuning fixes the style, but the facts will quickly go stale and give no citations."
+        },
+        {
+          "kind": "paragraph",
+          "hideForPaths": [
+            "S1"
+          ],
+          "text": "Decisions on synthetic QA cases: \"the assistant should cite current requirements that change every sprint\" → RAG; \"the assistant should always return a report in the company section layout\" → fine-tuning (or a template in the prompt)."
+        }
+      ]
+    },
+    {
+      "id": "s7-trzy-warstwy",
+      "title": "Three layers of error in RAG",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "The same bad answer can have different sources, and each requires a different fix. A tester must tell which layer failed before starting to fix anything."
+        },
+        {
+          "kind": "definition",
+          "term": "Retrieval error",
+          "text": "the right fragment never reached the context — because top-k was too small, the right source was excluded from the index, or only a semantically similar fragment was retrieved. Fix: better retrieval (larger top-k, metadata filters, the right sources)."
+        },
+        {
+          "kind": "definition",
+          "term": "Generation error",
+          "text": "the right fragment was in the context, but the model still fabricated or summarized it badly — the answer contradicts the correct source. Fix: a better prompt, enforced grounding."
+        },
+        {
+          "kind": "definition",
+          "term": "Source error",
+          "text": "the model retrieved and correctly cited the fragment, but the content in the document itself was wrong or out of date. Fix: correcting the documentation at the source — no retrieval or prompt will fix this."
+        },
+        {
+          "kind": "callout",
+          "variant": "info",
+          "onlyForPaths": [
+            "S1"
+          ],
+          "title": "In short",
+          "text": "Before you decide that \"the model is wrong,\" check: did it get the right fragment (retrieval), did it use it well (generation), was the document itself correct (source)."
+        }
+      ]
+    },
+    {
+      "id": "s8-diagnoza",
+      "title": "Diagnosis: which layer failed",
+      "type": "decision",
+      "onlyForPaths": [
+        "S2",
+        "S3"
+      ],
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Synthetic corpus \"NotkaApp\": DOC1 — the session token expires after 30 min of inactivity; DOC3 — the password reset link is valid for 30 min, single-use. Question: \"After how long does the password reset link expire?\". Read the signals from the retrieved context and the citation."
+        },
+        {
+          "kind": "table",
+          "title": "Error-layer signals",
+          "headers": [
+            "Observation",
+            "Error layer"
+          ],
+          "rows": [
+            [
+              "The model retrieved and cited DOC1 (session token): \"Expires after 30 minutes [DOC1]\". The number happens to match, but the citation concerns the wrong document; DOC3 never reached the context",
+              "Retrieval (similar-but-useless)"
+            ],
+            [
+              "DOC3 was in the context, but the model's answer contradicts it",
+              "Generation"
+            ],
+            [
+              "The model correctly cited DOC3, but the content in DOC3 was out of date",
+              "Source"
+            ],
+            [
+              "Every sentence of the answer is grounded in the right, correct citation",
+              "No error"
+            ]
+          ],
+          "textAlt": "Signals table. When DOC1 (session token) was cited instead of DOC3 (reset link), and the right fragment never reached the context — that is a retrieval error, the similar-but-useless trap; a coincidental number match does not mean grounding. When DOC3 was in the context but the answer contradicts it — a generation error. When DOC3 was correctly cited but its content is out of date — a source error. When every sentence is grounded in the right, correct citation — no error."
+        },
+        {
+          "kind": "callout",
+          "variant": "warn",
+          "title": "The trap",
+          "text": "A coincidental number match (\"30 minutes\") does not mean grounding if the citation points to the wrong document. Always check whether the cited fragment actually answers the question."
+        }
+      ]
+    },
+    {
+      "id": "s9-reranking-grounding",
+      "title": "Engineering deep dive: reranking and grounding",
+      "type": "content",
+      "onlyForPaths": [
+        "S3"
+      ],
+      "blocks": [
+        {
+          "kind": "definition",
+          "term": "Reranking",
+          "original": "re-sorting the results",
+          "text": "after initial retrieval, a second, more precise stage sorts the candidates by relevance. It operates on the retrieval results — so after retrieval, and before context injection. It improves the quality of the top-k actually used."
+        },
+        {
+          "kind": "definition",
+          "term": "Grounding",
+          "original": "anchoring in sources",
+          "text": "checking that every sentence of the answer is grounded in a retrieved fragment. It happens after the answer is generated — it verifies the produced text against the sources and enforces citations."
+        },
+        {
+          "kind": "paragraph",
+          "text": "Verification practice: for each sentence of the answer, point to the fragment it follows from. A sentence with no grounding in any retrieved fragment is a signal of a generation error or a retrieval gap — in both cases the answer must not be considered grounded."
+        },
+        {
+          "kind": "callout",
+          "variant": "info",
+          "title": "Measuring RAG quality",
+          "text": "How to systematically measure retrieval relevance and answer quality is the topic of M12 (evaluation). Here the principle suffices: without grounding, there is no trusted answer."
+        }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "rubric",
+    "id": "m6-pipeline-rag",
+    "title": "Build a RAG pipeline",
+    "intro": "The \"SklepDemo\" corpus (cart specification WYM-koszyk, returns policy WYM-zwroty, payment checklists). User question: \"What is the acceptance criterion for the cart item limit?\". For each rubric criterion, select the pipeline configuration decision that satisfies it. The score counts as the practical task R2-rag on path S3 and is a necessary condition — the passing threshold is 70% (score ≥ 3.5 / 5).",
+    "rubricId": "R2-rag",
+    "recordsPractical": true,
+    "scaleMax": 5,
+    "passThreshold": 3.5,
+    "criteria": [
+      {
+        "id": "K1",
+        "name": "Sources and grounding",
+        "points": 1,
+        "hint": "Enable only the sources that answer the question and ground the answer in them; enabling everything adds noise, omitting the right source makes a citation impossible.",
+        "options": [
+          {
+            "id": "a",
+            "text": "Include the cart source (WYM-koszyk) in the index, because it is the one that contains the answer; require the answer to be grounded in the retrieved fragment."
+          },
+          {
+            "id": "b",
+            "text": "Disable all sources and let the model answer from memory — it will be faster."
+          },
+          {
+            "id": "c",
+            "text": "Enable all sources and additionally ask the model not to cite, so the answer is shorter."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K2",
+        "name": "Chunking + overlap",
+        "points": 1,
+        "hint": "Cut by single requirement with a small overlap and the identifier in the metadata; a fixed cut truncates the acceptance criterion.",
+        "options": [
+          {
+            "id": "a",
+            "text": "Split by single requirement (one WYM = one fragment) with a small overlap and the \"WYM-koszyk-…\" identifier in the metadata."
+          },
+          {
+            "id": "b",
+            "text": "Cut every fixed number of characters without overlap — simpler to implement."
+          },
+          {
+            "id": "c",
+            "text": "Dump the whole cart specification as one huge fragment so nothing gets cut off."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K3",
+        "name": "Retrieval (top-k, metadata filters)",
+        "points": 1,
+        "hint": "Set top-k > 0, large enough for the right fragment to fit, and narrow it with a metadata filter to the cart document; top-k = 0 retrieves nothing.",
+        "options": [
+          {
+            "id": "a",
+            "text": "Set top-k to a few fragments and add a metadata filter limiting it to the cart document, so the relevant fragment definitely enters the context."
+          },
+          {
+            "id": "b",
+            "text": "Set top-k = 0 so the model is not distracted by retrieved fragments."
+          },
+          {
+            "id": "c",
+            "text": "Set top-k = 1 with no filters and count on that single retrieved fragment happening to be the right one."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K4",
+        "name": "Citations / verifiability",
+        "points": 1,
+        "hint": "Enforce a citation with the fragment identifier (e.g. \"[WYM-koszyk §3]\") so the answer can be verified against the source.",
+        "options": [
+          {
+            "id": "a",
+            "text": "Enforce a citation with the fragment identifier on every claim, e.g. \"[WYM-koszyk §3]\", so it can be checked in the source."
+          },
+          {
+            "id": "b",
+            "text": "Ask for a flowing paragraph without citations — it reads more pleasantly."
+          },
+          {
+            "id": "c",
+            "text": "Let the model invent section numbers if they fit the topic — they sound credible anyway."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K5",
+        "name": "Error diagnosis (retrieval / generation / source)",
+        "points": 1,
+        "hint": "First check whether the right fragment was in the context (retrieval), then whether the answer does not contradict it (generation), then whether the document itself is correct (source) — each layer has a different fix.",
+        "options": [
+          {
+            "id": "a",
+            "text": "When the answer is wrong, determine the layer: the right fragment missing from the context = retrieval; the fragment was good but the answer contradicts it = generation; the citation is correct but the document content is wrong = source — and fix the right layer."
+          },
+          {
+            "id": "b",
+            "text": "Treat every bad result the same and always tweak the prompt itself, regardless of what was in the context."
+          },
+          {
+            "id": "c",
+            "text": "If the number in the answer happens to match, accept the answer as correct without checking which document the citation concerns."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      }
+    ]
+  },
+  "summary": {
+    "points": [
+      "The RAG pipeline has a forced order: chunking → embeddings → index (offline), then retrieval → reranking → generation with citations (online).",
+      "For requirements documentation, cut by single requirement with overlap and the identifier in the metadata — this protects the completeness of the criterion and the clarity of the citation.",
+      "RAG = fresh, changing, citable facts; fine-tuning = stable style and format. \"Fine-tuning will teach the model the documentation\" is a myth.",
+      "The three layers of error have three different fixes: retrieval (the right fragment did not arrive), generation (good fragment, bad answer), source (correct citation, wrong document)."
+    ],
+    "checklist": [
+      "Are the pipeline steps in the correct order (retrieval before generation)?",
+      "Does the chunking preserve the whole requirement and its identifier in the metadata?",
+      "Is this a case for RAG (fresh facts + citations) rather than for fine-tuning (stable format)?",
+      "Can I identify the error layer: retrieval, generation, or source?"
+    ],
+    "checklistTitle": "Checklist — a ready RAG pipeline for QA",
+    "nextStep": "Next step: M7 — prompt engineering: how to write a prompt that uses the retrieved context."
+  }
+}

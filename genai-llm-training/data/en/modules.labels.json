@@ -1,0 +1,244 @@
+{
+  "M1": {
+    "name": "Foundations of GenAI and LLMs",
+    "level": "beginner",
+    "interactiveElement": "Task classifier",
+    "keyConcepts": [
+      "GenAI",
+      "LLM",
+      "classic ML",
+      "probabilistic output",
+      "training vs inference",
+      "hallucination"
+    ],
+    "learningOutcomes": [
+      "Distinguishes GenAI, LLMs, and classic ML through examples",
+      "Recognizes that an LLM generates the most probable answer, not a guaranteed truth",
+      "Classifies tasks as generative, classification, or deterministic"
+    ]
+  },
+  "M2": {
+    "name": "LLM architecture at a practical level",
+    "level": "beginner/intermediate",
+    "interactiveElement": "Context counter",
+    "keyConcepts": [
+      "token",
+      "tokenization",
+      "context window",
+      "parameters",
+      "transformer",
+      "attention",
+      "inference cost"
+    ],
+    "learningOutcomes": [
+      "Explains what a token is and why a long document can exceed the context window",
+      "Identifies 3 consequences of too small a context",
+      "Describes the transformer as a mechanism for learning relationships between tokens (intuition)",
+      "Recognizes that the number of parameters is not on its own a guarantee of quality"
+    ]
+  },
+  "M3": {
+    "name": "Generation parameters and output control",
+    "level": "beginner/intermediate",
+    "interactiveElement": "Generation sliders",
+    "keyConcepts": [
+      "temperature",
+      "top-p",
+      "max tokens",
+      "apparent determinism",
+      "repeatability",
+      "creativity"
+    ],
+    "learningOutcomes": [
+      "Tunes temperature for creative and formal tasks",
+      "Identifies the risk of too much randomness in QA tasks",
+      "Recognizes when max tokens truncates an answer",
+      "Compares generation settings and chooses the safer one for test documentation"
+    ]
+  },
+  "M4": {
+    "name": "Embeddings and semantic similarity",
+    "level": "intermediate",
+    "interactiveElement": "Semantic map",
+    "keyConcepts": [
+      "embeddings",
+      "vector",
+      "semantic similarity",
+      "cosine similarity",
+      "embedding model",
+      "nearest neighbors"
+    ],
+    "learningOutcomes": [
+      "Explains embeddings as a numerical representation of text meaning",
+      "Interprets cosine similarity as a measure of how close vector directions are",
+      "Identifies cases where a high similarity score does not mean a correct answer",
+      "Crafts a query for semantic search"
+    ]
+  },
+  "M5": {
+    "name": "Vector databases and similarity search",
+    "level": "intermediate/advanced",
+    "interactiveElement": "Retrieval debugger",
+    "keyConcepts": [
+      "vector database",
+      "ANN",
+      "index",
+      "similarity search",
+      "metadata filtering",
+      "recall",
+      "precision",
+      "top-k"
+    ],
+    "learningOutcomes": [
+      "Describes the role of a vector database in semantic search",
+      "Distinguishes exact search from approximate nearest neighbor",
+      "Identifies the impact of the index, metadata filtering, and chunk quality on the result",
+      "Diagnoses why a similarity search returned a fragment that is similar but useless"
+    ]
+  },
+  "M6": {
+    "name": "RAG: Retrieval-Augmented Generation",
+    "level": "intermediate/advanced",
+    "interactiveElement": "Build a RAG pipeline",
+    "keyConcepts": [
+      "RAG",
+      "retrieval",
+      "generation",
+      "chunking",
+      "overlap",
+      "reranking",
+      "citations",
+      "grounding",
+      "fine-tuning"
+    ],
+    "learningOutcomes": [
+      "Arranges the steps of a RAG pipeline in the correct order",
+      "Chooses a chunking strategy for requirements documentation",
+      "Distinguishes a case that requires RAG from a case that requires fine-tuning",
+      "Identifies a retrieval error, a generation error, and a source error based on the model's answer"
+    ]
+  },
+  "M7": {
+    "name": "Prompt engineering in practice",
+    "level": "beginner/intermediate",
+    "interactiveElement": "Prompt clinic",
+    "keyConcepts": [
+      "prompt",
+      "role",
+      "context",
+      "few-shot",
+      "constraints",
+      "output format",
+      "prompt scoring rubric"
+    ],
+    "learningOutcomes": [
+      "Creates a prompt that includes role, goal, context, data, constraints, quality criteria, and output format",
+      "Improves an imprecise prompt based on a faulty output",
+      "Applies few-shot when the response format or style must be repeatable",
+      "Identifies when a prompt will not solve the problem of missing data"
+    ]
+  },
+  "M8": {
+    "name": "Applications of GenAI in QA and quality",
+    "level": "intermediate",
+    "interactiveElement": "QA workbench",
+    "keyConcepts": [
+      "test case generation",
+      "test data ideas",
+      "risk-based testing",
+      "traceability",
+      "acceptance criteria",
+      "review checklist"
+    ],
+    "learningOutcomes": [
+      "Generates test cases from a requirement and identifies coverage gaps",
+      "Detects duplicates and sham tests",
+      "Creates a risk checklist for a feature",
+      "Assesses whether an LLM output is suitable for QA documentation after a substantive review",
+      "Identifies QA tasks where the LLM acts as an assistant, not a decision-maker"
+    ]
+  },
+  "M9": {
+    "name": "Tool integrations and agents",
+    "level": "intermediate",
+    "interactiveElement": "Agent permission board",
+    "keyConcepts": [
+      "tool use",
+      "agent",
+      "workflow",
+      "human-in-the-loop",
+      "permission scope",
+      "audit log",
+      "rollback"
+    ],
+    "learningOutcomes": [
+      "Distinguishes a chatbot, a workflow with a tool, and an agent that executes steps",
+      "Identifies the risks of giving an agent access to files, email, a repository, or a test system",
+      "Designs a minimal control principle: permissions, logs, human approval, rollback",
+      "Identifies tasks where an agent requires constraints and auditing"
+    ]
+  },
+  "M10": {
+    "name": "Security, data hygiene, and governance",
+    "level": "beginner/intermediate",
+    "interactiveElement": "Data safety gate",
+    "keyConcepts": [
+      "prompt injection",
+      "jailbreak",
+      "data leakage",
+      "PII",
+      "IP",
+      "acceptable use",
+      "audit trail",
+      "OWASP LLM Top 10"
+    ],
+    "learningOutcomes": [
+      "Recognizes prompt injection and jailbreak in a scenario",
+      "Classifies data as permitted, requiring anonymization, or not permitted",
+      "Identifies the risk of data leakage and PII",
+      "Applies an acceptable use policy",
+      "Defines the minimal audit trail for using GenAI in the QA process"
+    ]
+  },
+  "M11": {
+    "name": "Hallucinations, limits of use, and output verification",
+    "level": "beginner/intermediate",
+    "interactiveElement": "Output verifier",
+    "keyConcepts": [
+      "hallucination",
+      "verification",
+      "source checking",
+      "confidence",
+      "critical decision",
+      "human review"
+    ],
+    "learningOutcomes": [
+      "Identifies the causes of hallucinations: missing data, conflicting data, prompt pressure, outdated context, imprecise sources",
+      "Applies an output verification checklist",
+      "Rejects using an LLM when the result cannot be checked or when an error has high impact",
+      "Flags parts of an answer that require a source or an expert"
+    ]
+  },
+  "M12": {
+    "name": "Evaluating LLM and RAG quality",
+    "level": "advanced",
+    "interactiveElement": "Judge calibration lab",
+    "keyConcepts": [
+      "LLM-as-a-judge",
+      "golden set",
+      "evaluation rubric",
+      "bias",
+      "position bias",
+      "inter-rater agreement",
+      "groundedness",
+      "faithfulness"
+    ],
+    "learningOutcomes": [
+      "Defines a golden set for a chosen use case",
+      "Selects metrics: accuracy, faithfulness, groundedness, relevance, completeness",
+      "Designs an LLM-as-a-judge rubric",
+      "Identifies the risks of bias, position bias, and disagreement with human judgment",
+      "Calibrates automated scoring by comparing it with expert judgment and sets an acceptance threshold"
+    ]
+  }
+}

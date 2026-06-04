@@ -1,0 +1,412 @@
+{
+  "_meta": {
+    "module": "M6",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M6. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q041",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "kolejnosc_procesu",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "The participant arranges the full RAG pipeline from source documents to an answer with citations in the correct order.",
+      "prompt": "Arrange the steps of a full RAG (Retrieval-Augmented Generation) pipeline in the correct order — from preparing the \"SklepDemo\" corpus to a finished answer with citations.",
+      "sequence": [
+        "Split source documents into chunks (chunking)",
+        "Compute embeddings for the chunks",
+        "Store the chunks and embeddings in an index / vector database",
+        "Receive the user query",
+        "Search for the closest chunks (retrieval, top-k)",
+        "Inject the retrieved context into the prompt and generate an answer with citations"
+      ],
+      "feedbackCorrect": "The chunks must first be created and loaded into the index (chunking → embeddings → index) before a query can trigger retrieval, and only the retrieved context feeds the generation with citations.",
+      "feedbackIncorrect": "The indexing stage (chunking, embeddings, index) is independent of the query and always precedes it; retrieval must come before generation, because it supplies the context. Review the \"End-to-end RAG pipeline\" screen.",
+      "references": [
+        "M6.2",
+        "M6.3"
+      ]
+    },
+    {
+      "id": "Q042",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "kolejnosc_procesu",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "The participant orders the offline index-building phase of the RAG pipeline over a requirements documentation corpus.",
+      "prompt": "The team is preparing an index for the \"SklepDemo\" requirements corpus before anyone asks a question. Arrange the steps of this indexing phase in the correct order.",
+      "sequence": [
+        "Gather the source documents of the \"SklepDemo\" corpus",
+        "Split each document into chunks (chunking), preserving headings and identifiers in the metadata",
+        "Compute embeddings for each chunk",
+        "Store the chunks together with their embeddings and metadata in an index / vector database"
+      ],
+      "feedbackCorrect": "The indexing phase operates on documents (not on the query): first the collection, then splitting into chunks, then embeddings, and finally storing into an index ready for retrieval.",
+      "feedbackIncorrect": "Embeddings can only be computed for existing chunks, and what goes into the index is a chunk together with its embedding and metadata — the order is forced by data dependency. Go back to the description of chunking and embeddings.",
+      "references": [
+        "M6.2",
+        "M6.4"
+      ]
+    },
+    {
+      "id": "Q043",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "kolejnosc_procesu",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "The participant orders the query-time path with reranking and grounding control, recognizing where each step belongs.",
+      "prompt": "The index for the \"SklepDemo\" corpus is already built. Arrange the steps of the path that handles a single user query, including reordering the results and checking that the answer is grounded.",
+      "sequence": [
+        "Receive the user query and compute its embedding",
+        "Search the index for candidate chunks (retrieval, top-k)",
+        "Reorder the candidates by relevance (reranking)",
+        "Inject the best chunks into the prompt as context",
+        "Generate an answer with citations to the chunks",
+        "Check grounding: whether every sentence is backed by a retrieved chunk"
+      ],
+      "feedbackCorrect": "Reranking operates on the results of the initial retrieval (so it comes after retrieval and before injecting the context), and the grounding check happens after the answer is generated — it verifies the produced text against the sources.",
+      "feedbackIncorrect": "Reranking has nothing to sort without a prior retrieval, and grounding evaluates the finished answer, so it comes last. Review the engineering deep-dive on reranking and grounding.",
+      "references": [
+        "M6.3",
+        "M6.9"
+      ]
+    },
+    {
+      "id": "Q044",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "The participant recognizes the role of overlap when splitting requirements documentation into chunks.",
+      "prompt": "When splitting requirements documentation into chunks (chunking), overlap is applied between adjacent chunks. Why?",
+      "options": [
+        {
+          "id": "A",
+          "text": "So that a sentence or an acceptance criterion at the cut boundary is not torn apart and remains in the coherent context of at least one chunk"
+        },
+        {
+          "id": "B",
+          "text": "To reduce the number of chunks and thereby the size of the vector index"
+        },
+        {
+          "id": "C",
+          "text": "So that the model generating the answer no longer has to cite sources"
+        },
+        {
+          "id": "D",
+          "text": "To speed up computing embeddings for the entire corpus"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Overlap duplicates a span of text at the cut boundary, so content cut off in one chunk (e.g. an acceptance criterion) keeps its context in the adjacent chunk.",
+      "feedbackIncorrect": "Overlap increases, rather than reduces, the number and volume of chunks; its purpose is to protect context at the cut boundaries, not performance or citation. Review the screen on chunking and the overlap parameter.",
+      "references": [
+        "M6.4"
+      ]
+    },
+    {
+      "id": "Q045",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "The participant chooses RAG over fine-tuning for the need of fresh, citable factual knowledge.",
+      "prompt": "The QA team wants the assistant to answer questions about the current \"SklepDemo\" requirements and, with each answer, point to the specific section of the specification. The specification changes every sprint. Which approach is appropriate?",
+      "options": [
+        {
+          "id": "A",
+          "text": "RAG — because fresh, changing factual knowledge with the ability to cite the source is needed"
+        },
+        {
+          "id": "B",
+          "text": "Fine-tuning — because tuning the model on the specification will teach it the content of the requirements permanently"
+        },
+        {
+          "id": "C",
+          "text": "Fine-tuning — because only a fine-tuned model can provide citations to documents"
+        },
+        {
+          "id": "D",
+          "text": "Neither RAG nor fine-tuning — a longer prompt with general style instructions is enough"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "RAG supplies the model with fresh fragments from the current specification and lets it cite them; factual knowledge that changes every sprint is a classic case for RAG, not fine-tuning.",
+      "feedbackIncorrect": "Fine-tuning fixes style/behavior, not current facts, and does not provide citations to sources — with a changing specification it would quickly become outdated. Review the \"RAG or fine-tuning\" screen and the anti-myth about teaching the model the documentation.",
+      "references": [
+        "M6.6"
+      ]
+    },
+    {
+      "id": "Q046",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "The participant distinguishes the signals of a retrieval error, a generation error, and a source error based on the answer and the retrieved context.",
+      "prompt": "Which situation unambiguously indicates a generation error, rather than a retrieval error or a source error?",
+      "options": [
+        {
+          "id": "A",
+          "text": "The correct chunk with the correct criterion was retrieved into the context, yet the model's answer contradicts it"
+        },
+        {
+          "id": "B",
+          "text": "Among the retrieved chunks there is no chunk at all that contains the answer to the question"
+        },
+        {
+          "id": "C",
+          "text": "The model cited the chunk correctly, but the content in the source document itself was outdated"
+        },
+        {
+          "id": "D",
+          "text": "Top-k was set to 0, so no chunk made it into the prompt"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "When the correct chunk was in the context but the answer contradicts it, the generation stage failed — the model misused a correct source.",
+      "feedbackIncorrect": "A missing correct chunk (B, D) is a retrieval error, and a correct citation with wrong document content (C) is a source error. Review the \"Three layers of error in RAG\" screen.",
+      "references": [
+        "M6.7",
+        "M6.8"
+      ]
+    },
+    {
+      "id": "Q047",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "The participant chooses a chunking strategy that protects the completeness of a single requirement together with its identifier.",
+      "prompt": "In the \"SklepDemo\" corpus, each requirement has an identifier (e.g. \"WYM-014\") and its own acceptance criterion, sometimes several sentences long. Previously, arbitrary cutting every fixed number of characters caused the criterion to be cut in half, and retrieval returned a chunk without a conclusion. Which chunking strategy should you choose?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Split per single requirement — one requirement with its identifier and full acceptance criterion = one coherent chunk, the identifier in the metadata"
+        },
+        {
+          "id": "B",
+          "text": "Keep the fixed cut at the same number of characters, just reduce the chunk size so there are more of them"
+        },
+        {
+          "id": "C",
+          "text": "Dump the entire document as a single chunk, so nothing can get cut off"
+        },
+        {
+          "id": "D",
+          "text": "Split randomly, but increase top-k, counting on the right piece turning up anyway"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "The logical boundary \"one requirement = one chunk\" with the identifier in the metadata preserves the full criterion and a clear citation source — exactly what was missing with the fixed cut.",
+      "feedbackIncorrect": "Smaller fixed chunks cut the criteria even more often, the whole document as a chunk ruins retrieval relevance, and a random split with a large top-k does not guarantee the completeness of the requirement. Review the QA rule about chunking per requirement.",
+      "references": [
+        "M6.4",
+        "M6.5"
+      ]
+    },
+    {
+      "id": "Q048",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant decides between RAG and fine-tuning, recognizing the need for a fixed output format rather than new factual knowledge.",
+      "prompt": "The QA assistant must always return a test execution report in a fixed, company-standard layout of sections and tone, regardless of the question. The report content comes from current test logs, but the point is a repeatable format and style. What should you choose for the format requirement alone?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Fine-tuning (or a template in the prompt) — fixing a consistent style and output format is a typical tuning task, not new factual knowledge"
+        },
+        {
+          "id": "B",
+          "text": "RAG — because only retrieval can impose a fixed section layout on the model's report"
+        },
+        {
+          "id": "C",
+          "text": "RAG on a document describing the format — because every aspect of the model's behavior should be solved with retrieval"
+        },
+        {
+          "id": "D",
+          "text": "None of these — the output format simply cannot be controlled in LLM models"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "A consistent style and output format is model behavior that fine-tuning (or a prompt template) fixes — this is not fresh factual knowledge that requires RAG.",
+      "feedbackIncorrect": "RAG is responsible for fresh facts and citations, not for imposing a format; the \"everything with retrieval\" myth is wrong, and the output format absolutely can be controlled. Review the distinction between RAG and fine-tuning.",
+      "references": [
+        "M6.6"
+      ]
+    },
+    {
+      "id": "Q049",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant recognizes the error layer based on the retrieved context and the citation in the model's answer.",
+      "prompt": "On the \"NotkaApp\" corpus (DOC1: the session token expires after 30 min; DOC3: the password reset link is valid for 30 min, single-use), the question \"After how long does the password reset link expire?\" is asked. The model retrieved and cited only DOC1 and answers: \"It expires after 30 minutes of inactivity [DOC1]\". The number happens to match, but the citation concerns the session token, not the reset link. Which layer failed?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Retrieval — a semantically similar but wrong chunk (DOC1) was retrieved, and the correct one (DOC3) was missing from the context"
+        },
+        {
+          "id": "B",
+          "text": "Generation — the context had DOC3, but the model still summarized the correct chunk poorly"
+        },
+        {
+          "id": "C",
+          "text": "Source error — DOC3 contains incorrect information about the link's validity period"
+        },
+        {
+          "id": "D",
+          "text": "No error — since the number \"30 minutes\" matches, the answer is fully grounded"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "The citation points to DOC1 (the session token) rather than the correct DOC3 (the reset link) — this is a classic similar-but-useless case: retrieval failed, even though the number happens to match.",
+      "feedbackIncorrect": "DOC3 never made it into the context, so this is neither a generation error nor a source error; a coincidental number match does not mean grounding — the citation concerns the wrong document. Review the diagnosis of error layers and the similar-but-useless trap.",
+      "references": [
+        "M6.8",
+        "M6.7"
+      ]
+    },
+    {
+      "id": "Q050",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant identifies the signals that indicate a retrieval error in a RAG answer.",
+      "prompt": "Which of the following signals indicate that the retrieval stage failed in the RAG pipeline, rather than the generation stage? Select all that apply.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Among the retrieved chunks (top-k) there is no chunk at all that contains the answer to the question"
+        },
+        {
+          "id": "B",
+          "text": "The correct source was excluded from the index, so it could not be retrieved"
+        },
+        {
+          "id": "C",
+          "text": "Top-k was set too low and the correct chunk fell off the list of retrieved chunks"
+        },
+        {
+          "id": "D",
+          "text": "The correct chunk with the proper criterion was retrieved, yet the model's answer contradicts it"
+        },
+        {
+          "id": "E",
+          "text": "The retrieved and cited chunk was correct, but the content in the source document itself is outdated"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "A missing correct chunk in top-k, an excluded source, and too low a top-k are all situations in which the correct context did not reach the model — that is, a retrieval error.",
+      "feedbackIncorrect": "A contradiction despite correct context (D) is a generation error, and outdated content in a correctly cited document (E) is a source error — neither concerns retrieval. Review the three layers of error in RAG.",
+      "references": [
+        "M6.7",
+        "M6.8"
+      ]
+    }
+  ]
+}
