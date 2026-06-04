@@ -277,6 +277,17 @@ if (Qall) {
       const pm = paths.paths[p] && paths.paths[p].modules[q.module];
       if (!pm) fail(`${q.id}: ścieżka ${p} nie zawiera modułu ${q.module} w paths.json`);
     }
+    // Pokrycie pul per ścieżka (M13-2 #95): pula ścieżki P = pytania z P w paths[]. Test końcowy ścieżki
+    // losuje z TEJ puli, więc pula MUSI mieć >= finalTestQuestions (inaczej testu nie da się złożyć). Wymóg
+    // DERYWOWANY z paths.json (deklaracja), egzekwowany na banku — fundament pod dedykowane, rozłączne
+    // pule pytań per persona (ADR-0006 #94). Dziś S1⊆S2⊆S3; ten inwariant przeżyje rozłączne pule (M13-3..6).
+    const poolReport = [];
+    for (const [pid, p] of Object.entries(paths.paths)) {
+      const pool = Q.filter((q) => (q.paths || []).includes(pid));
+      if (pool.length < p.finalTestQuestions) fail(`ścieżka ${pid}: pula pytań ${pool.length} < finalTestQuestions ${p.finalTestQuestions} (test końcowy nie do złożenia z dopasowanej puli)`);
+      poolReport.push(`${pid}=${pool.length}/${p.finalTestQuestions}`);
+    }
+    report.push(`Pule per ścieżka (pula/test): ${poolReport.join(" ")} — pula >= test (ADR-0006; fundament dedykowanych pul #95)`);
   }
   // lint danych syntetycznych
   for (const q of Q) {

@@ -114,6 +114,19 @@ for (const c of [
   });
 }
 
+// ---------------- M13-2 (#95): pokrycie pul per ścieżka (fundament dedykowanych pul, ADR-0006) ----------------
+
+test("pokrycie puli per ścieżka (#95): finalTestQuestions > pula ścieżki → walidator FAILUJE", () => {
+  const dataDir = copyData();
+  const f = join(dataDir, "paths.json"); // paths.json jest wspólny (top-level data/), nie per-locale
+  const doc = JSON.parse(readFileSync(f, "utf8"));
+  doc.paths.S1.finalTestQuestions = 999; // pula S1 (~49) < 999 → testu nie da się złożyć z dopasowanej puli
+  writeFileSync(f, JSON.stringify(doc, null, 2));
+  const r = runValidator(dataDir);
+  assert.notEqual(r.code, 0, "pula ścieżki mniejsza niż finalTestQuestions MUSI failować (#95)");
+  assert.match(r.output, /pula pytań|finalTestQuestions/, "raport powinien wskazać niedobór puli ścieżki");
+});
+
 // ---------------- #80: kompletność katalogów UI + parytet strukturalny treści ----------------
 
 test("kompletność UI: BRAKUJĄCY klucz w en.json (obecny w pl) → walidator FAILUJE", () => {
