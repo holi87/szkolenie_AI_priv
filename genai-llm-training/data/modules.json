@@ -1,10 +1,10 @@
 {
   "_meta": {
     "issue": "#9 [09][M2] Zdefiniuj schematy danych kursu",
-    "version": "0.1",
+    "version": "0.2",
     "schema": "schemas/modules.schema.json",
     "source": "wymagania/06_program_curriculum.md (autorytatywne), wymagania/05, paths.json (czasy/warianty ścieżek)",
-    "notes": "Kanoniczne metadane treści modułów. Gating ścieżka×moduł i czasy wariantów: paths.json. Pula pytań: data/questions/mNN.json (zakres Q wg questionRange). Filar to PRIMARY filar modułu (pojedyncze pytania mogą mieć inny filar — patrz pliki questions/mNN.json)."
+    "notes": "Kanoniczne metadane treści modułów. Gating ścieżka×moduł i czasy wariantów: paths.json. Pula pytań: data/questions/mNN.json (zakres Q wg questionRange). Filar to PRIMARY filar modułu (pojedyncze pytania mogą mieć inny filar — patrz pliki questions/mNN.json). `scope` (M13/ADR-0006): core = identyczna pula pytań we wszystkich ścieżkach (paths=[S1,S2,S3]); dedicated = pula dzielona per persona (każde pytanie ma dokładnie 1 ścieżkę w paths)."
   },
   "pillars": {
     "foundations_technical": "Fundamenty i techniczne rozumienie GenAI/LLM (architektura, parametry, embeddings, vector DB, RAG, ewaluacja)",
@@ -17,6 +17,7 @@
       "order": 1,
       "timeFullMin": 35,
       "pillar": "foundations_technical",
+      "scope": "core",
       "questionRange": {
         "from": "Q001",
         "to": "Q008",
@@ -28,6 +29,7 @@
       "order": 2,
       "timeFullMin": 45,
       "pillar": "foundations_technical",
+      "scope": "dedicated",
       "questionRange": {
         "from": "Q009",
         "to": "Q017",
@@ -39,6 +41,7 @@
       "order": 3,
       "timeFullMin": 30,
       "pillar": "foundations_technical",
+      "scope": "dedicated",
       "questionRange": {
         "from": "Q018",
         "to": "Q024",
@@ -50,6 +53,7 @@
       "order": 4,
       "timeFullMin": 50,
       "pillar": "foundations_technical",
+      "scope": "dedicated",
       "questionRange": {
         "from": "Q025",
         "to": "Q032",
@@ -61,6 +65,7 @@
       "order": 5,
       "timeFullMin": 55,
       "pillar": "foundations_technical",
+      "scope": "dedicated",
       "questionRange": {
         "from": "Q033",
         "to": "Q040",
@@ -72,6 +77,7 @@
       "order": 6,
       "timeFullMin": 70,
       "pillar": "foundations_technical",
+      "scope": "dedicated",
       "questionRange": {
         "from": "Q041",
         "to": "Q050",
@@ -83,6 +89,7 @@
       "order": 7,
       "timeFullMin": 65,
       "pillar": "qa_practice",
+      "scope": "dedicated",
       "questionRange": {
         "from": "Q051",
         "to": "Q060",
@@ -94,6 +101,7 @@
       "order": 8,
       "timeFullMin": 75,
       "pillar": "qa_practice",
+      "scope": "dedicated",
       "questionRange": {
         "from": "Q061",
         "to": "Q072",
@@ -105,6 +113,7 @@
       "order": 9,
       "timeFullMin": 45,
       "pillar": "security_governance",
+      "scope": "dedicated",
       "questionRange": {
         "from": "Q073",
         "to": "Q080",
@@ -116,6 +125,7 @@
       "order": 10,
       "timeFullMin": 80,
       "pillar": "security_governance",
+      "scope": "core",
       "questionRange": {
         "from": "Q081",
         "to": "Q094",
@@ -128,6 +138,7 @@
       "order": 11,
       "timeFullMin": 60,
       "pillar": "qa_practice",
+      "scope": "core",
       "questionRange": {
         "from": "Q095",
         "to": "Q104",
@@ -139,6 +150,7 @@
       "order": 12,
       "timeFullMin": 90,
       "pillar": "foundations_technical",
+      "scope": "dedicated",
       "questionRange": {
         "from": "Q105",
         "to": "Q116",

@@ -42,17 +42,21 @@ function byDifficulty(list) {
   return g;
 }
 
+/** Dedykowane (M13/ADR-0006) = pytanie przypisane do DOKŁADNIE jednej ścieżki; rdzeń ma >1 ścieżkę w paths. */
+const isDedicated = (q) => Array.isArray(q.paths) && q.paths.length === 1;
+
 /**
  * Losuje test końcowy dla ścieżki.
  * @param {object[]} questions - płaski bank pytań (mergeQuestionBank)
  * @param {object} pathsData - data/paths.json
  * @param {string} pathId - S1 | S2 | S3
  * @param {Function} [rng=Math.random] - generator [0,1)
- * @returns {{pathId:string, count:number, questions:object[], criticalIds:string[], difficultyCounts:object}}
+ * @returns {{pathId:string, count:number, questions:object[], criticalIds:string[], dedicatedCount:number, difficultyCounts:object}}
  */
 export function selectFinalTest(questions, pathsData, pathId, rng = Math.random) {
   const path = getPath(pathsData, pathId);
   const n = path.finalTestQuestions;
+  const dedicatedMin = path.dedicatedQuestionsMin || 0;
   const pool = questions.filter((q) => Array.isArray(q.paths) && q.paths.includes(pathId));
 
   // 1. Wymuś wszystkie pytania krytyczne ścieżki (warunek konieczny — nie mogą wypaść z losowania).
@@ -60,7 +64,16 @@ export function selectFinalTest(questions, pathsData, pathId, rng = Math.random)
   const selected = [...criticals];
   const selectedIds = new Set(selected.map((q) => q.id));
 
-  // 2. Dobierz resztę wg rozkładu trudności, licząc już wybrane krytyczne do ich koszyków.
+  // 1b. Wymuś minimalną liczbę pytań DEDYKOWANYCH (M13/ADR-0006): persona realnie różni się treścią testu.
+  // Bez tej kwoty test mógłby wylosować całość z rdzenia (rdzeń S1=32 > test 25) i wszystkie persony miałyby
+  // identyczny zestaw — życzenie „inne pytania per ścieżka" byłoby niespełnione mimo dedykowanych pul.
+  let dedicatedCount = selected.filter(isDedicated).length;
+  for (const q of shuffle(pool.filter((x) => isDedicated(x) && !selectedIds.has(x.id)), rng)) {
+    if (dedicatedCount >= dedicatedMin) break;
+    selected.push(q); selectedIds.add(q.id); dedicatedCount += 1;
+  }
+
+  // 2. Dobierz resztę wg rozkładu trudności, licząc już wybrane (krytyczne + dedykowane) do koszyków.
   const hasL4 = pool.some((q) => q.difficulty === "L4");
   const targets = difficultyTargets(n, hasL4);
   const remainingByDiff = byDifficulty(pool.filter((q) => !selectedIds.has(q.id)));
@@ -84,12 +97,16 @@ export function selectFinalTest(questions, pathsData, pathId, rng = Math.random)
     }
   }
 
-  // 4. Gdy krytyczne + koszyki przekroczyły n, przytnij do n — ale NIGDY nie usuwaj krytycznych.
+  // 4. Gdy przekroczono n, przytnij — NIGDY nie usuwaj krytycznych ani dedykowanych poniżej kwoty.
   let final = selected;
   if (selected.length > n) {
     const keepCritical = selected.filter((q) => q.isCritical);
-    const trimmable = selected.filter((q) => !q.isCritical);
-    final = [...keepCritical, ...trimmable].slice(0, Math.max(n, keepCritical.length));
+    const dedic = selected.filter((q) => !q.isCritical && isDedicated(q));
+    const others = selected.filter((q) => !q.isCritical && !isDedicated(q));
+    const keepDedic = dedic.slice(0, Math.max(0, dedicatedMin)); // chroń kwotę dedykowanych
+    const trimmable = [...others, ...dedic.slice(keepDedic.length)]; // nadwyżkę dedykowanych można przyciąć
+    const floor = keepCritical.length + keepDedic.length;
+    final = [...keepCritical, ...keepDedic, ...trimmable].slice(0, Math.max(n, floor));
   }
 
   // Wymieszaj kolejność prezentacji — żeby pytania krytyczne (na początku) nie były rozpoznawalne po pozycji.
@@ -103,6 +120,7 @@ export function selectFinalTest(questions, pathsData, pathId, rng = Math.random)
     count: final.length,
     questions: final,
     criticalIds: final.filter((q) => q.isCritical).map((q) => q.id),
+    dedicatedCount: final.filter(isDedicated).length,
     difficultyCounts,
   };
 }

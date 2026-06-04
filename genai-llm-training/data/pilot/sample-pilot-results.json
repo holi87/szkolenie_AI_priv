@@ -3,7 +3,7 @@
     "issue": "#28 [28][M5] Skalibruj pytania po pilotażu",
     "schema": "../schemas/pilot-results.schema.json",
     "status": "SYNTETYCZNY / DEMONSTRACYJNY — to NIE są wyniki realnego pilotażu. Zbiór pokazuje działanie narzędzia kalibracji (tools/calibration/calibrate.mjs) i celowo zawiera przypadki poza zakresem trudności oraz pytanie krytyczne z niejasnością >10%. Realny plik powstaje PO pilotażu na 8–15 osobach (wymagania/07).",
-    "demoCohort": "Dla spójności attempts<=uprawnieni uczestnicy wszyscy uczestnicy demo są na ścieżce S3 (byPath S3=12), więc każde pytanie jest widziane przez 12 osób. Realny pilotaż ma mieszany rozkład S1/S2/S3.",
+    "demoCohort": "Dla spójności attempts<=uprawnieni uczestnicy wszyscy uczestnicy demo są na ścieżce S3 (byPath S3=12), więc każde pytanie jest widziane przez 12 osób. Po M13 (#94, dedykowane pule per ścieżka) próbka używa wyłącznie pytań z paths zawierającymi S3. Realny pilotaż ma mieszany rozkład S1/S2/S3.",
     "dataPolicy": "Dane ZAGREGOWANE per pytanie, bez PII. Uczestnicy anonimowi."
   },
   "version": "0.1-demo",
@@ -18,11 +18,11 @@
     { "id": "Q002", "attempts": 12, "correct": 10, "avgTimeSec": 31, "ambiguityReports": 0 },
     { "id": "Q005", "attempts": 12, "correct": 10, "avgTimeSec": 35, "ambiguityReports": 0 },
     { "id": "Q007", "attempts": 12, "correct": 8, "avgTimeSec": 52, "ambiguityReports": 0, "discrimination": 0.33 },
-    { "id": "Q009", "attempts": 12, "correct": 11, "avgTimeSec": 27, "ambiguityReports": 1 },
-    { "id": "Q016", "attempts": 12, "correct": 9, "avgTimeSec": 58, "ambiguityReports": 0 },
-    { "id": "Q017", "attempts": 12, "correct": 3, "avgTimeSec": 96, "ambiguityReports": 1, "discrimination": 0.12 },
-    { "id": "Q018", "attempts": 12, "correct": 10, "avgTimeSec": 30, "ambiguityReports": 0 },
-    { "id": "Q024", "attempts": 12, "correct": 8, "avgTimeSec": 61, "ambiguityReports": 0 },
+    { "id": "Q053", "attempts": 12, "correct": 11, "avgTimeSec": 27, "ambiguityReports": 0 },
+    { "id": "Q105", "attempts": 12, "correct": 9, "avgTimeSec": 58, "ambiguityReports": 0 },
+    { "id": "Q108", "attempts": 12, "correct": 3, "avgTimeSec": 96, "ambiguityReports": 1, "discrimination": 0.12 },
+    { "id": "Q070", "attempts": 12, "correct": 10, "avgTimeSec": 30, "ambiguityReports": 0 },
+    { "id": "Q062", "attempts": 12, "correct": 8, "avgTimeSec": 61, "ambiguityReports": 0 },
     { "id": "Q032", "attempts": 12, "correct": 11, "avgTimeSec": 44, "ambiguityReports": 0 },
     { "id": "Q040", "attempts": 12, "correct": 4, "avgTimeSec": 110, "ambiguityReports": 0, "discrimination": 0.28 },
     { "id": "Q081", "attempts": 12, "correct": 11, "avgTimeSec": 49, "ambiguityReports": 0 },
@@ -31,5 +31,5 @@
     { "id": "Q084", "attempts": 12, "correct": 12, "avgTimeSec": 38, "ambiguityReports": 0 },
     { "id": "Q085", "attempts": 12, "correct": 12, "avgTimeSec": 40, "ambiguityReports": 1 }
   ],
-  "notes": "Demo: Q017 (L3) poniżej zakresu (za trudne), Q032 (L3, golden) powyżej zakresu (za łatwe → dryf golden setu), Q083 (krytyczne) z 2/12 = 16,7% zgłoszeń niejasności → wymaga przepisania. Pozostałe w zakresie."
+  "notes": "Demo: Q108 (L3) poniżej zakresu (za trudne), Q032 (L3, golden) powyżej zakresu (za łatwe → dryf golden setu), Q083 (krytyczne) z 2/12 = 16,7% zgłoszeń niejasności → wymaga przepisania. Pozostałe w zakresie. Po M13 (#94) próbka używa wyłącznie pytań z paths zawierającymi S3 (kohorta demo = same S3)."
 }

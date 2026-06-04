@@ -52,6 +52,17 @@ export function pathModuleList(pathsData, modulesData, pathId, progress) {
   });
 }
 
+/**
+ * Moduły WIDOCZNE dla ścieżki = persona-set (M13/ADR-0006): pomija moduły czysto opcjonalne (variant
+ * "opcjonalny"). Required + warianty świadomościowy/rozszerzony/skrócony/praktyczny/full zostają, więc każda
+ * persona ma INNY zestaw modułów (S1≈7, S2≈10, S3=12) — życzenie „inne moduły dopasowane do celu" (#3).
+ * Gating niezmieniony: requiredModules są zawsze required→widoczne; isFinalTestUnlocked działa jak dotąd.
+ */
+export function pathVisibleModuleIds(pathsData, pathId) {
+  const mm = getPath(pathsData, pathId).modules || {};
+  return new Set(Object.keys(mm).filter((id) => mm[id] && mm[id].variant !== "opcjonalny"));
+}
+
 /** Status modułu z progresu: completed | in_progress | available (self-paced, brak twardego locka). */
 export function moduleStatus(progress, moduleId) {
   const st = progress && progress.modules && progress.modules[moduleId] && progress.modules[moduleId].status;

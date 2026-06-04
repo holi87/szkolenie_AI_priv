@@ -245,7 +245,7 @@ function main(argv) {
   if (selfTest) {
     const ids = (arr) => arr.map((q) => q.id).sort();
     const checks = [
-      [ids(result.outOfBand).includes("Q017"), "Q017 (L3 za trudne) poza zakresem"],
+      [ids(result.outOfBand).includes("Q108"), "Q108 (L3 za trudne) poza zakresem"],
       [ids(result.outOfBand).includes("Q032"), "Q032 (L3 golden za łatwe) poza zakresem"],
       [ids(result.criticalsToRewrite).includes("Q083"), "Q083 (krytyczne, 16,7% niejasności) do przepisania"],
       [result.criticalsToRewrite.every((q) => q.id !== "Q085"), "Q085 (8,3% < 10%) NIE jest flagowane"],

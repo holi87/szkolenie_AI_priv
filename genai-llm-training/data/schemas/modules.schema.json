@@ -13,12 +13,13 @@
       "minItems": 12, "maxItems": 12,
       "items": {
         "type": "object",
-        "required": ["id", "order", "timeFullMin", "pillar", "questionRange"],
+        "required": ["id", "order", "timeFullMin", "pillar", "scope", "questionRange"],
         "properties": {
           "id": { "type": "string", "pattern": "^M([1-9]|1[0-2])$" },
           "order": { "type": "integer", "minimum": 1, "maximum": 12 },
           "timeFullMin": { "type": "integer", "minimum": 1 },
           "pillar": { "type": "string", "enum": ["foundations_technical", "qa_practice", "security_governance"] },
+          "scope": { "type": "string", "enum": ["core", "dedicated"], "description": "M13/ADR-0006: core = pula wspólna wszystkim ścieżkom; dedicated = pula dzielona per persona (1 ścieżka/pytanie)." },
           "questionRange": {
             "type": "object",
             "required": ["from", "to", "count"],
