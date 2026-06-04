@@ -4,7 +4,6 @@
     "name": "English"
   },
   "nav.heading.modules": "Modules",
-  "nav.progress": "Progress: {pct}%",
   "nav.header.pathIndicator": "Path {pathId}",
   "nav.header.pathIndicatorNamed": "Path {pathId} — {pathName}",
   "nav.item.required": " · required",

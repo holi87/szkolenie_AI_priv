@@ -48,11 +48,10 @@ a { color: var(--color-accent); }
 .brand { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; }
 .brand__logo { color: var(--color-accent); font-size: 1.2rem; }
 .app-header__meta { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
-/* Atrybut [hidden] w headerze musi DZIAŁAĆ: reguły author (.btn{display:inline-flex}, .progress{display:flex})
-   biją UA [hidden]{display:none}, więc bez tego nav-toggle/reset/path-indicator ORAZ pasek #progress były
-   widoczne mimo hidden=true (m.in. „Moduły" na hubie, „Zacznij od nowa" i nieaktualny „Postęp: 0%" na
-   path-select — w EN wręcz wyciek PL). Specyficzność 0,1,1 > .btn/.progress 0,1,0. (#88, dociągnięte w M11)
-   Ekrany (app.js) ustawiają hidden per ekran; chrome/progress lokalizowane przez t(). */
+/* Atrybut [hidden] w headerze musi DZIAŁAĆ: reguła author .btn{display:inline-flex} bije UA [hidden]{display:none},
+   więc bez tego nav-toggle/reset/path-indicator były widoczne mimo hidden=true (m.in. „Moduły" na hubie,
+   „Zacznij od nowa" na path-select — w EN wręcz wyciek PL). Specyficzność 0,1,1 > .btn 0,1,0. (#88, dociągnięte w M11)
+   Ekrany (app.js) ustawiają hidden per ekran; chrome lokalizowany przez t(). */
 .app-header [hidden] { display: none; }
 .path-badge {
   font-size: var(--fs-300); padding: 0.2rem 0.6rem; border: 1px solid var(--color-border);
@@ -88,15 +87,6 @@ a { color: var(--color-accent); }
 .lang-switch__option[aria-checked="true"] { font-weight: var(--fw-medium); }
 .lang-switch__option-name { flex: 1; }
 .lang-switch__option-check { display: inline-flex; width: 1em; color: var(--color-accent); }
-
-/* Progress bar */
-.progress { display: flex; align-items: center; gap: 0.6rem; padding: 0 1rem 0.7rem; }
-.progress__track {
-  flex: 1; height: 0.55rem; background: var(--color-surface-2);
-  border: 1px solid var(--color-border); border-radius: 999px; overflow: hidden;
-}
-.progress__fill { height: 100%; background: var(--grad-accent); transition: width var(--dur-base) var(--ease); }
-.progress__label { font-size: var(--fs-300); color: var(--color-muted); white-space: nowrap; }
 
 /* Toggle motywu (UX-3): pokaż ikonę aktywnego motywu (księżyc=ciemny domyślnie, słońce=jasny). */
 .theme-toggle { gap: 0.4rem; padding: 0.4rem 0.7rem; }
