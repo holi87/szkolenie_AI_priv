@@ -7,7 +7,9 @@ import { icon } from "./icon.js";
 import { t } from "../i18n/i18n.js";
 
 // icon = NAZWA ikony SVG (icon.js), nie glif. Informacja zawsze w tekście — ikona dekoracyjna (WCAG 1.4.1).
-const STATUS_META = {
+// Eksportowane: hub modułów (#88) reużywa tej samej mapy statusów (ikona + KLUCZ tekstu), żeby nie
+// duplikować mapowania statusów między szyną a hubem.
+export const STATUS_META = {
   completed: { icon: "check", textKey: "nav.status.completed" },
   in_progress: { icon: "dot", textKey: "nav.status.inProgress" },
   available: { icon: "circle", textKey: "nav.status.available" },
@@ -15,7 +17,7 @@ const STATUS_META = {
 };
 
 /** Składa czytelny powód blokady testu z danych strukturalnych core (paths.js) przez t(). */
-function lockedReasonText(finalTest) {
+export function lockedReasonText(finalTest) {
   const reasons = [];
   if ((finalTest.blockers || []).length) {
     reasons.push(t("test.lockedReason.modules", { modules: finalTest.blockers.join(", ") }));
@@ -33,7 +35,8 @@ export function updateHeader(refs, { pathId, pathName, progressPct }) {
     refs.pathIndicator.textContent = pathName
       ? t("nav.header.pathIndicatorNamed", { pathId, pathName })
       : t("nav.header.pathIndicator", { pathId });
-    refs.navToggle.hidden = false;
+    // Widoczność „Moduły" (navToggle) ustawiają ekrany (app.js): ukryty na hubie, widoczny w module/teście/wyniku
+    // jako powrót do hubu (#88). Tu sterujemy tylko trwałymi elementami headera.
     refs.resetBtn.hidden = false;
     refs.progress.hidden = false;
   }

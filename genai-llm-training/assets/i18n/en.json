@@ -127,5 +127,17 @@
   "cert.failed.heading": "",
   "cert.failed.notice.withGates": "",
   "cert.failed.notice.noGates": "",
-  "cert.reason.below_pass_threshold": ""
+  "cert.reason.below_pass_threshold": "",
+  "module.hub.card.required": "",
+  "module.hub.card.optional": "",
+  "module.hub.card.meta": "",
+  "module.hub.card.quiz": "",
+  "module.hub.cta.start": "",
+  "module.hub.cta.continue": "",
+  "module.hub.cta.review": "",
+  "module.hub.cta.aria": "",
+  "module.hub.finalTest.cta": "",
+  "module.pillar.foundations_technical": "",
+  "module.pillar.qa_practice": "",
+  "module.pillar.security_governance": ""
 }

@@ -14,6 +14,7 @@ import { icon } from "./ui/icon.js";
 import { t, registerCatalog, setLocale, resolveLang, persistLang, localeHasData } from "./i18n/i18n.js";
 import { renderPathSelect } from "./ui/path-select.js";
 import { updateHeader, renderNav } from "./ui/shell.js";
+import { renderModuleHub } from "./ui/module-hub.js";
 import { initTheme, toggleTheme } from "./ui/theme.js";
 import { initLangSwitch } from "./ui/lang-switch.js";
 import { renderQuestion, renderFeedback } from "./ui/quiz-view.js";
@@ -117,18 +118,20 @@ function start(initialData, ctx = {}) {
   // Zamknięcie/przeładowanie karty w trakcie modułu — domknij czas, by nie zgubić pomiaru.
   if (globalThis.addEventListener) globalThis.addEventListener("beforeunload", flushModuleTime);
 
+  // Aktualizuje header (ścieżka + postęp) zawsze, a boczną SZYNĘ renderuje TYLKO gdy jest widoczna
+  // (widok modułu). Hub/test/wynik trzymają nav ukryty → pełna szerokość (single column), tu tylko header.
+  // Widoczność nav (refs.nav.hidden) i przycisku „Moduły" (refs.navToggle.hidden) ustawiają ekrany.
   function refreshHeaderAndNav() {
     const pathId = store.getActivePath();
     if (!pathId) return;
     updateHeader(refs, { pathId, pathName: pathName(data, pathId), progressPct: progressPct(store, data, pathId) });
-    refs.nav.hidden = false;
-    refs.navToggle.setAttribute("aria-expanded", "true"); // nav widoczny po wyborze ścieżki — spójny stan z toggle
+    if (refs.nav.hidden) return;
     const modules = pathModuleList(data.paths, data.modules, pathId, store.getProgress());
     const ft = finalTestStatus(store.getProgress(), data.paths, pathId);
     ft.active = state.screen === "test";
     renderNav(refs.nav, {
       modules, finalTest: ft, activeModuleId: state.moduleId,
-      onSelectModule: showModule,
+      onSelectModule: (id) => { showModule(id); focusView(); },
       onSelectFinalTest: () => (isFinalTestUnlocked(store.getProgress(), data.paths, pathId) ? showFinalTest() : null),
     });
   }
@@ -136,7 +139,6 @@ function start(initialData, ctx = {}) {
   function render() {
     const pathId = store.getActivePath();
     if (!pathId) return showPathSelect();
-    refreshHeaderAndNav();
     if (state.screen === "menu") showMenu();
     else if (state.screen === "module") showModule(state.moduleId);
     else if (state.screen === "test") showFinalTest();
@@ -179,12 +181,31 @@ function start(initialData, ctx = {}) {
     else if (unlocked) nextStep = t("module.nextStep.goToTest");
     else nextStep = t("module.nextStep.completeRequired");
 
-    mount(refs.view, el("div", { class: "view__content" }, [
-      el("h1", { text: t("module.menu.heading", { pathId, pathName: pathName(data, pathId) }) }),
-      el("p", { text: t("module.menu.intro") }),
-      el("div", { class: "next-step", attrs: { role: "status" } }, [el("span", { class: "next-step__icon", attrs: { "aria-hidden": "true" } }, [icon("info")]), nextStep]),
-      passed ? el("div", { class: "btn-row" }, [el("button", { class: "btn", type: "button", text: t("action.viewResult"), on: { click: showFinalTest } })]) : null,
-    ]));
+    // Hub = PODSTAWOWA powierzchnia wyboru modułów: pełna szerokość, bez bocznej szyny (single column). #88
+    refs.nav.hidden = true;
+    refs.navToggle.hidden = true; // jesteś na hubie — przycisk „Moduły" (powrót do hubu) byłby zbędny
+    refreshHeaderAndNav();
+
+    // Wzbogać listę modułów ścieżki (id/name/status/required) o metadane do kart: filar, czas, % quizu.
+    const byId = new Map(data.modules.modules.map((m) => [m.id, m]));
+    const modules = pathModuleList(data.paths, data.modules, pathId, prog).map((m) => {
+      const src = byId.get(m.id) || {};
+      const mp = prog.modules[m.id] || {};
+      return {
+        id: m.id, name: m.name, status: m.status, required: m.required,
+        pillar: src.pillar, time: src.timeFullMin,
+        quizPct: typeof mp.inlineQuizScorePct === "number" ? mp.inlineQuizScorePct : null,
+      };
+    });
+    const ft = finalTestStatus(prog, data.paths, pathId);
+    ft.passed = Boolean(passed);
+
+    mount(refs.view, renderModuleHub({
+      pathId, pathName: pathName(data, pathId), nextStep, modules, finalTest: ft,
+      onSelectModule: (id) => { showModule(id); focusView(); },
+      onSelectFinalTest: () => { showFinalTest(); focusView(); }, // showFinalTest sam routuje (locked→hub, passed→wynik)
+    }));
+    focusView();
   }
 
   function showModule(moduleId) {
@@ -192,6 +213,8 @@ function start(initialData, ctx = {}) {
     startModuleTimer(moduleId); // start pomiaru czasu w module (KPI Time to complete)
     if (store.getProgress().modules[moduleId]?.status !== "completed") store.setModuleStatus(moduleId, "in_progress");
     store.setLastLocation(moduleId, "module");
+    refs.nav.hidden = false;       // widok modułu = szyna jako WTÓRNA nawigacja (układ dwukolumnowy na desktopie)
+    refs.navToggle.hidden = false; // „Moduły" w headerze → powrót do hubu (mobile)
     refreshHeaderAndNav();
 
     const pathId = store.getActivePath();
@@ -330,6 +353,8 @@ function start(initialData, ctx = {}) {
     const path = getPath(data.paths, pathId);
     const selection = selectFinalTest(data.questions, data.paths, pathId);
     state.test = selection;
+    refs.nav.hidden = true;        // test końcowy = pełna szerokość (skupienie); szyna ukryta
+    refs.navToggle.hidden = false; // „Moduły" → powrót do hubu
     refreshHeaderAndNav();
     const ft = prog.finalTest || { attempts: 0, maxAttempts: path.attempts || 3 };
     // Moduły z zadaniem praktycznym tej ścieżki (z bramek rubrykowych) — gdzie ocena praktyczna powstaje.
@@ -377,6 +402,8 @@ function start(initialData, ctx = {}) {
 
   function showResult(cert, gates) {
     state.screen = "result";
+    refs.nav.hidden = true;        // wynik/certyfikat = pełna szerokość; szyna ukryta
+    refs.navToggle.hidden = false; // „Moduły" → powrót do hubu
     const pathId = store.getActivePath();
     mount(refs.view, renderResult(cert, {
       progress: store.getProgress(), pathName: pathName(data, pathId), gates,
@@ -399,11 +426,8 @@ function start(initialData, ctx = {}) {
       render();
     }
   });
-  refs.navToggle.addEventListener("click", () => {
-    const expanded = refs.navToggle.getAttribute("aria-expanded") === "true";
-    refs.navToggle.setAttribute("aria-expanded", String(!expanded));
-    refs.nav.hidden = expanded;
-  });
+  // „Moduły" w headerze = POWRÓT DO HUBU. Wybór modułów to dedykowany ekran (#88), nie przełączanie szyny.
+  refs.navToggle.addEventListener("click", () => { showMenu(); focusView(); });
 
   render();
 }
