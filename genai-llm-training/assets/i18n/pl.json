@@ -139,5 +139,15 @@
   "module.hub.finalTest.cta": "Przejdź do testu końcowego",
   "module.pillar.foundations_technical": "Fundamenty techniczne",
   "module.pillar.qa_practice": "Praktyka QA",
-  "module.pillar.security_governance": "Bezpieczeństwo i governance"
+  "module.pillar.security_governance": "Bezpieczeństwo i governance",
+  "chrome.skipLink": "Przejdź do treści",
+  "chrome.brand": "Szkolenie GenAI i LLM",
+  "chrome.title": "Szkolenie GenAI i LLM — QualityCat",
+  "chrome.theme.label": "Motyw",
+  "chrome.theme.toggle": "Przełącz motyw jasny/ciemny",
+  "chrome.reset": "Zacznij od nowa",
+  "chrome.nav.aria": "Moduły szkolenia",
+  "chrome.metaDescription": "Interaktywne szkolenie z GenAI i LLM: ścieżki S1/S2/S3, quizy, test końcowy, certyfikat.",
+  "chrome.footer.note": "Szkolenie statyczne (GitHub Pages). Postęp zapisujemy lokalnie w tej przeglądarce; nic nie wysyłamy na serwer, brak cookies.",
+  "chrome.footer.privacy": "Prywatność"
 }

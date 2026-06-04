@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Privacy — GenAI &amp; LLM Training</title>
+  <meta name="description" content="Privacy notice: what the static GenAI/LLM training stores and where. No cookies, no data sent anywhere.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230f1117'/%3E%3Cpath d='M8 3 13 8 8 13 3 8Z' fill='%236ea8fe'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#tresc">Skip to content</a>
+  <header class="app-header">
+    <div class="app-header__bar">
+      <div class="brand"><span class="brand__logo" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" focusable="false"><path d="M8 1.5 14.5 8 8 14.5 1.5 8Z" fill="currentColor"/></svg></span><span class="brand__name">Privacy</span></div>
+      <div class="app-header__meta"><a class="btn btn--ghost" href="index.html?lang=en">← Back to the training</a></div>
+    </div>
+  </header>
+
+  <main id="tresc" class="view" tabindex="-1">
+    <div class="view__content">
+      <h1>Privacy</h1>
+      <p>This training is <strong>fully static</strong> and <strong>sends none of your data to a server</strong> —
+        there is no backend, no analytics, no <strong>cookies</strong> and no third-party tools. Everything runs in your browser.</p>
+
+      <h2>What we store locally in your browser</h2>
+      <p>In <code>localStorage</code> (on your device) we keep only what is needed for the training to work and
+        remember your progress:</p>
+      <ul>
+        <li>the chosen path, module status and time, and your last location,</li>
+        <li>quiz and final-test results, plus completion-certificate data,</li>
+        <li>the selected colour theme (light/dark) and the selected interface language,</li>
+        <li>keys: <code>genai-training:progress:&lt;path&gt;</code>, <code>genai-training:cursor</code>, <code>genai-training:theme</code> and <code>genai-training:lang</code>.</li>
+      </ul>
+      <p><strong>The certificate alias is NOT saved.</strong> We keep it only in this session's memory —
+        it disappears when you refresh or close the tab. Please also use an alias, not your real name.</p>
+
+      <h2>Your data never leaves your device</h2>
+      <p>We do not transmit anything. The files you can download (JSON/CSV with results) and optionally send to a
+        coordinator <strong>do not contain your alias</strong> — they contain only anonymous identifiers (a
+        completion ID without the alias), results and times; the completion date is truncated to the day so it does
+        not become an identifier.</p>
+
+      <h2>How to delete your data</h2>
+      <p>At any time use the <strong>“Start over”</strong> button in the app (clears all saved progress for this
+        browser) or clear the site data in your browser settings.</p>
+
+      <h2>Cookies and legal basis</h2>
+      <p>We use <strong>no cookies</strong> and no tracking, so <strong>there is no need for a cookie consent
+        banner</strong>. Storing your progress locally is strictly necessary for the service you request yourself
+        (completing the training and issuing a certificate) — this is the “strictly necessary” exception under
+        Art. 5(3) of the ePrivacy Directive (2002/58/EC), so we do not ask for consent. Treat this page as the
+        information notice under Art. 13 GDPR.</p>
+
+      <p class="muted"><a href="index.html?lang=en">← Back to the training</a></p>
+    </div>
+  </main>
+</body>
+</html>

@@ -61,7 +61,7 @@ test("hasKey rozróżnia istnienie wartości od pustki", () => {
 
 // --- Realne katalogi: kompletność i parzystość zbioru kluczy (sanity, twarda walidacja w #80) ---
 
-test("realne pl.json/en.json mają identyczny zbiór kluczy (en = szkielet)", () => {
+test("realne pl.json/en.json mają identyczny zbiór kluczy (parytet katalogów)", () => {
   const pl = readJson("assets/i18n/pl.json");
   const en = readJson("assets/i18n/en.json");
   assert.deepEqual(Object.keys(pl).sort(), Object.keys(en).sort());
@@ -158,19 +158,31 @@ test("persistLang zapisuje wspierany locale pod LANG_KEY; resolveLang go odczytu
   assert.equal(s.getItem(LANG_KEY), "en");
 });
 
-test("konfiguracja locale deklaratywna: pl ma dane, en jest szkieletem (hasData=false)", () => {
+test("konfiguracja locale deklaratywna: pl i en mają komplet danych (hasData=true) — M11", () => {
   assert.ok(LOCALES.some((l) => l.code === "pl") && LOCALES.some((l) => l.code === "en"));
   assert.equal(localeHasData("pl"), true);
-  assert.equal(localeHasData("en"), false, "EN bez własnych danych na etapie fundamentu (#78)");
+  assert.equal(localeHasData("en"), true, "EN ma własne dane data/en/ (#82/#83) → UI i dane po EN");
   assert.equal(isSupportedLocale("zz"), false);
 });
 
-test("aktywny EN (szkielet pusty) renderuje treść PL przez fallback — pipeline end-to-end", () => {
+test("aktywny EN (realny katalog) renderuje treść po ANGIELSKU — pipeline end-to-end (#81)", () => {
   registerCatalog("pl", readJson("assets/i18n/pl.json"));
-  registerCatalog("en", readJson("assets/i18n/en.json")); // wszystkie wartości puste
+  registerCatalog("en", readJson("assets/i18n/en.json")); // M11: pełne tłumaczenie EN
   setLocale("en");
   const q = { id: "QZ", type: "single_choice", points: 1, correct: ["a"], feedbackCorrect: "", feedbackIncorrect: "" };
   const okTxt = renderFeedback(scoreQuestion(q, "a")).textContent;
-  assert.ok(okTxt.includes("Poprawnie"), "EN puste -> fallback PL widoczny w renderze");
-  assert.ok(!/feedback\.\w+/.test(okTxt), "brak wycieku klucza przy aktywnym EN");
+  assert.ok(okTxt.includes("Correct"), "aktywny EN -> render po angielsku");
+  assert.ok(!okTxt.includes("Poprawnie"), "brak polskiej prozy gdy EN kompletny");
+  assert.ok(!/feedback\.\w+/.test(okTxt), "brak wycieku surowego klucza przy aktywnym EN");
+});
+
+test("fallback t(): locale z BRAKUJĄCĄ wartością → PL; render bez wycieku klucza (mechanizm niezależny od kompletności EN)", () => {
+  registerCatalog("pl", readJson("assets/i18n/pl.json"));
+  registerCatalog("en", {}); // celowo niekompletny katalog (synthetic) — wymusza fallback do PL
+  setLocale("en");
+  const q = { id: "QZ", type: "single_choice", points: 1, correct: ["a"], feedbackCorrect: "", feedbackIncorrect: "" };
+  const okTxt = renderFeedback(scoreQuestion(q, "a")).textContent;
+  assert.ok(okTxt.includes("Poprawnie"), "brak klucza w aktywnym locale → fallback PL widoczny");
+  assert.ok(!/feedback\.\w+/.test(okTxt), "brak wycieku surowego klucza przy fallbacku");
+  setLocale("pl"); // przywróć kanon dla ewentualnych kolejnych testów
 });

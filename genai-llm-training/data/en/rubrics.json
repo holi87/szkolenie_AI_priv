@@ -1,0 +1,95 @@
+{
+  "_meta": {
+    "issue": "#7 [07][M1] Zdefiniuj rubryki zadań praktycznych",
+    "version": "0.1",
+    "doc": "docs/rubryki-zadan.md",
+    "source": "wymagania/07 (skale 0-5 i 0-3, progi, feedback), wymagania/06 (moduły, efekty)",
+    "notes": "Kryteria binarne (1/0) sumują się do maxScore. Progi: S2 promptowe >=4/5; S3 RAG i ewaluacja >=70% (>=3.5/5) jako warunek konieczny w M6 i M12."
+  },
+  "rubrics": [
+    {
+      "id": "R1-prompt",
+      "task": "Prompting task (Prompt clinic)",
+      "module": "M7",
+      "paths": ["S2", "S3"],
+      "scaleMax": 5,
+      "passThreshold": 4,
+      "passScope": "S2: required",
+      "criteria": [
+        { "id": "K1", "name": "Role and goal", "points": 1 },
+        { "id": "K2", "name": "Context and input data (no sensitive data)", "points": 1 },
+        { "id": "K3", "name": "Constraints and quality criteria", "points": 1 },
+        { "id": "K4", "name": "Output format (verifiable)", "points": 1 },
+        { "id": "K5", "name": "Safety and verifiability", "points": 1 }
+      ],
+      "belowThresholdFeedback": "Missing: {failedCriteria}. Add the role/goal, context, constraints and criteria, output format, and data hygiene."
+    },
+    {
+      "id": "R2-rag",
+      "task": "RAG readiness task",
+      "module": "M6",
+      "paths": ["S3"],
+      "scaleMax": 5,
+      "passThreshold": 3.5,
+      "passScope": "S3: required (>=70% in M6)",
+      "criteria": [
+        { "id": "K1", "name": "Sources and grounding", "points": 1 },
+        { "id": "K2", "name": "Chunking + overlap", "points": 1 },
+        { "id": "K3", "name": "Retrieval (top-k, metadata filters)", "points": 1 },
+        { "id": "K4", "name": "Citations / verifiability", "points": 1 },
+        { "id": "K5", "name": "Error diagnosis (retrieval/generation/source)", "points": 1 }
+      ],
+      "belowThresholdFeedback": "Below the threshold in M6. Missing: {failedCriteria}. Go back to the pipeline/chunking/error-diagnosis screens."
+    },
+    {
+      "id": "R3-eval",
+      "task": "Evaluation task (Judge/golden set)",
+      "module": "M12",
+      "paths": ["S3"],
+      "scaleMax": 5,
+      "passThreshold": 3.5,
+      "passScope": "S3: required (>=70% in M12)",
+      "criteria": [
+        { "id": "K1", "name": "Golden set fit for the use case", "points": 1 },
+        { "id": "K2", "name": "Metrics with justification", "points": 1 },
+        { "id": "K3", "name": "LLM-as-a-judge rubric (unambiguous)", "points": 1 },
+        { "id": "K4", "name": "Bias/position bias + calibration with an expert", "points": 1 },
+        { "id": "K5", "name": "Quality acceptance threshold", "points": 1 }
+      ],
+      "belowThresholdFeedback": "Below the threshold in M12. Missing: {failedCriteria}. Go back to the golden set / metrics / rubric / calibration."
+    },
+    {
+      "id": "R4-qa-workbench",
+      "task": "QA workbench (assessing QA output)",
+      "module": "M8",
+      "paths": ["S2", "S3"],
+      "scaleMax": 5,
+      "passThreshold": null,
+      "passScope": "practice (feedback / contributes to the quiz)",
+      "criteria": [
+        { "id": "K1", "name": "Test coverage", "points": 1 },
+        { "id": "K2", "name": "Coverage gaps", "points": 1 },
+        { "id": "K3", "name": "Sham tests / duplicates", "points": 1 },
+        { "id": "K4", "name": "Risks / faulty assumptions", "points": 1 },
+        { "id": "K5", "name": "Decision boundary (human verification)", "points": 1 }
+      ],
+      "belowThresholdFeedback": "Missing: {failedCriteria}."
+    },
+    {
+      "id": "R5-output-analysis",
+      "task": "Output analysis (Output verifier)",
+      "module": "M11",
+      "paths": ["S1", "S2", "S3"],
+      "scaleMax": 3,
+      "passThreshold": null,
+      "passScope": "practice",
+      "levels": [
+        { "points": 3, "descriptor": "All key sentences classified correctly; risky and unsupported ones caught" },
+        { "points": 2, "descriptor": "Mostly correct; a single non-critical error" },
+        { "points": 1, "descriptor": "Partial; a significant risk missed or an error on a critical sentence" },
+        { "points": 0, "descriptor": "No risk recognized / unsupported content accepted" }
+      ],
+      "belowThresholdFeedback": "Missed: {kategorie}. Go back to the output-verification checklist."
+    }
+  ]
+}

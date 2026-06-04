@@ -1,0 +1,116 @@
+{
+  "_meta": {
+    "issue": "#21 [21][M4] Wdroż moduły M3-M6",
+    "storyboard": "docs/storyboard/m03-parametry.md",
+    "interaction": "Suwaki generacji (kind: tune)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (SklepDemo/NotkaApp). Output interakcji jest prerenderowany (nie z żywego modelu). ZERO PII.",
+    "note": "Egzemplarz referencyjny typu tune: parametry → autorskie efekty (dane) + scorowany checkpoint."
+  },
+  "module": "M3",
+  "intro": "The same inputs and the same model can produce different answers, because generation is steered by parameters. In QA, reproducible results are the foundation of trustworthy documentation and regression testing — uncontrolled parameters yield unpredictable output.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Why control generation?",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Three controls shape the answer: temperature and top-p (randomness) plus max tokens (length). Before you trust output in test documentation, you need to know how to set them." },
+        { "kind": "callout", "variant": "info", "title": "Apparent determinism", "text": "A low temperature reduces randomness, but it does not guarantee identical results on every run — this is still a probabilistic model." }
+      ]
+    },
+    {
+      "id": "s2-temperature",
+      "title": "Temperature — from formal to creative",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Temperature", "original": "temperature", "text": "the control for randomness when selecting the next token." },
+        { "kind": "list", "items": [
+          "Low (~0.0–0.3): conservative, reproducible, formal answers — for documentation and test steps.",
+          "High (~0.8–1.2): varied, creative, less predictable answers — for brainstorming test data."
+        ] }
+      ]
+    },
+    {
+      "id": "s3-wysoka-losowosc",
+      "title": "High randomness vs. QA work",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "High temperature in QA means a lack of reproducibility (two runs = two different steps), content drift, difficulty in review and audit, and the risk of silent changes during regression." },
+        { "kind": "callout", "variant": "warn", "title": "Rule", "text": "When reproducibility and compliance with a requirement matter — lower the randomness." }
+      ]
+    },
+    {
+      "id": "s4-top-p",
+      "title": "top-p — the second randomness control",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "top-p", "original": "nucleus sampling", "text": "a cumulative-probability threshold — it narrows the pool of next-token candidates to the most probable ones that sum to p." },
+        { "kind": "paragraph", "text": "Both parameters control variety; you usually adjust one at a time. Low top-p = a narrower, safer choice (a stable vocabulary of QA terms); high = broader, riskier phrasing." }
+      ]
+    },
+    {
+      "id": "s5-max-tokens",
+      "title": "max tokens — when the answer gets cut off",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "max tokens", "original": "maximum number of tokens in the answer", "text": "a hard limit on output length." },
+        { "kind": "paragraph", "text": "Exceeding the limit cuts the answer off mid-sentence, mid-table, or mid-list — the final steps or acceptance criteria are missing. You can recognize it by a truncated sentence and an unclosed list. The fix: raise the limit or ask for a shorter format." }
+      ]
+    },
+    {
+      "id": "s6-decyzja",
+      "title": "Which setting for test documentation?",
+      "type": "decision",
+      "blocks": [
+        { "kind": "paragraph", "text": "Compare two presets for the same task (writing out the steps of a test case). Variant A: temp 0.2 / top-p 0.3 / high limit. Variant B: temp 1.0 / top-p 0.95 / low limit." },
+        { "kind": "paragraph", "text": "For documentation, choose lower randomness and headroom for length — this gives reproducibility and no truncation. In a moment you will check this with the sliders." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "tune",
+    "id": "m3-suwaki",
+    "title": "Generation sliders",
+    "intro": "Set the parameters and see how the simulated output changes for the task \"write out the login test steps in SklepDemo\". Then answer the checkpoint.",
+    "outputLabel": "Simulated output for the selected settings:",
+    "controls": [
+      { "id": "temp", "label": "Temperature", "levels": [
+        { "value": "0.2", "label": "Low (0.2)", "effect": "Formality: high. Test steps are reproducible, with the same layout on every run." },
+        { "value": "1.0", "label": "High (1.0)", "effect": "Formality: low. Steps differ between runs — no reproducibility, risk of content drift." }
+      ] },
+      { "id": "topp", "label": "top-p", "levels": [
+        { "value": "0.3", "label": "Low (0.3)", "effect": "The vocabulary of QA terms is stable and predictable." },
+        { "value": "0.95", "label": "High (0.95)", "effect": "Broader, sometimes risky phrasing — harder to review." }
+      ] },
+      { "id": "maxtok", "label": "max tokens", "levels": [
+        { "value": "512", "label": "High limit (512)", "effect": "Completeness: full. All steps and acceptance criteria fit." },
+        { "value": "64", "label": "Low limit (64)", "effect": "⚠ Answer cut off — the list of steps breaks off halfway, no summary. Raise the limit." }
+      ] }
+    ],
+    "checkpoint": {
+      "prompt": "For writing out the steps of a test case (where reproducibility and completeness matter), which setting is safer?",
+      "type": "single_choice",
+      "options": [
+        { "id": "A", "text": "temp 0.2 / top-p 0.3 / high limit — low randomness and length headroom" },
+        { "id": "B", "text": "temp 1.0 / top-p 0.95 / low limit — creative and short" }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Correct: low randomness gives reproducibility, and a high limit protects against truncating the list of steps.",
+      "feedbackIncorrect": "High randomness ruins reproducibility, and a low limit cuts off the steps — bad for documentation. Choose low temperature and length headroom."
+    }
+  },
+  "summary": {
+    "points": [
+      "Temperature and top-p control randomness; max tokens controls the length of the answer.",
+      "For QA, prefer low randomness and length headroom — reproducibility and no truncation.",
+      "Always verify the reproducibility and completeness of the output before using it in documentation."
+    ],
+    "checklist": [
+      "Did I lower the randomness where reproducibility matters?",
+      "Will the length limit fit the entire answer?",
+      "Is the output the same on a re-run?"
+    ],
+    "checklistTitle": "Checklist — generation control",
+    "nextStep": "Next step: M4 — embeddings and semantic similarity (or the next mandatory module on your path)."
+  }
+}

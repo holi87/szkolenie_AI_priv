@@ -1,0 +1,394 @@
+{
+  "_meta": {
+    "module": "M2",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M2. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q009",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "The participant correctly recognizes what a token is in text processing by an LLM (E1).",
+      "prompt": "In the \"LLM Architecture\" module, it was shown that the model does not work on words but on tokens. What is a token?",
+      "options": [
+        {
+          "id": "A",
+          "text": "A fragment of text (part of a word, a character, or a space) into which text is broken down before processing"
+        },
+        {
+          "id": "B",
+          "text": "Always a single whole word separated by spaces"
+        },
+        {
+          "id": "C",
+          "text": "A single page of a document loaded into the model"
+        },
+        {
+          "id": "D",
+          "text": "A model parameter responsible for the quality of the answer"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "A token is a fragment of text — part of a word, a character, or a space — because the model processes text after breaking it into tokens (tokenization), not by words or pages.",
+      "feedbackIncorrect": "A token is neither a whole word nor a page. Go back to the \"Token and tokenization\" screen: 1 token ≈ a few characters, and Polish can be \"more expensive\" in tokens than English.",
+      "references": [
+        "M2.2"
+      ]
+    },
+    {
+      "id": "Q010",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "The participant explains what the context window is and why a long document may not fit within it (E1).",
+      "prompt": "What is the context window and what happens when a document, together with the question and the answer, exceeds it?",
+      "options": [
+        {
+          "id": "A",
+          "text": "It is the maximum number of tokens the model sees at once; once it is exceeded, part of the input must drop out"
+        },
+        {
+          "id": "B",
+          "text": "It is the number of model parameters; once exceeded, the model runs slower but sees the entire document"
+        },
+        {
+          "id": "C",
+          "text": "It is the limit on the number of files you can upload; the text always fits in full"
+        },
+        {
+          "id": "D",
+          "text": "It is the size of the screen on which the model's answer is displayed"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "The context window is the maximum number of tokens (input + answer) that the model \"sees\" at once — once the limit is exceeded, part of the input drops out, like sheets of paper pushed off a desk of fixed size.",
+      "feedbackIncorrect": "The context window is counted in tokens, not in files, parameters, or screen pixels. Review the \"Context window\" screen and the desk analogy.",
+      "references": [
+        "M2.3"
+      ]
+    },
+    {
+      "id": "Q011",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "The participant applies knowledge of the context window to assess why pasting an entire document does not guarantee that the model has read it (E1).",
+      "prompt": "A tester pasted an entire 80-page fictional SklepDemo specification into the model and asked a question about a single requirement. The model answered while omitting a key clause. Which explanation is the most accurate?",
+      "options": [
+        {
+          "id": "A",
+          "text": "The document exceeded the context window, so part of the input (including this requirement) dropped out and the model did not \"see\" it"
+        },
+        {
+          "id": "B",
+          "text": "The model has too few parameters, which is why it cannot read long documents"
+        },
+        {
+          "id": "C",
+          "text": "Pasting an entire document always guarantees that the model read every page, so this must be a random error"
+        },
+        {
+          "id": "D",
+          "text": "Tokenization removed the spaces, which made the specification unreadable for the model"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Correct: \"I pasted the whole document\" ≠ \"the model read it\" — when the text exceeds the context window, part of the input drops out and may omit exactly the key requirement.",
+      "feedbackIncorrect": "The cause is neither the parameters nor tokenization of spaces — it is exceeding the context window. Go back to the \"Context window\" screen and the conclusion that pasting ≠ reading.",
+      "references": [
+        "M2.3"
+      ]
+    },
+    {
+      "id": "Q012",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant identifies the effects of too small a context when an important fragment drops out of the window (E2).",
+      "prompt": "Which of the following are direct effects of too small a context window when an important fragment of the input drops out? Select all correct answers.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Omitted information — the model answers without taking the key requirement into account"
+        },
+        {
+          "id": "B",
+          "text": "Inconsistency — the model \"forgets\" earlier decisions in a long conversation"
+        },
+        {
+          "id": "C",
+          "text": "Hallucination/guessing — missing data is replaced by fabrication"
+        },
+        {
+          "id": "D",
+          "text": "Automatic retrieval of the missing fragment from the internet to fill in the context"
+        },
+        {
+          "id": "E",
+          "text": "A permanent increase in the model's parameter count to fit the entire document"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "These are the three effects of too small a context: omitted information, inconsistency, and hallucination. The model does not fetch the missing data on its own, nor does it change its parameter count.",
+      "feedbackIncorrect": "The model does not fill gaps by retrieving from the web or by increasing its parameters. Review the \"Three effects of too small a context\" screen.",
+      "references": [
+        "M2.4"
+      ]
+    },
+    {
+      "id": "Q013",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant recognizes QA situations in which too small a context window is a real source of risk to decision quality (E2).",
+      "prompt": "In which situations from a tester's work is too small a context window a real source of risk to decision quality? Select all correct answers.",
+      "options": [
+        {
+          "id": "A",
+          "text": "A long conversation about defect ORD-TEST-777 in which the model stops taking into account the decisions from the beginning of the thread"
+        },
+        {
+          "id": "B",
+          "text": "Analysis of an extensive specification where the acceptance criterion is in a section that dropped out of the window"
+        },
+        {
+          "id": "C",
+          "text": "A question about a requirement that the model answers confidently, even though the source data was no longer in the context"
+        },
+        {
+          "id": "D",
+          "text": "A short question about a single definition whose full content fits within the context window"
+        },
+        {
+          "id": "E",
+          "text": "Changing the interface color of the tool in which the model is run"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "The risk arises wherever an important fragment drops out of the window: inconsistency in a long conversation, an omitted criterion, and a confident but data-unsupported answer. A short question that fits in the window and the UI color are not threats here.",
+      "feedbackIncorrect": "When the content fits in the window or the change concerns only the UI, the risk of too small a context does not occur. Review the relationship between the context window and its three effects (the \"Three effects…\" screen).",
+      "references": [
+        "M2.4",
+        "M2.3"
+      ]
+    },
+    {
+      "id": "Q014",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "kolejnosc_procesu",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "The participant arranges in the correct order the steps of text processing by an LLM — from text to answer (E3).",
+      "prompt": "Arrange in the correct order the steps an LLM performs from receiving text to generating an answer.",
+      "sequence": [
+        "The input text is broken down into tokens (tokenization)",
+        "The tokens are placed in the model's context window",
+        "The model leverages the relationships between tokens using attention",
+        "The model generates the successive tokens of the answer",
+        "The answer tokens are assembled back into readable text"
+      ],
+      "feedbackCorrect": "Correct: text → tokens → context window → attention on relationships → token generation → assembly into text. This is the intuitive flow \"from text to answer\".",
+      "feedbackIncorrect": "Tokenization must come first, then the context window and attention, and finally the generation and assembly of the answer. Review the \"Transformer and attention — intuition\" screen.",
+      "references": [
+        "M2.5",
+        "M2.2"
+      ]
+    },
+    {
+      "id": "Q015",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "kolejnosc_procesu",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "The participant orders the processing steps when the input is longer than the context window (E3, E1).",
+      "prompt": "A tester pastes a long document that exceeds the model's context window. Arrange the steps in the order in which the model processes such an overly long input.",
+      "sequence": [
+        "The model receives the pasted document and the tester's question",
+        "The text is broken down into tokens (tokenization)",
+        "The number of tokens is compared with the context window limit",
+        "Fragments exceeding the limit drop out of the window",
+        "The model processes only the tokens that fit within the window",
+        "The model generates an answer based on the available context"
+      ],
+      "feedbackCorrect": "Correct: receiving the text → tokenization → comparison with the window limit → cutting off the excess → processing what remains → answer. That is why part of the input may drop out before the model even starts computing attention.",
+      "feedbackIncorrect": "Cutting off the excess happens after tokenization and comparison with the window limit, and processing covers only what fit. Review the \"Context window\" and \"Transformer and attention\" screens.",
+      "references": [
+        "M2.5",
+        "M2.3"
+      ]
+    },
+    {
+      "id": "Q016",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "The participant makes a safe QA decision when a document is longer than the model's context window (E1, E2).",
+      "prompt": "You have to analyze a fictional PipeDemo specification (about 120 pages), and a preliminary check shows that its text significantly exceeds the model's context window. You care about getting a correct answer regarding specific acceptance criteria. What is the best decision?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Split the document and provide only the sections relevant to the question (e.g., \"Acceptance criteria\") so that they fit within the context window"
+        },
+        {
+          "id": "B",
+          "text": "Paste everything at once — since the tool accepted the text, the model will surely take every page into account"
+        },
+        {
+          "id": "C",
+          "text": "Paste everything and trust the answer, because a longer input always gives a fuller picture"
+        },
+        {
+          "id": "D",
+          "text": "Ask the model to write in the missing fragments of the specification that it did not fit on its own"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "When a document exceeds the window, the safe option is to provide only the sections relevant to the question — this way the key criteria really end up in the context and do not drop out.",
+      "feedbackIncorrect": "The tool accepting the text does not mean the model saw all of it; nor are you allowed to ask it to fabricate the missing fragments. Go back to the \"Context window\" and \"Three effects…\" screens.",
+      "references": [
+        "M2.3",
+        "M2.4"
+      ]
+    },
+    {
+      "id": "Q017",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant evaluates a model choice, recognizing that a larger parameter count is not on its own a guarantee of quality (E4).",
+      "prompt": "A team is choosing a model to analyze a fictional defect ID format in SklepDemo. Model X has significantly more parameters but mistakes the ID format in a test; model Y has fewer parameters but, with well-chosen context, correctly recognizes the format. A colleague proposes: \"Let's take X, because it has more billions of parameters\". How is it best to evaluate this proposal?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Reject it as an anti-pattern — accuracy is determined by fit to the task and context; since Y works better on this task, choose Y (or verify both options on real cases)"
+        },
+        {
+          "id": "B",
+          "text": "Accept the proposal — a larger parameter count always means higher answer quality"
+        },
+        {
+          "id": "C",
+          "text": "Accept X, but shorten the context window to even out the models' chances"
+        },
+        {
+          "id": "D",
+          "text": "Choose the model with more parameters and skip the tests, because the outcome is a foregone conclusion"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "The parameter count is not on its own a guarantee of quality — what matters is fit to the task, data quality, and context. Since Y is accurate on this task, choosing it \"because it has more billions of parameters\" is an anti-pattern.",
+      "feedbackIncorrect": "More parameters do not automatically mean better quality, and shortening the context window worsens results. Review the \"More parameters ≠ better quality\" screen.",
+      "references": [
+        "M2.6"
+      ]
+    }
+  ]
+}

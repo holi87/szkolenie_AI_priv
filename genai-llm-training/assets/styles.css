@@ -48,12 +48,12 @@ a { color: var(--color-accent); }
 .brand { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; }
 .brand__logo { color: var(--color-accent); font-size: 1.2rem; }
 .app-header__meta { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
-/* Atrybut [hidden] na przyciskach headera musi DZIAŁAĆ: .btn{display:inline-flex} (author) bije regułę UA
-   [hidden]{display:none}, więc bez tego nav-toggle/reset/path-indicator były widoczne mimo hidden=true
-   (m.in. „Moduły" na hubie i „Zacznij od nowa" na path-select). Specyficzność 0,1,1 > .btn 0,1,0. (#88)
-   „Moduły" = powrót do hubu; ekrany (app.js) ustawiają hidden: ukryty na hubie/path-select, widoczny w
-   module/teście/wyniku (desktop + mobile). */
-.app-header__meta [hidden] { display: none; }
+/* Atrybut [hidden] w headerze musi DZIAŁAĆ: reguły author (.btn{display:inline-flex}, .progress{display:flex})
+   biją UA [hidden]{display:none}, więc bez tego nav-toggle/reset/path-indicator ORAZ pasek #progress były
+   widoczne mimo hidden=true (m.in. „Moduły" na hubie, „Zacznij od nowa" i nieaktualny „Postęp: 0%" na
+   path-select — w EN wręcz wyciek PL). Specyficzność 0,1,1 > .btn/.progress 0,1,0. (#88, dociągnięte w M11)
+   Ekrany (app.js) ustawiają hidden per ekran; chrome/progress lokalizowane przez t(). */
+.app-header [hidden] { display: none; }
 .path-badge {
   font-size: var(--fs-300); padding: 0.2rem 0.6rem; border: 1px solid var(--color-border);
   border-radius: 999px; color: var(--color-fg); background: var(--color-surface-2);

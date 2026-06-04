@@ -6,7 +6,7 @@
 // z długością serii wynikającą z wstrzyknięcia. Wzorzec izolacji danych: cpSync + VALIDATE_DATA_DIR (jak data-negative).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { cpSync, writeFileSync, mkdtempSync, readFileSync } from "node:fs";
+import { cpSync, writeFileSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
@@ -31,6 +31,9 @@ function runValidator(dataDir) {
 function copyData() {
   const dir = mkdtempSync(join(tmpdir(), "genai-cluster-"));
   cpSync(DATA, join(dir, "data"), { recursive: true });
+  // Lint klastrowania to higiena POZYCJI w PL (locale-agnostyczna). Usuwamy data/en z kopii, by korupcja
+  // pola `correct` w PL nie wywołała błędu parytetu en↔pl i nie zaciemniła sprawdzanego WARN-a (M11).
+  rmSync(join(dir, "data", "en"), { recursive: true, force: true });
   return join(dir, "data");
 }
 // Ustawia pozycję poprawnej (correct) dla kolejnych single-correct pytań M1 wg `pick(i, options)`.

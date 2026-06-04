@@ -1,0 +1,481 @@
+{
+  "_meta": {
+    "module": "M7",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M7. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q051",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Verifies whether the participant recognizes the 'role' element in a prompt and understands its function.",
+      "prompt": "In the anatomy of a good prompt, one of the seven elements is the 'role'. What does this element establish in the model's response?",
+      "options": [
+        {
+          "id": "A",
+          "text": "The perspective and competencies from which the model should answer (e.g. 'you are a QA engineer')"
+        },
+        {
+          "id": "B",
+          "text": "The structure of the output in which the answer should be returned (e.g. a table or JSON)"
+        },
+        {
+          "id": "C",
+          "text": "A specific piece of material to process, e.g. a fragment of a requirement to analyze"
+        },
+        {
+          "id": "D",
+          "text": "Measurable criteria by which we can tell that the answer is good"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "The role defines from whose perspective and with what competencies the model answers, which sets the tone and level of detail of the response.",
+      "feedbackIncorrect": "That describes a different prompt element: output format, input data, or quality criteria. Review the anatomy of the 7 prompt elements.",
+      "references": [
+        "M7.2",
+        "M7.3"
+      ]
+    },
+    {
+      "id": "Q052",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Verifies whether the participant understands the role of the 'context' element and distinguishes it from input data and the goal.",
+      "prompt": "What is 'context' as a prompt element, as distinct from the 'goal' and the 'input data'?",
+      "options": [
+        {
+          "id": "A",
+          "text": "The background and information the model does not know from its own knowledge, e.g. a fragment of a synthetic SklepDemo requirement"
+        },
+        {
+          "id": "B",
+          "text": "The result that should be produced at the end of the model's work"
+        },
+        {
+          "id": "C",
+          "text": "A list of things the model should NOT do"
+        },
+        {
+          "id": "D",
+          "text": "The form in which the answer should be returned, e.g. a list or JSON"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Context provides background that the model does not know from training (e.g. a specific application requirement), which directly increases the accuracy of the output.",
+      "feedbackIncorrect": "You are confusing context with the goal (B), constraints (C), or format (D). Review the difference between goal, context, and input data.",
+      "references": [
+        "M7.3",
+        "M7.2"
+      ]
+    },
+    {
+      "id": "Q053",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Verifies whether the participant distinguishes 'constraints' from 'quality criteria' in a prompt.",
+      "prompt": "In a prompt for generating test cases for SklepDemo, you add the sentence: 'Do not invent fields that are not in the requirement'. Which prompt element is this sentence?",
+      "options": [
+        {
+          "id": "A",
+          "text": "A constraint — it specifies what the model should NOT do"
+        },
+        {
+          "id": "B",
+          "text": "A quality criterion — a measurable condition by which we recognize a good answer"
+        },
+        {
+          "id": "C",
+          "text": "An output format — the structure of the returned answer"
+        },
+        {
+          "id": "D",
+          "text": "A role — the perspective from which the model answers"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Forbidding the model to invent fields is a typical constraint: it explicitly narrows down what the model should not do and limits hallucinations.",
+      "feedbackIncorrect": "A quality criterion describes what a good output should look like (e.g. 'each case has steps and an expected result'), not what to avoid. Review the difference between constraints and criteria.",
+      "references": [
+        "M7.4",
+        "M7.2"
+      ]
+    },
+    {
+      "id": "Q054",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Verifies whether the participant can identify all the missing elements in a flawed prompt relative to the anatomy of the 7 elements.",
+      "prompt": "The prompt reads in full: 'Write tests for login.' Which of the following good-prompt elements are MISSING from it? (select all)",
+      "options": [
+        {
+          "id": "A",
+          "text": "Role and goal (from whose perspective and what exactly should be produced)"
+        },
+        {
+          "id": "B",
+          "text": "Context — which application and what login requirement"
+        },
+        {
+          "id": "C",
+          "text": "Constraints and quality criteria for the answer"
+        },
+        {
+          "id": "D",
+          "text": "Output format — in what structure to return the cases"
+        },
+        {
+          "id": "E",
+          "text": "An action verb specifying the task to perform"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "feedbackCorrect": "The prompt has an action verb ('write'), but it lacks role/goal, context, constraints/criteria, and format — those are exactly the four missing axes of the anatomy.",
+      "feedbackIncorrect": "The action verb ('write') is present, so option E is not a gap. What is missing is role/goal, context, constraints/criteria, and format. Review the anatomy of the 7 elements.",
+      "references": [
+        "M7.2",
+        "M7.6"
+      ]
+    },
+    {
+      "id": "Q055",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Verifies whether the participant can diagnose which axes of the 5-axis rubric a flawed prompt violates.",
+      "prompt": "A tester writes the prompt: 'Analyze the payment error in SklepDemo. Paste real production user data here. Write whatever you want, in any form.' Which axes of the prompt evaluation rubric (completeness, security, verifiability, format, constraints) does this prompt VIOLATE? (select all)",
+      "options": [
+        {
+          "id": "A",
+          "text": "Security — it encourages pasting real user data"
+        },
+        {
+          "id": "B",
+          "text": "Format — 'in any form' does not provide a verifiable output structure"
+        },
+        {
+          "id": "C",
+          "text": "Constraints — no limits whatsoever and no synthetic-data rule"
+        },
+        {
+          "id": "D",
+          "text": "Verifiability — no criteria by which to judge the correctness of the output"
+        },
+        {
+          "id": "E",
+          "text": "No axis is violated — the prompt is ready to use in QA"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "feedbackCorrect": "The prompt breaks security (real data), format ('any form'), constraints (no limits), and verifiability (no criteria) — four of the five rubric axes.",
+      "feedbackIncorrect": "Option E is wrong: the prompt violates as many as four axes and is not ready to use. Review the 5-axis rubric from the prompt-fixing screen.",
+      "references": [
+        "M7.6",
+        "M7.4"
+      ]
+    },
+    {
+      "id": "Q056",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Verifies whether the participant recognizes situations in which using few-shot is justified.",
+      "prompt": "In which situations is the use of few-shot (1-3 input->output examples in the prompt) JUSTIFIED? (select all)",
+      "options": [
+        {
+          "id": "A",
+          "text": "The output must keep a fixed, repeatable test-case layout for successive items"
+        },
+        {
+          "id": "B",
+          "text": "A specific response style is needed that is hard to convey with a verbal description alone"
+        },
+        {
+          "id": "C",
+          "text": "The model must maintain a consistent format across many items at once"
+        },
+        {
+          "id": "D",
+          "text": "Facts are missing from the context that the model does not know — the examples are meant to 'supply the knowledge'"
+        },
+        {
+          "id": "E",
+          "text": "We want the model to make up the missing data, as long as the output looks complete"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Few-shot serves format and style repeatability (A, B, C). It does not replace missing data, nor does it justify making things up.",
+      "feedbackIncorrect": "Few-shot does not fill in missing knowledge (D) nor serve to make things up (E) — that is the job of context/sources. Review the principle 'few-shot for repeatability, not for missing knowledge'.",
+      "references": [
+        "M7.5",
+        "M7.2"
+      ]
+    },
+    {
+      "id": "Q057",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Verifies whether the participant can identify the right prompt fix based on a specific error in the output.",
+      "prompt": "You give the prompt: 'Generate login test cases in SklepDemo.' The output is a single, long paragraph of prose with no breakdown into steps and no expected results — hard to use in QA. Which prompt fix addresses THIS error best?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Add an output format and criteria: 'Return a table: ID, steps, input data, expected result; one row per case'"
+        },
+        {
+          "id": "B",
+          "text": "Add the sentence 'be more detailed and professional'"
+        },
+        {
+          "id": "C",
+          "text": "Repeat the same prompt several times until the model hits the right form"
+        },
+        {
+          "id": "D",
+          "text": "Remove the word 'login' to give the model more freedom"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "The error concerns the output structure, so the right fix is to add an explicit output format and criteria — that makes the result verifiable.",
+      "feedbackIncorrect": "A generic 'be detailed', repeating, or removing scope does not fix the lack of structure. Review how to diagnose an error and choose a fix according to the rubric.",
+      "references": [
+        "M7.6",
+        "M7.4"
+      ]
+    },
+    {
+      "id": "Q058",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Verifies whether the participant decides to use few-shot when a repeatable output format is required.",
+      "prompt": "You have to generate 40 test cases for SklepDemo that MUST fit into an existing template with a fixed column layout (ID, step, data, expected result, priority). Your first attempts give a different layout every time. How best to ensure a repeatable format?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Provide 2 correctly formatted reference cases in the prompt (few-shot) and instruct the model to keep exactly that layout for the rest"
+        },
+        {
+          "id": "B",
+          "text": "Keep extending the prompt with an ever more precise verbal description of the layout, without any example"
+        },
+        {
+          "id": "C",
+          "text": "Generate the cases in any format and manually rewrite all 40 into the template"
+        },
+        {
+          "id": "D",
+          "text": "Raise the 'temperature' so the model is more creative in choosing the layout"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "When the format must be repeatable, few-shot (a few reference examples) is the most effective — the model copies the layout for the successive items.",
+      "feedbackIncorrect": "A verbal description alone can be ambiguous, manual rewriting wastes time, and a higher temperature increases format variance. Review when to use few-shot.",
+      "references": [
+        "M7.5",
+        "M7.6"
+      ]
+    },
+    {
+      "id": "Q059",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Verifies whether the participant recognizes that a prompt will not fix missing data, and chooses the right action instead of 'polishing' the prompt.",
+      "prompt": "You ask the model: 'After how long does the password reset link expire in NotkaApp?'. The requirement with this number was not provided to the model in the context. The model gives a different number of minutes every time, and successive prompt versions change nothing. What should you do?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Provide the model with a source containing this information (paste the requirement/document or use RAG) or check the documentation — because this is missing data, not a bad prompt"
+        },
+        {
+          "id": "B",
+          "text": "Keep polishing the prompt with ever more precise instructions until the model 'recalls the number by itself'"
+        },
+        {
+          "id": "C",
+          "text": "Accept the first number the model gives as fact and enter it into the tests"
+        },
+        {
+          "id": "D",
+          "text": "Ask the model to 'be confident in its answer' and not change its mind"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Varying answers when the information is missing from the context are a signal of missing data — no prompt will generate the truth, you have to provide the source.",
+      "feedbackIncorrect": "Polishing the prompt, accepting the first number, or asking for 'confidence' are paths to hallucination. Review the limits of prompting — when a prompt will not help (link to M11).",
+      "references": [
+        "M7.7",
+        "M7.6"
+      ]
+    },
+    {
+      "id": "Q060",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Verifies whether the participant can complete a flawed prompt with the missing anatomy elements so that it is ready to use in QA.",
+      "prompt": "You have to make the prompt 'Write tests for login.' ready to use in QA for SklepDemo. Which version BEST completes the missing prompt elements?",
+      "options": [
+        {
+          "id": "A",
+          "text": "'As a QA engineer, generate login test cases in SklepDemo based on the requirement: <paste requirement>. Do not invent fields outside the requirement; use synthetic data. Return a table: ID, steps, data, expected result. Each case must be verifiable.'"
+        },
+        {
+          "id": "B",
+          "text": "'Write good and accurate tests for login, try really hard and do not omit anything.'"
+        },
+        {
+          "id": "C",
+          "text": "'Write tests for login in SklepDemo.'"
+        },
+        {
+          "id": "D",
+          "text": "'You are an expert at everything. Generate a complete set of tests for the entire application in any format.'"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Version A adds role/goal, context (the requirement), constraints, a verifiability criterion, and format — the full set of elements needed to use it in QA.",
+      "feedbackIncorrect": "Generic encouragement (B), no context and no constraints (C), or too broad a scope without a format (D) do not complete the prompt anatomy. Review the 7 elements of a good prompt.",
+      "references": [
+        "M7.2",
+        "M7.4"
+      ]
+    }
+  ]
+}
