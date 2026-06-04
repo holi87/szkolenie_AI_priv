@@ -1,0 +1,76 @@
+{
+  "_meta": {
+    "issue": "#112-#118 [M15] Formative path S4 — Holak Scale (training module)",
+    "adr": "docs/adr/0009-sciezka-formatywna-s4-skala-holaka.md",
+    "interaction": "Practice classification (kind: classify) — formative exercise, NOT scored toward completion",
+    "source": "Holak Scale maturity axes: context management, token thrift. Attribution: quality-blog.eu/pl/blog/skala-holaka.",
+    "dataPolicy": "ALL examples SYNTHETIC and generic (no real data/PII). Formative module — no pass threshold, no certificate."
+  },
+  "module": "MSK1",
+  "intro": "You spot higher AI maturity not by the number of tools, but by HOW you feed the model context — and what it costs. This module trains context hygiene and token-cost awareness. It is a growth exercise, not a test.",
+  "screens": [
+    {
+      "id": "msk1-s1-po-co",
+      "title": "Why manage context and cost",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "The model sees only what fits in the context window. Too little context → a generic or wrong answer; too much irrelevant content → the model loses the signal and token cost grows. Mature practice means giving exactly what is needed — no more, no less." },
+        { "kind": "list", "items": [
+          "Context = the data, instructions and examples that truly affect the task.",
+          "Token cost grows with every character pasted — including the useless ones.",
+          "Repeatable tasks gain the most from templates and context hygiene."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "A Holak Scale axis", "text": "Deliberate management of context and cost is one of the axes that separate „I use AI” from „I use AI maturely”. More: quality-blog.eu/pl/blog/skala-holaka." }
+      ]
+    },
+    {
+      "id": "msk1-s2-praktyki",
+      "title": "Lean vs wasteful",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Lean practice selects context and reuses proven templates. Wasteful practice pastes „everything just in case”, mixes topics, and describes the context from scratch every time." },
+        { "kind": "callout", "variant": "warn", "title": "The „just in case” trap", "text": "Pasting your whole knowledge base into every prompt does not raise accuracy — more often it blurs the task and raises cost. Dose context deliberately." }
+      ]
+    },
+    {
+      "id": "msk1-s3-jak-cwiczyc",
+      "title": "How to practise",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Next you will classify practices as lean or wasteful. There is no pass threshold here — the goal is to recognize a pattern you can carry over into your own work." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "msk1-classify",
+    "title": "Lean or wasteful context practice?",
+    "intro": "Sort each practice. This is a growth exercise — feedback explains why a practice is (not) lean.",
+    "categories": [
+      { "id": "lean", "label": "Lean practice", "desc": "Selects context, controls cost, reuses templates." },
+      { "id": "wasteful", "label": "Wasteful practice", "desc": "Adds excess, mixes topics, describes everything from scratch." }
+    ],
+    "items": [
+      { "id": "msk1-i1", "text": "I pass only the document fragments relevant to the task.", "correctCategory": "lean", "rationale": "Selecting context raises accuracy and lowers cost." },
+      { "id": "msk1-i2", "text": "I paste my whole knowledge base into every prompt „just in case”.", "correctCategory": "wasteful", "rationale": "Excess blurs the signal and raises token cost." },
+      { "id": "msk1-i3", "text": "I keep a repeatable task as a prompt template with slots for data.", "correctCategory": "lean", "rationale": "A template means repeatability and context hygiene." },
+      { "id": "msk1-i4", "text": "I describe the context from scratch every time, in different words.", "correctCategory": "wasteful", "rationale": "No template = wasted time and inconsistent results." },
+      { "id": "msk1-i5", "text": "I remove stale and contradictory information from the context.", "correctCategory": "lean", "rationale": "Clean context lowers the risk of error and hallucination." },
+      { "id": "msk1-i6", "text": "I keep dozens of unrelated topics in a single chat.", "correctCategory": "wasteful", "rationale": "Mixing topics clutters the context and confuses the model." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Give exactly the context that affects the task — no more.",
+      "Turn repeatable tasks into prompt templates.",
+      "Every pasted character has a cost — dose context deliberately."
+    ],
+    "checklist": [
+      "Can I tell which parts of the context are truly needed?",
+      "Do I have a template for my most frequent AI task?",
+      "Do I clear stale and contradictory content from the context?"
+    ],
+    "checklistTitle": "Checklist — context hygiene",
+    "nextStep": "Next step: take one repeatable task and turn it into a prompt template with controlled context."
+  }
+}

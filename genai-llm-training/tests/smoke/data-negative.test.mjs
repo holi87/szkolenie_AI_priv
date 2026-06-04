@@ -260,3 +260,29 @@ test("MSH (#104): maturity-check bez pola scales → walidator FAILUJE (schemat 
   assert.notEqual(r.code, 0, "maturity-check bez scales MUSI failować (schema allOf: kind→required scales)");
   assert.match(r.output, /scales|msh\.json/, "raport powinien wskazać brak scales");
 });
+
+// ---------------- M15 (#113): ścieżka formatywna S4 — conditional-required (formative vs test) ----------------
+// Dwa kierunki gałęzi if/then/else w paths.schema (advisor): (1) ścieżka NIE-formatywna bez pola test-owego MUSI
+// failować (else wymaga kompletu), (2) flaga `formative` jest LOAD-BEARING — zdjęcie jej z S4 wrzuca ścieżkę w else
+// i też failuje. Kierunek pozytywny (S4 z formative:true przechodzi) pokrywa sanity #62 na realnych danych (zawiera S4).
+
+test("M15 (#113): ścieżka NIE-formatywna bez pola test-owego (finalTestQuestions) → walidator FAILUJE (gałąź else)", () => {
+  const dataDir = copyData();
+  const f = join(dataDir, "paths.json"); // wspólny (top-level data/)
+  const doc = JSON.parse(readFileSync(f, "utf8"));
+  delete doc.paths.S2.finalTestQuestions; // S2 nie jest formatywna → else wymaga finalTestQuestions
+  writeFileSync(f, JSON.stringify(doc, null, 2));
+  const r = runValidator(dataDir);
+  assert.notEqual(r.code, 0, "ścieżka z testem bez finalTestQuestions MUSI failować (else conditional-required)");
+  assert.match(r.output, /finalTestQuestions|required/i, "raport powinien wskazać brak wymaganego pola test-owego");
+});
+
+test("M15 (#113): flaga formative LOAD-BEARING — S4 bez formative:true wpada w gałąź else i FAILUJE", () => {
+  const dataDir = copyData();
+  const f = join(dataDir, "paths.json");
+  const doc = JSON.parse(readFileSync(f, "utf8"));
+  doc.paths.S4.formative = false; // zdejmij flagę → S4 traktowana jak ścieżka z testem, której pól (i M1..M12) nie ma
+  writeFileSync(f, JSON.stringify(doc, null, 2));
+  const r = runValidator(dataDir);
+  assert.notEqual(r.code, 0, "S4 bez formative:true MUSI failować (flaga jest load-bearing dla wyłączenia kontraktu testu)");
+});

@@ -258,5 +258,73 @@
       "Estimates an indicative maturity level of their own AI practice (0–11)",
       "Identifies the barrier and the next step to reach a higher level"
     ]
+  },
+  "MSK1": {
+    "name": "Context management and token cost",
+    "level": "all levels",
+    "interactiveElement": "Classify context-management practices",
+    "keyConcepts": [
+      "context management",
+      "context window",
+      "token cost",
+      "prompt hygiene",
+      "repeatable tasks"
+    ],
+    "learningOutcomes": [
+      "Distinguishes lean from wasteful context-management practices",
+      "Identifies how to cut token cost without losing quality",
+      "Plans a repeatable AI task with context and cost under control"
+    ]
+  },
+  "MSK2": {
+    "name": "Output verifiability and decision reversibility",
+    "level": "all levels",
+    "interactiveElement": "Classify decisions by risk and reversibility",
+    "keyConcepts": [
+      "verifiability",
+      "reversibility",
+      "audit trail",
+      "critical decision",
+      "human-in-the-loop"
+    ],
+    "learningOutcomes": [
+      "Assesses whether an AI output can be verified before use",
+      "Recognizes irreversible decisions that require human control",
+      "Designs work so AI-supported decisions stay checkable and reversible"
+    ]
+  },
+  "MSK3": {
+    "name": "Security, privacy and governance for AI",
+    "level": "all levels",
+    "interactiveElement": "Classify data and AI use cases",
+    "keyConcepts": [
+      "data privacy",
+      "PII",
+      "acceptable-use policy",
+      "AI governance",
+      "audit trail"
+    ],
+    "learningOutcomes": [
+      "Classifies data as allowed, requiring anonymization, or disallowed",
+      "Identifies minimal governance rules for AI use in a team",
+      "Recognizes privacy risks in repeated AI use"
+    ]
+  },
+  "MSK4": {
+    "name": "Climbing higher: maturity thresholds 8→9 and 10→11",
+    "level": "all levels",
+    "interactiveElement": "Classify maturity growth steps",
+    "keyConcepts": [
+      "threshold 8→9",
+      "threshold 10→11",
+      "assistant vs decision-maker",
+      "AI-use calibration",
+      "continuous improvement"
+    ],
+    "learningOutcomes": [
+      "Recognizes what separates level 8 from 9 and 10 from 11",
+      "Identifies a concrete, reversible step to reach a higher level",
+      "Tells real growth from a false sense of maturity"
+    ]
   }
 }

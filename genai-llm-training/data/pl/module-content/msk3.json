@@ -1,0 +1,77 @@
+{
+  "_meta": {
+    "issue": "#112-#118 [M15] Ścieżka formatywna S4 — Skala Holaka (moduł szkoleniowy)",
+    "adr": "docs/adr/0009-sciezka-formatywna-s4-skala-holaka.md",
+    "interaction": "Klasyfikacja danych i zastosowań (kind: classify) — ćwiczenie formatywne, NIE scorowane do zaliczenia",
+    "source": "Oś dojrzałości Skali Holaka: bezpieczeństwo, prywatność danych i governance użycia AI. Atrybucja: quality-blog.eu/pl/blog/skala-holaka.",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE i ogólne (zero realnych danych/PII). Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MSK3",
+  "intro": "Dojrzała adopcja AI to nie tylko skuteczność, ale i higiena danych: co wolno podać modelowi, co trzeba najpierw zanonimizować, a czego nie wolno użyć nigdy. Ten moduł uczy klasyfikować dane i ustawiać minimalne zasady governance. To ćwiczenie rozwojowe, nie test.",
+  "screens": [
+    {
+      "id": "msk3-s1-trzy-kosze",
+      "title": "Trzy kosze danych: dozwolone, do anonimizacji, niedozwolone",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Zanim wkleisz cokolwiek do modelu, przypisz dane do jednego z trzech koszy. Dozwolone: dane publiczne lub syntetyczne. Do anonimizacji: dane, które mogą wskazać osobę lub system, ale po zamaskowaniu są bezpieczne. Niedozwolone: sekrety i wrażliwe dane, których nie wolno eksponować." },
+        { "kind": "list", "items": [
+          "Dozwolone — dane publiczne, syntetyczne, nieidentyfikujące.",
+          "Do anonimizacji — usuń lub zastąp placeholderem to, co identyfikuje osobę/system.",
+          "Niedozwolone — hasła, klucze, sekrety, dane wrażliwe bez podstawy do użycia."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Oś Skali Holaka", "text": "Spisana polityka akceptowalnego użycia AI (dane, prywatność, IP) i minimalny ślad audytowy to znak dojrzałego governance. Więcej: quality-blog.eu/pl/blog/skala-holaka." }
+      ]
+    },
+    {
+      "id": "msk3-s2-governance",
+      "title": "Minimalne governance, które działa",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Governance nie musi być grube. Wystarczy: jasna lista dozwolonych zastosowań, zasada anonimizacji przed wysłaniem, zakaz wklejania sekretów oraz prosty ślad — kto, kiedy i do czego użył AI w procesie krytycznym." },
+        { "kind": "callout", "variant": "warn", "title": "Pułapka „to tylko test”", "text": "„Wkleję realne dane tylko raz, żeby sprawdzić” to najczęstszy wyciek. Raz wysłane dane mogły opuścić Twoją kontrolę — anonimizuj zawsze, także w eksperymencie." }
+      ]
+    },
+    {
+      "id": "msk3-s3-jak-cwiczyc",
+      "title": "Jak to ćwiczyć",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Za chwilę przypiszesz dane do koszy: dozwolone, do anonimizacji, niedozwolone. Bez progu zaliczenia — chodzi o odruch klasyfikowania danych zanim trafią do modelu." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "msk3-classify",
+    "title": "Dozwolone, do anonimizacji czy niedozwolone?",
+    "intro": "Przypisz każdy przypadek danych do właściwego kosza. Feedback wyjaśnia regułę prywatności i governance.",
+    "categories": [
+      { "id": "allowed", "label": "Dozwolone", "desc": "Dane publiczne lub syntetyczne, nieidentyfikujące." },
+      { "id": "anonymize", "label": "Do anonimizacji", "desc": "Bezpieczne dopiero po zamaskowaniu identyfikatorów." },
+      { "id": "disallowed", "label": "Niedozwolone", "desc": "Sekrety i dane wrażliwe bez podstawy do użycia." }
+    ],
+    "items": [
+      { "id": "msk3-i1", "text": "Publiczny fragment dokumentacji projektu open-source.", "correctCategory": "allowed", "rationale": "Dane publiczne, nieidentyfikujące — można użyć." },
+      { "id": "msk3-i2", "text": "Wymyślone, syntetyczne dane testowe bez powiązania z realną osobą.", "correctCategory": "allowed", "rationale": "Dane syntetyczne są bezpieczne z definicji." },
+      { "id": "msk3-i3", "text": "Zgłoszenie błędu z loginem użytkownika, który zastępujesz placeholderem.", "correctCategory": "anonymize", "rationale": "Identyfikator usuwasz/maskujesz — wtedy bezpieczne." },
+      { "id": "msk3-i4", "text": "Logi z danymi kontaktowymi klientów, które trzeba zamaskować przed użyciem.", "correctCategory": "anonymize", "rationale": "Po anonimizacji dane przestają wskazywać osobę." },
+      { "id": "msk3-i5", "text": "Hasła i klucze dostępowe do systemu produkcyjnego.", "correctCategory": "disallowed", "rationale": "Sekrety nigdy nie trafiają do promptu." },
+      { "id": "msk3-i6", "text": "Pełne dane osobowe klienta wklejone wprost do publicznego modelu.", "correctCategory": "disallowed", "rationale": "Identyfikujące dane wrażliwe bez podstawy i anonimizacji — niedozwolone." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Każde dane przed wysłaniem przypisz do kosza: dozwolone / do anonimizacji / niedozwolone.",
+      "Anonimizuj zawsze, gdy dane mogą wskazać osobę lub system — także w eksperymencie.",
+      "Spisz prostą politykę i zostaw minimalny ślad użycia AI w procesach krytycznych."
+    ],
+    "checklist": [
+      "Czy umiem przypisać moje typowe dane do trzech koszy?",
+      "Czy mam zasadę anonimizacji przed wysłaniem do modelu?",
+      "Czy wiem, czego nie wolno wklejać nigdy (sekrety, dane wrażliwe)?"
+    ],
+    "checklistTitle": "Checklista — higiena danych pod AI",
+    "nextStep": "Następny krok: spisz dla swojego zespołu jedną stronę zasad: dozwolone zastosowania, anonimizacja, zakaz sekretów, prosty ślad audytowy."
+  }
+}

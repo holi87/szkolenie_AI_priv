@@ -15,7 +15,9 @@ const appHtml = readFileSync(join(HERE, "..", "..", "index.html"), "utf8");
 
 const node = renderPathSelect(pathsData, modulesData, { onSelect: () => {} });
 const snap = serializeTree(node);
+const txt = node.textContent || "";              // serializeTree zrzuca tagi+klasy, NIE tekst → tekst sprawdzaj na textContent
 const occ = (re) => (snap.match(re) || []).length;
+const occTxt = (re) => (txt.match(re) || []).length;
 
 test("hero: sekcja + tytuł z akcentem + lead (pierwsze wrażenie)", () => {
   assert.match(snap, /class="hero"/, "brak sekcji .hero");
@@ -23,14 +25,21 @@ test("hero: sekcja + tytuł z akcentem + lead (pierwsze wrażenie)", () => {
   assert.match(snap, /hero__lead/, "brak podtytułu hero");
 });
 
-test("3 karty ścieżek; dokładnie JEDNA rekomendowana z plakietką", () => {
-  assert.equal(countByTag(node).ARTICLE, 3, "powinny być 3 karty ścieżek");
-  assert.equal(occ(/path-card--recommended/g), 1, "dokładnie jedna karta rekomendowana");
+test("4 karty ścieżek (S1-S3 + formatywna S4); dokładnie JEDNA rekomendowana z plakietką", () => {
+  assert.equal(countByTag(node).ARTICLE, 4, "powinny być 4 karty ścieżek (M15: +S4 formatywna)");
+  assert.equal(occ(/path-card--recommended/g), 1, "dokładnie jedna karta rekomendowana (S2)");
   assert.equal(occ(/path-card__badge/g), 1, "dokładnie jedna plakietka rekomendacji");
 });
 
-test("karty zachowują CTA + szczegóły wymaganych modułów (treść nie zniknęła po restylizacji)", () => {
-  assert.equal(occ(/path-card__cta/g), 3, "każda karta ma przycisk wyboru");
+test("karta S4 FORMATYWNA (M15): inny meta bez progu testu, widoczna jako formatywna", () => {
+  assert.match(snap, /path-card--formative/, "brak karty formatywnej S4");
+  // Tylko 3 ścieżki z testem (S1/S2/S3) pokazują próg; karta S4 formatywna nie ma progu (pole nie istnieje).
+  assert.equal(occTxt(/Próg:/g), 3, "próg tylko na kartach S1-S3; S4 formatywna bez progu");
+  assert.match(txt, /diagnoza \+ rozwój|autodiagnoza/, "karta S4 opisana jako diagnoza + rozwój");
+});
+
+test("karty zachowują CTA + szczegóły modułów (treść nie zniknęła po restylizacji)", () => {
+  assert.equal(occ(/path-card__cta/g), 4, "każda karta ma przycisk wyboru (4 ścieżki)");
   assert.match(snap, /path-card__details/, "karta bez szczegółów modułów");
   // M12-2 (#93): pole pseudonimu USUNIĘTE (certyfikat zniesiony) — asercja ODWRÓCONA: input nie może istnieć.
   assert.doesNotMatch(snap, /id="participant-name"/, "pole pseudonimu powinno zniknąć (#93)");

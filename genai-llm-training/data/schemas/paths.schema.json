@@ -28,22 +28,22 @@
     },
     "paths": {
       "type": "object",
-      "required": ["S1", "S2", "S3"],
+      "required": ["S1", "S2", "S3", "S4"],
       "patternProperties": {
-        "^S[123]$": {
+        "^S[1-4]$": {
           "type": "object",
-          "required": ["modules", "requiredModules", "finalTestQuestions", "dedicatedQuestionsMin", "passThresholdPct", "criticalQuestionsRequiredPct", "practicalTasks", "gates", "attempts"],
+          "required": ["modules"],
           "properties": {
+            "formative": { "type": "boolean", "description": "M15/ADR-0009: ścieżka FORMATYWNA (S4 Skala Holaka) — diagnoza + szkolenie, BEZ testu końcowego/progu/scoringu/certyfikatu. Gdy true, pola test-owe (requiredModules/finalTestQuestions/dedicatedQuestionsMin/passThresholdPct/criticalQuestionsRequiredPct/practicalTasks/gates/attempts) są NIEwymagane — patrz conditional required (allOf/if/then/else) niżej. Gdy brak/false: ścieżka klasyczna z testem (else wymusza komplet pól + M1..M12 w modules)." },
             "modules": {
               "type": "object",
-              "required": ["M1", "M2", "M3", "M4", "M5", "M6", "M7", "M8", "M9", "M10", "M11", "M12"],
               "patternProperties": {
-                "^M([1-9]|1[0-2]|SH)$": {
+                "^M([1-9]|1[0-2]|SH|SK[1-9])$": {
                   "type": "object",
                   "required": ["required", "variant"],
                   "properties": {
                     "required": { "type": "boolean" },
-                    "variant": { "type": "string", "enum": ["full", "skrocony", "opcjonalny", "swiadomosciowy", "rozszerzony", "praktyczny", "diagnostyczny"] }
+                    "variant": { "type": "string", "enum": ["full", "skrocony", "opcjonalny", "swiadomosciowy", "rozszerzony", "praktyczny", "diagnostyczny", "formatywny"] }
                   },
                   "additionalProperties": false
                 }
@@ -87,7 +87,17 @@
             },
             "attempts": { "type": "integer", "minimum": 1 }
           },
-          "additionalProperties": false
+          "additionalProperties": false,
+          "allOf": [
+            {
+              "if": { "required": ["formative"], "properties": { "formative": { "const": true } } },
+              "then": {},
+              "else": {
+                "required": ["requiredModules", "finalTestQuestions", "dedicatedQuestionsMin", "passThresholdPct", "criticalQuestionsRequiredPct", "practicalTasks", "gates", "attempts"],
+                "properties": { "modules": { "required": ["M1", "M2", "M3", "M4", "M5", "M6", "M7", "M8", "M9", "M10", "M11", "M12"] } }
+              }
+            }
+          ]
         }
       },
       "additionalProperties": false

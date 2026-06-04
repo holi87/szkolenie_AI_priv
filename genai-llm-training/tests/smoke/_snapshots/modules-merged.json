@@ -397,6 +397,94 @@
         "Określa orientacyjny poziom dojrzałości własnej praktyki AI (0–11)",
         "Wskazuje barierę i następny krok wejścia na wyższy poziom"
       ]
+    },
+    {
+      "id": "MSK1",
+      "order": 14,
+      "timeFullMin": 30,
+      "pillar": "foundations_technical",
+      "scope": "diagnostic",
+      "name": "Zarządzanie kontekstem i koszt tokenów",
+      "level": "wszystkie poziomy",
+      "interactiveElement": "Klasyfikacja praktyk zarządzania kontekstem",
+      "keyConcepts": [
+        "zarządzanie kontekstem",
+        "okno kontekstu",
+        "koszt tokenów",
+        "higiena promptu",
+        "powtarzalne zadania"
+      ],
+      "learningOutcomes": [
+        "Rozróżnia praktyki oszczędne i rozrzutne w zarządzaniu kontekstem",
+        "Wskazuje, jak ograniczyć koszt tokenów bez utraty jakości",
+        "Planuje powtarzalne zadanie AI z kontrolą kontekstu i kosztu"
+      ]
+    },
+    {
+      "id": "MSK2",
+      "order": 15,
+      "timeFullMin": 30,
+      "pillar": "qa_practice",
+      "scope": "diagnostic",
+      "name": "Weryfikowalność outputu i odwracalność decyzji",
+      "level": "wszystkie poziomy",
+      "interactiveElement": "Klasyfikacja decyzji wg ryzyka i odwracalności",
+      "keyConcepts": [
+        "weryfikowalność",
+        "odwracalność",
+        "ślad audytowy",
+        "decyzja krytyczna",
+        "human-in-the-loop"
+      ],
+      "learningOutcomes": [
+        "Ocenia, czy output AI da się zweryfikować przed użyciem",
+        "Rozpoznaje decyzje nieodwracalne wymagające kontroli człowieka",
+        "Projektuje pracę tak, by decyzje wsparte AI były sprawdzalne i odwracalne"
+      ]
+    },
+    {
+      "id": "MSK3",
+      "order": 16,
+      "timeFullMin": 30,
+      "pillar": "security_governance",
+      "scope": "diagnostic",
+      "name": "Bezpieczeństwo, prywatność i governance pod AI",
+      "level": "wszystkie poziomy",
+      "interactiveElement": "Klasyfikacja danych i zastosowań AI",
+      "keyConcepts": [
+        "prywatność danych",
+        "PII",
+        "polityka akceptowalnego użycia",
+        "governance AI",
+        "ślad audytowy"
+      ],
+      "learningOutcomes": [
+        "Klasyfikuje dane jako dozwolone, wymagające anonimizacji lub niedozwolone",
+        "Wskazuje minimalne zasady governance użycia AI w zespole",
+        "Rozpoznaje ryzyka prywatności w powtarzalnym użyciu AI"
+      ]
+    },
+    {
+      "id": "MSK4",
+      "order": 17,
+      "timeFullMin": 30,
+      "pillar": "qa_practice",
+      "scope": "diagnostic",
+      "name": "Wchodzenie wyżej: granice dojrzałości 8→9 i 10→11",
+      "level": "wszystkie poziomy",
+      "interactiveElement": "Klasyfikacja kroków rozwoju dojrzałości",
+      "keyConcepts": [
+        "granica 8→9",
+        "granica 10→11",
+        "asystent vs decydent",
+        "kalibracja użycia AI",
+        "ciągłe doskonalenie"
+      ],
+      "learningOutcomes": [
+        "Rozpoznaje, co odróżnia poziom 8 od 9 oraz 10 od 11",
+        "Wskazuje konkretny, odwracalny krok wejścia na wyższy poziom",
+        "Odróżnia realny rozwój od fałszywego poczucia dojrzałości"
+      ]
     }
   ]
 }

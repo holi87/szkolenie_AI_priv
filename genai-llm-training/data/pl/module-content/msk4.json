@@ -1,0 +1,76 @@
+{
+  "_meta": {
+    "issue": "#112-#118 [M15] Ścieżka formatywna S4 — Skala Holaka (moduł szkoleniowy)",
+    "adr": "docs/adr/0009-sciezka-formatywna-s4-skala-holaka.md",
+    "interaction": "Klasyfikacja kroków rozwoju (kind: classify) — ćwiczenie formatywne, NIE scorowane do zaliczenia",
+    "source": "Skala Holaka — dwie krytyczne granice dojrzałości: 8→9 i 10→11. Atrybucja: quality-blog.eu/pl/blog/skala-holaka.",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE i ogólne (zero realnych danych/PII). Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MSK4",
+  "intro": "Najtrudniejsze nie są pierwsze poziomy, lecz dwie granice: 8→9 (od indywidualnej dobrej praktyki do wpięcia AI w proces) oraz 10→11 (od pojedynczych usprawnień do ciągłego doskonalenia). Ten moduł pokazuje, co realnie odróżnia te poziomy i jak zaplanować przejście. To ćwiczenie rozwojowe, nie test.",
+  "screens": [
+    {
+      "id": "msk4-s1-dwie-granice",
+      "title": "Dwie granice, na których utyka rozwój",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Wiele osób i zespołów zatrzymuje się tuż przed poziomem 9 albo 11. Granica 8→9 to moment, gdy dobra praktyka jednej osoby staje się elementem procesu: jasny podział asystent/decydent, odwracalność i ślad audytowy. Granica 10→11 to moment, gdy usprawnienia zamieniają się w rutynę ciągłego doskonalenia i kalibracji." },
+        { "kind": "list", "items": [
+          "8→9: indywidualna praktyka → proces z kontrolą i śladem.",
+          "10→11: pojedyncze usprawnienia → mierzony, ciągle kalibrowany system.",
+          "Na obu granicach klucz to nie nowe narzędzie, lecz nowy nawyk pracy."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Skala Holaka", "text": "Granice 8→9 i 10→11 to najczęstsze miejsca utknięcia adopcji AI. Więcej: quality-blog.eu/pl/blog/skala-holaka." }
+      ]
+    },
+    {
+      "id": "msk4-s2-pulapka",
+      "title": "Pułapka fałszywej dojrzałości",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Najgroźniejsza jest pułapka „jesteśmy już dojrzali”. Uznanie dojrzałości za stan gotowy zatrzymuje rozwój tuż przed 11. Realny poziom 11 to nie cel osiągnięty, lecz rutyna pomiaru, kalibracji i poprawiania własnego użycia AI." },
+        { "kind": "callout", "variant": "warn", "title": "Sygnał utknięcia", "text": "Jeśli używasz AI sprawnie, ale nie mierzysz jego wpływu i nie kalibrujesz oceny outputu — prawdopodobnie stoisz na 10, nie na 11." }
+      ]
+    },
+    {
+      "id": "msk4-s3-jak-cwiczyc",
+      "title": "Jak to ćwiczyć",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Za chwilę przypiszesz konkretne kroki do właściwej granicy: 8→9 albo 10→11. Bez progu zaliczenia — celem jest rozpoznanie, który krok jest dziś Twoim najbliższym przejściem." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "msk4-classify",
+    "title": "Krok 8→9 czy 10→11?",
+    "intro": "Przypisz każdy krok do granicy, której dotyczy. Feedback wyjaśnia, dlaczego należy do tego przejścia.",
+    "categories": [
+      { "id": "t89", "label": "Krok 8→9", "desc": "Od indywidualnej dobrej praktyki do procesu z kontrolą i śladem." },
+      { "id": "t1011", "label": "Krok 10→11", "desc": "Od pojedynczych usprawnień do mierzonego, ciągłego doskonalenia." }
+    ],
+    "items": [
+      { "id": "msk4-i1", "text": "Wpinasz AI w proces z jasnym podziałem: asystent proponuje, człowiek decyduje.", "correctCategory": "t89", "rationale": "Podział ról i wpięcie w proces to istota przejścia 8→9." },
+      { "id": "msk4-i2", "text": "Dla decyzji wspartych AI zapewniasz odwracalność i ślad audytowy.", "correctCategory": "t89", "rationale": "Kontrola i ślad to warunek wejścia na poziom 9." },
+      { "id": "msk4-i3", "text": "Zaczynasz dzielić się praktykami i wspólnie kalibrować ocenę outputu w zespole.", "correctCategory": "t89", "rationale": "Wyjście z praktyki indywidualnej do zespołowej to ruch 8→9." },
+      { "id": "msk4-i4", "text": "Czynisz audyt i kalibrację użycia AI stałym elementem rutyny zespołu.", "correctCategory": "t1011", "rationale": "Stała kalibracja to istota poziomu 11." },
+      { "id": "msk4-i5", "text": "Mierzysz realny wpływ AI na jakość i czas, i na tej podstawie korygujesz podejście.", "correctCategory": "t1011", "rationale": "Pomiar i korekta to warunek przejścia 10→11." },
+      { "id": "msk4-i6", "text": "Traktujesz adopcję AI jako ciągłe doskonalenie wpisane w strategię.", "correctCategory": "t1011", "rationale": "Ciągłe doskonalenie zamiast jednorazowej inicjatywy to poziom 11." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Granica 8→9: zamień indywidualną praktykę w proces z podziałem ról, odwracalnością i śladem.",
+      "Granica 10→11: zamień usprawnienia w rutynę pomiaru, kalibracji i ciągłego doskonalenia.",
+      "Na obu granicach kluczem jest nowy nawyk pracy, nie nowe narzędzie."
+    ],
+    "checklist": [
+      "Czy wiem, na której granicy stoję dziś?",
+      "Czy mój najbliższy krok jest konkretny i odwracalny?",
+      "Czy mierzę wpływ AI, czy tylko go używam?"
+    ],
+    "checklistTitle": "Checklista — następna granica",
+    "nextStep": "Następny krok: wybierz jedną granicę (8→9 lub 10→11) i zaplanuj jeden mały, odwracalny eksperyment wejścia wyżej."
+  }
+}

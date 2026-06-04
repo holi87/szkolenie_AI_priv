@@ -1,0 +1,76 @@
+{
+  "_meta": {
+    "issue": "#112-#118 [M15] Ścieżka formatywna S4 — Skala Holaka (moduł szkoleniowy)",
+    "adr": "docs/adr/0009-sciezka-formatywna-s4-skala-holaka.md",
+    "interaction": "Klasyfikacja praktyk (kind: classify) — ćwiczenie formatywne, NIE scorowane do zaliczenia",
+    "source": "Osie dojrzałości Skali Holaka: zarządzanie kontekstem, oszczędność tokenów. Atrybucja: quality-blog.eu/pl/blog/skala-holaka.",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE i ogólne (zero realnych danych/PII). Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MSK1",
+  "intro": "Wyższe poziomy dojrzałości AI poznasz nie po liczbie narzędzi, ale po tym, JAK podajesz modelowi kontekst — i ile to kosztuje. Ten moduł uczy higieny kontekstu i świadomości kosztu tokenów. To ćwiczenie rozwojowe, nie test.",
+  "screens": [
+    {
+      "id": "msk1-s1-po-co",
+      "title": "Po co zarządzać kontekstem i kosztem",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Model widzi tylko to, co zmieści się w oknie kontekstu. Zbyt mało kontekstu → odpowiedź ogólna lub błędna; zbyt dużo nieistotnych treści → model gubi sygnał, a koszt tokenów rośnie. Dojrzała praktyka to podawanie dokładnie tego, co potrzebne — nie więcej, nie mniej." },
+        { "kind": "list", "items": [
+          "Kontekst = dane, instrukcje i przykłady, które realnie wpływają na zadanie.",
+          "Koszt tokenów rośnie z każdym wklejonym znakiem — także z niepotrzebnym.",
+          "Powtarzalne zadania zyskują najwięcej na szablonach i higienie kontekstu."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Oś Skali Holaka", "text": "Świadome zarządzanie kontekstem i kosztem to jedna z osi odróżniających poziom „używam AI” od „używam AI dojrzale”. Więcej: quality-blog.eu/pl/blog/skala-holaka." }
+      ]
+    },
+    {
+      "id": "msk1-s2-praktyki",
+      "title": "Oszczędnie vs rozrzutnie",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Oszczędna praktyka selekcjonuje kontekst i wielokrotnie używa sprawdzonych szablonów. Rozrzutna wkleja „wszystko na wszelki wypadek”, miesza tematy i opisuje kontekst od zera za każdym razem." },
+        { "kind": "callout", "variant": "warn", "title": "Pułapka „na wszelki wypadek”", "text": "Wklejanie całej bazy wiedzy do każdego promptu nie zwiększa trafności — częściej rozmywa zadanie i podnosi koszt. Dawkuj kontekst świadomie." }
+      ]
+    },
+    {
+      "id": "msk1-s3-jak-cwiczyc",
+      "title": "Jak to ćwiczyć",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Za chwilę sklasyfikujesz praktyki jako oszczędne lub rozrzutne. Nie ma tu progu zaliczenia — celem jest rozpoznanie wzorca, który możesz przenieść na własną pracę." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "msk1-classify",
+    "title": "Oszczędna czy rozrzutna praktyka kontekstu?",
+    "intro": "Przyporządkuj każdą praktykę. To ćwiczenie rozwojowe — feedback wyjaśnia, dlaczego dana praktyka jest (nie)oszczędna.",
+    "categories": [
+      { "id": "lean", "label": "Oszczędna praktyka", "desc": "Selekcjonuje kontekst, kontroluje koszt, używa szablonów." },
+      { "id": "wasteful", "label": "Rozrzutna praktyka", "desc": "Dodaje nadmiar, miesza tematy, opisuje wszystko od zera." }
+    ],
+    "items": [
+      { "id": "msk1-i1", "text": "Podaję tylko fragmenty dokumentu istotne dla zadania.", "correctCategory": "lean", "rationale": "Selekcja kontekstu zwiększa trafność i obniża koszt." },
+      { "id": "msk1-i2", "text": "Wklejam całą bazę wiedzy do każdego promptu „na wszelki wypadek”.", "correctCategory": "wasteful", "rationale": "Nadmiar rozmywa sygnał i podnosi koszt tokenów." },
+      { "id": "msk1-i3", "text": "Powtarzalne zadanie mam jako szablon promptu z miejscami na dane.", "correctCategory": "lean", "rationale": "Szablon to powtarzalność i higiena kontekstu." },
+      { "id": "msk1-i4", "text": "Za każdym razem opisuję kontekst od zera, innymi słowami.", "correctCategory": "wasteful", "rationale": "Brak szablonu = marnowany czas i niespójne wyniki." },
+      { "id": "msk1-i5", "text": "Usuwam z kontekstu nieaktualne i sprzeczne informacje.", "correctCategory": "lean", "rationale": "Czysty kontekst zmniejsza ryzyko błędu i halucynacji." },
+      { "id": "msk1-i6", "text": "Trzymam w jednym czacie dziesiątki niezwiązanych tematów.", "correctCategory": "wasteful", "rationale": "Mieszanie tematów zaśmieca kontekst i myli model." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Podawaj dokładnie ten kontekst, który wpływa na zadanie — nie więcej.",
+      "Powtarzalne zadania zamieniaj w szablony promptów.",
+      "Każdy wklejony znak ma koszt — dawkuj kontekst świadomie."
+    ],
+    "checklist": [
+      "Czy umiem wskazać, które części kontekstu są naprawdę potrzebne?",
+      "Czy mam szablon dla swojego najczęstszego zadania AI?",
+      "Czy czyszczę kontekst z nieaktualnych i sprzecznych treści?"
+    ],
+    "checklistTitle": "Checklista — higiena kontekstu",
+    "nextStep": "Następny krok: weź jedno powtarzalne zadanie i zamień je w szablon promptu z kontrolowanym kontekstem."
+  }
+}

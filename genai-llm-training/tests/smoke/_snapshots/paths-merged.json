@@ -127,10 +127,6 @@
         "M12": {
           "required": false,
           "variant": "opcjonalny"
-        },
-        "MSH": {
-          "required": false,
-          "variant": "diagnostyczny"
         }
       },
       "requiredModules": [
@@ -214,10 +210,6 @@
         "M12": {
           "required": false,
           "variant": "rozszerzony"
-        },
-        "MSH": {
-          "required": false,
-          "variant": "diagnostyczny"
         }
       },
       "requiredModules": [
@@ -311,10 +303,6 @@
         "M12": {
           "required": true,
           "variant": "full"
-        },
-        "MSH": {
-          "required": false,
-          "variant": "diagnostyczny"
         }
       },
       "requiredModules": [
@@ -368,6 +356,35 @@
       "attempts": 3,
       "name": "Inżynier / automatyzacja / techniczny QA",
       "assumedPathTime": "9-10 h (A4)"
+    },
+    "S4": {
+      "formative": true,
+      "modules": {
+        "MSH": {
+          "required": false,
+          "variant": "diagnostyczny"
+        },
+        "MSK1": {
+          "required": true,
+          "variant": "formatywny"
+        },
+        "MSK2": {
+          "required": true,
+          "variant": "formatywny"
+        },
+        "MSK3": {
+          "required": true,
+          "variant": "formatywny"
+        },
+        "MSK4": {
+          "required": true,
+          "variant": "formatywny"
+        }
+      },
+      "estContentTimeMin": 140,
+      "estContentTimeNote": "MSH ~20 min + 4 moduły szkoleniowe ~30 min (bez quizów; treść + interakcje). Ścieżka FORMATYWNA (M15/ADR-0009) — brak testu końcowego, progu, scoringu i certyfikatu.",
+      "name": "Skala Holaka — diagnoza i rozwój",
+      "assumedPathTime": "2.5-3 h"
     }
   }
 }

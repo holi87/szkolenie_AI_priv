@@ -163,6 +163,34 @@
       "timeFullMin": 20,
       "pillar": "security_governance",
       "scope": "diagnostic"
+    },
+    {
+      "id": "MSK1",
+      "order": 14,
+      "timeFullMin": 30,
+      "pillar": "foundations_technical",
+      "scope": "diagnostic"
+    },
+    {
+      "id": "MSK2",
+      "order": 15,
+      "timeFullMin": 30,
+      "pillar": "qa_practice",
+      "scope": "diagnostic"
+    },
+    {
+      "id": "MSK3",
+      "order": 16,
+      "timeFullMin": 30,
+      "pillar": "security_governance",
+      "scope": "diagnostic"
+    },
+    {
+      "id": "MSK4",
+      "order": 17,
+      "timeFullMin": 30,
+      "pillar": "qa_practice",
+      "scope": "diagnostic"
     }
   ]
 }

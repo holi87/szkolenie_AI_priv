@@ -19,10 +19,10 @@ const progressWith = (completed = [], practicalTasks = []) => ({
   practicalTasks,
 });
 
-test("pathModuleList: 13 modułów (12 kursu + MSH) w kolejności, flagi required zgodne z paths.json", () => {
+test("pathModuleList: 17 modułów (12 kursu + MSH + 4 MSK) w kolejności, flagi required zgodne z paths.json", () => {
   for (const pathId of ["S1", "S2", "S3"]) {
     const list = pathModuleList(pathsData, modulesData, pathId, progressWith());
-    assert.equal(list.length, 13);
+    assert.equal(list.length, 17);
     assert.deepEqual(list.map((m) => m.order), [...list.map((m) => m.order)].sort((a, b) => a - b));
     const req = new Set(requiredModules(pathsData, pathId));
     for (const m of list) assert.equal(m.required, req.has(m.id), `${pathId}/${m.id} required mismatch`);
@@ -113,7 +113,10 @@ test("S3: wymaga zapisanych R2-rag i R3-eval; brak choćby jednej → zablokowan
   assert.equal(isFinalTestUnlocked(both, pathsData, "S3"), true);
 });
 
-// ---------------- M14 (#106): moduł diagnostyczny MSH (Skala Holaka) — non-gating ----------------
+// ---------------- M14→M15 (#106/#115): moduł diagnostyczny MSH (Skala Holaka) — non-gating ----------------
+// M15/ADR-0009 (D3): MSH przeniesiony WYŁĄCZNIE do ścieżki formatywnej S4. Mechanika MSH (non-gating, neutralność)
+// bez zmian — zmienia się tylko UMIEJSCOWIENIE. Testy zaktualizowane (nie usunięte): non-gating dla S1/S2/S3 nadal
+// musi zachodzić, a widoczność MSH przeniesiona na S4 (wraz z 4 modułami szkoleniowymi MSK).
 
 test("MSH NIEWRAŻLIWY na gating (#106): isFinalTestUnlocked bez zmian niezależnie od statusu MSH; MSH nigdy blokerem", () => {
   const practicalsByPath = {
@@ -133,9 +136,15 @@ test("MSH NIEWRAŻLIWY na gating (#106): isFinalTestUnlocked bez zmian niezależ
   }
 });
 
-test("MSH widoczny w persona-set każdej ścieżki, ale poza requiredModules (non-gating)", () => {
+test("D3 (#115): MSH przeniesiony do S4 — widoczny w S4 z modułami MSK, ZNIKNĄŁ z persona-set S1/S2/S3", () => {
+  // S4 (formatywna): MSH (diagnoza) + 4 moduły szkoleniowe MSK widoczne (variant != opcjonalny); moduły kursu poza S4.
+  const s4 = pathVisibleModuleIds(pathsData, "S4");
+  assert.ok(s4.has("MSH"), "S4: MSH (diagnoza) widoczny");
+  for (const id of ["MSK1", "MSK2", "MSK3", "MSK4"]) assert.ok(s4.has(id), `S4: ${id} widoczny (szkolenie)`);
+  for (const id of ["M1", "M6", "M12"]) assert.ok(!s4.has(id), `S4: moduł kursu ${id} NIE należy do ścieżki formatywnej`);
+  // S1/S2/S3: MSH już nieobecny (przeniesiony do S4) i nigdy nie był wymagany.
   for (const pathId of ["S1", "S2", "S3"]) {
-    assert.ok(pathVisibleModuleIds(pathsData, pathId).has("MSH"), `${pathId}: MSH widoczny w hubie/nav (variant != opcjonalny)`);
-    assert.ok(!requiredModules(pathsData, pathId).includes("MSH"), `${pathId}: MSH poza requiredModules (nie bramkuje)`);
+    assert.ok(!pathVisibleModuleIds(pathsData, pathId).has("MSH"), `${pathId}: MSH przeniesiony do S4 (nieobecny w persona-set)`);
+    assert.ok(!requiredModules(pathsData, pathId).includes("MSH"), `${pathId}: MSH poza requiredModules`);
   }
 });

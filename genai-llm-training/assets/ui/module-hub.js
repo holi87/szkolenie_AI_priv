@@ -94,15 +94,17 @@ function finalTestCard(finalTest, onSelectFinalTest) {
  * @returns {HTMLElement} węzeł .view__content
  */
 export function renderModuleHub(cfg) {
-  const { pathId, pathName, nextStep, modules, finalTest, onSelectModule, onSelectFinalTest } = cfg;
+  const { pathId, pathName, intro, nextStep, modules, finalTest, onSelectModule, onSelectFinalTest } = cfg;
   const grid = el("div", { class: "hub-grid" }, modules.map((m) => moduleCard(m, onSelectModule)));
-  grid.appendChild(finalTestCard(finalTest, onSelectFinalTest));
+  // Ścieżka FORMATYWNA (S4, M15/ADR-0009) nie ma testu końcowego → brak karty testu (finalTest == null).
+  // Bez tego guardu finalTestStatus dałby fałszywe „dostępny" i klik prowadziłby do nieistniejącego testu.
+  if (finalTest) grid.appendChild(finalTestCard(finalTest, onSelectFinalTest));
   // hub-view zdejmuje limit szerokości .view__content (70ch) — siatka kart ma wykorzystać pełną kolumnę.
   return el("div", { class: "view__content hub-view" }, [
     el("h1", { text: pathName
       ? t("module.menu.heading", { pathId, pathName })
       : t("nav.header.pathIndicator", { pathId }) }),
-    el("p", { class: "muted", text: t("module.menu.intro") }),
+    el("p", { class: "muted", text: intro || t("module.menu.intro") }),
     nextStep
       ? el("div", { class: "next-step", attrs: { role: "status" } }, [
           el("span", { class: "next-step__icon", attrs: { "aria-hidden": "true" } }, [icon("info")]),

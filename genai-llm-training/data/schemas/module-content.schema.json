@@ -7,7 +7,7 @@
   "additionalProperties": false,
   "properties": {
     "_meta": { "type": "object" },
-    "module": { "type": "string", "pattern": "^M([1-9]|1[0-2]|SH)$" },
+    "module": { "type": "string", "pattern": "^M([1-9]|1[0-2]|SH|SK[1-9])$" },
     "intro": { "type": "string" },
     "screens": { "type": "array", "minItems": 1, "items": { "$ref": "#/definitions/screen" } },
     "interaction": { "$ref": "#/definitions/interaction" },

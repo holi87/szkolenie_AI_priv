@@ -4,7 +4,8 @@
 // zablokowany dopóki wszystkie moduły wymagane ścieżki nie są ukończone — to egzekwuje
 // "nie da się zaliczyć ścieżki z pominięciem wymaganych modułów".
 
-export const PATH_IDS = ["S1", "S2", "S3"];
+// S4 (M15/ADR-0009) = ścieżka FORMATYWNA (Skala Holaka): diagnoza + szkolenie, bez testu/scoringu/certyfikatu.
+export const PATH_IDS = ["S1", "S2", "S3", "S4"];
 
 export function isValidPath(pathId) {
   return PATH_IDS.includes(pathId);
@@ -14,6 +15,16 @@ export function getPath(pathsData, pathId) {
   const p = pathsData && pathsData.paths && pathsData.paths[pathId];
   if (!p) throw new Error(`Nieznana ścieżka: ${pathId}`);
   return p;
+}
+
+/**
+ * Czy ścieżka jest FORMATYWNA (M15/ADR-0009): diagnoza + szkolenie, BEZ testu końcowego, progu, scoringu i
+ * certyfikatu. Predykat sterujący guardami UI (karta bez „Test/Próg", hub bez karty testu, nav bez testu)
+ * oraz pominięciem ścieżki w pętlach test-engine/scoring. Analogiczny do scope:"diagnostic" na poziomie modułu.
+ */
+export function isFormativePath(pathsData, pathId) {
+  const p = pathsData && pathsData.paths && pathsData.paths[pathId];
+  return Boolean(p && p.formative === true);
 }
 
 /** Lista modułów wymaganych dla ścieżki (kolejność wg requiredModules w paths.json). */

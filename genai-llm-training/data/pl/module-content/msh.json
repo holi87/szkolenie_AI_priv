@@ -20,7 +20,7 @@
           "Wersja osobista (v2.1p) — dojrzałość Twojej własnej praktyki pracy z AI.",
           "Oba wymiary oceniamy osobno: organizacja może być wyżej lub niżej niż pojedyncza osoba."
         ] },
-        { "kind": "callout", "variant": "info", "title": "Skąd ten model", "text": "Skala Holaka: quality-blog.eu/pl/blog/skala-holaka (organizacja) i quality-blog.eu/pl/blog/skala-holaka-private (osoba). Tu używamy jej jako narzędzia autorefleksji, nie certyfikacji." }
+        { "kind": "callout", "variant": "info", "title": "Skąd nazwa i kto stoi za modelem", "text": "Skalę Holaka wymyślił Grzegorz Holak przy wsparciu Konrada Gomulskiego — stąd nazwa. Obaj są Senior Test Development Engineer w Sii Polska i członkami SJSI oraz współzałożycielami quality-blog.eu; Grzegorz Holak jest dodatkowo Test Architectem i AI Ambassadorem w SCIB. Źródła: quality-blog.eu/pl/blog/skala-holaka (organizacja) i quality-blog.eu/pl/blog/skala-holaka-private (osoba). Używamy jej jako narzędzia autorefleksji, nie certyfikacji." }
       ]
     },
     {

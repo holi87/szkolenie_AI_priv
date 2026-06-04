@@ -1,0 +1,76 @@
+{
+  "_meta": {
+    "issue": "#112-#118 [M15] Formative path S4 — Holak Scale (training module)",
+    "adr": "docs/adr/0009-sciezka-formatywna-s4-skala-holaka.md",
+    "interaction": "Growth-step classification (kind: classify) — formative exercise, NOT scored toward completion",
+    "source": "Holak Scale — two critical maturity thresholds: 8→9 and 10→11. Attribution: quality-blog.eu/pl/blog/skala-holaka.",
+    "dataPolicy": "ALL examples SYNTHETIC and generic (no real data/PII). Formative module — no pass threshold, no certificate."
+  },
+  "module": "MSK4",
+  "intro": "The hardest part is not the first levels but two thresholds: 8→9 (from individual good practice to wiring AI into a process) and 10→11 (from one-off improvements to continuous improvement). This module shows what really separates these levels and how to plan the crossing. It is a growth exercise, not a test.",
+  "screens": [
+    {
+      "id": "msk4-s1-dwie-granice",
+      "title": "Two thresholds where growth stalls",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Many people and teams stop just before level 9 or 11. The 8→9 threshold is when one person's good practice becomes part of a process: a clear assistant/decision-maker split, reversibility and an audit trail. The 10→11 threshold is when improvements turn into a routine of continuous improvement and calibration." },
+        { "kind": "list", "items": [
+          "8→9: individual practice → a process with control and a trail.",
+          "10→11: one-off improvements → a measured, continuously calibrated system.",
+          "At both thresholds the key is not a new tool but a new working habit."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Holak Scale", "text": "The 8→9 and 10→11 thresholds are the most common places AI adoption gets stuck. More: quality-blog.eu/pl/blog/skala-holaka." }
+      ]
+    },
+    {
+      "id": "msk4-s2-pulapka",
+      "title": "The false-maturity trap",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "The most dangerous one is the „we are mature already” trap. Treating maturity as a finished state stalls growth just before 11. Real level 11 is not a goal achieved but a routine of measuring, calibrating and improving your own AI use." },
+        { "kind": "callout", "variant": "warn", "title": "A stall signal", "text": "If you use AI smoothly but do not measure its impact and do not calibrate how you judge output — you are probably at 10, not 11." }
+      ]
+    },
+    {
+      "id": "msk4-s3-jak-cwiczyc",
+      "title": "How to practise",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Next you will assign concrete steps to the right threshold: 8→9 or 10→11. No pass threshold — the goal is to recognize which step is your nearest crossing today." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "msk4-classify",
+    "title": "Step 8→9 or 10→11?",
+    "intro": "Assign each step to the threshold it belongs to. Feedback explains why it belongs to that crossing.",
+    "categories": [
+      { "id": "t89", "label": "Step 8→9", "desc": "From individual good practice to a process with control and a trail." },
+      { "id": "t1011", "label": "Step 10→11", "desc": "From one-off improvements to measured, continuous improvement." }
+    ],
+    "items": [
+      { "id": "msk4-i1", "text": "You wire AI into a process with a clear split: assistant proposes, a human decides.", "correctCategory": "t89", "rationale": "Role split and wiring into a process is the essence of the 8→9 crossing." },
+      { "id": "msk4-i2", "text": "For AI-supported decisions you ensure reversibility and an audit trail.", "correctCategory": "t89", "rationale": "Control and a trail are the condition for reaching level 9." },
+      { "id": "msk4-i3", "text": "You start sharing practices and calibrating output judgment together in the team.", "correctCategory": "t89", "rationale": "Moving from individual to team practice is the 8→9 move." },
+      { "id": "msk4-i4", "text": "You make auditing and calibrating AI use a fixed part of the team's routine.", "correctCategory": "t1011", "rationale": "Continuous calibration is the essence of level 11." },
+      { "id": "msk4-i5", "text": "You measure AI's real impact on quality and time, and adjust your approach accordingly.", "correctCategory": "t1011", "rationale": "Measurement and correction are the condition for the 10→11 crossing." },
+      { "id": "msk4-i6", "text": "You treat AI adoption as continuous improvement built into the strategy.", "correctCategory": "t1011", "rationale": "Continuous improvement instead of a one-off initiative is level 11." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Threshold 8→9: turn individual practice into a process with role split, reversibility and a trail.",
+      "Threshold 10→11: turn improvements into a routine of measurement, calibration and continuous improvement.",
+      "At both thresholds the key is a new working habit, not a new tool."
+    ],
+    "checklist": [
+      "Do I know which threshold I am standing at today?",
+      "Is my nearest step concrete and reversible?",
+      "Do I measure AI's impact, or only use it?"
+    ],
+    "checklistTitle": "Checklist — the next threshold",
+    "nextStep": "Next step: pick one threshold (8→9 or 10→11) and plan one small, reversible experiment to climb higher."
+  }
+}

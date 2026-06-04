@@ -1,0 +1,76 @@
+{
+  "_meta": {
+    "issue": "#112-#118 [M15] Ścieżka formatywna S4 — Skala Holaka (moduł szkoleniowy)",
+    "adr": "docs/adr/0009-sciezka-formatywna-s4-skala-holaka.md",
+    "interaction": "Klasyfikacja decyzji (kind: classify) — ćwiczenie formatywne, NIE scorowane do zaliczenia",
+    "source": "Osie dojrzałości Skali Holaka: weryfikowalność outputu, odwracalność decyzji. Atrybucja: quality-blog.eu/pl/blog/skala-holaka.",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE i ogólne (zero realnych danych/PII). Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MSK2",
+  "intro": "Dojrzała praca z AI nie pyta tylko „czy model umie”, ale „czy output da się sprawdzić” i „czy decyzję da się cofnąć”. Ten moduł uczy oceniać weryfikowalność i odwracalność, zanim zaufasz odpowiedzi. To ćwiczenie rozwojowe, nie test.",
+  "screens": [
+    {
+      "id": "msk2-s1-dwie-osie",
+      "title": "Dwie osie zaufania: weryfikowalność i odwracalność",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Output bywa przekonujący w formie, a błędny w treści. Zanim go użyjesz, zadaj dwa pytania: czy mogę go zweryfikować wobec źródła oraz czy decyzję na jego podstawie da się cofnąć. Im trudniejsza weryfikacja i im mniejsza odwracalność, tym więcej kontroli człowieka." },
+        { "kind": "list", "items": [
+          "Weryfikowalność — czy mam jak sprawdzić, że odpowiedź jest prawdziwa.",
+          "Odwracalność — czy skutki decyzji da się wycofać bez dużej szkody.",
+          "Ślad audytowy — czy zostaje zapis, na podstawie czego podjęto decyzję."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Oś Skali Holaka", "text": "Projektowanie pracy tak, by decyzje wsparte AI były sprawdzalne i odwracalne, to znak wejścia na wyższy poziom. Więcej: quality-blog.eu/pl/blog/skala-holaka." }
+      ]
+    },
+    {
+      "id": "msk2-s2-granica",
+      "title": "Kiedy wystarczy weryfikacja, a kiedy potrzebny człowiek",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Niskie ryzyko: output łatwo sprawdzić, a decyzję cofnąć (np. szkic, propozycja do przeglądu). Wysokie ryzyko: skutek trudno odwrócić lub trudno zweryfikować (np. wysłanie komunikatu do klienta, trwała zmiana danych) — tam człowiek zatwierdza." },
+        { "kind": "callout", "variant": "warn", "title": "Pułapka gładkiej odpowiedzi", "text": "Pewny ton modelu nie jest dowodem poprawności. Brak możliwości weryfikacji to sygnał, by NIE polegać na odpowiedzi w decyzji krytycznej." }
+      ]
+    },
+    {
+      "id": "msk2-s3-jak-cwiczyc",
+      "title": "Jak to ćwiczyć",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Za chwilę sklasyfikujesz sytuacje jako niskiego ryzyka (output weryfikowalny i decyzja odwracalna) lub wymagające kontroli człowieka. Bez progu zaliczenia — chodzi o wyrobienie odruchu pytania o weryfikację i odwracalność." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "msk2-classify",
+    "title": "Niskie ryzyko czy kontrola człowieka?",
+    "intro": "Oceń każdą sytuację. Feedback wyjaśnia, jak weryfikowalność i odwracalność wpływają na potrzebę kontroli.",
+    "categories": [
+      { "id": "safe", "label": "Niskie ryzyko (po weryfikacji)", "desc": "Output łatwo sprawdzić, decyzja odwracalna." },
+      { "id": "control", "label": "Wymaga kontroli człowieka", "desc": "Trudna weryfikacja lub nieodwracalny skutek." }
+    ],
+    "items": [
+      { "id": "msk2-i1", "text": "AI proponuje szkic notatki, którą i tak przejrzysz i zredagujesz.", "correctCategory": "safe", "rationale": "Łatwa weryfikacja i pełna odwracalność — niskie ryzyko." },
+      { "id": "msk2-i2", "text": "AI generuje treść wysyłaną automatycznie do klienta bez przeglądu.", "correctCategory": "control", "rationale": "Skutek trudny do cofnięcia — wymaga zatwierdzenia człowieka." },
+      { "id": "msk2-i3", "text": "AI sugeruje przypadki testowe, które porównasz z wymaganiem.", "correctCategory": "safe", "rationale": "Możesz zweryfikować wobec źródła, nim użyjesz." },
+      { "id": "msk2-i4", "text": "AI decyduje o trwałym usunięciu rekordów w bazie produkcyjnej.", "correctCategory": "control", "rationale": "Nieodwracalne i trudne do weryfikacji — pełna kontrola człowieka." },
+      { "id": "msk2-i5", "text": "AI podsumowuje dokument, a Ty masz dostęp do oryginału.", "correctCategory": "safe", "rationale": "Źródło dostępne → łatwa weryfikacja; podsumowanie odwracalne." },
+      { "id": "msk2-i6", "text": "AI ustala ocenę kandydata, której nikt później nie sprawdza.", "correctCategory": "control", "rationale": "Brak weryfikacji + duży wpływ → wymaga człowieka i śladu audytowego." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Przed użyciem outputu pytaj: czy umiem to zweryfikować i czy decyzję da się cofnąć.",
+      "Im trudniejsza weryfikacja i mniejsza odwracalność, tym więcej kontroli człowieka.",
+      "Pewny ton modelu nie zastępuje dowodu — zostaw ślad, na czym oparto decyzję."
+    ],
+    "checklist": [
+      "Czy wiem, jak sprawdzić tę odpowiedź wobec źródła?",
+      "Czy skutki tej decyzji da się odwrócić?",
+      "Czy zostaje ślad audytowy dla decyzji krytycznej?"
+    ],
+    "checklistTitle": "Checklista — zanim zaufasz outputowi",
+    "nextStep": "Następny krok: w jednym swoim procesie dopisz krok weryfikacji i zasadę „decyzja nieodwracalna = zatwierdza człowiek”."
+  }
+}

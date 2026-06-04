@@ -22,8 +22,8 @@ function diskFetch(url) {
 test("loader czyta układ per-locale (pl) bez 404 — ścieżki loadera == układ na dysku", async () => {
   const data = await loadTrainingData({ basePath: `${DATA}/`, locale: "pl", fetchImpl: diskFetch });
   assert.equal(data.questions.length, 116, "kompletny bank z data/pl/questions/");
-  assert.equal(Object.keys(data.moduleContent).length, 13, "12 modułów kursu + MSH (diagnostyczny) z data/pl/module-content/");
-  assert.equal(data.modules.modules.length, 13);
+  assert.equal(Object.keys(data.moduleContent).length, 17, "12 modułów kursu + MSH (diagnostyczny) + MSK1-4 (S4 formatywna) z data/pl/module-content/");
+  assert.equal(data.modules.modules.length, 17);
   assert.ok(data.scenarios && data.scenarios.scenarios, "scenariusze z data/pl/");
   assert.ok(data.rubrics && data.rubrics.rubrics, "rubryki z data/pl/");
 });
@@ -49,7 +49,8 @@ test("każdy moduł po merge ma name/level/keyConcepts/learningOutcomes; każda 
   }
   for (const [id, p] of Object.entries(data.paths.paths)) {
     assert.ok(p.name && p.assumedPathTime, `${id}: brak name/assumedPathTime po merge`);
-    assert.ok(Array.isArray(p.gates), `${id}: utracono gates (single-source)`);
+    // Ścieżka FORMATYWNA (S4, M15/ADR-0009) nie ma bramek/testu — gates istnieją tylko dla ścieżek z testem.
+    if (!p.formative) assert.ok(Array.isArray(p.gates), `${id}: utracono gates (single-source)`);
   }
 });
 
