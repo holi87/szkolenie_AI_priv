@@ -109,6 +109,10 @@ const TOTAL = 116;
 // nieobecny → exempt-by-construction); scope-checki iterują po Q (MSH ma 0 pytań → nieosiągalny). Jedyna pętla
 // wymagająca JAWNEJ bramki to questionRange (czyta m.questionRange.count, którego diagnostyczny moduł nie ma).
 const hasBankQuestions = (m) => Boolean(m) && m.scope !== "diagnostic";
+// M15/ADR-0009: ścieżka FORMATYWNA (S4 Skala Holaka) — diagnoza + szkolenie, BEZ testu końcowego/scoringu/certyfikatu.
+// Wykluczamy ją z kontroli zależnych od testu (pula>=finalTestQuestions, kwota dedykowanych, progi/bramki) — pól tych
+// formatywna nie ma (conditional required w paths.schema), a iteracje czytałyby undefined (np. p.gates.length → crash).
+const isFormative = (p) => Boolean(p) && p.formative === true;
 const DIFF_TARGET = { L1: 41, L2: 46, L3: 23, L4: 6 };
 const SCENARIO_TYPES = new Set(["scenariusz", "scenariusz_decyzyjny"]);
 const TECHNICAL_MODULES = new Set(["M4", "M5", "M6", "M12"]);
@@ -289,6 +293,7 @@ if (Qall) {
     // pule pytań per persona (ADR-0006 #94). Dziś S1⊆S2⊆S3; ten inwariant przeżyje rozłączne pule (M13-3..6).
     const poolReport = [];
     for (const [pid, p] of Object.entries(paths.paths)) {
+      if (isFormative(p)) continue; // formatywna (S4) nie ma testu końcowego — pula/kwota nieistotne (M15/ADR-0009)
       const pool = Q.filter((q) => (q.paths || []).includes(pid));
       if (pool.length < p.finalTestQuestions) fail(`ścieżka ${pid}: pula pytań ${pool.length} < finalTestQuestions ${p.finalTestQuestions} (test końcowy nie do złożenia z dopasowanej puli)`);
       poolReport.push(`${pid}=${pool.length}/${p.finalTestQuestions}`);
@@ -310,6 +315,7 @@ if (Qall) {
       const critN = Q.filter((q) => q.isCritical).length;
       const dedReport = [];
       for (const [pid, p] of Object.entries(paths.paths)) {
+        if (isFormative(p)) continue; // formatywna (S4) — bez testu, kwota dedykowanych nieistotna (M15/ADR-0009)
         const ded = Q.filter((q) => scopeById[q.module] === "dedicated" && q.paths.includes(pid)).length;
         const min = p.dedicatedQuestionsMin || 0;
         if (ded < min) fail(`ścieżka ${pid}: pula dedykowanych ${ded} < dedicatedQuestionsMin ${min} (kwota dedykowanych niewykonalna)`);
@@ -493,6 +499,7 @@ checkContentParity();
 // ---------------- Progi ścieżek (raport) ----------------
 if (paths) {
   for (const [pid, p] of Object.entries(paths.paths)) {
+    if (isFormative(p)) { report.push(`Ścieżka ${pid}: FORMATYWNA (diagnoza + szkolenie) — bez testu/progu/bramek/certyfikatu (M15/ADR-0009)`); continue; }
     report.push(`Ścieżka ${pid}: próg ${p.passThresholdPct}% | test ${p.finalTestQuestions} pyt. | krytyczne ${p.criticalQuestionsRequiredPct}% | zadania ${p.practicalTasks} | bramki ${p.gates.length}`);
   }
 }
@@ -529,15 +536,17 @@ if (paths && rubrics) {
 // Integralność: klucze interakcji wskazują na istniejące kategorie/opcje; zadanie praktyczne → istniejąca rubryka.
 function loadModuleContent(locale) {
   const CDIR = join(DATA, locale, "module-content");
-  if (!existsSync(CDIR)) { fail(`brak treści modułów (data/${locale}/module-content/) — wymaga 12 plików mNN.json + msh.json`); return null; }
+  if (!existsSync(CDIR)) { fail(`brak treści modułów (data/${locale}/module-content/) — wymaga 12 plików mNN.json + msh.json + msk1..msk4.json`); return null; }
   const schema = load(join(SCHEMAS, "module-content.schema.json"));
   const rubricIds = new Set((rubrics ? rubrics.rubrics : []).map((r) => r.id));
   const rubricById = new Map((rubrics ? rubrics.rubrics : []).map((r) => [r.id, r]));
   const present = [];
-  // 12 modułów kursu (m01..m12 → M1..M12) + 1 moduł diagnostyczny (msh.json → MSH; M14/ADR-0008, bez puli pytań).
+  // 12 modułów kursu (m01..m12 → M1..M12) + 1 moduł diagnostyczny (msh.json → MSH; M14/ADR-0008) +
+  // 4 moduły szkoleniowe ścieżki formatywnej S4 (msk1..msk4.json → MSK1..MSK4; M15/ADR-0009). MSH+MSK bez puli pytań.
   const contentFiles = [
     ...Array.from({ length: 12 }, (_, i) => ({ f: `m${String(i + 1).padStart(2, "0")}.json`, expectMod: "M" + (i + 1) })),
     { f: "msh.json", expectMod: "MSH" },
+    ...Array.from({ length: 4 }, (_, i) => ({ f: `msk${i + 1}.json`, expectMod: "MSK" + (i + 1) })),
   ];
   for (const { f, expectMod } of contentFiles) {
     const fp = join(CDIR, f);
@@ -589,7 +598,7 @@ function loadModuleContent(locale) {
   return present;
 }
 const contentMods = CANON ? loadModuleContent(CANON) : null;
-if (contentMods) report.push(`Treść modułów: ${contentMods.length}/13 (${contentMods.join(",")})`);
+if (contentMods) report.push(`Treść modułów: ${contentMods.length}/17 (${contentMods.join(",")})`);
 
 // ---------------- Próbka wyników pilotażu (kalibracja #28) — schemat + integralność + lint syntetyczny ----------------
 // W repo trzymamy WYŁĄCZNIE syntetyczny przykład (realne wyniki pilotażu powstają poza repo).

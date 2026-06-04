@@ -1,0 +1,77 @@
+{
+  "_meta": {
+    "issue": "#112-#118 [M15] Formative path S4 — Holak Scale (training module)",
+    "adr": "docs/adr/0009-sciezka-formatywna-s4-skala-holaka.md",
+    "interaction": "Data and use-case classification (kind: classify) — formative exercise, NOT scored toward completion",
+    "source": "Holak Scale maturity axis: security, data privacy and governance of AI use. Attribution: quality-blog.eu/pl/blog/skala-holaka.",
+    "dataPolicy": "ALL examples SYNTHETIC and generic (no real data/PII). Formative module — no pass threshold, no certificate."
+  },
+  "module": "MSK3",
+  "intro": "Mature AI adoption is not only about effectiveness but about data hygiene: what you may give the model, what you must anonymize first, and what you must never use. This module trains you to classify data and set minimal governance rules. It is a growth exercise, not a test.",
+  "screens": [
+    {
+      "id": "msk3-s1-trzy-kosze",
+      "title": "Three data bins: allowed, to anonymize, disallowed",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Before you paste anything into a model, assign the data to one of three bins. Allowed: public or synthetic data. To anonymize: data that could point to a person or system but is safe once masked. Disallowed: secrets and sensitive data that must never be exposed." },
+        { "kind": "list", "items": [
+          "Allowed — public, synthetic, non-identifying data.",
+          "To anonymize — remove or replace with a placeholder anything that identifies a person/system.",
+          "Disallowed — passwords, keys, secrets, sensitive data with no basis for use."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "A Holak Scale axis", "text": "A written acceptable-use policy (data, privacy, IP) and a minimal audit trail are a mark of mature governance. More: quality-blog.eu/pl/blog/skala-holaka." }
+      ]
+    },
+    {
+      "id": "msk3-s2-governance",
+      "title": "Minimal governance that works",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Governance need not be heavy. Enough: a clear list of allowed use cases, an anonymize-before-sending rule, a ban on pasting secrets, and a simple trail — who, when and for what used AI in a critical process." },
+        { "kind": "callout", "variant": "warn", "title": "The „just a test” trap", "text": "„I'll paste real data only once, just to check” is the most common leak. Data sent once may already be out of your control — always anonymize, even in an experiment." }
+      ]
+    },
+    {
+      "id": "msk3-s3-jak-cwiczyc",
+      "title": "How to practise",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Next you will assign data to bins: allowed, to anonymize, disallowed. No pass threshold — the point is the reflex of classifying data before it reaches the model." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "msk3-classify",
+    "title": "Allowed, to anonymize, or disallowed?",
+    "intro": "Assign each data case to the right bin. Feedback explains the privacy and governance rule.",
+    "categories": [
+      { "id": "allowed", "label": "Allowed", "desc": "Public or synthetic, non-identifying data." },
+      { "id": "anonymize", "label": "To anonymize", "desc": "Safe only after identifiers are masked." },
+      { "id": "disallowed", "label": "Disallowed", "desc": "Secrets and sensitive data with no basis for use." }
+    ],
+    "items": [
+      { "id": "msk3-i1", "text": "A public fragment of an open-source project's documentation.", "correctCategory": "allowed", "rationale": "Public, non-identifying data — fine to use." },
+      { "id": "msk3-i2", "text": "Made-up, synthetic test data with no link to a real person.", "correctCategory": "allowed", "rationale": "Synthetic data is safe by definition." },
+      { "id": "msk3-i3", "text": "A bug report with a user login that you replace with a placeholder.", "correctCategory": "anonymize", "rationale": "Remove/mask the identifier — then it is safe." },
+      { "id": "msk3-i4", "text": "Logs with customer contact details that must be masked before use.", "correctCategory": "anonymize", "rationale": "After anonymization the data no longer points to a person." },
+      { "id": "msk3-i5", "text": "Passwords and access keys to a production system.", "correctCategory": "disallowed", "rationale": "Secrets never go into a prompt." },
+      { "id": "msk3-i6", "text": "A customer's full personal data pasted directly into a public model.", "correctCategory": "disallowed", "rationale": "Identifying sensitive data with no basis or anonymization — disallowed." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Before sending, assign every piece of data to a bin: allowed / to anonymize / disallowed.",
+      "Always anonymize when data could point to a person or system — even in an experiment.",
+      "Write a simple policy and keep a minimal trail of AI use in critical processes."
+    ],
+    "checklist": [
+      "Can I assign my typical data to the three bins?",
+      "Do I have an anonymize-before-sending rule?",
+      "Do I know what must never be pasted (secrets, sensitive data)?"
+    ],
+    "checklistTitle": "Checklist — data hygiene for AI",
+    "nextStep": "Next step: write a one-page rule set for your team: allowed use cases, anonymization, no secrets, a simple audit trail."
+  }
+}

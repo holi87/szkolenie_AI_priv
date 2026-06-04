@@ -3,7 +3,7 @@
 // żyje w core/*, render w ui/*. Brak treści szkoleniowej tutaj (separacja — AGENTS / standardy-jakosci).
 import { loadTrainingData, questionsForModule } from "./core/data-loader.js";
 import { createProgressStore, createLocalStorageAdapter, createMemoryAdapter } from "./core/progress-store.js";
-import { pathModuleList, finalTestStatus, requiredModules, getPath, isFinalTestUnlocked, requiredPracticalRubrics, pathVisibleModuleIds } from "./core/paths.js";
+import { pathModuleList, finalTestStatus, requiredModules, getPath, isFinalTestUnlocked, requiredPracticalRubrics, pathVisibleModuleIds, isFormativePath } from "./core/paths.js";
 import { selectFinalTest } from "./core/test-engine.js";
 import { scorePath } from "./core/scoring.js";
 import { scoreQuestion } from "./core/quiz-engine.js";
@@ -154,12 +154,13 @@ function start(initialData, ctx = {}) {
     if (refs.nav.hidden) return;
     const visible = pathVisibleModuleIds(data.paths, pathId); // persona-set (M13): pomija czysto opcjonalne
     const modules = pathModuleList(data.paths, data.modules, pathId, store.getProgress()).filter((m) => visible.has(m.id));
-    const ft = finalTestStatus(store.getProgress(), data.paths, pathId);
-    ft.active = state.screen === "test";
+    // Ścieżka FORMATYWNA (S4, M15): brak testu końcowego → finalTest=null (nav bez pozycji testu).
+    const ft = isFormativePath(data.paths, pathId) ? null : finalTestStatus(store.getProgress(), data.paths, pathId);
+    if (ft) ft.active = state.screen === "test";
     renderNav(refs.nav, {
       modules, finalTest: ft, activeModuleId: state.moduleId,
       onSelectModule: (id) => { showModule(id); focusView(); },
-      onSelectFinalTest: () => (isFinalTestUnlocked(store.getProgress(), data.paths, pathId) ? showFinalTest() : null),
+      onSelectFinalTest: () => (ft && isFinalTestUnlocked(store.getProgress(), data.paths, pathId) ? showFinalTest() : null),
     });
   }
 
@@ -191,13 +192,15 @@ function start(initialData, ctx = {}) {
     state.screen = "menu"; state.moduleId = null;
     const pathId = store.getActivePath();
     const prog = store.getProgress();
+    const formative = isFormativePath(data.paths, pathId);
     const req = requiredModules(data.paths, pathId);
     const nextReq = req.find((id) => !(prog.modules[id] && prog.modules[id].status === "completed"));
-    const unlocked = isFinalTestUnlocked(prog, data.paths, pathId);
+    const unlocked = !formative && isFinalTestUnlocked(prog, data.paths, pathId);
     const passed = prog.finalTest && prog.finalTest.passed;
 
     let nextStep;
-    if (passed) nextStep = t("module.nextStep.passed");
+    if (formative) nextStep = t("module.nextStep.formative");
+    else if (passed) nextStep = t("module.nextStep.passed");
     else if (nextReq) nextStep = t("module.nextStep.startModule", { module: nextReq });
     else if (unlocked) nextStep = t("module.nextStep.goToTest");
     else nextStep = t("module.nextStep.completeRequired");
@@ -220,11 +223,14 @@ function start(initialData, ctx = {}) {
         quizPct: typeof mp.inlineQuizScorePct === "number" ? mp.inlineQuizScorePct : null,
       };
     });
-    const ft = finalTestStatus(prog, data.paths, pathId);
-    ft.passed = Boolean(passed);
+    // Ścieżka FORMATYWNA (S4, M15): hub bez karty testu końcowego (finalTest=null → module-hub pomija kartę).
+    const ft = formative ? null : finalTestStatus(prog, data.paths, pathId);
+    if (ft) ft.passed = Boolean(passed);
 
     mount(refs.view, renderModuleHub({
-      pathId, pathName: pathName(data, pathId), nextStep, modules, finalTest: ft,
+      pathId, pathName: pathName(data, pathId),
+      intro: formative ? t("module.menu.introFormative") : undefined, // formatywna: intro bez „test końcowy się odblokuje"
+      nextStep, modules, finalTest: ft,
       onSelectModule: (id) => { showModule(id); focusView(); },
       onSelectFinalTest: () => { showFinalTest(); focusView(); }, // showFinalTest sam routuje (locked→hub, passed→wynik)
     }));
@@ -368,6 +374,8 @@ function start(initialData, ctx = {}) {
   function showFinalTest() {
     flushModuleTime(); // wejście do testu z modułu → zapisz czas modułu
     const pathId = store.getActivePath();
+    // Ścieżka FORMATYWNA (S4, M15/ADR-0009) nie ma testu końcowego — wszelkie wejście (np. stary stan/route) → hub.
+    if (isFormativePath(data.paths, pathId)) { showMenu(); return; }
     const prog = store.getProgress();
     if (!isFinalTestUnlocked(prog, data.paths, pathId)) { showMenu(); return; }
     // Już zaliczony — pokaż wynik, bez kolejnego podejścia (działa też po odświeżeniu strony).

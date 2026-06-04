@@ -86,12 +86,13 @@ function finalTestItem(finalTest, onSelectFinalTest) {
   ]);
 }
 
-/** Renderuje listę modułów + pozycję testu końcowego do nawigacji. */
+/** Renderuje listę modułów + (poza ścieżką formatywną) pozycję testu końcowego do nawigacji.
+    Ścieżka FORMATYWNA (S4, M15/ADR-0009) nie ma testu — wtedy finalTest == null i pozycja testu znika z nav. */
 export function renderNav(navEl, { modules, finalTest, activeModuleId, onSelectModule, onSelectFinalTest }) {
   mount(
     navEl,
     el("p", { class: "module-nav__heading", text: t("nav.heading.modules") }),
     ...modules.map((m) => moduleButton(m, { activeModuleId, onSelectModule })),
-    finalTestItem(finalTest, onSelectFinalTest),
+    finalTest ? finalTestItem(finalTest, onSelectFinalTest) : null,
   );
 }

@@ -9,7 +9,7 @@ import assert from "node:assert/strict";
 import { queryAll } from "./_dom-stub.mjs";
 import { bank, pathsData, modulesData, rubricsData, moduleContent, seededRng } from "./_fixtures.mjs";
 
-import { PATH_IDS, pathModuleList, finalTestStatus, getPath, requiredModules } from "../../assets/core/paths.js";
+import { PATH_IDS, pathModuleList, finalTestStatus, getPath, requiredModules, isFormativePath } from "../../assets/core/paths.js";
 import { selectFinalTest } from "../../assets/core/test-engine.js";
 import { scoreQuestion } from "../../assets/core/quiz-engine.js";
 import { scorePath } from "../../assets/core/scoring.js";
@@ -24,6 +24,10 @@ import { renderScreens, renderSummary } from "../../assets/ui/module-view.js";
 import { renderInteraction } from "../../assets/ui/interactions/index.js";
 
 const MODULE_IDS = Array.from({ length: 12 }, (_, i) => `M${i + 1}`);
+// Ścieżki Z TESTEM końcowym (S1/S2/S3). Formatywna S4 (M15/ADR-0009) nie ma testu/scoringu i nie zawiera modułów
+// kursu M1-M12 → wykluczamy ją z pętli render-testu/scoringu. Render karty S4 pokrywa test path-select (renderPathSelect
+// iteruje pełne PATH_IDS), a render modułów MSK pokrywa walk Playwright (MODULE_IDS to tylko M1-M12).
+const TEST_PATHS = PATH_IDS.filter((p) => !isFormativePath(pathsData, p));
 const isTag = (...tags) => (n) => tags.includes(n.tagName);
 
 // Zbiera atrybut `for` ze wszystkich <label> w drzewie (do sprawdzenia powiązań etykiet).
@@ -70,7 +74,7 @@ test("path-select renderuje się dla wszystkich ścieżek bez wyjątku + a11y", 
   assertA11y(node, "path-select");
 });
 
-for (const pathId of PATH_IDS) {
+for (const pathId of TEST_PATHS) {
   test(`render modułów + interakcji bez wyjątku — ścieżka ${pathId}`, () => {
     for (const id of MODULE_IDS) {
       const content = moduleContent[id];
@@ -115,7 +119,7 @@ test("render każdego typu pytania + feedback (poprawny/błędny/krytyczny) bez 
   assert.ok(queryAll(fb, (n) => n.getAttribute && n.getAttribute("role") === "alert").length > 0, "krytyczny feedback bez role=alert");
 });
 
-for (const pathId of PATH_IDS) {
+for (const pathId of TEST_PATHS) {
   test(`render testu końcowego + nawigacji + nagłówka bez wyjątku — ścieżka ${pathId}`, () => {
     const selection = selectFinalTest(bank, pathsData, pathId, seededRng(7));
     const path = getPath(pathsData, pathId);
@@ -165,7 +169,7 @@ test("render ekranu Wynik — gałąź ZALICZONA i NIEZALICZONA bez wyjątku (M1
 
 test("kompletność: 12 modułów ma treść, a wymagane moduły każdej ścieżki istnieją", () => {
   for (const id of MODULE_IDS) assert.ok(moduleContent[id], `brak treści ${id}`);
-  for (const pathId of PATH_IDS) {
+  for (const pathId of TEST_PATHS) {
     for (const id of requiredModules(pathsData, pathId)) {
       assert.ok(moduleContent[id], `${pathId}: wymagany ${id} bez treści`);
     }

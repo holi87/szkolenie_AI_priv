@@ -11,6 +11,10 @@
     "S3": {
       "name": "Inżynier / automatyzacja / techniczny QA",
       "assumedPathTime": "9-10 h (A4)"
+    },
+    "S4": {
+      "name": "Skala Holaka — diagnoza i rozwój",
+      "assumedPathTime": "2.5-3 h"
     }
   }
 }

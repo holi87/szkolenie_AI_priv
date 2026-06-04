@@ -20,7 +20,7 @@
           "Individual version (v2.1p) — the maturity of your own way of working with AI.",
           "We assess both dimensions separately: an organization may be higher or lower than a single person."
         ] },
-        { "kind": "callout", "variant": "info", "title": "Where the model comes from", "text": "Holak Scale: quality-blog.eu/pl/blog/skala-holaka (organization) and quality-blog.eu/pl/blog/skala-holaka-private (individual). Here we use it as a self-reflection tool, not a certification." }
+        { "kind": "callout", "variant": "info", "title": "Where the name and the model come from", "text": "The Holak Scale was devised by Grzegorz Holak with support from Konrad Gomulski — hence the name. Both are Senior Test Development Engineers at Sii Poland and members of SJSI, and co-founders of quality-blog.eu; Grzegorz Holak is additionally a Test Architect and AI Ambassador at SCIB. Sources: quality-blog.eu/pl/blog/skala-holaka (organization) and quality-blog.eu/pl/blog/skala-holaka-private (individual). We use it as a self-reflection tool, not a certification." }
       ]
     },
     {

@@ -11,9 +11,26 @@ const RECOMMENDED_PATH = "S2";
 function pathCard(pathsData, modulesData, pathId, onSelect) {
   const p = getPath(pathsData, pathId);
   const nameById = Object.fromEntries(modulesData.modules.map((m) => [m.id, m.name]));
+  const recommended = pathId === RECOMMENDED_PATH;
+
+  // Ścieżka FORMATYWNA (S4, M15/ADR-0009): diagnoza + szkolenie, BEZ testu/progu/zadań/certyfikatu.
+  // Inna karta — meta bez „Test: N · Próg: X%" (pola nie istnieją); lista modułów ścieżki zamiast „wymaganych".
+  if (p.formative === true) {
+    const moduleNames = Object.keys(p.modules || {}).map((id) => `${id} ${nameById[id] || ""}`.trim());
+    return el("article", { class: "path-card path-card--formative" }, [
+      el("h3", { class: "path-card__name", text: t("path.card.name", { pathId, pathName: p.name }) }),
+      el("p", { class: "path-card__meta", text: t("path.card.meta.formative", { time: p.assumedPathTime || "—" }) }),
+      el("p", { class: "path-card__meta", text: t("path.card.meta.modulesFormative", { count: moduleNames.length }) }),
+      el("details", { class: "path-card__details" }, [
+        el("summary", { text: t("path.card.showModules") }),
+        el("ul", { class: "path-card__list" }, moduleNames.map((n) => el("li", { text: n }))),
+      ]),
+      el("button", { class: "btn path-card__cta", type: "button", text: t("path.card.cta", { pathId }), on: { click: () => onSelect(pathId) } }),
+    ]);
+  }
+
   const requiredNames = (p.requiredModules || []).map((id) => `${id} ${nameById[id] || ""}`.trim());
   const optionalCount = 12 - (p.requiredModules || []).length;
-  const recommended = pathId === RECOMMENDED_PATH;
 
   return el("article", { class: `path-card${recommended ? " path-card--recommended" : ""}` }, [
     // Pasek + plakietka rekomendacji (gradient = sygnał wizualny, słowo = nośnik treści, WCAG 1.4.1).

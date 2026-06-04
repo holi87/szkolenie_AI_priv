@@ -11,6 +11,10 @@
     "S3": {
       "name": "Engineer / automation / technical QA",
       "assumedPathTime": "9-10 h (A4)"
+    },
+    "S4": {
+      "name": "Holak Scale — diagnosis & growth",
+      "assumedPathTime": "2.5-3 h"
     }
   }
 }

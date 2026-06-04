@@ -7,12 +7,12 @@
   "required": ["version", "path", "modules", "updatedAt"],
   "properties": {
     "version": { "type": "string", "description": "Wersja schematu progresu (semver)" },
-    "path": { "type": "string", "enum": ["S1", "S2", "S3"] },
+    "path": { "type": "string", "enum": ["S1", "S2", "S3", "S4"] },
     "modules": {
       "type": "object",
       "description": "Stan per moduł (klucz = id modułu).",
       "patternProperties": {
-        "^M([1-9]|1[0-2]|SH)$": {
+        "^M([1-9]|1[0-2]|SH|SK[1-9])$": {
           "type": "object",
           "required": ["status"],
           "properties": {

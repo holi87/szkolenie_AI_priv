@@ -5,7 +5,7 @@ import "./_dom-stub.mjs";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { bank, pathsData, modulesData, rubricsData, moduleContent } from "./_fixtures.mjs"; // rejestruje katalogi PL
-import { PATH_IDS, pathModuleList, finalTestStatus, getPath } from "../../assets/core/paths.js";
+import { PATH_IDS, pathModuleList, finalTestStatus, getPath, isFormativePath } from "../../assets/core/paths.js";
 import { scoreQuestion } from "../../assets/core/quiz-engine.js";
 import { buildResult } from "../../assets/core/certificate.js";
 import { selectFinalTest } from "../../assets/core/test-engine.js";
@@ -40,7 +40,9 @@ test("feedback (każdy typ pytania): brak wycieku", () => {
 });
 
 test("nav (locked + available) i test-view: brak wycieku", () => {
-  for (const pathId of PATH_IDS) {
+  // S4 formatywna (M15) nie ma testu końcowego — selectFinalTest/renderTest jej nie dotyczą; leak karty S4 łapie
+  // test path-select wyżej (renderPathSelect iteruje pełne PATH_IDS).
+  for (const pathId of PATH_IDS.filter((p) => !isFormativePath(pathsData, p))) {
     const navEl = globalThis.document.createElement("nav");
     const modules = pathModuleList(pathsData, modulesData, pathId, { modules: {}, practicalTasks: [] });
     const ftLocked = finalTestStatus({ modules: {}, practicalTasks: [] }, pathsData, pathId);

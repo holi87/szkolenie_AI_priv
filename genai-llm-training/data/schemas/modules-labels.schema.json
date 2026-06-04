@@ -4,9 +4,9 @@
   "title": "Etykiety modułów per-locale",
   "description": "Kontrakt data/<lang>/modules.labels.json — prose wyświetlana modułów, po ID (carve-out z modules.json, ADR-0004). Struktura/scoring single-source w data/modules.json.",
   "type": "object",
-  "required": ["M1", "M2", "M3", "M4", "M5", "M6", "M7", "M8", "M9", "M10", "M11", "M12", "MSH"],
+  "required": ["M1", "M2", "M3", "M4", "M5", "M6", "M7", "M8", "M9", "M10", "M11", "M12", "MSH", "MSK1", "MSK2", "MSK3", "MSK4"],
   "patternProperties": {
-    "^M([1-9]|1[0-2]|SH)$": {
+    "^M([1-9]|1[0-2]|SH|SK[1-9])$": {
       "type": "object",
       "required": ["name", "level", "interactiveElement", "keyConcepts", "learningOutcomes"],
       "properties": {

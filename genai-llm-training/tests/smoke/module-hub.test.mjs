@@ -35,6 +35,15 @@ test("siatka: jedna karta na moduł + karta testu końcowego (pełnowymiarowy hu
   assert.match(snap, /class="[^"]*hub-view/, "hub musi zdejmować limit szerokości treści (.view__content 70ch)");
 });
 
+test("ścieżka FORMATYWNA (M15, finalTest=null): hub BEZ karty testu końcowego", () => {
+  const node = renderModuleHub({
+    pathId: "S4", pathName: "Skala Holaka — diagnoza i rozwój", nextStep: "Zacznij od autodiagnozy.",
+    modules: MODULES, finalTest: null, onSelectModule: () => {}, onSelectFinalTest: () => {},
+  });
+  assert.equal(countByTag(node).ARTICLE, MODULES.length, "tylko karty modułów — brak karty testu (formatywna)");
+  assert.doesNotMatch(serializeTree(node), /hub-card--final/, "karta testu nie może istnieć w ścieżce formatywnej");
+});
+
 test("status: ZAWSZE ikona + tekst (WCAG 1.4.1) — nie sam kolor", () => {
   const node = build();
   assert.match(serializeTree(node), /hub-card__status-icon/, "brak ikony statusu");
