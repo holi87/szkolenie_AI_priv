@@ -101,16 +101,6 @@
         "additionalProperties": false
       }
     },
-    "certificate": {
-      "type": "object",
-      "properties": {
-        "issued": { "type": "boolean" },
-        "completionId": { "type": "string" },
-        "scorePct": { "type": "number" },
-        "issuedAt": { "type": "string" }
-      },
-      "additionalProperties": false
-    },
     "scoreWeights": {
       "type": "object",
       "description": "Wagi wyniku ścieżki (zgodne z macierzą): quiz inline 30% / test końcowy 60% / zadanie praktyczne 10%.",

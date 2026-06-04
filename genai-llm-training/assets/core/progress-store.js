@@ -86,9 +86,6 @@ export function createProgressStore(adapter, opts = {}) {
   let cursor = readJson(CURSOR_KEY) || { pathId: null, moduleId: null, screen: null };
   let activePath = cursor.pathId;
   let progress = activePath ? loadProgress(activePath) : null;
-  // Pseudonim trzymany TYLKO w pamięci sesji (model C, prywatność #63): nie trafia do localStorage ani do
-  // obiektu progresu, więc znika po odświeżeniu/zamknięciu karty i po resecie. Eksporty i tak go nie zawierają.
-  let sessionParticipant = null;
 
   const persist = () => {
     progress.updatedAt = now();
@@ -116,13 +113,6 @@ export function createProgressStore(adapter, opts = {}) {
     getActivePath: () => activePath,
     getProgress: () => (progress ? JSON.parse(JSON.stringify(progress)) : null),
     hasProgress: () => Boolean(activePath && adapter.get(PROGRESS_KEY(activePath)) != null),
-
-    // Model C (#63): pseudonim żyje tylko w pamięci sesji — bez persist(), bez zapisu do progress/localStorage.
-    // Nie wymaga aktywnej ścieżki (można wpisać przed wyborem). Znika po odświeżeniu strony i po resecie.
-    setParticipant(participant) {
-      sessionParticipant = { ...(sessionParticipant || {}), ...participant };
-    },
-    getParticipant: () => (sessionParticipant ? { ...sessionParticipant } : null),
 
     setModuleStatus(moduleId, status) {
       ensureActive();
@@ -225,17 +215,6 @@ export function createProgressStore(adapter, opts = {}) {
       persist();
     },
 
-    recordCertificate(cert) {
-      ensureActive();
-      progress.certificate = {
-        issued: Boolean(cert.issued),
-        ...(cert.completionId ? { completionId: cert.completionId } : {}),
-        ...(cert.scorePct != null ? { scorePct: cert.scorePct } : {}),
-        issuedAt: cert.issuedAt || now(),
-      };
-      persist();
-    },
-
     /** Kursor "ostatnie miejsce" — UI wraca tu po odświeżeniu (osobny klucz, poza obiektem progresu). */
     setLastLocation(moduleId, screen) {
       cursor = { pathId: activePath, moduleId, screen: screen || null };
@@ -250,7 +229,6 @@ export function createProgressStore(adapter, opts = {}) {
 
     /** Reset progresu: aktywnej ścieżki lub (all=true) wszystkich ścieżek + kursora. */
     reset({ all = false } = {}) {
-      sessionParticipant = null; // pseudonim sesji znika przy każdym resecie (#63)
       if (all) {
         for (const k of adapter.keys().filter((x) => x.startsWith(`${PREFIX}:`))) adapter.remove(k);
         cursor = { pathId: null, moduleId: null, screen: null };

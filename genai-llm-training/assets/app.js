@@ -7,7 +7,7 @@ import { pathModuleList, finalTestStatus, requiredModules, getPath, isFinalTestU
 import { selectFinalTest } from "./core/test-engine.js";
 import { scorePath } from "./core/scoring.js";
 import { scoreQuestion } from "./core/quiz-engine.js";
-import { buildCertificate } from "./core/certificate.js";
+import { buildResult } from "./core/certificate.js";
 import { evaluateInteraction } from "./core/interactions/index.js";
 import { el, mount } from "./ui/dom.js";
 import { icon } from "./ui/icon.js";
@@ -124,8 +124,6 @@ function start(initialData, ctx = {}) {
     });
   }
   const state = { screen: "menu", moduleId: null, test: null };
-  // Imię na certyfikat może być wpisane PRZED wyborem ścieżki (gdy brak aktywnej ścieżki nie ma gdzie zapisać).
-  let pendingName = (store.getParticipant() && store.getParticipant().displayName) || ""; // pseudonim tylko z pamięci sesji (#63)
 
   const focusView = () => refs.view.focus();
 
@@ -180,15 +178,9 @@ function start(initialData, ctx = {}) {
     refs.navToggle.hidden = true; refs.resetBtn.hidden = true;
     mount(refs.view, renderPathSelect(data.paths, data.modules, {
       currentPath: store.getActivePath(),
-      participantName: pendingName,
       onSelect: (pathId) => {
         store.selectPath(pathId);
-        if (pendingName) store.setParticipant({ displayName: pendingName }); // przenieś imię wpisane przed wyborem
         state.screen = "menu"; state.moduleId = null; render(); focusView();
-      },
-      onName: (name) => {
-        pendingName = name;
-        if (store.getActivePath() && name) store.setParticipant({ displayName: name });
       },
     }));
   }
@@ -413,29 +405,28 @@ function start(initialData, ctx = {}) {
       practicalResults: prog.practicalTasks,
     });
     store.recordFinalTest(result);
-    const cert = buildCertificate(result, { participant: store.getParticipant(), pathName: pathName(data, pathId), modulesData: data.modules });
-    if (cert.issued) store.recordCertificate({ issued: true, completionId: cert.completionId, scorePct: cert.scorePct });
-    state.result = cert;
-    showResult(cert, result.gates);
+    const outcome = buildResult(result, { pathName: pathName(data, pathId), modulesData: data.modules });
+    state.result = outcome;
+    showResult(outcome, result.gates);
     refreshHeaderAndNav();
   }
 
   function buildResultFromProgress(prog, pathId) {
     const ft = prog.finalTest || {};
-    return buildCertificate(
+    return buildResult(
       { pathId, scorePct: ft.lastScorePct ?? 0, passed: Boolean(ft.passed), weakModules: ft.weakModules || [] },
-      { participant: store.getParticipant(), pathName: pathName(data, pathId), modulesData: data.modules },
+      { pathName: pathName(data, pathId), modulesData: data.modules },
     );
   }
 
-  function showResult(cert, gates) {
+  function showResult(result, gates) {
     state.screen = "result";
-    refs.nav.hidden = true;        // wynik/certyfikat = pełna szerokość; szyna ukryta
+    refs.nav.hidden = true;        // ekran Wynik = pełna szerokość; szyna ukryta
     refs.navToggle.hidden = false; // „Moduły" → powrót do hubu
     const pathId = store.getActivePath();
-    mount(refs.view, renderResult(cert, {
+    mount(refs.view, renderResult(result, {
       progress: store.getProgress(), pathName: pathName(data, pathId), gates,
-      canRetry: !cert.issued && store.canAttemptFinalTest(),
+      canRetry: !result.passed && store.canAttemptFinalTest(),
       attemptInfo: t("test.attemptsUsed", { attempts: (store.getProgress().finalTest || {}).attempts || 0 }),
       onRetry: () => { showFinalTest(); focusView(); },
       onBack: () => { showMenu(); focusView(); },
@@ -449,7 +440,6 @@ function start(initialData, ctx = {}) {
     if (globalThis.confirm(t("action.resetConfirm"))) {
       timer.moduleId = null; timer.enterMs = 0; // porzuć licznik — reset i tak czyści progres
       store.reset({ all: true });
-      pendingName = ""; // wyczyść pseudonim trzymany w UI (#63) — inaczej wróciłby na ekran wyboru i kolejny certyfikat
       state.screen = "menu"; state.moduleId = null; state.result = null; state.test = null;
       render();
     }

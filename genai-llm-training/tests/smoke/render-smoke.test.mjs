@@ -13,7 +13,7 @@ import { PATH_IDS, pathModuleList, finalTestStatus, getPath, requiredModules } f
 import { selectFinalTest } from "../../assets/core/test-engine.js";
 import { scoreQuestion } from "../../assets/core/quiz-engine.js";
 import { scorePath } from "../../assets/core/scoring.js";
-import { buildCertificate } from "../../assets/core/certificate.js";
+import { buildResult } from "../../assets/core/certificate.js";
 import { evaluateInteraction } from "../../assets/core/interactions/index.js";
 import { renderPathSelect } from "../../assets/ui/path-select.js";
 import { updateHeader, renderNav } from "../../assets/ui/shell.js";
@@ -64,7 +64,7 @@ function makeRefs() {
 
 test("path-select renderuje się dla wszystkich ścieżek bez wyjątku + a11y", () => {
   const node = renderPathSelect(pathsData, modulesData, {
-    currentPath: "S2", participantName: "Tester", onSelect: () => {}, onName: () => {},
+    currentPath: "S2", onSelect: () => {},
   });
   assert.ok(node);
   assertA11y(node, "path-select");
@@ -138,26 +138,26 @@ for (const pathId of PATH_IDS) {
   });
 }
 
-test("render certyfikatu — gałąź ZALICZONA i NIEZALICZONA bez wyjątku", () => {
+test("render ekranu Wynik — gałąź ZALICZONA i NIEZALICZONA bez wyjątku (M12-2 #93)", () => {
   const pathId = "S1";
   const sel = selectFinalTest(bank, pathsData, pathId, seededRng(9));
   const answers = Object.fromEntries(sel.questions.map((q) => [q.id, null])); // brak odpowiedzi → niezaliczone
   const failRes = scorePath(pathId, sel.questions, answers, pathsData, { inlineQuizPct: 0 });
-  const failCert = buildCertificate(failRes, { pathName: "Świadomy użytkownik", modulesData });
-  const failNode = renderResult(failCert, {
+  const failResult = buildResult(failRes, { pathName: "Świadomy użytkownik", modulesData });
+  const failNode = renderResult(failResult, {
     progress: { path: pathId, finalTest: {}, practicalTasks: [] }, pathName: "Świadomy użytkownik",
     gates: failRes.gates, canRetry: true, onRetry: () => {}, onBack: () => {},
   });
   assert.ok(failNode);
 
-  // Gałąź zaliczona: zbuduj sztuczny pozytywny wynik.
-  const passCert = buildCertificate(
+  // Gałąź zaliczona: zbuduj sztuczny pozytywny wynik (bez pseudonimu/completionId — #93).
+  const passResult = buildResult(
     { pathId, scorePct: 88, passed: true, weakModules: [] },
-    { participant: { displayName: "Tester" }, pathName: "Świadomy użytkownik", modulesData },
+    { pathName: "Świadomy użytkownik", modulesData },
   );
-  assert.equal(passCert.issued, true);
-  const passNode = renderResult(passCert, {
-    progress: { path: pathId, finalTest: { passed: true, lastScorePct: 88 }, practicalTasks: [], certificate: passCert },
+  assert.equal(passResult.passed, true);
+  const passNode = renderResult(passResult, {
+    progress: { path: pathId, finalTest: { passed: true, lastScorePct: 88 }, practicalTasks: [] },
     pathName: "Świadomy użytkownik", gates: [], onBack: () => {},
   });
   assert.ok(passNode);
