@@ -1,11 +1,8 @@
 // path-select.js — ekran startowy: hero (pierwsze wrażenie) + wybór ścieżki S1/S2/S3 (issue #15, redesign UX-2 #71).
 // Pokazuje zakres ścieżki (wymagane/opcjonalne moduły, czas, próg) i zapisuje wybór (callback onSelect).
 import { el } from "./dom.js";
-import { t, getLocale } from "../i18n/i18n.js";
+import { t, privacyHref } from "../i18n/i18n.js";
 import { PATH_IDS, getPath } from "../core/paths.js";
-
-// Strona prywatności jest statyczna i per-locale (EN: privacy.html, PL: prywatnosc.html) — #81.
-const privacyHref = () => (getLocale() === "en" ? "privacy.html" : "prywatnosc.html");
 
 // Źródło rekomendacji: stała (paths.json jest "frozen" + schema additionalProperties:false, więc nie
 // wstrzykujemy tam flagi). S2 "Praktyk-użytkownik / QA" = główna persona szkolenia QA (wymagania/03).

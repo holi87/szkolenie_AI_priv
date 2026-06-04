@@ -146,5 +146,7 @@
   "chrome.theme.toggle": "Toggle light/dark theme",
   "chrome.reset": "Start over",
   "chrome.nav.aria": "Training modules",
-  "chrome.metaDescription": "Interactive GenAI & LLM training: S1/S2/S3 paths, quizzes, final test, certificate."
+  "chrome.metaDescription": "Interactive GenAI & LLM training: S1/S2/S3 paths, quizzes, final test, certificate.",
+  "chrome.footer.note": "Static training (GitHub Pages). Progress is saved locally in your browser; nothing is sent to a server, no cookies.",
+  "chrome.footer.privacy": "Privacy"
 }

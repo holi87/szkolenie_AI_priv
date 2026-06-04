@@ -147,5 +147,7 @@
   "chrome.theme.toggle": "Przełącz motyw jasny/ciemny",
   "chrome.reset": "Zacznij od nowa",
   "chrome.nav.aria": "Moduły szkolenia",
-  "chrome.metaDescription": "Interaktywne szkolenie z GenAI i LLM: ścieżki S1/S2/S3, quizy, test końcowy, certyfikat."
+  "chrome.metaDescription": "Interaktywne szkolenie z GenAI i LLM: ścieżki S1/S2/S3, quizy, test końcowy, certyfikat.",
+  "chrome.footer.note": "Szkolenie statyczne (GitHub Pages). Postęp zapisujemy lokalnie w tej przeglądarce; nic nie wysyłamy na serwer, brak cookies.",
+  "chrome.footer.privacy": "Prywatność"
 }

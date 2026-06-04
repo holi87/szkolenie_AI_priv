@@ -74,6 +74,12 @@ export function getLocale() {
   return activeLocale;
 }
 
+// Strona prywatności jest statyczna i per-locale (#81). Wspólne źródło prawdy dla WSZYSTKICH linków
+// (path-select, footer) — żeby aktywny locale i plik nie rozjechały się między miejscami.
+export function privacyHref() {
+  return activeLocale === "en" ? "privacy.html" : "prywatnosc.html";
+}
+
 /** Czysta wartość z katalogu locale dla klucza, albo null gdy brak / pusta. */
 function lookup(locale, key) {
   const c = catalogs[locale];

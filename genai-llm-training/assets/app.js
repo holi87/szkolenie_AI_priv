@@ -11,7 +11,7 @@ import { buildCertificate } from "./core/certificate.js";
 import { evaluateInteraction } from "./core/interactions/index.js";
 import { el, mount } from "./ui/dom.js";
 import { icon } from "./ui/icon.js";
-import { t, registerCatalog, setLocale, resolveLang, persistLang, localeHasData } from "./i18n/i18n.js";
+import { t, registerCatalog, setLocale, resolveLang, persistLang, localeHasData, privacyHref } from "./i18n/i18n.js";
 import { renderPathSelect } from "./ui/path-select.js";
 import { updateHeader, renderNav } from "./ui/shell.js";
 import { renderModuleHub, pillarLabel } from "./ui/module-hub.js";
@@ -66,6 +66,7 @@ function start(initialData, ctx = {}) {
     // Statyczny „chrome" headera lokalizowany przez setChrome() (#81) — inaczej na EN zostałby po polsku.
     skipLink: document.querySelector(".skip-link"), brandName: document.querySelector(".brand__name"),
     themeLabel: document.querySelector(".theme-toggle__label"), metaDesc: document.querySelector('meta[name="description"]'),
+    footerNote: $("footer-note"), footerPrivacy: $("footer-privacy-link"),
   };
 
   // Lokalizuje statyczne stringi chrome (skip-link, marka, etykiety przycisków, <title>, meta, aria) przez t().
@@ -81,6 +82,10 @@ function start(initialData, ctx = {}) {
     if (refs.themeToggle) { refs.themeToggle.setAttribute("aria-label", t("chrome.theme.toggle")); refs.themeToggle.setAttribute("title", t("chrome.theme.toggle")); }
     if (refs.nav) refs.nav.setAttribute("aria-label", t("chrome.nav.aria"));
     if (refs.metaDesc) refs.metaDesc.setAttribute("content", t("chrome.metaDescription"));
+    // Footer (zawsze widoczny): tekst + link prywatności z href locale-aware (#81 — inaczej EN dostaje PL stronę).
+    set(refs.footerNote, t("chrome.footer.note"));
+    set(refs.footerPrivacy, t("chrome.footer.privacy"));
+    if (refs.footerPrivacy) refs.footerPrivacy.setAttribute("href", privacyHref());
   }
   setChrome();
 

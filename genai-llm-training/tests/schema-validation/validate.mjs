@@ -376,6 +376,13 @@ function checkI18nCatalogs() {
   }
   const pl = catalogs.pl;
   if (!pl) { fail("brak kanonicznego katalogu UI assets/i18n/pl.json"); return; }
+  // Locale z KOMPLETEM danych (data/<lang>/) MUSI mieć plik katalogu UI. Bez tego pętla niżej (po istniejących
+  // plikach) nigdy by go nie zobaczyła → locale ze 100% nieprzetłumaczonym UI (cichy fallback PL) przeszedłby
+  // CI. To luka gorsza niż pusta wartość, którą łapiemy poniżej — zamykamy ją twardo (#81).
+  for (const lang of LOCALES) {
+    if (lang === CANON) continue;
+    if (!catalogs[lang]) fail(`brak katalogu UI assets/i18n/${lang}.json — locale ${lang} ma dane data/${lang}/, więc wymaga katalogu UI (inaczej 100% nieprzetłumaczone, cichy fallback PL)`);
+  }
   const keySet = (o) => new Set(Object.keys(o).filter((k) => k !== "_meta"));
   const plKeys = keySet(pl);
   for (const [lang, cat] of Object.entries(catalogs)) {
