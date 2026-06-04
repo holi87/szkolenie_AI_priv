@@ -28,8 +28,8 @@ export function lockedReasonText(finalTest) {
   return reasons.join("; ");
 }
 
-/** Aktualizuje header: ścieżka + pasek postępu (z ARIA). */
-export function updateHeader(refs, { pathId, pathName, progressPct }) {
+/** Aktualizuje header: wskaźnik ścieżki + trwałe przyciski (pasek postępu usunięty w M12 #92). */
+export function updateHeader(refs, { pathId, pathName }) {
   if (pathId) {
     refs.pathIndicator.hidden = false;
     refs.pathIndicator.textContent = pathName
@@ -38,12 +38,7 @@ export function updateHeader(refs, { pathId, pathName, progressPct }) {
     // Widoczność „Moduły" (navToggle) ustawiają ekrany (app.js): ukryty na hubie, widoczny w module/teście/wyniku
     // jako powrót do hubu (#88). Tu sterujemy tylko trwałymi elementami headera.
     refs.resetBtn.hidden = false;
-    refs.progress.hidden = false;
   }
-  const pct = Math.round(progressPct || 0);
-  refs.progressFill.style.width = `${pct}%`;
-  refs.progressTrack.setAttribute("aria-valuenow", String(pct));
-  refs.progressLabel.textContent = t("nav.progress", { pct });
 }
 
 function moduleButton(mod, { activeModuleId, onSelectModule }) {

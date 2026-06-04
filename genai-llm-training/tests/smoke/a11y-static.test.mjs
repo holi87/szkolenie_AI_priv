@@ -1,6 +1,6 @@
 // a11y-static.test.mjs — statyczne kontrole dostępności i responsywności (issue #25) bez przeglądarki.
 // Sprawdza fakty w index.html i styles.css, które są warunkiem WCAG/responsywności (desktop/tablet/mobile):
-// lang, viewport, <title>, skip-link, progressbar ARIA, focus-visible, reguła reflow (media query), klasa sr-only.
+// lang, viewport, <title>, skip-link, brak paska postępu (M12 #92), focus-visible, reguła reflow (media query), klasa sr-only.
 // Pure Node — czyta pliki z dysku. Uzupełnia render-smoke (drzewo runtime) o kontrolę statycznego shella i CSS.
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -30,11 +30,9 @@ test("index.html: skip-link jako pierwszy fokusowalny element (WCAG 2.4.1)", () 
   assert.ok(skipIdx > -1 && skipIdx < headerIdx, "skip-link nie jest przed <header>");
 });
 
-test("index.html: pasek postępu ma pełne ARIA (progressbar + valuemin/max/now)", () => {
-  assert.match(appHtml, /role="progressbar"/, "brak role=progressbar");
-  for (const a of ["aria-valuemin", "aria-valuemax", "aria-valuenow"]) {
-    assert.match(appHtml, new RegExp(a), `brak ${a} na pasku postępu`);
-  }
+test("index.html: pasek postępu usunięty (M12 #92) — brak progressbar/#progress; #view nadal cel skip-linku", () => {
+  assert.doesNotMatch(appHtml, /role="progressbar"/, "pasek postępu (role=progressbar) powinien być usunięty (#92)");
+  assert.doesNotMatch(appHtml, /id="progress[-"]/, "kontener/elementy #progress* powinny być usunięte (#92)");
   assert.match(appHtml, /id="view"[^>]*tabindex="-1"/, "główny obszar #view bez tabindex=-1 (cel skip-linku)");
 });
 
@@ -73,7 +71,7 @@ test("reduced-motion utwardzony: blok gasi ZARÓWNO transition JAK I animation (
   assert.match(block, /animation:\s*none/, "reduced-motion bez animation:none (utwardzenie pod keyframe UX-4/UX-5)");
 });
 
-// ----- UX-3 (#72): toggle motywu, anty-flash, gradientowy progress -----
+// ----- UX-3 (#72): toggle motywu, anty-flash (pasek postępu usunięty w M12 #92) -----
 test("toggle motywu: button#theme-toggle z aria-pressed + aria-label (fokusowalny, opisany)", () => {
   const tag = /<button[^>]*id="theme-toggle"[^>]*>/.exec(appHtml);
   assert.ok(tag, "brak przycisku #theme-toggle w headerze");
@@ -91,8 +89,9 @@ test("anty-flash motywu: inline script ustawia [data-theme] zanim namaluje CSS (
   assert.match(appHtml, /prefers-color-scheme/, "anty-flash nie respektuje prefers-color-scheme");
 });
 
-test("styles.css: pasek postępu ma gradientowe wypełnienie (UX-3)", () => {
-  assert.match(css, /\.progress__fill\s*\{[^}]*var\(--grad-accent\)/, "progress__fill bez gradientu --grad-accent");
+test("styles.css: reguły paska postępu usunięte (M12 #92)", () => {
+  assert.doesNotMatch(css, /\.progress__fill\s*\{/, "reguła .progress__fill powinna być usunięta (#92)");
+  assert.doesNotMatch(css, /\.progress__track\s*\{/, "reguła .progress__track powinna być usunięta (#92)");
 });
 
 test("tokens.css: istnieje, definiuje :root z drugim akcentem i gradientem (fundament design systemu #68)", () => {

@@ -58,8 +58,7 @@ function makeRefs() {
   const d = globalThis.document;
   const e = () => d.createElement("div");
   return {
-    pathIndicator: e(), navToggle: e(), resetBtn: e(), progress: e(),
-    progressFill: e(), progressTrack: e(), progressLabel: e(),
+    pathIndicator: e(), navToggle: e(), resetBtn: e(),
   };
 }
 
@@ -135,7 +134,7 @@ for (const pathId of PATH_IDS) {
     assert.ok(navEl.childNodes.length > 0);
 
     // Nagłówek.
-    updateHeader(makeRefs(), { pathId, pathName: path.name, progressPct: 42 });
+    updateHeader(makeRefs(), { pathId, pathName: path.name });
   });
 }
 

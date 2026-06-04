@@ -5,7 +5,6 @@
     "note": "Katalog kanoniczny (PL). en.json ma identyczny zbiór kluczy. Klucze płaskie, namespaced kropką. {param} = interpolacja w t()."
   },
   "nav.heading.modules": "Moduły",
-  "nav.progress": "Postęp: {pct}%",
   "nav.header.pathIndicator": "Ścieżka {pathId}",
   "nav.header.pathIndicatorNamed": "Ścieżka {pathId} — {pathName}",
   "nav.item.required": " · wymagany",

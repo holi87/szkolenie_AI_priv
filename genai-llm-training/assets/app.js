@@ -38,14 +38,6 @@ function pathName(data, pathId) {
   try { return getPath(data.paths, pathId).name; } catch { return null; }
 }
 
-function progressPct(store, data, pathId) {
-  const prog = store.getProgress();
-  const req = requiredModules(data.paths, pathId);
-  const done = req.filter((id) => prog.modules[id] && prog.modules[id].status === "completed").length;
-  if (prog.finalTest && prog.finalTest.passed) return 100;
-  return req.length ? (done / req.length) * 100 : 0;
-}
-
 /** Średni % quizów inline po modułach wymaganych (brak wyniku = 0, konserwatywnie) — wkład 30% do wyniku ścieżki. */
 function inlineQuizPctFor(prog, req) {
   if (!req.length) return null;
@@ -59,8 +51,7 @@ function start(initialData, ctx = {}) {
   const store = makeStore();
   const refs = {
     view: $("view"), nav: $("module-nav"), navToggle: $("nav-toggle"), resetBtn: $("reset-btn"),
-    pathIndicator: $("path-indicator"), progress: $("progress"), progressFill: $("progress-fill"),
-    progressTrack: document.querySelector(".progress__track"), progressLabel: $("progress-label"),
+    pathIndicator: $("path-indicator"),
     themeToggle: $("theme-toggle"),
     langWrap: $("lang-switch"), langBtn: $("lang-switch-btn"), langLabel: $("lang-switch-label"), langFlag: $("lang-switch-flag"),
     // Statyczny „chrome" headera lokalizowany przez setChrome() (#81) — inaczej na EN zostałby po polsku.
@@ -161,7 +152,7 @@ function start(initialData, ctx = {}) {
   function refreshHeaderAndNav() {
     const pathId = store.getActivePath();
     if (!pathId) return;
-    updateHeader(refs, { pathId, pathName: pathName(data, pathId), progressPct: progressPct(store, data, pathId) });
+    updateHeader(refs, { pathId, pathName: pathName(data, pathId) });
     if (refs.nav.hidden) return;
     const modules = pathModuleList(data.paths, data.modules, pathId, store.getProgress());
     const ft = finalTestStatus(store.getProgress(), data.paths, pathId);
@@ -185,7 +176,7 @@ function start(initialData, ctx = {}) {
   // ----- Ekrany -----
   function showPathSelect() {
     flushModuleTime();
-    refs.pathIndicator.hidden = true; refs.progress.hidden = true; refs.nav.hidden = true;
+    refs.pathIndicator.hidden = true; refs.nav.hidden = true;
     refs.navToggle.hidden = true; refs.resetBtn.hidden = true;
     mount(refs.view, renderPathSelect(data.paths, data.modules, {
       currentPath: store.getActivePath(),
