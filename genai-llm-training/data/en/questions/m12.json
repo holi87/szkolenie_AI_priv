@@ -1,0 +1,549 @@
+{
+  "_meta": {
+    "module": "M12",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M12. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q105",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Verifies whether the participant matches the right quality metric to the symptom of an LLM/RAG answer error.",
+      "prompt": "An evaluated model answer in the SklepDemo corpus contains a sentence that contradicts the source document (it claims the password reset link is reusable, although the source says: single-use). Which quality metric most accurately catches this problem?",
+      "options": [
+        {
+          "id": "A",
+          "text": "faithfulness (fidelity to the sources)"
+        },
+        {
+          "id": "B",
+          "text": "relevance (pertinence to the question)"
+        },
+        {
+          "id": "C",
+          "text": "completeness"
+        },
+        {
+          "id": "D",
+          "text": "accuracy understood as the overall factual correctness of the answer, regardless of the source"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "An answer that contradicts the source content is a classic symptom of low faithfulness — the answer is not faithful to the source it should be based on.",
+      "feedbackIncorrect": "This is not about topical relevance, about a missing part of the answer (completeness), or about overall factual correctness (accuracy) — the answer could sound \"correct\" and still contradict the specific source. It is about agreement with the source, i.e. faithfulness. Review the definition on the quality metrics screen.",
+      "references": [
+        "M12.4",
+        "M12.5"
+      ]
+    },
+    {
+      "id": "Q106",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Verifies the understanding of why an LLM-as-a-judge rubric must include anchor examples and level definitions.",
+      "prompt": "Why does a good evaluation rubric for an LLM-as-a-judge include a definition of each scale level along with anchor examples?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Because they increase the repeatability of the evaluation — different runs score the same way, by the same criteria instead of by a general impression"
+        },
+        {
+          "id": "B",
+          "text": "Because they shorten the evaluator's prompt and lower the token cost"
+        },
+        {
+          "id": "C",
+          "text": "Because they replace the golden set and ground truth, so there is no need to document the source of truth"
+        },
+        {
+          "id": "D",
+          "text": "Because they guarantee that the automated evaluation will never diverge from the expert's evaluation"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Level definitions and anchors establish a shared point of reference, so the evaluation becomes repeatable instead of an irreproducible 'is this good?'.",
+      "feedbackIncorrect": "A rubric does not replace the golden set, nor does it guarantee agreement with the expert; its goal is the repeatability of the evaluation. Go back to the screen about the rubric for LLM-as-a-judge.",
+      "references": [
+        "M12.6"
+      ]
+    },
+    {
+      "id": "Q107",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Verifies the ability to recognize position bias based on a pattern of scores in pairwise comparison.",
+      "prompt": "In the calibration lab, in the pair A3 vs A4 (two answer variants for the same WYM-koszyk criterion) the LLM evaluator gave a higher score to the variant shown first (A3: 2/2, A4: 1/2), while the QA expert scored the second variant higher (A3: 1/2, A4: 2/2). What best explains this discrepancy?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Position bias — the evaluator favors the answer shown first, regardless of its actual quality"
+        },
+        {
+          "id": "B",
+          "text": "Low faithfulness of both answers to the source"
+        },
+        {
+          "id": "C",
+          "text": "Lack of representative questions in the golden set"
+        },
+        {
+          "id": "D",
+          "text": "The expert made a mistake, because the automated evaluation is by definition more objective"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "The verdict depends on the order of presentation, not on the content — this is a defining symptom of position bias; swapping the order of A3/A4 would likely reverse the judge's result.",
+      "feedbackIncorrect": "The pattern 'the higher-scored option was shown first' points to position bias, not to a problem with the source or the golden set. Review the screen about bias and position bias.",
+      "references": [
+        "M12.7",
+        "M12.10"
+      ]
+    },
+    {
+      "id": "Q108",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Verifies the ability to interpret inter-rater agreement and the limitations of the raw % agreement indicator.",
+      "prompt": "On the golden set GS-SklepDemo, 90% of items have a 'pass' rating, and the LLM evaluator and the expert agree on the verdict in 90% of cases. Why can '90% agreement' alone be misleading as evidence of the evaluator's calibration?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Because with a strongly imbalanced distribution of ratings a high % agreement can be achieved almost by chance — you have to check whether they also agree on the rare 'fail' cases"
+        },
+        {
+          "id": "B",
+          "text": "Because 90% is always too low a threshold and 100% agreement should be required"
+        },
+        {
+          "id": "C",
+          "text": "Because with an imbalanced class distribution the agreement indicator must be discarded and the evaluation based solely on the expert's verdict"
+        },
+        {
+          "id": "D",
+          "text": "Because % agreement measures the speed of the evaluation, not its quality"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "When almost everything is 'pass', agreeing 'on pass' is cheap — what matters is whether the evaluator hits the rare, risky 'fail' cases.",
+      "feedbackIncorrect": "The problem is not the threshold value itself (B), nor discarding the agreement indicator in favor of the expert alone (C) — it is the effect of an imbalanced class distribution: with a majority of 'pass', high % agreement is cheap, so you have to check accuracy on the rare 'fail' cases. Go back to the screen about calibration and inter-rater agreement.",
+      "references": [
+        "M12.8"
+      ]
+    },
+    {
+      "id": "Q109",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Verifies whether the participant recognizes the elements that a good golden set should contain.",
+      "prompt": "What should a well-designed golden set (reference set) for the QA use case in SklepDemo contain? Select all correct answers.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Representative questions covering the typical scenarios of the use case"
+        },
+        {
+          "id": "B",
+          "text": "Edge cases and known pitfalls (e.g. a question outside the scope of the source)"
+        },
+        {
+          "id": "C",
+          "text": "A documented source of truth (ground truth) for each item"
+        },
+        {
+          "id": "D",
+          "text": "Randomly collected production logs with raw customer data"
+        },
+        {
+          "id": "E",
+          "text": "Items with an ambiguous expectation that cannot be resolved"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "A golden set is 'regression tests for the model's answers': representative questions, edge cases, and an unambiguous, documented source of truth for each item.",
+      "feedbackIncorrect": "Raw production logs (PII) and items with no resolvable expectation do not belong in a golden set. Review the 'Golden set for a use case' screen.",
+      "references": [
+        "M12.2",
+        "M12.3"
+      ]
+    },
+    {
+      "id": "Q110",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Verifies the recognition of signals indicating the evaluator's position bias.",
+      "prompt": "Which of the following signals indicate that the LLM evaluator may be affected by position bias? Select all correct ones.",
+      "options": [
+        {
+          "id": "A",
+          "text": "In pairwise comparisons the judge consistently picks the answer presented first"
+        },
+        {
+          "id": "B",
+          "text": "After swapping the order of two answers the judge's verdict reverses, even though the content has not changed"
+        },
+        {
+          "id": "C",
+          "text": "The judge's verdict differs from the expert's evaluation precisely in the order-dependent comparison pairs"
+        },
+        {
+          "id": "D",
+          "text": "The judge evaluates answers individually (without comparison) and gives low scores to all answers that contradict the source"
+        },
+        {
+          "id": "E",
+          "text": "The judge assigns identical scores regardless of the order of presentation"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Position bias manifests as the verdict's dependence on order: favoring the first position, reversing the verdict after a swap, and discrepancies concentrated in comparison pairs.",
+      "feedbackIncorrect": "Resilience to order (E) and consistent scoring of content that contradicts the source (D) indicate the absence of position bias. Go back to the screen about position bias and its diagnosis.",
+      "references": [
+        "M12.7",
+        "M12.10"
+      ]
+    },
+    {
+      "id": "Q111",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L4",
+      "bloom": "evaluation",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Verifies the ability to select a set of metrics adequate to a complex quality question.",
+      "prompt": "The quality question reads: 'Does the model's answer list all the payment terms from the source document and not add terms from outside the source?'. Which metrics best cover such an evaluation together? Select all that apply.",
+      "options": [
+        {
+          "id": "A",
+          "text": "completeness — whether all the payment terms required by the criterion are covered"
+        },
+        {
+          "id": "B",
+          "text": "faithfulness — whether the answer does not add terms that contradict the source or are absent from it"
+        },
+        {
+          "id": "C",
+          "text": "groundedness — whether the stated terms can be grounded in the provided context"
+        },
+        {
+          "id": "D",
+          "text": "position bias alone as a single metric of content quality"
+        },
+        {
+          "id": "E",
+          "text": "relevance only, because the question concerns payments"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "The question has two dimensions: coverage of all the terms (completeness) and the absence of content from outside the source plus grounding in the context (faithfulness, groundedness).",
+      "feedbackIncorrect": "Position bias is an evaluator risk, not a content metric; relevance alone will measure neither completeness nor fidelity to the source. Review the screens about metrics and how to select them.",
+      "references": [
+        "M12.4",
+        "M12.5"
+      ]
+    },
+    {
+      "id": "Q112",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L4",
+      "bloom": "evaluation",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Verifies the ability to assess which elements make an LLM-as-a-judge rubric reliable and resilient to bias.",
+      "prompt": "You are designing a rubric for an LLM-as-a-judge evaluating the faithfulness of answers in GS-SklepDemo. Which elements should it include so that the evaluation is repeatable and resilient to bias? Select all that apply.",
+      "options": [
+        {
+          "id": "A",
+          "text": "A clear evaluation criterion and a scale with a definition of each level (e.g. 0–2)"
+        },
+        {
+          "id": "B",
+          "text": "Anchor examples for the extreme and intermediate levels"
+        },
+        {
+          "id": "C",
+          "text": "The instruction 'evaluate solely against the source', not against the model's general knowledge"
+        },
+        {
+          "id": "D",
+          "text": "A rule to swap the order in pairwise comparisons, to limit position bias"
+        },
+        {
+          "id": "E",
+          "text": "A rule of rewarding longer answers as inherently more complete"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "feedbackCorrect": "A repeatable, bias-resilient rubric combines a clear criterion, a defined scale, anchors, evaluation against the source, and mitigation of position bias by swapping the order.",
+      "feedbackIncorrect": "Rewarding length is length bias — it inflates the score regardless of content. Go back to the screens about the rubric and about bias/position bias.",
+      "references": [
+        "M12.6",
+        "M12.7"
+      ]
+    },
+    {
+      "id": "Q113",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Verifies the interpretation of a discrepancy in which the evaluator inflates the score relative to the expert for an answer that contradicts the source.",
+      "prompt": "In the calibration lab, item A2 (a question about the deadline of the returns policy in SklepDemo) has an expert faithfulness score of 0/2 — the answer contradicts the source — while the LLM evaluator gave 2/2. How is this discrepancy best interpreted and what should be done about it?",
+      "options": [
+        {
+          "id": "A",
+          "text": "The judge inflates the score of an answer that contradicts the source — this is a signal to improve the rubric (an emphatic instruction 'contradiction with the source = 0') and re-evaluate, not to ignore it"
+        },
+        {
+          "id": "B",
+          "text": "Since the judge gave 2/2, the answer is good — the golden set should be updated by raising the ground truth to 2/2"
+        },
+        {
+          "id": "C",
+          "text": "The discrepancy is insignificant, because it is only one item — it can be omitted from the report"
+        },
+        {
+          "id": "D",
+          "text": "This is position bias, so it is enough to swap the order of the answers and the problem will disappear"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "A contradiction with the source rated 0/2 by the expert and 2/2 by the judge is an inflation requiring a rubric correction and re-evaluation — the golden set (ground truth) is the benchmark here.",
+      "feedbackIncorrect": "You must not adjust the ground truth to the judge's error or skip the discrepancy; this is not position bias (there is no comparison pair). Repeat the calibration loop from the screen about evaluator agreement.",
+      "references": [
+        "M12.8",
+        "M12.10"
+      ]
+    },
+    {
+      "id": "Q114",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L4",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Verifies the choice of the correct mitigation after detecting position bias in the calibration flow.",
+      "prompt": "The diagnosis in the lab confirms position bias in the pair A3/A4: the judge favors the variant shown first. You have to convince the team how to reliably confirm and limit this effect before setting an acceptance threshold. Which decision is best?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Repeat the evaluation with a swapped order A4/A3 (and/or average both arrangements) — if the verdict reverses, this confirms the bias; build order swapping permanently into the rubric"
+        },
+        {
+          "id": "B",
+          "text": "Trust the judge's first verdict, because the automated evaluation is faster and cheaper than the expert"
+        },
+        {
+          "id": "C",
+          "text": "Remove the pair A3/A4 from the golden set so that the % agreement goes up"
+        },
+        {
+          "id": "D",
+          "text": "Raise the acceptance threshold for all items to compensate for the uncertainty of the evaluation"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Swapping the order (and averaging both arrangements) simultaneously confirms position bias and neutralizes it — this is the standard mitigation written into the rubric before the threshold decision.",
+      "feedbackIncorrect": "Trusting an order-dependent verdict, removing inconvenient items, or blindly raising the threshold do not remove the bias — they mask it. Go back to the screens about position bias and calibration.",
+      "references": [
+        "M12.7",
+        "M12.10"
+      ]
+    },
+    {
+      "id": "Q115",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L4",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Verifies making a conservative go/no-go decision against an established acceptance threshold.",
+      "prompt": "The acceptance threshold for deploying a new prompt in SklepDemo reads: 'faithfulness ≥ 0.9 on the golden set AND zero items contradicting the source'. The new version reaches an average faithfulness of 0.93, but one item (analogous to A2) contradicts the source. Which decision is correct?",
+      "options": [
+        {
+          "id": "A",
+          "text": "No-go — the condition 'zero items contradicting the source' is not met, despite the good average; first remove the contradiction, then evaluate again"
+        },
+        {
+          "id": "B",
+          "text": "Go — the average of 0.93 exceeds 0.9, so the threshold is met regardless of a single item"
+        },
+        {
+          "id": "C",
+          "text": "Go with the threshold lowered to 0.85, since only one item fails"
+        },
+        {
+          "id": "D",
+          "text": "Conditional go — deploy to production and monitor the contradicting item along the way"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "The threshold is a conjunction of conditions; the unmet hard condition 'zero contradictions' forces a no-go regardless of the good average — a conservative default behavior.",
+      "feedbackIncorrect": "You must not bypass a hard condition with an average, lower the threshold, or deploy 'on a trial basis' — that is circumventing the acceptance criterion. Review the screen about the threshold and the go/no-go decision.",
+      "references": [
+        "M12.9"
+      ]
+    },
+    {
+      "id": "Q116",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L4",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Verifies under what condition the automated evaluation may be admitted to a go/no-go decision after successful calibration.",
+      "prompt": "After two iterations of improving the rubric, the agreement of the LLM evaluator with the expert on the golden set GS-SklepDemo rose from 4/6 to 6/6, and the discrepancies disappeared. The team wants to use the automated evaluation for the go/no-go release decision. What condition properly admits the automated evaluation to this decision?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Set an acceptance threshold (required agreement with the expert on the golden set and maintaining it on a fresh sample) along with periodic recalibration with the expert — a single 6/6 run does not guarantee durability."
+        },
+        {
+          "id": "B",
+          "text": "Once 6/6 is reached, it guarantees accuracy forever — the expert can be removed from the process."
+        },
+        {
+          "id": "C",
+          "text": "Admit the automated evaluation only if the judge agrees 100% with every future answer, otherwise never use it."
+        },
+        {
+          "id": "D",
+          "text": "An acceptance threshold is unnecessary, because an LLM-as-a-judge is by definition objective."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Admitting the automated evaluation requires an established acceptance threshold and maintaining it on a fresh sample, plus periodic recalibration with the expert — calibration is continuous, not one-off.",
+      "feedbackIncorrect": "Neither \"one-time 6/6 = forever\", nor \"100% on every future answer\", nor \"the judge is objective\" are correct — what is needed is an acceptance threshold and periodic recalibration. Go back to the screen about the quality acceptance threshold.",
+      "references": [
+        "M12.9",
+        "M12.10"
+      ]
+    }
+  ]
+}

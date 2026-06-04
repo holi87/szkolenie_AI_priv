@@ -1,0 +1,546 @@
+{
+  "_meta": {
+    "module": "M8",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M8. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q061",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "The participant analyzes an LLM-generated set of test cases and identifies a coverage gap relative to a requirement.",
+      "prompt": "Requirement for the NotkaApp application (fictional): a user resets their password via an email link valid for 30 minutes; after 3 failed login attempts the account is locked for 15 minutes. The LLM generated the cases: TC1 — successful reset; TC2 — link expired after 30 min; TC3 — 3 wrong passwords -> account locked. Which coverage gap is the most important one to fill here?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Missing case for reusing the same reset link (a single-use link used twice)"
+        },
+        {
+          "id": "B",
+          "text": "Missing case checking the color of the Reset password button"
+        },
+        {
+          "id": "C",
+          "text": "Missing case with an exactly 30-minute administrator session duration"
+        },
+        {
+          "id": "D",
+          "text": "Missing case verifying the application logo on the login page"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "A reset link is inherently single-use and time-limited, so the lack of a test for its reuse is a real security gap in the coverage of the requirement.",
+      "feedbackIncorrect": "The coverage gap concerns behavior aligned with the requirement (the link's validity and single-use nature), not cosmetic elements. Go back to the screen on coverage gaps.",
+      "references": [
+        "M8.3",
+        "M8.2"
+      ]
+    },
+    {
+      "id": "Q062",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant recognizes a sham case in an LLM output (an assertion that verifies nothing) and distinguishes it from a valuable test.",
+      "prompt": "In the set of cases for NotkaApp you find: TC4 — 'Open the password reset form and check that the form opens; expected result: none'. How should TC4 be classified?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Sham test — no defined expected result, the assertion actually checks nothing"
+        },
+        {
+          "id": "B",
+          "text": "A valid negative case for the account lockout scenario"
+        },
+        {
+          "id": "C",
+          "text": "A valid boundary case for the 30-minute link validity"
+        },
+        {
+          "id": "D",
+          "text": "A duplicate of case TC1 successful reset, which can be merged right away"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Without a defined expected result the test will always 'pass' and verifies nothing — that is the definition of a sham test.",
+      "feedbackIncorrect": "The key is the missing expected result, not the scenario type or similarity to another TC. Review the screen on duplicates and sham tests.",
+      "references": [
+        "M8.4"
+      ]
+    },
+    {
+      "id": "Q063",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant assesses whether a generated LLM output is suitable for QA documentation, identifying a fabricated fact that contradicts the requirement.",
+      "prompt": "The LLM generated a case description for NotkaApp with the note: 'After 3 failed attempts the account is locked for 24 hours, and the reset link is valid indefinitely'. The requirement states: lockout 15 minutes, link valid for 30 minutes. What is the most appropriate content-review decision before pasting this into the documentation?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Reject the fragment — it contains facts that contradict the requirement (fabricated values of 24 h and indefinitely), it needs correction before use"
+        },
+        {
+          "id": "B",
+          "text": "Accept it as is — the LLM usually provides values closer to reality than the requirement"
+        },
+        {
+          "id": "C",
+          "text": "Accept it and add a note that the values may vary depending on the application version"
+        },
+        {
+          "id": "D",
+          "text": "Reject the entire password reset test module, because the output contains one error"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Output that contradicts the requirement contains fabricated facts (hallucinations) and cannot enter the documentation without correction — content review ends with a 'fix/reject the fragment' decision.",
+      "feedbackIncorrect": "The requirement is the source of truth, not the LLM output; nor should the entire work be rejected because of a single fragment. Go back to the accept/fix/reject rubric.",
+      "references": [
+        "M8.6"
+      ]
+    },
+    {
+      "id": "Q064",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant defines the boundaries of human-in-the-loop, identifying a QA task in which the LLM remains an assistant while a human makes the decisions.",
+      "prompt": "A QA team wants to use an LLM for NotkaApp testing. Which proposal best captures the 'assistant, not decision-maker' principle?",
+      "options": [
+        {
+          "id": "A",
+          "text": "The LLM generates a draft of test cases and a risk checklist, while the tester approves the test scope and decides on release approval"
+        },
+        {
+          "id": "B",
+          "text": "The LLM independently approves the release to production if the generated tests pass"
+        },
+        {
+          "id": "C",
+          "text": "The LLM ultimately assesses critical risk and closes defects without the tester's involvement"
+        },
+        {
+          "id": "D",
+          "text": "The tester manually rewrites every case, and the LLM is not used at any stage"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "The LLM speeds up creating drafts and proposals, but decisions about acceptance, critical risk and release belong to the human (human-in-the-loop).",
+      "feedbackIncorrect": "Decisions about release and critical risk assessment cannot be handed over to the LLM, but giving up the assistant entirely wastes its value. Review the assistant vs. decision-maker screen.",
+      "references": [
+        "M8.7",
+        "M8.1"
+      ]
+    },
+    {
+      "id": "Q065",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant identifies categories of coverage gaps that an LLM often does not generate without an explicit instruction.",
+      "prompt": "You are generating test cases for the password reset feature in NotkaApp. Which categories are most often omitted by the LLM and require deliberate completion? Select all that apply.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Boundary cases (e.g., a link used exactly in the 30th minute)"
+        },
+        {
+          "id": "B",
+          "text": "Error paths and exceptional states (e.g., a link used a second time, concurrent sessions)"
+        },
+        {
+          "id": "C",
+          "text": "Happy path of the password reset with valid data"
+        },
+        {
+          "id": "D",
+          "text": "Test data for extreme values (e.g., an email of maximum length)"
+        },
+        {
+          "id": "E",
+          "text": "The browser window title on the confirmation page"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "D"
+      ],
+      "feedbackCorrect": "The LLM usually covers the happy path well, while omitting boundary cases, error paths and extreme data — that is exactly where we look for coverage gaps.",
+      "feedbackIncorrect": "The happy path is usually covered, and the window title is a cosmetic detail; the gaps concern boundaries, error paths and extreme data. Go back to the screen on coverage gaps.",
+      "references": [
+        "M8.3",
+        "M8.2"
+      ]
+    },
+    {
+      "id": "Q066",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant recognizes the characteristics of a duplicate and a sham test in a generated set of cases.",
+      "prompt": "You are reviewing a generated set of cases for NotkaApp for quality. Which statements about duplicates and sham tests are true? Select all that apply.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Two cases checking the same conditions with a different description are a duplicate, despite the different wording"
+        },
+        {
+          "id": "B",
+          "text": "A case without an expected result is a sham, because its assertion verifies nothing"
+        },
+        {
+          "id": "C",
+          "text": "A larger number of generated cases always means better coverage"
+        },
+        {
+          "id": "D",
+          "text": "A test with a 'true == true' assertion unrelated to the feature is a sham"
+        },
+        {
+          "id": "E",
+          "text": "A duplicate is harmless, because two identical tests increase confidence in the result"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "D"
+      ],
+      "feedbackCorrect": "A duplicate is the same conditions described differently, and a sham test has an assertion that verifies nothing; the number of cases is not a measure of coverage.",
+      "feedbackIncorrect": "A larger number of tests does not equal better coverage, and a duplicate increases maintenance cost without value. Review the screen on duplicates and sham tests.",
+      "references": [
+        "M8.4"
+      ]
+    },
+    {
+      "id": "Q067",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant applies the content-review criteria that an LLM output must meet to enter the QA documentation.",
+      "prompt": "Before you paste an LLM-generated set of cases into the official QA documentation of SklepDemo (fictional), which content-review criteria must be met? Select all that apply.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Consistency with the requirement (no values that contradict the acceptance criteria)"
+        },
+        {
+          "id": "B",
+          "text": "No fabricated facts (hallucinations) and verifiability of the content"
+        },
+        {
+          "id": "C",
+          "text": "No sensitive data and no real PII in the examples"
+        },
+        {
+          "id": "D",
+          "text": "The output should be as long as possible, because greater volume signals quality"
+        },
+        {
+          "id": "E",
+          "text": "The output should be accepted solely because it was generated by a newer model"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Admission to the documentation requires consistency with the requirement, no hallucinations, verifiability and no sensitive data — volume and model version are not criteria.",
+      "feedbackIncorrect": "Text length and model version are not quality criteria; what matters is consistency, verifiability and the absence of sensitive data. Go back to the content-review rubric.",
+      "references": [
+        "M8.6"
+      ]
+    },
+    {
+      "id": "Q068",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant distinguishes QA tasks in which the LLM is an assistant from decisions reserved for a human.",
+      "prompt": "Which QA tasks can be safely entrusted to an LLM as an assistant (with later human review)? Select all that apply.",
+      "options": [
+        {
+          "id": "A",
+          "text": "A draft of test cases from the requirement as a starting point"
+        },
+        {
+          "id": "B",
+          "text": "A proposal of risk categories for a risk-based testing checklist"
+        },
+        {
+          "id": "C",
+          "text": "Rephrasing and organizing existing test descriptions"
+        },
+        {
+          "id": "D",
+          "text": "The final decision on approving a release to production"
+        },
+        {
+          "id": "E",
+          "text": "Independently closing a critical defect without tester verification"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Drafts, proposals of risk categories and organizing content are the assistant's work; decisions about release and critical defects belong to the human.",
+      "feedbackIncorrect": "The decision about release and closing critical defects is the role of the decision-maker (the human), not the LLM. Review the assistant vs. decision-maker screen.",
+      "references": [
+        "M8.7",
+        "M8.1"
+      ]
+    },
+    {
+      "id": "Q069",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "The participant assigns NotkaApp functionality to the appropriate risk category in a risk-based testing checklist.",
+      "prompt": "Match a NotkaApp feature or artifact to the most appropriate risk category in a risk-based testing checklist.",
+      "pairs": [
+        {
+          "left": "Account lockout after 3 failed login attempts",
+          "right": "Security (protection against a brute-force attack)"
+        },
+        {
+          "left": "Storing the user's email in the database",
+          "right": "Data (protection of personal data and confidentiality)"
+        },
+        {
+          "left": "Reset link generation time under heavy load",
+          "right": "Performance (response time under load)"
+        },
+        {
+          "left": "Handling the reset form with a screen reader",
+          "right": "Accessibility (WCAG compliance)"
+        }
+      ],
+      "feedbackCorrect": "Each feature goes into the risk category that best describes its main threat — that is the core of a risk-based testing checklist.",
+      "feedbackIncorrect": "Categories get confused when you look at the technology instead of the feature's main threat (security, data, performance, accessibility). Review the screen on the risk checklist.",
+      "references": [
+        "M8.5"
+      ]
+    },
+    {
+      "id": "Q070",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "The participant assigns a typical defect of generated test cases to its consequence in QA.",
+      "prompt": "Match a typical defect of LLM-generated test cases for a SklepDemo requirement (fictional) to its main consequence in QA.",
+      "pairs": [
+        {
+          "left": "A generated case without an expected result",
+          "right": "Sham test — always passes, does not detect a defect"
+        },
+        {
+          "left": "Two cases with the same steps and data",
+          "right": "Duplicate — bloating the set without new coverage"
+        },
+        {
+          "left": "A case checking a field that is not in the requirement",
+          "right": "Scope hallucination — a test beyond the requirement"
+        },
+        {
+          "left": "Missing case for an error path described in the requirement",
+          "right": "Coverage gap — an untested scenario from the requirement"
+        }
+      ],
+      "feedbackCorrect": "Each defect has a different consequence for the set's quality: a sham test does not detect errors, a duplicate adds no coverage, a scope hallucination tests something outside the requirement, and a coverage gap leaves a risk untested.",
+      "feedbackIncorrect": "Distinguish defects by their effect: no expected result = sham test, same steps = duplicate, a field outside the requirement = scope hallucination, a missing error path = coverage gap. Review the QA workbench screen on gaps and sham tests.",
+      "references": [
+        "M8.6",
+        "M8.7"
+      ]
+    },
+    {
+      "id": "Q071",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "The participant assigns a specific risk from a NotkaApp feature to the test scenario that verifies it.",
+      "prompt": "Match a risk related to the NotkaApp password reset feature to the test case that verifies it.",
+      "pairs": [
+        {
+          "left": "Risk: the reset link works after expiration",
+          "right": "Test: attempt to use the link after 30 minutes have passed"
+        },
+        {
+          "left": "Risk: a single-use link works multiple times",
+          "right": "Test: using the same reset link twice"
+        },
+        {
+          "left": "Risk: the account does not lock after failed attempts",
+          "right": "Test: 3 consecutive failed login attempts and a check of the lockout"
+        },
+        {
+          "left": "Risk: reset works for a non-existent account",
+          "right": "Test: requesting a reset for an unregistered email"
+        }
+      ],
+      "feedbackCorrect": "Each risk is verified by a case that directly attempts to trigger the undesired behavior — this links risk-based testing with coverage.",
+      "feedbackIncorrect": "The test must target exactly the threat described by the risk (e.g., reusing the link, no lockout). Review the screen on the risk checklist and coverage gaps.",
+      "references": [
+        "M8.5",
+        "M8.3"
+      ]
+    },
+    {
+      "id": "Q072",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "The participant assigns a quality problem in a generated output to the appropriate corrective action by the tester.",
+      "prompt": "Match a detected problem in an LLM-generated QA artifact to the appropriate corrective action.",
+      "pairs": [
+        {
+          "left": "Two cases check the same conditions with a different description",
+          "right": "Merge the duplicates and keep one case"
+        },
+        {
+          "left": "A case without a defined expected result",
+          "right": "Remove or complete the assertion (sham test)"
+        },
+        {
+          "left": "Missing case for account lockout after 3 attempts",
+          "right": "Add a case covering the coverage gap"
+        },
+        {
+          "left": "The output states a lockout of 24 h instead of 15 min",
+          "right": "Fix the fact that contradicts the requirement before use"
+        }
+      ],
+      "feedbackCorrect": "Each type of problem in the output has a corresponding action: merging a duplicate, fixing a sham test, filling a gap, or correcting a fabricated fact.",
+      "feedbackIncorrect": "The corrective action depends on the type of problem — do not confuse a duplicate with a coverage gap or a sham test with a hallucination. Review the screens on duplicates and output review.",
+      "references": [
+        "M8.4",
+        "M8.6"
+      ]
+    }
+  ]
+}

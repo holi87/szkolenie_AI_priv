@@ -1,0 +1,370 @@
+{
+  "_meta": {
+    "module": "M9",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M9. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q073",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "The participant distinguishes an agent from a chatbot and from a workflow with a tool, based on who decides the next steps and whether side effects are produced.",
+      "prompt": "How does an agent differ from a chatbot and from a workflow with a single tool (tool use)?",
+      "options": [
+        {
+          "id": "A",
+          "text": "An agent independently plans and executes a sequence of steps and decides on its own which tool to call and when."
+        },
+        {
+          "id": "B",
+          "text": "An agent is a chatbot with a nicer interface — it only generates text and performs no actions."
+        },
+        {
+          "id": "C",
+          "text": "An agent always calls exactly one predetermined tool in a rigid, unchangeable flow."
+        },
+        {
+          "id": "D",
+          "text": "An agent differs from a chatbot solely in that it responds faster and handles a longer context."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Yes — the defining characteristic of an agent is independently planning and choosing the next steps and tools, which neither a chatbot nor a rigid workflow does.",
+      "feedbackIncorrect": "These describe a chatbot (text only) or a workflow with tool use (one predetermined tool). Review the screen on the three integration modes and pay attention to who decides the steps.",
+      "references": [
+        "M9.2"
+      ]
+    },
+    {
+      "id": "Q074",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "The participant correctly recognizes the meaning of the rollback control lever in the model of minimal control over an agent's actions.",
+      "prompt": "In the “4 control levers” model of an agent's actions — what does the rollback lever mean?",
+      "options": [
+        {
+          "id": "A",
+          "text": "The ability to undo a change made by the agent, returning to the state before it was applied."
+        },
+        {
+          "id": "B",
+          "text": "A record of all the agent's actions together with the time they were performed."
+        },
+        {
+          "id": "C",
+          "text": "A gate where a human approves an action before the agent performs it."
+        },
+        {
+          "id": "D",
+          "text": "Restricting the agent to the smallest necessary scope of access."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Rollback is the ability to undo a change — it distinguishes reversible from irreversible actions and determines the strength of the remaining safeguards.",
+      "feedbackIncorrect": "You are confusing the levers: B is the audit log, C is human-in-the-loop, D is permission scope. Review the screen on the four control levers.",
+      "references": [
+        "M9.6"
+      ]
+    },
+    {
+      "id": "Q075",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "The participant classifies a specific description of an AI tool's behavior as an agent, rather than a chatbot or a workflow, based on the independent chain of steps.",
+      "prompt": "A tool in the TEST environment reads the backlog from TestRail-SANDBOX on its own, decides which tickets are duplicates, merges them and opens 5 pull requests in the synt-shop repository — without being given a list of steps. Which integration mode is this?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Agent — it independently plans and executes multiple steps and selects tools."
+        },
+        {
+          "id": "B",
+          "text": "Chatbot — it only replies with text to questions about the backlog."
+        },
+        {
+          "id": "C",
+          "text": "Workflow with tool use — one predetermined tool in a rigid flow."
+        },
+        {
+          "id": "D",
+          "text": "An ordinary full-text search in the test management system."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Yes — the tool itself chooses the steps (analysis, merging, opening 5 PRs) and different tools without a given scenario, which is a characteristic of an agent.",
+      "feedbackIncorrect": "A chatbot only generates text, and a workflow executes one predetermined tool. Here the tool combines multiple steps on its own and operates on a repository — that is an agent. Review the distinction between the modes.",
+      "references": [
+        "M9.2",
+        "M9.3"
+      ]
+    },
+    {
+      "id": "Q076",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "The participant selects the minimal access scope and the appropriate control gate for a task with an irreversible effect (sending an email).",
+      "prompt": "You delegate task Z3 to an agent: “Send the weekly report to qa-team@przyklad.test”. A sent email is irreversible (it cannot be recalled). How should you configure the permissions and control for this task?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Access to send the email + human-in-the-loop: a human approves the content before it is sent."
+        },
+        {
+          "id": "B",
+          "text": "Full access to the mailbox (read and send) without approval, because it's only an internal report."
+        },
+        {
+          "id": "C",
+          "text": "Access to send without a gate, but with rollback of the email enabled after an error is detected."
+        },
+        {
+          "id": "D",
+          "text": "No access to email — the agent saves the report in the synt-shop repository and never sends anything."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "An irreversible action (a sent email) requires an HITL gate before the effect, with a minimal scope limited to sending — exactly what Z3 needs.",
+      "feedbackIncorrect": "An email cannot be recalled, so rollback does not exist (C), and no gate combined with excessive access is high risk (B). D does not accomplish the task. Review how to choose the gate for irreversible actions.",
+      "references": [
+        "M9.8",
+        "M9.6"
+      ]
+    },
+    {
+      "id": "Q077",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant selects the minimal access scope to the repository, restricting the agent to a working branch with a review gate instead of writing to main.",
+      "prompt": "Task Z4: the agent is to “Open a pull request with a fix in the synt-shop repository”. Which access scope is minimal and safe?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Write access limited to a working branch with opening a PR; no write permission (push/merge) to the main branch."
+        },
+        {
+          "id": "B",
+          "text": "Write access to the main branch, so the agent can immediately merge the fix without waiting for review."
+        },
+        {
+          "id": "C",
+          "text": "Full administrative access to the repository, including deleting branches and changing settings."
+        },
+        {
+          "id": "D",
+          "text": "Read-only access to the repository — the agent will describe the fix in a comment but will not open a PR."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Write access to a working branch + a PR provides a natural review gate, and the lack of permission to main keeps the scope minimal for the task.",
+      "feedbackIncorrect": "Write access to main or admin access are excessive permissions with a large impact (B, C), and read-only does not accomplish the task (D). Review the principle of the smallest necessary scope and the role of a PR as a gate.",
+      "references": [
+        "M9.8",
+        "M9.7"
+      ]
+    },
+    {
+      "id": "Q078",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant evaluates which of the delegated tasks carries the greatest residual risk and requires the strongest control, weighing reversibility and impact.",
+      "prompt": "An agent in the PipeDemo CI (TEST environment) has four tasks to perform. Which one requires the STRONGEST control (HITL gate + full log + scope restriction), because it combines the greatest impact with the hardest reversibility?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Change the configuration of the PipeDemo TEST environment (potential write outside TEST, hard to undo)."
+        },
+        {
+          "id": "B",
+          "text": "Summarize 10 tickets from TestRail-SANDBOX (read-only, no changes)."
+        },
+        {
+          "id": "C",
+          "text": "Read the logs of the regression test runs (read-only)."
+        },
+        {
+          "id": "D",
+          "text": "Create an internal text report from the results (local write, easy to overwrite)."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Changing the environment configuration has a large impact and a risk of writing outside TEST, and it is hard to undo — the rule of thumb “irreversible + large impact = gate + full audit” points to it.",
+      "feedbackIncorrect": "Read-only operations (B, C) do not change state, and a local report is easy to overwrite (D). The strongest control is required by an action with a large impact and difficult reversibility. Review the classification of tasks requiring an audit.",
+      "references": [
+        "M9.7",
+        "M9.8"
+      ]
+    },
+    {
+      "id": "Q079",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant identifies multiple real risks arising from granting an agent access to files, email, a repository and a test system.",
+      "prompt": "Which of the following are real risks of granting an agent broad access to files, email, a repository and a test management system? Select all that apply.",
+      "options": [
+        {
+          "id": "A",
+          "text": "The agent may fall victim to prompt injection hidden in the content it reads (e.g. in a ticket comment) and perform an unintended action."
+        },
+        {
+          "id": "B",
+          "text": "A wrong decision in the first step propagates through the subsequent steps, because the agent acts without pausing."
+        },
+        {
+          "id": "C",
+          "text": "The agent may cause an irreversible effect, e.g. send an email externally or delete files that cannot be restored."
+        },
+        {
+          "id": "D",
+          "text": "Granting broad access is safe in itself, as long as the agent uses a model with conversation memory disabled."
+        },
+        {
+          "id": "E",
+          "text": "End-to-end encryption of communication eliminates the risks arising from actions performed by the agent."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "The real risks are susceptibility to prompt injection, error propagation between steps, and irreversible effects. The control is restricting the scope and HITL — not conversation memory or encryption alone.",
+      "feedbackIncorrect": "D and E are misleading promises: disabled conversation memory does not restrict permissions, and transport encryption does not stop the agent's action itself. Review the access map and the sources of risk (M9.4–M9.5).",
+      "references": [
+        "M9.4",
+        "M9.5"
+      ]
+    },
+    {
+      "id": "Q080",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant identifies the elements of minimal control and audit of an agent's actions, separating them from apparent safeguards.",
+      "prompt": "Which elements genuinely make up the minimal control and audit of a QA agent's actions? Select all that apply.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Permission scope — restricting the agent to the smallest necessary scope of access."
+        },
+        {
+          "id": "B",
+          "text": "Audit log — a record of what the agent did and when, allowing the run to be reconstructed."
+        },
+        {
+          "id": "C",
+          "text": "Human-in-the-loop — a human-approval gate before an irreversible effect."
+        },
+        {
+          "id": "D",
+          "text": "Rollback — the ability to undo an applied change, returning to the previous state."
+        },
+        {
+          "id": "E",
+          "text": "Granting the agent full administrator permissions, so as not to block it with a lack of access."
+        },
+        {
+          "id": "F",
+          "text": "Disabling logs so the agent runs faster and leaves no traces."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "feedbackCorrect": "The four control levers are: permission scope, audit log, HITL gate and rollback. Together they provide minimal control and auditability.",
+      "feedbackIncorrect": "E and F are anti-patterns: full administrator permissions increase the risk, and disabling logs destroys the audit. Review the “4 control levers” model and the role of the audit log (M9.6, M9.8).",
+      "references": [
+        "M9.6",
+        "M9.8"
+      ]
+    }
+  ]
+}

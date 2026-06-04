@@ -383,6 +383,16 @@ function checkI18nCatalogs() {
     const k = keySet(cat);
     for (const key of plKeys) if (!k.has(key)) fail(`i18n ${lang}.json: brak klucza UI "${key}" (locale niekompletny wzgl. pl)`);
     for (const key of k) if (!plKeys.has(key)) fail(`i18n ${lang}.json: klucz-sierota "${key}" (nieobecny w pl.json)`);
+    // Locale z KOMPLETEM danych (data/<lang>/) musi mieć katalog UI w PEŁNI przetłumaczony — nie szkielet.
+    // #80 sprawdza tylko ZBIÓR kluczy; puste wartości fallbackują cicho do PL i przeszłyby niezauważone (#81).
+    if (LOCALES.includes(lang)) {
+      for (const key of plKeys) {
+        const v = cat[key];
+        if (typeof v !== "string" || v.trim() === "") {
+          fail(`i18n ${lang}.json: pusta wartość dla "${key}" — locale ${lang} ma dane data/${lang}/, więc katalog UI musi być przetłumaczony (nie pusty szkielet)`);
+        }
+      }
+    }
   }
   report.push(`Katalogi UI: ${Object.keys(catalogs).sort().join(",")} | klucze PL=${plKeys.size} (kompletność zbioru wzgl. pl)`);
 }

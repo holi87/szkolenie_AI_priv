@@ -1,0 +1,149 @@
+{
+  "_meta": {
+    "issue": "#21 [21][M4] Wdroż moduły M3-M6",
+    "storyboard": "docs/storyboard/m05-vector-db.md",
+    "interaction": "Retrieval debugger (kind: tune)",
+    "scenario": "SC-RAG-01 — mini-korpus dokumentacji QA (DOC1-DOC4, NotkaApp)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (NotkaApp/SklepDemo/PipeDemo). Output interakcji jest prerenderowany (autorski lookup po poziomach), nie z żywego retrievalu. ZERO PII, ZERO realnych domen.",
+    "note": "Egzemplarz typu tune wg m03: kontrolki retrievalu → autorskie efekty (recall/precision) + scorowany checkpoint diagnostyczny. Storyboard 1-8 → screens; ekran 9 → interaction; ekran 10 (quiz) zasilany z questions/m05.json; ekran 11 → summary."
+  },
+  "module": "M5",
+  "intro": "When a team builds a search tool over test documentation or a RAG system, the quality of the answer depends on WHAT retrieval found in the first place. A tester must be able to assess whether the returned passages are relevant, and diagnose why they are not. This module shows the role of the vector database, the exact vs. ANN trade-off, and the impact of the index, metadata, and chunks on the result.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Why does a tester need a vector database?",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "More and more often, QA tests features based on semantic search: a search tool over test documentation or a RAG assistant that answers questions about a product. In both cases, the relevance of the final answer starts with retrieval — with which passages were found." },
+        { "kind": "paragraph", "text": "Your job as a tester: assess whether the returned passages are relevant, and diagnose why they sometimes are not. In this module you will learn the role of the vector database, the exact vs. ANN difference, the impact of the index, metadata, and chunks, and finally you will use a search debugger on the synthetic NotkaApp corpus." },
+        { "kind": "callout", "variant": "info", "title": "What we will build here", "text": "We work on a made-up mini-corpus of QA documentation for the NotkaApp application — all data is synthetic, with no real customers and no PII." }
+      ]
+    },
+    {
+      "id": "s2-czym-jest",
+      "title": "What a vector database is",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Vector database", "original": "vector database", "text": "a store that holds the embeddings of passages (from M4) and lets you quickly find the vectors most similar to the query embedding." },
+        { "kind": "paragraph", "text": "Semantic search works by meaning, not by literal words. The path is fixed: query → query embedding → nearest vectors in the database → associated text passages. Unlike keyword search, which matches the same words — here it is semantic closeness that counts." },
+        { "kind": "diagram", "title": "From query to passages", "caption": "The semantic search flow.", "textAlt": "Four steps in a single sequence: (1) a text query, for example \"after how long does a password reset link expire\", (2) the embeddings model turns it into a vector, (3) the vector database compares that vector with the embeddings of passages and selects the nearest ones, (4) it returns the associated text passages, for example DOC3 about password reset." },
+        { "kind": "callout", "variant": "info", "title": "The NotkaApp mini-corpus", "text": "A 4-passage corpus circulates throughout this module: DOC1 — the session token expires after 30 min of inactivity; DOC2 — password policy (min. 12 characters, lockout after 3 failures); DOC3 — password reset: the email link is valid for 30 min, single-use; DOC4 — marketing FAQ (benefits and pricing)." }
+      ]
+    },
+    {
+      "id": "s3-dokladne-czy-przyblizone",
+      "title": "Exact or approximate?",
+      "type": "decision",
+      "blocks": [
+        { "kind": "paragraph", "text": "One decision before choosing an approach. You have two scenarios on the NotkaApp corpus. Scenario A: a small corpus (a dozen or so passages) and a requirement that NO relevant passage be missed during coverage verification. Scenario B: a corpus counted in millions of passages, where response speed matters above all." },
+        { "kind": "paragraph", "text": "Consider this: when can you afford to scan all the vectors (exact, but slower), and when do you have to take a shortcut through an index (faster, but with the risk of missing something)? In a moment we will break this trade-off down into its components." }
+      ]
+    },
+    {
+      "id": "s4-exact-vs-ann",
+      "title": "Exact vs. ANN — the trade-off",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Exact search", "original": "exact / brute force", "text": "scans all vectors in the database and returns the truly nearest ones — accurate, but slow; worthwhile for a small corpus." },
+        { "kind": "definition", "term": "ANN", "original": "approximate nearest neighbor", "text": "approximate nearest neighbor search; it uses an index to search faster at the cost of the risk of missing some relevant results." },
+        { "kind": "paragraph", "text": "We assess retrieval quality with a pair of measures. Recall (completeness of hits) tells you how many of all the relevant passages actually came back. Precision (purity of hits) tells you what fraction of the returned passages are truly relevant. These measures usually move in opposite directions: you widen the results — recall rises, precision falls." },
+        { "kind": "table", "title": "Exact vs. ANN", "caption": "A comparison of the approaches.", "headers": ["Feature", "Exact (brute force)", "ANN (with an index)"], "rows": [["What it does", "scans all vectors", "searches a shortcut through an index"], ["Accuracy", "full — misses nothing", "approximate — may miss relevant ones"], ["Speed", "slow, grows with the corpus", "fast, scales to large sets"], ["When to use", "small corpus, requirement of full relevance", "large corpus, response time matters"]], "textAlt": "The table compares two approaches across four dimensions. Exact (brute force) scans all vectors, gives full accuracy (misses nothing), is slow and grows with the size of the corpus; use it for a small corpus and a requirement of full relevance. ANN searches a shortcut through an index, gives an approximate result (may miss relevant ones), is fast and scales to large sets; use it for a large corpus, when response time matters." }
+      ]
+    },
+    {
+      "id": "s5-indeks",
+      "title": "The index and its impact",
+      "type": "content",
+      "hideForPaths": ["S1", "S2"],
+      "blocks": [
+        { "kind": "definition", "term": "Index", "original": "index", "text": "a data structure that speeds up ANN; its parameters shift the point between recall and speed and precision." },
+        { "kind": "paragraph", "text": "Without the math: an aggressive index (tuned for speed) searches a smaller slice of the vector space, so it sometimes misses a relevant passage even though it exists in the database. A gentler index searches more — slower, but it loses something less often." },
+        { "kind": "callout", "variant": "warn", "title": "A diagnostic trap", "text": "\"Nothing found\" or \"a known relevant document is missing\" is often the fault of the index settings, not the data. Before you decide a passage is not in the corpus, check whether ANN simply skipped it." }
+      ]
+    },
+    {
+      "id": "s6-metadane",
+      "title": "Metadata filtering",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Metadata filtering", "original": "metadata filtering", "text": "narrowing the candidate set by passage attributes (e.g. document_type, module, version) before or after computing similarity." },
+        { "kind": "paragraph", "text": "A metadata filter is a powerful precision lever. By allowing only the right passages (e.g. document_type = requirement), you sieve out noise — precision rises. But beware: too sharp a filter can cut out a relevant passage of a different type, so recall falls." },
+        { "kind": "callout", "variant": "warn", "title": "An example on NotkaApp", "text": "The relevant DOC3 (password reset) has document_type = test_case. If you turn on a \"requirements only\" filter, DOC3 disappears from the results — the filter raised precision, but lost the right passage (recall fell)." }
+      ]
+    },
+    {
+      "id": "s7-chunki",
+      "title": "Chunk quality",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Chunk", "original": "chunk", "text": "a fragment of a document indexed as a single unit and turned into a single vector." },
+        { "kind": "paragraph", "text": "The chunk boundary determines the meaning of the vector. A bad boundary — a sentence cut off halfway or a mash-up of two different requirements — yields a vector with a blurred meaning, and as a result a similar but useless result. Too large a chunk mixes many topics; too small a one loses the context needed to understand the passage." },
+        { "kind": "paragraph", "text": "This connects directly to the \"similar but useless\" diagnosis: a passage may have high similarity yet still be unfit as an answer — because it is cut off or concerns an adjacent topic. Similarity is not the same as relevance." }
+      ]
+    },
+    {
+      "id": "s8-diagnoza",
+      "title": "Similar but useless — the diagnosis",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "A mini diagnostic exercise (ungraded, a warm-up before the debugger). The query to the NotkaApp corpus is: \"after how long does a password reset link expire?\". Retrieval returned three passages with high similarity, but only one is useful." },
+        { "kind": "list", "ordered": true, "items": [
+          "DOC1 (the session token expires after 30 min of inactivity) — very high similarity: the words \"30 min\" and \"expires\" overlap, but it is a different topic (session, not reset). Similar, yet not relevant.",
+          "DOC3 (password reset: the email link is valid for 30 min, single-use) — this is the right source for the answer.",
+          "DOC4 (marketing FAQ: benefits and pricing) — it fell into the results as topical noise; useless."
+        ] },
+        { "kind": "paragraph", "text": "Before you reach for the first knob, name the cause of the irrelevance: a bad chunk boundary, the lack of a metadata filter to sieve out the marketing, ANN skipping a better passage, or simply confusing similarity with relevance. On the interaction screen you will check which correction actually helps." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "tune",
+    "id": "m5-retrieval-debugger",
+    "title": "Retrieval debugger",
+    "intro": "Tune the retrieval parameters for the query \"after how long does a password reset link expire?\" on the NotkaApp corpus (DOC1 session, DOC2 password policy, DOC3 password reset — relevant, DOC4 marketing FAQ). Observe how the set of returned passages and the recall/precision pair change, then answer the checkpoint.",
+    "outputLabel": "Simulated retrieval result for the chosen settings (returned passages + recall/precision):",
+    "controls": [
+      { "id": "topk", "label": "top-k (number of returned passages)", "levels": [
+        { "value": "2", "label": "Low (2)", "effect": "Only the 2 most similar passages come back: DOC1 (session) and DOC3 (reset). Precision is decent, but recall is fragile — if the relevant DOC3 dropped in the ranking, it would fall out of the top two and the result would be empty." },
+        { "value": "6", "label": "High (6)", "effect": "Almost all passages come back, including the relevant DOC3 — recall is higher. But the similar-but-useless DOC1 (session) and the marketing DOC4 also enter the results — precision is lower, more noise to sieve out." }
+      ] },
+      { "id": "prog", "label": "Similarity threshold", "levels": [
+        { "value": "low", "label": "Low (loose)", "effect": "It lets through passages even with weak similarity — recall is high, but precision is low: noise gets into the results (e.g. the marketing DOC4)." },
+        { "value": "high", "label": "High (strict)", "effect": "It admits only passages with high similarity. Note: the similar-but-irrelevant DOC1 (session) has a high score, so the threshold does NOT remove it — and it risks cutting off the relevant DOC3 if its score is lower (recall falls)." }
+      ] },
+      { "id": "filtr", "label": "Metadata filter (document_type)", "levels": [
+        { "value": "off", "label": "Off", "effect": "No filter — all types remain in the pool, including the marketing DOC4 and passages on an adjacent topic. Precision is lower." },
+        { "value": "topic", "label": "On: allow product documentation, cut off marketing", "effect": "The filter sieves out the marketing DOC4 and narrows the pool to product documentation — it targets the \"reset/account\" topic. Precision rises, and the relevant DOC3 stays in the results. This is the lever that removes similar-but-irrelevant noise without losing the right passage — provided the filter is not too narrow (too sharp a filter would cut out DOC3)." }
+      ] }
+    ],
+    "checkpoint": {
+      "prompt": "Similarity search returned DOC1 (the session token expires after 30 min) at the top — a passage similar to the query about password reset, but useless because it concerns the session. DOC1 has HIGH similarity. What will you change first to improve the precision of the result?",
+      "type": "single_choice",
+      "options": [
+        { "id": "A", "text": "Turn on a metadata filter targeting the topic (reset/account documentation, cutting off adjacent topics) — it is a signal orthogonal to similarity, so it sieves out the highly-similar but irrelevant DOC1 without touching the relevant DOC3." },
+        { "id": "B", "text": "Raise the similarity threshold to a very high value — since DOC1 is irrelevant, it is enough to cut off the weaker results." },
+        { "id": "C", "text": "Lower top-k to 1 — then only the most similar passage comes back and the noise disappears." },
+        { "id": "D", "text": "Accept DOC1 as the correct answer, because it has the highest similarity to the query." }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Correct. DOC1 is irrelevant despite high similarity, so levers based on the similarity score alone will fail. A metadata filter is an orthogonal signal — it cuts off adjacent topics (session, marketing) regardless of how \"similar\" they are.",
+      "feedbackIncorrect": "The trap: DOC1 has HIGH similarity, so raising the threshold will not remove it (and it risks cutting off the relevant DOC3 → recall falls), and top-k=1 would leave precisely this irrelevant passage at the top. Similarity is not relevance — sieve out the adjacent topic with a metadata filter (an orthogonal signal). Review the screen on metadata filtering."
+    }
+  },
+  "summary": {
+    "points": [
+      "The vector database decides WHAT retrieval found: it holds the embeddings and returns the nearest vectors relative to the query (semantic search).",
+      "Exact vs. ANN is a trade-off: accurate and slow (small corpus, full relevance) versus fast with the risk of missing something (large corpus).",
+      "The index, the metadata filter, chunk quality, and the similarity threshold steer the recall/precision pair — these are the levers of retrieval diagnosis.",
+      "Similar does not mean useful: a passage with high similarity may be irrelevant — you sieve it out with an orthogonal signal (a metadata filter), not the threshold alone."
+    ],
+    "checklist": [
+      "Are the returned passages really relevant, or only lexically similar?",
+      "Is an empty or poor result the fault of the index, the filter, or the threshold, rather than a lack of data?",
+      "Is my metadata filter not too sharp and has it not cut out a relevant passage (recall)?"
+    ],
+    "checklistTitle": "Checklist — retrieval diagnosis",
+    "nextStep": "Next step: M6 — RAG: how to build an answer with citations and sources from good retrieval."
+  }
+}

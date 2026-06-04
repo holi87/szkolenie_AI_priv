@@ -1,0 +1,428 @@
+{
+  "_meta": {
+    "issue": "#23 [23][M4] Wdroż moduły M10-M12",
+    "storyboard": "docs/storyboard/m12-evaluation.md",
+    "interaction": "Judge calibration lab (kind: rubric, zadanie praktyczne R3-eval)",
+    "scenario": "SC-EVAL-01 (rozjazd oceny człowiek vs LLM-as-a-judge; EX1 length bias, EX2 position bias)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (SklepDemo, golden set GS-SklepDemo, odpowiedzi A1-A6, QA-ekspert anon.). ZERO realnych danych klienta/PII.",
+    "note": "Element interaktywny typu rubric = warunek konieczny S3, próg 70% (score >= 3,5 / 5). Wszystkie 9 ekranów wspólne dla S1/S2/S3; charakter ROZSZERZONY/pełny realizuje warstwa pogłębiona na ekranie 8 (onlyForPaths blokiem)."
+  },
+  "module": "M12",
+  "intro": "\"Looks fine at a glance\" is not enough: without measurement you do not know whether a prompt change or a RAG pipeline change improved or degraded quality. This module teaches you to measure LLM and RAG quality with a tester's tools: a golden set, metrics, a judge rubric, calibration with an expert, and a decision threshold.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Why a tester needs LLM and RAG evaluation",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Without measuring quality, every prompt or RAG pipeline change is a shot in the dark — there is no way to tell whether it improved or degraded the answers. Here the tester brings what they do best: acceptance criteria, repeatability, and protection against regression."
+        },
+        {
+          "kind": "list",
+          "items": [
+            "Golden set — a reference suite, that is \"regression tests for the model's answers\".",
+            "Quality metrics — how to measure a good answer.",
+            "A scoring rubric for the evaluating model (LLM-as-a-judge).",
+            "Calibration with an expert and inter-rater agreement.",
+            "An acceptance threshold and the \"go / no-go\" decision."
+          ]
+        },
+        {
+          "kind": "callout",
+          "variant": "info",
+          "text": "Module time about 90 minutes. At the end there is an interactive \"Judge calibration lab\" that combines rubric, bias, and calibration in a single flow."
+        }
+      ]
+    },
+    {
+      "id": "s2-golden-set",
+      "title": "A golden set for the use case",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "definition",
+          "term": "Golden set",
+          "original": "a list of synthetic input → expected answer cases",
+          "text": "a documented collection: a question, the correct expectation, and the source of truth (ground truth). It plays the role of regression tests for the model's answers."
+        },
+        {
+          "kind": "paragraph",
+          "text": "A good golden set contains questions representative of the use case, edge cases, and known traps. Synthetic example \"GS-SklepDemo\": questions about the cart item limit, about the returns policy, and about acceptance criterion WYM-koszyk."
+        },
+        {
+          "kind": "callout",
+          "variant": "warn",
+          "title": "What a golden set is NOT",
+          "text": "It is not a pile of random logs or production data. An item with no decidable expectation and no source of truth does not belong in the golden set."
+        }
+      ]
+    },
+    {
+      "id": "s3-ocen-projekt",
+      "title": "Assess a golden set design",
+      "type": "decision",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Look at the candidates for the \"GS-SklepDemo\" golden set and decide which ones belong in the suite and which are flawed. Common flaws are: no source of truth, an ambiguous expectation, a duplicate, or an untestable question."
+        },
+        {
+          "kind": "list",
+          "items": [
+            "Good: \"What is the cart item limit?\" — the expectation follows from WYM-koszyk, the source is documented.",
+            "Flawed: \"Is the app nice?\" — the expectation is ambiguous and untestable.",
+            "Flawed: a question with no stated source of truth — there is nothing to evaluate against.",
+            "Flawed: a copy of an existing item — a duplicate does not increase coverage."
+          ]
+        },
+        {
+          "kind": "callout",
+          "variant": "safe",
+          "text": "Rule: every golden set item has an unambiguous expectation and a documented source of truth. Missing either one = the item is out."
+        }
+      ]
+    },
+    {
+      "id": "s4-piec-metryk",
+      "title": "Five quality metrics",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "To assess LLM and RAG answers we use five metrics. Each one measures a different dimension of quality and has a typical symptom when it is missing."
+        },
+        {
+          "kind": "table",
+          "headers": [
+            "Metric",
+            "What it measures",
+            "Typical symptom of a deficit"
+          ],
+          "rows": [
+            [
+              "accuracy",
+              "whether the answer is factually correct",
+              "a false claim stated as fact"
+            ],
+            [
+              "faithfulness",
+              "whether the answer is consistent with the source",
+              "a sentence that contradicts the source document"
+            ],
+            [
+              "groundedness",
+              "whether the content can be supported by the provided context",
+              "a claim with no basis in the retrieved fragment"
+            ],
+            [
+              "relevance",
+              "whether the answer addresses the question asked",
+              "an answer to a different question than the one asked"
+            ],
+            [
+              "completeness",
+              "whether all required conditions are covered",
+              "some acceptance-criterion conditions missing"
+            ]
+          ],
+          "textAlt": "Five quality metrics. Accuracy: whether the answer is factually correct; the deficit symptom is a false claim stated as fact. Faithfulness: whether the answer is consistent with the source; the deficit symptom is a sentence that contradicts the source document. Groundedness: whether the content can be supported by the provided context; the deficit symptom is a claim with no basis in the retrieved fragment. Relevance: whether the answer addresses the question asked; the deficit symptom is an answer to a different question than the one asked. Completeness: whether all required conditions are covered; the deficit symptom is some acceptance-criterion conditions missing."
+        },
+        {
+          "kind": "callout",
+          "variant": "info",
+          "text": "Link to M6: low faithfulness or groundedness often points to the RAG generation layer, while gaps in the retrieved sources point to the retrieval layer."
+        },
+        {
+          "kind": "callout",
+          "variant": "info",
+          "title": "Note: faithfulness vs groundedness",
+          "text": "In many sources, \"faithfulness\" and \"groundedness\" are treated together — as a single measure of \"whether the answer sticks to the provided context\". We separate them here for teaching purposes: faithfulness asks whether the answer does not contradict the source, and groundedness asks whether every claim has a basis in the retrieved fragment. In practice you usually check both at once."
+        }
+      ]
+    },
+    {
+      "id": "s5-dobierz-metryke",
+      "title": "Match the metric to the question",
+      "type": "decision",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "For a given quality question, pick the metric that settles it. The most common trap is confusing relevance with accuracy."
+        },
+        {
+          "kind": "list",
+          "items": [
+            "\"Is the answer consistent with the content of the source?\" → faithfulness (and groundedness).",
+            "\"Does the answer cover all the acceptance-criterion conditions?\" → completeness.",
+            "\"Does the answer even address the question asked?\" → relevance.",
+            "\"Is the value given factually correct?\" → accuracy."
+          ]
+        },
+        {
+          "kind": "callout",
+          "variant": "warn",
+          "text": "Trap: an answer can be relevant (on topic) and yet contradict the source. Relevance does not replace faithfulness."
+        }
+      ]
+    },
+    {
+      "id": "s6-rubryka",
+      "title": "A rubric for the LLM-as-a-judge",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "definition",
+          "term": "LLM-as-a-judge",
+          "original": "a language model in the role of an evaluator",
+          "text": "a model that evaluates another model's answers according to a rubric. Without a rubric it answers the general question \"is this good?\" and the score is not repeatable."
+        },
+        {
+          "kind": "paragraph",
+          "text": "A good evaluation rubric has: a clear criterion, a scale (e.g. 0–2 or 1–5), a definition of each level, anchor examples, and the instruction \"score only against the source\"."
+        },
+        {
+          "kind": "callout",
+          "variant": "warn",
+          "title": "Anti-myth",
+          "text": "\"Ask the model whether the answer is good\" without a rubric yields a score that depends on the whim of the run. Level definitions and anchors make the score repeatable."
+        }
+      ]
+    },
+    {
+      "id": "s7-bias-position",
+      "title": "Judge bias and position bias",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "An LLM judge has biases. Without control, automated scoring can produce a false \"green\", that is, pass an answer that should fail."
+        },
+        {
+          "kind": "definition",
+          "term": "Position bias",
+          "original": "a preference for position in pairwise comparison",
+          "text": "when comparing two answers, the judge more often picks the one shown first, regardless of its actual quality."
+        },
+        {
+          "kind": "list",
+          "items": [
+            "Length bias: inflating the score of the longer answer just for its length.",
+            "\"Courtesy\" scoring: an inflated grade regardless of the content.",
+            "Divergence from the human score: the judge gives a grade different from the expert's."
+          ]
+        },
+        {
+          "kind": "callout",
+          "variant": "info",
+          "text": "Mitigations (expanded later): swapping the order in pairwise comparisons, an unambiguous rubric, and calibration with an expert."
+        }
+      ]
+    },
+    {
+      "id": "s8-kalibracja",
+      "title": "Calibration with an expert and inter-rater agreement",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "To trust the automated score, compare it with an expert's score on the same golden set and compute the inter-rater agreement. The places where the scores diverge are a signal to improve the rubric, not to ignore them."
+        },
+        {
+          "kind": "list",
+          "ordered": true,
+          "items": [
+            "Score the answers with the LLM judge according to the rubric.",
+            "Compare with the expert's score on the same golden set.",
+            "Find the divergence and diagnose its cause (bias or a gap in the rubric).",
+            "Fix the rubric and score again."
+          ]
+        },
+        {
+          "kind": "callout",
+          "variant": "warn",
+          "onlyForPaths": [
+            "S2",
+            "S3"
+          ],
+          "title": "Going deeper: why \"% agreement\" alone is misleading",
+          "text": "With a heavily skewed distribution of scores (e.g. almost everything \"pass\"), a high agreement percentage can be reached almost at random. What matters is whether the judge hits the rare, risky \"fail\" cases, not just whether it agrees \"on pass\"."
+        }
+      ]
+    },
+    {
+      "id": "s9-prog-go-nogo",
+      "title": "Acceptance threshold and the go/no-go decision",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "The quality acceptance threshold sets when quality is \"good enough\". Example: \"faithfulness ≥ 0.9 on the golden set AND zero items contradicting the source\". The threshold is chosen by the risk of the use case, the cost of an error, and the result of the previous version (baseline)."
+        },
+        {
+          "kind": "definition",
+          "term": "Go / no-go decision",
+          "original": "go / no-go decision",
+          "text": "the decision whether a version may be released. The threshold also works in regression: it compares the new version with the previous one."
+        },
+        {
+          "kind": "callout",
+          "variant": "safe",
+          "title": "Conservative default",
+          "text": "No data to evaluate, or an unmet hard condition (e.g. one item contradicting the source) = no-go. A good average does not override a hard condition."
+        }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "rubric",
+    "id": "m12-judge-calibration",
+    "title": "Judge calibration lab",
+    "intro": "A synthetic set: answers A1–A6 to questions from the \"GS-SklepDemo\" golden set, scored by a QA expert (anonymized) and by an LLM judge. It contains a deliberately injected position bias (the A3/A4 pair) plus an inflation (A2) and a rubric gap (A5). For each criterion of the R3-eval rubric, mark the evaluation design decision that satisfies it. The score counts as the R3-eval practical task on path S3 and is a necessary condition — the pass threshold is 70% (score ≥ 3.5 / 5).",
+    "rubricId": "R3-eval",
+    "recordsPractical": true,
+    "scaleMax": 5,
+    "passThreshold": 3.5,
+    "criteria": [
+      {
+        "id": "K1",
+        "name": "Golden set fit for the use case",
+        "points": 1,
+        "hint": "The golden set has representative questions, edge cases, and a documented source of truth — not random logs.",
+        "prompt": "How do you build the \"GS-SklepDemo\" golden set for evaluating answers about the cart and returns?",
+        "options": [
+          {
+            "id": "a",
+            "text": "Representative questions about WYM-koszyk and the returns policy, edge cases (a question outside the source's scope), each item with a documented source of truth."
+          },
+          {
+            "id": "b",
+            "text": "Randomly collected production logs with raw customer data — they will be the most \"real\"."
+          },
+          {
+            "id": "c",
+            "text": "Only general questions like \"is the app good?\", with no stated expectation or source."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K2",
+        "name": "Metrics with justification",
+        "points": 1,
+        "hint": "Match metrics to what the question actually checks: covering the conditions = completeness, consistency with and grounding in the source = faithfulness/groundedness.",
+        "prompt": "Quality question: \"Does the answer list all the payment terms from the source and not add terms from outside the source?\". Which metrics should you choose?",
+        "options": [
+          {
+            "id": "a",
+            "text": "completeness (covering all the conditions) plus faithfulness and groundedness (no content from outside the source and grounding in the context) — each justified by a dimension of the question."
+          },
+          {
+            "id": "b",
+            "text": "relevance only, because the question is about payments — that is enough to evaluate the content."
+          },
+          {
+            "id": "c",
+            "text": "position bias as a content-quality metric, because it sounds technical."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K3",
+        "name": "LLM-as-a-judge rubric (unambiguous)",
+        "points": 1,
+        "hint": "An unambiguous rubric has a clear criterion, a scale with a definition of each level, anchors, and the instruction \"score against the source\".",
+        "prompt": "Item A5 (completeness of payment terms) diverges because the rubric does not specify when \"one term missing\" already means a lower level. How do you fix it?",
+        "options": [
+          {
+            "id": "a",
+            "text": "Add definitions for the scale levels (e.g. 2 = all terms; 1 = one term missing; 0 = most missing) with anchor examples and the instruction \"score only against the source\"."
+          },
+          {
+            "id": "b",
+            "text": "Leave the rubric as \"judge whether the answer is good\" and trust the evaluator's intuition."
+          },
+          {
+            "id": "c",
+            "text": "Remove the scale and collect only a free-form comment from the evaluator for each item."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K4",
+        "name": "Bias/position bias + calibration with an expert",
+        "points": 1,
+        "hint": "Position bias is confirmed and neutralized by swapping the order (A3/A4); length bias is inflation for length; always validate the verdict against the expert's score on the golden set.",
+        "prompt": "The A3/A4 pair (the same WYM-koszyk variant) and an item where the judge inflates the longer answer — how do you reliably detect and limit bias before setting the threshold?",
+        "options": [
+          {
+            "id": "a",
+            "text": "Repeat the A3/A4 scoring with the order swapped (and average both arrangements): a flipped verdict confirms position bias, so write order swapping into the rubric; do not reward an answer for length alone; calibrate every grade against the expert's score on the golden set."
+          },
+          {
+            "id": "b",
+            "text": "Reward the longer answer as more complete by assumption and trust the judge's first verdict, because automated scoring is faster and objective."
+          },
+          {
+            "id": "c",
+            "text": "Remove the troublesome A3/A4 pair from the golden set so the agreement percentage goes up, and skip the comparison with the expert."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K5",
+        "name": "Quality acceptance threshold",
+        "points": 1,
+        "hint": "The threshold is often a conjunction: the average AND a hard condition \"zero contradictions\". No data or an unmet hard condition = no-go (conservative default).",
+        "prompt": "Threshold: \"faithfulness ≥ 0.9 on the golden set AND zero items contradicting the source\". The new version has an average of 0.93, but item A2 contradicts the source. What is the decision?",
+        "options": [
+          {
+            "id": "a",
+            "text": "No-go: the hard condition \"zero contradictions\" is not met despite the good average — first remove the contradiction in A2, then score again; allow automated scoring after calibration and with periodic recalibration against the expert."
+          },
+          {
+            "id": "b",
+            "text": "Go: the 0.93 average exceeds 0.9, so the threshold is met regardless of a single contradicting item."
+          },
+          {
+            "id": "c",
+            "text": "Go with the threshold lowered to 0.85, since only one item fails — or roll out \"on a trial basis\" and monitor."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      }
+    ]
+  },
+  "summary": {
+    "points": [
+      "A golden set is regression tests for the model's answers: representative questions, edge cases, a documented source of truth.",
+      "Five metrics: accuracy, faithfulness, groundedness, relevance, completeness — match each to the dimension of the question.",
+      "A rubric for the LLM-as-a-judge must be unambiguous: a criterion, a scale with level definitions, anchors, scoring against the source.",
+      "The judge has bias (including position bias and length bias) — detect it by swapping the order and by calibration with an expert (inter-rater agreement).",
+      "An acceptance threshold is often a conjunction of conditions; an unmet hard condition or missing data = no-go."
+    ],
+    "checklist": [
+      "Does the golden set have an unambiguous expectation and a source of truth for every item?",
+      "Are the metrics matched to what the question actually checks?",
+      "Does the judge rubric have level definitions, anchors, and scoring against the source?",
+      "Did I check position bias by swapping the order and calibrate the score with an expert?",
+      "Does the acceptance threshold have a hard condition, and does missing data give a no-go?"
+    ],
+    "checklistTitle": "Checklist — a ready LLM and RAG evaluation",
+    "nextStep": "Next step: for S3, usually the final test and the appendices. Repeat the loop: golden set → metrics → rubric → calibration → threshold → decision."
+  }
+}

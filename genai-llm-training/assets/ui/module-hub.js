@@ -18,7 +18,8 @@ const CTA_KEY = {
 
 // Czytelna etykieta filaru z kodu semantycznego (np. "qa_practice" → „Praktyka QA"). Fallback do surowego
 // kodu, gdy brak klucza w katalogu (t() zwraca wtedy sam klucz) — żeby nowy filar nie pokazał klucza i18n.
-function pillarLabel(code) {
+// Eksportowana: widok modułu (module.meta w app.js) reużywa, by nie pokazywać surowego kodu filaru (#81).
+export function pillarLabel(code) {
   if (!code) return "—";
   const key = `module.pillar.${code}`;
   const label = t(key);

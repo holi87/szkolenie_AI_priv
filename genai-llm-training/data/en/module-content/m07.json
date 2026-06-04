@@ -1,0 +1,292 @@
+{
+  "_meta": {
+    "issue": "#22 [22][M4] Wdroż moduły M7-M9",
+    "storyboard": "docs/storyboard/m07-prompt-engineering.md",
+    "interaction": "Prompt clinic (kind: rubric, zadanie praktyczne R1-prompt)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (SklepDemo, fikcyjne wymagania). ZERO realnych danych klienta/PII.",
+    "note": "Egzemplarz referencyjny typu rubric z zadaniem praktycznym. Wariant S1 SKRÓCONY: ekrany 3-4 scalone (onlyForPaths), few-shot zredukowany."
+  },
+  "module": "M7",
+  "intro": "An unclear prompt = an unclear result = wasted time and the risk that a tester treats a hallucination as fact. A good prompt increases your control over the model and makes the output easier to verify.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Why a tester needs prompt engineering",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "The goal of this module is to write prompts that produce repeatable, verifiable output for QA work. You will learn the anatomy of a prompt, how to fix a bad prompt, few-shot, and the limits of a prompt."
+        }
+      ]
+    },
+    {
+      "id": "s2-anatomia",
+      "title": "Anatomy of a prompt: 7 elements",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "list",
+          "items": [
+            "Role — from whose perspective the model answers (e.g. \"you are a QA engineer\").",
+            "Goal — what should be produced.",
+            "Context — background the model does not know (a fragment of a synthetic requirement).",
+            "Input data — the specific material to be processed.",
+            "Constraints — what the model should NOT do / its limits.",
+            "Quality criteria — how we recognize that the output is good (measurable).",
+            "Output format — the structure (table, list, JSON) that makes verification easier."
+          ]
+        },
+        {
+          "kind": "paragraph",
+          "onlyForPaths": [
+            "S2",
+            "S3"
+          ],
+          "text": "Example on a QA task: \"You are a QA engineer. Generate test cases for login in SklepDemo according to the given requirement; do not invent fields beyond the requirement; return a table: ID | steps | data | expected result.\""
+        }
+      ]
+    },
+    {
+      "id": "s34-s1-min",
+      "title": "Prompt elements — the minimum (S1)",
+      "type": "content",
+      "onlyForPaths": [
+        "S1"
+      ],
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "In the short version, remember the minimum: give a role and a goal, include context and data, add constraints and an output format. These elements have the strongest influence on the quality and verifiability of the output."
+        }
+      ]
+    },
+    {
+      "id": "s3-pierwsza-polowa",
+      "title": "First half: role, goal, context, data",
+      "type": "content",
+      "onlyForPaths": [
+        "S2",
+        "S3"
+      ],
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "The role sets the perspective, the goal says what should be produced, the context provides background the model does not know, and the input data is the material to be processed. The same goal with context and without it yields clearly different output quality."
+        }
+      ]
+    },
+    {
+      "id": "s4-druga-polowa",
+      "title": "Second half: constraints, quality criteria, format",
+      "type": "content",
+      "onlyForPaths": [
+        "S2",
+        "S3"
+      ],
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Constraints say what the model should NOT do (e.g. \"do not invent fields beyond the requirement\"). Quality criteria are measurable and verifiable. The output format (table/list/JSON) makes further control easier. Constraints + criteria are the lever for verifiability and safety."
+        }
+      ]
+    },
+    {
+      "id": "s5-fewshot",
+      "title": "Few-shot: when to show examples",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "definition",
+          "term": "Few-shot",
+          "original": "a few examples in the prompt",
+          "text": "inserting 1-3 model input→output pairs when the format or style needs to be repeatable."
+        },
+        {
+          "kind": "paragraph",
+          "onlyForPaths": [
+            "S2",
+            "S3"
+          ],
+          "text": "Contrast with zero-shot (no examples): use few-shot for format repeatability, not for \"filling in missing knowledge\". Example: 2 model test cases → the model keeps that layout for the next ones."
+        }
+      ]
+    },
+    {
+      "id": "s6-rubryka",
+      "title": "Fixing a bad prompt against a rubric",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "The prompt assessment rubric has 5 axes: completeness, safety, verifiability, format, constraints. The repair loop: bad output → diagnosis against the rubric → a specific fix → better output."
+        },
+        {
+          "kind": "callout",
+          "variant": "info",
+          "text": "This screen prepares you directly for the \"Prompt clinic\" interaction below."
+        }
+      ]
+    },
+    {
+      "id": "s7-granice",
+      "title": "Limits of a prompt: when a prompt will not help",
+      "type": "decision",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "A prompt is not magic. When data is missing (the model has no information in the context), no amount of \"polishing\" the prompt will generate the truth — a hallucination will result."
+        },
+        {
+          "kind": "callout",
+          "variant": "warn",
+          "title": "What to do instead",
+          "text": "Provide the data (context/RAG), go to the source, or hand the task to a human. Warning sign: the prompt keeps growing, yet the output still makes things up. More in M11."
+        }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "rubric",
+    "id": "m7-prompt-clinic",
+    "title": "Prompt clinic",
+    "intro": "A flawed prompt: \"Write login tests.\" For each axis of the rubric, mark the fix that satisfies it. The score counts as practical task R1-prompt on the S2 path (threshold 4/5); on S3 it is an exercise with feedback.",
+    "rubricId": "R1-prompt",
+    "recordsPractical": true,
+    "scaleMax": 5,
+    "passThreshold": 4,
+    "criteria": [
+      {
+        "id": "K1",
+        "name": "Role and goal",
+        "points": 1,
+        "hint": "Add a role and a clear goal: who answers and what should be produced.",
+        "options": [
+          {
+            "id": "a",
+            "text": "\"You are a QA engineer. Generate test cases for login in SklepDemo.\""
+          },
+          {
+            "id": "b",
+            "text": "Leave \"Write login tests\" unchanged."
+          },
+          {
+            "id": "c",
+            "text": "Add \"be creative and surprise me\"."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K2",
+        "name": "Context and input data (no sensitive data)",
+        "points": 1,
+        "hint": "Include a synthetic requirement; do not paste real user data.",
+        "options": [
+          {
+            "id": "a",
+            "text": "Include a synthetic SklepDemo login requirement (lockout after 3 errors, reset link valid for 30 min)."
+          },
+          {
+            "id": "b",
+            "text": "Paste a real production log with user emails."
+          },
+          {
+            "id": "c",
+            "text": "Provide no context — the model \"will figure it out\"."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K3",
+        "name": "Constraints and quality criteria",
+        "points": 1,
+        "hint": "Say what the model should NOT do, and add measurable criteria.",
+        "options": [
+          {
+            "id": "a",
+            "text": "\"Do not invent fields beyond the requirement; cover edge cases; every test has an expected result.\""
+          },
+          {
+            "id": "b",
+            "text": "\"Write as many tests as possible, quantity is what counts.\""
+          },
+          {
+            "id": "c",
+            "text": "No constraints — let the model decide on its own."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K4",
+        "name": "Output format (verifiable)",
+        "points": 1,
+        "hint": "Demand a fixed structure; for repeatability consider few-shot.",
+        "options": [
+          {
+            "id": "a",
+            "text": "\"Return a table: ID | steps | input data | expected result\" + 2 model examples (few-shot)."
+          },
+          {
+            "id": "b",
+            "text": "\"Answer in a free-form paragraph.\""
+          },
+          {
+            "id": "c",
+            "text": "Do not specify a format."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K5",
+        "name": "Safety and verifiability",
+        "points": 1,
+        "hint": "Require synthetic data and the marking of uncertain spots for verification.",
+        "options": [
+          {
+            "id": "a",
+            "text": "\"Use only synthetic data; mark assumptions that need verification against the requirement.\""
+          },
+          {
+            "id": "b",
+            "text": "\"If you do not know something, make up a plausible value.\""
+          },
+          {
+            "id": "c",
+            "text": "\"You may use real data if it speeds up the work.\""
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      }
+    ]
+  },
+  "summary": {
+    "points": [
+      "A good prompt has 7 elements: role, goal, context, data, constraints, criteria, format.",
+      "Improve the prompt against a 5-axis rubric: completeness, safety, verifiability, format, constraints.",
+      "Use few-shot for format repeatability, not for missing knowledge.",
+      "When data is missing, a prompt will not help — provide the source or hand the task to a human."
+    ],
+    "checklist": [
+      "Does the prompt have a role, goal, context, and data?",
+      "Are there constraints and measurable quality criteria?",
+      "Is the output format verifiable?",
+      "Did I enforce synthetic data and the marking of uncertainty?"
+    ],
+    "checklistTitle": "Checklist — a ready QA prompt",
+    "nextStep": "Next step: M8 — GenAI applications in QA (generating and assessing test cases)."
+  }
+}
