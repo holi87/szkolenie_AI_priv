@@ -288,6 +288,30 @@ if (Qall) {
       poolReport.push(`${pid}=${pool.length}/${p.finalTestQuestions}`);
     }
     report.push(`Pule per ścieżka (pula/test): ${poolReport.join(" ")} — pula >= test (ADR-0006; fundament dedykowanych pul #95)`);
+
+    // Model hybrydowy (M13/ADR-0006 #94): rdzeń (scope=core) vs dedykowane (scope=dedicated).
+    // - dedykowane: KAŻDE pytanie należy do dokładnie 1 ścieżki → pule rozłączne per persona;
+    // - rdzeń: pytanie wspólne wszystkim ścieżkom (>=2 ścieżki w paths).
+    // Plus: pula dedykowanych każdej ścieżki >= dedicatedQuestionsMin (kwota wymuszana w teście przez test-engine),
+    //   oraz dedicatedQuestionsMin + krytyczne <= finalTestQuestions (test musi być wykonalny).
+    if (modules) {
+      const scopeById = Object.fromEntries(modules.modules.map((m) => [m.id, m.scope]));
+      for (const q of Q) {
+        const sc = scopeById[q.module];
+        if (sc === "dedicated" && q.paths.length !== 1) fail(`${q.id}: moduł ${q.module} dedykowany — pytanie musi należeć do dokładnie 1 ścieżki (rozłączność), ma paths=${JSON.stringify(q.paths)}`);
+        if (sc === "core" && q.paths.length < 2) fail(`${q.id}: moduł ${q.module} rdzeniowy — pytanie musi być wspólne (>=2 ścieżki), ma paths=${JSON.stringify(q.paths)}`);
+      }
+      const critN = Q.filter((q) => q.isCritical).length;
+      const dedReport = [];
+      for (const [pid, p] of Object.entries(paths.paths)) {
+        const ded = Q.filter((q) => scopeById[q.module] === "dedicated" && q.paths.includes(pid)).length;
+        const min = p.dedicatedQuestionsMin || 0;
+        if (ded < min) fail(`ścieżka ${pid}: pula dedykowanych ${ded} < dedicatedQuestionsMin ${min} (kwota dedykowanych niewykonalna)`);
+        if (min + critN > p.finalTestQuestions) fail(`ścieżka ${pid}: dedicatedQuestionsMin ${min} + krytyczne ${critN} > finalTestQuestions ${p.finalTestQuestions} (test niewykonalny)`);
+        dedReport.push(`${pid}=${ded}/${min}`);
+      }
+      report.push(`Dedykowane per ścieżka (pula/kwota): ${dedReport.join(" ")} — pule rozłączne (M13/ADR-0006 #94)`);
+    }
   }
   // lint danych syntetycznych
   for (const q of Q) {

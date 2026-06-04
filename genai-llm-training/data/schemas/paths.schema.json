@@ -32,7 +32,7 @@
       "patternProperties": {
         "^S[123]$": {
           "type": "object",
-          "required": ["modules", "requiredModules", "finalTestQuestions", "passThresholdPct", "criticalQuestionsRequiredPct", "practicalTasks", "gates", "attempts"],
+          "required": ["modules", "requiredModules", "finalTestQuestions", "dedicatedQuestionsMin", "passThresholdPct", "criticalQuestionsRequiredPct", "practicalTasks", "gates", "attempts"],
           "properties": {
             "modules": {
               "type": "object",
@@ -54,6 +54,7 @@
             "estContentTimeMin": { "type": "integer" },
             "estContentTimeNote": { "type": "string" },
             "finalTestQuestions": { "type": "integer", "minimum": 1 },
+            "dedicatedQuestionsMin": { "type": "integer", "minimum": 0, "description": "M13/ADR-0006: minimalna liczba pytań z modułów DEDYKOWANYCH wymuszona w teście końcowym ścieżki (persona realnie różni się treścią testu — nie losuje całości z rdzenia)." },
             "passThresholdPct": { "type": "integer", "minimum": 0, "maximum": 100 },
             "criticalQuestionsRequiredPct": { "type": "integer", "minimum": 0, "maximum": 100 },
             "practicalTasks": { "type": "integer", "minimum": 0 },

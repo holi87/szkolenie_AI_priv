@@ -12,8 +12,7 @@
       "module": "M6",
       "pillar": "foundations_technical",
       "paths": [
-        "S2",
-        "S3"
+        "S2"
       ],
       "difficulty": "L2",
       "bloom": "apply",
@@ -43,7 +42,6 @@
       "module": "M6",
       "pillar": "foundations_technical",
       "paths": [
-        "S2",
         "S3"
       ],
       "difficulty": "L2",
@@ -102,8 +100,7 @@
       "module": "M6",
       "pillar": "foundations_technical",
       "paths": [
-        "S2",
-        "S3"
+        "S2"
       ],
       "difficulty": "L1",
       "bloom": "understand",
@@ -145,8 +142,7 @@
       "module": "M6",
       "pillar": "foundations_technical",
       "paths": [
-        "S2",
-        "S3"
+        "S2"
       ],
       "difficulty": "L2",
       "bloom": "apply",
@@ -188,7 +184,6 @@
       "module": "M6",
       "pillar": "foundations_technical",
       "paths": [
-        "S2",
         "S3"
       ],
       "difficulty": "L2",
@@ -232,7 +227,6 @@
       "module": "M6",
       "pillar": "foundations_technical",
       "paths": [
-        "S2",
         "S3"
       ],
       "difficulty": "L3",
@@ -276,8 +270,7 @@
       "module": "M6",
       "pillar": "foundations_technical",
       "paths": [
-        "S2",
-        "S3"
+        "S2"
       ],
       "difficulty": "L3",
       "bloom": "evaluation",
@@ -319,7 +312,6 @@
       "module": "M6",
       "pillar": "foundations_technical",
       "paths": [
-        "S2",
         "S3"
       ],
       "difficulty": "L3",
@@ -363,8 +355,7 @@
       "module": "M6",
       "pillar": "foundations_technical",
       "paths": [
-        "S2",
-        "S3"
+        "S2"
       ],
       "difficulty": "L3",
       "bloom": "analysis",

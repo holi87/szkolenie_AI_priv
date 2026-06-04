@@ -12,9 +12,7 @@
       "module": "M7",
       "pillar": "qa_practice",
       "paths": [
-        "S1",
-        "S2",
-        "S3"
+        "S1"
       ],
       "difficulty": "L1",
       "bloom": "understand",
@@ -57,9 +55,7 @@
       "module": "M7",
       "pillar": "qa_practice",
       "paths": [
-        "S1",
-        "S2",
-        "S3"
+        "S2"
       ],
       "difficulty": "L1",
       "bloom": "understand",
@@ -102,8 +98,6 @@
       "module": "M7",
       "pillar": "qa_practice",
       "paths": [
-        "S1",
-        "S2",
         "S3"
       ],
       "difficulty": "L1",
@@ -147,9 +141,7 @@
       "module": "M7",
       "pillar": "qa_practice",
       "paths": [
-        "S1",
-        "S2",
-        "S3"
+        "S1"
       ],
       "difficulty": "L2",
       "bloom": "analysis",
@@ -199,9 +191,7 @@
       "module": "M7",
       "pillar": "qa_practice",
       "paths": [
-        "S1",
-        "S2",
-        "S3"
+        "S2"
       ],
       "difficulty": "L2",
       "bloom": "analysis",
@@ -251,9 +241,7 @@
       "module": "M7",
       "pillar": "qa_practice",
       "paths": [
-        "S1",
-        "S2",
-        "S3"
+        "S1"
       ],
       "difficulty": "L1",
       "bloom": "understand",
@@ -302,9 +290,7 @@
       "module": "M7",
       "pillar": "qa_practice",
       "paths": [
-        "S1",
-        "S2",
-        "S3"
+        "S2"
       ],
       "difficulty": "L1",
       "bloom": "understand",
@@ -347,8 +333,6 @@
       "module": "M7",
       "pillar": "qa_practice",
       "paths": [
-        "S1",
-        "S2",
         "S3"
       ],
       "difficulty": "L2",
@@ -392,9 +376,7 @@
       "module": "M7",
       "pillar": "qa_practice",
       "paths": [
-        "S1",
-        "S2",
-        "S3"
+        "S1"
       ],
       "difficulty": "L2",
       "bloom": "analysis",
@@ -437,9 +419,7 @@
       "module": "M7",
       "pillar": "qa_practice",
       "paths": [
-        "S1",
-        "S2",
-        "S3"
+        "S2"
       ],
       "difficulty": "L2",
       "bloom": "apply",

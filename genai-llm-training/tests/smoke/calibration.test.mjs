@@ -27,13 +27,13 @@ test("zakresy trudności zgodne z wymagania/07 (L1 80–95, L2 55–80, L3 35–
   assert.deepEqual(DIFFICULTY_BANDS.L4, [0.2, 0.45]);
 });
 
-test("pytania poza zakresem: Q017 (za trudne) i Q032 (za łatwe) wykryte; pytania w zakresie pominięte", () => {
+test("pytania poza zakresem: Q108 (za trudne) i Q032 (za łatwe) wykryte; pytania w zakresie pominięte", () => {
   const r = calibrate(pilot, ctx);
-  assert.ok(ids(r.outOfBand).includes("Q017"), "Q017 (L3, 25% < 35%) powinno być za trudne");
+  assert.ok(ids(r.outOfBand).includes("Q108"), "Q108 (L3, 25% < 35%) powinno być za trudne");
   assert.ok(ids(r.outOfBand).includes("Q032"), "Q032 (L3, 91,7% > 65%) powinno być za łatwe");
   assert.ok(!ids(r.outOfBand).includes("Q002"), "Q002 (L1, 83% w zakresie) NIE poza zakresem");
-  const q017 = r.perQuestion.find((q) => q.id === "Q017");
-  assert.equal(q017.direction, "za trudne");
+  const q108 = r.perQuestion.find((q) => q.id === "Q108");
+  assert.equal(q108.direction, "za trudne");
   const q032 = r.perQuestion.find((q) => q.id === "Q032");
   assert.equal(q032.direction, "za łatwe");
 });

@@ -3,7 +3,7 @@
 // żyje w core/*, render w ui/*. Brak treści szkoleniowej tutaj (separacja — AGENTS / standardy-jakosci).
 import { loadTrainingData, questionsForModule } from "./core/data-loader.js";
 import { createProgressStore, createLocalStorageAdapter, createMemoryAdapter } from "./core/progress-store.js";
-import { pathModuleList, finalTestStatus, requiredModules, getPath, isFinalTestUnlocked, requiredPracticalRubrics } from "./core/paths.js";
+import { pathModuleList, finalTestStatus, requiredModules, getPath, isFinalTestUnlocked, requiredPracticalRubrics, pathVisibleModuleIds } from "./core/paths.js";
 import { selectFinalTest } from "./core/test-engine.js";
 import { scorePath } from "./core/scoring.js";
 import { scoreQuestion } from "./core/quiz-engine.js";
@@ -152,7 +152,8 @@ function start(initialData, ctx = {}) {
     if (!pathId) return;
     updateHeader(refs, { pathId, pathName: pathName(data, pathId) });
     if (refs.nav.hidden) return;
-    const modules = pathModuleList(data.paths, data.modules, pathId, store.getProgress());
+    const visible = pathVisibleModuleIds(data.paths, pathId); // persona-set (M13): pomija czysto opcjonalne
+    const modules = pathModuleList(data.paths, data.modules, pathId, store.getProgress()).filter((m) => visible.has(m.id));
     const ft = finalTestStatus(store.getProgress(), data.paths, pathId);
     ft.active = state.screen === "test";
     renderNav(refs.nav, {
@@ -207,8 +208,10 @@ function start(initialData, ctx = {}) {
     refreshHeaderAndNav();
 
     // Wzbogać listę modułów ścieżki (id/name/status/required) o metadane do kart: filar, czas, % quizu.
+    // Persona-set (M13/ADR-0006): hub pokazuje INNY zestaw modułów per ścieżka (pomija czysto opcjonalne).
     const byId = new Map(data.modules.modules.map((m) => [m.id, m]));
-    const modules = pathModuleList(data.paths, data.modules, pathId, prog).map((m) => {
+    const visibleHub = pathVisibleModuleIds(data.paths, pathId);
+    const modules = pathModuleList(data.paths, data.modules, pathId, prog).filter((m) => visibleHub.has(m.id)).map((m) => {
       const src = byId.get(m.id) || {};
       const mp = prog.modules[m.id] || {};
       return {

@@ -53,9 +53,24 @@ test("S3: rozkład trudności trafia w target dokładnie (pool wystarczający)",
   assert.deepEqual(sel.difficultyCounts, { L1: 19, L2: 22, L3: 11, L4: 3 });
 });
 
-test("S2: rozkład trudności trafia w target dokładnie", () => {
+test("S2: rozkład trudności — best-effort po dedykowanej puli per persona (M13/ADR-0006)", () => {
+  // Po re-allokacji (M13) S2 ma własną, rozłączną pulę: L3 ograniczone do udziału S2 (nie całego banku),
+  // więc cel 20% L3 jest best-effort (silnik dopełnia z dostępnych koszyków). Suma == 40, L4=0 (L4 jest S3-only).
   const sel = selectFinalTest(bank, pathsData, "S2", seededRng(5));
-  assert.deepEqual(sel.difficultyCounts, { L1: 14, L2: 18, L3: 8, L4: 0 });
+  assert.deepEqual(sel.difficultyCounts, { L1: 15, L2: 18, L3: 7, L4: 0 });
+  assert.equal(sel.difficultyCounts.L1 + sel.difficultyCounts.L2 + sel.difficultyCounts.L3 + sel.difficultyCounts.L4, 40);
+});
+
+test("każda ścieżka wymusza kwotę pytań DEDYKOWANYCH (M13/ADR-0006 — persona realnie różni się treścią testu)", () => {
+  for (const pathId of ["S1", "S2", "S3"]) {
+    const min = pathsData.paths[pathId].dedicatedQuestionsMin;
+    for (const seed of [1, 5, 42, 99]) {
+      const sel = selectFinalTest(bank, pathsData, pathId, seededRng(seed));
+      assert.ok(sel.dedicatedCount >= min, `${pathId} seed ${seed}: dedykowanych ${sel.dedicatedCount} < kwota ${min}`);
+      // dedykowane = pula 1-ścieżkowa → każde należy WYŁĄCZNIE do tej ścieżki (rozłączność).
+      for (const q of sel.questions) if (q.paths.length === 1) assert.deepEqual(q.paths, [pathId]);
+    }
+  }
 });
 
 test("S1: L3 ograniczone pulą (3 dostępne < 5 target), liczba i tak == 25", () => {

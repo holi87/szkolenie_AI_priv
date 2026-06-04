@@ -120,11 +120,48 @@ test("pokrycie puli per ścieżka (#95): finalTestQuestions > pula ścieżki →
   const dataDir = copyData();
   const f = join(dataDir, "paths.json"); // paths.json jest wspólny (top-level data/), nie per-locale
   const doc = JSON.parse(readFileSync(f, "utf8"));
-  doc.paths.S1.finalTestQuestions = 999; // pula S1 (~49) < 999 → testu nie da się złożyć z dopasowanej puli
+  doc.paths.S1.finalTestQuestions = 999; // pula S1 (~39) < 999 → testu nie da się złożyć z dopasowanej puli
   writeFileSync(f, JSON.stringify(doc, null, 2));
   const r = runValidator(dataDir);
   assert.notEqual(r.code, 0, "pula ścieżki mniejsza niż finalTestQuestions MUSI failować (#95)");
   assert.match(r.output, /pula pytań|finalTestQuestions/, "raport powinien wskazać niedobór puli ścieżki");
+});
+
+test("dedykowane (M13/#94): pytanie modułu dedykowanego z >1 ścieżką → walidator FAILUJE (rozłączność pul)", () => {
+  const dataDir = copyData();
+  for (const loc of ["pl", "en"]) {
+    const f = join(dataDir, loc, "questions", "m02.json"); // M2 = dedykowany (scope=dedicated)
+    const doc = JSON.parse(readFileSync(f, "utf8"));
+    doc.questions.find((x) => x.id === "Q009").paths = ["S1", "S2"]; // dedykowane musi mieć dokładnie 1 ścieżkę
+    writeFileSync(f, JSON.stringify(doc, null, 2));
+  }
+  const r = runValidator(dataDir);
+  assert.notEqual(r.code, 0, "dedykowane z 2 ścieżkami MUSI failować (rozłączność)");
+  assert.match(r.output, /dedykowany|dokładnie 1 ścieżki/, "raport powinien wskazać złamaną rozłączność");
+});
+
+test("rdzeń (M13/#94): pytanie modułu rdzeniowego z 1 ścieżką → walidator FAILUJE (rdzeń musi być wspólny)", () => {
+  const dataDir = copyData();
+  for (const loc of ["pl", "en"]) {
+    const f = join(dataDir, loc, "questions", "m01.json"); // M1 = rdzeń (scope=core)
+    const doc = JSON.parse(readFileSync(f, "utf8"));
+    doc.questions.find((x) => x.id === "Q002").paths = ["S1"]; // rdzeń musi być wspólny (>=2 ścieżki)
+    writeFileSync(f, JSON.stringify(doc, null, 2));
+  }
+  const r = runValidator(dataDir);
+  assert.notEqual(r.code, 0, "rdzeniowe z 1 ścieżką MUSI failować");
+  assert.match(r.output, /rdzeniowy|wspólne/, "raport powinien wskazać złamany rdzeń");
+});
+
+test("kwota dedykowanych (M13/#94): dedicatedQuestionsMin > pula dedykowanych → walidator FAILUJE", () => {
+  const dataDir = copyData();
+  const f = join(dataDir, "paths.json");
+  const doc = JSON.parse(readFileSync(f, "utf8"));
+  doc.paths.S3.dedicatedQuestionsMin = 999; // pula dedykowanych S3 (~54) < 999 → kwota niewykonalna
+  writeFileSync(f, JSON.stringify(doc, null, 2));
+  const r = runValidator(dataDir);
+  assert.notEqual(r.code, 0, "kwota dedykowanych większa niż pula MUSI failować");
+  assert.match(r.output, /pula dedykowanych|dedicatedQuestionsMin|niewykonaln/, "raport powinien wskazać niewykonalną kwotę");
 });
 
 // ---------------- #80: kompletność katalogów UI + parytet strukturalny treści ----------------
