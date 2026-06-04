@@ -1,0 +1,138 @@
+{
+  "_meta": {
+    "module": "M2",
+    "issue": "#20 [M2] Architektura LLM na poziomie praktycznym (z wariantem S1 skróconym)",
+    "storyboard": "docs/storyboard/m02-architektura.md",
+    "interaction": "Licznik kontekstu (kind: tune)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (PipeDemo/SklepDemo/NotkaApp, identyfikatory testowe). Output interakcji jest prerenderowany (lookup po poziomie), nie z żywego modelu. ZERO PII, ZERO realnych domen.",
+    "note": "6 ekranów treści + interakcja tune + podsumowanie. Wariant S1 SKRÓCONY realizowany przez onlyForPaths na blokach (token: przykład liczbowy S2/S3; transformer/attention: rdzeń S1 vs diagram S2/S3; inference cost S3). Quiz inline = pula questions/m02.json (Q14–Q15 mają paths S2/S3 — pominięcie kolejności dla S1 jest już tam wyegzekwowane)."
+  },
+  "module": "M2",
+  "intro": "A model does not \"read\" a document the way a human does — it works on tokens and has a finite context window. For a tester this is not trivia: a truncated requirement, a skipped specification section, or a hallucination on overly long input directly degrades the quality of decisions. This module builds intuition (without the math): the token, the context window, the transformer and attention, and why more parameters does not mean better.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Why a tester needs LLM architecture",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Before you trust a model's answer about a specification or a defect, it helps to know how the model \"sees\" text at all. It does not read it like a human — it breaks it into tokens and fits only as much as the context window allows." },
+        { "kind": "list", "items": [
+          "Truncated requirement — the model answers without the fragment that dropped out of the window.",
+          "Skipped specification section — a key criterion never made it into the context.",
+          "Hallucination on overly long input — missing data replaced with fabrication."
+        ] },
+        { "kind": "paragraph", "text": "You will learn four things: what a token and a context window are, the three effects of too little context, the intuition behind the transformer and attention, and the fact that the number of parameters is no guarantee of quality. At the end, you will shrink the context window yourself in the \"Context counter\" interaction." },
+        { "kind": "callout", "variant": "info", "onlyForPaths": ["S1"], "title": "Shortcut for your path", "text": "The key business question is: \"will this document even fit in the model's window?\". If not — the model will still answer, but it may skip what matters." }
+      ]
+    },
+    {
+      "id": "s2-token",
+      "title": "Token and tokenization",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Token", "original": "token", "text": "the smallest fragment of text the model works on — not a whole word, but part of a word, a single character, or a space." },
+        { "kind": "definition", "term": "Tokenization", "original": "tokenization", "text": "breaking text into tokens, which the model does before it processes anything." },
+        { "kind": "paragraph", "text": "The everyday takeaway: cost and limits are counted in tokens, not in words or pages. A \"short\" paragraph in Polish can take up more tokens than you would expect." },
+        { "kind": "callout", "variant": "info", "onlyForPaths": ["S2", "S3"], "title": "Rough example", "text": "The sentence from a fictional report \"Order ZX-204 failed validation\" comes to roughly a dozen tokens — because \"ZX-204\" breaks into several fragments, and Polish endings add more. Rule of thumb: 1 token ≈ a few characters, and Polish tends to be \"pricier\" in tokens than English." }
+      ]
+    },
+    {
+      "id": "s3-okno-kontekstu",
+      "title": "Context window — why a long document does not fit in full",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Context window", "original": "context window", "text": "the maximum number of tokens the model \"sees\" at once — it covers both the input (document, question) and the generated answer." },
+        { "kind": "paragraph", "text": "When the document plus the question plus the answer exceed this limit, part of the input has to drop out — the model simply will not see it." },
+        { "kind": "paragraph", "text": "The mechanism itself varies by tool: some return an \"limit exceeded\" error, others silently truncate the oldest content, and still others apply a sliding window. Even when everything fits, a very long context tends to be used less effectively in the middle (the \"lost in the middle\" effect). The takeaway for a tester is the same, though: do not assume the model saw and used everything — verify it." },
+        { "kind": "callout", "variant": "info", "title": "The desk analogy", "text": "The context window is a desk with a fixed surface. Every new sheet pushes the oldest ones over the edge — they do not vanish because they are \"unimportant\", but because there was no room left." },
+        { "kind": "callout", "variant": "warn", "title": "Decision rule", "text": "\"I pasted the whole document\" does not mean \"the model read it\". First check whether the content fits in the context window." }
+      ]
+    },
+    {
+      "id": "s4-trzy-skutki",
+      "title": "Three effects of too little context",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "When a relevant fragment drops out of the window, three typical effects appear — all dangerous for the quality of a tester's decisions." },
+        { "kind": "list", "ordered": true, "items": [
+          "Omitted information — the model answers without a key requirement, because it never saw it.",
+          "Inconsistency — in a long conversation the model \"forgets\" earlier agreements that dropped out of the window.",
+          "Hallucination and guessing — missing data is replaced with fabricated yet confidently worded content."
+        ] },
+        { "kind": "paragraph", "onlyForPaths": ["S2", "S3"], "text": "Mini QA examples: the model summarizes the PipeDemo specification but skips a criterion from a section that dropped out (omission); in a long thread about defect ORD-TEST-777 it starts ignoring agreements from the beginning (inconsistency); asked about a requirement no longer in the context, it states it \"off the top of its head\" (hallucination)." },
+        { "kind": "callout", "variant": "warn", "onlyForPaths": ["S1"], "title": "Why this is a quality risk", "text": "Each of these effects looks like a normal answer — the model does not warn you that it failed to see something. That is why a decision based on such an answer can be silently wrong." }
+      ]
+    },
+    {
+      "id": "s5-transformer-uwaga",
+      "title": "Transformer and attention — the intuition",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "onlyForPaths": ["S1"], "text": "Put simply: the model learns relationships between fragments of text, which lets it understand that distant words can refer to one another. That is all you need to remember here." },
+        { "kind": "definition", "onlyForPaths": ["S2", "S3"], "term": "Transformer", "original": "transformer", "text": "an architecture that learns which tokens are related to one another — regardless of how far apart they sit in the text." },
+        { "kind": "definition", "onlyForPaths": ["S2", "S3"], "term": "Attention", "original": "attention", "text": "the mechanism for \"what the model looks at\" — it lets it link, for example, a pronoun to a noun from many sentences earlier, by weighting the relationships between tokens." },
+        { "kind": "diagram", "onlyForPaths": ["S2", "S3"], "textAlt": "The flow from text to answer in five steps: 1) the input text is broken into tokens (tokenization); 2) the tokens go into the context window; 3) using attention, the model weights the relationships between tokens; 4) the model generates the answer tokens one by one; 5) the answer tokens are reassembled back into readable text.", "ascii": "tekst -> [tokenizacja] -> tokeny -> [okno kontekstu] -> [uwaga: powiazania] -> [generacja] -> tokeny odpowiedzi -> tekst" },
+        { "kind": "paragraph", "onlyForPaths": ["S3"], "text": "Going deeper: attention compares every token with the others, so its cost grows with the length of the input. A very long context window means more computation, that is, a higher inference cost and a longer response time — an extra argument for supplying only the sections relevant to the question." }
+      ]
+    },
+    {
+      "id": "s6-parametry",
+      "title": "More parameters ≠ better quality",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Parameters", "original": "parameters", "text": "the model's internal weights — you can think of them as the model's \"capacity\", but their count alone does not determine accuracy on a specific QA task." },
+        { "kind": "paragraph", "text": "What really determines the outcome: how well the model fits the task, the quality of the data, the length of the context window, and the way you prompt — not the sheer number of billions of parameters." },
+        { "kind": "table", "onlyForPaths": ["S2", "S3"], "caption": "What really affects the accuracy of an answer", "headers": ["Factor", "Impact on quality"], "rows": [
+          ["Number of parameters", "Helps, but does not guarantee accuracy on a specific task"],
+          ["Fit to the task", "Often more important than the size of the model"],
+          ["Context window and choice of fragments", "Determines whether the model sees the needed data at all"],
+          ["Prompting approach", "Affects the precision and repeatability of answers"]
+        ], "textAlt": "A table of four factors and their impact on quality: the number of parameters helps but does not guarantee accuracy; fit to the task is often more important than size; the context window and choice of fragments determine whether the model sees the needed data; the prompting approach affects precision and repeatability." },
+        { "kind": "callout", "variant": "warn", "title": "Anti-pattern", "text": "Choosing a model \"because it has more billions of parameters\". Synthetic example: a larger model gets the fictional defect ID format in SklepDemo wrong, while a smaller one with better context gets it right. Do not buy by parameter count — check on your own task." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "tune",
+    "id": "m2-licznik-kontekstu",
+    "title": "Context counter",
+    "intro": "You are working with a synthetic PipeDemo specification made of six sections arranged in order: (1) Scope ZX-204, (2) Acceptance criteria, (3) Test data, (4) Environment, (5) Risks, (6) Glossary. Shrink the context window and observe which sections drop out and which control questions can no longer be answered. Rule: the smaller the window, the sooner the later sections drop out (the Glossary first, the Scope last). Then complete the checkpoint.",
+    "outputLabel": "State of the document in the window for the chosen limit:",
+    "controls": [
+      { "id": "limit", "label": "Context limit", "levels": [
+        { "value": "duzy", "label": "Large", "effect": "All six sections fit in the window (Scope ZX-204, Acceptance criteria, Test data, Environment, Risks, Glossary). Every control question has its basis in an available section — all four questions can be answered correctly." },
+        { "value": "sredni", "label": "Medium", "effect": "Sections 1–3 remain in the window (Scope ZX-204, Acceptance criteria, Test data). Out of context are: Environment, Risks, and Glossary. The questions about the runtime environment and about a glossary definition lose their basis; the questions about scope and about acceptance criteria are still answerable." },
+        { "value": "maly", "label": "Small", "effect": "Only section 1 remains in the window (Scope ZX-204). Out of context drop: Acceptance criteria, Test data, Environment, Risks, and Glossary. Only the question about the order's scope is possible; the questions about acceptance criteria, about test data, about the environment, and about the glossary lose their basis — the model would answer without a source." }
+      ] }
+    ],
+    "checkpoint": {
+      "prompt": "You set the context limit to \"Small\" (only the Scope ZX-204 section remains in the window). Which of the following control questions will the model NOT answer correctly, because its section dropped out of the window?",
+      "type": "single_choice",
+      "options": [
+        { "id": "A", "text": "What are the acceptance criteria for order ZX-204?" },
+        { "id": "B", "text": "What is the scope of order ZX-204?" },
+        { "id": "C", "text": "What is the order number described in the specification?" },
+        { "id": "D", "text": "What is the name of the specification being analyzed?" }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Correct: with a small limit, only the \"Scope ZX-204\" section remains in the window. The \"Acceptance criteria\" section dropped out, so the model has nothing to base an answer about the criteria on — a textbook example of omitted information.",
+      "feedbackIncorrect": "The remaining questions can be answered from the \"Scope ZX-204\" section, which stayed in the window. The problem is the question about acceptance criteria — that section dropped out of the window at the small limit, so the model would answer without a source."
+    }
+  },
+  "summary": {
+    "points": [
+      "The model works on tokens, not words — cost and limits are counted in tokens.",
+      "The context window is finite; when a document exceeds it, part of the input drops out and the model does not see it.",
+      "Too small a window produces three effects: omitted information, inconsistency, and hallucination.",
+      "The transformer learns relationships between tokens (attention); the number of parameters is not, in itself, a guarantee of quality."
+    ],
+    "checklist": [
+      "Did I check that the document fits in the model's context window?",
+      "Did I give the model only the sections relevant to the question when the whole was too long?",
+      "Am I avoiding trusting an answer just because the tool accepted the entire text?",
+      "Do I judge the model by its fit to the task, not by the number of parameters alone?"
+    ],
+    "checklistTitle": "Checklist — the context window in QA practice",
+    "nextStep": "Next step: M3 — generation parameters (temperature, top-p, max tokens)."
+  }
+}

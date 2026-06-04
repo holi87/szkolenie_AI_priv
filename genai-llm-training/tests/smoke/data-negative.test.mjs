@@ -4,7 +4,7 @@
 // musimy udowodnić, że bramka realnie WYKRYWA regresję danych. Pure Node (fs + child_process).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { cpSync, writeFileSync, mkdtempSync, readFileSync } from "node:fs";
+import { cpSync, writeFileSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
@@ -125,6 +125,14 @@ test("kompletność UI: BRAKUJĄCY klucz w en.json (obecny w pl) → walidator F
   const r = runValidator(DATA, { VALIDATE_I18N_DIR: i18nDir });
   assert.notEqual(r.code, 0, "brakujący klucz UI w locale MUSI failować");
   assert.match(r.output, /brak klucza UI|feedback\.correct/, "raport powinien wskazać brakujący klucz");
+});
+
+test("kompletność UI: BRAKUJĄCY PLIK en.json przy istniejących data/en/ → walidator FAILUJE (luka false-PASS, M11)", () => {
+  const i18nDir = copyI18n();
+  rmSync(join(i18nDir, "en.json")); // usuń CAŁY katalog UI EN; dane data/en/ (realne) zostają → locale ma dane, brak UI
+  const r = runValidator(DATA, { VALIDATE_I18N_DIR: i18nDir });
+  assert.notEqual(r.code, 0, "locale z danymi bez pliku katalogu UI MUSI failować (inaczej 100% nieprzetłumaczone przejdzie CI)");
+  assert.match(r.output, /brak katalogu UI|en\.json/, "raport powinien wskazać brakujący katalog UI");
 });
 
 test("kompletność UI: klucz-SIEROTA w en.json (nieobecny w pl) → walidator FAILUJE", () => {

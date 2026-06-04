@@ -1,0 +1,180 @@
+{
+  "_meta": {
+    "issue": "#22 [22][M4] Wdroż moduły M7-M9",
+    "storyboard": "docs/storyboard/m08-qa-use-cases.md",
+    "interaction": "QA workbench (kind: rubric, ĆWICZENIOWE — rubryka R4-qa-workbench, bez progu)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (NotkaApp, SklepDemo, przyklad.test, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Egzemplarz typu rubric ĆWICZENIOWY: pominięto passThreshold i recordsPractical (feedback bez bramki). M8 obowiązkowy S2/S3, opcjonalny S1 — bez wariantu skróconego, ten sam ciąg ekranów dla wszystkich ścieżek. Treść interakcji oparta na SC-QA-01 (reset hasła NotkaApp)."
+  },
+  "module": "M8",
+  "intro": "GenAI speeds up QA work: it drafts test cases, risk checklists, and documentation reviews. But an LLM generates the most probable text, not verified truth — which is why the tester remains the decision-maker, and the model an assistant.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Why GenAI in QA — and where its role ends",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "An LLM speeds up creating and analyzing QA artifacts: test cases, risk checklists, documentation reviews. But it generates the most probable text, not verified truth — it is you who decides what ends up in the documentation." },
+        { "kind": "list", "items": [
+          "E1 — you generate test cases from a requirement and point out coverage gaps.",
+          "E2 — you detect duplicates and sham tests (those with no real verification value).",
+          "E3 — you build a risk checklist (risk-based testing).",
+          "E4 — you judge whether an output is fit for QA documentation after a substantive review.",
+          "E5 — you identify where the LLM is an assistant and where a human makes the decision."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "How this differs from M7", "text": "M7 taught how to write prompts. M8 focuses on applying an LLM to real QA tasks and assessing its output. The guiding principle: the LLM as assistant, the tester as decision-maker." }
+      ]
+    },
+    {
+      "id": "s2-generowanie",
+      "title": "Generating test cases from a requirement",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "From a synthetic requirement (e.g. \"Password field: min. 8 characters, min. 1 digit\") you ask the LLM for test cases: valid, boundary, negative. A good prompt provides the role, the requirement, and the output format (table: ID | steps | data | expected result)." },
+        { "kind": "list", "items": [
+          "Valid TC — the password meets all the rules, registration succeeds.",
+          "Boundary TC — a password of exactly the minimum length (8 characters).",
+          "Negative TC — a password with no digit, an error message expected."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Takeaway", "text": "The LLM gives a quick skeleton tied to acceptance criteria and to a requirement→test traceability link. It is a starting point, not a finished set." }
+      ]
+    },
+    {
+      "id": "s3-braki-pokrycia",
+      "title": "Coverage gaps — what the LLM did not think of",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Read the output for coverage gaps: missing boundary cases, missing error paths, omitted states, no test data for extreme values. Technique: compare the generated cases against a list of risk categories and look for empty cells." },
+        { "kind": "callout", "variant": "warn", "title": "Synthetic example", "text": "For login the LLM covered the \"happy path\" but omitted the lockout after 5 failed attempts. What is usually missing are boundaries, error paths, and extreme data — that is where to look for gaps." }
+      ]
+    },
+    {
+      "id": "s4-duplikaty-pozorne",
+      "title": "Duplicates and sham tests",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Sham test", "original": "test with no real verification value", "text": "a case whose assertion checks nothing — no expected result, \"the test always passes\"." },
+        { "kind": "definition", "term": "Duplicate", "text": "two cases checking the same conditions with a different description; they inflate the set without adding coverage." },
+        { "kind": "callout", "variant": "warn", "title": "Takeaway", "text": "More cases ≠ better coverage. A duplicate raises maintenance cost, and a sham test gives a false sense of safety." }
+      ]
+    },
+    {
+      "id": "s5-checklista-ryzyk",
+      "title": "Risk checklist for a feature",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "The LLM drafts a risk checklist (risk-based testing) by category: security, data, performance, accessibility, compliance. Each item: risk + impact + area to test." },
+        { "kind": "table",
+          "title": "Synthetic checklist — the NotkaApp \"password reset\" feature",
+          "headers": ["Category", "Risk", "Area to test"],
+          "rows": [
+            ["Security", "Reset link works after expiry or multiple times", "30-min validity, single-use link"],
+            ["Data", "User e-mail exposed in an error message", "Response content for an unknown account"],
+            ["Accessibility", "Form not operable with a screen reader", "WCAG compliance, focus and labels"]
+          ],
+          "textAlt": "A risk checklist table for the NotkaApp password reset: category Security — risk of the link working after expiry or multiple times, area is 30-min validity and single-use; category Data — risk of the e-mail being exposed in an error, area is the response content for an unknown account; category Accessibility — risk of no screen-reader support, area is WCAG compliance, focus and labels." },
+        { "kind": "callout", "variant": "info", "text": "The LLM proposes categories, the tester prioritizes and discards the off-target ones." }
+      ]
+    },
+    {
+      "id": "s6-do-dokumentacji",
+      "title": "Is this output fit for QA documentation?",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Before pasting an output into documentation, run a substantive review (review checklist): consistency with the requirement, completeness, no fabricated facts (hallucinations), verifiability, no sensitive data." },
+        { "kind": "list", "ordered": true, "items": [
+          "Accept — the output is consistent with the requirement, complete, verifiable, with no sensitive data.",
+          "Fix — minor gaps or a single fabricated fact to correct against the requirement.",
+          "Reject — facts contradicting the requirement or sensitive data; do not use without rework."
+        ] },
+        { "kind": "callout", "variant": "info", "text": "A link to M11 (output verification) and M10 (data and privacy)." }
+      ]
+    },
+    {
+      "id": "s7-asystent-decydent",
+      "title": "Assistant or decision-maker — where to draw the line",
+      "type": "decision",
+      "blocks": [
+        { "kind": "paragraph", "text": "The LLM can support tasks as an assistant: a draft of cases, a draft checklist, brainstorming. The human makes the decision (human-in-the-loop): accepting cases, assessing critical risk, sign-off for release." },
+        { "kind": "table",
+          "title": "Assistant vs decision-maker — 3 synthetic situations",
+          "headers": ["Situation", "Assistant (LLM)", "Decision-maker (human)"],
+          "rows": [
+            ["Draft of test cases from a requirement", "Generates a proposal", "Approves the scope"],
+            ["Critical risk assessment", "Proposes categories", "Decides the priority"],
+            ["Sign-off for release", "Does not decide", "Makes the decision"]
+          ],
+          "textAlt": "A table of three QA situations split into the role of assistant (LLM) and decision-maker (human): drafting test cases — the LLM generates a proposal, the human approves the scope; critical risk assessment — the LLM proposes categories, the human decides the priority; sign-off for release — the LLM does not decide, the human makes the decision." },
+        { "kind": "callout", "variant": "safe", "title": "The line", "text": "The higher the stakes of a decision (release, critical risk, closing a defect), the more firmly the role belongs to the human. The LLM speeds things up but does not sign off." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "rubric",
+    "id": "m8-qa-workbench",
+    "title": "QA workbench",
+    "intro": "NotkaApp requirement (fictional): a user resets their password via an e-mail link valid for 30 minutes; after 3 failed login attempts the account is locked for 15 minutes. The LLM generated these cases: TC1 — successful reset; TC2 — link expired after 30 min; TC3 — 3 wrong passwords → account locked. Assess this output against the rubric's five axes. This is a learning-mode exercise — you get feedback, with no pass threshold.",
+    "rubricId": "R4-qa-workbench",
+    "scaleMax": 5,
+    "criteria": [
+      { "id": "K1", "name": "Test coverage", "points": 1,
+        "prompt": "Which behaviors from the NotkaApp requirement does the LLM output actually COVER (TC1–TC3)?",
+        "hint": "The output covers the reset happy path, link expiry after 30 min, and account lockout after 3 failed attempts.",
+        "options": [
+          { "id": "a", "text": "Successful reset (TC1), link expiry after 30 min (TC2), and account lockout after 3 failed attempts (TC3)." },
+          { "id": "b", "text": "Reuse of the same reset link and concurrent user sessions." },
+          { "id": "c", "text": "Cosmetics only: the color of the \"Reset password\" button and the logo on the login page." }
+        ], "correctOptionIds": ["a"] },
+      { "id": "K2", "name": "Coverage gaps", "points": 1,
+        "prompt": "Which cases are MISSING from the LLM output relative to the NotkaApp requirement? Mark exactly all the gaps.",
+        "hint": "Three gaps were omitted: empty e-mail, a single-use link used twice, and concurrent sessions. Link expiry (TC2) and lockout after 3 attempts (TC3) are already covered.",
+        "options": [
+          { "id": "a", "text": "Reset with an empty e-mail field (input validation)." },
+          { "id": "b", "text": "Reuse of the same reset link (single-use link used twice)." },
+          { "id": "c", "text": "Concurrent password-reset sessions for the same account." },
+          { "id": "d", "text": "Link expiry after 30 minutes — that already covers TC2." }
+        ], "correctOptionIds": ["a", "b", "c"] },
+      { "id": "K3", "name": "Sham tests / duplicates", "points": 1,
+        "prompt": "TC4 was added to the set: \"Open the reset form and check that the form opens; expected result: none\". How should it be classified?",
+        "hint": "With no defined expected result, the assertion verifies nothing — this is a sham test, not a valuable boundary case.",
+        "options": [
+          { "id": "a", "text": "A sham test — no expected result, the assertion actually checks nothing." },
+          { "id": "b", "text": "A valid boundary case for the link's 30-minute validity." },
+          { "id": "c", "text": "A valuable negative case for the account-lockout scenario." }
+        ], "correctOptionIds": ["a"] },
+      { "id": "K4", "name": "Risks / wrong assumptions", "points": 1,
+        "prompt": "In a note attached to the output the LLM wrote: \"the account lockout lasts 24 hours, and the reset link is valid indefinitely\". How should this be assessed against the requirement?",
+        "hint": "The requirement says: 15-minute lockout, 30-minute link validity. The values 24 h and \"indefinitely\" are fabricated facts (hallucinations) contradicting the requirement — wrong assumptions to reject or fix.",
+        "options": [
+          { "id": "a", "text": "Wrong assumptions contradicting the requirement (fabricated 24 h and \"indefinitely\") — fix or reject before use." },
+          { "id": "b", "text": "Acceptable — the LLM usually gives values closer to reality than the requirement does." },
+          { "id": "c", "text": "Accept with a note that the values may differ depending on the app version." }
+        ], "correctOptionIds": ["a"] },
+      { "id": "K5", "name": "Decision boundary (human verification)", "points": 1,
+        "prompt": "How should the roles between the LLM and the tester be split for this set, in line with the \"assistant, not decision-maker\" principle?",
+        "hint": "The LLM drafts cases and a risk checklist; approving the scope, assessing critical risk, and the release decision belong to the human (human-in-the-loop).",
+        "options": [
+          { "id": "a", "text": "The LLM generates a draft of cases and a risk checklist, and the tester approves the scope and decides on release sign-off." },
+          { "id": "b", "text": "The LLM signs off the release to production on its own if the generated tests pass." },
+          { "id": "c", "text": "The LLM ultimately assesses critical risk and closes defects without the tester's involvement." }
+        ], "correctOptionIds": ["a"] }
+    ]
+  },
+  "summary": {
+    "points": [
+      "E1 — from a requirement you generate a draft of test cases and read the output for coverage gaps (boundaries, error paths, extreme data).",
+      "E2 — you recognize duplicates (the same conditions with a different description) and sham tests (an assertion with no expected result); more cases ≠ better coverage.",
+      "E3 — you draft a risk checklist (security, data, performance, accessibility, compliance), and prioritize it yourself.",
+      "E4 — before documentation you apply a substantive review: accept / fix / reject (consistency with the requirement, no hallucinations, no sensitive data).",
+      "E5 — the LLM is an assistant; acceptance, critical risk, and release belong to the human (human-in-the-loop)."
+    ],
+    "checklist": [
+      "Does the output cover the happy path, the boundaries, and the error paths from the requirement?",
+      "Did I point out the coverage gaps as well as the duplicates and sham tests?",
+      "Did I check the output for facts contradicting the requirement (hallucinations)?",
+      "Have the critical-risk and release decisions stayed with the human?"
+    ],
+    "checklistTitle": "Checklist — assessing LLM output in QA",
+    "nextStep": "Next step: M9 — integrations and agents (for S3 and optionally S2); for S1, a return to the mandatory path."
+  }
+}

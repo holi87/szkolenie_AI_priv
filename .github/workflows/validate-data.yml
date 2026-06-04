@@ -9,12 +9,14 @@ on:
   pull_request:
     paths:
       - 'genai-llm-training/data/**'
+      - 'genai-llm-training/assets/i18n/**'   # M11: walidator sprawdza parytet+kompletność katalogów UI per-locale
       - 'genai-llm-training/tests/schema-validation/**'
       - '.github/workflows/validate-data.yml'
   push:
     branches: [main]
     paths:
       - 'genai-llm-training/data/**'
+      - 'genai-llm-training/assets/i18n/**'
       - 'genai-llm-training/tests/schema-validation/**'
       - '.github/workflows/validate-data.yml'
 

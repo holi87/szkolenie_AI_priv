@@ -1,0 +1,130 @@
+{
+  "_meta": {
+    "issue": "#20 [20][M4] Wdroż moduły M1-M2",
+    "storyboard": "docs/storyboard/m01-fundamenty.md",
+    "interaction": "Klasyfikator zadań (kind: classify)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (NotkaApp/SklepDemo/PipeDemo, domena przyklad.test). ZERO realnych danych klienta/PII.",
+    "note": "Egzemplarz referencyjny typu classify dla pozostałych modułów."
+  },
+  "module": "M1",
+  "intro": "Testers increasingly receive ready-made output from an LLM — a test case draft, a requirements summary, a report. To judge whether to trust it, you need to know where that answer comes from and how GenAI differs from classic ML. This module gives you that map of concepts and trains you to match the technology to the task.",
+  "screens": [
+    {
+      "id": "s1-cel",
+      "title": "Why you need this module",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Without distinguishing GenAI, LLM, and classic ML, it is easy to use a tool for the wrong task or to treat a made-up answer as a fact. That is a real risk in QA work, when a model's output ends up in test documentation." },
+        { "kind": "list", "items": [
+          "You will distinguish three kinds of solutions: generative, classification, and rule-based.",
+          "You will understand where an LLM's answer comes from and why it is not a guaranteed truth.",
+          "You will classify a QA task into the right technology."
+        ] }
+      ]
+    },
+    {
+      "id": "s2-mapa-pojec",
+      "title": "GenAI, LLM, and classic ML — a map of concepts",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Classic ML", "original": "machine learning", "text": "the model learns a pattern and usually classifies or predicts a value (e.g., \"spam / not spam\")." },
+        { "kind": "definition", "term": "GenAI", "original": "generative AI", "text": "artificial intelligence that creates new content: text, image, audio, or code." },
+        { "kind": "definition", "term": "LLM", "original": "large language model", "text": "a subset of GenAI specialized in language — it predicts the most probable next fragment of text." },
+        { "kind": "diagram", "textAlt": "Three sets: the largest is GenAI (content creation). The LLM is contained within GenAI as its language subset. Classic ML is a separate set next to GenAI — it classifies and predicts, it does not create. Conclusion: every LLM is GenAI, but not every GenAI is an LLM; classic ML is a different family.", "ascii": "[ GenAI ........ ]   [ Classic ML ]\n  [ LLM ]\n(creates content)    (classifies/predicts)" }
+      ]
+    },
+    {
+      "id": "s3-piec-przykladow",
+      "title": "Five examples side by side",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Look at the task's input and output: if the output is new content — that is GenAI/LLM; if it is a label from a fixed set — that is classic ML." },
+        { "kind": "table",
+          "caption": "Five synthetic examples and their classification",
+          "headers": ["Example", "Output", "Category"],
+          "rows": [
+            ["Classifying a ticket as bug/question/request", "a label from a fixed set", "classic ML"],
+            ["A test case draft from a requirement description", "new text", "LLM / GenAI"],
+            ["Detecting an anomaly in performance metrics", "a flag for deviation from the baseline", "classic ML"],
+            ["Summarizing a long meeting note", "new, shorter text", "LLM"],
+            ["Generating an image for a presentation", "a new image", "GenAI (non-LLM)"]
+          ],
+          "textAlt": "Three examples that create new content (test draft, summary, image) are GenAI/LLM; two that assign a label (ticket classification, metric anomaly) are classic ML. The image is GenAI, but not an LLM." }
+      ]
+    },
+    {
+      "id": "s4-skad-odpowiedz",
+      "title": "Where an LLM's answer comes from",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "An LLM predicts the most probable next fragment of text based on patterns from training. It is not a truth search engine or a fact database — a probable form can be factually wrong." },
+        { "kind": "definition", "term": "Hallucination", "original": "hallucination", "text": "an output that sounds credible but is not grounded in data." },
+        { "kind": "callout", "variant": "warn", "title": "Consequence for QA", "text": "Every LLM output requires verification before it serves as a fact. You will learn the full verification checklist in module M11." }
+      ]
+    },
+    {
+      "id": "s5-trening-wnioskowanie",
+      "title": "Training vs. inference",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Training", "original": "training", "text": "the one-time teaching of the model on a large dataset — it establishes the patterns." },
+        { "kind": "definition", "term": "Inference", "original": "inference", "text": "every use of the model on your input — this is where the answer is produced." },
+        { "kind": "paragraph", "text": "The takeaway for a tester: the model does not \"learn\" from your single prompt and does not know events after its training date." },
+        { "kind": "paragraph", "onlyForPaths": ["S2", "S3"], "text": "For technical paths: inference cost grows with the length of the input and output, which is why excess context costs money and does not always improve quality." }
+      ]
+    },
+    {
+      "id": "s6-trzy-typy",
+      "title": "Three types of tasks: generative / classification / deterministic",
+      "type": "decision",
+      "blocks": [
+        { "kind": "list", "items": [
+          "Generative — creates new content (LLM / GenAI).",
+          "Classification — assigns a label from a fixed set (classic ML).",
+          "Deterministic — the same input always yields the same result per an explicit rule (rule-based system)."
+        ] },
+        { "kind": "paragraph", "text": "Ask yourself: what kind of task do you have on your desk right now? In a moment you will practice this on 12 synthetic tasks." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "m1-klasyfikator",
+    "title": "Task classifier",
+    "intro": "Assign each synthetic QA task to the most appropriate solution category. After checking, you will see the rationale next to each task.",
+    "categories": [
+      { "id": "llm", "label": "LLM", "desc": "a language-generative task (creates new content)" },
+      { "id": "ml", "label": "Classic ML", "desc": "classification/prediction from a fixed set of labels" },
+      { "id": "rule", "label": "Rule-based system", "desc": "an explicit, fully predictable rule" },
+      { "id": "human", "label": "Human expert", "desc": "a decision carrying accountability and judgment" }
+    ],
+    "items": [
+      { "id": "t1", "text": "Write a draft of 5 test cases for the login requirement in NotkaApp.", "correctCategory": "llm", "rationale": "New text content is produced — a generative task, LLM." },
+      { "id": "t2", "text": "Summarize a long note from the QA team meeting into five bullet points.", "correctCategory": "llm", "rationale": "Generating a shorter text from a longer one is a language task for an LLM." },
+      { "id": "t3", "text": "Propose the wording of an error message for the payment form in SklepDemo.", "correctCategory": "llm", "rationale": "Creating a new message is text generation — LLM." },
+      { "id": "t4", "text": "Label an incoming ticket as \"bug\", \"question\", or \"request\".", "correctCategory": "ml", "rationale": "Assigning a label from a fixed set is classification — classic ML." },
+      { "id": "t5", "text": "Detect an anomaly in performance metrics relative to a baseline.", "correctCategory": "ml", "rationale": "Detecting deviations from a pattern is classic ML, not generation." },
+      { "id": "t6", "text": "Predict whether a new ticket belongs to the \"urgent\" or \"normal\" group.", "correctCategory": "ml", "rationale": "Predicting a category from data is classic ML." },
+      { "id": "t7", "text": "Check whether a postal code has the format NN-NNN.", "correctCategory": "rule", "rationale": "An explicit format rule yields a deterministic result — a rule-based system." },
+      { "id": "t8", "text": "Validate whether an order number matches the pattern ORD-TEST-NNN.", "correctCategory": "rule", "rationale": "Pattern validation is fully predictable — a rule, not an LLM." },
+      { "id": "t9", "text": "Convert a net amount to gross at a fixed rate of 23%.", "correctCategory": "rule", "rationale": "A calculation per a fixed rule is deterministic — a rule-based system." },
+      { "id": "t10", "text": "Decide whether to hold a release due to legal risk.", "correctCategory": "human", "rationale": "A decision carrying accountability and legal context belongs to a human expert." },
+      { "id": "t11", "text": "Sign off on a critical security risk before a release.", "correctCategory": "human", "rationale": "Accepting risk is an accountable human judgment, not a task for a model." },
+      { "id": "t12", "text": "Resolve a dispute between two teams over a defect's priority.", "correctCategory": "human", "rationale": "Resolving a conflict requires judgment and accountability — a human expert." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "GenAI creates content, classic ML classifies/predicts, an LLM predicts the most probable text — not the truth.",
+      "The choice of technology depends on the type of task: generative, classification, or deterministic.",
+      "An LLM's output is probabilistic, so it requires verification before it becomes a fact."
+    ],
+    "checklist": [
+      "Does the task require new content, or a label/result from a rule?",
+      "Can I verify the model's answer against a source?",
+      "Does the decision not require human accountability?"
+    ],
+    "checklistTitle": "Checklist — before you use an LLM",
+    "nextStep": "Next step: M2 — LLM architecture: tokens and the context window."
+  }
+}

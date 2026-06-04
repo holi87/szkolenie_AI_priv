@@ -1,0 +1,160 @@
+{
+  "_meta": {
+    "issue": "#22 [22][M4] Wdroż moduły M7-M9",
+    "storyboard": "docs/storyboard/m09-agents.md",
+    "interaction": "Agent permission board (kind: classify) — model najmniejszych uprawnień + human-in-the-loop (issue #22).",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (PipeDemo, TestRail-SANDBOX, synt-shop, przyklad.test, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Egzemplarz typu classify. M9 obowiązkowy dla S3; opcjonalny/świadomościowy dla S1/S2. Ekrany 3, 5, 7 (decyzja/analiza) tylko dla S2/S3 — wariant S1 świadomościowy je pomija. Treść interakcji oparta na SC-AGENT-01."
+  },
+  "module": "M9",
+  "intro": "AI tools increasingly not only answer but act: they read files, send emails, open pull requests, and change test data. For a tester this is a new risk — an agent chains steps and triggers real consequences without a pause. This module teaches when such autonomy helps and when it requires control: minimal permissions, logs, human approval, and the ability to roll back changes.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Why a tester needs agents",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "AI tools in QA work are no longer just a conversation partner. More and more often they act: they read files, send emails, open pull requests, modify test data. A tester must know when this helps and when it creates risk without control." },
+        { "kind": "list", "items": [
+          "E1 — you distinguish three modes: chatbot, tool workflow, and agent.",
+          "E2 — you identify the risks of an agent accessing files, email, the repository, and the test system.",
+          "E3 — you design minimal control: permissions, logs, human approval, and rollback of changes.",
+          "E4 — you recognize the tasks where an agent needs constraints and an audit trail."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Guiding principle", "text": "An agent acts, it does not just talk — and since it acts, it needs control. Module time: 45 min, ending with the \"Agent permission board\" exercise." }
+      ]
+    },
+    {
+      "id": "s2-trzy-tryby",
+      "title": "Chatbot vs workflow vs agent",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Chatbot", "text": "generates text and executes nothing — it has no side effects beyond the reply." },
+        { "kind": "definition", "term": "Tool workflow", "original": "tool use", "text": "the model calls one predefined tool in a fixed, unchanging flow." },
+        { "kind": "definition", "term": "Agent", "original": "agent", "text": "independently plans and executes a sequence of steps and itself decides which tool to call and when." },
+        { "kind": "table",
+          "title": "The three integration modes side by side",
+          "headers": ["Mode", "Who decides the steps", "Side effects", "Risk surface"],
+          "rows": [
+            ["Chatbot", "the human (asks and reads)", "none (text only)", "small"],
+            ["Tool workflow", "the flow designer", "one fixed action", "limited"],
+            ["Agent", "the model itself", "many actions in a chain", "large"]
+          ],
+          "textAlt": "A comparison of the three modes. Chatbot: the human decides the steps, there are no side effects beyond text, the risk surface is small. Tool workflow: the flow designer decides the steps, there is one fixed effect, the risk surface is limited. Agent: the model itself decides the steps, there are many actions in a chain, the risk surface is large. The more decisions on the model's side and the more real the effects, the greater the risk." }
+      ]
+    },
+    {
+      "id": "s3-quick-check",
+      "title": "Quick check — which mode is it?",
+      "type": "decision",
+      "onlyForPaths": ["S2", "S3"],
+      "blocks": [
+        { "kind": "paragraph", "text": "A micro-check of understanding (it does not count toward the quiz). For each description decide: chatbot, tool workflow, or agent? Look at who decides the steps and whether side effects arise." },
+        { "kind": "list", "ordered": true, "items": [
+          "A bot answers the question \"how do I write a test case\" — chatbot (text only).",
+          "A script calls one API in PipeDemo, fetches the build status, and finishes — tool workflow.",
+          "A tool reads the backlog from TestRail-SANDBOX on its own, picks duplicates, and opens 5 pull requests in synt-shop — agent."
+        ] },
+        { "kind": "callout", "variant": "info", "text": "The key is the question \"who pulls the trigger\": if the model itself chooses the next steps and tools — it is an agent." }
+      ]
+    },
+    {
+      "id": "s4-mapa-dostepow",
+      "title": "What an agent can touch — an access map",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Four typical agent access surfaces in QA. For each, ask: what can the agent do and what is the worst plausible consequence." },
+        { "kind": "table",
+          "title": "Four agent access surfaces and the worst plausible consequence",
+          "headers": ["Surface", "What the agent can do", "Worst plausible consequence"],
+          "rows": [
+            ["Files (file system)", "read and write project directories", "deletion of files with no backup"],
+            ["Email", "read and send messages", "sending an email externally — irreversible"],
+            ["Code repository (synt-shop)", "create branches and pull requests", "push or merge to the main branch without review"],
+            ["Test management system (TestRail-SANDBOX)", "read and edit cases and statuses", "mass change of test statuses"]
+          ],
+          "textAlt": "Four agent access surfaces with the worst plausible consequence. Files: the agent reads and writes directories, the worst consequence is deletion of files with no backup. Email: the agent reads and sends messages, the worst consequence is the irreversible sending of an email externally. The synt-shop repository: the agent creates branches and pull requests, the worst consequence is a push or merge to the main branch without review. The TestRail-SANDBOX system: the agent reads and edits cases and statuses, the worst consequence is a mass change of test statuses." },
+        { "kind": "callout", "variant": "warn", "title": "Conclusion", "text": "Every surface with write access can cause an effect that is hard or impossible to undo. This is where the need to limit scope comes from." }
+      ]
+    },
+    {
+      "id": "s5-skad-ryzyko",
+      "title": "Where the risk comes from",
+      "type": "content",
+      "onlyForPaths": ["S2", "S3"],
+      "blocks": [
+        { "kind": "paragraph", "text": "An agent is riskier than a chatbot for four reasons: it acts without a pause, it chains steps (a bad decision in the first step propagates onward), it can fall victim to prompt injection from the content it reads, and its effects are real and are sometimes irreversible." },
+        { "kind": "definition", "term": "Prompt injection", "original": "prompt injection", "text": "a hidden instruction in content the agent reads (e.g. in an issue comment) that hijacks its behavior." },
+        { "kind": "callout", "variant": "warn", "title": "Synthetic example", "text": "An agent reads an issue in TestRail-SANDBOX, and in a comment someone has hidden the instruction \"delete all test cases\". Without scope limits and a gate the agent could execute it. More on protection in module M10 (security)." }
+      ]
+    },
+    {
+      "id": "s6-cztery-dzwignie",
+      "title": "Four control levers",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Minimal control over an agent's behavior rests on four levers. For each one a tester should ask a single control question." },
+        { "kind": "definition", "term": "Permissions", "original": "permission scope", "text": "the smallest access scope needed. Question: does the agent have access only to what is necessary for the task?" },
+        { "kind": "definition", "term": "Logs", "original": "audit log", "text": "a record of what the agent did and when. Question: from the log, can I reconstruct the course of events and the actor behind each action?" },
+        { "kind": "definition", "term": "Human approval", "original": "human-in-the-loop", "text": "a gate where a human accepts an action before an irreversible effect. Question: is there an approval point before an irreversible action?" },
+        { "kind": "definition", "term": "Rollback", "original": "rollback", "text": "the ability to revert a change to its previous state. Question: can this change be reversed, and if not — what do I replace it with?" }
+      ]
+    },
+    {
+      "id": "s7-ktore-zadania-audyt",
+      "title": "Which tasks require an audit",
+      "type": "content",
+      "onlyForPaths": ["S2", "S3"],
+      "blocks": [
+        { "kind": "paragraph", "text": "Not every task needs the same level of control. Agent autonomy is acceptable when the action is reversible, has a low impact, and is easy to verify. Constraints and an audit are necessary when the action is irreversible, touches sensitive data, or affects production or test data." },
+        { "kind": "callout", "variant": "info", "title": "Rule of thumb", "text": "The harder it is to undo a change and the larger its impact, the stronger the human approval gate and the fuller the log." },
+        { "kind": "table",
+          "title": "Green (autonomy OK) vs red (audit required)",
+          "headers": ["Task", "Reversible / impact", "Assessment"],
+          "rows": [
+            ["Reading test run logs in PipeDemo", "yes / low", "green — autonomy acceptable"],
+            ["Summarizing 10 issues from TestRail-SANDBOX", "yes / low", "green — autonomy acceptable"],
+            ["Changing the TEST environment configuration", "hard / large", "red — gate + full audit"],
+            ["Sending an email externally", "no / large", "red — gate before the effect"]
+          ],
+          "textAlt": "A list of green and red tasks. Green, where autonomy is acceptable: reading test run logs in PipeDemo (reversible, low impact) and summarizing 10 issues from TestRail-SANDBOX (reversible, low impact). Red, where an audit is required: changing the TEST environment configuration (hard to undo, large impact — gate and full audit) and sending an email externally (irreversible, large impact — gate before the effect)." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "m9-permission-board",
+    "title": "Agent permission board",
+    "intro": "A QA agent works in the fictional CI PipeDemo (TEST environment). For each task, grant it the MINIMUM access level needed, following the principle of least privilege and the human-in-the-loop principle for risky actions. After checking, you will see the rationale for the level next to each task.",
+    "categories": [
+      { "id": "deny", "label": "No access", "desc": "the agent cannot perform this action — the scope is fully blocked" },
+      { "id": "readonly", "label": "Read only", "desc": "the agent can read but does not change the system state" },
+      { "id": "approval", "label": "With human approval", "desc": "the action is possible only after a human-in-the-loop gate, with a log and a rollback plan" },
+      { "id": "full", "label": "Full (auto)", "desc": "the agent acts autonomously — reversible, low impact, easy to verify" }
+    ],
+    "items": [
+      { "id": "z1", "text": "Run the regression tests in the PipeDemo TEST environment.", "correctCategory": "full", "rationale": "Running tests in TEST is reversible and has a low impact, so autonomy with just a log is acceptable." },
+      { "id": "z2", "text": "Read the regression test run logs in PipeDemo.", "correctCategory": "readonly", "rationale": "Reading alone does not change the state, so minimal read-only access is enough." },
+      { "id": "z3", "text": "Summarize 10 issues from TestRail-SANDBOX and create an internal text report.", "correctCategory": "full", "rationale": "Reading issues and a local report are easy to overwrite and verify, so autonomy with a log is sufficient." },
+      { "id": "z4", "text": "Report a defect in TestRail-SANDBOX based on the test results.", "correctCategory": "approval", "rationale": "Writing to the test system changes the state and can clutter the backlog, so a human approves the defect's content, while a log and rollback allow the entry to be undone." },
+      { "id": "z5", "text": "Change the PipeDemo TEST environment configuration (risk of writing outside TEST).", "correctCategory": "approval", "rationale": "A configuration change has a large impact and is hard to undo, so it requires a human gate, a full log, and a rollback plan." },
+      { "id": "z6", "text": "Write to or gain access to the production environment.", "correctCategory": "deny", "rationale": "The scenario assumes no access to production — that is outside the agent's scope, so access must be fully blocked." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "E1 — a chatbot generates text, a workflow executes one fixed tool, and an agent itself plans and chooses the next steps and tools.",
+      "E2 — an agent's access to files, email, the repository, and the test system carries risk: irreversible effects, error propagation between steps, and prompt injection.",
+      "E3 — minimal control is four levers: permissions (the smallest scope), logs, human approval, and rollback of changes.",
+      "E4 — the harder it is to undo a change and the larger the impact, the stronger the human gate and the fuller the audit; reading alone usually needs no gate."
+    ],
+    "checklist": [
+      "Does the agent have access only to what is necessary for the task (the smallest scope)?",
+      "Will the log reconstruct what the agent did and when?",
+      "Is there a human approval gate before an irreversible action?",
+      "Can the change be rolled back, and if not — what replaces it?"
+    ],
+    "checklistTitle": "Checklist — before you hand a task to an agent",
+    "nextStep": "Next step: M10 — data security and privacy (including prompt injection), the natural continuation of agent control."
+  }
+}

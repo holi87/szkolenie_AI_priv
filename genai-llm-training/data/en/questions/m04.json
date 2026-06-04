@@ -1,0 +1,371 @@
+{
+  "_meta": {
+    "module": "M4",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M4. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q025",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "The participant explains what an embedding is as a numerical representation of the meaning of text.",
+      "prompt": "An embedding model converts a phrase from QA documentation into an embedding. What does the resulting vector of numbers actually represent?",
+      "options": [
+        {
+          "id": "A",
+          "text": "The semantic meaning of the text in numerical form — phrases with similar meaning produce similar vectors."
+        },
+        {
+          "id": "B",
+          "text": "The number of words in the phrase and its length in characters."
+        },
+        {
+          "id": "C",
+          "text": "The exact record of consecutive letters encoded as ASCII codes."
+        },
+        {
+          "id": "D",
+          "text": "A numerical score for the grammatical and stylistic correctness of the text."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "An embedding encodes the meaning of text as a vector of numbers, so that phrases close in meaning (e.g. „login” and „authentication”) end up close to each other.",
+      "feedbackIncorrect": "An embedding does not count characters, letters or grammar — it encodes meaning. Go back to the „A word as a vector” screen.",
+      "references": [
+        "M4.1",
+        "M4.2"
+      ]
+    },
+    {
+      "id": "Q026",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "The participant interprets cosine similarity as a measure of the direction of vectors, independent of text length.",
+      "prompt": "In the NotkaApp corpus you have a short description „Password reset: e-mail link valid for 30 min” and a long, elaborate paragraph describing the same reset procedure. Why is their cosine similarity high despite the large difference in text length?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Cosine similarity measures the angle (direction) between meaning vectors, not their length — both texts point in the same direction."
+        },
+        {
+          "id": "B",
+          "text": "Cosine similarity grows with the number of words, so a longer text always has higher similarity."
+        },
+        {
+          "id": "C",
+          "text": "Cosine similarity compares the number of shared words, and both texts contain the word „reset”."
+        },
+        {
+          "id": "D",
+          "text": "Cosine similarity always returns 1.0 when the texts concern the same product."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Cosine similarity computes the angle between vectors, i.e. the agreement in the direction of meaning — the length/„weight” of the text does not affect the result, so a short and a long description of the same thing are close.",
+      "feedbackIncorrect": "It is neither the number of words nor the shared tokens that decides, but the direction of the meaning vector. Review „Cosine similarity — direction, not length”.",
+      "references": [
+        "M4.3"
+      ]
+    },
+    {
+      "id": "Q027",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "The participant correctly interprets a ranking of nearest neighbors and understands the conventional nature of the similarity threshold.",
+      "prompt": "A semantic search returned a list of nearest neighbors with the results: fragment A = 0.91, fragment B = 0.74, fragment C = 0.62. How should a tester interpret this?",
+      "options": [
+        {
+          "id": "A",
+          "text": "The list is sorted in descending order of similarity, but a high position does not guarantee business relevance — the content must be verified."
+        },
+        {
+          "id": "B",
+          "text": "Fragment A with a score of 0.91 is certainly the correct answer, because it exceeds the 0.9 threshold."
+        },
+        {
+          "id": "C",
+          "text": "Results below 0.75 are always wrong and can be rejected without checking."
+        },
+        {
+          "id": "D",
+          "text": "A score of 0.62 means that fragment C is exactly 62% correct on the merits."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "The ranking orders results in descending order, but the threshold is conventional and corpus-dependent — a high position is a signal, not proof of relevance.",
+      "feedbackIncorrect": "There is no fixed, universal threshold, and a numerical score is not a „percentage of correctness”. Go back to „How to read a similarity ranking”.",
+      "references": [
+        "M4.4"
+      ]
+    },
+    {
+      "id": "Q028",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant selects the characteristics of a good query for semantic search.",
+      "prompt": "You want to find in the NotkaApp documentation information about the validity period of the password reset link in the current version. Which practices for formulating a semantic query will increase the relevance of the results? Select all correct answers.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Use a full phrase that captures the intent, e.g. „validity period of the password reset link”, instead of a single word."
+        },
+        {
+          "id": "B",
+          "text": "Specify the context and version, e.g. „password reset in NotkaApp v2”, if we care about the current wording."
+        },
+        {
+          "id": "C",
+          "text": "Formulate the query as a negation alone, e.g. „not session token”, in order to filter out other results."
+        },
+        {
+          "id": "D",
+          "text": "Type a single general word „password”, hoping the model will figure out the intent on its own."
+        },
+        {
+          "id": "E",
+          "text": "Include the key object of the query (the reset link), in order to move away from similar but different concepts (the session token)."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "E"
+      ],
+      "feedbackCorrect": "A full phrase capturing the intent, specifying the context/version, and indicating the key object steer the query vector toward the right meaning.",
+      "feedbackIncorrect": "A single word is too general, and a negation alone works poorly in semantic search (the model still encodes the topic „session token”). Review „Choosing a query for semantic search”.",
+      "references": [
+        "M4.7"
+      ]
+    },
+    {
+      "id": "Q029",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant recognizes situations in which high similarity does not mean a correct answer.",
+      "prompt": "In which of the following situations can a high cosine similarity score be misleading, returning a fragment that is semantically close but business-wise incorrect? Select all correct answers.",
+      "options": [
+        {
+          "id": "A",
+          "text": "The fragment „login does not work” comes up as close for the query „login works” (negation/antonym)."
+        },
+        {
+          "id": "B",
+          "text": "A description of the payments feature comes up as close for a bug report about the same feature (same topic, different intent)."
+        },
+        {
+          "id": "C",
+          "text": "A fragment about a security „token” comes up for a query about a „token” in the sense of an LLM unit (ambiguity/polysemy)."
+        },
+        {
+          "id": "D",
+          "text": "An old wording of a requirement is very similar to the new one, although only the new one is correct (outdated version)."
+        },
+        {
+          "id": "E",
+          "text": "Two fragments describing exactly the same, current password reset procedure produce high similarity."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "feedbackCorrect": "These are four classic similarity traps: negation, the same topic with a different intent, polysemy, and an outdated version — an embedding encodes the topic more strongly than small, critical differences.",
+      "feedbackIncorrect": "Option E is the case where high similarity is RELEVANT (two consistent, current descriptions of the same thing). Review „Trap: similar ≠ correct — 4 cases”.",
+      "references": [
+        "M4.5",
+        "M4.6"
+      ]
+    },
+    {
+      "id": "Q030",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant evaluates why embeddings confuse critical differences and draws the right conclusion for QA work.",
+      "prompt": "Why does an embedding model confuse pairs such as „login works” / „login does not work”, and what conclusion should a tester draw from this? Select all the accurate statements.",
+      "options": [
+        {
+          "id": "A",
+          "text": "An embedding encodes the topic and style of a phrase more strongly than small but critical differences, such as a negation or a version number."
+        },
+        {
+          "id": "B",
+          "text": "A similarity ranking is a supporting signal, not a verdict — the result requires verification of the fragment's content."
+        },
+        {
+          "id": "C",
+          "text": "It is worth supporting the search with filtering by metadata (e.g. version, document type) to limit misleading hits."
+        },
+        {
+          "id": "D",
+          "text": "Since the model confuses these pairs, semantic search should be abandoned entirely in QA."
+        },
+        {
+          "id": "E",
+          "text": "It is enough to raise the similarity threshold to 0.95 to automatically eliminate all traps."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "An embedding encodes the topic more strongly than a negation or a version, which is why we treat the ranking as a signal requiring content verification, supported by metadata filtering.",
+      "feedbackIncorrect": "Abandoning search (D) and a rigid threshold (E) are false solutions — a pair with a negation can be so similar that no threshold will filter it out. Review „Going deeper: why the model gets it wrong”.",
+      "references": [
+        "M4.6",
+        "M4.5"
+      ]
+    },
+    {
+      "id": "Q031",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant diagnoses, on a concrete case, why high similarity returned a business-wise incorrect fragment.",
+      "prompt": "In the NotkaApp corpus you enter the query „How long until the password reset link expires?”. As the closest match the search returns DOC1: „Login procedure: the session token expires after 30 min of inactivity” (0.86), and only lower down DOC3: „Password reset: e-mail link valid for 30 min, single-use” (0.71). What best explains this result?",
+      "options": [
+        {
+          "id": "A",
+          "text": "DOC1 is semantically close because it shares with the query the theme „something expires after 30 min”, but it concerns a different object (the session token), so the correct source is DOC3 — this is the „similar but different concept” trap (same theme, different object)."
+        },
+        {
+          "id": "B",
+          "text": "DOC1 is the correct answer, because it has a higher similarity score than DOC3."
+        },
+        {
+          "id": "C",
+          "text": "The result is an error of the embedding model, which should be reported as a library defect."
+        },
+        {
+          "id": "D",
+          "text": "DOC3 is incorrect, because its score of 0.71 is below the universal relevance threshold of 0.75."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "The shared theme „expires after 30 min” brings DOC1 close to the query, even though it concerns the session token and not the reset link — the correct source is DOC3, despite its lower score.",
+      "feedbackIncorrect": "The highest score does not determine relevance, and 0.75 is not any universal threshold — this is the classic „similar but different concept” trap. Review the „Trap: similar ≠ correct” and „Semantic map” screens.",
+      "references": [
+        "M4.5",
+        "M4.9"
+      ]
+    },
+    {
+      "id": "Q032",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "The participant recognizes the negation trap in search results and chooses a safe QA decision.",
+      "prompt": "On the „Semantic map” you enter the query „login does not work after the update”. The closest fragment (0.89) turns out to be „login works correctly”, while the fragment „known bug: login locks up after update v2” is only third (0.77). How best to assess this situation and react?",
+      "options": [
+        {
+          "id": "A",
+          "text": "This is the negation trap: the embedding encodes the shared topic „login”, but loses „does not work” vs „works” — you should verify the content and choose the fragment about the known bug, despite its lower score."
+        },
+        {
+          "id": "B",
+          "text": "Accept the fragment „login works correctly”, because it has the highest similarity 0.89, and close the analysis."
+        },
+        {
+          "id": "C",
+          "text": "Consider both fragments equivalent, since both concern login, and decide nothing further."
+        },
+        {
+          "id": "D",
+          "text": "Lower the threshold to 0.5 so that the ranking automatically moves the right fragment to the first position."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "„Works” and „does not work” are semantically close because they differ only by the negation — the highest score is misleading here, so we verify the content and choose the fragment about the known bug.",
+      "feedbackIncorrect": "The highest score is the negation trap, and manipulating the threshold does not fix the direction of the vector — you have to check the content. Review „Trap: similar ≠ correct” and „Semantic map”.",
+      "references": [
+        "M4.5",
+        "M4.9"
+      ]
+    }
+  ]
+}

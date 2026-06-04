@@ -1,0 +1,179 @@
+{
+  "_meta": {
+    "issue": "#23 [23][M4] Wdroż moduł M11 — halucynacje, granice, weryfikacja outputu",
+    "storyboard": "docs/storyboard/m11-verification.md",
+    "interaction": "Output verifier (kind: classify)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (NotkaApp/SklepDemo/PipeDemo, domena przyklad.test, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "M11 obowiązkowy dla S1/S2/S3 — żaden ekran nie znika przez gating; tylko ekran 3 ma blok pogłębienia S2/S3. Wzmacnia zasadę KONTROLI outputu (#23). Scenariusz bazowy: SC-VERIFY-01."
+  },
+  "module": "M11",
+  "intro": "A tester receives a finished artifact from an LLM — a test report, a test case, a requirements summary, a snippet of documentation — and has to decide whether to trust it. As you recall from M1, an LLM returns the most probable text, not guaranteed truth. Without a verification habit it is easy to let fabricated content slip through as fact. This module gives you five causes of hallucinations, a verification checklist, and a rule for when to simply reject the LLM.",
+  "screens": [
+    {
+      "id": "s1-cel",
+      "title": "Why you need this module",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "An LLM's answer can sound credible and confident while at the same time containing a fabricated fact or a nonexistent source. If such a snippet makes it unchecked into test documentation or a release decision, the mistake becomes yours, not the model's. That is why output control is a core tester competency — most critical precisely where the tester is not a domain expert." },
+        { "kind": "list", "items": [
+          "You will recognize where a hallucination comes from — five common causes.",
+          "You will run a verification checklist before trusting an answer.",
+          "You will reject the LLM when the result cannot be checked or the error has high impact.",
+          "You will flag snippets that require a source or an expert, instead of accepting or rejecting the whole."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "What's ahead", "text": "About 60 minutes: short theory screens, a \"use it or reject it\" decision, the \"Output verifier\" exercise (you flag the sentences of an LLM's answer), and a quiz with instant feedback. The module is mandatory on every path." }
+      ]
+    },
+    {
+      "id": "s2-czym-jest-halucynacja",
+      "title": "What a hallucination is (and what it isn't)",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Hallucination", "original": "hallucination", "text": "output that sounds credible but is not grounded in data — a fabricated fact, a nonexistent source, or an incorrect detail delivered in a confident tone." },
+        { "kind": "paragraph", "text": "Key principle: a confident tone does not mean correctness. The model phrases sentences just as smoothly when it is backed by data as when it is not." },
+        { "kind": "list", "items": [
+          "This is NOT a hallucination: a user error, i.e. a badly or ambiguously worded prompt.",
+          "This is NOT a hallucination: an answer in which the model explicitly signals uncertainty (\"I'm not sure, check the documentation\").",
+          "This is NOT a hallucination: a correct answer that simply hasn't been verified yet."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Example", "text": "Asked about NotkaApp, the model answers: \"The configuration is described in section 9.2 of the documentation.\" The tester checks — the document ends at section 6. Section 9.2 does not exist: this is a hallucination, despite a perfectly credible form." }
+      ]
+    },
+    {
+      "id": "s3-mechanizm",
+      "title": "Where hallucinations come from — the mechanism",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "The model has no built-in \"I don't know\" signal. When it lacks the knowledge or a pattern for your question, instead of admitting ignorance it \"fills in\" what sounds most probable. A hallucination is therefore a consequence of how the mechanism works, not a malfunction." },
+        { "kind": "paragraph", "onlyForPaths": ["S2", "S3"], "text": "Technical deep dive: an LLM predicts the next token based on a probability distribution learned in training, rather than querying a database of facts. A higher temperature increases the randomness of token selection, and the lack of access to a real source during generation means the model fills gaps with the most probable sequence — hence confidently worded but invented details." },
+        { "kind": "callout", "variant": "info", "title": "Takeaway for the tester", "text": "Since fabrication is built into the mechanism, verification is not a \"just in case\" option — it is a permanent step in working with LLM output." }
+      ]
+    },
+    {
+      "id": "s4-piec-przyczyn",
+      "title": "Five causes of hallucinations",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "The same causes recur in nearly every case of fabrication. Recognizing the cause helps you decide what to do with the snippet." },
+        { "kind": "table",
+          "caption": "Five causes of hallucinations with a synthetic warning signal",
+          "headers": ["Cause", "Mechanism", "Warning signal"],
+          "rows": [
+            ["Missing data", "question outside the model's knowledge", "a reference to a section or document that cannot be found"],
+            ["Conflicting data", "contradictory information in the context or training", "two versions of the same fact in one answer"],
+            ["Prompt pressure", "the prompt forces an answer the model does not have (e.g. \"give the exact version number\")", "a specific number or name given despite no basis"],
+            ["Stale context", "a question about a state after the training date or about an outdated document", "a description of a feature that may have appeared after the data cutoff"],
+            ["Imprecise sources", "the model mixes or averages similar documents", "a detail that fits another, similar product"]
+          ],
+          "textAlt": "Five causes of hallucinations. 1) Missing data — a question outside the model's knowledge; signal: a reference to an unfindable source. 2) Conflicting data — contradictory information; signal: two versions of a fact at once. 3) Prompt pressure — the prompt forces an answer the model does not have; signal: a specific given without basis. 4) Stale context — a question about a state after the training date; signal: a description of a feature created after the data cutoff. 5) Imprecise sources — the model mixes similar documents; signal: a detail from another, similar product." }
+      ]
+    },
+    {
+      "id": "s5-checklista",
+      "title": "Output verification checklist",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Before you trust an answer, go through it step by step. Each snippet will end up assigned to one of the five flagging categories you will learn on the next screens." },
+        { "kind": "list", "ordered": true, "items": [
+          "Are there concrete, checkable claims — numbers, names, quotes, steps?",
+          "Does the cited source exist and actually say what the model claims?",
+          "Is the content not out of date relative to the current state?",
+          "Are there no internal contradictions in the answer?",
+          "Does the snippet concern a critical decision where I must check with an expert?"
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "When output is unverified", "text": "If the claims are checkable but you have not confirmed them in a source, the output remains UNVERIFIED — you must not pass it on as fact. The length and detail of an answer are not proof of quality." }
+      ]
+    },
+    {
+      "id": "s6-kiedy-nie-uzywac",
+      "title": "When NOT to use an LLM",
+      "type": "decision",
+      "blocks": [
+        { "kind": "paragraph", "text": "Before using output, weigh two axes: whether the result can be checked (verifiability) and what the impact of an error is (reversible and low vs irreversible and high)." },
+        { "kind": "callout", "variant": "warn", "title": "Rule of thumb", "text": "Can't be checked OR the error has a high, hard-to-reverse impact → don't rely on the LLM. Reject the result or require human or source verification. This is an either/or: one condition is enough." },
+        { "kind": "paragraph", "text": "Guiding question: if this answer were fabricated, what would be the worst plausible outcome, and would I catch it?" },
+        { "kind": "table",
+          "caption": "Synthetic green and red use cases",
+          "headers": ["Use case", "Verifiable?", "Error impact", "Decision"],
+          "rows": [
+            ["A draft of test cases for NotkaApp login that you review anyway", "yes, via review", "low, reversible", "green — usable"],
+            ["A summary of a long QA meeting note", "yes, against the note", "low", "green — usable, after checking"],
+            ["A decision whether to turn off error logging in SklepDemo production", "hard", "high, hard to reverse", "red — expert, not the LLM"],
+            ["Confirming compliance with a standard without access to the source", "no", "high", "red — reject or require a source"]
+          ],
+          "textAlt": "Four use cases. Green (usable after verification): a draft of test cases reviewed by the tester, and a summary of a note — verifiable and low impact. Red (not the LLM): a decision to turn off logging in production (hard to check, high impact), and confirming compliance with a standard without a source (uncheckable, high impact)." }
+      ]
+    },
+    {
+      "id": "s7-oznaczanie-fragmentow",
+      "title": "Flagging snippets: source and expert",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "An LLM's answer is rarely entirely good or entirely bad — more often it mixes snippets that are certain, uncertain, and risky. Instead of accepting or rejecting the whole, you flag each snippet separately." },
+        { "kind": "list", "items": [
+          "Correct — a snippet confirmed in a source or beyond dispute.",
+          "Unsupported — a snippet contradicting a known requirement or source.",
+          "Needs a source — a checkable claim, but given without a citation; it must be confirmed.",
+          "Risky — a high-impact claim without a source, or a critical decision for an expert.",
+          "To be rejected — a snippet citing a nonexistent source or plainly fabricated."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Granularity instead of all-or-nothing", "text": "These five categories are the language of the \"Output verifier\" exercise on the next screen. \"Needs a source\" means a missing citation, not an error; \"unsupported\" and \"to be rejected\" are already real problems with the content." }
+      ]
+    },
+    {
+      "id": "s10-karta",
+      "title": "Verification card for your work",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "A condensed cheat sheet to keep at your desk — a synthesis of screens 4–7, with no new content." },
+        { "kind": "list", "items": [
+          "Five causes: missing data, conflicting data, prompt pressure, stale context, imprecise sources.",
+          "Checklist: (a) checkable claims, (b) the source exists and confirms it, (c) currency, (d) no internal contradictions, (e) critical decision → expert.",
+          "Rule: can't be checked OR high error impact → don't rely on the LLM.",
+          "Five flagging categories: correct, unsupported, needs a source, risky, to be rejected."
+        ] }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "m11-output-verifier",
+    "title": "Output verifier",
+    "intro": "You analyze a single synthetic LLM answer sentence by sentence — to a tester's question about NotkaApp and SklepDemo. Assign each sentence one of the five categories. After checking, you will see a rationale with the hallucination cause for each sentence and an assessment of whether you caught the critical snippets.",
+    "categories": [
+      { "id": "poprawne", "label": "Correct", "desc": "confirmed in a source or beyond dispute — can be accepted" },
+      { "id": "nieuzasadnione", "label": "Unsupported", "desc": "contradicts a known requirement or source" },
+      { "id": "wymaga_zrodla", "label": "Needs a source", "desc": "a checkable claim, but without a citation — to be confirmed" },
+      { "id": "ryzykowne", "label": "Risky", "desc": "high impact without a source, or a critical decision for an expert" },
+      { "id": "do_odrzucenia", "label": "To be rejected", "desc": "cites a nonexistent source or is plainly fabricated" }
+    ],
+    "items": [
+      { "id": "z1", "text": "Password reset in NotkaApp uses a link valid for 30 minutes.", "correctCategory": "poprawne", "rationale": "Consistent with the documentation (DOC3) — the claim is confirmed and can be accepted." },
+      { "id": "z2", "text": "The reset link can be used multiple times, until it works.", "correctCategory": "nieuzasadnione", "rationale": "Directly contradicts a known source (DOC3: the link is single-use) — the snippet must be rejected as wrong, not merely confirmed." },
+      { "id": "z3", "text": "An account lockout after failed attempts lasts 24 hours.", "correctCategory": "wymaga_zrodla", "rationale": "A checkable number given without a citation — to be confirmed in the requirement (which states 15 minutes) before you accept it; cause: imprecise sources." },
+      { "id": "z4", "text": "NotkaApp has ISO 27001 certification.", "correctCategory": "ryzykowne", "rationale": "A high-impact claim given without a source — cause: missing data; it requires an expert or proof, not just a citation." },
+      { "id": "z5", "text": "The full logging configuration is described in section 9.2 of the NotkaApp documentation.", "correctCategory": "do_odrzucenia", "rationale": "The document ends at section 6 — a fabricated, nonexistent source; cause: missing data." },
+      { "id": "z6", "text": "You can safely turn off error logging in SklepDemo production, it won't affect compliance.", "correctCategory": "ryzykowne", "rationale": "A high-impact, hard-to-reverse decision under prompt pressure — it requires an expert, not LLM output." },
+      { "id": "z7", "text": "Version 2.5 of NotkaApp added automatic log rotation every 24 hours.", "correctCategory": "nieuzasadnione", "rationale": "A specific version number and feature given despite no basis — cause: prompt pressure or stale context; contradicts the available state." },
+      { "id": "z8", "text": "The default log level in NotkaApp is DEBUG.", "correctCategory": "wymaga_zrodla", "rationale": "A specific, checkable claim without a citation — it is not wrong, but it requires confirmation in the documentation." },
+      { "id": "z9", "text": "NotkaApp is an application for creating and organizing notes.", "correctCategory": "poprawne", "rationale": "A general, undisputed description of the product — it needs no flagging or additional source." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "A hallucination is a consequence of the mechanism, not a malfunction — the model fills in when it doesn't know; five causes: missing data, conflicting data, prompt pressure, stale context, imprecise sources.",
+      "The verification checklist guards against trusting fabricated content: checkable claims, the existence and consistency of the source, currency, no contradictions, the critical-decision threshold.",
+      "No verifiability OR high error impact = don't rely on the LLM — reject it or require a human or a source.",
+      "We flag output by snippets (correct, unsupported, needs a source, risky, to be rejected), not the whole as all-or-nothing."
+    ],
+    "checklist": [
+      "Are there concrete, checkable claims (numbers, names, quotes, steps)?",
+      "Does the cited source exist and say what the model claims?",
+      "Is the content not out of date relative to the current state?",
+      "Are there no internal contradictions in the answer?",
+      "Is the snippet a critical decision requiring an expert?"
+    ],
+    "checklistTitle": "LLM output verification card",
+    "nextStep": "Next step: M12 — evaluating LLM and RAG quality."
+  }
+}

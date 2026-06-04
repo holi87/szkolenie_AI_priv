@@ -1,0 +1,476 @@
+{
+  "_meta": {
+    "module": "M11",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M11. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q095",
+      "module": "M11",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant recognizes a hallucination in a ready LLM output in the form of a fabricated, non-existent source.",
+      "prompt": "A tester asks the LLM how to configure logging in the `synt-API v2` documentation. The model replies in a confident tone: \"The full configuration is described in section 7.4 of the `synt-API v2` documentation.\" The tester checks the documentation and sees that it ends at section 6 — section 7.4 does not exist. How should this sentence most accurately be classified?",
+      "options": [
+        {
+          "id": "A",
+          "text": "It's a hallucination — the model cited a plausible-sounding but unsupported source (the section does not exist)."
+        },
+        {
+          "id": "B",
+          "text": "It's a correct answer that the tester simply hasn't gotten around to verifying yet."
+        },
+        {
+          "id": "C",
+          "text": "It's a user error — the prompt was poorly worded, so the model is not at fault."
+        },
+        {
+          "id": "D",
+          "text": "It's a signal of uncertainty — the model explicitly flagged that it is not sure about section 7.4."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "A confidently phrased reference to a non-existent section is a classic hallucination — the output looks credible but is not supported by data.",
+      "feedbackIncorrect": "The model neither signaled uncertainty nor cited a real source — it made the section up. Review the definition of a hallucination (an output that is credible but unsupported by data).",
+      "references": [
+        "M11.2",
+        "M11.8"
+      ]
+    },
+    {
+      "id": "Q096",
+      "module": "M11",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "The participant points out that forcing a specific answer through the prompt (prompt pressure) is the cause of a hallucination when the model does not have the given information.",
+      "prompt": "A tester writes to the LLM: \"Give me the exact version number in which NotkaApp added log rotation — answer with the number only.\" Even though it does not have this information in context, the model replies: \"2.5\". Which cause of hallucination is responsible for this result?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Prompt pressure — the prompt forced a specific answer the model did not have, so it made one up."
+        },
+        {
+          "id": "B",
+          "text": "Data conflict — the context contained two contradictory version numbers."
+        },
+        {
+          "id": "C",
+          "text": "Imprecise sources — the model averaged several similar documents about log rotation."
+        },
+        {
+          "id": "D",
+          "text": "Outdated context — the question concerned a state from before the model's training date."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "The instruction \"give me the exact number\" forces the model to provide a specific answer despite a lack of data — this is the definition of prompt pressure.",
+      "feedbackIncorrect": "In this scenario there are no contradictory or averaged sources; the problem is demanding a specific value the model does not have. Review the cause 'prompt pressure' from the catalog of five causes.",
+      "references": [
+        "M11.4"
+      ]
+    },
+    {
+      "id": "Q097",
+      "module": "M11",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant assigns the correct labeling category to a sentence from the output, distinguishing a verifiable sentence without a citation from a sentence that explicitly contradicts the documentation.",
+      "prompt": "In an LLM answer about NotkaApp, the following sentence appears: \"The default log level is DEBUG.\" The claim is specific and verifiable, but the model provides no source, and the tester does not have at hand a document that would either confirm or refute it. Which labeling category should be assigned to this sentence?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Needs a source — the claim is verifiable, but there is no citation, so it must be confirmed in the documentation."
+        },
+        {
+          "id": "B",
+          "text": "Unsupported — the sentence directly contradicts a known requirement."
+        },
+        {
+          "id": "C",
+          "text": "To be rejected — the sentence cites a non-existent source."
+        },
+        {
+          "id": "D",
+          "text": "Correct — the claim sounds reasonable, so it can be accepted without further verification."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "A specific, verifiable claim without a citation is not yet wrong — it falls into the 'needs a source' category until we confirm it in the documentation.",
+      "feedbackIncorrect": "Nothing indicates that the sentence is contradictory or fabricated — it simply lacks a citation. Review the difference between 'needs a source' and 'unsupported'/'to be rejected'.",
+      "references": [
+        "M11.7",
+        "M11.8"
+      ]
+    },
+    {
+      "id": "Q098",
+      "module": "M11",
+      "pillar": "security_governance",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "The participant makes a governance decision to reject the LLM when the result is both unverifiable and carries a high impact of error.",
+      "prompt": "In an answer about NotkaApp, the LLM advises: \"You can safely disable error logging in production, it won't affect compliance.\" The tester has no way to verify this claim, and disabling logs in production is a hard-to-reverse, high-impact decision. Which decision is the safest?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Do not rely on the LLM — the result is unverifiable and the error has a high impact; flag the passage as risky and escalate the decision to an expert/source."
+        },
+        {
+          "id": "B",
+          "text": "Implement the recommendation — the model spoke in a confident tone and used the word \"safely\"."
+        },
+        {
+          "id": "C",
+          "text": "Roll it out to production right away, and restore logs only if problems appear."
+        },
+        {
+          "id": "D",
+          "text": "Ask the same model to confirm its own answer and act according to the second response."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Rule of thumb: lack of verifiability OR high impact of error = do not rely on the LLM. Here both conditions hold, so a human/source takes over the decision.",
+      "feedbackIncorrect": "A confident tone and the model's self-confirmation are not proof; with an unverifiable, high-impact result you must not rely on the LLM. Review the rule 'when not to use the LLM'.",
+      "references": [
+        "M11.6",
+        "M11.7"
+      ]
+    },
+    {
+      "id": "Q099",
+      "module": "M11",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "The participant distinguishes a hallucination from an answer in which the model explicitly signals uncertainty.",
+      "prompt": "Which of the following best describes an LLM hallucination?",
+      "options": [
+        {
+          "id": "A",
+          "text": "An output that sounds credible and is delivered in a confident tone, but is unsupported by data (a fabricated fact, a non-existent source, a wrong detail)."
+        },
+        {
+          "id": "B",
+          "text": "An answer in which the model explicitly states that it is not sure and asks for clarification."
+        },
+        {
+          "id": "C",
+          "text": "Any answer that the user simply hasn't yet checked against the documentation."
+        },
+        {
+          "id": "D",
+          "text": "An error message returned by the model's API when the prompt is too long."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "A hallucination is content that is credible in form but unsupported by data — a confident tone does not mean correctness.",
+      "feedbackIncorrect": "Explicit uncertainty, a lack of verification, or an API error are not hallucinations. Review the definition: a credible tone + no support in the data.",
+      "references": [
+        "M11.2"
+      ]
+    },
+    {
+      "id": "Q100",
+      "module": "M11",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "The participant recognizes outdated context (training cutoff) as a cause of hallucination when asked about a state after the training date.",
+      "prompt": "A tester asks the LLM about the details of a feature released last week, already after the model's training data cutoff date. The model nevertheless describes how this feature supposedly works. Which cause of hallucination is the main one here?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Outdated context (training cutoff) — the question concerns a state after the model's training date."
+        },
+        {
+          "id": "B",
+          "text": "Prompt pressure — the prompt was phrased as a command, not a question."
+        },
+        {
+          "id": "C",
+          "text": "Data conflict — the training contained two contradictory versions of the feature."
+        },
+        {
+          "id": "D",
+          "text": "Imprecise sources — the model confused two similar documents."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "The feature came into being after the data cutoff date — the model could not have known it and 'fills in the gap', which is a cause of the outdated context type.",
+      "feedbackIncorrect": "The problem is neither the form of the prompt nor mixing sources, but a lack of knowledge about events after the training cutoff. Review the cause 'outdated context'.",
+      "references": [
+        "M11.4"
+      ]
+    },
+    {
+      "id": "Q101",
+      "module": "M11",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "The participant formulates a threshold for rejecting the LLM based on the verifiability of the result and the impact of the error.",
+      "prompt": "According to the rule 'when NOT to use the LLM' — when should a tester not rely on the model's answer?",
+      "options": [
+        {
+          "id": "A",
+          "text": "When the result cannot be verified OR an error would have a high, hard-to-reverse impact."
+        },
+        {
+          "id": "B",
+          "text": "Only when the answer is long and contains a lot of technical detail."
+        },
+        {
+          "id": "C",
+          "text": "Only when the result cannot be verified AND the error has a high impact at the same time."
+        },
+        {
+          "id": "D",
+          "text": "Never — an LLM answer can always be accepted if the model sounds confident."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "The rule is a disjunction (OR): a lack of verifiability or a high impact of error is enough on its own to not rely on the LLM.",
+      "feedbackIncorrect": "This is not a conjunction — one of the conditions is enough. The length of the answer and a confident tone are not criteria. Review the rule of thumb from the 'When NOT to use the LLM' screen.",
+      "references": [
+        "M11.6"
+      ]
+    },
+    {
+      "id": "Q102",
+      "module": "M11",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant identifies all the steps of the LLM output verification checklist.",
+      "prompt": "Which items belong to the LLM output verification checklist (what to check before you trust the answer)? Select all that are correct.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Whether the output contains specific, verifiable claims (numbers, names, citations, steps)."
+        },
+        {
+          "id": "B",
+          "text": "Whether the cited source exists and actually says what the model claims."
+        },
+        {
+          "id": "C",
+          "text": "Whether the content is not out of date relative to the current state."
+        },
+        {
+          "id": "D",
+          "text": "Whether the answer has no internal contradictions."
+        },
+        {
+          "id": "E",
+          "text": "Whether the answer is longer and more detailed than the previous version."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "feedbackCorrect": "The checklist checks verifiable claims, the existence and consistency of the source, currency, and internal coherence — not the length of the answer.",
+      "feedbackIncorrect": "Length/level of detail is not a quality criterion; the rest are checklist steps (a–d). Review the 'Output verification checklist' screen.",
+      "references": [
+        "M11.5"
+      ]
+    },
+    {
+      "id": "Q103",
+      "module": "M11",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant recognizes warning signs in an LLM output that may indicate a hallucination.",
+      "prompt": "Which of the following are genuine warning signs that a fragment of an LLM answer may be a hallucination? Select all that are correct.",
+      "options": [
+        {
+          "id": "A",
+          "text": "A reference to a section or document that cannot be found in the source."
+        },
+        {
+          "id": "B",
+          "text": "A specific number or version number given without any citation or reference."
+        },
+        {
+          "id": "C",
+          "text": "A statement contradicting another fragment of the same answer."
+        },
+        {
+          "id": "D",
+          "text": "A description of a state of affairs that could only have come into being after the model's data cutoff date."
+        },
+        {
+          "id": "E",
+          "text": "A clear note by the model: \"I'm not sure, check in the documentation\"."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "feedbackCorrect": "A non-existent source, a specific value without a citation, an internal contradiction, and content after the training cutoff are typical warning signs; explicit uncertainty is not a hallucination.",
+      "feedbackIncorrect": "An explicit note of uncertainty is an honest signal, not a warning of a hallucination. Review the warning signs of the causes of hallucination.",
+      "references": [
+        "M11.4",
+        "M11.2"
+      ]
+    },
+    {
+      "id": "Q104",
+      "module": "M11",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant identifies fragments of an answer that should be labeled as needing a source or an expert, instead of accepting or rejecting the whole.",
+      "prompt": "An LLM answer about NotkaApp contains the sentences below. Which should be labeled as needing a source or an expert (not for immediate acceptance)? Select all that are correct.",
+      "options": [
+        {
+          "id": "A",
+          "text": "\"An account lockout lasts 24 hours.\" — a verifiable number without a citation, to be confirmed against a requirement."
+        },
+        {
+          "id": "B",
+          "text": "\"NotkaApp holds an ISO 27001 certificate.\" — a high-impact claim, given without a source."
+        },
+        {
+          "id": "C",
+          "text": "\"You can safely disable error logging in production.\" — a critical decision requiring an expert."
+        },
+        {
+          "id": "D",
+          "text": "\"Password reset uses a link valid for 30 minutes.\" — consistent with DOC3, confirmed in the documentation."
+        },
+        {
+          "id": "E",
+          "text": "\"NotkaApp is a note-taking app.\" — a general, indisputable description of the product."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Verifiable claims without a citation (A, B) need a source, and a critical decision (C) needs an expert; confirmed or indisputable sentences do not need a label.",
+      "feedbackIncorrect": "A sentence consistent with DOC3 and a general product description do not need a label; we label fragments that are verifiable without a citation and critical decisions. Review the granularity of labeling (the 'Labeling fragments' screen).",
+      "references": [
+        "M11.7",
+        "M11.8"
+      ]
+    }
+  ]
+}
