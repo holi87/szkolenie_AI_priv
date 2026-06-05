@@ -1,0 +1,549 @@
+{
+  "_meta": {
+    "module": "M12",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M12. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q105",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Verifica se il partecipante sceglie la metrica di qualità adatta al sintomo dell'errore in una risposta LLM/RAG.",
+      "prompt": "La risposta del modello in fase di valutazione nel corpus SklepDemo contiene una frase in contraddizione con il contenuto del documento di origine (afferma che il link per il reset della password è riutilizzabile più volte, mentre la fonte dice: monouso). Quale metrica di qualità coglie con maggiore precisione questo problema?",
+      "options": [
+        {
+          "id": "A",
+          "text": "faithfulness (fedeltà alle fonti)"
+        },
+        {
+          "id": "B",
+          "text": "relevance (pertinenza rispetto alla domanda)"
+        },
+        {
+          "id": "C",
+          "text": "completeness (completezza)"
+        },
+        {
+          "id": "D",
+          "text": "accuracy intesa come correttezza fattuale generale della risposta, indipendentemente dalla fonte"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Una contraddizione tra la risposta e il contenuto della fonte è un classico sintomo di bassa faithfulness: la risposta non è fedele alla fonte su cui dovrebbe basarsi.",
+      "feedbackIncorrect": "Qui non si tratta di pertinenza dell'argomento (relevance), di parti mancanti della risposta (completeness) né di correttezza fattuale generale (accuracy): la risposta potrebbe suonare „corretta” e ciononostante essere in contraddizione con una fonte specifica. Si tratta di conformità alla fonte, cioè faithfulness. Rivedi la definizione nella schermata delle metriche di qualità.",
+      "references": [
+        "M12.4",
+        "M12.5"
+      ]
+    },
+    {
+      "id": "Q106",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Verifica la comprensione del perché una rubrica LLM-as-a-judge debba contenere esempi di ancoraggio e definizioni dei livelli.",
+      "prompt": "Perché una buona rubrica di valutazione (evaluation rubric) per LLM-as-a-judge contiene la definizione di ogni livello della scala e degli esempi di ancoraggio (anchor examples)?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Perché aumentano la ripetibilità della valutazione: esecuzioni diverse valutano allo stesso modo, secondo gli stessi criteri anziché su un'impressione generale"
+        },
+        {
+          "id": "B",
+          "text": "Perché accorciano il prompt del valutatore e riducono il costo dei token"
+        },
+        {
+          "id": "C",
+          "text": "Perché sostituiscono il golden set e la ground truth, così non serve documentare la fonte di verità"
+        },
+        {
+          "id": "D",
+          "text": "Perché garantiscono che la valutazione automatica non si discosti mai dalla valutazione dell'esperto"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Le definizioni dei livelli e gli esempi di ancoraggio stabiliscono un punto di riferimento comune, quindi la valutazione diventa ripetibile invece di essere un irripetibile 'è buono o no?'.",
+      "feedbackIncorrect": "La rubrica non sostituisce il golden set né garantisce la concordanza con l'esperto; il suo scopo è la ripetibilità della valutazione. Torna alla schermata sulla rubrica per LLM-as-a-judge.",
+      "references": [
+        "M12.6"
+      ]
+    },
+    {
+      "id": "Q107",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Verifica la capacità di riconoscere il position bias in base al pattern delle valutazioni nel confronto a coppie.",
+      "prompt": "Nel laboratorio di calibrazione, nella coppia A3 vs A4 (due varianti di risposta per lo stesso criterio WYM-koszyk) l'LLM valutatore ha dato un punteggio più alto alla variante mostrata per prima (A3: 2/2, A4: 1/2), mentre l'esperto QA ha valutato più in alto la seconda variante (A3: 1/2, A4: 2/2). Cosa spiega meglio questa discrepanza?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Position bias: il valutatore favorisce la risposta mostrata per prima, indipendentemente dalla sua reale qualità"
+        },
+        {
+          "id": "B",
+          "text": "Bassa faithfulness di entrambe le risposte rispetto alla fonte"
+        },
+        {
+          "id": "C",
+          "text": "Assenza di domande rappresentative nel golden set"
+        },
+        {
+          "id": "D",
+          "text": "L'esperto ha commesso un errore, perché la valutazione automatica è per definizione più obiettiva"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Il verdetto dipende dall'ordine di presentazione e non dal contenuto: è il sintomo per definizione del position bias; invertire l'ordine A3/A4 probabilmente capovolgerebbe il risultato del judge.",
+      "feedbackIncorrect": "Il pattern 'la posizione mostrata per prima riceve un punteggio più alto' indica un bias di posizione, non un problema con la fonte o con il golden set. Rivedi la schermata su bias e position bias.",
+      "references": [
+        "M12.7",
+        "M12.10"
+      ]
+    },
+    {
+      "id": "Q108",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Verifica la capacità di interpretare la concordanza tra valutatori e i limiti del semplice indicatore % di concordanza.",
+      "prompt": "Sul golden set GS-SklepDemo il 90% delle posizioni ha valutazione 'pass', e l'LLM valutatore e l'esperto concordano sul verdetto nel 90% dei casi. Perché la sola 'concordanza del 90%' può essere fuorviante come prova della calibrazione del valutatore?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Perché con una distribuzione delle valutazioni fortemente sbilanciata una % di concordanza elevata si può ottenere quasi a caso: bisogna verificare se concordano anche sui rari casi 'fail'"
+        },
+        {
+          "id": "B",
+          "text": "Perché il 90% è sempre una soglia troppo bassa e si deve richiedere il 100% di concordanza"
+        },
+        {
+          "id": "C",
+          "text": "Perché con una distribuzione di classi sbilanciata l'indicatore di concordanza va scartato e la valutazione va basata esclusivamente sul verdetto dell'esperto"
+        },
+        {
+          "id": "D",
+          "text": "Perché la % di concordanza misura la velocità della valutazione, non la sua qualità"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Quando quasi tutto è 'pass', concordare 'sui pass' è facile: ciò che conta è se il valutatore coglie i rari e rischiosi casi 'fail'.",
+      "feedbackIncorrect": "Il problema non è il valore stesso della soglia (B) né lo scarto dell'indicatore di concordanza a favore del solo esperto (C): è l'effetto della distribuzione di classi sbilanciata: con la prevalenza dei 'pass' una % di concordanza elevata è facile, quindi bisogna verificare l'accuratezza sui rari casi 'fail'. Torna alla schermata sulla calibrazione e sulla concordanza tra valutatori.",
+      "references": [
+        "M12.8"
+      ]
+    },
+    {
+      "id": "Q109",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Verifica se il partecipante riconosce gli elementi che un buon golden set dovrebbe contenere.",
+      "prompt": "Cosa dovrebbe contenere un golden set (set di riferimento) ben progettato per il caso d'uso QA in SklepDemo? Seleziona tutte le risposte corrette.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Domande rappresentative che coprano gli scenari tipici del caso d'uso"
+        },
+        {
+          "id": "B",
+          "text": "Casi limite e trappole note (es. una domanda fuori dall'ambito della fonte)"
+        },
+        {
+          "id": "C",
+          "text": "Una fonte di verità documentata (ground truth) per ogni posizione"
+        },
+        {
+          "id": "D",
+          "text": "Log di produzione raccolti a caso con dati grezzi dei clienti"
+        },
+        {
+          "id": "E",
+          "text": "Posizioni con aspettativa ambigua, che non è possibile dirimere"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Il golden set è l'insieme dei 'test di regressione per le risposte del modello': domande rappresentative, casi limite e una fonte di verità univoca e documentata per ogni posizione.",
+      "feedbackIncorrect": "I log di produzione grezzi (PII) e le posizioni senza aspettativa dirimibile non fanno parte del golden set. Rivedi la schermata 'Golden set per il caso d'uso'.",
+      "references": [
+        "M12.2",
+        "M12.3"
+      ]
+    },
+    {
+      "id": "Q110",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Verifica il riconoscimento dei segnali che indicano un position bias del valutatore.",
+      "prompt": "Quali dei seguenti segnali indicano che l'LLM valutatore potrebbe essere affetto da bias di posizione (position bias)? Seleziona tutte le risposte corrette.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Nei confronti a coppie il judge sceglie sistematicamente la risposta presentata per prima"
+        },
+        {
+          "id": "B",
+          "text": "Dopo aver invertito l'ordine di due risposte il verdetto del judge si capovolge, pur non essendo cambiato il contenuto"
+        },
+        {
+          "id": "C",
+          "text": "Il verdetto del judge differisce dalla valutazione dell'esperto esattamente nelle coppie di confronto dipendenti dall'ordine"
+        },
+        {
+          "id": "D",
+          "text": "Il judge valuta le risposte singolarmente (senza confronto) e assegna punteggi bassi a tutte quelle in contraddizione con la fonte"
+        },
+        {
+          "id": "E",
+          "text": "Il judge assegna punteggi identici indipendentemente dall'ordine di presentazione"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Il position bias si manifesta nella dipendenza del verdetto dall'ordine: favorire la prima posizione, capovolgere il verdetto dopo l'inversione e discrepanze concentrate nelle coppie di confronto.",
+      "feedbackIncorrect": "La robustezza all'ordine (E) e una valutazione coerente del contenuto in contraddizione con la fonte (D) testimoniano l'assenza di position bias. Torna alla schermata sul position bias e sulla sua diagnosi.",
+      "references": [
+        "M12.7",
+        "M12.10"
+      ]
+    },
+    {
+      "id": "Q111",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L4",
+      "bloom": "evaluation",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Verifica la capacità di selezionare un insieme di metriche adeguato a una domanda di qualità complessa.",
+      "prompt": "La domanda di qualità è: 'La risposta del modello elenca tutte le condizioni di pagamento del documento di origine e non aggiunge condizioni esterne alla fonte?'. Quali metriche, insieme, coprono meglio questa valutazione? Seleziona tutte quelle pertinenti.",
+      "options": [
+        {
+          "id": "A",
+          "text": "completeness: se sono state coperte tutte le condizioni di pagamento richieste dal criterio"
+        },
+        {
+          "id": "B",
+          "text": "faithfulness: se la risposta non aggiunge condizioni in contraddizione con la fonte o in essa assenti"
+        },
+        {
+          "id": "C",
+          "text": "groundedness: se le condizioni indicate possono essere ancorate al contesto fornito"
+        },
+        {
+          "id": "D",
+          "text": "il position bias da solo come singola metrica di qualità del contenuto"
+        },
+        {
+          "id": "E",
+          "text": "solo relevance, perché la domanda riguarda i pagamenti"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "La domanda ha due dimensioni: la copertura di tutte le condizioni (completeness) e l'assenza di contenuti esterni alla fonte e il loro ancoraggio al contesto (faithfulness, groundedness).",
+      "feedbackIncorrect": "Il position bias è un rischio del valutatore, non una metrica del contenuto; la sola relevance non misura né la completezza né la fedeltà alla fonte. Rivedi le schermate sulle metriche e sulla loro selezione.",
+      "references": [
+        "M12.4",
+        "M12.5"
+      ]
+    },
+    {
+      "id": "Q112",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L4",
+      "bloom": "evaluation",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Verifica la capacità di valutare quali elementi rendono una rubrica LLM-as-a-judge affidabile e resistente al bias.",
+      "prompt": "Stai progettando una rubrica per un LLM-as-a-judge che valuta la faithfulness delle risposte in GS-SklepDemo. Quali elementi dovrebbe contenere affinché la valutazione sia ripetibile e resistente al bias? Seleziona tutti quelli pertinenti.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Un criterio di valutazione chiaro e una scala con la definizione di ogni livello (es. 0–2)"
+        },
+        {
+          "id": "B",
+          "text": "Esempi di ancoraggio (anchor examples) per i livelli estremi e intermedi"
+        },
+        {
+          "id": "C",
+          "text": "L'istruzione 'valuta esclusivamente rispetto alla fonte', e non rispetto alla conoscenza generale del modello"
+        },
+        {
+          "id": "D",
+          "text": "La regola di inversione dell'ordine nei confronti a coppie, per ridurre il position bias"
+        },
+        {
+          "id": "E",
+          "text": "La regola di premiare le risposte più lunghe in quanto presunte più complete"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "feedbackCorrect": "Una rubrica ripetibile e resistente al bias unisce un criterio chiaro, una scala definita, gli esempi di ancoraggio, la valutazione rispetto alla fonte e la mitigazione del position bias tramite l'inversione dell'ordine.",
+      "feedbackIncorrect": "Premiare la lunghezza è il length bias: gonfia la valutazione indipendentemente dal contenuto. Torna alle schermate sulla rubrica e su bias/position bias.",
+      "references": [
+        "M12.6",
+        "M12.7"
+      ]
+    },
+    {
+      "id": "Q113",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Verifica l'interpretazione di una discrepanza in cui il valutatore gonfia il punteggio rispetto all'esperto per una risposta in contraddizione con la fonte.",
+      "prompt": "Nel laboratorio di calibrazione la posizione A2 (domanda sul termine della politica di reso in SklepDemo) ha una valutazione faithfulness dell'esperto pari a 0/2 — la risposta è in contraddizione con la fonte — mentre l'LLM valutatore ha dato 2/2. Come interpretare al meglio questa discrepanza e cosa farne?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Il judge gonfia la valutazione di una risposta in contraddizione con la fonte: è un segnale per migliorare la rubrica (un'istruzione netta 'contraddizione con la fonte = 0') e rivalutare, non per ignorarla"
+        },
+        {
+          "id": "B",
+          "text": "Dato che il judge ha dato 2/2, la risposta è buona: bisogna aggiornare il golden set, alzando la ground truth a 2/2"
+        },
+        {
+          "id": "C",
+          "text": "La discrepanza è irrilevante, perché è solo una posizione: la si può omettere nel report"
+        },
+        {
+          "id": "D",
+          "text": "È position bias, quindi basta invertire l'ordine delle risposte e il problema sparirà"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Una contraddizione con la fonte valutata dall'esperto a 0/2 e dal judge a 2/2 è un gonfiamento che richiede una correzione della rubrica e una rivalutazione: qui il golden set (ground truth) è il punto di riferimento.",
+      "feedbackIncorrect": "Non si deve adattare la ground truth all'errore del judge né omettere la discrepanza; non è position bias (manca una coppia di confronto). Ripeti il ciclo di calibrazione della schermata sulla concordanza tra valutatori.",
+      "references": [
+        "M12.8",
+        "M12.10"
+      ]
+    },
+    {
+      "id": "Q114",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L4",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Verifica la scelta della mitigazione corretta dopo aver rilevato un position bias nel flusso di calibrazione.",
+      "prompt": "La diagnosi in laboratorio conferma il position bias nella coppia A3/A4: il judge favorisce la variante mostrata per prima. Devi convincere il team su come confermare e ridurre con rigore questo effetto prima di stabilire la soglia di accettazione. Quale decisione è la migliore?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Ripetere la valutazione con l'ordine invertito A4/A3 (e/o mediare entrambe le disposizioni): se il verdetto si capovolge, ciò conferma il bias; integrare stabilmente l'inversione dell'ordine nella rubrica"
+        },
+        {
+          "id": "B",
+          "text": "Fidarsi del primo verdetto del judge, perché la valutazione automatica è più veloce ed economica dell'esperto"
+        },
+        {
+          "id": "C",
+          "text": "Rimuovere la coppia A3/A4 dal golden set, affinché la % di concordanza aumenti"
+        },
+        {
+          "id": "D",
+          "text": "Alzare la soglia di accettazione per tutte le posizioni, per compensare l'incertezza della valutazione"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "L'inversione dell'ordine (e la media di entrambe le disposizioni) conferma e al tempo stesso neutralizza il position bias: è la mitigazione standard da inserire nella rubrica prima di decidere la soglia.",
+      "feedbackIncorrect": "Fidarsi di un verdetto dipendente dall'ordine, rimuovere le posizioni scomode o alzare ciecamente la soglia non eliminano il bias: lo mascherano. Torna alle schermate sul position bias e sulla calibrazione.",
+      "references": [
+        "M12.7",
+        "M12.10"
+      ]
+    },
+    {
+      "id": "Q115",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L4",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Verifica l'adozione di una decisione go/no-go conservativa rispetto a una soglia di accettazione stabilita.",
+      "prompt": "La soglia di accettazione per il rilascio di un nuovo prompt in SklepDemo recita: 'faithfulness ≥ 0,9 sul golden set E zero posizioni in contraddizione con la fonte'. La nuova versione raggiunge una faithfulness media di 0,93, ma una posizione (analoga ad A2) è in contraddizione con la fonte. Quale decisione è corretta?",
+      "options": [
+        {
+          "id": "A",
+          "text": "No-go: la condizione 'zero posizioni in contraddizione con la fonte' non è soddisfatta, nonostante la buona media; elimina prima la contraddizione, poi rivaluta"
+        },
+        {
+          "id": "B",
+          "text": "Go: la media 0,93 supera 0,9, quindi la soglia è soddisfatta indipendentemente dalla singola posizione"
+        },
+        {
+          "id": "C",
+          "text": "Go abbassando la soglia a 0,85, dato che fallisce solo una posizione"
+        },
+        {
+          "id": "D",
+          "text": "Go condizionato: rilasciare in produzione e monitorare la posizione in contraddizione nel frattempo"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "La soglia è una congiunzione di condizioni; la condizione vincolante 'zero contraddizioni' non soddisfatta impone il no-go indipendentemente dalla buona media: è il comportamento conservativo di default.",
+      "feedbackIncorrect": "Non si deve aggirare una condizione vincolante con la media, né abbassare la soglia o rilasciare 'in prova': è un elusione del criterio di accettazione. Rivedi la schermata sulla soglia e sulla decisione go/no-go.",
+      "references": [
+        "M12.9"
+      ]
+    },
+    {
+      "id": "Q116",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L4",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Verifica a quale condizione la valutazione automatica può essere ammessa alla decisione go/no-go dopo una calibrazione riuscita.",
+      "prompt": "Dopo due iterazioni di miglioramento della rubrica, la concordanza dell'LLM valutatore con l'esperto sul golden set GS-SklepDemo è salita da 4/6 a 6/6, e le discrepanze sono sparite. Il team vuole usare la valutazione automatica per la decisione go/no-go sul rilascio. Quale condizione ammette correttamente la valutazione automatica a questa decisione?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Stabilire una soglia di accettazione (concordanza richiesta con l'esperto sul golden set e suo mantenimento su un campione fresco) e una ricalibrazione periodica con l'esperto: una singola esecuzione 6/6 non garantisce la durata."
+        },
+        {
+          "id": "B",
+          "text": "6/6 raggiunto una volta garantisce l'accuratezza per sempre: si può rimuovere l'esperto dal processo."
+        },
+        {
+          "id": "C",
+          "text": "Ammettere la valutazione automatica solo se il judge concorderà al 100% con ogni risposta futura, altrimenti non usarla mai."
+        },
+        {
+          "id": "D",
+          "text": "La soglia di accettazione è superflua, perché l'LLM-as-a-judge è per definizione obiettivo."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Ammettere la valutazione automatica richiede una soglia di accettazione stabilita e il suo mantenimento su un campione fresco, oltre a una ricalibrazione periodica con l'esperto: la calibrazione è continua, non una tantum.",
+      "feedbackIncorrect": "Né „una volta 6/6 = per sempre”, né „100% su ogni risposta futura”, né „il judge è obiettivo” sono corretti: servono una soglia di accettazione e una ricalibrazione periodica. Torna alla schermata sulla soglia di accettazione della qualità.",
+      "references": [
+        "M12.9",
+        "M12.10"
+      ]
+    }
+  ]
+}

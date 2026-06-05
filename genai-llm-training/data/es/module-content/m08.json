@@ -1,0 +1,180 @@
+{
+  "_meta": {
+    "issue": "#22 [22][M4] Wdroż moduły M7-M9",
+    "storyboard": "docs/storyboard/m08-qa-use-cases.md",
+    "interaction": "QA workbench (kind: rubric, ĆWICZENIOWE — rubryka R4-qa-workbench, bez progu)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (NotkaApp, SklepDemo, przyklad.test, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Egzemplarz typu rubric ĆWICZENIOWY: pominięto passThreshold i recordsPractical (feedback bez bramki). M8 obowiązkowy S2/S3, opcjonalny S1 — bez wariantu skróconego, ten sam ciąg ekranów dla wszystkich ścieżek. Treść interakcji oparta na SC-QA-01 (reset hasła NotkaApp)."
+  },
+  "module": "M8",
+  "intro": "La GenAI acelera el trabajo de QA: esboza casos de prueba, listas de verificación de riesgos y la revisión de documentación. Pero un LLM genera el texto más probable, no una verdad verificada — por eso el tester sigue siendo quien decide, y el modelo es su asistente.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Para qué sirve la GenAI en QA — y dónde termina su papel",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "El LLM acelera la creación y el análisis de artefactos de QA: casos de prueba, listas de verificación de riesgos, revisión de documentación. Sin embargo, genera el texto más probable, no una verdad verificada — eres tú quien decide qué llega a la documentación." },
+        { "kind": "list", "items": [
+          "E1 — generas casos de prueba a partir de un requisito e identificas las carencias de cobertura.",
+          "E2 — detectas duplicados y pruebas aparentes (sin valor de verificación real).",
+          "E3 — creas una lista de verificación de riesgos (risk-based testing).",
+          "E4 — evaluas si el output sirve para la documentación de QA tras un control de fondo.",
+          "E5 — señalas dónde el LLM es un asistente y dónde la decisión la toma una persona."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "En qué se diferencia de M7", "text": "M7 enseñaba a escribir prompts. M8 se centra en aplicar el LLM a tareas reales de QA y en evaluar su output. Principio rector: el LLM como asistente, el tester como quien decide." }
+      ]
+    },
+    {
+      "id": "s2-generowanie",
+      "title": "Generar casos de prueba a partir de un requisito",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "A partir de un requisito sintético (p. ej. «Campo de contraseña: mín. 8 caracteres, mín. 1 dígito») pides al LLM casos de prueba: válido, límite, negativo. Un buen prompt indica el rol, el requisito y el formato de salida (tabla: ID | pasos | datos | resultado esperado)." },
+        { "kind": "list", "items": [
+          "TC válido — la contraseña cumple todas las reglas, el registro se completa.",
+          "TC límite — contraseña con exactamente la longitud mínima (8 caracteres).",
+          "TC negativo — contraseña sin dígito, se espera un mensaje de error."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Conclusión", "text": "El LLM proporciona un esqueleto rápido vinculado a los criterios de aceptación (acceptance criteria) y con trazabilidad (traceability) requisito→prueba. Es un punto de partida, no un conjunto terminado." }
+      ]
+    },
+    {
+      "id": "s3-braki-pokrycia",
+      "title": "Carencias de cobertura — lo que el LLM no se le ocurrió",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Lee el output buscando huecos en la cobertura (coverage gaps): falta de casos límite, falta de rutas de error, estados omitidos, falta de datos de prueba para valores extremos. Técnica: contrasta el conjunto de casos generados con una lista de categorías de riesgo y busca los campos vacíos." },
+        { "kind": "callout", "variant": "warn", "title": "Ejemplo sintético", "text": "Para el inicio de sesión, el LLM cubrió el «happy path», pero omitió el bloqueo tras 5 intentos fallidos. Lo que más suele faltar son los límites, las rutas de error y los datos extremos — ahí busca los huecos." }
+      ]
+    },
+    {
+      "id": "s4-duplikaty-pozorne",
+      "title": "Duplicados y pruebas aparentes",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Prueba aparente", "original": "prueba sin valor de verificación real", "text": "caso cuya aserción no comprueba nada — no hay resultado esperado, «la prueba siempre pasa»." },
+        { "kind": "definition", "term": "Duplicado", "text": "dos casos que comprueban las mismas condiciones con otra descripción; inflan el conjunto sin aportar nueva cobertura." },
+        { "kind": "callout", "variant": "warn", "title": "Conclusión", "text": "Más casos ≠ mejor cobertura. Un duplicado aumenta el coste de mantenimiento, y una prueba aparente da una falsa sensación de seguridad." }
+      ]
+    },
+    {
+      "id": "s5-checklista-ryzyk",
+      "title": "Lista de verificación de riesgos para una funcionalidad",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "El LLM esboza una lista de verificación de riesgos (risk-based testing) por categorías: seguridad, datos, rendimiento, accesibilidad, conformidad. Cada elemento: riesgo + impacto + área a probar." },
+        { "kind": "table",
+          "title": "Lista de verificación sintética — función «restablecer contraseña» de NotkaApp",
+          "headers": ["Categoría", "Riesgo", "Área a probar"],
+          "rows": [
+            ["Seguridad", "El enlace de restablecimiento funciona tras caducar o de forma repetida", "Validez de 30 min, uso único del enlace"],
+            ["Datos", "El correo del usuario queda expuesto en el mensaje de error", "Contenido de la respuesta ante una cuenta desconocida"],
+            ["Accesibilidad", "Formulario no operable con lector de pantalla", "Conformidad con WCAG, foco y etiquetas"]
+          ],
+          "textAlt": "Tabla de lista de verificación de riesgos para el restablecimiento de contraseña de NotkaApp: categoría Seguridad — riesgo de que el enlace funcione tras caducar o de forma repetida, el área es la validez de 30 min y el uso único; categoría Datos — riesgo de exponer el correo en el error, el área es el contenido de la respuesta ante una cuenta desconocida; categoría Accesibilidad — riesgo de falta de operabilidad con lector de pantalla, el área es la conformidad con WCAG, el foco y las etiquetas." },
+        { "kind": "callout", "variant": "info", "text": "El LLM propone categorías, el tester prioriza y descarta las que no encajan." }
+      ]
+    },
+    {
+      "id": "s6-do-dokumentacji",
+      "title": "¿Sirve este output para la documentación de QA?",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Antes de pegar el output en la documentación, pásalo por un control de fondo (review checklist): coherencia con el requisito, completitud, ausencia de hechos inventados (alucinaciones), verificabilidad, ausencia de datos sensibles." },
+        { "kind": "list", "ordered": true, "items": [
+          "Acepta — output coherente con el requisito, completo, verificable, sin datos sensibles.",
+          "Corrige — carencias menores o un hecho inventado que ajustar frente al requisito.",
+          "Rechaza — hechos contradictorios con el requisito o datos sensibles; no lo uses sin reelaborarlo."
+        ] },
+        { "kind": "callout", "variant": "info", "text": "Enlace con M11 (verificación del output) y M10 (datos y privacidad)." }
+      ]
+    },
+    {
+      "id": "s7-asystent-decydent",
+      "title": "Asistente o quien decide — dónde poner el límite",
+      "type": "decision",
+      "blocks": [
+        { "kind": "paragraph", "text": "El LLM puede apoyar tareas como asistente: borrador de casos, esbozo de listas de verificación, lluvia de ideas. La decisión la toma una persona (human-in-the-loop): aceptación de casos, evaluación de riesgo crítico, aprobación para el release." },
+        { "kind": "table",
+          "title": "Asistente vs. quien decide — 3 situaciones sintéticas",
+          "headers": ["Situación", "Asistente (LLM)", "Quien decide (persona)"],
+          "rows": [
+            ["Borrador de casos de prueba a partir de un requisito", "Genera la propuesta", "Aprueba el alcance"],
+            ["Evaluación de riesgo crítico", "Propone categorías", "Decide la prioridad"],
+            ["Aprobación de la versión para el release", "No decide", "Toma la decisión"]
+          ],
+          "textAlt": "Tabla de tres situaciones de QA divididas según el papel de asistente (LLM) y de quien decide (persona): borrador de casos de prueba — el LLM genera la propuesta, la persona aprueba el alcance; evaluación de riesgo crítico — el LLM propone categorías, la persona decide la prioridad; aprobación de la versión para el release — el LLM no decide, la persona toma la decisión." },
+        { "kind": "callout", "variant": "safe", "title": "El límite", "text": "Cuanto mayor es lo que está en juego en la decisión (release, riesgo crítico, cierre de un defecto), más recae el papel en la persona. El LLM acelera, pero no aprueba." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "rubric",
+    "id": "m8-qa-workbench",
+    "title": "QA workbench",
+    "intro": "Requisito de NotkaApp (ficticio): el usuario restablece la contraseña mediante un enlace por correo válido durante 30 minutos; tras 3 intentos de inicio de sesión fallidos, la cuenta se bloquea durante 15 minutos. El LLM generó estos casos: TC1 — restablecimiento correcto; TC2 — el enlace caduca a los 30 min; TC3 — 3 contraseñas erróneas → bloqueo de la cuenta. Evalúa este output según los cinco ejes de la rúbrica. Es un ejercicio en modo aprendizaje — recibes feedback, sin umbral de aprobación.",
+    "rubricId": "R4-qa-workbench",
+    "scaleMax": 5,
+    "criteria": [
+      { "id": "K1", "name": "Cobertura de pruebas", "points": 1,
+        "prompt": "¿Qué comportamientos del requisito de NotkaApp CUBRE realmente el output del LLM (TC1–TC3)?",
+        "hint": "El output cubre el happy path del restablecimiento, la caducidad del enlace a los 30 min y el bloqueo de la cuenta tras 3 intentos fallidos.",
+        "options": [
+          { "id": "a", "text": "Restablecimiento correcto (TC1), caducidad del enlace a los 30 min (TC2) y bloqueo de la cuenta tras 3 intentos fallidos (TC3)." },
+          { "id": "b", "text": "Reutilización del mismo enlace de restablecimiento y sesiones simultáneas del usuario." },
+          { "id": "c", "text": "Solo lo cosmético: el color del botón «Restablecer contraseña» y el logotipo en la página de inicio de sesión." }
+        ], "correctOptionIds": ["a"] },
+      { "id": "K2", "name": "Carencias de cobertura", "points": 1,
+        "prompt": "¿Qué casos FALTAN en el output del LLM respecto al requisito de NotkaApp? Marca exactamente todos los huecos.",
+        "hint": "Se omitieron tres huecos: correo vacío, enlace de un solo uso utilizado dos veces y sesiones simultáneas. La caducidad del enlace (TC2) y el bloqueo tras 3 intentos (TC3) ya están cubiertos.",
+        "options": [
+          { "id": "a", "text": "Restablecimiento con el campo de correo vacío (validación de los datos de entrada)." },
+          { "id": "b", "text": "Reutilización del mismo enlace de restablecimiento (enlace de un solo uso utilizado dos veces)." },
+          { "id": "c", "text": "Sesiones simultáneas de restablecimiento de contraseña para la misma cuenta." },
+          { "id": "d", "text": "Caducidad del enlace a los 30 minutos — eso ya lo cubre TC2." }
+        ], "correctOptionIds": ["a", "b", "c"] },
+      { "id": "K3", "name": "Pruebas aparentes / duplicados", "points": 1,
+        "prompt": "Al conjunto se añadió TC4: «Abre el formulario de restablecimiento y comprueba que el formulario se abre; resultado esperado: ninguno». ¿Cómo clasificarlo?",
+        "hint": "Sin un resultado esperado definido, la aserción no verifica nada — es una prueba aparente, no un caso límite con valor.",
+        "options": [
+          { "id": "a", "text": "Prueba aparente — sin resultado esperado, la aserción en realidad no comprueba nada." },
+          { "id": "b", "text": "Caso límite correcto para la validez del enlace de 30 minutos." },
+          { "id": "c", "text": "Caso negativo con valor para el escenario de bloqueo de la cuenta." }
+        ], "correctOptionIds": ["a"] },
+      { "id": "K4", "name": "Riesgos / supuestos erróneos", "points": 1,
+        "prompt": "En una nota del output, el LLM escribió: «el bloqueo de la cuenta dura 24 horas y el enlace de restablecimiento es válido de forma indefinida». ¿Cómo evaluarlo frente al requisito?",
+        "hint": "El requisito dice: bloqueo de 15 minutos, enlace válido durante 30 minutos. Los valores 24 h e «indefinido» son hechos inventados (alucinaciones) contradictorios con el requisito — supuestos erróneos que hay que rechazar o corregir.",
+        "options": [
+          { "id": "a", "text": "Supuestos erróneos contradictorios con el requisito (24 h e «indefinido» inventados) — corrige o rechaza antes de usarlo." },
+          { "id": "b", "text": "Aceptable — el LLM suele dar valores más cercanos a la realidad que el requisito." },
+          { "id": "c", "text": "Acéptalo con una anotación de que los valores pueden variar según la versión de la aplicación." }
+        ], "correctOptionIds": ["a"] },
+      { "id": "K5", "name": "Límite de la decisión (verificación humana)", "points": 1,
+        "prompt": "¿Cómo repartir los papeles entre el LLM y el tester en este conjunto conforme al principio «asistente, no quien decide»?",
+        "hint": "El LLM esboza los casos y la lista de verificación de riesgos; la aceptación del alcance, la evaluación del riesgo crítico y la decisión sobre el release corresponden a la persona (human-in-the-loop).",
+        "options": [
+          { "id": "a", "text": "El LLM genera el borrador de casos y la lista de verificación de riesgos, y el tester aprueba el alcance y decide la admisión para el release." },
+          { "id": "b", "text": "El LLM aprueba por sí solo la versión para producción si las pruebas generadas pasan." },
+          { "id": "c", "text": "El LLM evalúa de forma definitiva el riesgo crítico y cierra los defectos sin participación del tester." }
+        ], "correctOptionIds": ["a"] }
+    ]
+  },
+  "summary": {
+    "points": [
+      "E1 — a partir de un requisito generas el borrador de los casos de prueba y lees el output buscando carencias de cobertura (límites, rutas de error, datos extremos).",
+      "E2 — reconoces duplicados (las mismas condiciones con otra descripción) y pruebas aparentes (aserción sin resultado esperado); más casos ≠ mejor cobertura.",
+      "E3 — esbozas una lista de verificación de riesgos (seguridad, datos, rendimiento, accesibilidad, conformidad), y tú mismo priorizas.",
+      "E4 — antes de la documentación aplicas un control de fondo: acepta / corrige / rechaza (coherencia con el requisito, sin alucinaciones, sin datos sensibles).",
+      "E5 — el LLM es un asistente; la aceptación, el riesgo crítico y el release corresponden a la persona (human-in-the-loop)."
+    ],
+    "checklist": [
+      "¿El output cubre el happy path, los límites y las rutas de error del requisito?",
+      "¿He señalado las carencias de cobertura y los duplicados y pruebas aparentes?",
+      "¿He revisado el output buscando hechos contradictorios con el requisito (alucinaciones)?",
+      "¿Las decisiones sobre el riesgo crítico y el release han quedado en manos de la persona?"
+    ],
+    "checklistTitle": "Lista de verificación — evaluación del output del LLM en QA",
+    "nextStep": "Siguiente paso: M9 — integraciones y agentes (para S3 y opcionalmente S2); para S1, vuelta a la ruta obligatoria."
+  }
+}

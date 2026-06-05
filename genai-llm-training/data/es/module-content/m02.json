@@ -1,0 +1,138 @@
+{
+  "_meta": {
+    "module": "M2",
+    "issue": "#20 [M2] Architektura LLM na poziomie praktycznym (z wariantem S1 skróconym)",
+    "storyboard": "docs/storyboard/m02-architektura.md",
+    "interaction": "Licznik kontekstu (kind: tune)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (PipeDemo/SklepDemo/NotkaApp, identyfikatory testowe). Output interakcji jest prerenderowany (lookup po poziomie), nie z żywego modelu. ZERO PII, ZERO realnych domen.",
+    "note": "6 ekranów treści + interakcja tune + podsumowanie. Wariant S1 SKRÓCONY realizowany przez onlyForPaths na blokach (token: przykład liczbowy S2/S3; transformer/attention: rdzeń S1 vs diagram S2/S3; inference cost S3). Quiz inline = pula questions/m02.json (Q14–Q15 mają paths S2/S3 — pominięcie kolejności dla S1 jest już tam wyegzekwowane)."
+  },
+  "module": "M2",
+  "intro": "Un modelo no «lee» un documento como lo hace una persona: trabaja con tokens y tiene una ventana de contexto finita. Para quien prueba software esto no es una curiosidad: un requisito truncado, una sección de la especificación omitida o una alucinación ante una entrada demasiado larga degradan directamente la calidad de las decisiones. Este módulo construye intuición (sin matemáticas): el token, la ventana de contexto, el transformer y la atención, y por qué más parámetros no significa mejor.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Para qué necesita un tester la arquitectura de los LLM",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Antes de confiar en la respuesta de un modelo sobre una especificación o un defecto, conviene saber cómo «ve» el texto el modelo en primer lugar. No lo lee como una persona: lo descompone en tokens y solo cabe en él lo que permite la ventana de contexto." },
+        { "kind": "list", "items": [
+          "Requisito truncado: el modelo responde sin el fragmento que se salió de la ventana.",
+          "Sección de la especificación omitida: un criterio clave nunca llegó al contexto.",
+          "Alucinación ante una entrada demasiado larga: la falta de datos se sustituye por una invención."
+        ] },
+        { "kind": "paragraph", "text": "Aprenderás cuatro cosas: qué son un token y una ventana de contexto, los tres efectos de un contexto insuficiente, la intuición detrás del transformer y la atención, y el hecho de que el número de parámetros no garantiza la calidad. Al final, tú mismo reducirás la ventana de contexto en la interacción «Contador de contexto»." },
+        { "kind": "callout", "variant": "info", "onlyForPaths": ["S1"], "title": "Atajo para tu ruta", "text": "La pregunta de negocio más importante es: «¿cabe siquiera este documento en la ventana del modelo?». Si no cabe, el modelo responderá igualmente, pero puede omitir lo que importa." }
+      ]
+    },
+    {
+      "id": "s2-token",
+      "title": "Token y tokenización",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Token", "original": "token", "text": "el fragmento más pequeño de texto con el que trabaja el modelo: no es una palabra entera, sino parte de una palabra, un único carácter o un espacio." },
+        { "kind": "definition", "term": "Tokenización", "original": "tokenization", "text": "la descomposición del texto en tokens, que el modelo realiza antes de procesar cualquier cosa." },
+        { "kind": "paragraph", "text": "La conclusión para el día a día: el coste y los límites se cuentan en tokens, no en palabras ni en páginas. Un párrafo «corto» en polaco puede ocupar más tokens de lo que parece." },
+        { "kind": "callout", "variant": "info", "onlyForPaths": ["S2", "S3"], "title": "Ejemplo orientativo", "text": "La frase de un informe ficticio «El pedido ZX-204 no superó la validación» equivale, a grandes rasgos, a una docena larga de tokens, porque «ZX-204» se descompone en varios fragmentos y las terminaciones polacas añaden más. Regla práctica: 1 token ≈ unos pocos caracteres, y el polaco suele ser «más caro» en tokens que el inglés." }
+      ]
+    },
+    {
+      "id": "s3-okno-kontekstu",
+      "title": "Ventana de contexto: por qué un documento largo no entra entero",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Ventana de contexto", "original": "context window", "text": "el número máximo de tokens que el modelo «ve» a la vez; abarca tanto la entrada (documento, pregunta) como la respuesta generada." },
+        { "kind": "paragraph", "text": "Cuando el documento más la pregunta más la respuesta superan ese límite, parte de la entrada tiene que salirse: el modelo simplemente no la verá." },
+        { "kind": "paragraph", "text": "El mecanismo en sí varía según la herramienta: unas devuelven un error de «límite superado», otras recortan en silencio el contenido más antiguo y otras aplican una ventana deslizante. Incluso cuando todo cabe, un contexto muy largo suele aprovecharse peor en su parte central (el efecto «lost in the middle»). La conclusión para quien prueba software es, sin embargo, la misma: no des por hecho que el modelo vio y aprovechó todo; verifícalo." },
+        { "kind": "callout", "variant": "info", "title": "La analogía del escritorio", "text": "La ventana de contexto es un escritorio de superficie fija. Cada hoja nueva empuja las más antiguas fuera del borde: no desaparecen porque sean «poco importantes», sino porque ya no quedaba sitio." },
+        { "kind": "callout", "variant": "warn", "title": "Regla de decisión", "text": "«Pegué el documento entero» no significa «el modelo lo leyó». Primero comprueba si el contenido cabe en la ventana de contexto." }
+      ]
+    },
+    {
+      "id": "s4-trzy-skutki",
+      "title": "Tres efectos de un contexto demasiado pequeño",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Cuando un fragmento relevante se sale de la ventana, aparecen tres efectos típicos, todos peligrosos para la calidad de las decisiones de quien prueba software." },
+        { "kind": "list", "ordered": true, "items": [
+          "Omisión de información: el modelo responde sin un requisito clave, porque no lo vio.",
+          "Incoherencia: en una conversación larga, el modelo «olvida» acuerdos anteriores que se salieron de la ventana.",
+          "Alucinación y suposiciones: la falta de datos se sustituye por contenido inventado, pero formulado con seguridad."
+        ] },
+        { "kind": "paragraph", "onlyForPaths": ["S2", "S3"], "text": "Miniejemplos de QA: el modelo resume la especificación PipeDemo, pero omite un criterio de una sección que se salió (omisión); en un hilo largo sobre el defecto ORD-TEST-777 empieza a ignorar los acuerdos del principio (incoherencia); preguntado por un requisito que ya no está en el contexto, lo da «de memoria» (alucinación)." },
+        { "kind": "callout", "variant": "warn", "onlyForPaths": ["S1"], "title": "Por qué es un riesgo para la calidad", "text": "Cada uno de estos efectos parece una respuesta normal: el modelo no avisa de que no llegó a ver algo. Por eso una decisión basada en esa respuesta puede ser silenciosamente errónea." }
+      ]
+    },
+    {
+      "id": "s5-transformer-uwaga",
+      "title": "Transformer y atención: la intuición",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "onlyForPaths": ["S1"], "text": "Dicho de forma sencilla: el modelo aprende relaciones entre fragmentos de texto, lo que le permite entender que palabras distantes pueden referirse entre sí. Eso es todo lo que necesitas recordar aquí." },
+        { "kind": "definition", "onlyForPaths": ["S2", "S3"], "term": "Transformer", "original": "transformer", "text": "una arquitectura que aprende qué tokens están relacionados entre sí, sin importar lo lejos que se encuentren en el texto." },
+        { "kind": "definition", "onlyForPaths": ["S2", "S3"], "term": "Atención", "original": "attention", "text": "el mecanismo de «hacia dónde mira el modelo»: permite enlazar, por ejemplo, un pronombre con un sustantivo de muchas frases atrás, ponderando las relaciones entre tokens." },
+        { "kind": "diagram", "onlyForPaths": ["S2", "S3"], "textAlt": "El flujo desde el texto hasta la respuesta en cinco pasos: 1) el texto de entrada se descompone en tokens (tokenización); 2) los tokens entran en la ventana de contexto; 3) mediante la atención, el modelo pondera las relaciones entre tokens; 4) el modelo genera los tokens de respuesta uno a uno; 5) los tokens de respuesta se recomponen de nuevo en un texto legible.", "ascii": "tekst -> [tokenizacja] -> tokeny -> [okno kontekstu] -> [uwaga: powiazania] -> [generacja] -> tokeny odpowiedzi -> tekst" },
+        { "kind": "paragraph", "onlyForPaths": ["S3"], "text": "Para profundizar: la atención compara cada token con los demás, por lo que su coste crece con la longitud de la entrada. Una ventana de contexto muy larga implica más cálculo, es decir, un mayor coste de inferencia (inference cost) y un tiempo de respuesta más largo: un argumento adicional para aportar solo las secciones relevantes para la pregunta." }
+      ]
+    },
+    {
+      "id": "s6-parametry",
+      "title": "Más parámetros ≠ mejor calidad",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Parámetros", "original": "parameters", "text": "los pesos internos del modelo; se pueden entender como la «capacidad» del modelo, pero su número por sí solo no determina la precisión en una tarea concreta de QA." },
+        { "kind": "paragraph", "text": "El resultado lo determinan de verdad: el ajuste del modelo a la tarea, la calidad de los datos, la longitud de la ventana de contexto y la forma de redactar el prompt; y no el mero número de miles de millones de parámetros." },
+        { "kind": "table", "onlyForPaths": ["S2", "S3"], "caption": "Qué influye realmente en la precisión de la respuesta", "headers": ["Factor", "Impacto en la calidad"], "rows": [
+          ["Número de parámetros", "Ayuda, pero no garantiza la precisión en una tarea concreta"],
+          ["Ajuste a la tarea", "A menudo más importante que el tamaño del modelo"],
+          ["Ventana de contexto y selección de fragmentos", "Decide si el modelo ve siquiera los datos necesarios"],
+          ["Forma de redactar el prompt", "Influye en la precisión y la repetibilidad de las respuestas"]
+        ], "textAlt": "Una tabla de cuatro factores y su impacto en la calidad: el número de parámetros ayuda, pero no garantiza la precisión; el ajuste a la tarea suele ser más importante que el tamaño; la ventana de contexto y la selección de fragmentos deciden si el modelo ve los datos necesarios; la forma de redactar el prompt influye en la precisión y la repetibilidad." },
+        { "kind": "callout", "variant": "warn", "title": "Antipatrón", "text": "Elegir un modelo «porque tiene más miles de millones de parámetros». Ejemplo sintético: un modelo más grande confunde el formato ficticio del ID de un defecto en SklepDemo, mientras que uno más pequeño con mejor contexto acierta. No compres por número de parámetros: compruébalo en tu propia tarea." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "tune",
+    "id": "m2-licznik-kontekstu",
+    "title": "Contador de contexto",
+    "intro": "Trabajas con una especificación sintética PipeDemo compuesta por seis secciones ordenadas en secuencia: (1) Alcance ZX-204, (2) Criterios de aceptación, (3) Datos de prueba, (4) Entorno, (5) Riesgos, (6) Glosario. Reduce la ventana de contexto y observa qué secciones se salen y a qué preguntas de control ya no se puede responder. Regla: cuanto menor es la ventana, antes se salen las secciones posteriores (primero el Glosario, en último lugar el Alcance). Después resuelve el checkpoint.",
+    "outputLabel": "Estado del documento en la ventana para el límite elegido:",
+    "controls": [
+      { "id": "limit", "label": "Límite de contexto", "levels": [
+        { "value": "duzy", "label": "Grande", "effect": "En la ventana caben las seis secciones (Alcance ZX-204, Criterios de aceptación, Datos de prueba, Entorno, Riesgos, Glosario). Cada pregunta de control tiene fundamento en una sección disponible: las cuatro preguntas se pueden responder correctamente." },
+        { "value": "sredni", "label": "Medio", "effect": "En la ventana quedan las secciones 1–3 (Alcance ZX-204, Criterios de aceptación, Datos de prueba). Fuera del contexto están: Entorno, Riesgos y Glosario. Pierden su fundamento las preguntas sobre el entorno de ejecución y sobre una definición del glosario; las preguntas sobre el alcance y sobre los criterios de aceptación siguen siendo posibles." },
+        { "value": "maly", "label": "Pequeño", "effect": "En la ventana queda solo la sección 1 (Alcance ZX-204). Fuera del contexto se salen: Criterios de aceptación, Datos de prueba, Entorno, Riesgos y Glosario. Solo es posible la pregunta sobre el alcance del pedido; las preguntas sobre los criterios de aceptación, sobre los datos de prueba, sobre el entorno y sobre el glosario pierden su fundamento: el modelo respondería sin fuente." }
+      ] }
+    ],
+    "checkpoint": {
+      "prompt": "Ajustas el límite de contexto a «Pequeño» (en la ventana queda solo la sección Alcance ZX-204). ¿A cuál de las siguientes preguntas de control NO responderá correctamente el modelo, porque su sección se salió de la ventana?",
+      "type": "single_choice",
+      "options": [
+        { "id": "A", "text": "¿Cuáles son los criterios de aceptación del pedido ZX-204?" },
+        { "id": "B", "text": "¿De qué trata el alcance del pedido ZX-204?" },
+        { "id": "C", "text": "¿Cuál es el número del pedido descrito en la especificación?" },
+        { "id": "D", "text": "¿Cómo se llama la especificación analizada?" }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Correcto: con un límite pequeño, en la ventana queda solo la sección «Alcance ZX-204». La sección «Criterios de aceptación» se salió, así que el modelo no tiene en qué basar la respuesta sobre los criterios: un ejemplo de manual de omisión de información.",
+      "feedbackIncorrect": "Las demás preguntas se pueden responder con la sección «Alcance ZX-204», que se quedó en la ventana. El problema es la pregunta sobre los criterios de aceptación: esa sección se salió de la ventana con el límite pequeño, así que el modelo respondería sin fuente."
+    }
+  },
+  "summary": {
+    "points": [
+      "El modelo trabaja con tokens, no con palabras: el coste y los límites se cuentan en tokens.",
+      "La ventana de contexto es finita; cuando un documento la supera, parte de la entrada se sale y el modelo no la ve.",
+      "Una ventana demasiado pequeña produce tres efectos: omisión de información, incoherencia y alucinación.",
+      "El transformer aprende relaciones entre tokens (atención); el número de parámetros no es, por sí solo, una garantía de calidad."
+    ],
+    "checklist": [
+      "¿Comprobé que el documento cabe en la ventana de contexto del modelo?",
+      "¿Le di al modelo solo las secciones relevantes para la pregunta cuando el conjunto era demasiado largo?",
+      "¿Evito confiar en una respuesta solo porque la herramienta aceptó el texto entero?",
+      "¿Juzgo al modelo por su ajuste a la tarea y no solo por el número de parámetros?"
+    ],
+    "checklistTitle": "Lista de comprobación: la ventana de contexto en la práctica de QA",
+    "nextStep": "Siguiente paso: M3 — parámetros de generación (temperature, top-p, max tokens)."
+  }
+}

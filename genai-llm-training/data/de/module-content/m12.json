@@ -1,0 +1,428 @@
+{
+  "_meta": {
+    "issue": "#23 [23][M4] Wdroż moduły M10-M12",
+    "storyboard": "docs/storyboard/m12-evaluation.md",
+    "interaction": "Judge calibration lab (kind: rubric, zadanie praktyczne R3-eval)",
+    "scenario": "SC-EVAL-01 (rozjazd oceny człowiek vs LLM-as-a-judge; EX1 length bias, EX2 position bias)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (SklepDemo, golden set GS-SklepDemo, odpowiedzi A1-A6, QA-ekspert anon.). ZERO realnych danych klienta/PII.",
+    "note": "Element interaktywny typu rubric = warunek konieczny S3, próg 70% (score >= 3,5 / 5). Wszystkie 9 ekranów wspólne dla S1/S2/S3; charakter ROZSZERZONY/pełny realizuje warstwa pogłębiona na ekranie 8 (onlyForPaths blokiem)."
+  },
+  "module": "M12",
+  "intro": "„Läuft schon irgendwie“ reicht nicht: Ohne Messung weißt du nicht, ob eine Änderung am Prompt oder an der RAG-Pipeline die Qualität verbessert oder verschlechtert hat. Dieses Modul lehrt, die Qualität von LLM und RAG mit den Werkzeugen einer Testerin zu messen: Golden Set, Metriken, Bewertungsrubrik, Kalibrierung mit Expertinnen und Entscheidungsschwelle.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Wozu braucht eine Testerin die Evaluation von LLM und RAG",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Ohne Qualitätsmessung ist jede Änderung am Prompt oder an der RAG-Pipeline ein Schritt ins Dunkle — man weiß nicht, ob sie die Antworten verbessert oder verschlechtert hat. Die Testerin bringt hier ein, was sie am besten kann: Akzeptanzkriterien, Wiederholbarkeit und Schutz vor Regression."
+        },
+        {
+          "kind": "list",
+          "items": [
+            "Golden Set — ein Referenzdatensatz, also „Regressionstests für die Antworten des Modells“.",
+            "Qualitätsmetriken — womit man eine gute Antwort misst.",
+            "Bewertungsrubrik für das bewertende Modell (engl. LLM-as-a-judge).",
+            "Kalibrierung mit Expertinnen und Übereinstimmung der Bewertenden (engl. inter-rater agreement).",
+            "Akzeptanzschwelle und Entscheidung „weiter / stoppen“ (engl. go / no-go)."
+          ]
+        },
+        {
+          "kind": "callout",
+          "variant": "info",
+          "text": "Dauer des Moduls etwa 90 Minuten. Am Ende wartet das interaktive Element „Judge calibration lab“, das Rubrik, Bias und Kalibrierung in einem Ablauf verbindet."
+        }
+      ]
+    },
+    {
+      "id": "s2-golden-set",
+      "title": "Golden Set für einen Anwendungsfall",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "definition",
+          "term": "Golden Set (Referenzdatensatz)",
+          "original": "Liste synthetischer Fälle Eingabe → erwartete Antwort",
+          "text": "eine dokumentierte Sammlung: Frage, korrekte Erwartung und Quelle der Wahrheit (engl. ground truth). Er übernimmt die Rolle von Regressionstests für die Antworten des Modells."
+        },
+        {
+          "kind": "paragraph",
+          "text": "Ein guter Golden Set enthält für den Anwendungsfall repräsentative Fragen, Grenzfälle sowie bekannte Fallstricke. Synthetisches Beispiel „GS-SklepDemo“: Fragen zum Positionslimit im Warenkorb, zur Rückgaberichtlinie und zum Akzeptanzkriterium WYM-koszyk."
+        },
+        {
+          "kind": "callout",
+          "variant": "warn",
+          "title": "Was ein Golden Set NICHT ist",
+          "text": "Es ist weder eine Sammlung zufälliger Logs noch von Produktivdaten. Positionen ohne entscheidbare Erwartung und ohne Quelle der Wahrheit nimmt man nicht in den Golden Set auf."
+        }
+      ]
+    },
+    {
+      "id": "s3-ocen-projekt",
+      "title": "Bewerte den Entwurf des Golden Sets",
+      "type": "decision",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Sieh dir die Kandidaten für den Golden Set „GS-SklepDemo“ an und entscheide, welche sich für den Datensatz eignen und welche fehlerhaft sind. Ein Mangel ist häufig: fehlende Quelle der Wahrheit, mehrdeutige Erwartung, ein Duplikat oder eine nicht testbare Frage."
+        },
+        {
+          "kind": "list",
+          "items": [
+            "Gut: „Wie hoch ist das Positionslimit im Warenkorb?“ — die Erwartung ergibt sich aus WYM-koszyk, die Quelle ist dokumentiert.",
+            "Fehlerhaft: „Ist die App nett?“ — die Erwartung ist mehrdeutig, nicht testbar.",
+            "Fehlerhaft: eine Frage ohne angegebene Quelle der Wahrheit — es ist unklar, wogegen man bewerten soll.",
+            "Fehlerhaft: eine Kopie einer bestehenden Position — ein Duplikat erhöht die Abdeckung nicht."
+          ]
+        },
+        {
+          "kind": "callout",
+          "variant": "safe",
+          "text": "Regel: Jede Position des Golden Sets hat eine eindeutige Erwartung und eine dokumentierte Quelle der Wahrheit. Fehlt eines davon = die Position fällt raus."
+        }
+      ]
+    },
+    {
+      "id": "s4-piec-metryk",
+      "title": "Fünf Qualitätsmetriken",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Zur Bewertung von LLM- und RAG-Antworten verwenden wir fünf Metriken. Jede misst eine andere Qualitätsdimension und hat ein typisches Mangelsymptom."
+        },
+        {
+          "kind": "table",
+          "headers": [
+            "Metrik",
+            "Was sie misst",
+            "Typisches Mangelsymptom"
+          ],
+          "rows": [
+            [
+              "Treffgenauigkeit (accuracy)",
+              "ob die Antwort inhaltlich korrekt ist",
+              "eine falsche Behauptung, als Fakt dargestellt"
+            ],
+            [
+              "Quellentreue (faithfulness)",
+              "ob die Antwort mit der Quelle übereinstimmt",
+              "ein Satz, der dem Quelldokument widerspricht"
+            ],
+            [
+              "Verankerung (groundedness)",
+              "ob sich der Inhalt auf den übergebenen Kontext stützen lässt",
+              "eine Behauptung ohne Stütze im abgerufenen Fragment"
+            ],
+            [
+              "Angemessenheit (relevance)",
+              "ob die Antwort die gestellte Frage betrifft",
+              "eine Antwort auf eine andere als die gestellte Frage"
+            ],
+            [
+              "Vollständigkeit (completeness)",
+              "ob alle erforderlichen Bedingungen abgedeckt sind",
+              "ein Teil der Bedingungen des Akzeptanzkriteriums fehlt"
+            ]
+          ],
+          "textAlt": "Fünf Qualitätsmetriken. Treffgenauigkeit (accuracy): ob die Antwort inhaltlich korrekt ist; das Mangelsymptom ist eine falsche Behauptung, die als Fakt dargestellt wird. Quellentreue (faithfulness): ob die Antwort mit der Quelle übereinstimmt; das Mangelsymptom ist ein Satz, der dem Quelldokument widerspricht. Verankerung (groundedness): ob sich der Inhalt auf den übergebenen Kontext stützen lässt; das Mangelsymptom ist eine Behauptung ohne Stütze im abgerufenen Fragment. Angemessenheit (relevance): ob die Antwort die gestellte Frage betrifft; das Mangelsymptom ist eine Antwort auf eine andere als die gestellte Frage. Vollständigkeit (completeness): ob alle erforderlichen Bedingungen abgedeckt sind; das Mangelsymptom ist ein fehlender Teil der Bedingungen des Akzeptanzkriteriums."
+        },
+        {
+          "kind": "callout",
+          "variant": "info",
+          "text": "Bezug zu M6: Eine niedrige faithfulness oder groundedness deutet oft auf die Generierungsschicht von RAG hin, Lücken in den abgerufenen Quellen dagegen auf die Retrieval-Schicht."
+        },
+        {
+          "kind": "callout",
+          "variant": "info",
+          "title": "Hinweis: faithfulness vs. groundedness",
+          "text": "In vielen Quellen werden „Quellentreue“ und „Verankerung“ zusammen behandelt — als ein Maß dafür, „ob die Antwort sich an den übergebenen Kontext hält“. Wir trennen sie hier didaktisch: faithfulness fragt, ob die Antwort der Quelle nicht widerspricht, groundedness dagegen, ob jede Behauptung eine Stütze im abgerufenen Fragment hat. In der Praxis prüft man üblicherweise beide zugleich."
+        }
+      ]
+    },
+    {
+      "id": "s5-dobierz-metryke",
+      "title": "Wähle die passende Metrik zur Frage",
+      "type": "decision",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Wähle für eine gegebene Qualitätsfrage die Metrik, die sie entscheidet. Der häufigste Fallstrick ist die Verwechslung von Angemessenheit (relevance) mit Treffgenauigkeit (accuracy)."
+        },
+        {
+          "kind": "list",
+          "items": [
+            "„Stimmt die Antwort mit dem Inhalt der Quelle überein?“ → faithfulness (und Verankerung / groundedness).",
+            "„Deckt die Antwort alle Bedingungen des Akzeptanzkriteriums ab?“ → completeness.",
+            "„Betrifft die Antwort überhaupt die gestellte Frage?“ → relevance.",
+            "„Ist der angegebene Wert inhaltlich korrekt?“ → accuracy."
+          ]
+        },
+        {
+          "kind": "callout",
+          "variant": "warn",
+          "text": "Fallstrick: Eine Antwort kann angemessen (zum Thema) sein und trotzdem der Quelle widersprechen. Relevance ersetzt faithfulness nicht."
+        }
+      ]
+    },
+    {
+      "id": "s6-rubryka",
+      "title": "Rubrik für LLM-as-a-judge",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "definition",
+          "term": "LLM-as-a-judge",
+          "original": "Sprachmodell in der Rolle des Bewertenden",
+          "text": "ein Modell, das die Antworten eines anderen Modells anhand einer Rubrik bewertet. Ohne Rubrik beantwortet es das allgemeine „ist das gut?“ und die Bewertung ist nicht wiederholbar."
+        },
+        {
+          "kind": "paragraph",
+          "text": "Eine gute Bewertungsrubrik (engl. evaluation rubric) hat: ein klares Kriterium, eine Skala (z. B. 0–2 oder 1–5), eine Definition jeder Stufe, verankernde Beispiele (engl. anchor examples) sowie die Anweisung „bewerte ausschließlich anhand der Quelle“."
+        },
+        {
+          "kind": "callout",
+          "variant": "warn",
+          "title": "Anti-Mythos",
+          "text": "„Frag das Modell, ob die Antwort gut ist“ liefert ohne Rubrik eine Bewertung, die von der Laune des Durchlaufs abhängt. Stufendefinitionen und Anker machen die Bewertung wiederholbar."
+        }
+      ]
+    },
+    {
+      "id": "s7-bias-position",
+      "title": "Voreingenommenheit des Bewertenden und Position Bias",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Ein bewertendes LLM hat Voreingenommenheiten (engl. bias). Ohne Kontrolle kann eine automatische Bewertung ein falsches „Grün“ geben, also eine Antwort durchwinken, die eigentlich durchfallen sollte."
+        },
+        {
+          "kind": "definition",
+          "term": "Position Bias (Positionsvoreingenommenheit)",
+          "original": "Vorliebe für die Position im paarweisen Vergleich",
+          "text": "beim Vergleich zweier Antworten wählt der Bewertende häufiger die zuerst gezeigte, unabhängig von ihrer tatsächlichen Qualität."
+        },
+        {
+          "kind": "list",
+          "items": [
+            "Length Bias: Überbewertung der längeren Antwort allein wegen ihrer Länge.",
+            "„Höflichkeits“-Bewertung: eine überhöhte Note unabhängig vom Inhalt.",
+            "Abweichung von der menschlichen Bewertung: der Judge vergibt eine andere Note als die Expertin."
+          ]
+        },
+        {
+          "kind": "callout",
+          "variant": "info",
+          "text": "Gegenmaßnahmen (im Folgenden vertieft): Vertauschung der Reihenfolge in paarweisen Vergleichen, eine eindeutige Rubrik und Kalibrierung mit Expertinnen."
+        }
+      ]
+    },
+    {
+      "id": "s8-kalibracja",
+      "title": "Kalibrierung mit Expertinnen und Übereinstimmung der Bewertenden",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Um der automatischen Bewertung vertrauen zu können, vergleiche sie mit der Bewertung einer Expertin auf demselben Golden Set und berechne die Übereinstimmung zwischen den Bewertenden (engl. inter-rater agreement). Die Stellen, an denen die Bewertungen auseinandergehen, sind ein Signal zur Verbesserung der Rubrik, nicht zum Ignorieren."
+        },
+        {
+          "kind": "list",
+          "ordered": true,
+          "items": [
+            "Bewerte die Antworten mit dem bewertenden LLM anhand der Rubrik.",
+            "Vergleiche mit der Bewertung der Expertin auf demselben Golden Set.",
+            "Finde die Abweichung und diagnostiziere die Ursache (Bias oder eine Lücke in der Rubrik).",
+            "Verbessere die Rubrik und bewerte erneut."
+          ]
+        },
+        {
+          "kind": "callout",
+          "variant": "warn",
+          "onlyForPaths": [
+            "S2",
+            "S3"
+          ],
+          "title": "Vertiefung: warum die bloße „% Übereinstimmung“ in die Irre führt",
+          "text": "Bei stark ungleicher Verteilung der Bewertungen (z. B. fast alles „pass“) lässt sich eine hohe Übereinstimmungsquote nahezu zufällig erreichen. Entscheidend ist, ob der Bewertende die seltenen, riskanten „fail“-Fälle trifft, und nicht nur „auf pass“ übereinstimmt."
+        }
+      ]
+    },
+    {
+      "id": "s9-prog-go-nogo",
+      "title": "Akzeptanzschwelle und Go/No-Go-Entscheidung",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Die Qualitätsakzeptanzschwelle (engl. acceptance threshold) legt fest, wann die Qualität „gut genug“ ist. Beispiel: „faithfulness ≥ 0,9 auf dem Golden Set UND null Positionen, die der Quelle widersprechen“. Die Schwelle wählt man nach dem Risiko des Anwendungsfalls, den Kosten eines Fehlers und dem Ergebnis der Vorversion (Baseline)."
+        },
+        {
+          "kind": "definition",
+          "term": "Go-/No-Go-Entscheidung („weiter / stoppen“)",
+          "original": "go / no-go decision",
+          "text": "die Entscheidung, ob eine Version freigegeben werden darf. Die Schwelle wirkt auch in der Regression: Sie vergleicht die neue Version mit der vorherigen."
+        },
+        {
+          "kind": "callout",
+          "variant": "safe",
+          "title": "Konservative Voreinstellung",
+          "text": "Fehlende Bewertungsdaten oder eine nicht erfüllte harte Bedingung (z. B. eine Position, die der Quelle widerspricht) = No-Go. Ein guter Durchschnitt schert sich nicht um die harte Bedingung."
+        }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "rubric",
+    "id": "m12-judge-calibration",
+    "title": "Judge calibration lab",
+    "intro": "Synthetischer Datensatz: Antworten A1–A6 auf Fragen aus dem Golden Set „GS-SklepDemo“, bewertet von einer QA-Expertin (anon.) und von einem bewertenden LLM. Er enthält einen absichtlich eingeschleusten Position Bias (Paar A3/A4) sowie eine Überbewertung (A2) und eine Rubriklücke (A5). Markiere für jedes Kriterium der Rubrik R3-eval die Evaluations-Designentscheidung, die es erfüllt. Die Bewertung zählt als praktische Aufgabe R3-eval auf dem Pfad S3 und ist eine notwendige Bedingung — die Bestehensschwelle beträgt 70 % (score ≥ 3,5 / 5).",
+    "rubricId": "R3-eval",
+    "recordsPractical": true,
+    "scaleMax": 5,
+    "passThreshold": 3.5,
+    "criteria": [
+      {
+        "id": "K1",
+        "name": "Golden Set passend zum Use Case",
+        "points": 1,
+        "hint": "Der Golden Set hat repräsentative Fragen, Grenzfälle und eine dokumentierte Quelle der Wahrheit — keine zufälligen Logs.",
+        "prompt": "Wie baust du den Golden Set „GS-SklepDemo“ zur Bewertung von Antworten zu Warenkorb und Rückgaben auf?",
+        "options": [
+          {
+            "id": "a",
+            "text": "Repräsentative Fragen zu WYM-koszyk und zur Rückgaberichtlinie, Grenzfälle (eine Frage außerhalb des Quellbereichs), jede Position mit dokumentierter Quelle der Wahrheit."
+          },
+          {
+            "id": "b",
+            "text": "Zufällig gesammelte Produktiv-Logs mit rohen Kundendaten — die werden am „echtesten“ sein."
+          },
+          {
+            "id": "c",
+            "text": "Nur allgemeine Fragen wie „ist die App gut?“, ohne angegebene Erwartung und ohne Quelle."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K2",
+        "name": "Metriken mit Begründung",
+        "points": 1,
+        "hint": "Wähle die Metriken passend zu dem, was die Frage wirklich prüft: Abdeckung der Bedingungen = completeness, Übereinstimmung und Stütze in der Quelle = faithfulness/groundedness.",
+        "prompt": "Qualitätsfrage: „Nennt die Antwort alle Zahlungsbedingungen aus der Quelle und fügt keine Bedingungen außerhalb der Quelle hinzu?“. Welche Metriken wählst du?",
+        "options": [
+          {
+            "id": "a",
+            "text": "completeness (Abdeckung aller Bedingungen) sowie faithfulness und groundedness (kein Inhalt außerhalb der Quelle und Stütze im Kontext) — jede mit der Dimension der Frage begründet."
+          },
+          {
+            "id": "b",
+            "text": "Ausschließlich relevance, weil die Frage Zahlungen betrifft — das reicht zur Inhaltsbewertung."
+          },
+          {
+            "id": "c",
+            "text": "Position Bias als Metrik für die Inhaltsqualität, weil es technisch klingt."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K3",
+        "name": "Rubrik für LLM-as-a-judge (eindeutig)",
+        "points": 1,
+        "hint": "Eine eindeutige Rubrik hat ein klares Kriterium, eine Skala mit Definition jeder Stufe, Anker und die Anweisung „bewerte anhand der Quelle“.",
+        "prompt": "Position A5 (Vollständigkeit der Zahlungsbedingungen) geht auseinander, weil die Rubrik nicht präzisiert, wann „eine Bedingung fehlt“ bereits eine niedrigere Stufe bedeutet. Wie verbesserst du sie?",
+        "options": [
+          {
+            "id": "a",
+            "text": "Definitionen der Skalenstufen ergänzen (z. B. 2 = alle Bedingungen; 1 = eine Bedingung fehlt; 0 = die meisten fehlen) mit verankernden Beispielen und der Anweisung „bewerte ausschließlich anhand der Quelle“."
+          },
+          {
+            "id": "b",
+            "text": "Die Rubrik als „bewerte, ob die Antwort gut ist“ belassen und dem Gespür des Bewertenden vertrauen."
+          },
+          {
+            "id": "c",
+            "text": "Die Skala entfernen und für jede Position nur einen freien Kommentar des Bewertenden sammeln."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K4",
+        "name": "Bias/Position Bias + Kalibrierung mit Expertin",
+        "points": 1,
+        "hint": "Position Bias bestätigt und neutralisiert die Vertauschung der Reihenfolge (A3/A4); Length Bias ist die Überbewertung wegen der Länge; das Urteil validierst du stets mit der Bewertung der Expertin auf dem Golden Set.",
+        "prompt": "Paar A3/A4 (dieselbe Variante WYM-koszyk) sowie eine Position, bei der der Judge die längere Antwort überbewertet — wie erkennst und begrenzt du den Bias zuverlässig, bevor du die Schwelle festlegst?",
+        "options": [
+          {
+            "id": "a",
+            "text": "Die Bewertung von A3/A4 mit vertauschter Reihenfolge wiederholen (und beide Anordnungen mitteln): Eine Umkehr des Urteils bestätigt einen Position Bias, also die Vertauschung der Reihenfolge in die Rubrik aufnehmen; Antworten nicht allein für die Länge belohnen; jede Note an der Bewertung der Expertin auf dem Golden Set kalibrieren."
+          },
+          {
+            "id": "b",
+            "text": "Die längere Antwort grundsätzlich als vollständiger belohnen und dem ersten Urteil des Judge vertrauen, weil die automatische Bewertung schneller und objektiver ist."
+          },
+          {
+            "id": "c",
+            "text": "Das lästige Paar A3/A4 aus dem Golden Set entfernen, damit die Übereinstimmungsquote steigt, und den Vergleich mit der Expertin auslassen."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K5",
+        "name": "Qualitätsakzeptanzschwelle",
+        "points": 1,
+        "hint": "Die Schwelle ist oft eine Konjunktion: Durchschnitt UND harte Bedingung „null Widersprüche“. Fehlende Daten oder eine nicht erfüllte harte Bedingung = No-Go (konservative Voreinstellung).",
+        "prompt": "Schwelle: „faithfulness ≥ 0,9 auf dem Golden Set UND null Positionen, die der Quelle widersprechen“. Die neue Version hat einen Durchschnitt von 0,93, aber Position A2 widerspricht der Quelle. Welche Entscheidung?",
+        "options": [
+          {
+            "id": "a",
+            "text": "No-Go: Die harte Bedingung „null Widersprüche“ ist trotz gutem Durchschnitt nicht erfüllt — beseitige zuerst den Widerspruch in A2, dann bewerte erneut; die automatische Bewertung erst nach Kalibrierung zulassen und mit periodischer Rekalibrierung mit der Expertin."
+          },
+          {
+            "id": "b",
+            "text": "Go: Der Durchschnitt 0,93 überschreitet 0,9, also ist die Schwelle erfüllt, unabhängig von einer einzelnen widersprüchlichen Position."
+          },
+          {
+            "id": "c",
+            "text": "Go mit Absenkung der Schwelle auf 0,85, da nur eine Position versagt — oder „testweise“ ausrollen und überwachen."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Der Golden Set (Referenzdatensatz) sind Regressionstests für die Antworten des Modells: repräsentative Fragen, Grenzfälle, dokumentierte Quelle der Wahrheit.",
+      "Fünf Metriken: Treffgenauigkeit, Quellentreue, Verankerung, Angemessenheit, Vollständigkeit — jede passend zur Dimension der Frage wählen.",
+      "Die Rubrik für LLM-as-a-judge muss eindeutig sein: Kriterium, Skala mit Stufendefinitionen, Anker, Bewertung anhand der Quelle.",
+      "Der Bewertende hat Bias (u. a. Position Bias und Length Bias) — erkenne ihn durch Vertauschung der Reihenfolge und Kalibrierung mit der Expertin (Übereinstimmung der Bewertenden).",
+      "Die Akzeptanzschwelle ist oft eine Konjunktion von Bedingungen; eine nicht erfüllte harte Bedingung oder fehlende Daten = No-Go."
+    ],
+    "checklist": [
+      "Hat der Golden Set für jede Position eine eindeutige Erwartung und eine Quelle der Wahrheit?",
+      "Sind die Metriken passend zu dem gewählt, was die Frage wirklich prüft?",
+      "Hat die Rubrik des Bewertenden Stufendefinitionen, Anker und eine Bewertung anhand der Quelle?",
+      "Habe ich den Position Bias durch Vertauschung der Reihenfolge geprüft und die Bewertung mit der Expertin kalibriert?",
+      "Hat die Akzeptanzschwelle eine harte Bedingung, und führen fehlende Daten zu einem No-Go?"
+    ],
+    "checklistTitle": "Checkliste — fertige Evaluation von LLM und RAG",
+    "nextStep": "Nächster Schritt: für S3 üblicherweise der Abschlusstest und die Zusatzmaterialien. Wiederhole die Schleife: Golden Set → Metriken → Rubrik → Kalibrierung → Schwelle → Entscheidung."
+  }
+}

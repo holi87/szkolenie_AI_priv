@@ -1,0 +1,180 @@
+{
+  "_meta": {
+    "issue": "#22 [22][M4] Wdroż moduły M7-M9",
+    "storyboard": "docs/storyboard/m08-qa-use-cases.md",
+    "interaction": "QA workbench (kind: rubric, ĆWICZENIOWE — rubryka R4-qa-workbench, bez progu)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (NotkaApp, SklepDemo, przyklad.test, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Egzemplarz typu rubric ĆWICZENIOWY: pominięto passThreshold i recordsPractical (feedback bez bramki). M8 obowiązkowy S2/S3, opcjonalny S1 — bez wariantu skróconego, ten sam ciąg ekranów dla wszystkich ścieżek. Treść interakcji oparta na SC-QA-01 (reset hasła NotkaApp)."
+  },
+  "module": "M8",
+  "intro": "GenAI beschleunigt die QA-Arbeit: Es entwirft Testfälle, Risiko-Checklisten und Dokumentationsreviews. Doch ein LLM erzeugt den wahrscheinlichsten Text, nicht die verifizierte Wahrheit — deshalb bleibt der Tester der Entscheider und das Modell der Assistent.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Wozu GenAI in der QA — und wo seine Rolle endet",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Ein LLM beschleunigt das Erstellen und Analysieren von QA-Artefakten: Testfälle, Risiko-Checklisten, Dokumentationsreviews. Es erzeugt jedoch den wahrscheinlichsten Text und nicht die verifizierte Wahrheit — du entscheidest, was in die Dokumentation aufgenommen wird." },
+        { "kind": "list", "items": [
+          "E1 — du generierst Testfälle aus einer Anforderung und benennst Lücken in der Abdeckung.",
+          "E2 — du erkennst Duplikate und Scheintests (ohne echten Prüfwert).",
+          "E3 — du erstellst eine Risiko-Checkliste (Risk-based Testing).",
+          "E4 — du beurteilst, ob der Output nach fachlicher Prüfung für die QA-Dokumentation taugt.",
+          "E5 — du benennst, wo das LLM Assistent ist und wo der Mensch die Entscheidung trifft."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Was unterscheidet das von M7", "text": "M7 vermittelte das Schreiben von Prompts. M8 konzentriert sich auf den Einsatz des LLM in realen QA-Aufgaben und die Bewertung seines Outputs. Leitprinzip: LLM als Assistent, Tester als Entscheider." }
+      ]
+    },
+    {
+      "id": "s2-generowanie",
+      "title": "Testfälle aus einer Anforderung generieren",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Aus einer synthetischen Anforderung (z. B. „Passwortfeld: min. 8 Zeichen, min. 1 Ziffer\") bittest du das LLM um Testfälle: einen positiven, einen Grenz- und einen Negativfall. Ein guter Prompt nennt die Rolle, die Anforderung und das Ausgabeformat (Tabelle: ID | Schritte | Daten | erwartetes Ergebnis)." },
+        { "kind": "list", "items": [
+          "Positiver TC — das Passwort erfüllt alle Regeln, die Registrierung gelingt.",
+          "Grenz-TC — Passwort mit exakt der Mindestlänge (8 Zeichen).",
+          "Negativer TC — Passwort ohne Ziffer, erwartet wird eine Fehlermeldung."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Fazit", "text": "Das LLM liefert ein schnelles Grundgerüst mit Bezug zu den Akzeptanzkriterien (Acceptance Criteria) und einer Nachverfolgbarkeit (Traceability) Anforderung→Test. Das ist der Startpunkt, kein fertiges Set." }
+      ]
+    },
+    {
+      "id": "s3-braki-pokrycia",
+      "title": "Lücken in der Abdeckung — was das LLM nicht bedacht hat",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Lies den Output auf Abdeckungslücken (Coverage Gaps): fehlende Grenzfälle, fehlende Fehlerpfade, übersehene Zustände, fehlende Testdaten für Extremwerte. Technik: Stelle die generierten Fälle einer Liste von Risikokategorien gegenüber und suche nach leeren Feldern." },
+        { "kind": "callout", "variant": "warn", "title": "Synthetisches Beispiel", "text": "Beim Login hat das LLM den „Happy Path\" abgedeckt, aber die Sperre nach 5 Fehlversuchen ausgelassen. Am häufigsten fehlen Grenzen, Fehlerpfade und Extremdaten — dort suchst du nach Lücken." }
+      ]
+    },
+    {
+      "id": "s4-duplikaty-pozorne",
+      "title": "Duplikate und Scheintests",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Scheintest", "original": "Test ohne echten Prüfwert", "text": "ein Fall, dessen Assertion nichts überprüft — kein erwartetes Ergebnis, „der Test besteht immer\"." },
+        { "kind": "definition", "term": "Duplikat", "text": "zwei Fälle, die dieselben Bedingungen mit anderer Beschreibung prüfen; sie blähen das Set auf, ohne neue Abdeckung." },
+        { "kind": "callout", "variant": "warn", "title": "Fazit", "text": "Mehr Fälle ≠ bessere Abdeckung. Ein Duplikat erhöht die Wartungskosten, und ein Scheintest erzeugt ein falsches Sicherheitsgefühl." }
+      ]
+    },
+    {
+      "id": "s5-checklista-ryzyk",
+      "title": "Risiko-Checkliste für eine Funktionalität",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Das LLM entwirft eine Risiko-Checkliste (Risk-based Testing) nach Kategorien: Sicherheit, Daten, Performance, Barrierefreiheit, Compliance. Jeder Eintrag: Risiko + Auswirkung + zu testender Bereich." },
+        { "kind": "table",
+          "title": "Synthetische Checkliste — Funktion „Passwort-Reset\" von NotkaApp",
+          "headers": ["Kategorie", "Risiko", "Zu testender Bereich"],
+          "rows": [
+            ["Sicherheit", "Reset-Link funktioniert nach Ablauf oder mehrfach", "Gültigkeit 30 Min., Einmaligkeit des Links"],
+            ["Daten", "E-Mail des Nutzers in der Fehlermeldung offengelegt", "Inhalt der Antwort bei unbekanntem Konto"],
+            ["Barrierefreiheit", "Formular mit Screenreader nicht bedienbar", "Konformität mit WCAG, Fokus und Labels"]
+          ],
+          "textAlt": "Tabelle einer Risiko-Checkliste für den Passwort-Reset von NotkaApp: Kategorie Sicherheit — Risiko, dass der Link nach Ablauf oder mehrfach funktioniert, Bereich ist Gültigkeit 30 Min. und Einmaligkeit; Kategorie Daten — Risiko, dass die E-Mail in der Fehlermeldung offengelegt wird, Bereich ist der Inhalt der Antwort bei unbekanntem Konto; Kategorie Barrierefreiheit — Risiko fehlender Bedienbarkeit mit Screenreader, Bereich ist die Konformität mit WCAG, Fokus und Labels." },
+        { "kind": "callout", "variant": "info", "text": "Das LLM schlägt Kategorien vor, der Tester priorisiert und verwirft die unpassenden." }
+      ]
+    },
+    {
+      "id": "s6-do-dokumentacji",
+      "title": "Taugt dieser Output für die QA-Dokumentation?",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Bevor du den Output in die Dokumentation einfügst, durchlaufe eine fachliche Prüfung (Review-Checkliste): Übereinstimmung mit der Anforderung, Vollständigkeit, keine erfundenen Fakten (Halluzinationen), Verifizierbarkeit, keine sensiblen Daten." },
+        { "kind": "list", "ordered": true, "items": [
+          "Annehmen — Output stimmt mit der Anforderung überein, ist vollständig, verifizierbar, ohne sensible Daten.",
+          "Korrigieren — kleinere Lücken oder ein erfundener Fakt, der gegenüber der Anforderung zu berichtigen ist.",
+          "Verwerfen — Fakten, die der Anforderung widersprechen, oder sensible Daten; nicht ohne Überarbeitung verwenden."
+        ] },
+        { "kind": "callout", "variant": "info", "text": "Verbindung zu M11 (Verifikation des Outputs) und M10 (Daten und Privatsphäre)." }
+      ]
+    },
+    {
+      "id": "s7-asystent-decydent",
+      "title": "Assistent oder Entscheider — wo die Grenze ziehen",
+      "type": "decision",
+      "blocks": [
+        { "kind": "paragraph", "text": "Ein LLM kann Aufgaben als Assistent unterstützen: Entwurf von Fällen, Draft einer Checkliste, Brainstorming. Die Entscheidung trifft der Mensch (Human-in-the-Loop): Abnahme der Fälle, Bewertung kritischer Risiken, Freigabe für ein Release." },
+        { "kind": "table",
+          "title": "Assistent vs. Entscheider — 3 synthetische Situationen",
+          "headers": ["Situation", "Assistent (LLM)", "Entscheider (Mensch)"],
+          "rows": [
+            ["Entwurf von Testfällen aus einer Anforderung", "Erzeugt einen Vorschlag", "Genehmigt den Umfang"],
+            ["Bewertung eines kritischen Risikos", "Schlägt Kategorien vor", "Entscheidet über die Priorität"],
+            ["Freigabe für ein Release", "Entscheidet nicht", "Trifft die Entscheidung"]
+          ],
+          "textAlt": "Tabelle dreier QA-Situationen mit der Aufteilung in die Rolle des Assistenten (LLM) und des Entscheiders (Mensch): Entwurf von Testfällen — das LLM erzeugt einen Vorschlag, der Mensch genehmigt den Umfang; Bewertung eines kritischen Risikos — das LLM schlägt Kategorien vor, der Mensch entscheidet über die Priorität; Freigabe für ein Release — das LLM entscheidet nicht, der Mensch trifft die Entscheidung." },
+        { "kind": "callout", "variant": "safe", "title": "Grenze", "text": "Je höher der Einsatz einer Entscheidung (Release, kritisches Risiko, Schließen eines Defekts), desto stärker liegt die Rolle beim Menschen. Das LLM beschleunigt, aber es gibt nicht frei." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "rubric",
+    "id": "m8-qa-workbench",
+    "title": "QA workbench",
+    "intro": "Anforderung von NotkaApp (fiktiv): Der Nutzer setzt das Passwort über einen 30 Minuten gültigen E-Mail-Link zurück; nach 3 fehlerhaften Login-Versuchen wird das Konto für 15 Minuten gesperrt. Das LLM hat folgende Fälle generiert: TC1 — korrekter Reset; TC2 — Link nach 30 Min. abgelaufen; TC3 — 3 falsche Passwörter → Kontosperre. Beurteile diesen Output anhand der fünf Achsen der Rubrik. Dies ist eine Übung im Lernmodus — du erhältst Feedback, ohne Bestehensschwelle.",
+    "rubricId": "R4-qa-workbench",
+    "scaleMax": 5,
+    "criteria": [
+      { "id": "K1", "name": "Testabdeckung", "points": 1,
+        "prompt": "Welche Verhaltensweisen aus der NotkaApp-Anforderung deckt der LLM-Output tatsächlich AB (TC1–TC3)?",
+        "hint": "Der Output deckt den Happy Path des Resets, den Ablauf des Links nach 30 Min. und die Kontosperre nach 3 Fehlversuchen ab.",
+        "options": [
+          { "id": "a", "text": "Korrekter Reset (TC1), Ablauf des Links nach 30 Min. (TC2) und Kontosperre nach 3 Fehlversuchen (TC3)." },
+          { "id": "b", "text": "Erneute Verwendung desselben Reset-Links und parallele Nutzer-Sitzungen." },
+          { "id": "c", "text": "Ausschließlich Kosmetik: Farbe des Buttons „Passwort zurücksetzen\" und das Logo auf der Login-Seite." }
+        ], "correctOptionIds": ["a"] },
+      { "id": "K2", "name": "Abdeckungslücken", "points": 1,
+        "prompt": "Welche Fälle FEHLEN im LLM-Output gegenüber der NotkaApp-Anforderung? Markiere genau alle Lücken.",
+        "hint": "Drei Lücken wurden ausgelassen: leere E-Mail, ein Einmal-Link zweimal verwendet sowie parallele Sitzungen. Der Ablauf des Links (TC2) und die Sperre nach 3 Versuchen (TC3) sind bereits abgedeckt.",
+        "options": [
+          { "id": "a", "text": "Reset mit leerem E-Mail-Feld (Validierung der Eingabedaten)." },
+          { "id": "b", "text": "Erneute Verwendung desselben Reset-Links (Einmal-Link zweimal verwendet)." },
+          { "id": "c", "text": "Parallele Passwort-Reset-Sitzungen für dasselbe Konto." },
+          { "id": "d", "text": "Ablauf des Links nach 30 Minuten — das deckt bereits TC2 ab." }
+        ], "correctOptionIds": ["a", "b", "c"] },
+      { "id": "K3", "name": "Scheintests / Duplikate", "points": 1,
+        "prompt": "Dem Set wurde TC4 hinzugefügt: „Öffne das Reset-Formular und prüfe, dass sich das Formular öffnet; erwartetes Ergebnis: keines\". Wie ist es einzuordnen?",
+        "hint": "Ohne definiertes erwartetes Ergebnis verifiziert die Assertion nichts — das ist ein Scheintest, kein wertvoller Grenzfall.",
+        "options": [
+          { "id": "a", "text": "Scheintest — kein erwartetes Ergebnis, die Assertion prüft tatsächlich nichts." },
+          { "id": "b", "text": "Korrekter Grenzfall für die 30-minütige Gültigkeit des Links." },
+          { "id": "c", "text": "Wertvoller Negativfall für das Szenario der Kontosperre." }
+        ], "correctOptionIds": ["a"] },
+      { "id": "K4", "name": "Risiken / falsche Annahmen", "points": 1,
+        "prompt": "In einer Notiz zum Output schrieb das LLM: „Die Kontosperre dauert 24 Stunden, und der Reset-Link ist unbegrenzt gültig\". Wie ist das gegenüber der Anforderung zu bewerten?",
+        "hint": "Die Anforderung besagt: Sperre 15 Minuten, Link 30 Minuten gültig. Die Werte 24 Std. und „unbegrenzt\" sind erfundene Fakten (Halluzinationen), die der Anforderung widersprechen — falsche Annahmen, die zu verwerfen oder zu korrigieren sind.",
+        "options": [
+          { "id": "a", "text": "Falsche Annahmen, die der Anforderung widersprechen (erfundene 24 Std. und „unbegrenzt\") — vor der Verwendung korrigieren oder verwerfen." },
+          { "id": "b", "text": "Akzeptabel — das LLM nennt meist Werte, die der Realität näher sind als die Anforderung." },
+          { "id": "c", "text": "Mit dem Vermerk annehmen, dass die Werte je nach Anwendungsversion variieren können." }
+        ], "correctOptionIds": ["a"] },
+      { "id": "K5", "name": "Entscheidungsgrenze (menschliche Verifikation)", "points": 1,
+        "prompt": "Wie teilt man bei diesem Set die Rollen zwischen LLM und Tester gemäß dem Prinzip „Assistent, nicht Entscheider\" auf?",
+        "hint": "Das LLM entwirft Fälle und eine Risiko-Checkliste; die Abnahme des Umfangs, die Bewertung kritischer Risiken und die Release-Entscheidung liegen beim Menschen (Human-in-the-Loop).",
+        "options": [
+          { "id": "a", "text": "Das LLM generiert einen Entwurf der Fälle und eine Risiko-Checkliste, und der Tester genehmigt den Umfang und entscheidet über die Freigabe zum Release." },
+          { "id": "b", "text": "Das LLM gibt das Release eigenständig für die Produktion frei, wenn die generierten Tests bestehen." },
+          { "id": "c", "text": "Das LLM bewertet abschließend das kritische Risiko und schließt Defekte ohne Beteiligung des Testers." }
+        ], "correctOptionIds": ["a"] }
+    ]
+  },
+  "summary": {
+    "points": [
+      "E1 — aus einer Anforderung generierst du einen Entwurf der Testfälle und liest den Output auf Lücken in der Abdeckung (Grenzen, Fehlerpfade, Extremdaten).",
+      "E2 — du erkennst Duplikate (dieselben Bedingungen mit anderer Beschreibung) und Scheintests (Assertion ohne erwartetes Ergebnis); mehr Fälle ≠ bessere Abdeckung.",
+      "E3 — du entwirfst eine Risiko-Checkliste (Sicherheit, Daten, Performance, Barrierefreiheit, Compliance) und priorisierst selbst.",
+      "E4 — vor der Dokumentation wendest du eine fachliche Prüfung an: annehmen / korrigieren / verwerfen (Übereinstimmung mit der Anforderung, keine Halluzinationen, keine sensiblen Daten).",
+      "E5 — das LLM ist Assistent; Abnahme, kritisches Risiko und Release liegen beim Menschen (Human-in-the-Loop)."
+    ],
+    "checklist": [
+      "Deckt der Output den Happy Path, die Grenzen und die Fehlerpfade aus der Anforderung ab?",
+      "Habe ich die Lücken in der Abdeckung sowie Duplikate und Scheintests benannt?",
+      "Habe ich den Output auf Fakten geprüft, die der Anforderung widersprechen (Halluzinationen)?",
+      "Sind die Entscheidungen über kritisches Risiko und Release beim Menschen geblieben?"
+    ],
+    "checklistTitle": "Checkliste — Bewertung des LLM-Outputs in der QA",
+    "nextStep": "Nächster Schritt: M9 — Integrationen und Agenten (für S3 und optional S2); für S1 zurück zum verpflichtenden Pfad."
+  }
+}

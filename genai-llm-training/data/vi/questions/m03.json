@@ -1,0 +1,301 @@
+{
+  "_meta": {
+    "module": "M3",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M3. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q018",
+      "module": "M3",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Học viên chọn khoảng temperature cho tác vụ đòi hỏi tính trang trọng và khả năng lặp lại.",
+      "prompt": "Bạn cần tạo các bước cho một test case để đưa vào tài liệu trong NotkaApp — kết quả phải trang trọng và có khả năng lặp lại cao nhất có thể khi chạy lại. Khoảng temperature nào là phù hợp nhất?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Thấp, khoảng 0,0-0,3"
+        },
+        {
+          "id": "B",
+          "text": "Trung bình, khoảng 0,5-0,7"
+        },
+        {
+          "id": "C",
+          "text": "Cao, khoảng 0,8-1,2"
+        },
+        {
+          "id": "D",
+          "text": "Tối đa, khoảng 1,3-1,5"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Temperature thấp (~0,0-0,3) cho ra câu trả lời thận trọng và dễ lặp lại hơn, đúng với những gì tài liệu kiểm thử yêu cầu.",
+      "feedbackIncorrect": "Temperature càng cao thì độ ngẫu nhiên càng lớn và khả năng lặp lại càng thấp — ngược với điều ta muốn trong tài liệu. Hãy xem lại màn hình M3.2 về thang temperature.",
+      "references": [
+        "M3.2"
+      ]
+    },
+    {
+      "id": "Q019",
+      "module": "M3",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Học viên chỉ ra rủi ro chính của temperature cao trong các tác vụ QA.",
+      "prompt": "Một nhóm chạy cùng một prompt về test case của SklepDemo hai lần với temperature 1,1. Rủi ro nào đối với công việc QA là đặc trưng nhất ở đây?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Thiếu khả năng lặp lại — hai lần chạy cho ra các bước khác nhau, gây khó khăn cho việc rà soát và kiểm thử hồi quy"
+        },
+        {
+          "id": "B",
+          "text": "Câu trả lời luôn bị cắt giữa chừng câu"
+        },
+        {
+          "id": "C",
+          "text": "Câu trả lời trở nên ngắn và súc tích hơn so với khi temperature thấp"
+        },
+        {
+          "id": "D",
+          "text": "Kết quả trở nên giống hệt nhau ở mỗi lần chạy"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Độ ngẫu nhiên cao gây trôi dạt nội dung và thiếu khả năng lặp lại giữa các lần chạy, làm suy giảm độ tin cậy của tài liệu và kiểm thử hồi quy.",
+      "feedbackIncorrect": "Việc bị cắt là do max tokens, còn khả năng lặp lại giảm (chứ không tăng) khi temperature tăng. Hãy xem lại màn hình M3.3 về rủi ro của độ ngẫu nhiên cao trong QA.",
+      "references": [
+        "M3.3"
+      ]
+    },
+    {
+      "id": "Q020",
+      "module": "M3",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Học viên nhận biết các dấu hiệu của câu trả lời bị cắt do giới hạn max tokens.",
+      "prompt": "Sau khi tạo danh sách test case, câu trả lời kết thúc bằng một câu bị bỏ dở và một danh sách chưa khép kín, không có phần tóm tắt. Điều gì nhiều khả năng đã xảy ra?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Câu trả lời bị cắt sau khi đạt giới hạn max tokens"
+        },
+        {
+          "id": "B",
+          "text": "Temperature được đặt quá thấp"
+        },
+        {
+          "id": "C",
+          "text": "top-p đã thu hẹp vốn từ vựng thuật ngữ QA"
+        },
+        {
+          "id": "D",
+          "text": "Mô hình cho rằng tác vụ vi phạm chính sách"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Câu bị bỏ dở, danh sách chưa khép kín và thiếu phần tóm tắt là các dấu hiệu điển hình của việc vượt quá giới hạn max tokens.",
+      "feedbackIncorrect": "Temperature và top-p điều khiển độ ngẫu nhiên chứ không phải độ dài — chính max tokens mới giới hạn cứng số lượng token của câu trả lời. Hãy xem lại màn hình M3.5 về nhận biết câu trả lời bị cắt.",
+      "references": [
+        "M3.5"
+      ]
+    },
+    {
+      "id": "Q021",
+      "module": "M3",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Học viên điều chỉnh thiết lập độ ngẫu nhiên cho phù hợp với tính chất của tác vụ (sáng tạo vs trang trọng).",
+      "prompt": "Một tester có hai tác vụ: (1) động não tìm dữ liệu kiểm thử khác thường cho một biểu mẫu trong SklepDemo và (2) ghi lại các bước cuối cùng của test case để đưa vào tài liệu. Nên đặt temperature một cách hợp lý cho mỗi tác vụ như thế nào?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Tác vụ 1 — temperature cao hơn; tác vụ 2 — temperature thấp"
+        },
+        {
+          "id": "B",
+          "text": "Tác vụ 1 — temperature thấp; tác vụ 2 — temperature cao hơn"
+        },
+        {
+          "id": "C",
+          "text": "Cả hai tác vụ — temperature tối đa để có kết quả phong phú hơn"
+        },
+        {
+          "id": "D",
+          "text": "Cả hai tác vụ — temperature 0,0, vì như vậy luôn an toàn nhất"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Động não được lợi từ sự đa dạng (temperature cao hơn), còn tài liệu đòi hỏi khả năng lặp lại và tính trang trọng (temperature thấp).",
+      "feedbackIncorrect": "Lựa chọn bị đảo ngược: tác vụ sáng tạo được lợi từ độ ngẫu nhiên cao hơn, còn tác vụ trang trọng được lợi từ độ ngẫu nhiên thấp. Hãy xem lại màn hình M3.2 về ánh xạ temperature theo loại tác vụ.",
+      "references": [
+        "M3.2"
+      ]
+    },
+    {
+      "id": "Q022",
+      "module": "M3",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Học viên ghép thiết lập tham số với tác động của nó lên tính trang trọng, sự đa dạng và độ dài của output.",
+      "prompt": "Hãy ghép thiết lập tham số sinh văn bản với tác động của nó lên output.",
+      "pairs": [
+        {
+          "left": "Temperature thấp",
+          "right": "Câu trả lời dễ lặp lại và trang trọng hơn"
+        },
+        {
+          "left": "Temperature cao",
+          "right": "Câu trả lời đa dạng và sáng tạo hơn"
+        },
+        {
+          "left": "max tokens thấp",
+          "right": "Câu trả lời bị cắt trước khi kết thúc"
+        },
+        {
+          "left": "top-p thấp",
+          "right": "Lựa chọn token tiếp theo hẹp hơn và ổn định hơn"
+        }
+      ],
+      "feedbackCorrect": "Temperature điều khiển tính trang trọng/sự đa dạng, max tokens điều khiển độ dài, còn top-p điều khiển độ rộng của tập ứng viên cho token tiếp theo.",
+      "feedbackIncorrect": "Các vai trò bị nhầm lẫn: độ ngẫu nhiên (temperature, top-p) không giống với độ dài (max tokens). Hãy xem lại màn hình M3.2 và M3.4 về các yếu tố điều khiển việc sinh văn bản.",
+      "references": [
+        "M3.2",
+        "M3.4"
+      ]
+    },
+    {
+      "id": "Q023",
+      "module": "M3",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Học viên ghép thiết lập tham số với rủi ro hoặc ứng dụng của nó trong công việc QA.",
+      "prompt": "Hãy ghép thiết lập tham số sinh văn bản với hệ quả của nó trong bối cảnh tài liệu kiểm thử QA.",
+      "pairs": [
+        {
+          "left": "Temperature cao",
+          "right": "Các bước sai lệch giữa hai lần chạy cùng một prompt"
+        },
+        {
+          "left": "max tokens thấp",
+          "right": "Thiếu các bước cuối hoặc tiêu chí chấp nhận trong câu trả lời"
+        },
+        {
+          "left": "top-p thấp",
+          "right": "Vốn từ vựng thuật ngữ QA ổn định và an toàn"
+        },
+        {
+          "left": "top-p cao",
+          "right": "Cách diễn đạt rộng hơn và rủi ro hơn"
+        }
+      ],
+      "feedbackCorrect": "Độ ngẫu nhiên cao có nguy cơ làm mất khả năng lặp lại, max tokens quá thấp làm mất phần cuối của tài liệu, còn top-p điều chỉnh việc lựa chọn từ ngữ rộng và rủi ro đến đâu.",
+      "feedbackIncorrect": "Hãy lưu ý rằng chính độ ngẫu nhiên (temperature/top-p) chịu trách nhiệm cho rủi ro về nội dung, còn max tokens chịu trách nhiệm cho việc thiếu phần cuối. Hãy xem lại màn hình M3.3 và M3.4.",
+      "references": [
+        "M3.3",
+        "M3.4"
+      ]
+    },
+    {
+      "id": "Q024",
+      "module": "M3",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Học viên so sánh hai preset sinh văn bản và chọn preset an toàn hơn cho tài liệu kiểm thử.",
+      "prompt": "Bạn cần ghi lại các bước của test case đăng nhập vào NotkaApp dưới dạng tài liệu lưu trữ lâu dài. Có hai preset để lựa chọn cho cùng một tác vụ:\nPhương án A: temperature 0,2 / top-p 0,3 / max tokens cao.\nPhương án B: temperature 1,0 / top-p 0,95 / max tokens thấp.\nLựa chọn nào an toàn hơn và tại sao?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Phương án A — độ ngẫu nhiên thấp đem lại khả năng lặp lại và tính trang trọng, còn max tokens cao bảo vệ tài liệu khỏi bị cắt"
+        },
+        {
+          "id": "B",
+          "text": "Phương án B — temperature và top-p cao sẽ cho mô tả các bước phong phú và chi tiết hơn"
+        },
+        {
+          "id": "C",
+          "text": "Phương án B — max tokens thấp buộc phải súc tích, điều này luôn tốt hơn trong tài liệu"
+        },
+        {
+          "id": "D",
+          "text": "Tùy ý — các tham số sinh văn bản không ảnh hưởng đến tài liệu kiểm thử"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Đối với tài liệu, điều quan trọng là khả năng lặp lại và tính đầy đủ: độ ngẫu nhiên thấp (A) hạn chế trôi dạt, còn dư địa max tokens bảo vệ các bước khỏi bị cắt cụt.",
+      "feedbackIncorrect": "Độ ngẫu nhiên cao đe dọa khả năng lặp lại, còn max tokens thấp có nguy cơ làm tài liệu bị cắt — đây không phải là ưu điểm trong tài liệu. Hãy xem lại màn hình M3.6 về việc chọn preset an toàn hơn.",
+      "references": [
+        "M3.6"
+      ]
+    }
+  ]
+}

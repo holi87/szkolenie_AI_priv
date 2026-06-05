@@ -1,0 +1,114 @@
+{
+  "_meta": {
+    "issue": "#124 [M16] Formativer Pfad S4 — Skills und Wirkungsmessung (Schulungsmodul, Rubric-Interaktion)",
+    "adr": "docs/adr/0009-sciezka-formatywna-s4-skala-holaka.md",
+    "interaction": "Bewertung der Workflow-Reife nach Rubrik (kind: rubric) — formative Übung, NICHT zum Bestehen gewertet (kein rubricId/Schwellenwert)",
+    "source": "Holak-Skala — zwei kritische Reifegrenzen: 8→9 und 10→11; Skills und Wirkungsmessung. Quellenangabe: quality-blog.eu/pl/blog/skala-holaka.",
+    "dataPolicy": "ALLE Beispiele SYNTHETISCH und allgemein (keine echten Daten/PII). Formatives Modul — ohne Bestehensschwelle und Zertifikat."
+  },
+  "module": "MSK4",
+  "intro": "Am schwierigsten sind nicht die ersten Stufen, sondern zwei Grenzen: 8→9 (von der individuellen guten Praxis zur Einbindung von KI in den Prozess) sowie 10→11 (von einzelnen Verbesserungen zur kontinuierlichen Weiterentwicklung). Der Reifetest ist ein konkreter, wiederholbarer Workflow (Skill): Hat er einen festen Kontext, eine Verifikation, Umkehrbarkeit und eine gemessene Wirkung? Dieses Modul lehrt, die Reife eines Skills nach einer Rubrik zu bewerten. Es ist eine Entwicklungsübung, kein Test.",
+  "screens": [
+    {
+      "id": "msk4-s1-dwie-granice",
+      "title": "Zwei Grenzen, an denen die Entwicklung stecken bleibt",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Viele Personen und Teams bleiben kurz vor Stufe 9 oder 11 stehen. Die Grenze 8→9 ist der Moment, in dem die gute Praxis einer einzelnen Person zum Bestandteil des Prozesses wird: eine klare Aufteilung Assistent/Entscheider, Umkehrbarkeit und eine Prüfspur. Die Grenze 10→11 ist der Moment, in dem Verbesserungen zur Routine aus Messung, Kalibrierung und kontinuierlicher Weiterentwicklung werden." },
+        { "kind": "list", "items": [
+          "8→9: individuelle Praxis → Prozess mit Kontrolle und Prüfspur.",
+          "10→11: einzelne Verbesserungen → gemessenes, kontinuierlich kalibriertes System.",
+          "An beiden Grenzen ist der Schlüssel nicht ein neues Werkzeug, sondern eine neue Arbeitsgewohnheit."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Holak-Skala", "text": "Die Grenzen 8→9 und 10→11 sind die häufigsten Stellen, an denen die KI-Einführung stecken bleibt.",
+          "links": [ { "label": "Holak-Skala — Reifegradmodell (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka" } ]
+        }
+      ]
+    },
+    {
+      "id": "msk4-s2-skill-jako-probka",
+      "title": "Der Skill als Reifestichprobe",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Reife zeigt sich am besten an einem konkreten, wiederholbaren Workflow (Skill). Ein unreifer Skill ist ein „Prompt auf die Schnelle“: wechselnder Kontext, keine Verifikation, keine Prüfspur, Erfolg nach Bauchgefühl gemessen. Ein reifer Skill hat einen festen Kontext und ein festes Format, einen expliziten Verifikationsschritt, Umkehrbarkeit mit Prüfspur sowie eine gemessene Wirkung auf Qualität und Zeit." },
+        { "kind": "callout", "variant": "warn", "title": "Signal für Stillstand", "text": "Wenn du KI souverän nutzt, aber ihre Wirkung nicht misst und die Bewertung des Outputs nicht kalibrierst — stehst du wahrscheinlich auf 10, nicht auf 11." }
+      ]
+    },
+    {
+      "id": "msk4-s3-jak-cwiczyc",
+      "title": "Wie man das übt",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Im Folgenden bewertest du die Reife eines Beispiel-Skills nach vier Kriterien. Markiere in jedem Kriterium die Merkmale, die auf Reife hindeuten — alles zu markieren (auch die Distraktoren) erfüllt das Kriterium nicht. Ohne Bestehensschwelle: Das Feedback zeigt, was zu einer höheren Stufe fehlt." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "rubric",
+    "id": "msk4-rubric",
+    "title": "Bewerte die Reife eines KI-Workflows (eines Skills)",
+    "intro": "Markiere für jedes Kriterium die Merkmale, die für die Reife eines Skills sprechen. Dies ist eine Entwicklungsübung — ohne Bestehensschwelle; das Feedback zeigt, was fehlt.",
+    "criteria": [
+      {
+        "id": "K1",
+        "name": "Kontext und Wiederholbarkeit",
+        "prompt": "Was zeugt von einem reifen Kontextmanagement in diesem Skill?",
+        "hint": "Reife bedeutet einen festen, ausgewählten Kontext — kein Beschreiben von Grund auf jedes Mal.",
+        "options": [
+          { "id": "a", "text": "Fester, durchdachter Kontext und Ausgabeformat." },
+          { "id": "b", "text": "Kontext jedes Mal von Grund auf, mit anderen Worten, beschrieben." },
+          { "id": "c", "text": "Auswahl nur der für die Aufgabe relevanten Daten." }
+        ],
+        "correctOptionIds": ["a", "c"]
+      },
+      {
+        "id": "K2",
+        "name": "Verifizierbarkeit",
+        "prompt": "Was macht den Skill verifizierbar, bevor das Ergebnis genutzt wird?",
+        "hint": "Ein selbstsicherer Ton des Modells ist kein Beweis — es braucht einen expliziten Prüfschritt.",
+        "options": [
+          { "id": "a", "text": "Ein expliziter Schritt, den Output gegen eine Quelle zu prüfen." },
+          { "id": "b", "text": "Vertrauen in den selbstsicheren Ton der Modellantwort." }
+        ],
+        "correctOptionIds": ["a"]
+      },
+      {
+        "id": "K3",
+        "name": "Umkehrbarkeit und Prüfspur",
+        "prompt": "Was macht die durch den Skill gestützten Entscheidungen sicher?",
+        "hint": "Grenze 8→9: Kontrolle und Prüfspur statt unumkehrbarer Aktionen ohne Freigabe.",
+        "options": [
+          { "id": "a", "text": "Aktionen hinterlassen eine Prüfspur und lassen sich rückgängig machen." },
+          { "id": "b", "text": "Unumkehrbare Entscheidungen, die ohne menschliche Freigabe ausgeführt werden." }
+        ],
+        "correctOptionIds": ["a"]
+      },
+      {
+        "id": "K4",
+        "name": "Wirkungsmessung",
+        "prompt": "Was unterscheidet Stufe 11 (kontinuierliche Weiterentwicklung) vom bloßen Nutzen von KI?",
+        "hint": "Grenze 10→11: gemessene Wirkung und Kalibrierung, nicht die bloße Tatsache der Nutzung.",
+        "options": [
+          { "id": "a", "text": "Gemessene Wirkung auf Qualität und Zeit sowie Anpassung des Vorgehens." },
+          { "id": "b", "text": "Es zählt allein die Tatsache, dass wir KI nutzen." },
+          { "id": "c", "text": "Regelmäßige Kalibrierung der Output-Bewertung." }
+        ],
+        "correctOptionIds": ["a", "c"]
+      }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Reife zeigt sich an einem konkreten Skill: fester Kontext, Verifikation, Umkehrbarkeit mit Prüfspur, gemessene Wirkung.",
+      "Grenze 8→9: Verwandle individuelle Praxis in einen Prozess mit Kontrolle und Prüfspur.",
+      "Grenze 10→11: Verwandle Verbesserungen in eine Routine aus Messung, Kalibrierung und kontinuierlicher Weiterentwicklung."
+    ],
+    "checklist": [
+      "Hat mein häufigster Skill einen festen Kontext und ein festes Ausgabeformat?",
+      "Hat er einen expliziten Verifikationsschritt und hinterlässt er eine Prüfspur?",
+      "Messe ich seine Wirkung auf Qualität und Zeit, oder nutze ich ihn nur?"
+    ],
+    "checklistTitle": "Checkliste — Reife eines Skills",
+    "nextStep": "Nächster Schritt: Nimm einen deiner Skills und ergänze das fehlende Kriterium mit der niedrigsten Bewertung — meist ist es der Verifikationsschritt oder die Wirkungsmessung."
+  }
+}

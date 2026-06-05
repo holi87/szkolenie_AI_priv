@@ -1,0 +1,292 @@
+{
+  "_meta": {
+    "issue": "#22 [22][M4] Wdroż moduły M7-M9",
+    "storyboard": "docs/storyboard/m07-prompt-engineering.md",
+    "interaction": "Prompt clinic (kind: rubric, zadanie praktyczne R1-prompt)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (SklepDemo, fikcyjne wymagania). ZERO realnych danych klienta/PII.",
+    "note": "Egzemplarz referencyjny typu rubric z zadaniem praktycznym. Wariant S1 SKRÓCONY: ekrany 3-4 scalone (onlyForPaths), few-shot zredukowany."
+  },
+  "module": "M7",
+  "intro": "Ein unklarer Prompt = ein unklares Ergebnis = vergeudete Zeit und das Risiko, dass eine testende Person eine Halluzination für eine Tatsache hält. Ein guter Prompt erhöht die Kontrolle über das Modell und erleichtert die Überprüfung der Ausgabe.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Wozu braucht eine testende Person Prompt Engineering",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Ziel des Moduls ist es, Prompts zu schreiben, die eine wiederholbare, überprüfbare Ausgabe für die QA-Arbeit liefern. Du lernst die Anatomie eines Prompts, die Korrektur eines schlechten Prompts, Few-shot und die Grenzen des Prompts kennen."
+        }
+      ]
+    },
+    {
+      "id": "s2-anatomia",
+      "title": "Anatomie eines Prompts: 7 Elemente",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "list",
+          "items": [
+            "Rolle — aus wessen Perspektive das Modell antwortet (z. B. „du bist QA-Ingenieur“).",
+            "Ziel — was entstehen soll.",
+            "Kontext — der Hintergrund, den das Modell nicht kennt (Ausschnitt einer synthetischen Anforderung).",
+            "Eingabedaten — das konkrete zu verarbeitende Material.",
+            "Einschränkungen — was das Modell NICHT tun soll / Grenzen.",
+            "Qualitätskriterien — woran wir erkennen, dass die Ausgabe gut ist (messbar).",
+            "Ausgabeformat — die Struktur (Tabelle, Liste, JSON), die die Überprüfung erleichtert."
+          ]
+        },
+        {
+          "kind": "paragraph",
+          "onlyForPaths": [
+            "S2",
+            "S3"
+          ],
+          "text": "Beispiel an einer QA-Aufgabe: „Du bist QA-Ingenieur. Generiere Testfälle für die Anmeldung in SklepDemo gemäß der angegebenen Anforderung; erfinde keine Felder außerhalb der Anforderung; gib eine Tabelle zurück: ID | Schritte | Daten | erwartetes Ergebnis.“"
+        }
+      ]
+    },
+    {
+      "id": "s34-s1-min",
+      "title": "Elemente des Prompts — Minimum (S1)",
+      "type": "content",
+      "onlyForPaths": [
+        "S1"
+      ],
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Merke dir in der Kurzfassung das Minimum: gib Rolle und Ziel an, füge Kontext und Daten hinzu, ergänze Einschränkungen sowie das Ausgabeformat. Diese Elemente entscheiden am stärksten über die Qualität und die Überprüfbarkeit der Ausgabe."
+        }
+      ]
+    },
+    {
+      "id": "s3-pierwsza-polowa",
+      "title": "Erste Hälfte: Rolle, Ziel, Kontext, Daten",
+      "type": "content",
+      "onlyForPaths": [
+        "S2",
+        "S3"
+      ],
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Die Rolle setzt die Perspektive, das Ziel sagt, was entstehen soll, der Kontext liefert den Hintergrund, den das Modell nicht kennt, und die Eingabedaten sind das zu verarbeitende Material. Dasselbe Ziel mit Kontext und ohne ihn ergibt eine deutlich unterschiedliche Qualität der Ausgabe."
+        }
+      ]
+    },
+    {
+      "id": "s4-druga-polowa",
+      "title": "Zweite Hälfte: Einschränkungen, Qualitätskriterien, Format",
+      "type": "content",
+      "onlyForPaths": [
+        "S2",
+        "S3"
+      ],
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Einschränkungen sagen, was das Modell NICHT tun soll (z. B. „erfinde keine Felder außerhalb der Anforderung“). Qualitätskriterien sind messbar und überprüfbar. Das Ausgabeformat (Tabelle/Liste/JSON) erleichtert die weitere Kontrolle. Einschränkungen + Kriterien sind der Hebel für Überprüfbarkeit und Sicherheit."
+        }
+      ]
+    },
+    {
+      "id": "s5-fewshot",
+      "title": "Few-shot: wann man Beispiele zeigt",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "definition",
+          "term": "Few-shot",
+          "original": "einige Beispiele im Prompt",
+          "text": "das Einfügen von 1–3 musterhaften Eingabe→Ausgabe-Paaren, wenn das Format oder der Stil wiederholbar sein muss."
+        },
+        {
+          "kind": "paragraph",
+          "onlyForPaths": [
+            "S2",
+            "S3"
+          ],
+          "text": "Kontrast zu Zero-shot (ohne Beispiele): Few-shot setzt du für die Wiederholbarkeit des Formats ein, nicht zum „Ergänzen fehlenden Wissens“. Beispiel: 2 musterhafte Testfälle → das Modell behält dieses Layout für die folgenden bei."
+        }
+      ]
+    },
+    {
+      "id": "s6-rubryka",
+      "title": "Korrektur eines schlechten Prompts nach Rubrik",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Die Rubrik zur Bewertung eines Prompts hat 5 Achsen: Vollständigkeit, Sicherheit, Überprüfbarkeit, Format, Einschränkungen. Korrekturschleife: schlechte Ausgabe → Diagnose nach Rubrik → konkrete Korrektur → bessere Ausgabe."
+        },
+        {
+          "kind": "callout",
+          "variant": "info",
+          "text": "Dieser Bildschirm bereitet direkt auf die Interaktion „Prompt clinic“ weiter unten vor."
+        }
+      ]
+    },
+    {
+      "id": "s7-granice",
+      "title": "Grenzen des Prompts: wann ein Prompt nicht hilft",
+      "type": "decision",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Ein Prompt ist keine Magie. Wenn Daten fehlen (das Modell hat die Information nicht im Kontext), erzeugt kein „Aufhübschen“ des Prompts die Wahrheit — es entsteht eine Halluzination."
+        },
+        {
+          "kind": "callout",
+          "variant": "warn",
+          "title": "Was stattdessen zu tun ist",
+          "text": "Liefere die Daten (Kontext/RAG), greife auf die Quelle zurück oder gib die Aufgabe an einen Menschen ab. Warnsignal: der Prompt wächst, aber die Ausgabe fantasiert weiter. Mehr dazu in M11."
+        }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "rubric",
+    "id": "m7-prompt-clinic",
+    "title": "Prompt clinic",
+    "intro": "Fehlerhafter Prompt: „Schreibe Tests für die Anmeldung.“ Markiere für jede Achse der Rubrik die Korrektur, die sie erfüllt. Die Bewertung zählt als praktische Aufgabe R1-prompt auf dem Pfad S2 (Schwelle 4/5); auf S3 ist es eine Übung mit Feedback.",
+    "rubricId": "R1-prompt",
+    "recordsPractical": true,
+    "scaleMax": 5,
+    "passThreshold": 4,
+    "criteria": [
+      {
+        "id": "K1",
+        "name": "Rolle und Ziel",
+        "points": 1,
+        "hint": "Füge eine Rolle und ein klares Ziel hinzu: wer antwortet und was entstehen soll.",
+        "options": [
+          {
+            "id": "a",
+            "text": "„Du bist QA-Ingenieur. Generiere Testfälle für die Anmeldung in SklepDemo.“"
+          },
+          {
+            "id": "b",
+            "text": "Lass „Schreibe Tests für die Anmeldung“ unverändert."
+          },
+          {
+            "id": "c",
+            "text": "Füge „sei kreativ und überrasche mich“ hinzu."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K2",
+        "name": "Kontext und Eingabedaten (ohne sensible Daten)",
+        "points": 1,
+        "hint": "Füge eine synthetische Anforderung hinzu; füge keine echten Nutzerdaten ein.",
+        "options": [
+          {
+            "id": "a",
+            "text": "Füge die synthetische Anmeldeanforderung von SklepDemo hinzu (Sperre nach 3 Fehlversuchen, Reset-Link 30 min)."
+          },
+          {
+            "id": "b",
+            "text": "Füge ein echtes Produktions-Log mit Nutzer-E-Mails ein."
+          },
+          {
+            "id": "c",
+            "text": "Gib keinen Kontext an — das Modell „errät es“."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K3",
+        "name": "Einschränkungen und Qualitätskriterien",
+        "points": 1,
+        "hint": "Sag, was das Modell NICHT tun soll, und füge messbare Kriterien hinzu.",
+        "options": [
+          {
+            "id": "a",
+            "text": "„Erfinde keine Felder außerhalb der Anforderung; decke Randfälle ab; jeder Test hat ein erwartetes Ergebnis.“"
+          },
+          {
+            "id": "b",
+            "text": "„Schreibe so viele Tests wie möglich, die Menge zählt.“"
+          },
+          {
+            "id": "c",
+            "text": "Keine Einschränkungen — das Modell soll selbst entscheiden."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K4",
+        "name": "Ausgabeformat (überprüfbar)",
+        "points": 1,
+        "hint": "Fordere eine feste Struktur ein; bei Wiederholbarkeit ziehe Few-shot in Betracht.",
+        "options": [
+          {
+            "id": "a",
+            "text": "„Gib eine Tabelle zurück: ID | Schritte | Eingabedaten | erwartetes Ergebnis“ + 2 musterhafte Beispiele (Few-shot)."
+          },
+          {
+            "id": "b",
+            "text": "„Antworte in einem freien Absatz.“"
+          },
+          {
+            "id": "c",
+            "text": "Lege das Format nicht fest."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K5",
+        "name": "Sicherheit und Überprüfbarkeit",
+        "points": 1,
+        "hint": "Fordere synthetische Daten und das Kennzeichnen unsicherer Stellen zur Überprüfung.",
+        "options": [
+          {
+            "id": "a",
+            "text": "„Verwende ausschließlich synthetische Daten; kennzeichne Annahmen, die gegen die Anforderung überprüft werden müssen.“"
+          },
+          {
+            "id": "b",
+            "text": "„Wenn du etwas nicht weißt, erfinde einen plausiblen Wert.“"
+          },
+          {
+            "id": "c",
+            "text": "„Du darfst echte Daten verwenden, wenn sie die Arbeit beschleunigen.“"
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Ein guter Prompt hat 7 Elemente: Rolle, Ziel, Kontext, Daten, Einschränkungen, Kriterien, Format.",
+      "Verbessere den Prompt nach der Rubrik mit 5 Achsen: Vollständigkeit, Sicherheit, Überprüfbarkeit, Format, Einschränkungen.",
+      "Few-shot setzt du für die Wiederholbarkeit des Formats ein, nicht für fehlendes Wissen.",
+      "Wenn Daten fehlen, hilft der Prompt nicht — liefere eine Quelle oder gib die Aufgabe an einen Menschen ab."
+    ],
+    "checklist": [
+      "Hat der Prompt eine Rolle, ein Ziel, einen Kontext und Daten?",
+      "Gibt es Einschränkungen und messbare Qualitätskriterien?",
+      "Ist das Ausgabeformat überprüfbar?",
+      "Habe ich synthetische Daten und das Kennzeichnen von Unsicherheiten erzwungen?"
+    ],
+    "checklistTitle": "Checkliste — fertiger QA-Prompt",
+    "nextStep": "Nächster Schritt: M8 — Anwendungsfälle von GenAI in der QA (Generierung und Bewertung von Testfällen)."
+  }
+}

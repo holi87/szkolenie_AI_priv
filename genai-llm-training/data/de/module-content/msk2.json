@@ -1,0 +1,113 @@
+{
+  "_meta": {
+    "issue": "#124 [M16] Ścieżka formatywna S4 — agenci AI (moduł szkoleniowy, interakcja tune)",
+    "adr": "docs/adr/0009-sciezka-formatywna-s4-skala-holaka.md",
+    "interaction": "Strojenie parametrów agenta (kind: tune) — ćwiczenie formatywne, NIE scorowane do zaliczenia",
+    "source": "Osie dojrzałości Skali Holaka: weryfikowalność outputu, odwracalność decyzji, kontrola agentów. Atrybucja: quality-blog.eu/pl/blog/skala-holaka.",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE i ogólne (zero realnych danych/PII). Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MSK2",
+  "intro": "Ein Agent ist kein Chatbot: Er führt Schritte aus und nutzt Werkzeuge, kann also die Welt real verändern — Dateien, E-Mails, Daten, Repository. Reife Arbeit mit einem Agenten bedeutet, die Autonomie an das Risiko anzupassen: Je schwerer eine Auswirkung rückgängig zu machen und der Output zu überprüfen ist, desto enger die Berechtigungen und desto mehr menschliche Kontrolle. Dieses Modul lehrt, diese Hebel einzustellen. Es ist eine Übung zur Weiterentwicklung, kein Test.",
+  "screens": [
+    {
+      "id": "msk2-s1-od-chatbota-do-agenta",
+      "title": "Vom Chatbot zum Agenten",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Ein Chatbot antwortet mit Text. Ein Workflow mit Werkzeug führt einen definierten Schritt aus. Ein Agent plant und führt mehrere Schritte aus und greift dabei selbst auf Werkzeuge zu — und genau deshalb braucht er Grenzen. Die Frage lautet nicht „kann der Agent das“, sondern „was passiert, wenn er einen Fehler macht, und schaffen wir es, ihn rückgängig zu machen“." },
+        { "kind": "list", "items": [
+          "Chatbot — schlägt vor, führt nichts aus.",
+          "Workflow mit Werkzeug — führt einen definierten Schritt aus.",
+          "Agent — plant und führt mehrere Schritte mit Zugriff auf Werkzeuge aus."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Eine Achse der Holak-Skala", "text": "Die Arbeit so zu gestalten, dass KI-gestützte Entscheidungen (auch Aktionen des Agenten) überprüfbar und umkehrbar sind, ist ein Zeichen für den Aufstieg auf eine höhere Stufe.",
+          "links": [ { "label": "Holak-Skala — Reifegradmodell (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka" } ]
+        }
+      ]
+    },
+    {
+      "id": "msk2-s2-trzy-dzwignie",
+      "title": "Drei Hebel der Agentenkontrolle",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Die Sicherheit eines Agenten beruht nicht auf Vertrauen, sondern auf dem Einstellen von drei Hebeln: dem Berechtigungsumfang (was der Agent überhaupt darf), dem Punkt der menschlichen Freigabe (wann er fragen muss) sowie dem Audit-Trail und der Umkehrbarkeit (lässt sich prüfen und rückgängig machen, was er getan hat)." },
+        { "kind": "list", "items": [
+          "Berechtigungsumfang — von Nur-Lesen bis zum vollen Schreibzugriff auf die Produktion.",
+          "Human-in-the-loop — Freigabe immer, nur für Unumkehrbares oder nie.",
+          "Trail und Umkehrbarkeit — vollständiges Log mit Rollback, einfaches Log oder keines."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Die Falle „der Agent regelt das schon“", "text": "Je breiter der Zugriff und je weniger Kontrolle, desto günstiger … bis zum ersten unumkehrbaren Fehler. Schränke die Berechtigungen standardmäßig ein und verlange eine Freigabe dort, wo die Auswirkung schwer rückgängig zu machen ist." }
+      ]
+    },
+    {
+      "id": "msk2-s3-jak-cwiczyc",
+      "title": "Wie du das übst",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Unten stellst du drei Parameter des Agenten ein und siehst live, wie sich das Risikoprofil verändert. Anschließend wählst du im Checkpoint einen sicheren Satz für eine Aufgabe mit unumkehrbaren Auswirkungen. Ohne Bestehensschwelle — es geht um den Reflex, die Autonomie an das Risiko anzupassen." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "tune",
+    "id": "msk2-tune",
+    "title": "Stimme Autonomie und Kontrolle des Agenten ab",
+    "intro": "Stelle die drei Hebel ein und beobachte das Risikoprofil. Beantworte dann den Checkpoint — es ist eine Übung zur Weiterentwicklung, kein Test.",
+    "outputLabel": "Risikoprofil des Agenten (live):",
+    "controls": [
+      {
+        "id": "scope",
+        "label": "Berechtigungsumfang",
+        "levels": [
+          { "value": "read", "label": "Nur Lesen", "effect": "Der Agent verändert nichts — niedrigstes Risiko, gut für Analyse und Vorschläge." },
+          { "value": "sandbox", "label": "Schreiben in der Sandbox", "effect": "Änderungen nur in einer isolierten Umgebung — leicht zu verwerfen." },
+          { "value": "prod", "label": "Voller Schreibzugriff auf die Produktion", "effect": "Der Agent kann Produktionsdaten dauerhaft verändern — höchstes Risiko, erfordert Kontrolle." }
+        ]
+      },
+      {
+        "id": "approval",
+        "label": "Freigabe durch den Menschen",
+        "levels": [
+          { "value": "always", "label": "Immer vor der Aktion", "effect": "Der Mensch gibt jeden Schritt frei — langsamer, aber vollständig kontrolliert." },
+          { "value": "irreversible", "label": "Für unumkehrbare Entscheidungen", "effect": "Zustimmung erforderlich, wenn sich die Auswirkung nicht rückgängig machen lässt — ein vernünftiger Standardkompromiss." },
+          { "value": "never", "label": "Nie (volle Autonomie)", "effect": "Der Agent handelt ohne zu fragen — schnell, aber ein Fehler kann unbemerkt durchgehen." }
+        ]
+      },
+      {
+        "id": "audit",
+        "label": "Audit-Trail und Umkehrbarkeit",
+        "levels": [
+          { "value": "full", "label": "Vollständiges Log + Rollback", "effect": "Jede Aktion ist protokolliert und kann rückgängig gemacht werden — volle Überprüfbarkeit." },
+          { "value": "basic", "label": "Einfaches Log", "effect": "Man weiß, was passiert ist, doch das Rückgängigmachen ist oft manuell und schwierig." },
+          { "value": "none", "label": "Kein Trail", "effect": "Man weiß nicht, was der Agent getan hat und warum — keine Überprüfbarkeit." }
+        ]
+      }
+    ],
+    "checkpoint": {
+      "prompt": "Ein Agent soll bei einer Aufgabe helfen, die Produktionsdaten DAUERHAFT verändern kann (Auswirkung schwer rückgängig zu machen). Welcher Satz von Einstellungen ist zu Beginn am sichersten?",
+      "type": "single_choice",
+      "options": [
+        { "id": "a", "text": "Voller Schreibzugriff auf die Produktion, Freigabe nie, kein Trail — „der Agent regelt das schon“." },
+        { "id": "b", "text": "Nur Lesen oder Sandbox, menschliche Freigabe für Unumkehrbares, vollständiges Log mit Rollback." },
+        { "id": "c", "text": "Voller Schreibzugriff auf die Produktion, einfaches Log, ohne Freigabe — „wir beschleunigen, prüfen später“." }
+      ],
+      "correct": ["b"],
+      "feedbackCorrect": "Ja. Bei unumkehrbaren Auswirkungen schränkst du die Berechtigungen ein, verlangst die Zustimmung des Menschen und sorgst für einen vollständigen Trail mit der Möglichkeit, rückgängig zu machen.",
+      "feedbackIncorrect": "Bei unumkehrbaren Auswirkungen ist Autonomie ohne Kontrolle und Trail eine Einladung zum unumkehrbaren Fehler. Schränke die Berechtigungen ein, füge eine menschliche Freigabe hinzu und ein vollständiges Log mit Rollback."
+    }
+  },
+  "summary": {
+    "points": [
+      "Ein Agent kann die Welt real verändern — passe die Autonomie an das Risiko und die Umkehrbarkeit der Aufgabe an.",
+      "Drei Kontrollhebel: Berechtigungsumfang, Freigabe durch den Menschen, Audit-Trail mit Rollback.",
+      "Schränke die Berechtigungen standardmäßig ein; je schwerer eine Auswirkung rückgängig zu machen ist, desto mehr menschliche Kontrolle."
+    ],
+    "checklist": [
+      "Weiß ich, was das Schlimmste ist, das der Agent mit den aktuellen Berechtigungen tun kann?",
+      "Erfordern unumkehrbare Aktionen eine Freigabe durch den Menschen?",
+      "Bleibt ein Audit-Trail bestehen und lässt sich die Aktion des Agenten rückgängig machen?"
+    ],
+    "checklistTitle": "Checkliste — bevor du den Agenten loslässt",
+    "nextStep": "Nächster Schritt: Notiere für eine reale Agentenaufgabe die schlimmstmögliche Auswirkung und passe daran den Berechtigungsumfang, den Freigabepunkt und den Audit-Trail an."
+  }
+}

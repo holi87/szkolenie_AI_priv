@@ -1,0 +1,95 @@
+{
+  "_meta": {
+    "issue": "#7 [07][M1] Визначити рубрики практичних завдань",
+    "version": "0.1",
+    "doc": "docs/rubryki-zadan.md",
+    "source": "wymagania/07 (шкали 0-5 та 0-3, пороги, зворотний звʼязок), wymagania/06 (модулі, ефекти)",
+    "notes": "Бінарні критерії (1/0) сумуються до maxScore. Пороги: S2 промптові >=4/5; S3 RAG та оцінювання >=70% (>=3.5/5) як необхідна умова в M6 та M12."
+  },
+  "rubrics": [
+    {
+      "id": "R1-prompt",
+      "task": "Промптове завдання (Prompt clinic)",
+      "module": "M7",
+      "paths": ["S2", "S3"],
+      "scaleMax": 5,
+      "passThreshold": 4,
+      "passScope": "S2: необхідна умова",
+      "criteria": [
+        { "id": "K1", "name": "Роль і мета", "points": 1 },
+        { "id": "K2", "name": "Контекст і вхідні дані (без чутливих даних)", "points": 1 },
+        { "id": "K3", "name": "Обмеження та критерії якості", "points": 1 },
+        { "id": "K4", "name": "Формат виводу (перевірюваний)", "points": 1 },
+        { "id": "K5", "name": "Безпека та перевірюваність", "points": 1 }
+      ],
+      "belowThresholdFeedback": "Бракує: {failedCriteria}. Доповніть роль/мету, контекст, обмеження та критерії, формат виводу, а також гігієну даних."
+    },
+    {
+      "id": "R2-rag",
+      "task": "Завдання на готовність до RAG",
+      "module": "M6",
+      "paths": ["S3"],
+      "scaleMax": 5,
+      "passThreshold": 3.5,
+      "passScope": "S3: необхідна умова (>=70% в M6)",
+      "criteria": [
+        { "id": "K1", "name": "Джерела та grounding", "points": 1 },
+        { "id": "K2", "name": "Chunking + overlap", "points": 1 },
+        { "id": "K3", "name": "Retrieval (top-k, фільтри метаданих)", "points": 1 },
+        { "id": "K4", "name": "Цитати / перевірюваність", "points": 1 },
+        { "id": "K5", "name": "Діагностика помилок (retrieval/generation/джерельна)", "points": 1 }
+      ],
+      "belowThresholdFeedback": "Нижче порогу в M6. Бракує: {failedCriteria}. Поверніться до екранів pipeline/chunking/діагностики помилок."
+    },
+    {
+      "id": "R3-eval",
+      "task": "Завдання з оцінювання (Judge/golden set)",
+      "module": "M12",
+      "paths": ["S3"],
+      "scaleMax": 5,
+      "passThreshold": 3.5,
+      "passScope": "S3: необхідна умова (>=70% в M12)",
+      "criteria": [
+        { "id": "K1", "name": "Golden set, адекватний use case", "points": 1 },
+        { "id": "K2", "name": "Метрики з обґрунтуванням", "points": 1 },
+        { "id": "K3", "name": "Рубрика LLM-as-a-judge (однозначна)", "points": 1 },
+        { "id": "K4", "name": "Bias/position bias + калібрування з експертом", "points": 1 },
+        { "id": "K5", "name": "Поріг прийняття якості", "points": 1 }
+      ],
+      "belowThresholdFeedback": "Нижче порогу в M12. Бракує: {failedCriteria}. Поверніться до golden set / метрик / рубрики / калібрування."
+    },
+    {
+      "id": "R4-qa-workbench",
+      "task": "QA workbench (оцінка виводу QA)",
+      "module": "M8",
+      "paths": ["S2", "S3"],
+      "scaleMax": 5,
+      "passThreshold": null,
+      "passScope": "тренувальне (зворотний звʼязок / внесок до квізу)",
+      "criteria": [
+        { "id": "K1", "name": "Покриття тестами", "points": 1 },
+        { "id": "K2", "name": "Прогалини в покритті", "points": 1 },
+        { "id": "K3", "name": "Уявні тести / дублікати", "points": 1 },
+        { "id": "K4", "name": "Ризики / хибні припущення", "points": 1 },
+        { "id": "K5", "name": "Межа рішення (перевірка людиною)", "points": 1 }
+      ],
+      "belowThresholdFeedback": "Бракує: {failedCriteria}."
+    },
+    {
+      "id": "R5-output-analysis",
+      "task": "Аналіз виводу (Output verifier)",
+      "module": "M11",
+      "paths": ["S1", "S2", "S3"],
+      "scaleMax": 3,
+      "passThreshold": null,
+      "passScope": "тренувальне",
+      "levels": [
+        { "points": 3, "descriptor": "Усі ключові твердження правильно класифіковані; ризиковані та необґрунтовані виявлено" },
+        { "points": 2, "descriptor": "Більшість правильно; поодинока некритична помилка" },
+        { "points": 1, "descriptor": "Частково; пропущено суттєвий ризик або помилку в критичному твердженні" },
+        { "points": 0, "descriptor": "Відсутнє розпізнавання ризику / прийняття необґрунтованого вмісту" }
+      ],
+      "belowThresholdFeedback": "Пропущено: {kategorie}. Поверніться до чеклиста перевірки виводу."
+    }
+  ]
+}

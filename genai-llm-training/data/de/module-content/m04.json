@@ -1,0 +1,171 @@
+{
+  "_meta": {
+    "module": "M4",
+    "issue": "[M4] Wdroż treść modułu M4 — Embeddings i podobieństwo semantyczne",
+    "storyboard": "docs/storyboard/m04-embeddings.md",
+    "schema": "../schemas/module-content.schema.json",
+    "scenario": "SC-RAG-01 (mini-korpus DOC1-DOC4, pułapka: DOC1 token sesji 30 min podobny semantycznie, ale poprawne źródło to DOC3 link resetu)",
+    "interaction": "Mapa semantyczna (kind: classify)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (NotkaApp/SklepDemo/PipeDemo, domena przyklad.test, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pointa: wysokie podobieństwo semantyczne ≠ poprawność biznesowa. Zgodne z pulą Q25-Q32."
+  },
+  "module": "M4",
+  "intro": "Dokumentationssuche, Deduplizierung von Tickets und RAG (Module M5-M6) basieren auf Embeddings und semantischer Ähnlichkeit. Ein Tester, der versteht, warum ein „ähnlicher\" Abschnitt durchaus „falsch\" sein kann, diagnostiziert Suchergebnisse besser und vertraut dem Ranking nicht blind. Dieses Modul vermittelt dir ein Gespür für Embeddings, Cosine Similarity und die vier Ähnlichkeitsfallen, die du am Ende auf der „Semantischen Karte\" übst.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Wozu Embeddings für Tester",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Immer häufiger liefert dir eine semantische Suchmaschine das Ergebnis: Du gibst eine Frage ein, und das System liefert die „am besten passenden\" Dokumentationsabschnitte zurück. Darunter arbeiten Embeddings (semantische Vektoren, engl. embeddings) und ein Ähnlichkeitsmaß. Wenn du nicht weißt, wie das berechnet wird, hältst du leicht das oberste Ergebnis für die richtige Antwort." },
+        { "kind": "list", "items": [
+          "Du erklärst, was ein Embedding als numerische Repräsentation von Bedeutung ist.",
+          "Du interpretierst Cosine Similarity als Nähe der Vektorrichtung, nicht der Textlänge.",
+          "Du benennst 4 Fälle, in denen hohe Ähnlichkeit keine korrekte Antwort bedeutet.",
+          "Du wählst die Anfrage für die semantische Suche so, dass sie die Intention trifft."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Interaktives Element", "text": "Am Ende betrittst du die „Semantische Karte\": Du wählst eine Anfrage und siehst eine Liste der nächstgelegenen Abschnitte mit ihrem Ähnlichkeitswert und der Markierung, ob das Ergebnis fachlich zutreffend ist oder eine Falle darstellt." }
+      ]
+    },
+    {
+      "id": "s2-slowo-jako-wektor",
+      "title": "Das Wort als Vektor",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Embedding", "original": "embedding", "text": "numerische Repräsentation der Bedeutung eines Textes — das Modell wandelt eine Phrase in einen Vektor (engl. vector) aus Zahlen um, in dem nahe Bedeutungen nahe beieinander liegen." },
+        { "kind": "paragraph", "text": "Ein Embedding-Modell (engl. embedding model) zählt weder Buchstaben noch Wörter — es kodiert Bedeutung. Dadurch landen „Anmeldung\" und „Authentifizierung\" nahe beieinander, während „Rechnung\" weit entfernt liegt, obwohl keines dieser Wörter identisch ist." },
+        { "kind": "diagram", "textAlt": "Auf einer schematischen 2D-Karte liegen drei Phrasen aus der NotkaApp-Dokumentation: „Anmeldung\" im Punkt (0,8; 0,7) und „Authentifizierung\" direkt daneben bei (0,9; 0,6) — nah beieinander, weil sie fast dasselbe bedeuten. Die Phrase „Rechnung\" liegt weit entfernt bei (0,1; 0,2). Fazit: Der Abstand auf der Karte entspricht dem Bedeutungsunterschied, nicht der Schreibweise.", "ascii": "logowanie •      faktura\nuwierzytelnianie •\n                          •" }
+      ]
+    },
+    {
+      "id": "s3-cosine-similarity",
+      "title": "Cosine Similarity — Richtung, nicht Länge",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Cosine Similarity", "original": "cosine similarity", "text": "Maß für den Winkel zwischen zwei Bedeutungsvektoren; Ergebnis von −1 bis 1, bei Text in der Praxis 0-1. Je näher an 1, desto übereinstimmender die Bedeutungsrichtung." },
+        { "kind": "paragraph", "text": "Die zentrale Intuition: Entscheidend ist die Bedeutungsrichtung, nicht die Länge oder „Wucht\" des Textes. Eine kurze Beschreibung und ein langer, ausführlicher Absatz über dasselbe Verfahren weisen dieselbe Richtung, daher ist ihre Ähnlichkeit trotz Längenunterschieds hoch." },
+        { "kind": "table",
+          "caption": "Drei synthetische Phrasenpaare aus der NotkaApp-Dokumentation und ihre schematische Ähnlichkeit",
+          "headers": ["Phrasenpaar", "Cosine Similarity", "Warum"],
+          "rows": [
+            ["„Passwort-Reset: E-Mail-Link 30 Min. gültig\" vs. langer Absatz über dasselbe Verfahren", "0,94", "dieselbe Bedeutungsrichtung, die Länge senkt den Wert nicht"],
+            ["„Anmeldung funktioniert\" vs. „Anmeldung funktioniert nicht\"", "0,90", "das gemeinsame Thema „Anmeldung\" überwiegt die Verneinung"],
+            ["„Passwort-Reset\" vs. „Produktpreisliste\"", "0,21", "unterschiedliche Themen, abweichende Vektorrichtung"]
+          ],
+          "textAlt": "Eine kurze und eine lange Beschreibung desselben Reset-Verfahrens haben eine Ähnlichkeit von 0,94 — die Länge senkt den Wert nicht, denn entscheidend ist die Richtung. Das Paar „Anmeldung funktioniert\" / „Anmeldung funktioniert nicht\" hat ganze 0,90, weil das gemeinsame Thema die Verneinung überwiegt. Das Paar mit unterschiedlichen Themen (Passwort-Reset vs. Preisliste) hat nur 0,21." }
+      ]
+    },
+    {
+      "id": "s4-ranking",
+      "title": "Wie man ein Ähnlichkeits-Ranking liest",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Nächste Nachbarn", "original": "nearest neighbors", "text": "Liste der Abschnitte, die der Anfrage am ähnlichsten sind, absteigend nach Ähnlichkeitswert sortiert." },
+        { "kind": "paragraph", "text": "Ein Wert von 0,91 ist „näher\" als 0,62, aber die Zahl ist kein Prozentwert für Korrektheit. Die Abschneideschwelle (z. B. 0,75) ist konventionell und korpusabhängig — in einem anderen Datensatz kann derselbe Wert etwas anderes bedeuten." },
+        { "kind": "list", "items": [
+          "Die Liste ist absteigend nach Ähnlichkeit sortiert — ganz oben steht das semantisch Nächste.",
+          "Eine hohe Position ist ein Signal für Relevanz, kein Beweis — der Inhalt muss verifiziert werden.",
+          "Es gibt keine feste, universelle Schwelle; 0,62 bedeutet nicht „zu 62 % korrekt\"."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Brücke zum nächsten Bildschirm", "text": "Da eine hohe Position keine Relevanz garantiert, sehen wir uns konkrete Situationen an, in denen das oberste Ergebnis zu einer falschen Antwort führt." }
+      ]
+    },
+    {
+      "id": "s5-pulapka-4-przypadki",
+      "title": "Falle: ähnlich ≠ korrekt — 4 Fälle",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Das ist der Kern des Moduls. Ein Embedding kodiert das Thema stärker als kleine, aber kritische Unterschiede. Vier typische Situationen, in denen hohe Ähnlichkeit in die Irre führt:" },
+        { "kind": "list", "ordered": true, "items": [
+          "Verneinung / Antonym — „Anmeldung funktioniert\" und „Anmeldung funktioniert nicht\" sind semantisch nah, obwohl sie das Gegenteil bedeuten.",
+          "Gleiches Thema, andere Intention — Beschreibung der Zahlungsfunktion in SklepDemo vs. Fehlermeldung zu derselben Funktion.",
+          "Mehrdeutigkeit (Polysemie) — „Token\" im Sinne von Sicherheit vs. „Token\" als Einheit in einem LLM.",
+          "Veraltete Version — alte und neue Formulierung einer Anforderung sind sehr ähnlich, korrekt ist aber nur die neue."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Kernpunkt", "text": "In allen vier Fällen ist der Abschnitt semantisch nah, aber fachlich falsch. Eine hohe Cosine Similarity ist nicht dasselbe wie eine korrekte Antwort." }
+      ]
+    },
+    {
+      "id": "s6-dlaczego-model-sie-myli",
+      "title": "Vertiefung: warum sich das Modell irrt",
+      "type": "content",
+      "onlyForPaths": ["S2", "S3"],
+      "blocks": [
+        { "kind": "paragraph", "text": "Woher kommen diese Fallen? Ein Embedding mittelt die Bedeutung der gesamten Phrase und kodiert Thema und Stil stärker als einzelne, kleine Wörter. Die Verneinung „nicht\", die Versionsnummer „v2\" oder ein Wechsel der Intention sind nur ein kleiner Teil des Vektors und gehen daher vor dem Hintergrund des gemeinsamen Themas unter." },
+        { "kind": "list", "items": [
+          "Das Ähnlichkeits-Ranking ist ein unterstützendes Signal, kein Urteil — das Ergebnis erfordert eine Verifikation des Abschnittsinhalts.",
+          "Es lohnt sich, die Suche durch Filterung nach Metadaten zu unterstützen (z. B. Dokumentversion, Typ), um irreführende Treffer zu reduzieren.",
+          "Ein starres Anheben der Schwelle (z. B. auf 0,95) korrigiert die Vektorrichtung nicht — ein Paar mit Verneinung kann so ähnlich sein, dass keine Schwelle es aussortiert."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Brücke zu weiteren Modulen", "text": "Die Filterung nach Metadaten lernst du in M5 (Vector Databases) kennen, und die vollständige Checkliste zur Verifikation des Outputs in M11." }
+      ]
+    },
+    {
+      "id": "s7-dobor-zapytania",
+      "title": "Wahl der Anfrage für die semantische Suche",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Relevanz beginnt mit der Anfrage (engl. query). Je besser sie die Intention und das zentrale Objekt wiedergibt, desto genauer zielt der Anfragevektor auf die richtige Bedeutung und entfernt sich von ähnlichen, aber anderen Begriffen." },
+        { "kind": "table",
+          "caption": "Schwache vs. bessere Anfrage und ihre Auswirkung auf die Ergebnisliste (synthetisches Beispiel, NotkaApp)",
+          "headers": ["Schwache Anfrage", "Bessere Anfrage", "Auswirkung auf die Ergebnisse"],
+          "rows": [
+            ["„Passwort\"", "„Gültigkeitsdauer des Passwort-Reset-Links\"", "die vollständige Phrase gibt die Intention wieder statt eines einzigen allgemeinen Wortes"],
+            ["„Reset\"", "„Passwort-Reset in NotkaApp v2\"", "der präzisierte Kontext und die Version heben die aktuelle Formulierung hervor"],
+            ["„nicht Sitzungs-Token\"", "„Passwort-Reset-Link, nicht Sitzungs-Token\"", "das zentrale Objekt (Reset-Link) entfernt das Ergebnis vom Sitzungs-Token; eine reine Verneinung funktioniert nicht"]
+          ],
+          "textAlt": "Das allgemeine „Passwort\" ersetzen wir durch die vollständige Phrase „Gültigkeitsdauer des Passwort-Reset-Links\", weil sie die Intention wiedergibt. „Reset\" ersetzen wir durch „Passwort-Reset in NotkaApp v2\", um die aktuelle Version zu treffen. Eine Anfrage baut man nicht als reine Verneinung „nicht Sitzungs-Token\" — besser benennt man das zentrale Objekt „Passwort-Reset-Link\", um das Ergebnis vom Sitzungs-Token zu entfernen." },
+        { "kind": "callout", "variant": "safe", "title": "Faustregel", "text": "Vollständige Phrase + Kontext/Version + zentrales Objekt. Vermeide ein einzelnes Wort und baue die Anfrage nicht aus einer reinen Verneinung." }
+      ]
+    },
+    {
+      "id": "s8-chcesz-poglebic",
+      "title": "Möchtest du vertiefen?",
+      "type": "decision",
+      "blocks": [
+        { "kind": "paragraph", "text": "Du hast jetzt die vier Fallen und die Regeln zur Wahl der Anfrage. Zeit, sie auf der „Semantischen Karte\" zu üben." },
+        { "kind": "list", "items": [
+          "Empfohlen (S2 erweitert / S3): Betritt die vollständige „Semantische Karte\" mit dem NotkaApp-Mini-Korpus und diagnostischen Fällen.",
+          "Abkürzung (S1): Geh zur vereinfachten Version und zum Quiz, wenn du nur die Grundlagen festigen möchtest."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Nächster bester Schritt", "text": "Öffne die „Semantische Karte\": Wähle die Anfrage zur Gültigkeitsdauer des Passwort-Reset-Links und prüfe, welcher Abschnitt wirklich zutreffend ist." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "m4-mapa-semantyczna",
+    "title": "Semantische Karte",
+    "intro": "Anfrage: „Nach welcher Zeit läuft der Passwort-Reset-Link ab?\" (NotkaApp-Mini-Korpus). Bei jedem Abschnitt ist die Ähnlichkeit zur Anfrage angegeben. Ordne ihn einer Kategorie zu. Kernpunkt: Das oberste Ergebnis ist nicht immer die korrekte Antwort — hohe semantische Ähnlichkeit ≠ fachliche Korrektheit. Nach dem Prüfen siehst du bei jedem Abschnitt eine Begründung.",
+    "categories": [
+      { "id": "trafny", "label": "Fachlich zutreffend", "desc": "beantwortet die Anfrage zum Passwort-Reset-Link — korrekte Quelle" },
+      { "id": "podobny_bledny", "label": "Semantisch ähnlich, aber falsch", "desc": "thematisch ähnlich, betrifft aber ein anderes Objekt oder eine andere Intention — eine Falle" },
+      { "id": "nietrafny", "label": "Nicht verwandt", "desc": "niedriger Wert, anderes Thema — beantwortet die Anfrage nicht" }
+    ],
+    "items": [
+      { "id": "doc3", "text": "DOC3: „Passwort-Reset: E-Mail-Link 30 Min. gültig, einmalig.\" (Ähnlichkeit 0,71)", "correctCategory": "trafny", "rationale": "Das ist die korrekte Quelle: Sie betrifft genau den Passwort-Reset-Link und seine Gültigkeitsdauer — zutreffend trotz niedrigerem Wert als DOC1." },
+      { "id": "doc3b", "text": "Paraphrase von DOC3: „Der per E-Mail verschickte Link zum Zurücksetzen des Passworts wird 30 Minuten nach dem Versand unwirksam.\" (Ähnlichkeit 0,69)", "correctCategory": "trafny", "rationale": "Die längere Beschreibung desselben Verfahrens weist dieselbe Bedeutungsrichtung auf und ist daher genauso zutreffend — Cosine Similarity misst die Richtung, nicht die Länge." },
+      { "id": "doc1", "text": "DOC1: „Anmeldeverfahren in NotkaApp: Der Sitzungs-Token läuft nach 30 Min. Inaktivität ab.\" (Ähnlichkeit 0,86 — am höchsten)", "correctCategory": "podobny_bledny", "rationale": "FALLE: Teilt mit der Anfrage das Motiv „etwas läuft nach 30 Min. ab\", betrifft aber ein anderes Objekt (Sitzungs-Token, nicht Reset-Link) — höchste Ähnlichkeit und dennoch die falsche Quelle." },
+      { "id": "doc-akt", "text": "Abschnitt aus einem anderen Prozess: „Der Konto-Aktivierungslink läuft 30 Min. nach der Registrierung ab.\" (Ähnlichkeit 0,80)", "correctCategory": "podobny_bledny", "rationale": "Dasselbe Motiv „Link läuft nach 30 Min. ab\", aber ein anderes Objekt (Konto-Aktivierung, nicht Passwort-Reset) — die hohe Ähnlichkeit führt in die Irre, weil das Embedding das gemeinsame Thema stärker kodiert als den Objektunterschied." },
+      { "id": "doc2", "text": "DOC2: „Passwortrichtlinie NotkaApp: mind. 12 Zeichen, Sperre nach 3 Fehlversuchen.\" (Ähnlichkeit 0,55)", "correctCategory": "podobny_bledny", "rationale": "Gemeinsames Thema „Passwort\", betrifft aber Regeln zu Länge und Sperre und nicht die Gültigkeitsdauer des Reset-Links — nah, beantwortet die Anfrage aber nicht." },
+      { "id": "doc-neg", "text": "Ticket: „Anmeldung funktioniert nicht nach dem Update v2\". (Ähnlichkeit 0,58)", "correctCategory": "podobny_bledny", "rationale": "Falle mit anderem Objekt und anderer Intention: Betrifft die Anmeldung (nicht den Passwort-Reset) und ist eine Fehlermeldung, keine Beschreibung der Link-Gültigkeitsdauer — verwandtes Thema, beantwortet die Anfrage aber nicht." },
+      { "id": "doc4", "text": "DOC4: „Marketing-FAQ NotkaApp: Produktvorteile und Preisliste.\" (Ähnlichkeit 0,19)", "correctCategory": "nietrafny", "rationale": "Anderes Thema (Marketing, Preisliste), abweichende Vektorrichtung — der niedrige Wert signalisiert korrekt, dass kein Bezug zur Anfrage besteht." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Ein Embedding ist die Bedeutung eines Textes, gespeichert als Zahlenvektor — nahe Bedeutungen ergeben nahe Vektoren.",
+      "Cosine Similarity misst die Bedeutungsrichtung, nicht die Textlänge — eine kurze und eine lange Beschreibung derselben Sache liegen nah beieinander.",
+      "Vier Ähnlichkeitsfallen: Verneinung, gleiches Thema bei anderer Intention, Mehrdeutigkeit und veraltete Version.",
+      "Das Ähnlichkeits-Ranking ist ein Signal, kein Urteil — das oberste Ergebnis ist manchmal fachlich falsch, deshalb muss der Inhalt verifiziert werden."
+    ],
+    "checklist": [
+      "Betrifft das oberste Ergebnis tatsächlich dasselbe Objekt und dieselbe Intention wie meine Anfrage?",
+      "Unterscheidet sich der Abschnitt vom korrekten nicht nur durch eine Verneinung oder eine Versionsnummer?",
+      "Gibt die Anfrage die Intention mit einer vollständigen Phrase, Kontext und zentralem Objekt wieder?",
+      "Habe ich den Inhalt des Abschnitts verifiziert, statt mich auf die bloße Position im Ranking zu verlassen?"
+    ],
+    "checklistTitle": "Checkliste — bevor du dem Ergebnis der semantischen Suche vertraust",
+    "nextStep": "Nächster Schritt: M5 — Vector Databases und Similarity Search (Filterung nach Metadaten und Such-Pipeline)."
+  }
+}

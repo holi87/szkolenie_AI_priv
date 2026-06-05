@@ -1,0 +1,20 @@
+{
+  "paths": {
+    "S1": {
+      "name": "Non technique / décisionnel",
+      "assumedPathTime": "3.5-4.5 h (A4)"
+    },
+    "S2": {
+      "name": "Praticien-utilisateur / QA",
+      "assumedPathTime": "6-7 h (A4)"
+    },
+    "S3": {
+      "name": "Ingénieur / automatisation / QA technique",
+      "assumedPathTime": "9-10 h (A4)"
+    },
+    "S4": {
+      "name": "Échelle de Holak — diagnostic et développement",
+      "assumedPathTime": "2.5-3 h"
+    }
+  }
+}

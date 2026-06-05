@@ -1,0 +1,370 @@
+{
+  "_meta": {
+    "module": "M9",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M9. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q073",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Học viên phân biệt agent với chatbot và với workflow có công cụ dựa trên việc ai quyết định các bước tiếp theo và liệu có phát sinh tác động phụ hay không.",
+      "prompt": "Agent khác chatbot và khác workflow có một công cụ duy nhất (tool use) ở điểm nào?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Agent tự lập kế hoạch và thực hiện một chuỗi các bước, đồng thời tự quyết định gọi công cụ nào và vào lúc nào."
+        },
+        {
+          "id": "B",
+          "text": "Agent chỉ là chatbot với giao diện đẹp hơn — nó chỉ sinh ra văn bản, không thực hiện bất kỳ hành động nào."
+        },
+        {
+          "id": "C",
+          "text": "Agent luôn gọi đúng một công cụ đã định trước trong một luồng cứng nhắc, không thay đổi."
+        },
+        {
+          "id": "D",
+          "text": "Agent chỉ khác chatbot ở chỗ trả lời nhanh hơn và xử lý được ngữ cảnh dài hơn."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Đúng — đặc điểm định nghĩa của agent là tự lập kế hoạch và chọn các bước cùng công cụ tiếp theo, điều mà cả chatbot lẫn workflow cứng nhắc đều không làm.",
+      "feedbackIncorrect": "Đó là mô tả của chatbot (chỉ sinh văn bản) hoặc workflow có tool use (một công cụ đã định sẵn). Hãy ôn lại màn hình về ba chế độ tích hợp và chú ý xem ai quyết định các bước.",
+      "references": [
+        "M9.2"
+      ]
+    },
+    {
+      "id": "Q074",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Học viên nhận diện đúng ý nghĩa của đòn bẩy kiểm soát rollback trong mô hình kiểm soát tối thiểu hoạt động của agent.",
+      "prompt": "Trong mô hình „4 đòn bẩy kiểm soát” hoạt động của agent — đòn bẩy rollback có nghĩa là gì?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Khả năng hoàn tác thay đổi mà agent đã thực hiện, đưa về trạng thái trước khi thực hiện thay đổi đó."
+        },
+        {
+          "id": "B",
+          "text": "Việc ghi lại toàn bộ hành động của agent kèm theo thời điểm thực hiện."
+        },
+        {
+          "id": "C",
+          "text": "Cổng kiểm soát nơi con người phê duyệt hành động trước khi agent thực hiện."
+        },
+        {
+          "id": "D",
+          "text": "Việc giới hạn agent ở phạm vi truy cập nhỏ nhất cần thiết."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Rollback là khả năng hoàn tác một thay đổi — nó phân biệt hành động có thể đảo ngược với hành động không thể đảo ngược, và quyết định sức mạnh của các biện pháp bảo vệ còn lại.",
+      "feedbackIncorrect": "Bạn đang nhầm lẫn các đòn bẩy: B là audit log, C là human-in-the-loop, D là permission scope. Hãy ôn lại màn hình về bốn đòn bẩy kiểm soát.",
+      "references": [
+        "M9.6"
+      ]
+    },
+    {
+      "id": "Q075",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Học viên phân loại một mô tả cụ thể về hoạt động của công cụ AI là agent, chứ không phải chatbot hay workflow, dựa trên chuỗi các bước tự chủ.",
+      "prompt": "Một công cụ trong môi trường TEST tự đọc backlog từ TestRail-SANDBOX, quyết định những báo cáo nào là trùng lặp, gộp chúng lại và mở 5 pull request trong kho synt-shop — mà không được cung cấp danh sách các bước. Đây là chế độ tích hợp nào?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Agent — tự lập kế hoạch và thực hiện nhiều bước, đồng thời tự chọn công cụ."
+        },
+        {
+          "id": "B",
+          "text": "Chatbot — chỉ trả lời bằng văn bản cho các câu hỏi về backlog."
+        },
+        {
+          "id": "C",
+          "text": "Workflow có tool use — một công cụ đã định sẵn trong luồng cứng nhắc."
+        },
+        {
+          "id": "D",
+          "text": "Tìm kiếm toàn văn thông thường trong hệ thống quản lý kiểm thử."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Đúng — công cụ tự chọn các bước (phân tích, gộp, mở 5 PR) và các công cụ khác nhau mà không có kịch bản cho trước, đó chính là đặc điểm của agent.",
+      "feedbackIncorrect": "Chatbot chỉ sinh văn bản, còn workflow thực hiện một công cụ đã định sẵn. Ở đây công cụ tự kết nối nhiều bước và tác động lên kho mã — đó là agent. Hãy ôn lại sự phân biệt giữa các chế độ.",
+      "references": [
+        "M9.2",
+        "M9.3"
+      ]
+    },
+    {
+      "id": "Q076",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Học viên chọn phạm vi truy cập tối thiểu và cổng kiểm soát phù hợp cho một tác vụ có tác động không thể đảo ngược (gửi email).",
+      "prompt": "Bạn giao cho agent tác vụ Z3: „Gửi báo cáo hàng tuần đến qa-team@przyklad.test”. Email đã gửi là không thể đảo ngược (không thể thu hồi). Cấu hình quyền và kiểm soát cho tác vụ này như thế nào?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Quyền gửi email + human-in-the-loop: con người phê duyệt nội dung trước khi gửi."
+        },
+        {
+          "id": "B",
+          "text": "Toàn quyền với hộp thư (đọc và gửi) mà không cần phê duyệt, vì đây chỉ là báo cáo nội bộ."
+        },
+        {
+          "id": "C",
+          "text": "Quyền gửi không cần cổng kiểm soát, nhưng bù lại bật rollback email sau khi phát hiện lỗi."
+        },
+        {
+          "id": "D",
+          "text": "Không có quyền với email — agent lưu báo cáo vào kho synt-shop và không bao giờ gửi đi bất cứ thứ gì."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Hành động không thể đảo ngược (email đã gửi) đòi hỏi cổng HITL trước khi phát sinh tác động, với phạm vi tối thiểu chỉ giới hạn ở việc gửi — đúng những gì Z3 cần.",
+      "feedbackIncorrect": "Không thể thu hồi email, nên rollback không tồn tại (C), còn việc không có cổng kiểm soát kèm quyền truy cập dư thừa là rủi ro cao (B). D thì không thực hiện được tác vụ. Hãy ôn lại cách chọn cổng kiểm soát cho hành động không thể đảo ngược.",
+      "references": [
+        "M9.8",
+        "M9.6"
+      ]
+    },
+    {
+      "id": "Q077",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Học viên chọn phạm vi truy cập tối thiểu vào kho mã, giới hạn agent ở nhánh làm việc với cổng review thay vì ghi vào main.",
+      "prompt": "Tác vụ Z4: agent phải „Mở pull request kèm bản vá trong kho synt-shop”. Phạm vi truy cập nào là tối thiểu và an toàn?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Quyền ghi giới hạn ở nhánh làm việc kèm mở PR; không có quyền ghi (push/merge) vào nhánh main."
+        },
+        {
+          "id": "B",
+          "text": "Quyền ghi vào nhánh main, để agent gộp bản vá ngay lập tức mà không cần chờ review."
+        },
+        {
+          "id": "C",
+          "text": "Toàn quyền quản trị kho mã, bao gồm cả xóa nhánh và thay đổi cấu hình."
+        },
+        {
+          "id": "D",
+          "text": "Chỉ quyền đọc kho mã — agent mô tả bản vá trong một bình luận nhưng không mở PR."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Quyền ghi vào nhánh làm việc + PR tạo ra một cổng review tự nhiên, còn việc không có quyền với main giữ phạm vi ở mức tối thiểu cần thiết cho tác vụ.",
+      "feedbackIncorrect": "Quyền ghi vào main hay quyền quản trị là những quyền dư thừa với tác động lớn (B, C), còn chỉ riêng quyền đọc thì không thực hiện được tác vụ (D). Hãy ôn lại nguyên tắc phạm vi nhỏ nhất cần thiết và vai trò của PR như một cổng kiểm soát.",
+      "references": [
+        "M9.8",
+        "M9.7"
+      ]
+    },
+    {
+      "id": "Q078",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Học viên đánh giá tác vụ được giao nào mang rủi ro tồn dư lớn nhất và đòi hỏi kiểm soát mạnh nhất, bằng cách cân nhắc khả năng đảo ngược và mức tác động.",
+      "prompt": "Agent trong CI PipeDemo (môi trường TEST) có bốn tác vụ phải thực hiện. Tác vụ nào đòi hỏi kiểm soát MẠNH NHẤT (cổng HITL + log đầy đủ + giới hạn phạm vi), vì nó kết hợp tác động lớn nhất với khả năng đảo ngược khó nhất?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Thay đổi cấu hình môi trường TEST PipeDemo (có khả năng ghi ra ngoài TEST, khó hoàn tác)."
+        },
+        {
+          "id": "B",
+          "text": "Tóm tắt 10 báo cáo từ TestRail-SANDBOX (chỉ đọc, không thay đổi)."
+        },
+        {
+          "id": "C",
+          "text": "Đọc log của lượt chạy kiểm thử hồi quy (chỉ đọc)."
+        },
+        {
+          "id": "D",
+          "text": "Tạo một báo cáo văn bản nội bộ từ kết quả (lưu cục bộ, dễ ghi đè)."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Việc thay đổi cấu hình môi trường có tác động lớn và rủi ro ghi ra ngoài TEST, lại khó hoàn tác — quy tắc ngón tay cái „không thể đảo ngược + tác động lớn = cổng kiểm soát + audit đầy đủ” chỉ ra chính nó.",
+      "feedbackIncorrect": "Các thao tác chỉ đọc (B, C) không thay đổi trạng thái, còn báo cáo cục bộ thì dễ ghi đè (D). Kiểm soát mạnh nhất là cần cho hành động có tác động lớn và khó đảo ngược. Hãy ôn lại cách phân loại các tác vụ cần audit.",
+      "references": [
+        "M9.7",
+        "M9.8"
+      ]
+    },
+    {
+      "id": "Q079",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Học viên chỉ ra nhiều rủi ro thực tế phát sinh từ việc cấp cho agent quyền truy cập vào tệp, email, kho mã và hệ thống kiểm thử.",
+      "prompt": "Những điều nào dưới đây là rủi ro thực tế khi cấp cho agent quyền truy cập rộng vào tệp, email, kho mã và hệ thống quản lý kiểm thử? Hãy chọn tất cả đáp án đúng.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Agent có thể trở thành nạn nhân của prompt injection ẩn trong nội dung mà nó đọc (ví dụ trong một bình luận của báo cáo) và thực hiện hành động ngoài ý muốn."
+        },
+        {
+          "id": "B",
+          "text": "Một quyết định sai ở bước đầu lan truyền qua các bước tiếp theo, vì agent hoạt động mà không có điểm dừng."
+        },
+        {
+          "id": "C",
+          "text": "Agent có thể gây ra tác động không thể đảo ngược, ví dụ gửi email ra bên ngoài hoặc xóa các tệp không thể khôi phục."
+        },
+        {
+          "id": "D",
+          "text": "Bản thân việc cấp quyền truy cập rộng là an toàn, miễn là agent dùng mô hình đã tắt bộ nhớ hội thoại."
+        },
+        {
+          "id": "E",
+          "text": "Mã hóa truyền thông đầu cuối (end-to-end) loại bỏ các rủi ro phát sinh từ hành động mà agent thực hiện."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Rủi ro thực tế là khả năng bị prompt injection, sự lan truyền lỗi giữa các bước và tác động không thể đảo ngược. Biện pháp kiểm soát là giới hạn phạm vi và HITL — không phải bộ nhớ hội thoại hay riêng việc mã hóa.",
+      "feedbackIncorrect": "D và E là những lời hứa sai lầm: tắt bộ nhớ hội thoại không giới hạn quyền hạn, còn mã hóa đường truyền không ngăn được chính hành động của agent. Hãy ôn lại bản đồ quyền truy cập và các nguồn rủi ro (M9.4–M9.5).",
+      "references": [
+        "M9.4",
+        "M9.5"
+      ]
+    },
+    {
+      "id": "Q080",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Học viên chỉ ra các yếu tố của kiểm soát và audit tối thiểu đối với hoạt động của agent, tách biệt chúng khỏi những biện pháp bảo vệ chỉ là bề ngoài.",
+      "prompt": "Những yếu tố nào thực sự tạo nên kiểm soát và audit tối thiểu đối với hoạt động của agent QA? Hãy chọn tất cả đáp án đúng.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Permission scope — giới hạn agent ở phạm vi truy cập nhỏ nhất cần thiết."
+        },
+        {
+          "id": "B",
+          "text": "Audit log — ghi lại agent đã làm gì và vào lúc nào, cho phép tái dựng lại tiến trình."
+        },
+        {
+          "id": "C",
+          "text": "Human-in-the-loop — cổng phê duyệt bởi con người trước khi xảy ra tác động không thể đảo ngược."
+        },
+        {
+          "id": "D",
+          "text": "Rollback — khả năng hoàn tác thay đổi đã thực hiện, đưa về trạng thái trước đó."
+        },
+        {
+          "id": "E",
+          "text": "Cấp cho agent toàn quyền quản trị, để không cản trở nó vì thiếu quyền truy cập."
+        },
+        {
+          "id": "F",
+          "text": "Tắt log để agent chạy nhanh hơn và không để lại dấu vết."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "feedbackCorrect": "Bốn đòn bẩy kiểm soát là: phạm vi quyền, log audit, cổng HITL và rollback. Kết hợp lại, chúng tạo nên kiểm soát tối thiểu và khả năng audit.",
+      "feedbackIncorrect": "E và F là các phản mẫu: toàn quyền quản trị làm tăng rủi ro, còn tắt log thì phá hủy khả năng audit. Hãy ôn lại mô hình „4 đòn bẩy kiểm soát” và vai trò của audit log (M9.6, M9.8).",
+      "references": [
+        "M9.6",
+        "M9.8"
+      ]
+    }
+  ]
+}

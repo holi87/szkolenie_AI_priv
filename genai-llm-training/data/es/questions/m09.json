@@ -1,0 +1,370 @@
+{
+  "_meta": {
+    "module": "M9",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M9. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q073",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "El participante distingue un agente de un chatbot y de un flujo de trabajo con una herramienta según quién decide los pasos siguientes y si se producen efectos secundarios.",
+      "prompt": "¿En qué se diferencia un agente de un chatbot y de un flujo de trabajo con una sola herramienta (tool use)?",
+      "options": [
+        {
+          "id": "A",
+          "text": "El agente planifica y ejecuta por sí mismo una secuencia de pasos y decide qué herramienta invocar y cuándo."
+        },
+        {
+          "id": "B",
+          "text": "El agente es un chatbot con una interfaz más bonita: solo genera texto y no ejecuta ninguna acción."
+        },
+        {
+          "id": "C",
+          "text": "El agente siempre invoca exactamente una herramienta predefinida en un flujo rígido e invariable."
+        },
+        {
+          "id": "D",
+          "text": "El agente se diferencia de un chatbot únicamente en que responde más rápido y maneja un contexto más largo."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Sí: la característica que define a un agente es planificar de forma autónoma y elegir los pasos y las herramientas siguientes, algo que no hace ni un chatbot ni un flujo de trabajo rígido.",
+      "feedbackIncorrect": "Esas son descripciones de un chatbot (solo texto) o de un flujo de trabajo con tool use (una herramienta predefinida). Repasa la pantalla sobre los tres modos de integración y fíjate en quién decide los pasos.",
+      "references": [
+        "M9.2"
+      ]
+    },
+    {
+      "id": "Q074",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "El participante reconoce correctamente el significado de la palanca de control rollback en el modelo de control mínimo de la actividad del agente.",
+      "prompt": "En el modelo de las «4 palancas de control» de la actividad del agente, ¿qué significa la palanca de rollback?",
+      "options": [
+        {
+          "id": "A",
+          "text": "La posibilidad de revertir un cambio introducido por el agente al estado anterior a su ejecución."
+        },
+        {
+          "id": "B",
+          "text": "El registro de todas las acciones del agente junto con el momento de su ejecución."
+        },
+        {
+          "id": "C",
+          "text": "Una compuerta en la que una persona aprueba la acción antes de que el agente la ejecute."
+        },
+        {
+          "id": "D",
+          "text": "La limitación del agente al menor ámbito de acceso necesario."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "El rollback es la capacidad de deshacer un cambio: distingue las acciones reversibles de las irreversibles y determina la fuerza de las demás salvaguardas.",
+      "feedbackIncorrect": "Estás confundiendo las palancas: B es el audit log, C es el human-in-the-loop y D es el permission scope. Repasa la pantalla sobre las cuatro palancas de control.",
+      "references": [
+        "M9.6"
+      ]
+    },
+    {
+      "id": "Q075",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "El participante clasifica la descripción concreta del funcionamiento de una herramienta de IA como un agente, y no como un chatbot o un flujo de trabajo, a partir de la cadena de pasos autónoma.",
+      "prompt": "Una herramienta en el entorno TEST lee por sí misma el backlog de TestRail-SANDBOX, decide qué tickets son duplicados, los fusiona y abre 5 pull requests en el repositorio synt-shop, sin que se le indique una lista de pasos. ¿Qué modo de integración es?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Agente: planifica y ejecuta por sí mismo varios pasos y selecciona las herramientas."
+        },
+        {
+          "id": "B",
+          "text": "Chatbot: solo responde con texto a preguntas sobre el backlog."
+        },
+        {
+          "id": "C",
+          "text": "Flujo de trabajo con tool use: una herramienta predefinida en un flujo rígido."
+        },
+        {
+          "id": "D",
+          "text": "Una simple búsqueda de texto completo en el sistema de gestión de pruebas."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Sí: la herramienta elige por sí misma los pasos (análisis, fusión, apertura de 5 PR) y distintas herramientas sin un guion indicado, lo cual es propio de un agente.",
+      "feedbackIncorrect": "Un chatbot solo genera texto y un flujo de trabajo ejecuta una herramienta predefinida. Aquí la herramienta encadena por sí misma varios pasos y actúa sobre el repositorio: es un agente. Repasa la distinción entre los modos.",
+      "references": [
+        "M9.2",
+        "M9.3"
+      ]
+    },
+    {
+      "id": "Q076",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "El participante selecciona el ámbito mínimo de acceso y la compuerta de control adecuada para una tarea con efecto irreversible (envío de un correo).",
+      "prompt": "Delegas en el agente la tarea Z3: «Envía el informe semanal a qa-team@przyklad.test». El correo enviado es irreversible (no se puede deshacer). ¿Cómo configurar los permisos y el control para esta tarea?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Acceso al envío de correo + human-in-the-loop: una persona aprueba el contenido antes de enviarlo."
+        },
+        {
+          "id": "B",
+          "text": "Acceso completo al buzón (lectura y envío) sin aprobación, porque es solo un informe interno."
+        },
+        {
+          "id": "C",
+          "text": "Acceso al envío sin compuerta, pero con rollback del correo activado al detectar un error."
+        },
+        {
+          "id": "D",
+          "text": "Sin acceso al correo: el agente guarda el informe en el repositorio synt-shop y nunca envía nada."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Una acción irreversible (correo enviado) requiere una compuerta HITL antes del efecto, con un ámbito mínimo limitado al envío: exactamente lo que necesita Z3.",
+      "feedbackIncorrect": "El correo no se puede deshacer, así que el rollback no existe (C), y la falta de compuerta con acceso excesivo supone un riesgo alto (B). D no cumple la tarea. Repasa la elección de la compuerta para acciones irreversibles.",
+      "references": [
+        "M9.8",
+        "M9.6"
+      ]
+    },
+    {
+      "id": "Q077",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "El participante selecciona el ámbito mínimo de acceso al repositorio, limitando al agente a una rama de trabajo con compuerta de review en lugar de escritura en main.",
+      "prompt": "Tarea Z4: el agente debe «Abrir un pull request con una corrección en el repositorio synt-shop». ¿Qué ámbito de acceso es mínimo y seguro?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Escritura limitada a una rama de trabajo con apertura de PR; sin permiso de escritura (push/merge) en la rama main."
+        },
+        {
+          "id": "B",
+          "text": "Escritura en la rama main, para que el agente fusione la corrección de inmediato sin esperar el review."
+        },
+        {
+          "id": "C",
+          "text": "Acceso administrativo completo al repositorio, incluido borrar ramas y cambiar la configuración."
+        },
+        {
+          "id": "D",
+          "text": "Solo lectura del repositorio: el agente describe la corrección en un comentario, pero no abre el PR."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "La escritura en una rama de trabajo + el PR proporcionan una compuerta natural de review, y la falta de permiso sobre main mantiene el ámbito mínimo necesario para la tarea.",
+      "feedbackIncorrect": "Escribir en main o el acceso de admin son permisos excesivos de gran impacto (B, C), y la lectura por sí sola no cumple la tarea (D). Repasa el principio del menor ámbito necesario y el papel del PR como compuerta.",
+      "references": [
+        "M9.8",
+        "M9.7"
+      ]
+    },
+    {
+      "id": "Q078",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "El participante evalúa cuál de las tareas delegadas conlleva el mayor riesgo residual y requiere el control más fuerte, ponderando la reversibilidad y el impacto.",
+      "prompt": "El agente en CI PipeDemo (entorno TEST) tiene cuatro tareas que ejecutar. ¿Cuál requiere el control MÁS FUERTE (compuerta HITL + log completo + limitación del ámbito), porque combina el mayor impacto con la reversibilidad más difícil?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Cambia la configuración del entorno TEST de PipeDemo (posible escritura fuera de TEST, difícil de deshacer)."
+        },
+        {
+          "id": "B",
+          "text": "Resume 10 tickets de TestRail-SANDBOX (solo lectura, sin cambios)."
+        },
+        {
+          "id": "C",
+          "text": "Lee los logs de la ejecución de las pruebas de regresión (solo lectura)."
+        },
+        {
+          "id": "D",
+          "text": "Crea un informe de texto interno con los resultados (escritura local, fácil de sobrescribir)."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Cambiar la configuración del entorno tiene un gran impacto y riesgo de escritura fuera de TEST, y es difícil de deshacer: la regla práctica «irreversible + gran impacto = compuerta + auditoría completa» la señala.",
+      "feedbackIncorrect": "Las operaciones de solo lectura (B, C) no modifican el estado, y un informe local se sobrescribe fácilmente (D). El control más fuerte lo requiere la acción de gran impacto y reversibilidad difícil. Repasa la clasificación de tareas que requieren auditoría.",
+      "references": [
+        "M9.7",
+        "M9.8"
+      ]
+    },
+    {
+      "id": "Q079",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "El participante identifica varios riesgos reales derivados de conceder al agente acceso a archivos, correo, repositorio y sistema de pruebas.",
+      "prompt": "¿Cuáles de los siguientes son riesgos reales de conceder al agente un acceso amplio a archivos, correo, repositorio y sistema de gestión de pruebas? Marca todas las correctas.",
+      "options": [
+        {
+          "id": "A",
+          "text": "El agente puede ser víctima de un prompt injection oculto en el contenido que lee (p. ej., en el comentario de un ticket) y ejecutar una acción no deseada."
+        },
+        {
+          "id": "B",
+          "text": "Una decisión errónea en el primer paso se propaga a los pasos siguientes, porque el agente actúa sin pausa."
+        },
+        {
+          "id": "C",
+          "text": "El agente puede provocar un efecto irreversible, p. ej., enviar un correo al exterior o borrar archivos que no se pueden recuperar."
+        },
+        {
+          "id": "D",
+          "text": "Conceder un acceso amplio es seguro por sí solo mientras el agente use un modelo con la memoria de conversaciones desactivada."
+        },
+        {
+          "id": "E",
+          "text": "El cifrado de la comunicación de extremo a extremo elimina los riesgos derivados de las acciones que ejecuta el agente."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Los riesgos reales son la vulnerabilidad al prompt injection, la propagación del error entre pasos y los efectos irreversibles. El control consiste en limitar el ámbito y el HITL, no la memoria de conversaciones ni el cifrado por sí solo.",
+      "feedbackIncorrect": "D y E son falsas promesas: la memoria de conversaciones desactivada no limita los permisos, y el cifrado del transporte no detiene la propia acción del agente. Repasa el mapa de accesos y las fuentes de riesgo (M9.4-M9.5).",
+      "references": [
+        "M9.4",
+        "M9.5"
+      ]
+    },
+    {
+      "id": "Q080",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "El participante identifica los elementos del control y la auditoría mínimos de la actividad del agente, distinguiéndolos de las salvaguardas aparentes.",
+      "prompt": "¿Qué elementos componen realmente el control y la auditoría mínimos de la actividad de un agente de QA? Marca todas las correctas.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Permission scope: limitación del agente al menor ámbito de acceso necesario."
+        },
+        {
+          "id": "B",
+          "text": "Audit log: registro de qué hizo el agente y cuándo, que permite reconstruir el desarrollo."
+        },
+        {
+          "id": "C",
+          "text": "Human-in-the-loop: compuerta de aprobación por una persona antes de un efecto irreversible."
+        },
+        {
+          "id": "D",
+          "text": "Rollback: posibilidad de revertir un cambio introducido al estado anterior."
+        },
+        {
+          "id": "E",
+          "text": "Conceder al agente permisos completos de administrador, para no bloquearlo por falta de acceso."
+        },
+        {
+          "id": "F",
+          "text": "Desactivar los logs para que el agente actúe más rápido y no deje rastros."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "feedbackCorrect": "Las cuatro palancas de control son: el ámbito de permisos, el log de auditoría, la compuerta HITL y el rollback. Juntas proporcionan un control mínimo y trazabilidad.",
+      "feedbackIncorrect": "E y F son antipatrones: los permisos completos de administrador aumentan el riesgo, y desactivar los logs destruye la auditoría. Repasa el modelo de las «4 palancas de control» y el papel del audit log (M9.6, M9.8).",
+      "references": [
+        "M9.6",
+        "M9.8"
+      ]
+    }
+  ]
+}

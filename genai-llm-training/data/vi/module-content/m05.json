@@ -1,0 +1,149 @@
+{
+  "_meta": {
+    "issue": "#21 [21][M4] Wdroż moduły M3-M6",
+    "storyboard": "docs/storyboard/m05-vector-db.md",
+    "interaction": "Retrieval debugger (kind: tune)",
+    "scenario": "SC-RAG-01 — mini-korpus dokumentacji QA (DOC1-DOC4, NotkaApp)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (NotkaApp/SklepDemo/PipeDemo). Output interakcji jest prerenderowany (autorski lookup po poziomach), nie z żywego retrievalu. ZERO PII, ZERO realnych domen.",
+    "note": "Egzemplarz typu tune wg m03: kontrolki retrievalu → autorskie efekty (recall/precision) + scorowany checkpoint diagnostyczny. Storyboard 1-8 → screens; ekran 9 → interaction; ekran 10 (quiz) zasilany z questions/m05.json; ekran 11 → summary."
+  },
+  "module": "M5",
+  "intro": "Khi một nhóm xây dựng công cụ tìm kiếm trên tài liệu kiểm thử hoặc một hệ thống RAG, chất lượng câu trả lời phụ thuộc vào việc retrieval thực sự đã tìm được GÌ. Tester phải biết đánh giá xem các đoạn được trả về có liên quan hay không, và chẩn đoán tại sao chúng không liên quan. Mô-đun này cho thấy vai trò của cơ sở dữ liệu vector, sự đánh đổi giữa exact và ANN cũng như ảnh hưởng của chỉ mục, metadata và chunk lên kết quả.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Tại sao tester cần cơ sở dữ liệu vector?",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "QA ngày càng thường xuyên kiểm thử các tính năng dựa trên tìm kiếm ngữ nghĩa: công cụ tìm kiếm trên tài liệu kiểm thử hoặc trợ lý RAG trả lời các câu hỏi về sản phẩm. Trong cả hai trường hợp, độ liên quan của câu trả lời cuối cùng bắt đầu từ retrieval — từ việc các đoạn nào đã được tìm thấy." },
+        { "kind": "paragraph", "text": "Nhiệm vụ của bạn với tư cách tester: đánh giá xem các đoạn được trả về có liên quan hay không, và chẩn đoán tại sao đôi khi chúng lại không liên quan. Trong mô-đun này, bạn sẽ tìm hiểu vai trò của cơ sở dữ liệu vector, sự khác biệt giữa exact và ANN, ảnh hưởng của chỉ mục, metadata và chunk, và cuối cùng bạn sẽ dùng trình gỡ lỗi tìm kiếm trên kho ngữ liệu tổng hợp NotkaApp." },
+        { "kind": "callout", "variant": "info", "title": "Chúng ta sẽ xây dựng gì ở đây", "text": "Chúng ta làm việc trên một mini-kho ngữ liệu giả định gồm tài liệu QA của ứng dụng NotkaApp — toàn bộ dữ liệu đều là tổng hợp, không có khách hàng thật và không có PII." }
+      ]
+    },
+    {
+      "id": "s2-czym-jest",
+      "title": "Cơ sở dữ liệu vector là gì",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Cơ sở dữ liệu vector", "original": "vector database", "text": "kho lưu trữ các embedding của các đoạn (từ M4) và cho phép nhanh chóng tìm ra các vector giống nhất với embedding của truy vấn." },
+        { "kind": "paragraph", "text": "Tìm kiếm ngữ nghĩa (semantic search) hoạt động theo ý nghĩa, không theo từ ngữ nguyên văn. Lộ trình là cố định: truy vấn → embedding của truy vấn → các vector gần nhất trong cơ sở dữ liệu → các đoạn văn bản liên quan. Khác với tìm kiếm theo từ khóa vốn khớp đúng những từ giống nhau — ở đây điều quan trọng là sự gần gũi về mặt ngữ nghĩa." },
+        { "kind": "diagram", "title": "Từ truy vấn đến các đoạn", "caption": "Luồng tìm kiếm ngữ nghĩa.", "textAlt": "Bốn bước trong một chuỗi liền mạch: (1) truy vấn dạng văn bản, ví dụ \"sau bao lâu thì liên kết đặt lại mật khẩu hết hạn\", (2) mô hình embedding chuyển nó thành một vector, (3) cơ sở dữ liệu vector so sánh vector này với các embedding của các đoạn và chọn ra những vector gần nhất, (4) trả về các đoạn văn bản liên quan, ví dụ DOC3 về đặt lại mật khẩu." },
+        { "kind": "callout", "variant": "info", "title": "Mini-kho ngữ liệu NotkaApp", "text": "Trong mô-đun này, một kho ngữ liệu 4 đoạn được sử dụng xuyên suốt: DOC1 — token phiên hết hạn sau 30 phút không hoạt động; DOC2 — chính sách mật khẩu (tối thiểu 12 ký tự, khóa sau 3 lần sai); DOC3 — đặt lại mật khẩu: liên kết e-mail có hiệu lực 30 phút, dùng một lần; DOC4 — FAQ tiếp thị (ưu điểm và bảng giá)." }
+      ]
+    },
+    {
+      "id": "s3-dokladne-czy-przyblizone",
+      "title": "Chính xác hay xấp xỉ?",
+      "type": "decision",
+      "blocks": [
+        { "kind": "paragraph", "text": "Một quyết định trước khi chọn cách tiếp cận. Bạn có hai kịch bản trên kho ngữ liệu NotkaApp. Kịch bản A: kho ngữ liệu nhỏ (khoảng hơn chục đoạn) và yêu cầu rằng KHÔNG đoạn liên quan nào được bỏ sót khi kiểm tra độ bao phủ. Kịch bản B: kho ngữ liệu tính bằng hàng triệu đoạn, nơi điều quan trọng nhất là tốc độ phản hồi." },
+        { "kind": "paragraph", "text": "Hãy suy nghĩ: khi nào bạn có thể duyệt qua toàn bộ vector (chính xác, nhưng chậm hơn), và khi nào bạn buộc phải đi đường tắt qua chỉ mục (nhanh hơn, nhưng có nguy cơ bỏ sót)? Lát nữa chúng ta sẽ phân tích sự đánh đổi này thành từng yếu tố." }
+      ]
+    },
+    {
+      "id": "s4-exact-vs-ann",
+      "title": "Exact vs ANN — sự đánh đổi",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Tìm kiếm chính xác", "original": "exact / brute force", "text": "duyệt qua toàn bộ vector trong cơ sở dữ liệu và trả về những vector thực sự gần nhất — chính xác, nhưng chậm; đáng dùng khi kho ngữ liệu nhỏ." },
+        { "kind": "definition", "term": "ANN", "original": "approximate nearest neighbor", "text": "tìm kiếm láng giềng gần nhất xấp xỉ; sử dụng chỉ mục để tìm kiếm nhanh hơn, đổi lại có nguy cơ bỏ sót một phần kết quả liên quan." },
+        { "kind": "paragraph", "text": "Chúng ta đánh giá chất lượng retrieval bằng một cặp thước đo. Recall (độ đầy đủ của các kết quả trúng) cho biết trong số tất cả các đoạn liên quan, có bao nhiêu đoạn thực sự được trả về. Precision (độ tinh khiết của các kết quả trúng) cho biết bao nhiêu phần trong số các đoạn được trả về là thực sự liên quan. Hai thước đo này thường đi ngược chiều nhau: bạn mở rộng kết quả — recall tăng, precision giảm." },
+        { "kind": "table", "title": "Exact vs ANN", "caption": "So sánh các cách tiếp cận.", "headers": ["Đặc điểm", "Exact (brute force)", "ANN (có chỉ mục)"], "rows": [["Làm gì", "duyệt qua toàn bộ vector", "tìm kiếm theo đường tắt qua chỉ mục"], ["Độ chính xác", "đầy đủ — không bỏ sót gì", "xấp xỉ — có thể bỏ sót kết quả liên quan"], ["Tốc độ", "chậm, tăng theo kho ngữ liệu", "nhanh, mở rộng được cho các tập lớn"], ["Khi nào dùng", "kho ngữ liệu nhỏ, yêu cầu độ liên quan đầy đủ", "kho ngữ liệu lớn, điều quan trọng là thời gian phản hồi"]], "textAlt": "Bảng so sánh hai cách tiếp cận trên bốn chiều. Exact (brute force) duyệt qua toàn bộ vector, cho độ chính xác đầy đủ (không bỏ sót gì), chậm và tăng theo kích thước kho ngữ liệu; dùng khi kho ngữ liệu nhỏ và yêu cầu độ liên quan đầy đủ. ANN tìm kiếm theo đường tắt qua chỉ mục, cho kết quả xấp xỉ (có thể bỏ sót kết quả liên quan), nhanh và mở rộng được cho các tập lớn; dùng khi kho ngữ liệu lớn, khi thời gian phản hồi là quan trọng." }
+      ]
+    },
+    {
+      "id": "s5-indeks",
+      "title": "Chỉ mục và ảnh hưởng của nó",
+      "type": "content",
+      "hideForPaths": ["S1", "S2"],
+      "blocks": [
+        { "kind": "definition", "term": "Chỉ mục", "original": "index", "text": "cấu trúc dữ liệu tăng tốc ANN; các tham số của nó dịch chuyển điểm cân bằng giữa recall với tốc độ và precision." },
+        { "kind": "paragraph", "text": "Không cần toán học: một chỉ mục quyết liệt (đặt nặng tốc độ) chỉ tìm kiếm trong một lát cắt nhỏ hơn của không gian vector, nên đôi khi nó bỏ sót một đoạn liên quan, dù đoạn đó tồn tại trong cơ sở dữ liệu. Một chỉ mục dịu hơn tìm kiếm nhiều hơn — chậm hơn, nhưng hiếm khi bỏ sót điều gì." },
+        { "kind": "callout", "variant": "warn", "title": "Bẫy chẩn đoán", "text": "\"Không tìm thấy gì\" hoặc \"thiếu một tài liệu liên quan đã biết\" thường là lỗi do thiết lập chỉ mục, chứ không phải do dữ liệu. Trước khi kết luận rằng đoạn đó không có trong kho ngữ liệu, hãy kiểm tra xem ANN có đơn giản là đã bỏ sót nó hay không." }
+      ]
+    },
+    {
+      "id": "s6-metadane",
+      "title": "Lọc theo metadata",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Lọc theo metadata", "original": "metadata filtering", "text": "thu hẹp tập ứng viên theo các thuộc tính của đoạn (ví dụ loại_tài_liệu, mô-đun, phiên bản) trước hoặc sau khi tính độ tương đồng." },
+        { "kind": "paragraph", "text": "Bộ lọc metadata là một đòn bẩy mạnh cho độ chính xác. Bằng cách chỉ cho qua những đoạn phù hợp (ví dụ loại_tài_liệu = yêu_cầu), bạn lọc bỏ nhiễu — precision tăng. Nhưng lưu ý: một bộ lọc quá gắt có thể cắt bỏ một đoạn liên quan thuộc loại khác, nên recall giảm." },
+        { "kind": "callout", "variant": "warn", "title": "Ví dụ trên NotkaApp", "text": "DOC3 liên quan (đặt lại mật khẩu) có loại_tài_liệu = ca_kiểm_thử. Nếu bạn bật bộ lọc \"chỉ yêu_cầu\", DOC3 sẽ biến mất khỏi kết quả — bộ lọc đã nâng precision, nhưng làm mất đoạn đúng (recall giảm)." }
+      ]
+    },
+    {
+      "id": "s7-chunki",
+      "title": "Chất lượng chunk",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Chunk", "original": "chunk", "text": "một đoạn của tài liệu được lập chỉ mục như một đơn vị và được chuyển thành một vector." },
+        { "kind": "paragraph", "text": "Ranh giới của chunk quyết định ý nghĩa của vector. Ranh giới tồi — một câu bị cắt ngang chừng hoặc một mớ ghép của hai yêu cầu khác nhau — cho ra một vector có ý nghĩa mờ nhòe, và hậu quả là một kết quả tương đồng nhưng vô dụng. Chunk quá lớn trộn lẫn nhiều chủ đề; chunk quá nhỏ làm mất ngữ cảnh cần thiết để hiểu đoạn đó." },
+        { "kind": "paragraph", "text": "Điều này liên hệ trực tiếp đến chẩn đoán \"tương đồng nhưng vô dụng\": một đoạn có thể có độ tương đồng cao, mà vẫn không dùng được làm câu trả lời — vì nó bị cắt cụt hoặc nói về một chủ đề lân cận. Tương đồng không phải là độ liên quan." }
+      ]
+    },
+    {
+      "id": "s8-diagnoza",
+      "title": "Tương đồng nhưng vô dụng — chẩn đoán",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Bài tập chẩn đoán nhỏ (không tính điểm, để khởi động trước khi dùng trình gỡ lỗi). Truy vấn tới kho ngữ liệu NotkaApp là: \"sau bao lâu thì liên kết đặt lại mật khẩu hết hạn?\". Retrieval đã trả về ba đoạn với độ tương đồng cao, nhưng chỉ một đoạn là hữu dụng." },
+        { "kind": "list", "ordered": true, "items": [
+          "DOC1 (token phiên hết hạn sau 30 phút không hoạt động) — độ tương đồng rất cao: các từ \"30 phút\" và \"hết hạn\" trùng lặp, nhưng đây là chủ đề khác (phiên, không phải đặt lại). Tương đồng, nhưng không liên quan.",
+          "DOC3 (đặt lại mật khẩu: liên kết e-mail có hiệu lực 30 phút, dùng một lần) — đây là nguồn đúng cho câu trả lời.",
+          "DOC4 (FAQ tiếp thị: ưu điểm và bảng giá) — lọt vào kết quả như là nhiễu chủ đề; vô dụng."
+        ] },
+        { "kind": "paragraph", "text": "Trước khi với tay tới núm vặn đầu tiên, hãy gọi tên nguyên nhân của sự không liên quan: ranh giới chunk tồi, thiếu bộ lọc metadata để lọc bỏ tiếp thị, ANN bỏ sót một đoạn tốt hơn, hay đơn giản là nhầm lẫn tương đồng với độ liên quan. Trên màn hình tương tác, bạn sẽ kiểm tra xem việc hiệu chỉnh nào thực sự giúp ích." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "tune",
+    "id": "m5-retrieval-debugger",
+    "title": "Retrieval debugger",
+    "intro": "Hãy chọn các tham số retrieval cho truy vấn \"sau bao lâu thì liên kết đặt lại mật khẩu hết hạn?\" trên kho ngữ liệu NotkaApp (DOC1 phiên, DOC2 chính sách mật khẩu, DOC3 đặt lại mật khẩu — liên quan, DOC4 FAQ tiếp thị). Hãy quan sát tập các đoạn được trả về cùng cặp recall/precision thay đổi như thế nào, rồi trả lời checkpoint.",
+    "outputLabel": "Kết quả retrieval mô phỏng cho các thiết lập đã chọn (các đoạn được trả về + recall/precision):",
+    "controls": [
+      { "id": "topk", "label": "top-k (số đoạn được trả về)", "levels": [
+        { "value": "2", "label": "Thấp (2)", "effect": "Chỉ 2 đoạn tương đồng nhất được trả về: DOC1 (phiên) và DOC3 (đặt lại). Precision tạm ổn, nhưng recall mong manh — nếu DOC3 liên quan bị tụt hạng, nó sẽ rớt khỏi top 2 và kết quả sẽ rỗng." },
+        { "value": "6", "label": "Cao (6)", "effect": "Gần như tất cả các đoạn được trả về, bao gồm cả DOC3 liên quan — recall cao hơn. Nhưng vào kết quả còn có cả DOC1 (phiên) tương đồng-nhưng-vô-dụng cùng DOC4 tiếp thị — precision thấp hơn, nhiều nhiễu hơn để lọc bỏ." }
+      ] },
+      { "id": "prog", "label": "Ngưỡng tương đồng (similarity threshold)", "levels": [
+        { "value": "low", "label": "Thấp (lỏng)", "effect": "Cho qua cả những đoạn có độ tương đồng yếu — recall cao, nhưng precision thấp: nhiễu lọt vào kết quả (ví dụ DOC4 tiếp thị)." },
+        { "value": "high", "label": "Cao (gắt)", "effect": "Chỉ cho vào những đoạn có độ tương đồng cao. Lưu ý: DOC1 (phiên) tương đồng-nhưng-không-liên-quan có điểm cao, nên ngưỡng KHÔNG loại bỏ nó — bù lại có nguy cơ cắt mất DOC3 liên quan, nếu điểm của nó thấp hơn (recall giảm)." }
+      ] },
+      { "id": "filtr", "label": "Bộ lọc metadata (loại_tài_liệu)", "levels": [
+        { "value": "off", "label": "Tắt", "effect": "Không có bộ lọc — trong tập vẫn còn tất cả các loại, kể cả DOC4 tiếp thị và các đoạn về chủ đề lân cận. Precision thấp hơn." },
+        { "value": "topic", "label": "Bật: cho phép tài liệu sản phẩm, cắt bỏ tiếp thị", "effect": "Bộ lọc lọc bỏ DOC4 tiếp thị và thu hẹp tập về tài liệu sản phẩm — nhắm vào chủ đề \"đặt lại/tài khoản\". Precision tăng, và DOC3 liên quan vẫn nằm trong kết quả. Đây là đòn bẩy loại bỏ nhiễu tương đồng-nhưng-không-liên-quan mà không làm mất đoạn đúng — với điều kiện bộ lọc không quá hẹp (bộ lọc quá gắt sẽ cắt mất DOC3)." }
+      ] }
+    ],
+    "checkpoint": {
+      "prompt": "Similarity search đã trả về DOC1 (token phiên hết hạn sau 30 phút) ở đầu danh sách — một đoạn tương đồng với truy vấn về đặt lại mật khẩu, nhưng vô dụng vì nó nói về phiên. DOC1 có độ tương đồng CAO. Bạn sẽ thay đổi điều gì trước tiên để cải thiện độ chính xác của kết quả?",
+      "type": "single_choice",
+      "options": [
+        { "id": "A", "text": "Bật bộ lọc metadata nhắm vào chủ đề (tài liệu về đặt lại/tài khoản, cắt bỏ các chủ đề lân cận) — đây là tín hiệu trực giao với độ tương đồng, nên nó lọc bỏ DOC1 tương đồng-cao-nhưng-không-liên-quan, mà không động đến DOC3 liên quan." },
+        { "id": "B", "text": "Nâng ngưỡng tương đồng lên một giá trị rất cao — vì DOC1 không liên quan, chỉ cần cắt bỏ các kết quả yếu hơn là đủ." },
+        { "id": "C", "text": "Hạ top-k xuống 1 — khi đó chỉ đoạn tương đồng nhất được trả về và nhiễu sẽ biến mất." },
+        { "id": "D", "text": "Coi DOC1 là câu trả lời đúng, vì nó có độ tương đồng cao nhất với truy vấn." }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Đúng rồi. DOC1 không liên quan mặc dù có độ tương đồng cao, nên các đòn bẩy chỉ dựa vào chính điểm tương đồng sẽ thất bại. Bộ lọc metadata là một tín hiệu trực giao — nó cắt bỏ các chủ đề lân cận (phiên, tiếp thị) bất kể chúng \"tương đồng\" đến đâu.",
+      "feedbackIncorrect": "Bẫy: DOC1 có độ tương đồng CAO, nên nâng ngưỡng sẽ không loại bỏ được nó (và còn có nguy cơ cắt mất DOC3 liên quan → recall giảm), còn top-k=1 sẽ để chính đoạn không liên quan này ở đầu danh sách. Tương đồng không phải là độ liên quan — hãy lọc bỏ chủ đề lân cận bằng bộ lọc metadata (tín hiệu trực giao). Hãy ôn lại màn hình về lọc theo metadata."
+    }
+  },
+  "summary": {
+    "points": [
+      "Cơ sở dữ liệu vector quyết định retrieval đã tìm được GÌ: nó lưu trữ các embedding và trả về các vector gần nhất so với truy vấn (tìm kiếm ngữ nghĩa).",
+      "Exact vs ANN là một sự đánh đổi: chính xác và chậm (kho ngữ liệu nhỏ, độ liên quan đầy đủ) so với nhanh nhưng có nguy cơ bỏ sót (kho ngữ liệu lớn).",
+      "Chỉ mục, bộ lọc metadata, chất lượng chunk và ngưỡng tương đồng điều khiển cặp recall/precision — đó là các đòn bẩy để chẩn đoán retrieval.",
+      "Tương đồng không có nghĩa là hữu dụng: một đoạn có độ tương đồng cao đôi khi không liên quan — bạn lọc bỏ nó bằng tín hiệu trực giao (bộ lọc metadata), chứ không bằng riêng ngưỡng."
+    ],
+    "checklist": [
+      "Các đoạn được trả về có thực sự liên quan, hay chỉ tương đồng về mặt từ ngữ?",
+      "Kết quả rỗng hoặc nghèo nàn là lỗi do chỉ mục, bộ lọc hay ngưỡng, chứ không phải do thiếu dữ liệu?",
+      "Bộ lọc metadata của tôi có quá gắt và đã cắt mất một đoạn liên quan hay không (recall)?"
+    ],
+    "checklistTitle": "Danh sách kiểm tra — chẩn đoán retrieval",
+    "nextStep": "Bước tiếp theo: M6 — RAG: cách xây dựng câu trả lời có trích dẫn và nguồn từ một retrieval tốt."
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "_meta": {
+    "issue": "#122 [M16] Separazione della diagnosi della Skala Holaka — dimensione PERSONALE (v2.1p)",
+    "adr": "docs/adr/0008-modul-skali-holaka-msh.md",
+    "interaction": "Self-check della maturità personale (kind: maturity-check) — NON-gating, framing neutro",
+    "source": "Modello di maturità nell'adozione dell'AI «Skala Holaka»: dimensione personale v2.1p (persona, 0–11). Attribuzione: quality-blog.eu/pl/blog/skala-holaka-private.",
+    "dataPolicy": "TUTTE le frasi del self-check sono SINTETICHE e generiche (zero dati reali/PII). Diagnosi orientativa — NON è possibile «bocciarla». L'euristica di punteggio è semplificata (numero di selezioni → livello 0–11) e va verificata da un esperto di dominio (SME)."
+  },
+  "module": "MSHP",
+  "intro": "La Skala Holaka nella dimensione personale (v2.1p) aiuta a dare un nome alla maturità della tua pratica di lavoro con l'AI — dove sei oggi e qual è il vero passo successivo. È un'autodiagnosi, non un test: non c'è un esito «superato/bocciato», ma un livello orientativo 0–11 e un'indicazione su come salire più in alto. Puoi svolgerla indipendentemente dalla diagnosi dell'organizzazione (MSHO).",
+  "screens": [
+    {
+      "id": "mshp-s1-czym-jest",
+      "title": "Che cos'è la Skala Holaka personale",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "La versione personale (v2.1p) descrive la maturità del tuo metodo di lavoro con l'AI su 12 livelli (0–11) — dai primi utilizzi fino a una pratica consapevole, misurata e in continuo miglioramento. Aiuta a evitare due trappole: «uso l'AI, quindi sono maturo» e «è solo un giocattolo»." },
+        { "kind": "list", "items": [
+          "Valuti esclusivamente la TUA pratica — a prescindere da quanto sia matura l'organizzazione.",
+          "Conta COME usi l'AI (contesto, verifica, reversibilità), non il numero di strumenti.",
+          "La diagnosi dell'organizzazione (Skala Holaka v2.1e) la svolgi separatamente nel modulo MSHO."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Da dove viene il nome e chi sta dietro al modello", "text": "La Skala Holaka è stata ideata da Grzegorz Holak con il supporto di Konrad Gomulski — da qui il nome. Entrambi sono Senior Test Development Engineer presso Sii Polska e membri della SJSI, oltre che cofondatori di quality-blog.eu; Grzegorz Holak è inoltre Test Architect e AI Ambassador in SCIB. La usiamo come strumento di autoriflessione, non di certificazione.",
+          "links": [
+            { "label": "Skala Holaka — dimensione personale (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka-private" },
+            { "label": "Skala Holaka — dimensione organizzativa (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mshp-s2-osie-i-granice",
+      "title": "Come riconoscere il livello: assi e due soglie",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "I livelli più alti non li riconosci dal numero di strumenti, ma dalle abitudini (dal livello ~4 in su): formulare il prompt in modo consapevole, gestire il contesto e il costo, verificare le risposte critiche rispetto alla fonte, progettare il lavoro in modo che le decisioni siano reversibili e misurare l'impatto reale dell'AI sulla tua qualità e sul tuo tempo." },
+        { "kind": "list", "items": [
+          "Barriera — l'abitudine la cui assenza blocca il passaggio più in alto.",
+          "Successo — ciò che funziona davvero quando il livello è raggiunto.",
+          "Trappola — il falso senso di maturità che fa arretrare la crescita."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Due soglie critiche (personali)", "text": "Soglia 8→9: dall'«utente esperto» al progettare il lavoro in modo che le decisioni supportate dall'AI siano verificabili e reversibili, e al condividere le pratiche. Soglia 10→11: dalla routine al misurare il proprio impatto dell'AI e al miglioramento continuo del metodo." }
+      ]
+    },
+    {
+      "id": "mshp-s3-jak-czytac",
+      "title": "Come leggere il tuo risultato",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Tra poco selezionerai le frasi vere oggi per la tua pratica personale. Il numero di selezioni dà un livello orientativo 0–11 e un'indicazione «dove sei / come salire più in alto». Seleziona onestamente solo ciò che fai davvero ogni giorno." },
+        { "kind": "callout", "variant": "safe", "title": "È una diagnosi, non una valutazione", "text": "Non ci sono risposte giuste o sbagliate né una soglia di superamento. Il risultato non incide sul completamento del percorso né su alcun test — è uno specchio, non un esame." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "maturity-check",
+    "id": "mshp-selfcheck",
+    "title": "Skala Holaka v2.1p — autodiagnosi della maturità personale",
+    "intro": "Seleziona le frasi vere oggi per la tua pratica personale di lavoro con l'AI. Dopo la verifica vedrai un livello orientativo 0–11 e il passo successivo — senza giudizi pass/fail.",
+    "scales": [
+      {
+        "id": "person",
+        "label": "Persona (Skala Holaka v2.1p)",
+        "intro": "Quanto è matura la tua pratica personale di lavoro con l'AI? Seleziona ciò che fai ogni giorno.",
+        "max": 11,
+        "statements": [
+          { "id": "per-1", "text": "Uso l'AI per compiti concreti e ripetibili." },
+          { "id": "per-2", "text": "Formulo il prompt in modo consapevole: ruolo, obiettivo, contesto, formato dell'output." },
+          { "id": "per-3", "text": "Riconosco che l'output può essere errato pur avendo una forma credibile." },
+          { "id": "per-4", "text": "Verifico le risposte critiche rispetto alla fonte prima di usarle." },
+          { "id": "per-5", "text": "Scelgo lo strumento/modello adatto al compito, non ne uso uno solo per tutto." },
+          { "id": "per-6", "text": "Gestisco il contesto: fornisco solo ciò che serve e tengo d'occhio il costo." },
+          { "id": "per-7", "text": "So quando NON usare l'AI: mancanza di dati, rischio elevato, irreversibilità." },
+          { "id": "per-8", "text": "Progetto il lavoro in modo che le decisioni supportate dall'AI siano reversibili e verificabili." },
+          { "id": "per-9", "text": "Condivido le pratiche e, insieme agli altri, calibro la valutazione dell'output." },
+          { "id": "per-10", "text": "Misuro l'impatto reale dell'AI sulla mia qualità e sul mio tempo e correggo l'approccio." },
+          { "id": "per-11", "text": "Considero il lavoro con l'AI come un miglioramento continuo del mio metodo." }
+        ],
+        "bands": [
+          { "min": 0, "max": 2, "label": "Livello 0–2: Primi utilizzi", "advice": "Barriera: trattare l'AI come un oracolo. Passo successivo: inizia a formulare il prompt in modo consapevole e a verificare ogni risposta che intendi usare." },
+          { "min": 3, "max": 5, "label": "Livello 3–5: Utente consapevole", "advice": "Successo: verifichi l'output e scegli lo strumento adatto al compito. Passo successivo: impara a gestire il contesto e il costo e a riconoscere quando NON usare l'AI." },
+          { "min": 6, "max": 8, "label": "Livello 6–8: Professionista", "advice": "Successo: conosci i limiti e gestisci il contesto. Soglia 8→9: progetta il lavoro in modo che le decisioni siano reversibili e verificabili, e condividi le pratiche con il team." },
+          { "min": 9, "max": 11, "label": "Livello 9–11: Padronanza del metodo", "advice": "Trappola: la routine senza misurazione né riflessione. Soglia 10→11: misura l'impatto reale dell'AI sul tuo lavoro e considera il metodo come un miglioramento continuo." }
+        ]
+      }
+    ]
+  },
+  "summary": {
+    "points": [
+      "La Skala Holaka v2.1p misura COME usi l'AI (contesto, verificabilità, reversibilità), non il numero di strumenti.",
+      "Valuti esclusivamente la tua pratica personale — l'organizzazione la diagnostichi separatamente (MSHO).",
+      "È una diagnosi orientativa: senza pass/fail, senza incidere sul completamento — serve a indicare il passo successivo."
+    ],
+    "checklist": [
+      "Hai dato un nome al tuo livello personale orientativo (0–11)?",
+      "Sai qual è la barriera più vicina da superare?",
+      "Conosci un passo successivo concreto per salire più in alto?"
+    ],
+    "checklistTitle": "Checklist — dopo l'autodiagnosi personale",
+    "nextStep": "Passo successivo: scegli una barriera del livello superiore e pianifica un piccolo esperimento reversibile nel tuo lavoro."
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "_meta": {
+    "issue": "#124 [M16] Ścieżka formatywna S4 — skille i mierzenie wpływu (moduł szkoleniowy, interakcja rubric)",
+    "adr": "docs/adr/0009-sciezka-formatywna-s4-skala-holaka.md",
+    "interaction": "Ocena dojrzałości workflow wg rubryki (kind: rubric) — ćwiczenie formatywne, NIE scorowane do zaliczenia (bez rubricId/progu)",
+    "source": "Skala Holaka — dwie krytyczne granice dojrzałości: 8→9 i 10→11; skille i mierzenie wpływu. Atrybucja: quality-blog.eu/pl/blog/skala-holaka.",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE i ogólne (zero realnych danych/PII). Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MSK4",
+  "intro": "Lo más difícil no son los primeros niveles, sino dos fronteras: 8→9 (de la buena práctica individual a integrar la IA en el proceso) y 10→11 (de las mejoras puntuales a la mejora continua). La prueba de madurez es un workflow concreto y repetible (skill): si tiene contexto estable, verificación, reversibilidad e impacto medido. Este módulo enseña a evaluar la madurez de un skill según una rúbrica. Es un ejercicio de desarrollo, no un examen.",
+  "screens": [
+    {
+      "id": "msk4-s1-dwie-granice",
+      "title": "Dos fronteras en las que se estanca el progreso",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Muchas personas y equipos se detienen justo antes del nivel 9 o el 11. La frontera 8→9 es el momento en que la buena práctica de una persona pasa a formar parte del proceso: reparto claro entre asistente y decisor, reversibilidad y rastro de auditoría. La frontera 10→11 es el momento en que las mejoras se convierten en una rutina de medición, calibración y mejora continua." },
+        { "kind": "list", "items": [
+          "8→9: práctica individual → proceso con control y rastro.",
+          "10→11: mejoras puntuales → sistema medido y calibrado de forma continua.",
+          "En ambas fronteras la clave no es una nueva herramienta, sino un nuevo hábito de trabajo."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Skala Holaka", "text": "Las fronteras 8→9 y 10→11 son los puntos de estancamiento más frecuentes en la adopción de la IA.",
+          "links": [ { "label": "Skala Holaka — modelo de madurez (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka" } ]
+        }
+      ]
+    },
+    {
+      "id": "msk4-s2-skill-jako-probka",
+      "title": "El skill como muestra de madurez",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "La madurez se ve mejor en un workflow concreto y repetible (skill). Un skill inmaduro es un «prompt improvisado»: contexto cambiante, sin verificación, sin rastro, con el éxito medido por la impresión. Un skill maduro tiene contexto y formato estables, un paso de verificación explícito, reversibilidad con rastro e impacto medido en la calidad y el tiempo." },
+        { "kind": "callout", "variant": "warn", "title": "Señal de estancamiento", "text": "Si usas la IA con soltura pero no mides su impacto ni calibras la evaluación del output, probablemente estás en el 10, no en el 11." }
+      ]
+    },
+    {
+      "id": "msk4-s3-jak-cwiczyc",
+      "title": "Cómo practicarlo",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "A continuación evaluarás la madurez de un skill de ejemplo según cuatro criterios. Marca en cada criterio aquellas características que evidencian madurez — marcarlo todo (incluidos los distractores) no supera el criterio. Sin umbral de aprobado: el feedback muestra qué falta para alcanzar un nivel superior." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "rubric",
+    "id": "msk4-rubric",
+    "title": "Evalúa la madurez de un workflow de IA (skill)",
+    "intro": "Para cada criterio marca las características que evidencian la madurez del skill. Es un ejercicio de desarrollo — sin umbral de aprobado; el feedback indica qué falta.",
+    "criteria": [
+      {
+        "id": "K1",
+        "name": "Contexto y repetibilidad",
+        "prompt": "¿Qué evidencia una gestión madura del contexto en este skill?",
+        "hint": "La madurez es un contexto estable y seleccionado, no describirlo desde cero cada vez.",
+        "options": [
+          { "id": "a", "text": "Contexto y formato de salida estables y bien pensados." },
+          { "id": "b", "text": "Contexto descrito desde cero, con otras palabras, cada vez." },
+          { "id": "c", "text": "Selección únicamente de los datos relevantes para la tarea." }
+        ],
+        "correctOptionIds": ["a", "c"]
+      },
+      {
+        "id": "K2",
+        "name": "Verificabilidad",
+        "prompt": "¿Qué hace que un skill sea verificable antes de usar el resultado?",
+        "hint": "El tono seguro del modelo no es prueba — hace falta un paso de comprobación explícito.",
+        "options": [
+          { "id": "a", "text": "Un paso explícito de comprobación del output frente a la fuente." },
+          { "id": "b", "text": "Confiar en el tono seguro de la respuesta del modelo." }
+        ],
+        "correctOptionIds": ["a"]
+      },
+      {
+        "id": "K3",
+        "name": "Reversibilidad y rastro",
+        "prompt": "¿Qué hace que las decisiones apoyadas por un skill sean seguras?",
+        "hint": "Frontera 8→9: control y rastro en lugar de acciones irreversibles sin aprobación.",
+        "options": [
+          { "id": "a", "text": "Las acciones dejan rastro y se pueden deshacer." },
+          { "id": "b", "text": "Decisiones irreversibles ejecutadas sin aprobación humana." }
+        ],
+        "correctOptionIds": ["a"]
+      },
+      {
+        "id": "K4",
+        "name": "Medición del impacto",
+        "prompt": "¿Qué distingue el nivel 11 (mejora continua) del mero uso de la IA?",
+        "hint": "Frontera 10→11: impacto medido y calibración, no el simple hecho de usarla.",
+        "options": [
+          { "id": "a", "text": "Impacto medido en la calidad y el tiempo, y corrección del enfoque." },
+          { "id": "b", "text": "Lo que cuenta es el simple hecho de que usamos IA." },
+          { "id": "c", "text": "Calibración regular de la evaluación del output." }
+        ],
+        "correctOptionIds": ["a", "c"]
+      }
+    ]
+  },
+  "summary": {
+    "points": [
+      "La madurez se ve en un skill concreto: contexto estable, verificación, reversibilidad con rastro, impacto medido.",
+      "Frontera 8→9: convierte la práctica individual en un proceso con control y rastro.",
+      "Frontera 10→11: convierte las mejoras en una rutina de medición, calibración y mejora continua."
+    ],
+    "checklist": [
+      "¿Mi skill más frecuente tiene contexto y formato de salida estables?",
+      "¿Tiene un paso de verificación explícito y deja rastro?",
+      "¿Mido su impacto en la calidad y el tiempo, o solo lo uso?"
+    ],
+    "checklistTitle": "Lista de comprobación — madurez del skill",
+    "nextStep": "Siguiente paso: toma uno de tus skills y añade el criterio que falta con la peor valoración — con frecuencia es el paso de verificación o la medición del impacto."
+  }
+}

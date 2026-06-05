@@ -1,0 +1,500 @@
+{
+  "_meta": {
+    "issue": "#23 [23][M4] Wdroż moduł M6 RAG",
+    "storyboard": "docs/storyboard/m06-rag.md",
+    "interaction": "Zbuduj pipeline RAG (kind: rubric, zadanie praktyczne R2-rag, warunek konieczny S3, próg 70% = 3.5/5)",
+    "scenario": "SC-RAG-01 (mini-korpus dokumentacji QA, korpus SklepDemo/NotkaApp)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (SklepDemo, NotkaApp, fikcyjne wymagania WYM-koszyk/WYM-zwroty). ZERO realnych danych klienta/PII.",
+    "note": "Wariant S1 ŚWIADOMOŚCIOWY: ekrany techniczne (chunking, ćwiczenia, pogłębienie inżynierskie) skrócone/pominięte przez onlyForPaths/hideForPaths. S2 PRAKTYCZNY i S3 PEŁNY: pełny przebieg. Treść rozróżnia błąd retrieval/generation/źródłowy oraz RAG vs fine-tuning (E3, E4)."
+  },
+  "module": "M6",
+  "intro": "LLM không có quyền truy cập tài liệu nội bộ của công ty sẽ bịa ra các chi tiết yêu cầu. RAG (tiếng Anh: Retrieval-Augmented Generation) cho phép mô hình tìm kiếm trong tài liệu của bạn và trả lời dựa trên chúng, kèm trích dẫn. Trong module này bạn sẽ dựng pipeline RAG, lựa chọn cách chunking, phân biệt RAG với việc tinh chỉnh mô hình và học cách nhận diện ba tầng lỗi.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Tại sao tester cần RAG",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Mô hình ngôn ngữ không biết đặc tả nội bộ của công ty bạn. Khi được hỏi về một chi tiết yêu cầu, nó thường bịa ra một câu trả lời nghe có vẻ hợp lý nhưng không đúng sự thật. RAG (tiếng Anh: Retrieval-Augmented Generation) là cách tiếp cận “hãy để mô hình tìm kiếm trong tài liệu của chúng ta và trả lời dựa trên chúng”."
+        },
+        {
+          "kind": "paragraph",
+          "text": "Đối với QA, điều này mang lại lợi ích cụ thể: câu trả lời về các yêu cầu hiện hành, hỗ trợ viết ca kiểm thử có tham chiếu đến đặc tả, tìm nhanh tiêu chí chấp nhận — luôn kèm trích dẫn tới nguồn có thể kiểm chứng được."
+        },
+        {
+          "kind": "callout",
+          "variant": "info",
+          "onlyForPaths": [
+            "S1"
+          ],
+          "title": "Khi nào nên nghĩ tới RAG",
+          "text": "Nếu các câu hỏi liên quan đến tài liệu hay thay đổi của bạn và câu trả lời phải chỉ ra nguồn — thì đó là trường hợp dành cho RAG. Phần còn lại của module sẽ chỉ ra cách nó hoạt động từng bước một."
+        },
+        {
+          "kind": "list",
+          "hideForPaths": [
+            "S1"
+          ],
+          "items": [
+            "E1 — bạn sẽ sắp xếp các bước của pipeline RAG theo đúng thứ tự.",
+            "E2 — bạn sẽ chọn chiến lược chia tài liệu thành các đoạn (chunking).",
+            "E3 — bạn sẽ phân biệt trường hợp dành cho RAG với trường hợp dành cho việc tinh chỉnh mô hình (fine-tuning).",
+            "E4 — bạn sẽ nhận diện lỗi tìm kiếm, lỗi sinh nội dung và lỗi nguồn."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s2-pipeline",
+      "title": "Pipeline RAG từ đầu đến cuối",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Toàn bộ quy trình trên một màn hình. Pha xây dựng chỉ mục (offline) chuẩn bị tài liệu, pha truy vấn (online) xử lý câu hỏi của người dùng. Nguyên tắc then chốt: câu trả lời phải được neo (tiếng Anh: grounding) vào các nguồn đã truy xuất, chứ không phải vào trí nhớ của mô hình."
+        },
+        {
+          "kind": "list",
+          "ordered": true,
+          "items": [
+            "Các tài liệu nguồn của kho ngữ liệu “SklepDemo” được đưa vào đầu vào.",
+            "Chia thành các đoạn (tiếng Anh: chunking) — tài liệu được cắt thành những mẩu nhỏ, mạch lạc.",
+            "Vector nhúng (tiếng Anh: embeddings) — mỗi đoạn nhận được một biểu diễn vector của ý nghĩa.",
+            "Chỉ mục / cơ sở dữ liệu vector — các đoạn, vector nhúng và metadata được lưu lại để tìm kiếm.",
+            "Câu hỏi của người dùng — ví dụ “Tiêu chí chấp nhận cho giới hạn số mục trong giỏ hàng là gì?”.",
+            "Tìm kiếm (tiếng Anh: retrieval, top-k) — chỉ mục trả về những đoạn gần nhất.",
+            "Sắp xếp lại (tiếng Anh: reranking) — bước tùy chọn cải thiện độ phù hợp của top-k.",
+            "Chèn ngữ cảnh đã truy xuất vào prompt.",
+            "Sinh câu trả lời kèm trích dẫn (tiếng Anh: citations) chỉ ra đoạn nguồn."
+          ]
+        },
+        {
+          "kind": "diagram",
+          "title": "Sơ đồ pipeline RAG",
+          "caption": "Pha chỉ mục (offline) và pha truy vấn (online).",
+          "textAlt": "Pha chỉ mục (offline): tài liệu nguồn → chunking → embeddings → chỉ mục/cơ sở dữ liệu vector. Pha truy vấn (online): câu hỏi của người dùng → retrieval (top-k) từ chỉ mục → (tùy chọn) reranking → chèn ngữ cảnh vào prompt → sinh câu trả lời kèm trích dẫn. Chỉ mục nối hai pha lại với nhau: nó được tạo offline và được truy vấn online.",
+          "onlyForPaths": [
+            "S2",
+            "S3"
+          ]
+        },
+        {
+          "kind": "diagram",
+          "title": "Sơ đồ tổng quan RAG",
+          "caption": "Phiên bản đơn giản hóa.",
+          "textAlt": "Tài liệu → chỉ mục → tìm các đoạn khớp với câu hỏi → câu trả lời kèm trích dẫn dựa trên các đoạn đó.",
+          "onlyForPaths": [
+            "S1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s3-kolejnosc",
+      "title": "Thứ tự các bước rất quan trọng",
+      "type": "content",
+      "onlyForPaths": [
+        "S2",
+        "S3"
+      ],
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Thứ tự không tùy tiện — nó bị ràng buộc bởi sự phụ thuộc dữ liệu. Chunking phải đứng trước embeddings, vì embeddings được tính cho các đoạn đã tồn tại. Chỉ mục được tạo trước retrieval, vì không thể tìm kiếm thứ gì đó chưa được lưu. Retrieval phải đứng trước sinh nội dung, vì nó cung cấp ngữ cảnh cho quá trình sinh."
+        },
+        {
+          "kind": "callout",
+          "variant": "info",
+          "title": "Hai pha",
+          "text": "Pha chỉ mục (chunking → embeddings → chỉ mục) làm việc trên tài liệu và độc lập với câu hỏi — nó được thực hiện một lần, offline. Pha truy vấn (retrieval → reranking → sinh nội dung) chạy mỗi khi có câu hỏi."
+        },
+        {
+          "kind": "callout",
+          "variant": "warn",
+          "title": "Lỗi sắp xếp phổ biến nhất",
+          "text": "Nhầm lẫn thứ tự embeddings và chunking, hoặc đặt sinh nội dung trước retrieval. Sinh nội dung mà không có retrieval trước đó chỉ đơn giản là mô hình đoán mò từ trí nhớ — đúng là điều mà RAG cần tránh."
+        }
+      ]
+    },
+    {
+      "id": "s4-chunking",
+      "title": "Chunking cho tài liệu yêu cầu",
+      "type": "content",
+      "onlyForPaths": [
+        "S2",
+        "S3"
+      ],
+      "blocks": [
+        {
+          "kind": "definition",
+          "term": "Chunking",
+          "original": "chia thành các đoạn",
+          "text": "việc chia tài liệu thành những mẩu nhỏ, mạch lạc phù hợp để nhúng và tìm kiếm. Không thể nhồi cả tài liệu cùng một lúc — nó sẽ quá lớn và thiếu chính xác trong retrieval."
+        },
+        {
+          "kind": "list",
+          "items": [
+            "Kích thước đoạn — một mẩu chứa được bao nhiêu văn bản.",
+            "Chồng lấn (tiếng Anh: overlap) — các đoạn chồng lên nhau một phần, để nội dung ở ranh giới cắt không bị xé rời.",
+            "Ranh giới logic — một mục, một yêu cầu đơn lẻ hoặc một bước, thay vì cắt giữa câu."
+          ]
+        },
+        {
+          "kind": "callout",
+          "variant": "safe",
+          "title": "Quy tắc QA",
+          "text": "Một yêu cầu hoặc một kịch bản = một đoạn mạch lạc. Giữ lại tiêu đề và định danh (ví dụ “WYM-koszyk §3”) trong metadata — chính chúng biến trích dẫn thành thứ có thể kiểm chứng được."
+        },
+        {
+          "kind": "paragraph",
+          "text": "Hậu quả của chunking tồi trong tài liệu tổng hợp “SklepDemo — giỏ hàng”: việc cắt tùy tiện theo số ký tự cố định sẽ cắt đứt tiêu chí chấp nhận giữa chừng, và retrieval trả về đoạn không có kết luận. Overlap bảo vệ ranh giới; chia theo yêu cầu bảo vệ tính trọn vẹn."
+        }
+      ]
+    },
+    {
+      "id": "s5-dobierz-chunking",
+      "title": "Chọn chunking — quyết định nhanh",
+      "type": "decision",
+      "onlyForPaths": [
+        "S2",
+        "S3"
+      ],
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Một đoạn đặc tả “SklepDemo — giỏ hàng”: mỗi yêu cầu có một định danh (ví dụ “WYM-koszyk-014”) và tiêu chí chấp nhận riêng đôi khi dài tới vài câu. Trước đây, việc cắt cố định theo cùng một số ký tự đã cắt đứt tiêu chí giữa chừng. Nên chọn chiến lược nào?"
+        },
+        {
+          "kind": "list",
+          "items": [
+            "Theo từng yêu cầu đơn lẻ — một yêu cầu với định danh và tiêu chí đầy đủ = một đoạn, định danh nằm trong metadata. ĐÚNG.",
+            "Kích thước cố định không overlap, chỉ nhỏ hơn — cắt tiêu chí còn thường xuyên hơn.",
+            "Cả tài liệu thành một đoạn — phá hỏng độ phù hợp của retrieval, mô hình nhận quá nhiều nhiễu."
+          ]
+        },
+        {
+          "kind": "callout",
+          "variant": "safe",
+          "title": "Tại sao theo yêu cầu",
+          "text": "Ranh giới logic “một yêu cầu = một đoạn” giữ được tiêu chí trọn vẹn và nguồn trích dẫn rõ ràng — chính là điều đã thiếu khi cắt cố định. Đây là sự chuẩn bị cho các câu hỏi tình huống của module."
+        }
+      ]
+    },
+    {
+      "id": "s6-rag-vs-finetuning",
+      "title": "RAG hay fine-tuning",
+      "type": "decision",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Đây là sự phân biệt then chốt. RAG cung cấp cho mô hình kiến thức sự kiện mới mẻ, hay thay đổi và cho phép trích dẫn nó. Fine-tuning (tinh chỉnh) củng cố một phong cách, định dạng và hành vi cố định của mô hình — chứ không phải kiến thức sự kiện mới."
+        },
+        {
+          "kind": "table",
+          "title": "RAG so với fine-tuning",
+          "headers": [
+            "Chiều so sánh",
+            "RAG",
+            "Fine-tuning"
+          ],
+          "rows": [
+            [
+              "Để làm gì",
+              "Kiến thức sự kiện mới mẻ, hay thay đổi",
+              "Phong cách, định dạng, hành vi cố định"
+            ],
+            [
+              "Trích dẫn tới nguồn",
+              "Có — chỉ ra đoạn đã truy xuất",
+              "Không — kiến thức hòa vào trọng số mô hình"
+            ],
+            [
+              "Cập nhật",
+              "Thay tài liệu trong chỉ mục",
+              "Cần tinh chỉnh lại"
+            ],
+            [
+              "Trường hợp QA điển hình",
+              "“Câu trả lời phải trích dẫn đặc tả hiện hành”",
+              "“Báo cáo luôn theo bố cục các mục của chúng ta”"
+            ]
+          ],
+          "textAlt": "So sánh: RAG dùng cho kiến thức sự kiện mới mẻ, hay thay đổi, cho trích dẫn tới nguồn, cập nhật bằng cách thay tài liệu trong chỉ mục; trường hợp QA điển hình là câu trả lời trích dẫn đặc tả hiện hành. Fine-tuning dùng để củng cố phong cách và định dạng cố định, không cho trích dẫn, cập nhật cần tinh chỉnh lại; trường hợp QA điển hình là báo cáo luôn theo một bố cục các mục cố định."
+        },
+        {
+          "kind": "callout",
+          "variant": "warn",
+          "title": "Phản huyền thoại",
+          "text": "“Fine-tuning sẽ dạy mô hình tài liệu của chúng ta.” Không. Với các sự kiện hay thay đổi hãy dùng RAG — tinh chỉnh sẽ củng cố phong cách, nhưng kiến thức sự kiện sẽ nhanh chóng lỗi thời và không cho trích dẫn."
+        },
+        {
+          "kind": "paragraph",
+          "hideForPaths": [
+            "S1"
+          ],
+          "text": "Quyết định trên các trường hợp QA tổng hợp: “trợ lý phải trích dẫn các yêu cầu hiện hành, thay đổi mỗi sprint” → RAG; “trợ lý phải luôn trả về báo cáo theo bố cục các mục của công ty” → fine-tuning (hoặc mẫu trong prompt)."
+        }
+      ]
+    },
+    {
+      "id": "s7-trzy-warstwy",
+      "title": "Ba tầng lỗi trong RAG",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Cùng một câu trả lời sai có thể có nguồn gốc khác nhau, và mỗi nguồn cần một cách sửa khác nhau. Tester phải phân biệt tầng nào đã hỏng trước khi bắt đầu sửa bất cứ thứ gì."
+        },
+        {
+          "kind": "definition",
+          "term": "Lỗi tìm kiếm (retrieval)",
+          "text": "đoạn đúng đã không lọt vào ngữ cảnh — vì top-k quá nhỏ, nguồn đúng bị loại khỏi chỉ mục, hoặc đoạn được lấy chỉ tương tự về mặt ngữ nghĩa. Cách sửa: retrieval tốt hơn (top-k lớn hơn, bộ lọc metadata, đúng nguồn)."
+        },
+        {
+          "kind": "definition",
+          "term": "Lỗi sinh nội dung (generation)",
+          "text": "đoạn đúng đã có trong ngữ cảnh, nhưng mô hình vẫn bịa ra hoặc tóm tắt sai — câu trả lời mâu thuẫn với nguồn chính xác. Cách sửa: prompt tốt hơn, buộc phải neo vào nguồn."
+        },
+        {
+          "kind": "definition",
+          "term": "Lỗi nguồn",
+          "text": "mô hình đã lấy và trích dẫn đúng đoạn, nhưng bản thân nội dung trong tài liệu lại sai hoặc lỗi thời. Cách sửa: sửa tài liệu tại nguồn — không retrieval hay prompt nào sửa được điều này."
+        },
+        {
+          "kind": "callout",
+          "variant": "info",
+          "onlyForPaths": [
+            "S1"
+          ],
+          "title": "Tóm tắt",
+          "text": "Trước khi kết luận rằng “mô hình sai”, hãy kiểm tra: nó có nhận được đoạn đúng không (retrieval), nó có dùng đoạn đó đúng cách không (generation), bản thân tài liệu có chính xác không (nguồn)."
+        }
+      ]
+    },
+    {
+      "id": "s8-diagnoza",
+      "title": "Chẩn đoán: tầng nào đã hỏng",
+      "type": "decision",
+      "onlyForPaths": [
+        "S2",
+        "S3"
+      ],
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Kho ngữ liệu tổng hợp “NotkaApp”: DOC1 — token phiên hết hạn sau 30 phút không hoạt động; DOC3 — liên kết đặt lại mật khẩu có hiệu lực 30 phút, dùng một lần. Câu hỏi: “Liên kết đặt lại mật khẩu hết hạn sau bao lâu?”. Đọc các tín hiệu từ ngữ cảnh đã truy xuất và từ trích dẫn."
+        },
+        {
+          "kind": "table",
+          "title": "Tín hiệu của các tầng lỗi",
+          "headers": [
+            "Quan sát",
+            "Tầng lỗi"
+          ],
+          "rows": [
+            [
+              "Mô hình đã lấy và trích dẫn DOC1 (token phiên): “Hết hạn sau 30 phút [DOC1]”. Con số tình cờ khớp, nhưng trích dẫn lại thuộc về tài liệu sai; DOC3 không lọt vào ngữ cảnh",
+              "Retrieval (similar-but-useless)"
+            ],
+            [
+              "DOC3 đã ở trong ngữ cảnh, nhưng câu trả lời của mô hình lại mâu thuẫn với nó",
+              "Generation"
+            ],
+            [
+              "Mô hình đã trích dẫn DOC3 đúng cách, nhưng nội dung trong DOC3 lại lỗi thời",
+              "Nguồn"
+            ],
+            [
+              "Mỗi câu trong câu trả lời đều có chỗ dựa ở một trích dẫn đúng và chính xác",
+              "Không có lỗi"
+            ]
+          ],
+          "textAlt": "Bảng tín hiệu. Khi trích dẫn DOC1 (token phiên) thay vì DOC3 (liên kết đặt lại), mà đoạn đúng không lọt vào ngữ cảnh — đó là lỗi retrieval, bẫy similar-but-useless; sự trùng khớp ngẫu nhiên của con số không có nghĩa là đã neo nguồn. Khi DOC3 đã có trong ngữ cảnh nhưng câu trả lời mâu thuẫn với nó — lỗi generation. Khi DOC3 được trích dẫn đúng nhưng nội dung của nó lỗi thời — lỗi nguồn. Khi mỗi câu đều có chỗ dựa ở một trích dẫn đúng và chính xác — không có lỗi."
+        },
+        {
+          "kind": "callout",
+          "variant": "warn",
+          "title": "Bẫy",
+          "text": "Sự trùng khớp ngẫu nhiên của con số (“30 phút”) không có nghĩa là đã neo nguồn, nếu trích dẫn chỉ tới tài liệu sai. Luôn kiểm tra xem đoạn được trích dẫn có thực sự trả lời câu hỏi hay không."
+        }
+      ]
+    },
+    {
+      "id": "s9-reranking-grounding",
+      "title": "Đào sâu kỹ thuật: reranking và grounding",
+      "type": "content",
+      "onlyForPaths": [
+        "S3"
+      ],
+      "blocks": [
+        {
+          "kind": "definition",
+          "term": "Reranking",
+          "original": "sắp xếp lại kết quả",
+          "text": "sau retrieval sơ bộ, một bước thứ hai chính xác hơn sắp xếp các ứng viên theo độ phù hợp. Nó hoạt động trên kết quả của retrieval — nên đứng sau retrieval, và trước khi chèn ngữ cảnh. Nó cải thiện chất lượng của top-k thực sự được dùng."
+        },
+        {
+          "kind": "definition",
+          "term": "Grounding",
+          "original": "neo nguồn",
+          "text": "việc kiểm tra rằng mỗi câu trong câu trả lời đều có chỗ dựa trong một đoạn đã truy xuất. Diễn ra sau khi sinh câu trả lời — nó kiểm chứng văn bản đã tạo ra so với các nguồn và buộc phải có trích dẫn."
+        },
+        {
+          "kind": "paragraph",
+          "text": "Thực hành kiểm chứng: với mỗi câu trong câu trả lời, hãy chỉ ra đoạn mà nó dựa vào. Một câu không có chỗ dựa ở bất kỳ đoạn nào đã truy xuất là tín hiệu của lỗi sinh nội dung hoặc của khoảng trống trong retrieval — trong cả hai trường hợp, không được phép coi câu trả lời là đã neo nguồn."
+        },
+        {
+          "kind": "callout",
+          "variant": "info",
+          "title": "Đo chất lượng RAG",
+          "text": "Cách đo độ phù hợp của retrieval và chất lượng câu trả lời một cách có hệ thống — đó là chủ đề của M12 (đánh giá). Ở đây chỉ cần một nguyên tắc: không có neo nguồn thì không có câu trả lời đáng tin."
+        }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "rubric",
+    "id": "m6-pipeline-rag",
+    "title": "Dựng pipeline RAG",
+    "intro": "Kho ngữ liệu “SklepDemo” (đặc tả giỏ hàng WYM-koszyk, chính sách đổi trả WYM-zwroty, checklist thanh toán). Câu hỏi của người dùng: “Tiêu chí chấp nhận cho giới hạn số mục trong giỏ hàng là gì?”. Với mỗi tiêu chí của rubric, hãy chọn quyết định cấu hình pipeline thỏa mãn nó. Bài đánh giá tính như nhiệm vụ thực hành R2-rag trên lộ trình S3 và là điều kiện bắt buộc — ngưỡng đạt là 70% (score ≥ 3,5 / 5).",
+    "rubricId": "R2-rag",
+    "recordsPractical": true,
+    "scaleMax": 5,
+    "passThreshold": 3.5,
+    "criteria": [
+      {
+        "id": "K1",
+        "name": "Nguồn và grounding",
+        "points": 1,
+        "hint": "Chỉ bật những nguồn trả lời được câu hỏi và neo câu trả lời vào chúng; bật tất cả sẽ thêm nhiễu, bỏ sót nguồn đúng khiến không trích dẫn được.",
+        "options": [
+          {
+            "id": "a",
+            "text": "Đưa vào chỉ mục nguồn về giỏ hàng (WYM-koszyk), vì chính nó chứa câu trả lời; buộc câu trả lời phải được neo vào đoạn đã truy xuất."
+          },
+          {
+            "id": "b",
+            "text": "Tắt tất cả các nguồn và cho phép mô hình trả lời từ trí nhớ — sẽ nhanh hơn."
+          },
+          {
+            "id": "c",
+            "text": "Bật tất cả các nguồn và còn yêu cầu mô hình đừng trích dẫn, để câu trả lời ngắn hơn."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K2",
+        "name": "Chunking + overlap",
+        "points": 1,
+        "hint": "Cắt theo từng yêu cầu đơn lẻ với một chút overlap và định danh trong metadata; cắt cố định sẽ cắt đứt tiêu chí chấp nhận.",
+        "options": [
+          {
+            "id": "a",
+            "text": "Chia theo từng yêu cầu đơn lẻ (một WYM = một đoạn) với overlap nhỏ và định danh “WYM-koszyk-…” trong metadata."
+          },
+          {
+            "id": "b",
+            "text": "Cắt theo số ký tự cố định không overlap — dễ triển khai hơn."
+          },
+          {
+            "id": "c",
+            "text": "Nhồi toàn bộ đặc tả giỏ hàng thành một đoạn khổng lồ, để không có gì bị cắt đứt."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K3",
+        "name": "Retrieval (top-k, bộ lọc metadata)",
+        "points": 1,
+        "hint": "Đặt top-k > 0, đủ lớn để đoạn đúng lọt vào, và thu hẹp bằng bộ lọc metadata tới tài liệu về giỏ hàng; top-k = 0 sẽ không lấy gì cả.",
+        "options": [
+          {
+            "id": "a",
+            "text": "Đặt top-k ở mức vài đoạn và thêm bộ lọc metadata giới hạn vào tài liệu về giỏ hàng, để đoạn phù hợp chắc chắn lọt vào ngữ cảnh."
+          },
+          {
+            "id": "b",
+            "text": "Đặt top-k = 0, để mô hình không bị phân tâm bởi các đoạn đã lấy."
+          },
+          {
+            "id": "c",
+            "text": "Đặt top-k = 1 không bộ lọc và hy vọng rằng một đoạn được lấy ngẫu nhiên trúng đích."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K4",
+        "name": "Trích dẫn / khả năng kiểm chứng",
+        "points": 1,
+        "hint": "Buộc phải có trích dẫn kèm định danh đoạn (ví dụ “[WYM-koszyk §3]”), để câu trả lời có thể được kiểm chứng so với nguồn.",
+        "options": [
+          {
+            "id": "a",
+            "text": "Buộc mỗi khẳng định phải kèm trích dẫn với định danh đoạn, ví dụ “[WYM-koszyk §3]”, để có thể kiểm tra nó trong nguồn."
+          },
+          {
+            "id": "b",
+            "text": "Yêu cầu một đoạn văn trôi chảy không trích dẫn — đọc dễ chịu hơn."
+          },
+          {
+            "id": "c",
+            "text": "Cho phép mô hình tự nghĩ ra số mục, nếu chúng hợp với chủ đề — dù sao nghe cũng đáng tin."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K5",
+        "name": "Chẩn đoán lỗi (retrieval / generation / nguồn)",
+        "points": 1,
+        "hint": "Trước hết kiểm tra xem đoạn đúng có trong ngữ cảnh không (retrieval), rồi xem câu trả lời có mâu thuẫn với nó không (generation), rồi xem bản thân tài liệu có chính xác không (nguồn) — mỗi tầng có một cách sửa khác nhau.",
+        "options": [
+          {
+            "id": "a",
+            "text": "Khi câu trả lời sai, hãy xác định tầng: thiếu đoạn đúng trong ngữ cảnh = retrieval; đoạn đúng nhưng câu trả lời mâu thuẫn với nó = generation; trích dẫn đúng nhưng nội dung tài liệu sai = nguồn — và sửa đúng tầng đó."
+          },
+          {
+            "id": "b",
+            "text": "Coi mọi kết quả sai như nhau và luôn chỉ chỉnh prompt, bất kể có gì trong ngữ cảnh."
+          },
+          {
+            "id": "c",
+            "text": "Nếu con số trong câu trả lời tình cờ khớp, hãy coi câu trả lời là đúng mà không kiểm tra trích dẫn thuộc về tài liệu nào."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Pipeline RAG có thứ tự bắt buộc: chunking → embeddings → chỉ mục (offline), rồi retrieval → reranking → sinh nội dung kèm trích dẫn (online).",
+      "Đối với tài liệu yêu cầu, hãy cắt theo từng yêu cầu đơn lẻ với overlap và định danh trong metadata — điều này bảo vệ tính trọn vẹn của tiêu chí và sự rõ ràng của trích dẫn.",
+      "RAG = kiến thức sự kiện mới mẻ, hay thay đổi, trích dẫn được; fine-tuning = phong cách và định dạng cố định. “Fine-tuning sẽ dạy mô hình tài liệu” là một huyền thoại.",
+      "Ba tầng lỗi có ba cách sửa khác nhau: retrieval (đoạn đúng không lọt vào), generation (đoạn đúng, câu trả lời sai), nguồn (trích dẫn đúng, tài liệu sai)."
+    ],
+    "checklist": [
+      "Các bước của pipeline có đúng thứ tự không (retrieval trước generation)?",
+      "Chunking có giữ được trọn vẹn yêu cầu và định danh của nó trong metadata không?",
+      "Đây có phải trường hợp dành cho RAG (sự kiện mới + trích dẫn), chứ không phải cho fine-tuning (định dạng cố định) không?",
+      "Tôi có chỉ ra được tầng lỗi: retrieval, generation hay nguồn không?"
+    ],
+    "checklistTitle": "Checklist — pipeline RAG sẵn sàng cho QA",
+    "nextStep": "Bước tiếp theo: M7 — prompt engineering: cách viết prompt sử dụng ngữ cảnh đã truy xuất."
+  }
+}

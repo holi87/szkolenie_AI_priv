@@ -1,0 +1,171 @@
+{
+  "_meta": {
+    "module": "M4",
+    "issue": "[M4] Wdroż treść modułu M4 — Embeddings i podobieństwo semantyczne",
+    "storyboard": "docs/storyboard/m04-embeddings.md",
+    "schema": "../schemas/module-content.schema.json",
+    "scenario": "SC-RAG-01 (mini-korpus DOC1-DOC4, pułapka: DOC1 token sesji 30 min podobny semantycznie, ale poprawne źródło to DOC3 link resetu)",
+    "interaction": "Mapa semantyczna (kind: classify)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (NotkaApp/SklepDemo/PipeDemo, domena przyklad.test, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pointa: wysokie podobieństwo semantyczne ≠ poprawność biznesowa. Zgodne z pulą Q25-Q32."
+  },
+  "module": "M4",
+  "intro": "Le moteur de recherche documentaire, la déduplication des tickets et le RAG (modules M5-M6) reposent sur les embeddings et la similarité sémantique. Un testeur qui comprend pourquoi un fragment « similaire » peut être « erroné » diagnostique mieux les résultats de recherche et ne fait pas aveuglément confiance au classement. Ce module vous donne l'intuition des embeddings, de la similarité cosinus et des quatre pièges de la similarité, puis vous les mettez en pratique sur la « Carte sémantique ».",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Pourquoi un testeur a besoin des embeddings",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "De plus en plus souvent, c'est un moteur de recherche sémantique qui vous fournit le résultat : vous saisissez une question et le système renvoie les fragments de documentation « les plus pertinents ». En coulisses, ce sont les embeddings (vecteurs sémantiques, en anglais embeddings) et une mesure de similarité qui opèrent. Si vous ignorez comment le calcul est fait, il est facile de prendre le résultat le mieux classé pour la bonne réponse." },
+        { "kind": "list", "items": [
+          "Vous expliquerez ce qu'est un embedding en tant que représentation numérique du sens.",
+          "Vous interpréterez la similarité cosinus comme la proximité de direction des vecteurs, et non comme la longueur du texte.",
+          "Vous identifierez 4 cas où une similarité élevée ne signifie pas une réponse correcte.",
+          "Vous formulerez une requête de recherche sémantique adaptée pour viser l'intention."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Élément interactif", "text": "Pour terminer, vous accéderez à la « Carte sémantique » : vous choisirez une requête et verrez la liste des fragments les plus proches, avec leur score de similarité et l'indication précisant si le résultat est pertinent sur le plan métier, ou s'il s'agit d'un piège." }
+      ]
+    },
+    {
+      "id": "s2-slowo-jako-wektor",
+      "title": "Le mot comme vecteur",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Embedding", "original": "embedding", "text": "représentation numérique du sens d'un texte — le modèle convertit une expression en un vecteur (en anglais vector) de nombres, dans lequel les sens proches se trouvent proches les uns des autres." },
+        { "kind": "paragraph", "text": "Un modèle d'embedding (en anglais embedding model) ne compte ni les lettres ni les mots — il encode le sens. C'est pourquoi « connexion » et « authentification » se retrouvent proches, tandis que « facture » reste éloignée, bien qu'aucun de ces mots ne soit identique." },
+        { "kind": "diagram", "textAlt": "Sur une carte 2D conventionnelle, trois expressions issues de la documentation NotkaApp : « connexion » au point (0,8 ; 0,7) et « authentification » juste à côté en (0,9 ; 0,6) — proches, car elles signifient presque la même chose. L'expression « facture » se trouve loin, en (0,1 ; 0,2). Conclusion : la distance sur la carte reflète la différence de sens, et non l'orthographe.", "ascii": "logowanie •      faktura\nuwierzytelnianie •\n                          •" }
+      ]
+    },
+    {
+      "id": "s3-cosine-similarity",
+      "title": "Similarité cosinus — la direction, pas la longueur",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Similarité cosinus", "original": "cosine similarity", "text": "mesure de l'angle entre deux vecteurs de sens ; le résultat va de −1 à 1, en pratique de 0 à 1 pour du texte. Plus la valeur est proche de 1, plus la direction du sens est concordante." },
+        { "kind": "paragraph", "text": "Intuition clé : ce qui compte, c'est la direction du sens, et non la longueur ou la « force » du texte. Une description courte et un long paragraphe détaillé portant sur la même procédure pointent dans la même direction, donc leur similarité est élevée malgré la différence de longueur." },
+        { "kind": "table",
+          "caption": "Trois paires d'expressions synthétiques issues de la documentation NotkaApp et leur similarité conventionnelle",
+          "headers": ["Paire d'expressions", "Similarité cosinus", "Pourquoi"],
+          "rows": [
+            ["« Réinitialisation du mot de passe : lien e-mail valable 30 min » vs un long paragraphe sur la même procédure", "0,94", "même direction de sens, la longueur ne diminue pas le résultat"],
+            ["« la connexion fonctionne » vs « la connexion ne fonctionne pas »", "0,90", "le thème commun « connexion » domine sur la négation"],
+            ["« réinitialisation du mot de passe » vs « tarif du produit »", "0,21", "thèmes différents, direction des vecteurs divergente"]
+          ],
+          "textAlt": "Une description courte et une description longue de la même procédure de réinitialisation ont une similarité de 0,94 — la longueur ne diminue pas le résultat, car c'est la direction qui compte. La paire « la connexion fonctionne » / « la connexion ne fonctionne pas » atteint 0,90, car le thème commun l'emporte sur la négation. La paire portant sur des thèmes différents (réinitialisation du mot de passe vs tarif) n'atteint que 0,21." }
+      ]
+    },
+    {
+      "id": "s4-ranking",
+      "title": "Comment lire le classement de similarité",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Plus proches voisins", "original": "nearest neighbors", "text": "liste des fragments les plus similaires à la requête, triée par ordre décroissant de la valeur de similarité." },
+        { "kind": "paragraph", "text": "Un score de 0,91 est « plus proche » que 0,62, mais ce nombre n'est pas un pourcentage d'exactitude. Le seuil de coupure (p. ex. 0,75) est conventionnel et dépend du corpus — dans un autre ensemble, la même valeur peut signifier autre chose." },
+        { "kind": "list", "items": [
+          "La liste est triée par ordre décroissant de similarité — en haut, le plus proche sémantiquement.",
+          "Une position élevée est un signal de pertinence, pas une preuve — le contenu doit être vérifié.",
+          "Pas de seuil fixe et universel ; 0,62 ne signifie pas « correct à 62 % »."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Pont vers l'écran suivant", "text": "Puisqu'une position élevée ne garantit pas la pertinence, examinons des situations concrètes où le résultat le mieux classé mène à une réponse erronée." }
+      ]
+    },
+    {
+      "id": "s5-pulapka-4-przypadki",
+      "title": "Piège : similaire ≠ correct — 4 cas",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "C'est le cœur du module. L'embedding encode le thème plus fortement que de petites différences, pourtant critiques. Quatre situations typiques où une similarité élevée induit en erreur :" },
+        { "kind": "list", "ordered": true, "items": [
+          "Négation / antonyme — « la connexion fonctionne » et « la connexion ne fonctionne pas » sont sémantiquement proches, bien qu'elles signifient le contraire.",
+          "Même thème, intention différente — la description de la fonction de paiement dans SklepDemo vs un signalement de bug de cette même fonction.",
+          "Polysémie — le « token » de sécurité vs le « token » comme unité dans un LLM.",
+          "Version obsolète — l'ancienne et la nouvelle formulation d'une exigence sont très similaires, mais seule la nouvelle est correcte."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "L'essentiel", "text": "Dans les quatre cas, le fragment est sémantiquement proche, mais incorrect sur le plan métier. Une similarité cosinus élevée n'équivaut pas à une réponse correcte." }
+      ]
+    },
+    {
+      "id": "s6-dlaczego-model-sie-myli",
+      "title": "Approfondissement : pourquoi le modèle se trompe",
+      "type": "content",
+      "onlyForPaths": ["S2", "S3"],
+      "blocks": [
+        { "kind": "paragraph", "text": "D'où viennent ces pièges ? L'embedding moyenne le sens de toute l'expression et encode le thème et le style plus fortement que des mots isolés et mineurs. La négation « ne… pas », le numéro de version « v2 » ou le changement d'intention ne représentent qu'une petite part du vecteur, ils se noient donc dans le thème commun." },
+        { "kind": "list", "items": [
+          "Le classement de similarité est un signal d'appui, pas un verdict — le résultat exige de vérifier le contenu du fragment.",
+          "Il vaut la peine d'appuyer la recherche par un filtrage sur les métadonnées (p. ex. version du document, type), afin de limiter les correspondances trompeuses.",
+          "Relever brutalement le seuil (p. ex. à 0,95) ne corrige pas la direction du vecteur — une paire avec négation peut être si similaire qu'aucun seuil ne l'écarte."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Pont vers les modules suivants", "text": "Vous découvrirez le filtrage par métadonnées dans le M5 (bases de données vectorielles), et la checklist complète de vérification de l'output dans le M11." }
+      ]
+    },
+    {
+      "id": "s7-dobor-zapytania",
+      "title": "Formuler la requête pour la recherche sémantique",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "La pertinence commence par la requête (en anglais query). Plus elle reflète l'intention et l'objet clé, plus le vecteur de la requête vise le bon sens et s'éloigne des concepts proches mais distincts." },
+        { "kind": "table",
+          "caption": "Requête faible vs meilleure et son effet sur la liste de résultats (exemple synthétique, NotkaApp)",
+          "headers": ["Requête faible", "Meilleure requête", "Effet sur les résultats"],
+          "rows": [
+            ["« mot de passe »", "« durée de validité du lien de réinitialisation du mot de passe »", "l'expression complète reflète l'intention, au lieu d'un seul mot générique"],
+            ["« réinitialisation »", "« réinitialisation du mot de passe dans NotkaApp v2 »", "le contexte précisé et la version font remonter la formulation à jour"],
+            ["« pas le token de session »", "« lien de réinitialisation du mot de passe, pas le token de session »", "l'objet clé (lien de réinitialisation) éloigne le résultat du token de session ; la négation seule ne fonctionne pas"]
+          ],
+          "textAlt": "On remplace le « mot de passe » générique par l'expression complète « durée de validité du lien de réinitialisation du mot de passe », car elle reflète l'intention. On remplace « réinitialisation » par « réinitialisation du mot de passe dans NotkaApp v2 » pour viser la version à jour. On ne construit pas une requête comme une simple négation « pas le token de session » — il vaut mieux nommer l'objet clé « lien de réinitialisation du mot de passe » afin d'éloigner le résultat du token de session." },
+        { "kind": "callout", "variant": "safe", "title": "Règle générale", "text": "Expression complète + contexte/version + objet clé. Évitez le mot isolé et ne construisez pas la requête à partir d'une simple négation." }
+      ]
+    },
+    {
+      "id": "s8-chcesz-poglebic",
+      "title": "Envie d'approfondir ?",
+      "type": "decision",
+      "blocks": [
+        { "kind": "paragraph", "text": "Vous maîtrisez déjà les quatre pièges et les règles de formulation des requêtes. Il est temps de les mettre en pratique sur la « Carte sémantique »." },
+        { "kind": "list", "items": [
+          "Recommandé (S2 étendu / S3) : accédez à la « Carte sémantique » complète avec le mini-corpus NotkaApp et les cas diagnostiques.",
+          "Raccourci (S1) : passez à la version simplifiée et au quiz si vous souhaitez seulement consolider les bases."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Meilleure prochaine étape", "text": "Ouvrez la « Carte sémantique » : choisissez la requête sur la durée de validité du lien de réinitialisation du mot de passe et vérifiez quel fragment est réellement pertinent." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "m4-mapa-semantyczna",
+    "title": "Carte sémantique",
+    "intro": "Requête : « Au bout de combien de temps le lien de réinitialisation du mot de passe expire-t-il ? » (mini-corpus NotkaApp). Chaque fragment indique sa similarité avec la requête. Classez-le dans une catégorie. L'essentiel : le résultat le mieux classé n'est pas toujours la bonne réponse — une similarité sémantique élevée ≠ exactitude métier. Après vérification, vous verrez la justification associée à chaque fragment.",
+    "categories": [
+      { "id": "trafny", "label": "Pertinent sur le plan métier", "desc": "répond à la requête sur le lien de réinitialisation du mot de passe — la bonne source" },
+      { "id": "podobny_bledny", "label": "Similaire sémantiquement, mais erroné", "desc": "proche thématiquement, mais porte sur un autre objet ou une autre intention — un piège" },
+      { "id": "nietrafny", "label": "Sans rapport", "desc": "score faible, thème différent — ne répond pas à la requête" }
+    ],
+    "items": [
+      { "id": "doc3", "text": "DOC3 : « Réinitialisation du mot de passe : lien e-mail valable 30 min, à usage unique. » (similarité 0,71)", "correctCategory": "trafny", "rationale": "C'est la bonne source : elle porte précisément sur le lien de réinitialisation du mot de passe et sa durée de validité — pertinente malgré un score inférieur à DOC1." },
+      { "id": "doc3b", "text": "Paraphrase de DOC3 : « Le lien de réinitialisation du mot de passe envoyé par e-mail cesse de fonctionner 30 minutes après son envoi. » (similarité 0,69)", "correctCategory": "trafny", "rationale": "Une description plus longue de la même procédure pointe dans la même direction de sens, elle est donc tout aussi pertinente — la similarité cosinus mesure la direction, pas la longueur." },
+      { "id": "doc1", "text": "DOC1 : « Procédure de connexion dans NotkaApp : le token de session expire après 30 min d'inactivité. » (similarité 0,86 — le plus élevé)", "correctCategory": "podobny_bledny", "rationale": "PIÈGE : partage avec la requête le motif « quelque chose expire après 30 min », mais porte sur un autre objet (le token de session, pas le lien de réinitialisation) — la similarité la plus élevée, et pourtant la mauvaise source." },
+      { "id": "doc-akt", "text": "Fragment d'un autre processus : « Le lien d'activation du compte expire 30 min après l'inscription. » (similarité 0,80)", "correctCategory": "podobny_bledny", "rationale": "Même motif « le lien expire après 30 min », mais objet différent (activation du compte, pas réinitialisation du mot de passe) — une similarité élevée induit en erreur, car l'embedding encode le thème commun plus fortement que la différence d'objet." },
+      { "id": "doc2", "text": "DOC2 : « Politique de mots de passe NotkaApp : min. 12 caractères, blocage après 3 erreurs. » (similarité 0,55)", "correctCategory": "podobny_bledny", "rationale": "Thème commun « mot de passe », mais porte sur les règles de longueur et de blocage, et non sur la durée de validité du lien de réinitialisation — proche, mais ne répond pas à la requête." },
+      { "id": "doc-neg", "text": "Ticket : « la connexion ne fonctionne pas après la mise à jour v2 ». (similarité 0,58)", "correctCategory": "podobny_bledny", "rationale": "Piège d'objet différent et d'intention différente : il porte sur la connexion (pas la réinitialisation du mot de passe) et c'est un signalement de bug, pas une description de la durée de validité du lien — thème apparenté, mais ne répond pas à la requête." },
+      { "id": "doc4", "text": "DOC4 : « FAQ marketing NotkaApp : avantages du produit et tarifs. » (similarité 0,19)", "correctCategory": "nietrafny", "rationale": "Thème différent (marketing, tarifs), direction du vecteur divergente — le score faible signale correctement l'absence de lien avec la requête." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Un embedding, c'est le sens d'un texte enregistré sous forme de vecteur de nombres — des sens proches donnent des vecteurs proches.",
+      "La similarité cosinus mesure la direction du sens, pas la longueur du texte — une description courte et une longue de la même chose sont proches.",
+      "Quatre pièges de la similarité : la négation, le même thème avec une intention différente, la polysémie et la version obsolète.",
+      "Le classement de similarité est un signal, pas un verdict — le résultat le mieux classé peut être erroné sur le plan métier, c'est pourquoi le contenu doit être vérifié."
+    ],
+    "checklist": [
+      "Le résultat le mieux classé porte-t-il effectivement sur le même objet et la même intention que ma requête ?",
+      "Le fragment ne diffère-t-il du fragment correct que par une négation ou un numéro de version ?",
+      "La requête reflète-t-elle l'intention par une expression complète, avec le contexte et l'objet clé ?",
+      "Ai-je vérifié le contenu du fragment, au lieu de me fier à sa seule position dans le classement ?"
+    ],
+    "checklistTitle": "Checklist — avant de faire confiance à un résultat de recherche sémantique",
+    "nextStep": "Étape suivante : M5 — Bases de données vectorielles et recherche par similarité (filtrage des métadonnées et pipeline de recherche)."
+  }
+}

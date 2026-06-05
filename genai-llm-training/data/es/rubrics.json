@@ -1,0 +1,95 @@
+{
+  "_meta": {
+    "issue": "#7 [07][M1] Zdefiniuj rubryki zadań praktycznych",
+    "version": "0.1",
+    "doc": "docs/rubryki-zadan.md",
+    "source": "wymagania/07 (skale 0-5 i 0-3, progi, feedback), wymagania/06 (moduły, efekty)",
+    "notes": "Kryteria binarne (1/0) sumują się do maxScore. Progi: S2 promptowe >=4/5; S3 RAG i ewaluacja >=70% (>=3.5/5) jako warunek konieczny w M6 i M12."
+  },
+  "rubrics": [
+    {
+      "id": "R1-prompt",
+      "task": "Tarea de prompting (Prompt clinic)",
+      "module": "M7",
+      "paths": ["S2", "S3"],
+      "scaleMax": 5,
+      "passThreshold": 4,
+      "passScope": "S2: requisito obligatorio",
+      "criteria": [
+        { "id": "K1", "name": "Rol y objetivo", "points": 1 },
+        { "id": "K2", "name": "Contexto y datos de entrada (sin datos sensibles)", "points": 1 },
+        { "id": "K3", "name": "Restricciones y criterios de calidad", "points": 1 },
+        { "id": "K4", "name": "Formato de salida (verificable)", "points": 1 },
+        { "id": "K5", "name": "Seguridad y verificabilidad", "points": 1 }
+      ],
+      "belowThresholdFeedback": "Falta: {failedCriteria}. Completa el rol/objetivo, el contexto, las restricciones y los criterios, el formato de salida y la higiene de datos."
+    },
+    {
+      "id": "R2-rag",
+      "task": "Tarea de RAG readiness",
+      "module": "M6",
+      "paths": ["S3"],
+      "scaleMax": 5,
+      "passThreshold": 3.5,
+      "passScope": "S3: requisito obligatorio (>=70% en M6)",
+      "criteria": [
+        { "id": "K1", "name": "Fuentes y grounding", "points": 1 },
+        { "id": "K2", "name": "Chunking + overlap", "points": 1 },
+        { "id": "K3", "name": "Retrieval (top-k, filtros de metadatos)", "points": 1 },
+        { "id": "K4", "name": "Citas / verificabilidad", "points": 1 },
+        { "id": "K5", "name": "Diagnóstico de errores (retrieval/generación/fuente)", "points": 1 }
+      ],
+      "belowThresholdFeedback": "Por debajo del umbral en M6. Falta: {failedCriteria}. Vuelve a las pantallas de pipeline/chunking/diagnóstico de errores."
+    },
+    {
+      "id": "R3-eval",
+      "task": "Tarea de evaluación (Judge/golden set)",
+      "module": "M12",
+      "paths": ["S3"],
+      "scaleMax": 5,
+      "passThreshold": 3.5,
+      "passScope": "S3: requisito obligatorio (>=70% en M12)",
+      "criteria": [
+        { "id": "K1", "name": "Golden set adecuado al caso de uso", "points": 1 },
+        { "id": "K2", "name": "Métricas con justificación", "points": 1 },
+        { "id": "K3", "name": "Rúbrica LLM-as-a-judge (inequívoca)", "points": 1 },
+        { "id": "K4", "name": "Bias/position bias + calibración con un experto", "points": 1 },
+        { "id": "K5", "name": "Umbral de aceptación de calidad", "points": 1 }
+      ],
+      "belowThresholdFeedback": "Por debajo del umbral en M12. Falta: {failedCriteria}. Vuelve al golden set / métricas / rúbrica / calibración."
+    },
+    {
+      "id": "R4-qa-workbench",
+      "task": "QA workbench (evaluación del output de QA)",
+      "module": "M8",
+      "paths": ["S2", "S3"],
+      "scaleMax": 5,
+      "passThreshold": null,
+      "passScope": "de práctica (feedback / aporta al cuestionario)",
+      "criteria": [
+        { "id": "K1", "name": "Cobertura de pruebas", "points": 1 },
+        { "id": "K2", "name": "Lagunas de cobertura", "points": 1 },
+        { "id": "K3", "name": "Pruebas aparentes / duplicados", "points": 1 },
+        { "id": "K4", "name": "Riesgos / supuestos erróneos", "points": 1 },
+        { "id": "K5", "name": "Límite de decisión (verificación humana)", "points": 1 }
+      ],
+      "belowThresholdFeedback": "Falta: {failedCriteria}."
+    },
+    {
+      "id": "R5-output-analysis",
+      "task": "Análisis del output (Output verifier)",
+      "module": "M11",
+      "paths": ["S1", "S2", "S3"],
+      "scaleMax": 3,
+      "passThreshold": null,
+      "passScope": "de práctica",
+      "levels": [
+        { "points": 3, "descriptor": "Todas las frases clave clasificadas correctamente; las arriesgadas e infundadas detectadas" },
+        { "points": 2, "descriptor": "En su mayoría correcto; un único error no crítico" },
+        { "points": 1, "descriptor": "Parcial; se omitió un riesgo importante o hay un error en una frase crítica" },
+        { "points": 0, "descriptor": "No se reconoce el riesgo / aceptación de contenido infundado" }
+      ],
+      "belowThresholdFeedback": "Se pasó por alto: {kategorie}. Vuelve a la lista de verificación del output."
+    }
+  ]
+}

@@ -1,0 +1,171 @@
+{
+  "_meta": {
+    "module": "M4",
+    "issue": "[M4] Wdroż treść modułu M4 — Embeddings i podobieństwo semantyczne",
+    "storyboard": "docs/storyboard/m04-embeddings.md",
+    "schema": "../schemas/module-content.schema.json",
+    "scenario": "SC-RAG-01 (mini-korpus DOC1-DOC4, pułapka: DOC1 token sesji 30 min podobny semantycznie, ale poprawne źródło to DOC3 link resetu)",
+    "interaction": "Mapa semantyczna (kind: classify)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (NotkaApp/SklepDemo/PipeDemo, domena przyklad.test, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pointa: wysokie podobieństwo semantyczne ≠ poprawność biznesowa. Zgodne z pulą Q25-Q32."
+  },
+  "module": "M4",
+  "intro": "El buscador de documentación, la deduplicación de tickets y RAG (módulos M5-M6) se apoyan en los embeddings y la similitud semántica. El tester que entiende por qué un fragmento «parecido» a veces es «erróneo» diagnostica mejor los resultados de búsqueda y no confía en el ranking a ciegas. Este módulo te da intuición sobre los embeddings, la similitud del coseno y cuatro trampas de la similitud, y al final los practicas en el «Mapa semántico».",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Para qué necesita el tester los embeddings",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Cada vez con más frecuencia el resultado te lo da un buscador semántico: escribes una pregunta y el sistema devuelve los fragmentos de documentación «que mejor encajan». Por debajo funcionan los embeddings (vectores semánticos, en inglés embeddings) y una medida de similitud. Si no sabes cómo lo calcula, es fácil tomar el resultado más alto como la respuesta correcta." },
+        { "kind": "list", "items": [
+          "Explicarás qué es un embedding como representación numérica del significado.",
+          "Interpretarás la similitud del coseno como cercanía de dirección de los vectores, no de longitud del texto.",
+          "Señalarás 4 casos en los que una similitud alta no significa una respuesta correcta.",
+          "Ajustarás la consulta de búsqueda semántica para acertar con la intención."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Elemento interactivo", "text": "Al final entrarás en el «Mapa semántico»: elegirás una consulta y verás la lista de los fragmentos más cercanos con su puntuación de similitud y una marca que indica si el resultado es acertado desde el punto de vista del negocio o si es una trampa." }
+      ]
+    },
+    {
+      "id": "s2-slowo-jako-wektor",
+      "title": "La palabra como vector",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Embedding", "original": "embedding", "text": "representación numérica del significado de un texto — el modelo convierte una frase en un vector (en inglés vector) de números en el que los significados cercanos quedan próximos entre sí." },
+        { "kind": "paragraph", "text": "El modelo de embeddings (en inglés embedding model) no cuenta letras ni palabras — codifica el significado. Gracias a ello «inicio de sesión» y «autenticación» quedan próximos, mientras que «factura» queda lejos, aunque ninguna de estas palabras sea idéntica." },
+        { "kind": "diagram", "textAlt": "En un mapa 2D convencional, tres frases de la documentación de NotkaApp: «inicio de sesión» en el punto (0,8; 0,7) y «autenticación» justo al lado en (0,9; 0,6) — cerca, porque significan casi lo mismo. La frase «factura» queda lejos, en (0,1; 0,2). Conclusión: la distancia en el mapa corresponde a la diferencia de significado, no a la ortografía.", "ascii": "logowanie •      faktura\nuwierzytelnianie •\n                          •" }
+      ]
+    },
+    {
+      "id": "s3-cosine-similarity",
+      "title": "Similitud del coseno — dirección, no longitud",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Similitud del coseno", "original": "cosine similarity", "text": "medida del ángulo entre dos vectores de significado; el resultado va de −1 a 1, en la práctica de 0 a 1 para texto. Cuanto más cerca de 1, más coincidente es la dirección del significado." },
+        { "kind": "paragraph", "text": "La intuición clave: lo que cuenta es la dirección del significado, no la longitud ni la «fuerza» del texto. Una descripción breve y un párrafo largo y detallado sobre el mismo procedimiento apuntan a la misma dirección, así que su similitud es alta a pesar de la diferencia de longitud." },
+        { "kind": "table",
+          "caption": "Tres pares sintéticos de frases de la documentación de NotkaApp y su similitud convencional",
+          "headers": ["Par de frases", "Similitud del coseno", "Por qué"],
+          "rows": [
+            ["«Restablecer contraseña: enlace por correo válido 30 min» vs. un párrafo largo sobre el mismo procedimiento", "0,94", "la misma dirección de significado, la longitud no baja el resultado"],
+            ["«el inicio de sesión funciona» vs. «el inicio de sesión no funciona»", "0,90", "el tema común «inicio de sesión» domina sobre la negación"],
+            ["«restablecer contraseña» vs. «precio del producto»", "0,21", "temas distintos, dirección divergente de los vectores"]
+          ],
+          "textAlt": "Una descripción breve y una larga del mismo procedimiento de restablecimiento tienen una similitud de 0,94 — la longitud no baja el resultado, porque lo que cuenta es la dirección. El par «el inicio de sesión funciona» / «el inicio de sesión no funciona» llega a 0,90, porque el tema común pesa más que la negación. El par sobre temas distintos (restablecer contraseña vs. precio) tiene solo 0,21." }
+      ]
+    },
+    {
+      "id": "s4-ranking",
+      "title": "Cómo leer el ranking de similitud",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Vecinos más cercanos", "original": "nearest neighbors", "text": "lista de los fragmentos más parecidos a la consulta, ordenada de mayor a menor por el valor de similitud." },
+        { "kind": "paragraph", "text": "Un resultado de 0,91 está «más cerca» que 0,62, pero el número no es un porcentaje de corrección. El umbral de corte (p. ej. 0,75) es convencional y depende del corpus — en otro conjunto el mismo valor puede significar algo distinto." },
+        { "kind": "list", "items": [
+          "La lista está ordenada de mayor a menor por similitud — arriba, el más cercano semánticamente.",
+          "Una posición alta es una señal de acierto, no una prueba — el contenido hay que verificarlo.",
+          "No hay un umbral fijo ni universal; 0,62 no significa «correcto en un 62%»."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Puente al siguiente pantalla", "text": "Dado que una posición alta no garantiza el acierto, veamos situaciones concretas en las que el resultado más alto lleva a una respuesta errónea." }
+      ]
+    },
+    {
+      "id": "s5-pulapka-4-przypadki",
+      "title": "Trampa: parecido ≠ correcto — 4 casos",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Este es el núcleo del módulo. El embedding codifica el tema con más fuerza que diferencias pequeñas pero críticas. Cuatro situaciones típicas en las que una similitud alta confunde:" },
+        { "kind": "list", "ordered": true, "items": [
+          "Negación / antónimo — «el inicio de sesión funciona» y «el inicio de sesión no funciona» están semánticamente cerca, aunque significan lo contrario.",
+          "El mismo tema, distinta intención — la descripción de la función de pagos en SklepDemo vs. un reporte de error de esa misma función.",
+          "Ambigüedad (polisemia) — «token» de seguridad vs. «token» como unidad en un LLM.",
+          "Versión desactualizada — la redacción antigua y la nueva de un requisito son muy parecidas, pero solo la nueva es correcta."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Lo esencial", "text": "En los cuatro casos el fragmento está semánticamente cerca, pero es incorrecto desde el punto de vista del negocio. Una similitud del coseno alta no es lo mismo que una respuesta correcta." }
+      ]
+    },
+    {
+      "id": "s6-dlaczego-model-sie-myli",
+      "title": "Profundización: por qué se equivoca el modelo",
+      "type": "content",
+      "onlyForPaths": ["S2", "S3"],
+      "blocks": [
+        { "kind": "paragraph", "text": "¿De dónde salen estas trampas? El embedding promedia el significado de toda la frase y codifica el tema y el estilo con más fuerza que las palabras sueltas y pequeñas. La negación «no», el número de versión «v2» o un cambio de intención son una parte mínima del vector, así que se pierden frente al tema común." },
+        { "kind": "list", "items": [
+          "El ranking de similitud es una señal de apoyo, no un veredicto — el resultado exige verificar el contenido del fragmento.",
+          "Conviene reforzar la búsqueda con un filtrado por metadatos (p. ej. versión del documento, tipo) para reducir las coincidencias engañosas.",
+          "Subir el umbral de forma rígida (p. ej. a 0,95) no corrige la dirección del vector — un par con negación a veces es tan parecido que ningún umbral lo descarta."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Puente a los módulos siguientes", "text": "El filtrado por metadatos lo verás en M5 (Vector databases), y la checklist completa de verificación del output en M11." }
+      ]
+    },
+    {
+      "id": "s7-dobor-zapytania",
+      "title": "Ajustar la consulta para la búsqueda semántica",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "El acierto empieza por la consulta (en inglés query). Cuanto mejor refleje la intención y el objeto clave, más apunta el vector de la consulta al significado correcto y se aleja de conceptos parecidos pero distintos." },
+        { "kind": "table",
+          "caption": "Consulta débil vs. mejor consulta y su efecto en la lista de resultados (ejemplo sintético, NotkaApp)",
+          "headers": ["Consulta débil", "Mejor consulta", "Efecto en los resultados"],
+          "rows": [
+            ["«contraseña»", "«tiempo de validez del enlace de restablecimiento de contraseña»", "la frase completa refleja la intención, en lugar de una sola palabra genérica"],
+            ["«restablecer»", "«restablecer contraseña en NotkaApp v2»", "el contexto y la versión precisados realzan la redacción actual"],
+            ["«no el token de sesión»", "«enlace de restablecimiento de contraseña, no el token de sesión»", "el objeto clave (enlace de restablecimiento) aleja el resultado del token de sesión; la negación por sí sola no funciona"]
+          ],
+          "textAlt": "El genérico «contraseña» lo sustituimos por la frase completa «tiempo de validez del enlace de restablecimiento de contraseña», porque refleja la intención. «restablecer» lo sustituimos por «restablecer contraseña en NotkaApp v2», para acertar con la versión actual. La consulta no se construye solo como una negación «no el token de sesión» — mejor nombrar el objeto clave «enlace de restablecimiento de contraseña», para alejar el resultado del token de sesión." },
+        { "kind": "callout", "variant": "safe", "title": "Regla general", "text": "Frase completa + contexto/versión + objeto clave. Evita la palabra suelta y no construyas la consulta solo a partir de la negación." }
+      ]
+    },
+    {
+      "id": "s8-chcesz-poglebic",
+      "title": "¿Quieres profundizar?",
+      "type": "decision",
+      "blocks": [
+        { "kind": "paragraph", "text": "Ya tienes las cuatro trampas y las reglas para ajustar la consulta. Es hora de practicarlas en el «Mapa semántico»." },
+        { "kind": "list", "items": [
+          "Recomendado (S2 ampliado / S3): entra en el «Mapa semántico» completo con el mini-corpus de NotkaApp y los casos de diagnóstico.",
+          "Atajo (S1): pasa a la versión simplificada y al cuestionario si solo quieres consolidar los fundamentos."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Siguiente mejor paso", "text": "Abre el «Mapa semántico»: elige la consulta sobre el tiempo de validez del enlace de restablecimiento de contraseña y comprueba qué fragmento es realmente acertado." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "m4-mapa-semantyczna",
+    "title": "Mapa semántico",
+    "intro": "Consulta: «¿Tras cuánto tiempo caduca el enlace de restablecimiento de contraseña?» (mini-corpus de NotkaApp). Cada fragmento tiene indicada su similitud con la consulta. Asígnalo a una categoría. La clave: el resultado más alto no siempre es la respuesta correcta — una similitud semántica alta ≠ corrección de negocio. Tras comprobar, verás la justificación junto a cada fragmento.",
+    "categories": [
+      { "id": "trafny", "label": "Acertado para el negocio", "desc": "responde a la consulta sobre el enlace de restablecimiento de contraseña — fuente correcta" },
+      { "id": "podobny_bledny", "label": "Parecido semánticamente, pero erróneo", "desc": "parecido por el tema, pero trata de otro objeto o intención — trampa" },
+      { "id": "nietrafny", "label": "No relacionado", "desc": "resultado bajo, otro tema — no responde a la consulta" }
+    ],
+    "items": [
+      { "id": "doc3", "text": "DOC3: «Restablecer contraseña: enlace por correo válido 30 min, de un solo uso.» (similitud 0,71)", "correctCategory": "trafny", "rationale": "Es la fuente correcta: trata exactamente del enlace de restablecimiento de contraseña y su tiempo de validez — acertado pese a un resultado más bajo que DOC1." },
+      { "id": "doc3b", "text": "Paráfrasis de DOC3: «El enlace para restablecer la contraseña enviado por correo deja de funcionar 30 minutos después del envío.» (similitud 0,69)", "correctCategory": "trafny", "rationale": "Una descripción más larga del mismo procedimiento apunta a la misma dirección de significado, así que es igual de acertada — la similitud del coseno mide la dirección, no la longitud." },
+      { "id": "doc1", "text": "DOC1: «Procedimiento de inicio de sesión en NotkaApp: el token de sesión caduca tras 30 min de inactividad.» (similitud 0,86 — el más alto)", "correctCategory": "podobny_bledny", "rationale": "TRAMPA: comparte con la consulta el motivo «algo caduca tras 30 min», pero trata de otro objeto (el token de sesión, no el enlace de restablecimiento) — la similitud más alta y, sin embargo, una fuente errónea." },
+      { "id": "doc-akt", "text": "Fragmento de otro proceso: «El enlace de activación de cuenta caduca tras 30 min desde el registro.» (similitud 0,80)", "correctCategory": "podobny_bledny", "rationale": "El mismo motivo «el enlace caduca tras 30 min», pero otro objeto (activación de cuenta, no restablecimiento de contraseña) — la similitud alta confunde, porque el embedding codifica el tema común con más fuerza que la diferencia de objeto." },
+      { "id": "doc2", "text": "DOC2: «Política de contraseñas de NotkaApp: mín. 12 caracteres, bloqueo tras 3 errores.» (similitud 0,55)", "correctCategory": "podobny_bledny", "rationale": "Tema común «contraseña», pero trata de reglas de longitud y bloqueo, no del tiempo de validez del enlace de restablecimiento — cercano, pero no responde a la consulta." },
+      { "id": "doc-neg", "text": "Reporte: «el inicio de sesión no funciona tras la actualización v2». (similitud 0,58)", "correctCategory": "podobny_bledny", "rationale": "Trampa de otro objeto y otra intención: trata del inicio de sesión (no del restablecimiento de contraseña) y es un reporte de error, no una descripción del tiempo de validez del enlace — tema afín, pero no responde a la consulta." },
+      { "id": "doc4", "text": "DOC4: «FAQ de marketing de NotkaApp: ventajas del producto y precios.» (similitud 0,19)", "correctCategory": "nietrafny", "rationale": "Otro tema (marketing, precios), dirección divergente del vector — el resultado bajo señala correctamente la falta de relación con la consulta." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Un embedding es el significado de un texto guardado como vector de números — significados cercanos dan vectores cercanos.",
+      "La similitud del coseno mide la dirección del significado, no la longitud del texto — una descripción breve y una larga de lo mismo están cerca.",
+      "Cuatro trampas de la similitud: la negación, el mismo tema con distinta intención, la ambigüedad y la versión desactualizada.",
+      "El ranking de similitud es una señal, no un veredicto — el resultado más alto a veces es erróneo para el negocio, por eso el contenido hay que verificarlo."
+    ],
+    "checklist": [
+      "¿El resultado más alto trata realmente del mismo objeto e intención que mi consulta?",
+      "¿El fragmento se diferencia del correcto solo por una negación o por el número de versión?",
+      "¿La consulta refleja la intención con una frase completa, con contexto y objeto clave?",
+      "¿He verificado el contenido del fragmento en lugar de confiar solo en la posición en el ranking?"
+    ],
+    "checklistTitle": "Checklist — antes de confiar en el resultado de una búsqueda semántica",
+    "nextStep": "Siguiente paso: M5 — Vector databases y similarity search (filtrado por metadatos y pipeline de búsqueda)."
+  }
+}

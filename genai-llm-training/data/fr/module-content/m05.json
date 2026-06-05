@@ -1,0 +1,149 @@
+{
+  "_meta": {
+    "issue": "#21 [21][M4] Wdroż moduły M3-M6",
+    "storyboard": "docs/storyboard/m05-vector-db.md",
+    "interaction": "Retrieval debugger (kind: tune)",
+    "scenario": "SC-RAG-01 — mini-korpus dokumentacji QA (DOC1-DOC4, NotkaApp)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (NotkaApp/SklepDemo/PipeDemo). Output interakcji jest prerenderowany (autorski lookup po poziomach), nie z żywego retrievalu. ZERO PII, ZERO realnych domen.",
+    "note": "Egzemplarz typu tune wg m03: kontrolki retrievalu → autorskie efekty (recall/precision) + scorowany checkpoint diagnostyczny. Storyboard 1-8 → screens; ekran 9 → interaction; ekran 10 (quiz) zasilany z questions/m05.json; ekran 11 → summary."
+  },
+  "module": "M5",
+  "intro": "Lorsqu'une équipe construit un moteur de recherche sur la documentation de test ou un système RAG, la qualité de la réponse dépend de CE que le retrieval a trouvé en premier lieu. Un testeur doit savoir évaluer si les passages retournés sont pertinents, et diagnostiquer pourquoi ils ne le sont pas. Ce module présente le rôle de la base de données vectorielle, le compromis exact vs ANN, ainsi que l'impact de l'index, des métadonnées et des chunks sur le résultat.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Pourquoi un testeur a-t-il besoin d'une base de données vectorielle ?",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "De plus en plus souvent, le QA teste des fonctionnalités fondées sur la recherche sémantique : un moteur de recherche sur la documentation de test ou un assistant RAG qui répond à des questions sur un produit. Dans les deux cas, la pertinence de la réponse finale commence par le retrieval — par les passages qui ont été trouvés." },
+        { "kind": "paragraph", "text": "Votre rôle en tant que testeur : évaluer si les passages retournés sont pertinents, et diagnostiquer pourquoi ils ne le sont parfois pas. Dans ce module, vous découvrirez le rôle de la base de données vectorielle, la différence entre exact et ANN, l'impact de l'index, des métadonnées et des chunks, et pour finir vous utiliserez un débogueur de recherche sur le corpus synthétique NotkaApp." },
+        { "kind": "callout", "variant": "info", "title": "Ce que nous allons construire ici", "text": "Nous travaillons sur un mini-corpus fictif de documentation QA de l'application NotkaApp — toutes les données sont synthétiques, sans clients réels et sans PII." }
+      ]
+    },
+    {
+      "id": "s2-czym-jest",
+      "title": "Qu'est-ce qu'une base de données vectorielle",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Base de données vectorielle", "original": "vector database", "text": "un magasin qui stocke les embeddings des passages (du M4) et permet de trouver rapidement les vecteurs les plus similaires à l'embedding de la requête." },
+        { "kind": "paragraph", "text": "La recherche sémantique fonctionne par le sens, et non par les mots littéraux. Le chemin est fixe : requête → embedding de la requête → vecteurs les plus proches dans la base → passages de texte associés. Contrairement à la recherche par mots-clés, qui apparie les mots identiques — ici, c'est la proximité sémantique qui compte." },
+        { "kind": "diagram", "title": "De la requête aux passages", "caption": "Le flux de la recherche sémantique.", "textAlt": "Quatre étapes en une seule séquence : (1) une requête textuelle, par exemple « au bout de combien de temps un lien de réinitialisation de mot de passe expire-t-il », (2) le modèle d'embeddings la transforme en vecteur, (3) la base de données vectorielle compare ce vecteur avec les embeddings des passages et sélectionne les plus proches, (4) elle retourne les passages de texte associés, par exemple DOC3 sur la réinitialisation du mot de passe." },
+        { "kind": "callout", "variant": "info", "title": "Le mini-corpus NotkaApp", "text": "Un corpus de 4 passages circule tout au long de ce module : DOC1 — le jeton de session expire après 30 min d'inactivité ; DOC2 — politique de mots de passe (min. 12 caractères, blocage après 3 erreurs) ; DOC3 — réinitialisation du mot de passe : le lien e-mail est valable 30 min, à usage unique ; DOC4 — FAQ marketing (avantages et tarifs)." }
+      ]
+    },
+    {
+      "id": "s3-dokladne-czy-przyblizone",
+      "title": "Exact ou approché ?",
+      "type": "decision",
+      "blocks": [
+        { "kind": "paragraph", "text": "Une décision avant de choisir une approche. Vous avez deux scénarios sur le corpus NotkaApp. Scénario A : un petit corpus (une dizaine de passages) et l'exigence qu'AUCUN passage pertinent ne soit manqué lors de la vérification de la couverture. Scénario B : un corpus compté en millions de passages, où la vitesse de réponse compte avant tout." },
+        { "kind": "paragraph", "text": "Demandez-vous : quand pouvez-vous vous permettre de parcourir tous les vecteurs (exact, mais plus lent), et quand devez-vous prendre un raccourci par un index (plus rapide, mais avec le risque de manquer quelque chose) ? Dans un instant, nous décomposerons ce compromis en ses éléments." }
+      ]
+    },
+    {
+      "id": "s4-exact-vs-ann",
+      "title": "Exact vs ANN — le compromis",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Recherche exacte", "original": "exact / brute force", "text": "parcourt tous les vecteurs de la base et retourne réellement les plus proches — précis, mais lent ; rentable pour un petit corpus." },
+        { "kind": "definition", "term": "ANN", "original": "approximate nearest neighbor", "text": "recherche du plus proche voisin approché ; utilise un index pour chercher plus vite au prix du risque de manquer une partie des résultats pertinents." },
+        { "kind": "paragraph", "text": "Nous évaluons la qualité du retrieval avec une paire de mesures. Le rappel (complétude des résultats trouvés) indique combien, parmi tous les passages pertinents, sont effectivement revenus. La précision (pureté des résultats trouvés) indique quelle proportion des passages retournés est réellement pertinente. Ces mesures évoluent généralement en sens opposé : vous élargissez les résultats — le rappel augmente, la précision baisse." },
+        { "kind": "table", "title": "Exact vs ANN", "caption": "Comparaison des approches.", "headers": ["Caractéristique", "Exact (brute force)", "ANN (avec index)"], "rows": [["Ce qu'il fait", "parcourt tous les vecteurs", "explore un raccourci par un index"], ["Précision", "complète — ne manque rien", "approchée — peut manquer des passages pertinents"], ["Vitesse", "lent, augmente avec le corpus", "rapide, passe à l'échelle sur de grands ensembles"], ["Quand l'utiliser", "petit corpus, exigence de pertinence complète", "grand corpus, le temps de réponse compte"]], "textAlt": "Le tableau compare deux approches selon quatre dimensions. Exact (brute force) parcourt tous les vecteurs, offre une précision complète (ne manque rien), est lent et augmente avec la taille du corpus ; à utiliser pour un petit corpus et une exigence de pertinence complète. ANN explore un raccourci par un index, fournit un résultat approché (peut manquer des passages pertinents), est rapide et passe à l'échelle sur de grands ensembles ; à utiliser pour un grand corpus, lorsque le temps de réponse compte." }
+      ]
+    },
+    {
+      "id": "s5-indeks",
+      "title": "L'index et son impact",
+      "type": "content",
+      "hideForPaths": ["S1", "S2"],
+      "blocks": [
+        { "kind": "definition", "term": "Index", "original": "index", "text": "structure de données qui accélère l'ANN ; ses paramètres déplacent le point entre rappel d'une part, vitesse et précision d'autre part." },
+        { "kind": "paragraph", "text": "Sans les mathématiques : un index agressif (réglé pour la vitesse) explore une portion plus petite de l'espace des vecteurs, de sorte qu'il manque parfois un passage pertinent bien qu'il existe dans la base. Un index plus doux explore davantage — plus lentement, mais il perd quelque chose moins souvent." },
+        { "kind": "callout", "variant": "warn", "title": "Piège de diagnostic", "text": "« Rien trouvé » ou « il manque un document pertinent connu » est souvent la faute des réglages de l'index, et non des données. Avant de conclure qu'un passage n'est pas dans le corpus, vérifiez si l'ANN ne l'a tout simplement pas écarté." }
+      ]
+    },
+    {
+      "id": "s6-metadane",
+      "title": "Filtrage par métadonnées",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Filtrage par métadonnées", "original": "metadata filtering", "text": "restriction de l'ensemble des candidats selon les attributs du passage (p. ex. type_document, module, version) avant ou après le calcul de la similarité." },
+        { "kind": "paragraph", "text": "Le filtre par métadonnées est un puissant levier de précision. En n'autorisant que les bons passages (p. ex. type_document = exigence), vous écartez le bruit — la précision augmente. Mais attention : un filtre trop strict peut éliminer un passage pertinent d'un autre type, ce qui fait baisser le rappel." },
+        { "kind": "callout", "variant": "warn", "title": "Exemple sur NotkaApp", "text": "Le DOC3 pertinent (réinitialisation du mot de passe) a type_document = cas_de_test. Si vous activez un filtre « exigences uniquement », le DOC3 disparaît des résultats — le filtre a augmenté la précision, mais a perdu le bon passage (le rappel a baissé)." }
+      ]
+    },
+    {
+      "id": "s7-chunki",
+      "title": "Qualité des chunks",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Chunk", "original": "chunk", "text": "fragment d'un document indexé comme une seule unité et transformé en un seul vecteur." },
+        { "kind": "paragraph", "text": "La frontière du chunk détermine le sens du vecteur. Une mauvaise frontière — une phrase coupée en deux ou un mélange de deux exigences différentes — produit un vecteur au sens flou, et par conséquent un résultat similaire mais inutilisable. Un chunk trop grand mélange de nombreux sujets ; un chunk trop petit perd le contexte nécessaire pour comprendre le passage." },
+        { "kind": "paragraph", "text": "Cela rejoint directement le diagnostic « similaire, mais inutile » : un passage peut avoir une similarité élevée tout en restant inadapté comme réponse — parce qu'il est coupé ou qu'il concerne un sujet voisin. La similarité n'est pas la même chose que la pertinence." }
+      ]
+    },
+    {
+      "id": "s8-diagnoza",
+      "title": "Similaire, mais inutile — le diagnostic",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Mini-exercice de diagnostic (non noté, en guise d'échauffement avant le débogueur). La requête adressée au corpus NotkaApp est : « au bout de combien de temps un lien de réinitialisation de mot de passe expire-t-il ? ». Le retrieval a retourné trois passages à similarité élevée, mais un seul est utile." },
+        { "kind": "list", "ordered": true, "items": [
+          "DOC1 (le jeton de session expire après 30 min d'inactivité) — similarité très élevée : les mots « 30 min » et « expire » se recoupent, mais c'est un autre sujet (la session, pas la réinitialisation). Similaire, mais non pertinent.",
+          "DOC3 (réinitialisation du mot de passe : le lien e-mail est valable 30 min, à usage unique) — c'est la bonne source de la réponse.",
+          "DOC4 (FAQ marketing : avantages et tarifs) — tombé dans les résultats comme bruit thématique ; inutile."
+        ] },
+        { "kind": "paragraph", "text": "Avant de toucher au premier bouton, nommez la cause de la non-pertinence : une mauvaise frontière de chunk, l'absence d'un filtre par métadonnées pour écarter le marketing, l'omission par l'ANN d'un meilleur passage, ou simplement la confusion entre similarité et pertinence. Sur l'écran d'interaction, vous vérifierez quelle correction aide réellement." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "tune",
+    "id": "m5-retrieval-debugger",
+    "title": "Retrieval debugger",
+    "intro": "Réglez les paramètres du retrieval pour la requête « au bout de combien de temps un lien de réinitialisation de mot de passe expire-t-il ? » sur le corpus NotkaApp (DOC1 session, DOC2 politique de mots de passe, DOC3 réinitialisation du mot de passe — pertinent, DOC4 FAQ marketing). Observez comment l'ensemble des passages retournés ainsi que la paire rappel/précision évoluent, puis répondez au checkpoint.",
+    "outputLabel": "Résultat simulé du retrieval pour les réglages choisis (passages retournés + rappel/précision) :",
+    "controls": [
+      { "id": "topk", "label": "top-k (nombre de passages retournés)", "levels": [
+        { "value": "2", "label": "Faible (2)", "effect": "Seuls les 2 passages les plus similaires reviennent : DOC1 (session) et DOC3 (réinitialisation). La précision est correcte, mais le rappel est fragile — si le DOC3 pertinent descendait dans le classement, il sortirait du duo de tête et le résultat serait vide." },
+        { "value": "6", "label": "Élevé (6)", "effect": "Presque tous les passages reviennent, y compris le DOC3 pertinent — le rappel est plus élevé. Mais le DOC1 (session) similaire-mais-inutile ainsi que le DOC4 marketing entrent aussi dans les résultats — la précision est plus basse, davantage de bruit à écarter." }
+      ] },
+      { "id": "prog", "label": "Seuil de similarité (similarity threshold)", "levels": [
+        { "value": "low", "label": "Bas (souple)", "effect": "Il laisse passer des passages même à similarité faible — le rappel est élevé, mais la précision est basse : du bruit entre dans les résultats (p. ex. le DOC4 marketing)." },
+        { "value": "high", "label": "Élevé (strict)", "effect": "Il n'admet que les passages à similarité élevée. Attention : le DOC1 (session) similaire-mais-non-pertinent a un score élevé, donc le seuil ne l'élimine PAS — en revanche il risque d'écarter le DOC3 pertinent si son score est plus bas (le rappel baisse)." }
+      ] },
+      { "id": "filtr", "label": "Filtre par métadonnées (type_document)", "levels": [
+        { "value": "off", "label": "Désactivé", "effect": "Aucun filtre — tous les types restent dans le pool, y compris le DOC4 marketing et les passages sur un sujet voisin. La précision est plus basse." },
+        { "value": "topic", "label": "Activé : autoriser la documentation produit, écarter le marketing", "effect": "Le filtre écarte le DOC4 marketing et restreint le pool à la documentation produit — il cible le sujet « réinitialisation/compte ». La précision augmente, et le DOC3 pertinent reste dans les résultats. C'est le levier qui supprime le bruit similaire-mais-non-pertinent sans perdre le bon passage — à condition que le filtre ne soit pas trop étroit (un filtre trop strict éliminerait le DOC3)." }
+      ] }
+    ],
+    "checkpoint": {
+      "prompt": "La recherche par similarité a retourné en tête DOC1 (le jeton de session expire après 30 min) — un passage similaire à la requête sur la réinitialisation du mot de passe, mais inutile, car il concerne la session. DOC1 a une similarité ÉLEVÉE. Que changez-vous d'abord pour améliorer la précision du résultat ?",
+      "type": "single_choice",
+      "options": [
+        { "id": "A", "text": "Activer un filtre par métadonnées ciblant le sujet (documentation de réinitialisation/compte, en écartant les sujets voisins) — c'est un signal orthogonal à la similarité, donc il écarte le DOC1 fortement similaire mais non pertinent, sans toucher au DOC3 pertinent." },
+        { "id": "B", "text": "Relever le seuil de similarité à une valeur très élevée — puisque DOC1 est non pertinent, il suffit d'écarter les résultats plus faibles." },
+        { "id": "C", "text": "Abaisser le top-k à 1 — ainsi seul le passage le plus similaire revient et le bruit disparaît." },
+        { "id": "D", "text": "Considérer DOC1 comme la bonne réponse, car il a la plus haute similarité avec la requête." }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Bien. DOC1 est non pertinent malgré une similarité élevée, donc les leviers fondés sur le seul score de similarité échoueront. Le filtre par métadonnées est un signal orthogonal — il écarte les sujets voisins (session, marketing) indépendamment de leur degré de « similarité ».",
+      "feedbackIncorrect": "Le piège : DOC1 a une similarité ÉLEVÉE, donc relever le seuil ne l'éliminera pas (et risque d'écarter le DOC3 pertinent → le rappel baisse), et top-k=1 laisserait précisément ce passage non pertinent en tête. La similarité n'est pas la pertinence — écartez le sujet voisin avec un filtre par métadonnées (un signal orthogonal). Revoyez l'écran sur le filtrage par métadonnées."
+    }
+  },
+  "summary": {
+    "points": [
+      "La base de données vectorielle décide de CE que le retrieval a trouvé : elle stocke les embeddings et retourne les vecteurs les plus proches par rapport à la requête (recherche sémantique).",
+      "Exact vs ANN est un compromis : précis et lent (petit corpus, pertinence complète) contre rapide avec le risque de manquer quelque chose (grand corpus).",
+      "L'index, le filtre par métadonnées, la qualité des chunks et le seuil de similarité pilotent la paire rappel/précision — ce sont les leviers du diagnostic du retrieval.",
+      "Similaire ne signifie pas utile : un passage à similarité élevée peut être non pertinent — vous l'écartez avec un signal orthogonal (un filtre par métadonnées), et non par le seul seuil."
+    ],
+    "checklist": [
+      "Les passages retournés sont-ils vraiment pertinents, ou seulement similaires sur le plan lexical ?",
+      "Un résultat vide ou pauvre est-il la faute de l'index, du filtre ou du seuil, plutôt qu'un manque de données ?",
+      "Mon filtre par métadonnées n'est-il pas trop strict et n'a-t-il pas éliminé un passage pertinent (rappel) ?"
+    ],
+    "checklistTitle": "Checklist — diagnostic du retrieval",
+    "nextStep": "Étape suivante : M6 — RAG : comment construire une réponse avec citations et sources à partir d'un bon retrieval."
+  }
+}

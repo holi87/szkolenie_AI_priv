@@ -1,0 +1,347 @@
+{
+  "M1": {
+    "name": "Fondamentaux de la GenAI et des LLM",
+    "level": "débutant",
+    "interactiveElement": "Classificateur de tâches",
+    "keyConcepts": [
+      "GenAI",
+      "LLM",
+      "ML classique",
+      "sortie probabiliste",
+      "training vs inference",
+      "hallucination"
+    ],
+    "learningOutcomes": [
+      "Distingue la GenAI, les LLM et le ML classique à partir d'exemples",
+      "Souligne que le LLM génère la réponse la plus probable, et non une vérité garantie",
+      "Classe les tâches comme génératives, de classification ou déterministes"
+    ]
+  },
+  "M2": {
+    "name": "Architecture des LLM au niveau pratique",
+    "level": "débutant/intermédiaire",
+    "interactiveElement": "Compteur de contexte",
+    "keyConcepts": [
+      "token",
+      "tokenisation",
+      "context window",
+      "parameters",
+      "transformer",
+      "attention",
+      "inference cost"
+    ],
+    "learningOutcomes": [
+      "Explique ce qu'est un token et pourquoi un long document peut dépasser la context window",
+      "Identifie 3 conséquences d'un contexte trop réduit",
+      "Décrit le transformer comme un mécanisme d'apprentissage des relations entre tokens (intuition)",
+      "Reconnaît que le nombre de paramètres n'est pas en soi une garantie de qualité"
+    ]
+  },
+  "M3": {
+    "name": "Paramètres de génération et contrôle du résultat",
+    "level": "débutant/intermédiaire",
+    "interactiveElement": "Curseurs de génération",
+    "keyConcepts": [
+      "temperature",
+      "top-p",
+      "max tokens",
+      "déterminisme apparent",
+      "reproductibilité",
+      "créativité"
+    ],
+    "learningOutcomes": [
+      "Adapte la temperature à une tâche créative et à une tâche formelle",
+      "Souligne le risque d'une trop forte aléa dans les tâches de QA",
+      "Reconnaît quand max tokens coupe la réponse",
+      "Compare les réglages de génération et choisit le plus sûr pour la documentation de test"
+    ]
+  },
+  "M4": {
+    "name": "Embeddings et similarité sémantique",
+    "level": "intermédiaire",
+    "interactiveElement": "Carte sémantique",
+    "keyConcepts": [
+      "embeddings",
+      "vector",
+      "semantic similarity",
+      "cosine similarity",
+      "embedding model",
+      "nearest neighbors"
+    ],
+    "learningOutcomes": [
+      "Explique les embeddings comme une représentation numérique du sens d'un texte",
+      "Interprète la cosine similarity comme une mesure de proximité de direction des vecteurs",
+      "Identifie les cas où un score de similarité élevé ne signifie pas une réponse correcte",
+      "Formule une requête adaptée à la recherche sémantique"
+    ]
+  },
+  "M5": {
+    "name": "Bases de données vectorielles et similarity search",
+    "level": "intermédiaire/avancé",
+    "interactiveElement": "Débogueur de retrieval",
+    "keyConcepts": [
+      "vector database",
+      "ANN",
+      "index",
+      "similarity search",
+      "metadata filtering",
+      "recall",
+      "precision",
+      "top-k"
+    ],
+    "learningOutcomes": [
+      "Décrit le rôle d'une vector database dans la recherche sémantique",
+      "Distingue la recherche exacte de l'approximate nearest neighbor",
+      "Souligne l'impact de l'index, du filtrage des métadonnées et de la qualité des chunks sur le résultat",
+      "Diagnostique pourquoi une similarity search a renvoyé un fragment similaire mais inutile"
+    ]
+  },
+  "M6": {
+    "name": "RAG : Retrieval-Augmented Generation",
+    "level": "intermédiaire/avancé",
+    "interactiveElement": "Construis un pipeline RAG",
+    "keyConcepts": [
+      "RAG",
+      "retrieval",
+      "generation",
+      "chunking",
+      "overlap",
+      "reranking",
+      "citations",
+      "grounding",
+      "fine-tuning"
+    ],
+    "learningOutcomes": [
+      "Ordonne les étapes d'un pipeline RAG dans le bon ordre",
+      "Choisit une stratégie de chunking pour une documentation d'exigences",
+      "Distingue le cas qui nécessite un RAG du cas qui nécessite un fine-tuning",
+      "Identifie une erreur de retrieval, une erreur de generation et une erreur de source à partir de la réponse du modèle"
+    ]
+  },
+  "M7": {
+    "name": "Le prompt engineering en pratique",
+    "level": "débutant/intermédiaire",
+    "interactiveElement": "Clinique du prompt",
+    "keyConcepts": [
+      "prompt",
+      "rôle",
+      "contexte",
+      "few-shot",
+      "constraints",
+      "output format",
+      "grille d'évaluation du prompt"
+    ],
+    "learningOutcomes": [
+      "Crée un prompt comportant rôle, objectif, contexte, données, contraintes, critères de qualité et format de sortie",
+      "Corrige un prompt imprécis à partir d'une sortie erronée",
+      "Applique le few-shot lorsque le format ou le style de la réponse doit être reproductible",
+      "Indique quand un prompt ne résoudra pas le problème d'un manque de données"
+    ]
+  },
+  "M8": {
+    "name": "Applications de la GenAI au QA et à la qualité",
+    "level": "intermédiaire",
+    "interactiveElement": "Atelier QA",
+    "keyConcepts": [
+      "test case generation",
+      "test data ideas",
+      "risk-based testing",
+      "traceability",
+      "acceptance criteria",
+      "review checklist"
+    ],
+    "learningOutcomes": [
+      "Génère des cas de test à partir d'une exigence et identifie les lacunes de couverture",
+      "Détecte les doublons et les tests factices",
+      "Crée une checklist de risques pour une fonctionnalité",
+      "Évalue si la sortie d'un LLM convient à une documentation QA après contrôle de fond",
+      "Identifie les tâches QA où le LLM joue le rôle d'assistant, et non de décideur"
+    ]
+  },
+  "M9": {
+    "name": "Intégrations d'outils et agents",
+    "level": "intermédiaire",
+    "interactiveElement": "Tableau des permissions de l'agent",
+    "keyConcepts": [
+      "tool use",
+      "agent",
+      "workflow",
+      "human-in-the-loop",
+      "permission scope",
+      "audit log",
+      "rollback"
+    ],
+    "learningOutcomes": [
+      "Distingue un chatbot, un workflow avec outil et un agent exécutant des étapes",
+      "Souligne les risques de donner à un agent l'accès aux fichiers, au courriel, au dépôt ou au système de test",
+      "Conçoit un principe de contrôle minimal : permissions, journaux, validation humaine, rollback",
+      "Identifie les tâches où un agent nécessite des restrictions et un audit"
+    ]
+  },
+  "M10": {
+    "name": "Sécurité, hygiène des données et governance",
+    "level": "débutant/intermédiaire",
+    "interactiveElement": "Portail de sûreté des données",
+    "keyConcepts": [
+      "prompt injection",
+      "jailbreak",
+      "data leakage",
+      "PII",
+      "IP",
+      "acceptable use",
+      "audit trail",
+      "OWASP LLM Top 10"
+    ],
+    "learningOutcomes": [
+      "Reconnaît une prompt injection et un jailbreak dans un scénario",
+      "Classe les données comme autorisées, nécessitant une anonymisation ou interdites",
+      "Souligne le risque de data leakage et de PII",
+      "Applique une politique d'usage acceptable",
+      "Définit la trace d'audit minimale pour l'usage de la GenAI dans un processus QA"
+    ]
+  },
+  "M11": {
+    "name": "Hallucinations, limites d'usage et vérification de la sortie",
+    "level": "débutant/intermédiaire",
+    "interactiveElement": "Vérificateur de sortie",
+    "keyConcepts": [
+      "hallucination",
+      "verification",
+      "source checking",
+      "confidence",
+      "critical decision",
+      "human review"
+    ],
+    "learningOutcomes": [
+      "Identifie les causes des hallucinations : manque de données, conflit de données, pression du prompt, contexte obsolète, sources imprécises",
+      "Applique une checklist de vérification de la sortie",
+      "Rejette l'usage d'un LLM lorsque le résultat ne peut être vérifié ou lorsqu'une erreur a un impact élevé",
+      "Marque les fragments de réponse nécessitant une source ou un expert"
+    ]
+  },
+  "M12": {
+    "name": "Évaluation de la qualité des LLM et du RAG",
+    "level": "avancé",
+    "interactiveElement": "Labo de calibration du juge",
+    "keyConcepts": [
+      "LLM-as-a-judge",
+      "golden set",
+      "evaluation rubric",
+      "bias",
+      "position bias",
+      "inter-rater agreement",
+      "groundedness",
+      "faithfulness"
+    ],
+    "learningOutcomes": [
+      "Définit un golden set pour un use case donné",
+      "Choisit les métriques : accuracy, faithfulness, groundedness, relevance, completeness",
+      "Conçoit une grille LLM-as-a-judge",
+      "Souligne les risques de bias, de position bias et de divergence avec l'évaluation humaine",
+      "Calibre l'évaluation automatique en la comparant à l'évaluation d'un expert et fixe un seuil d'acceptation"
+    ]
+  },
+  "MSHP": {
+    "name": "Échelle de Holak — autodiagnostic de la maturité personnelle (v2.1p)",
+    "level": "tous niveaux",
+    "interactiveElement": "Self-check de la maturité personnelle (Échelle de Holak v2.1p)",
+    "keyConcepts": [
+      "maturité de sa propre pratique de l'IA",
+      "Échelle de Holak v2.1p (personne)",
+      "vérifiabilité de la sortie",
+      "réversibilité des décisions",
+      "gestion du contexte"
+    ],
+    "learningOutcomes": [
+      "Détermine un niveau indicatif de maturité de sa propre pratique de l'IA (0–11)",
+      "Identifie le blocage et la prochaine étape pour monter d'un cran dans sa propre méthode de travail",
+      "Reconnaît le piège d'un faux sentiment de maturité personnelle"
+    ]
+  },
+  "MSHO": {
+    "name": "Échelle de Holak — autodiagnostic de la maturité de l'organisation (v2.1e)",
+    "level": "tous niveaux",
+    "interactiveElement": "Self-check de la maturité de l'organisation (Échelle de Holak v2.1e)",
+    "keyConcepts": [
+      "maturité de l'adoption de l'IA dans l'organisation",
+      "Échelle de Holak v2.1e (organisation)",
+      "politique d'usage acceptable",
+      "trace d'audit",
+      "mesure de l'impact de l'IA"
+    ],
+    "learningOutcomes": [
+      "Détermine un niveau indicatif de maturité de l'adoption de l'IA dans l'organisation (0–11)",
+      "Identifie le blocage et la prochaine étape d'adoption à l'échelle de l'équipe/de l'entreprise",
+      "Distingue une adoption mesurée et continûment améliorée d'une initiative ponctuelle"
+    ]
+  },
+  "MSK1": {
+    "name": "Gestion du contexte et coût des tokens",
+    "level": "tous niveaux",
+    "interactiveElement": "Classification des pratiques de gestion du contexte",
+    "keyConcepts": [
+      "gestion du contexte",
+      "fenêtre de contexte",
+      "coût des tokens",
+      "hygiène du prompt",
+      "tâches répétitives"
+    ],
+    "learningOutcomes": [
+      "Distingue les pratiques économes des pratiques dispendieuses dans la gestion du contexte",
+      "Indique comment limiter le coût des tokens sans perte de qualité",
+      "Planifie une tâche IA répétitive avec contrôle du contexte et du coût"
+    ]
+  },
+  "MSK2": {
+    "name": "Agents IA : autonomie, permissions et contrôle humain",
+    "level": "tous niveaux",
+    "interactiveElement": "Réglage de l'autonomie et du contrôle de l'agent (tune)",
+    "keyConcepts": [
+      "agent",
+      "tool use",
+      "human-in-the-loop",
+      "périmètre des permissions",
+      "réversibilité et trace d'audit",
+      "vérifiabilité de la sortie"
+    ],
+    "learningOutcomes": [
+      "Distingue un chatbot, un workflow avec outil et un agent exécutant des étapes",
+      "Adapte le niveau d'autonomie de l'agent au risque et à la réversibilité de la tâche",
+      "Conçoit des limites de permissions, une validation humaine et une trace d'audit pour l'agent"
+    ]
+  },
+  "MSK3": {
+    "name": "Sécurité, confidentialité et governance pour l'IA",
+    "level": "tous niveaux",
+    "interactiveElement": "Classification des données et des usages de l'IA",
+    "keyConcepts": [
+      "confidentialité des données",
+      "PII",
+      "politique d'usage acceptable",
+      "governance de l'IA",
+      "trace d'audit"
+    ],
+    "learningOutcomes": [
+      "Classe les données comme autorisées, nécessitant une anonymisation ou interdites",
+      "Indique les règles minimales de governance pour l'usage de l'IA en équipe",
+      "Reconnaît les risques de confidentialité dans un usage répétitif de l'IA"
+    ]
+  },
+  "MSK4": {
+    "name": "Skills et mesure de l'impact : évaluation de la maturité du workflow IA",
+    "level": "tous niveaux",
+    "interactiveElement": "Évaluation de la maturité du workflow IA selon une grille (rubric)",
+    "keyConcepts": [
+      "skills / workflows répétitifs",
+      "frontière 8→9 et 10→11",
+      "mesure de l'impact de l'IA",
+      "calibration et amélioration continue",
+      "grille de maturité"
+    ],
+    "learningOutcomes": [
+      "Évalue la maturité d'un workflow IA répétitif (skill) selon des critères concrets",
+      "Reconnaît ce qui distingue le niveau 8 du niveau 9 et le niveau 10 du niveau 11",
+      "Distingue un développement mesuré et calibré d'un faux sentiment de maturité"
+    ]
+  }
+}

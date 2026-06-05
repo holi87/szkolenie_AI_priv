@@ -1,0 +1,102 @@
+{
+  "_meta": {
+    "issue": "#122 [M16] Rozdzielenie diagnozy Skali Holaka — wymiar ORGANIZACYJNY (v2.1e)",
+    "adr": "docs/adr/0008-modul-skali-holaka-msh.md",
+    "interaction": "Self-check dojrzałości organizacji (kind: maturity-check) — NON-gating, neutralny framing",
+    "source": "Model dojrzałości adopcji AI „Skala Holaka”: wymiar organizacyjny v2.1e (organizacja, 0–11). Atrybucja: quality-blog.eu/pl/blog/skala-holaka.",
+    "dataPolicy": "WSZYSTKIE zdania self-checku SYNTETYCZNE i ogólne (zero realnych danych/PII). Diagnoza orientacyjna — NIE da się jej „oblać”. Heurystyka punktacji uproszczona (liczba zaznaczeń → poziom 0–11) do weryfikacji przez eksperta dziedzinowego (SME)."
+  },
+  "module": "MSHO",
+  "intro": "L'Échelle de Holak dans sa dimension organisationnelle (v2.1e) aide à nommer la maturité de l'adoption de l'IA dans votre équipe ou votre entreprise — où en est l'organisation aujourd'hui et quelle est la prochaine étape réaliste. C'est un auto-diagnostic, pas un test : il n'y a pas de résultat « réussi/échoué », seulement un niveau indicatif 0–11 et une indication sur la manière de progresser. Vous pouvez le réaliser indépendamment du diagnostic personnel (MSHP).",
+  "screens": [
+    {
+      "id": "msho-s1-czym-jest",
+      "title": "Qu'est-ce que l'Échelle de Holak organisationnelle",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "La version organisationnelle (v2.1e) décrit la maturité de l'adoption de l'IA dans une équipe ou une entreprise sur 12 niveaux (0–11) — des expérimentations spontanées jusqu'à une adoption consciente, mesurée et continuellement améliorée, inscrite dans la stratégie. Elle aide à éviter deux pièges : « nous avons de l'IA, donc nous sommes matures » et « ce n'est qu'un jouet »." },
+        { "kind": "list", "items": [
+          "Vous évaluez l'adoption de l'IA dans l'ORGANISATION — indépendamment de la maturité de chaque individu.",
+          "L'organisation peut se situer plus haut ou plus bas que son meilleur praticien.",
+          "Le diagnostic de votre propre pratique (Échelle de Holak v2.1p) se réalise séparément dans le module MSHP."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "D'où vient le nom et qui est derrière le modèle", "text": "L'Échelle de Holak a été imaginée par Grzegorz Holak avec le soutien de Konrad Gomulski — d'où son nom. Tous deux sont Senior Test Development Engineer chez Sii Polska et membres de la SJSI ainsi que cofondateurs de quality-blog.eu ; Grzegorz Holak est en outre Test Architect et AI Ambassador chez SCIB. Nous l'utilisons comme un outil d'auto-réflexion, pas de certification.",
+          "links": [
+            { "label": "Échelle de Holak — dimension organisationnelle (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka" },
+            { "label": "Échelle de Holak — dimension personnelle (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka-private" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "msho-s2-osie-i-granice",
+      "title": "Comment reconnaître le niveau : les axes et les deux seuils",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "La maturité d'une organisation ne se reconnaît pas au nombre de licences, mais au fait que l'IA soit intégrée aux processus : une politique d'usage acceptable écrite, des cas d'usage autorisés, une vérification obligatoire des sorties dans les processus critiques, la mesure de l'impact sur la qualité et le temps, ainsi que la réversibilité des décisions avec une trace d'audit." },
+        { "kind": "list", "items": [
+          "Barrière — ce qui manque à l'organisation pour passer au niveau supérieur.",
+          "Réussite — ce qui fonctionne réellement une fois le niveau atteint.",
+          "Piège — considérer la maturité comme un état acquis plutôt que comme une amélioration continue."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Deux seuils critiques (organisationnels)", "text": "Seuil 8→9 : passer des « bonnes pratiques individuelles » à l'intégration de l'IA dans le processus, avec une distinction claire entre assistant et décideur et une trace d'audit. Seuil 10→11 : passer d'améliorations ponctuelles à une amélioration continue et à la calibration de l'adoption comme élément de la stratégie." }
+      ]
+    },
+    {
+      "id": "msho-s3-jak-czytac",
+      "title": "Comment lire le résultat de l'organisation",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Vous allez maintenant cocher les affirmations vraies aujourd'hui pour votre organisation. Le nombre de cases cochées donne un niveau indicatif 0–11 ainsi qu'une indication « où vous en êtes / comment progresser ». Cochez honnêtement uniquement ce qui est réellement mis en œuvre — pas ce qui est planifié." },
+        { "kind": "callout", "variant": "safe", "title": "C'est un diagnostic, pas une évaluation", "text": "Il n'y a ni bonnes ni mauvaises réponses, ni seuil de réussite. Le résultat n'influe ni sur l'achèvement du parcours ni sur aucun test — c'est un miroir, pas un audit." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "maturity-check",
+    "id": "msho-selfcheck",
+    "title": "Échelle de Holak v2.1e — auto-diagnostic de maturité de l'organisation",
+    "intro": "Cochez les affirmations vraies aujourd'hui pour votre équipe ou votre entreprise. Après vérification, vous verrez un niveau indicatif 0–11 et la prochaine étape — sans évaluation réussi/échoué.",
+    "scales": [
+      {
+        "id": "org",
+        "label": "Organisation (Échelle de Holak v2.1e)",
+        "intro": "Quel est le niveau de maturité de l'adoption de l'IA dans votre équipe ou votre entreprise ? Cochez ce qui est réellement mis en œuvre.",
+        "max": 11,
+        "statements": [
+          { "id": "org-1", "text": "Certaines personnes utilisent l'IA pour des tâches ponctuelles." },
+          { "id": "org-2", "text": "Il existe un échange informel de bonnes pratiques d'utilisation de l'IA." },
+          { "id": "org-3", "text": "Une politique d'usage acceptable de l'IA a été rédigée (données, confidentialité, propriété intellectuelle)." },
+          { "id": "org-4", "text": "Certains processus ont des cas d'usage de l'IA définis et autorisés." },
+          { "id": "org-5", "text": "Les sorties de l'IA dans les processus critiques sont obligatoirement vérifiées par un humain." },
+          { "id": "org-6", "text": "Les équipes mesurent l'impact de l'IA sur la qualité et le temps, et pas seulement le fait de l'utiliser." },
+          { "id": "org-7", "text": "Il existe une gestion consciente du contexte et du coût des tokens dans les tâches répétitives." },
+          { "id": "org-8", "text": "Les décisions appuyées par l'IA sont réversibles et laissent une trace d'audit." },
+          { "id": "org-9", "text": "L'IA est intégrée aux processus avec une distinction claire : assistant vs décideur." },
+          { "id": "org-10", "text": "L'organisation calibre et audite régulièrement sa propre utilisation de l'IA." },
+          { "id": "org-11", "text": "L'adoption de l'IA fait partie de la stratégie et de l'amélioration continue, et non d'une initiative ponctuelle." }
+        ],
+        "bands": [
+          { "min": 0, "max": 2, "label": "Niveau 0–2 : Expérimentations spontanées", "advice": "Barrière : absence de règles communes et d'objectif. Prochaine étape : rédigez une politique simple d'usage acceptable de l'IA (données, confidentialité) et désignez 1 à 2 processus pilotes." },
+          { "min": 3, "max": 5, "label": "Niveau 3–5 : Premiers cadres", "advice": "Réussite : il existe des règles et des cas d'usage autorisés. Prochaine étape : instaurez une vérification obligatoire des sorties dans les processus critiques et commencez à mesurer l'impact." },
+          { "min": 6, "max": 8, "label": "Niveau 6–8 : Processus conscients", "advice": "Réussite : vous mesurez l'impact et gérez le contexte. Seuil 8→9 : intégrez l'IA dans le processus avec une distinction claire entre assistant et décideur et une trace d'audit pour les décisions." },
+          { "min": 9, "max": 11, "label": "Niveau 9–11 : Adoption mature", "advice": "Piège : considérer la maturité comme un état acquis et non comme une amélioration continue. Seuil 10→11 : faites de la calibration et de l'audit de l'utilisation de l'IA un élément de la stratégie et de la routine de l'équipe." }
+        ]
+      }
+    ]
+  },
+  "summary": {
+    "points": [
+      "L'Échelle de Holak v2.1e mesure si l'IA est intégrée aux processus (règles, vérification, mesure), pas le nombre de licences.",
+      "Vous évaluez l'adoption dans l'organisation — votre propre pratique se diagnostique séparément (MSHP).",
+      "C'est un diagnostic indicatif : sans réussi/échoué, sans incidence sur la validation — il vise à indiquer la prochaine étape."
+    ],
+    "checklist": [
+      "Avez-vous nommé le niveau indicatif de l'organisation (0–11) ?",
+      "Savez-vous quelle est la barrière la plus proche à franchir ?",
+      "Connaissez-vous une prochaine étape concrète pour progresser ?"
+    ],
+    "checklistTitle": "Checklist — après l'auto-diagnostic de l'organisation",
+    "nextStep": "Prochaine étape : choisissez une barrière du niveau supérieur et planifiez une petite étape d'adoption réversible."
+  }
+}

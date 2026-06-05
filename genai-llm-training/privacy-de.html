@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Datenschutz — GenAI- und LLM-Schulung</title>
+  <meta name="description" content="Datenschutzinformation: was die statische GenAI/LLM-Schulung speichert und wo. Keine Cookies, kein Versand von Daten.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230f1117'/%3E%3Cpath d='M8 3 13 8 8 13 3 8Z' fill='%236ea8fe'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#tresc">Zum Inhalt springen</a>
+  <header class="app-header">
+    <div class="app-header__bar">
+      <div class="brand"><span class="brand__logo" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" focusable="false"><path d="M8 1.5 14.5 8 8 14.5 1.5 8Z" fill="currentColor"/></svg></span><span class="brand__name">Datenschutz</span></div>
+      <div class="app-header__meta"><a class="btn btn--ghost" href="index.html">← Zurück zur Schulung</a></div>
+    </div>
+  </header>
+
+  <main id="tresc" class="view" tabindex="-1">
+    <div class="view__content">
+      <h1>Datenschutz</h1>
+      <p>Diese Schulung ist <strong>vollständig statisch</strong> und <strong>sendet keine Ihrer Daten an einen Server</strong> —
+        es gibt kein Backend, keine Analyse, keine <strong>Cookies</strong> und keine externen Tools. Alles läuft in Ihrem Browser.</p>
+
+      <h2>Was wir lokal in Ihrem Browser speichern</h2>
+      <p>Im Speicher <code>localStorage</code> (auf Ihrem Gerät) speichern wir nur das, was nötig ist, damit die Schulung
+        funktioniert und sich Ihren Fortschritt merkt:</p>
+      <ul>
+        <li>den gewählten Pfad, den Status und die Zeit der Module, die zuletzt besuchte Stelle,</li>
+        <li>die Ergebnisse der Quizze und des Abschlusstests sowie die Daten des Bestätigungszertifikats,</li>
+        <li>das gewählte Farbschema (hell/dunkel) sowie die gewählte Sprache der Benutzeroberfläche,</li>
+        <li>die Schlüssel: <code>genai-training:progress:&lt;Pfad&gt;</code>, <code>genai-training:cursor</code>, <code>genai-training:theme</code> und <code>genai-training:lang</code>.</li>
+      </ul>
+      <p><strong>Das Pseudonym für das Zertifikat wird NICHT gespeichert.</strong> Wir behalten es ausschließlich im Speicher dieser Sitzung —
+        es verschwindet nach dem Neuladen oder Schließen des Tabs. Wir bitten Sie außerdem, ein Pseudonym anzugeben, nicht Ihren echten Vor- und Nachnamen.</p>
+
+      <h2>Daten verlassen Ihr Gerät nicht</h2>
+      <p>Wir übertragen nichts. Die Dateien, die Sie herunterladen (JSON/CSV mit den Ergebnissen) und gegebenenfalls an die Koordinatorin oder den Koordinator senden können,
+        <strong>enthalten Ihr Pseudonym nicht</strong> — sie enthalten nur anonyme Kennungen (Bestätigungs-ID ohne
+        Nickname), Ergebnisse und Zeiten; das Bestätigungsdatum wird auf den Tag gekürzt, um keine Kennung zu erzeugen.</p>
+
+      <h2>So löschen Sie Ihre Daten</h2>
+      <p>Verwenden Sie jederzeit die Schaltfläche <strong>„Von vorn beginnen“</strong> in der Anwendung (löscht den gesamten gespeicherten Fortschritt dieses
+        Browsers) oder löschen Sie die Websitedaten in den Einstellungen Ihres Browsers.</p>
+
+      <h2>Cookies und Rechtsgrundlage</h2>
+      <p>Wir verwenden <strong>keinerlei Cookies</strong> und kein Tracking, daher <strong>gibt es kein Cookie-Einwilligungsbanner, und es ist auch
+        keines erforderlich</strong>. Das lokale Speichern des Fortschritts ist unbedingt erforderlich, damit der von Ihnen selbst angeforderte Dienst funktioniert (das Absolvieren
+        der Schulung und das Ausstellen des Zertifikats) — dies ist die Ausnahme „unbedingt erforderlich“ nach Art. 5(3) der ePrivacy-Richtlinie (2002/58/EG),
+        weshalb wir nicht um Einwilligung bitten. Betrachten Sie diese Seite als Information im Sinne von Art. 13 DSGVO.</p>
+
+      <p class="muted"><a href="index.html">← Zurück zur Schulung</a></p>
+    </div>
+  </main>
+</body>
+</html>

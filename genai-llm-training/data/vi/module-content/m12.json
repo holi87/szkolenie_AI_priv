@@ -1,0 +1,428 @@
+{
+  "_meta": {
+    "issue": "#23 [23][M4] Wdroż moduły M10-M12",
+    "storyboard": "docs/storyboard/m12-evaluation.md",
+    "interaction": "Judge calibration lab (kind: rubric, zadanie praktyczne R3-eval)",
+    "scenario": "SC-EVAL-01 (rozjazd oceny człowiek vs LLM-as-a-judge; EX1 length bias, EX2 position bias)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (SklepDemo, golden set GS-SklepDemo, odpowiedzi A1-A6, QA-ekspert anon.). ZERO realnych danych klienta/PII.",
+    "note": "Element interaktywny typu rubric = warunek konieczny S3, próg 70% (score >= 3,5 / 5). Wszystkie 9 ekranów wspólne dla S1/S2/S3; charakter ROZSZERZONY/pełny realizuje warstwa pogłębiona na ekranie 8 (onlyForPaths blokiem)."
+  },
+  "module": "M12",
+  "intro": "„Chạy được là được” thì chưa đủ: không đo lường thì bạn không biết một thay đổi prompt hay pipeline RAG đã cải thiện hay làm giảm chất lượng. Mô-đun này dạy cách đo chất lượng LLM và RAG bằng công cụ của người kiểm thử: golden set, các chỉ số, rubric của bên chấm điểm, hiệu chuẩn với chuyên gia và ngưỡng quyết định.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Vì sao người kiểm thử cần đánh giá LLM và RAG",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Không đo lường chất lượng thì mọi thay đổi prompt hay pipeline RAG đều là một bước đi trong bóng tối — không rõ nó đã cải thiện hay làm giảm chất lượng câu trả lời. Người kiểm thử mang đến đây chính những thứ họ giỏi nhất: tiêu chí chấp nhận, tính lặp lại được và sự bảo vệ chống thoái lui."
+        },
+        {
+          "kind": "list",
+          "items": [
+            "Golden set — bộ chuẩn mực, tức là „các bài kiểm thử thoái lui cho câu trả lời của mô hình”.",
+            "Các chỉ số chất lượng — đo một câu trả lời tốt bằng cái gì.",
+            "Rubric chấm điểm cho mô hình chấm điểm (LLM-as-a-judge).",
+            "Hiệu chuẩn với chuyên gia và độ đồng thuận giữa các bên chấm (inter-rater agreement).",
+            "Ngưỡng chấp nhận và quyết định „đi tiếp / dừng lại” (go / no-go)."
+          ]
+        },
+        {
+          "kind": "callout",
+          "variant": "info",
+          "text": "Thời lượng mô-đun khoảng 90 phút. Ở cuối là phần tương tác „Judge calibration lab”, kết hợp rubric, bias và hiệu chuẩn trong cùng một luồng."
+        }
+      ]
+    },
+    {
+      "id": "s2-golden-set",
+      "title": "Golden set cho trường hợp sử dụng",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "definition",
+          "term": "Golden set (bộ chuẩn mực)",
+          "original": "danh sách các trường hợp tổng hợp đầu vào → đầu ra mong đợi",
+          "text": "tập hợp được ghi chép: câu hỏi, kỳ vọng đúng và nguồn chân lý (ground truth). Nó đóng vai trò các bài kiểm thử thoái lui cho câu trả lời của mô hình."
+        },
+        {
+          "kind": "paragraph",
+          "text": "Một golden set tốt chứa những câu hỏi đại diện cho trường hợp sử dụng, các trường hợp biên cùng những cái bẫy đã biết. Ví dụ tổng hợp „GS-SklepDemo”: câu hỏi về giới hạn số mục trong giỏ hàng, về chính sách trả hàng và về tiêu chí chấp nhận WYM-koszyk."
+        },
+        {
+          "kind": "callout",
+          "variant": "warn",
+          "title": "Golden set KHÔNG phải là gì",
+          "text": "Đó không phải tập các log ngẫu nhiên hay dữ liệu sản xuất. Một mục không có kỳ vọng phân định được và không có nguồn chân lý thì không đưa vào golden set."
+        }
+      ]
+    },
+    {
+      "id": "s3-ocen-projekt",
+      "title": "Đánh giá thiết kế golden set",
+      "type": "decision",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Hãy nhìn các ứng viên cho golden set „GS-SklepDemo” và phân định xem cái nào phù hợp để đưa vào bộ, còn cái nào bị lỗi. Lỗi thường gặp là: thiếu nguồn chân lý, kỳ vọng mơ hồ, trùng lặp hoặc câu hỏi không kiểm thử được."
+        },
+        {
+          "kind": "list",
+          "items": [
+            "Tốt: „Giới hạn số mục trong giỏ hàng là bao nhiêu?” — kỳ vọng suy ra từ WYM-koszyk, nguồn được ghi chép.",
+            "Lỗi: „Ứng dụng có ngầu không?” — kỳ vọng mơ hồ, không kiểm thử được.",
+            "Lỗi: câu hỏi không chỉ ra nguồn chân lý — không rõ phải đánh giá dựa trên cái gì.",
+            "Lỗi: bản sao của một mục đã có — trùng lặp không làm tăng độ bao phủ."
+          ]
+        },
+        {
+          "kind": "callout",
+          "variant": "safe",
+          "text": "Quy tắc: mỗi mục của golden set đều có kỳ vọng rõ ràng và nguồn chân lý được ghi chép. Thiếu một trong hai = mục đó bị loại."
+        }
+      ]
+    },
+    {
+      "id": "s4-piec-metryk",
+      "title": "Năm chỉ số chất lượng",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Để đánh giá câu trả lời của LLM và RAG, ta dùng năm chỉ số. Mỗi chỉ số đo một chiều chất lượng khác nhau và có triệu chứng thiếu hụt điển hình."
+        },
+        {
+          "kind": "table",
+          "headers": [
+            "Chỉ số",
+            "Đo cái gì",
+            "Triệu chứng thiếu hụt điển hình"
+          ],
+          "rows": [
+            [
+              "độ chính xác (accuracy)",
+              "câu trả lời có đúng về mặt nội dung không",
+              "một khẳng định sai được nêu ra như sự thật"
+            ],
+            [
+              "độ trung thành với nguồn (faithfulness)",
+              "câu trả lời có khớp với nguồn không",
+              "một câu mâu thuẫn với tài liệu nguồn"
+            ],
+            [
+              "tính có căn cứ (groundedness)",
+              "nội dung có thể dựa vào ngữ cảnh được cung cấp không",
+              "một khẳng định không có căn cứ trong đoạn đã truy xuất"
+            ],
+            [
+              "độ liên quan (relevance)",
+              "câu trả lời có liên quan đến câu hỏi đã đặt không",
+              "trả lời cho một câu hỏi khác với câu được đặt"
+            ],
+            [
+              "tính đầy đủ (completeness)",
+              "đã bao phủ mọi điều kiện yêu cầu chưa",
+              "thiếu một phần điều kiện của tiêu chí chấp nhận"
+            ]
+          ],
+          "textAlt": "Năm chỉ số chất lượng. Độ chính xác (accuracy): câu trả lời có đúng về mặt nội dung không; triệu chứng thiếu hụt là một khẳng định sai được nêu ra như sự thật. Độ trung thành với nguồn (faithfulness): câu trả lời có khớp với nguồn không; triệu chứng thiếu hụt là một câu mâu thuẫn với tài liệu nguồn. Tính có căn cứ (groundedness): nội dung có thể dựa vào ngữ cảnh được cung cấp không; triệu chứng thiếu hụt là một khẳng định không có căn cứ trong đoạn đã truy xuất. Độ liên quan (relevance): câu trả lời có liên quan đến câu hỏi đã đặt không; triệu chứng thiếu hụt là trả lời cho một câu hỏi khác với câu được đặt. Tính đầy đủ (completeness): đã bao phủ mọi điều kiện yêu cầu chưa; triệu chứng thiếu hụt là thiếu một phần điều kiện của tiêu chí chấp nhận."
+        },
+        {
+          "kind": "callout",
+          "variant": "info",
+          "text": "Liên hệ với M6: faithfulness hoặc groundedness thấp thường chỉ ra tầng sinh của RAG, còn lỗ hổng trong các nguồn đã truy xuất — chỉ ra tầng truy xuất (retrieval)."
+        },
+        {
+          "kind": "callout",
+          "variant": "info",
+          "title": "Ghi chú: faithfulness so với groundedness",
+          "text": "Trong nhiều nguồn tài liệu, „độ trung thành với nguồn” và „tính có căn cứ” đôi khi được gộp chung — như một thước đo duy nhất „câu trả lời có bám vào ngữ cảnh được cung cấp không”. Ở đây ta tách chúng ra vì mục đích sư phạm: faithfulness hỏi rằng câu trả lời có mâu thuẫn với nguồn không, còn groundedness — mỗi khẳng định có căn cứ trong đoạn đã truy xuất không. Trên thực tế thường kiểm tra cả hai cùng lúc."
+        }
+      ]
+    },
+    {
+      "id": "s5-dobierz-metryke",
+      "title": "Chọn chỉ số phù hợp với câu hỏi",
+      "type": "decision",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Với một câu hỏi chất lượng cho trước, hãy chọn chỉ số phân định được nó. Cái bẫy thường gặp nhất là nhầm lẫn độ liên quan (relevance) với độ chính xác (accuracy)."
+        },
+        {
+          "kind": "list",
+          "items": [
+            "„Câu trả lời có khớp với nội dung nguồn không?” → faithfulness (và tính có căn cứ / groundedness).",
+            "„Câu trả lời có bao phủ mọi điều kiện của tiêu chí chấp nhận không?” → completeness.",
+            "„Câu trả lời có thực sự liên quan đến câu hỏi đã đặt không?” → relevance.",
+            "„Giá trị được nêu có đúng về mặt nội dung không?” → accuracy."
+          ]
+        },
+        {
+          "kind": "callout",
+          "variant": "warn",
+          "text": "Cái bẫy: một câu trả lời có thể liên quan (đúng chủ đề) mà vẫn mâu thuẫn với nguồn. Relevance không thay thế được faithfulness."
+        }
+      ]
+    },
+    {
+      "id": "s6-rubryka",
+      "title": "Rubric cho LLM-as-a-judge",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "definition",
+          "term": "LLM-as-a-judge",
+          "original": "mô hình ngôn ngữ trong vai trò người đánh giá",
+          "text": "mô hình đánh giá câu trả lời của một mô hình khác theo rubric. Không có rubric, nó trả lời câu hỏi chung chung „cái này có tốt không?” và đánh giá không lặp lại được."
+        },
+        {
+          "kind": "paragraph",
+          "text": "Một rubric đánh giá tốt (evaluation rubric) có: tiêu chí rõ ràng, thang điểm (ví dụ 0–2 hoặc 1–5), định nghĩa cho từng mức, các ví dụ neo (anchor examples) và chỉ dẫn „chỉ đánh giá dựa trên nguồn”."
+        },
+        {
+          "kind": "callout",
+          "variant": "warn",
+          "title": "Phản huyền thoại",
+          "text": "„Hỏi mô hình xem câu trả lời có tốt không” mà không có rubric sẽ cho ra đánh giá phụ thuộc vào sự bất chợt của lần chạy. Định nghĩa các mức và các neo làm cho đánh giá lặp lại được."
+        }
+      ]
+    },
+    {
+      "id": "s7-bias-position",
+      "title": "Sự thiên lệch của bên chấm điểm và position bias",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "LLM chấm điểm có những thiên lệch (bias). Không kiểm soát, đánh giá tự động có thể cho ra „đèn xanh” giả, tức là cho qua một câu trả lời đáng lẽ phải bị loại."
+        },
+        {
+          "kind": "definition",
+          "term": "Position bias (thiên lệch vị trí)",
+          "original": "preferencja pozycji w porównaniu parami",
+          "text": "khi so sánh hai câu trả lời, bên chấm điểm thường chọn câu được hiển thị đầu tiên, bất kể chất lượng thực sự của nó."
+        },
+        {
+          "kind": "list",
+          "items": [
+            "Length bias: đánh giá cao hơn cho câu trả lời dài hơn chỉ vì độ dài của nó.",
+            "Đánh giá „nể nang”: cho điểm cao bất kể nội dung.",
+            "Lệch so với đánh giá của con người: judge cho điểm khác với chuyên gia."
+          ]
+        },
+        {
+          "kind": "callout",
+          "variant": "info",
+          "text": "Các biện pháp giảm thiểu (sẽ triển khai tiếp): đổi thứ tự trong các so sánh theo cặp, rubric rõ ràng và hiệu chuẩn với chuyên gia."
+        }
+      ]
+    },
+    {
+      "id": "s8-kalibracja",
+      "title": "Hiệu chuẩn với chuyên gia và độ đồng thuận giữa các bên chấm",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Để tin được đánh giá tự động, hãy so sánh nó với đánh giá của chuyên gia trên cùng golden set và tính độ đồng thuận giữa các bên chấm (inter-rater agreement). Những chỗ mà các đánh giá lệch nhau là tín hiệu để cải thiện rubric, chứ không phải để bỏ qua."
+        },
+        {
+          "kind": "list",
+          "ordered": true,
+          "items": [
+            "Đánh giá các câu trả lời bằng LLM chấm điểm theo rubric.",
+            "So sánh với đánh giá của chuyên gia trên cùng golden set.",
+            "Tìm chỗ lệch và chẩn đoán nguyên nhân (bias hay lỗ hổng trong rubric).",
+            "Sửa rubric và đánh giá lại."
+          ]
+        },
+        {
+          "kind": "callout",
+          "variant": "warn",
+          "onlyForPaths": [
+            "S2",
+            "S3"
+          ],
+          "title": "Đào sâu: vì sao chỉ riêng „% đồng thuận” lại gây hiểu nhầm",
+          "text": "Khi phân bố các đánh giá rất mất cân bằng (ví dụ gần như tất cả đều „pass”), một tỷ lệ đồng thuận cao có thể đạt được gần như ngẫu nhiên. Điều then chốt là bên chấm điểm có nhắm trúng những trường hợp „fail” hiếm gặp và rủi ro hay không, chứ không chỉ đồng thuận „ở mức pass”."
+        }
+      ]
+    },
+    {
+      "id": "s9-prog-go-nogo",
+      "title": "Ngưỡng chấp nhận và quyết định go/no-go",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Ngưỡng chấp nhận chất lượng (acceptance threshold) xác định khi nào chất lượng „đủ tốt”. Ví dụ: „faithfulness ≥ 0,9 trên golden set VÀ không có mục nào mâu thuẫn với nguồn”. Ngưỡng được chọn theo rủi ro của trường hợp sử dụng, chi phí của lỗi và kết quả của phiên bản trước (baseline)."
+        },
+        {
+          "kind": "definition",
+          "term": "Quyết định go / no-go („đi tiếp / dừng lại”)",
+          "original": "go / no-go decision",
+          "text": "quyết định xem có được phép phát hành phiên bản hay không. Ngưỡng cũng hoạt động trong thoái lui: nó so sánh phiên bản mới với phiên bản trước."
+        },
+        {
+          "kind": "callout",
+          "variant": "safe",
+          "title": "Mặc định bảo thủ",
+          "text": "Thiếu dữ liệu để đánh giá hoặc một điều kiện cứng không được thỏa mãn (ví dụ một mục mâu thuẫn với nguồn) = no-go. Trung bình tốt không cứu được điều kiện cứng."
+        }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "rubric",
+    "id": "m12-judge-calibration",
+    "title": "Judge calibration lab",
+    "intro": "Bộ tổng hợp: các câu trả lời A1–A6 cho những câu hỏi từ golden set „GS-SklepDemo”, được chấm bởi một QA-ekspert (anon.) và bởi một LLM chấm điểm. Bộ này cố ý cài cắm position bias (cặp A3/A4) cùng với việc đánh giá quá cao (A2) và một lỗ hổng rubric (A5). Với mỗi tiêu chí của rubric R3-eval, hãy chọn quyết định thiết kế đánh giá thỏa mãn tiêu chí đó. Bài đánh giá được tính là nhiệm vụ thực hành R3-eval trên lộ trình S3 và là điều kiện bắt buộc — ngưỡng đạt là 70% (score ≥ 3,5 / 5).",
+    "rubricId": "R3-eval",
+    "recordsPractical": true,
+    "scaleMax": 5,
+    "passThreshold": 3.5,
+    "criteria": [
+      {
+        "id": "K1",
+        "name": "Golden set phù hợp với use case",
+        "points": 1,
+        "hint": "Golden set có các câu hỏi đại diện, các trường hợp biên và nguồn chân lý được ghi chép — không phải log ngẫu nhiên.",
+        "prompt": "Làm sao xây dựng golden set „GS-SklepDemo” để đánh giá các câu trả lời về giỏ hàng và trả hàng?",
+        "options": [
+          {
+            "id": "a",
+            "text": "Các câu hỏi đại diện về WYM-koszyk và chính sách trả hàng, các trường hợp biên (câu hỏi ngoài phạm vi nguồn), mỗi mục đều có nguồn chân lý được ghi chép."
+          },
+          {
+            "id": "b",
+            "text": "Thu thập ngẫu nhiên log sản xuất với dữ liệu thô của khách hàng — chúng sẽ „thật” nhất."
+          },
+          {
+            "id": "c",
+            "text": "Toàn những câu hỏi chung chung kiểu „ứng dụng có tốt không?”, không chỉ ra kỳ vọng lẫn nguồn."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K2",
+        "name": "Các chỉ số có lý lẽ",
+        "points": 1,
+        "hint": "Chọn các chỉ số phù hợp với cái mà câu hỏi thực sự kiểm tra: bao phủ các điều kiện = completeness, khớp và có căn cứ trong nguồn = faithfulness/groundedness.",
+        "prompt": "Câu hỏi chất lượng: „Câu trả lời có liệt kê mọi điều kiện thanh toán từ nguồn và không thêm điều kiện nằm ngoài nguồn không?”. Nên chọn những chỉ số nào?",
+        "options": [
+          {
+            "id": "a",
+            "text": "completeness (bao phủ mọi điều kiện) cùng faithfulness và groundedness (không có nội dung ngoài nguồn và có căn cứ trong ngữ cảnh) — mỗi chỉ số đều được lý giải bằng một chiều của câu hỏi."
+          },
+          {
+            "id": "b",
+            "text": "Chỉ relevance thôi, vì câu hỏi liên quan đến thanh toán — thế là đủ để đánh giá nội dung."
+          },
+          {
+            "id": "c",
+            "text": "Position bias như một chỉ số chất lượng nội dung, vì nghe có vẻ kỹ thuật."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K3",
+        "name": "Rubric LLM-as-a-judge (rõ ràng)",
+        "points": 1,
+        "hint": "Một rubric rõ ràng có tiêu chí rõ ràng, thang điểm với định nghĩa cho từng mức, các neo và chỉ dẫn „đánh giá dựa trên nguồn”.",
+        "prompt": "Mục A5 (tính đầy đủ của các điều kiện thanh toán) bị lệch, vì rubric không nói rõ khi nào „thiếu 1 điều kiện” đã là mức thấp hơn. Sửa nó thế nào?",
+        "options": [
+          {
+            "id": "a",
+            "text": "Bổ sung định nghĩa cho các mức của thang điểm (ví dụ 2 = mọi điều kiện; 1 = thiếu một điều kiện; 0 = thiếu phần lớn) cùng các ví dụ neo và chỉ dẫn „chỉ đánh giá dựa trên nguồn”."
+          },
+          {
+            "id": "b",
+            "text": "Để nguyên rubric là „đánh giá xem câu trả lời có tốt không” và tin vào cảm giác của bên chấm điểm."
+          },
+          {
+            "id": "c",
+            "text": "Bỏ thang điểm và chỉ thu thập nhận xét tự do của bên chấm điểm cho mỗi mục."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K4",
+        "name": "Bias/position bias + hiệu chuẩn với chuyên gia",
+        "points": 1,
+        "hint": "Position bias được xác nhận và vô hiệu hóa bằng việc đổi thứ tự (A3/A4); length bias là việc đánh giá cao vì độ dài; phán quyết luôn cần kiểm chứng bằng đánh giá của chuyên gia trên golden set.",
+        "prompt": "Cặp A3/A4 (cùng một biến thể WYM-koszyk) và mục mà judge đánh giá cao câu trả lời dài hơn — làm sao phát hiện và hạn chế bias một cách đáng tin cậy trước khi đặt ngưỡng?",
+        "options": [
+          {
+            "id": "a",
+            "text": "Lặp lại việc chấm A3/A4 với thứ tự đảo ngược (và lấy trung bình cả hai cách sắp xếp): việc đảo ngược phán quyết xác nhận position bias, nên đưa việc đổi thứ tự vào rubric; không thưởng điểm cho câu trả lời chỉ vì độ dài; hiệu chuẩn mỗi điểm số dựa trên đánh giá của chuyên gia trên golden set."
+          },
+          {
+            "id": "b",
+            "text": "Thưởng cho câu trả lời dài hơn vì mặc định coi nó đầy đủ hơn và tin vào phán quyết đầu tiên của judge, vì đánh giá tự động nhanh hơn và khách quan hơn."
+          },
+          {
+            "id": "c",
+            "text": "Xóa cặp A3/A4 rắc rối khỏi golden set để tỷ lệ đồng thuận tăng lên, và bỏ qua việc so sánh với chuyên gia."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K5",
+        "name": "Ngưỡng chấp nhận chất lượng",
+        "points": 1,
+        "hint": "Ngưỡng đôi khi là một phép hội: trung bình VÀ điều kiện cứng „không có mâu thuẫn”. Thiếu dữ liệu hoặc điều kiện cứng không được thỏa mãn = no-go (mặc định bảo thủ).",
+        "prompt": "Ngưỡng: „faithfulness ≥ 0,9 trên golden set VÀ không có mục nào mâu thuẫn với nguồn”. Phiên bản mới có trung bình 0,93, nhưng mục A2 mâu thuẫn với nguồn. Quyết định ra sao?",
+        "options": [
+          {
+            "id": "a",
+            "text": "No-go: điều kiện cứng „không có mâu thuẫn” không được thỏa mãn dù trung bình tốt — trước tiên hãy loại bỏ mâu thuẫn ở A2, rồi đánh giá lại; chỉ chấp nhận đánh giá tự động sau khi hiệu chuẩn và với việc tái hiệu chuẩn định kỳ cùng chuyên gia."
+          },
+          {
+            "id": "b",
+            "text": "Go: trung bình 0,93 vượt 0,9, nên ngưỡng được thỏa mãn bất kể một mục mâu thuẫn đơn lẻ."
+          },
+          {
+            "id": "c",
+            "text": "Go kèm việc hạ ngưỡng xuống 0,85, vì chỉ một mục bị lỗi — hoặc triển khai „thử nghiệm” và theo dõi."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Golden set (bộ chuẩn mực) là các bài kiểm thử thoái lui cho câu trả lời của mô hình: câu hỏi đại diện, các trường hợp biên, nguồn chân lý được ghi chép.",
+      "Năm chỉ số: độ chính xác, độ trung thành với nguồn, tính có căn cứ, độ liên quan, tính đầy đủ — hãy chọn mỗi chỉ số phù hợp với chiều của câu hỏi.",
+      "Rubric cho LLM-as-a-judge phải rõ ràng: tiêu chí, thang điểm với định nghĩa các mức, các neo, đánh giá dựa trên nguồn.",
+      "Bên chấm điểm có bias (trong đó có position bias và length bias) — hãy phát hiện bằng việc đổi thứ tự và hiệu chuẩn với chuyên gia (độ đồng thuận giữa các bên chấm).",
+      "Ngưỡng chấp nhận đôi khi là một phép hội các điều kiện; điều kiện cứng không được thỏa mãn hoặc thiếu dữ liệu = no-go."
+    ],
+    "checklist": [
+      "Golden set có kỳ vọng rõ ràng và nguồn chân lý cho mỗi mục không?",
+      "Các chỉ số có được chọn phù hợp với cái mà câu hỏi thực sự kiểm tra không?",
+      "Rubric của bên chấm điểm có định nghĩa các mức, các neo và đánh giá dựa trên nguồn không?",
+      "Tôi đã kiểm tra position bias bằng việc đổi thứ tự và hiệu chuẩn đánh giá với chuyên gia chưa?",
+      "Ngưỡng chấp nhận có điều kiện cứng không, và việc thiếu dữ liệu có cho ra no-go không?"
+    ],
+    "checklistTitle": "Danh sách kiểm tra — đánh giá LLM và RAG sẵn sàng",
+    "nextStep": "Bước tiếp theo: với S3 thường là bài kiểm tra cuối và các phần bổ sung. Hãy lặp lại vòng lặp: golden set → các chỉ số → rubric → hiệu chuẩn → ngưỡng → quyết định."
+  }
+}

@@ -1,0 +1,149 @@
+{
+  "_meta": {
+    "issue": "#21 [21][M4] Wdroż moduły M3-M6",
+    "storyboard": "docs/storyboard/m05-vector-db.md",
+    "interaction": "Retrieval debugger (kind: tune)",
+    "scenario": "SC-RAG-01 — mini-korpus dokumentacji QA (DOC1-DOC4, NotkaApp)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (NotkaApp/SklepDemo/PipeDemo). Output interakcji jest prerenderowany (autorski lookup po poziomach), nie z żywego retrievalu. ZERO PII, ZERO realnych domen.",
+    "note": "Egzemplarz typu tune wg m03: kontrolki retrievalu → autorskie efekty (recall/precision) + scorowany checkpoint diagnostyczny. Storyboard 1-8 → screens; ekran 9 → interaction; ekran 10 (quiz) zasilany z questions/m05.json; ekran 11 → summary."
+  },
+  "module": "M5",
+  "intro": "Wenn ein Team eine Suchfunktion über der Testdokumentation oder ein RAG-System baut, hängt die Qualität der Antwort davon ab, WAS das Retrieval überhaupt gefunden hat. Eine Testerin oder ein Tester muss beurteilen können, ob die zurückgegebenen Passagen relevant sind, und diagnostizieren, warum sie es nicht sind. Dieses Modul zeigt die Rolle der Vektordatenbank, den Kompromiss exact vs. ANN sowie den Einfluss von Index, Metadaten und Chunks auf das Ergebnis.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Wozu braucht eine Testerin oder ein Tester eine Vektordatenbank?",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Immer häufiger testet QA Funktionen, die auf semantischer Suche beruhen: eine Suchfunktion über der Testdokumentation oder einen RAG-Assistenten, der Fragen zum Produkt beantwortet. In beiden Fällen beginnt die Relevanz der finalen Antwort beim Retrieval — also damit, welche Passagen gefunden wurden." },
+        { "kind": "paragraph", "text": "Deine Aufgabe als Testerin oder Tester: beurteilen, ob die zurückgegebenen Passagen relevant sind, und diagnostizieren, warum sie es manchmal nicht sind. In diesem Modul lernst du die Rolle der Vektordatenbank kennen, den Unterschied exact vs. ANN, den Einfluss von Index, Metadaten und Chunks, und am Ende setzt du einen Such-Debugger auf dem synthetischen NotkaApp-Korpus ein." },
+        { "kind": "callout", "variant": "info", "title": "Was wir hier aufbauen", "text": "Wir arbeiten an einem erfundenen Mini-Korpus der QA-Dokumentation der Anwendung NotkaApp — alle Daten sind synthetisch, ohne echte Kunden und ohne PII." }
+      ]
+    },
+    {
+      "id": "s2-czym-jest",
+      "title": "Was eine Vektordatenbank ist",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Vektordatenbank", "original": "vector database", "text": "ein Speicher, der die Embeddings von Passagen (aus M4) ablegt und es ermöglicht, schnell die Vektoren zu finden, die dem Embedding der Anfrage am ähnlichsten sind." },
+        { "kind": "paragraph", "text": "Die semantische Suche (semantic search) funktioniert über die Bedeutung, nicht über die wörtlichen Wörter. Der Pfad ist fest: Anfrage → Embedding der Anfrage → nächste Vektoren in der Datenbank → zugehörige Textpassagen. Anders als die Stichwortsuche, die dieselben Wörter abgleicht — hier zählt die Bedeutungsnähe." },
+        { "kind": "diagram", "title": "Von der Anfrage zu den Passagen", "caption": "Der Ablauf der semantischen Suche.", "textAlt": "Vier Schritte in einer einzigen Abfolge: (1) eine Textanfrage, zum Beispiel „nach wie langer Zeit läuft der Link zum Zurücksetzen des Passworts ab“, (2) das Embedding-Modell wandelt sie in einen Vektor um, (3) die Vektordatenbank vergleicht diesen Vektor mit den Embeddings der Passagen und wählt die nächsten aus, (4) sie gibt die zugehörigen Textpassagen zurück, zum Beispiel DOC3 über das Zurücksetzen des Passworts." },
+        { "kind": "callout", "variant": "info", "title": "Mini-Korpus NotkaApp", "text": "In diesem Modul kursiert ein 4-Passagen-Korpus: DOC1 — das Session-Token läuft nach 30 min Inaktivität ab; DOC2 — Passwort-Richtlinie (mind. 12 Zeichen, Sperre nach 3 Fehlern); DOC3 — Passwort zurücksetzen: E-Mail-Link 30 min gültig, einmalig; DOC4 — Marketing-FAQ (Vorteile und Preise)." }
+      ]
+    },
+    {
+      "id": "s3-dokladne-czy-przyblizone",
+      "title": "Exakt oder approximativ?",
+      "type": "decision",
+      "blocks": [
+        { "kind": "paragraph", "text": "Eine Entscheidung vor der Wahl des Ansatzes. Du hast zwei Szenarien auf dem NotkaApp-Korpus. Szenario A: ein kleiner Korpus (rund ein Dutzend Passagen) und die Anforderung, dass KEINE relevante Passage bei der Abdeckungsprüfung entgeht. Szenario B: ein Korpus in Millionenhöhe an Passagen, bei dem vor allem die Antwortgeschwindigkeit zählt." },
+        { "kind": "paragraph", "text": "Überlege: Wann kannst du es dir leisten, alle Vektoren durchzusehen (exakt, aber langsamer), und wann musst du über einen Index abkürzen (schneller, aber mit dem Risiko, etwas zu übersehen)? Gleich zerlegen wir diesen Kompromiss in seine Bestandteile." }
+      ]
+    },
+    {
+      "id": "s4-exact-vs-ann",
+      "title": "Exact vs. ANN — der Kompromiss",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Exakte Suche", "original": "exact / brute force", "text": "durchsucht alle Vektoren in der Datenbank und gibt die wirklich nächsten zurück — exakt, aber langsam; lohnend bei einem kleinen Korpus." },
+        { "kind": "definition", "term": "ANN", "original": "approximate nearest neighbor", "text": "Suche nach dem approximativen nächsten Nachbarn; sie nutzt einen Index, um schneller zu suchen, auf Kosten des Risikos, einen Teil der relevanten Ergebnisse zu übersehen." },
+        { "kind": "paragraph", "text": "Die Retrieval-Qualität bewerten wir mit einem Paar von Kennzahlen. Recall (Vollständigkeit der Treffer) gibt an, wie viele von allen relevanten Passagen tatsächlich zurückkamen. Precision (Reinheit der Treffer) gibt an, welcher Anteil der zurückgegebenen Passagen wirklich relevant ist. Diese Kennzahlen bewegen sich meist in entgegengesetzte Richtungen: Du erweiterst die Ergebnisse — der Recall steigt, die Precision sinkt." },
+        { "kind": "table", "title": "Exact vs. ANN", "caption": "Ein Vergleich der Ansätze.", "headers": ["Merkmal", "Exact (brute force)", "ANN (mit Index)"], "rows": [["Was es tut", "durchsucht alle Vektoren", "durchsucht eine Abkürzung über den Index"], ["Genauigkeit", "vollständig — übersieht nichts", "approximativ — kann Relevantes übersehen"], ["Geschwindigkeit", "langsam, wächst mit dem Korpus", "schnell, skaliert auf große Mengen"], ["Wann verwenden", "kleiner Korpus, Anforderung voller Relevanz", "großer Korpus, die Antwortzeit zählt"]], "textAlt": "Die Tabelle vergleicht zwei Ansätze in vier Dimensionen. Exact (brute force) durchsucht alle Vektoren, liefert volle Genauigkeit (übersieht nichts), ist langsam und wächst mit der Größe des Korpus; verwende es bei einem kleinen Korpus und der Anforderung voller Relevanz. ANN durchsucht eine Abkürzung über den Index, liefert ein approximatives Ergebnis (kann Relevantes übersehen), ist schnell und skaliert auf große Mengen; verwende es bei einem großen Korpus, wenn die Antwortzeit zählt." }
+      ]
+    },
+    {
+      "id": "s5-indeks",
+      "title": "Der Index und sein Einfluss",
+      "type": "content",
+      "hideForPaths": ["S1", "S2"],
+      "blocks": [
+        { "kind": "definition", "term": "Index", "original": "index", "text": "eine Datenstruktur, die ANN beschleunigt; ihre Parameter verschieben den Punkt zwischen Recall und Geschwindigkeit sowie Precision." },
+        { "kind": "paragraph", "text": "Ohne Mathematik: Ein aggressiver Index (auf Geschwindigkeit ausgerichtet) durchsucht einen kleineren Ausschnitt des Vektorraums, weshalb es vorkommt, dass er eine relevante Passage übersieht, obwohl diese in der Datenbank existiert. Ein sanfterer Index durchsucht mehr — langsamer, aber er verliert seltener etwas." },
+        { "kind": "callout", "variant": "warn", "title": "Fallstrick der Diagnose", "text": "„Nichts gefunden“ oder „ein bekanntes relevantes Dokument fehlt“ ist oft die Schuld der Index-Einstellungen, nicht der Daten. Bevor du annimmst, dass die Passage nicht im Korpus ist, prüfe, ob ANN sie nicht einfach übersehen hat." }
+      ]
+    },
+    {
+      "id": "s6-metadane",
+      "title": "Filterung von Metadaten",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Filterung von Metadaten", "original": "metadata filtering", "text": "Einengung der Kandidatenmenge nach Attributen der Passage (z. B. Dokumenttyp, Modul, Version) vor oder nach der Berechnung der Ähnlichkeit." },
+        { "kind": "paragraph", "text": "Der Metadatenfilter ist ein mächtiger Hebel für die Präzision. Indem du nur die richtigen Passagen zulässt (z. B. Dokumenttyp = Anforderung), siebst du das Rauschen aus — die Precision steigt. Aber Achtung: Ein zu scharfer Filter kann eine relevante Passage eines anderen Typs herausschneiden, weshalb der Recall sinkt." },
+        { "kind": "callout", "variant": "warn", "title": "Beispiel an NotkaApp", "text": "Die relevante DOC3 (Passwort zurücksetzen) hat den Dokumenttyp = Testfall. Wenn du den Filter „nur Anforderung“ einschaltest, verschwindet DOC3 aus den Ergebnissen — der Filter hat die Precision angehoben, aber die richtige Passage verloren (der Recall ist gesunken)." }
+      ]
+    },
+    {
+      "id": "s7-chunki",
+      "title": "Qualität der Chunks",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Chunk", "original": "chunk", "text": "ein Fragment eines Dokuments, das als eine Einheit indexiert und in einen Vektor umgewandelt wird." },
+        { "kind": "paragraph", "text": "Die Grenze des Chunks entscheidet über die Bedeutung des Vektors. Eine schlechte Grenze — ein mitten im Satz abgeschnittener Text oder ein Gemenge aus zwei verschiedenen Anforderungen — ergibt einen Vektor mit verschwommener Bedeutung und im Ergebnis einen ähnlichen, aber nutzlosen Treffer. Ein zu großer Chunk vermischt viele Themen; ein zu kleiner verliert den Kontext, der zum Verständnis der Passage nötig ist." },
+        { "kind": "paragraph", "text": "Das hängt direkt mit der Diagnose „ähnlich, aber unbrauchbar“ zusammen: Eine Passage kann eine hohe Ähnlichkeit haben und sich dennoch nicht als Antwort eignen — weil sie abgeschnitten ist oder ein Nebenthema betrifft. Ähnlichkeit ist nicht dasselbe wie Relevanz." }
+      ]
+    },
+    {
+      "id": "s8-diagnoza",
+      "title": "Ähnlich, aber unbrauchbar — die Diagnose",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Eine kleine Diagnoseübung (ohne Punkte, zum Aufwärmen vor dem Debugger). Die Anfrage an den NotkaApp-Korpus lautet: „nach wie langer Zeit läuft der Link zum Zurücksetzen des Passworts ab?“. Das Retrieval hat drei Passagen mit hoher Ähnlichkeit zurückgegeben, aber nur eine ist brauchbar." },
+        { "kind": "list", "ordered": true, "items": [
+          "DOC1 (das Session-Token läuft nach 30 min Inaktivität ab) — sehr hohe Ähnlichkeit: Die Wörter „30 min“ und „läuft ab“ überschneiden sich, aber es ist ein anderes Thema (Session, nicht Zurücksetzen). Ähnlich, aber nicht relevant.",
+          "DOC3 (Passwort zurücksetzen: E-Mail-Link 30 min gültig, einmalig) — das ist die richtige Quelle der Antwort.",
+          "DOC4 (Marketing-FAQ: Vorteile und Preise) — geriet als thematisches Rauschen in die Ergebnisse; unbrauchbar."
+        ] },
+        { "kind": "paragraph", "text": "Bevor du zum ersten Regler greifst, benenne die Ursache der fehlenden Relevanz: eine schlechte Chunk-Grenze, ein fehlender Metadatenfilter, der das Marketing aussiebt, das Übersehen einer besseren Passage durch ANN oder schlicht das Verwechseln von Ähnlichkeit mit Relevanz. Auf dem Interaktionsbildschirm prüfst du, welche Korrektur wirklich hilft." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "tune",
+    "id": "m5-retrieval-debugger",
+    "title": "Retrieval debugger",
+    "intro": "Wähle die Retrieval-Parameter für die Anfrage „nach wie langer Zeit läuft der Link zum Zurücksetzen des Passworts ab?“ auf dem NotkaApp-Korpus (DOC1 Session, DOC2 Passwort-Richtlinie, DOC3 Passwort zurücksetzen — relevant, DOC4 Marketing-FAQ). Beobachte, wie sich die Menge der zurückgegebenen Passagen sowie das Paar Recall/Precision verändert, und beantworte dann den Checkpoint.",
+    "outputLabel": "Simuliertes Retrieval-Ergebnis für die gewählten Einstellungen (zurückgegebene Passagen + Recall/Precision):",
+    "controls": [
+      { "id": "topk", "label": "top-k (Anzahl der zurückgegebenen Passagen)", "levels": [
+        { "value": "2", "label": "Niedrig (2)", "effect": "Es kommen nur die 2 ähnlichsten Passagen zurück: DOC1 (Session) und DOC3 (Zurücksetzen). Die Precision ist ordentlich, aber der Recall ist fragil — würde die relevante DOC3 im Ranking absinken, fiele sie aus den zwei heraus und das Ergebnis wäre leer." },
+        { "value": "6", "label": "Hoch (6)", "effect": "Es kommen nahezu alle Passagen zurück, darunter die relevante DOC3 — der Recall ist höher. Aber in die Ergebnisse gelangen auch die ähnliche-aber-unbrauchbare DOC1 (Session) sowie die marketinglastige DOC4 — die Precision ist niedriger, mehr Rauschen zum Aussieben." }
+      ] },
+      { "id": "prog", "label": "Ähnlichkeitsschwelle (similarity threshold)", "levels": [
+        { "value": "low", "label": "Niedrig (locker)", "effect": "Lässt Passagen sogar bei schwacher Ähnlichkeit durch — der Recall ist hoch, aber die Precision niedrig: In die Ergebnisse gerät Rauschen (z. B. die marketinglastige DOC4)." },
+        { "value": "high", "label": "Hoch (scharf)", "effect": "Lässt nur Passagen mit hoher Ähnlichkeit durch. Achtung: Die ähnliche-aber-nicht-relevante DOC1 (Session) hat ein hohes Ergebnis, also entfernt die Schwelle sie NICHT — dafür riskiert sie, die relevante DOC3 abzuschneiden, wenn deren Ergebnis niedriger ist (der Recall sinkt)." }
+      ] },
+      { "id": "filtr", "label": "Metadatenfilter (Dokumenttyp)", "levels": [
+        { "value": "off", "label": "Ausgeschaltet", "effect": "Kein Filter — im Pool bleiben alle Typen, einschließlich der marketinglastigen DOC4 und der Passagen zum Nebenthema. Die Precision ist niedriger." },
+        { "value": "topic", "label": "Eingeschaltet: Produktdokumentation zulassen, Marketing abschneiden", "effect": "Der Filter siebt die marketinglastige DOC4 aus und engt den Pool auf die Produktdokumentation ein — er zielt auf das Thema „Zurücksetzen/Konto“. Die Precision steigt, und die relevante DOC3 bleibt in den Ergebnissen. Das ist ein Hebel, der das ähnliche-aber-nicht-relevante Rauschen entfernt, ohne die richtige Passage zu verlieren — vorausgesetzt, der Filter ist nicht zu eng (ein zu scharfer Filter würde DOC3 herausschneiden)." }
+      ] }
+    ],
+    "checkpoint": {
+      "prompt": "Die Similarity Search hat an der Spitze DOC1 (das Session-Token läuft nach 30 min ab) zurückgegeben — eine Passage, die der Anfrage zum Zurücksetzen des Passworts ähnlich ist, aber unbrauchbar, weil sie die Session betrifft. DOC1 hat eine HOHE Ähnlichkeit. Was änderst du zuerst, um die Präzision des Ergebnisses zu verbessern?",
+      "type": "single_choice",
+      "options": [
+        { "id": "A", "text": "Einen Metadatenfilter einschalten, der auf das Thema zielt (Dokumentation zum Zurücksetzen/Konto, Abschneiden von Nebenthemen) — das ist ein zur Ähnlichkeit orthogonales Signal, also siebt es die hoch-ähnliche, aber nicht relevante DOC1 aus, ohne die relevante DOC3 anzutasten." },
+        { "id": "B", "text": "Die Ähnlichkeitsschwelle auf einen sehr hohen Wert anheben — da DOC1 nicht relevant ist, genügt es, die schwächeren Ergebnisse abzuschneiden." },
+        { "id": "C", "text": "top-k auf 1 senken — dann kommt nur die ähnlichste Passage zurück und das Rauschen verschwindet." },
+        { "id": "D", "text": "DOC1 als richtige Antwort anerkennen, weil sie die höchste Ähnlichkeit zur Anfrage hat." }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Richtig. DOC1 ist trotz hoher Ähnlichkeit nicht relevant, daher versagen Hebel, die allein auf dem Ähnlichkeitsergebnis beruhen. Der Metadatenfilter ist ein orthogonales Signal — er schneidet Nebenthemen (Session, Marketing) ab, unabhängig davon, wie sehr sie „ähnlich“ sind.",
+      "feedbackIncorrect": "Fallstrick: DOC1 hat eine HOHE Ähnlichkeit, also entfernt das Anheben der Schwelle sie nicht (und droht, die relevante DOC3 abzuschneiden → der Recall sinkt), und top-k=1 würde genau diese nicht relevante Passage an der Spitze belassen. Ähnlichkeit ist nicht Relevanz — siebe das Nebenthema mit einem Metadatenfilter aus (orthogonales Signal). Wiederhole den Bildschirm zur Filterung von Metadaten."
+    }
+  },
+  "summary": {
+    "points": [
+      "Die Vektordatenbank entscheidet, WAS das Retrieval gefunden hat: Sie legt die Embeddings ab und gibt die nächsten Vektoren in Bezug auf die Anfrage zurück (semantische Suche).",
+      "Exact vs. ANN ist ein Kompromiss: exakt und langsam (kleiner Korpus, volle Relevanz) gegen schnell mit dem Risiko des Übersehens (großer Korpus).",
+      "Index, Metadatenfilter, Qualität der Chunks und Ähnlichkeitsschwelle steuern das Paar Recall/Precision — das sind die Hebel der Retrieval-Diagnose.",
+      "Ähnlich heißt nicht brauchbar: Eine Passage mit hoher Ähnlichkeit ist mitunter nicht relevant — du siebst sie mit einem orthogonalen Signal aus (Metadatenfilter), nicht allein mit der Schwelle."
+    ],
+    "checklist": [
+      "Sind die zurückgegebenen Passagen wirklich relevant oder nur lexikalisch ähnlich?",
+      "Ist ein leeres oder dürftiges Ergebnis die Schuld des Index, des Filters oder der Schwelle und nicht ein Fehlen von Daten?",
+      "Ist mein Metadatenfilter nicht zu scharf und hat nicht die relevante Passage herausgeschnitten (Recall)?"
+    ],
+    "checklistTitle": "Checkliste — Diagnose des Retrievals",
+    "nextStep": "Nächster Schritt: M6 — RAG: wie man aus gutem Retrieval eine Antwort mit Zitaten und Quellen baut."
+  }
+}

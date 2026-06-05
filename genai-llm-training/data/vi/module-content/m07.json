@@ -1,0 +1,292 @@
+{
+  "_meta": {
+    "issue": "#22 [22][M4] Wdroż moduły M7-M9",
+    "storyboard": "docs/storyboard/m07-prompt-engineering.md",
+    "interaction": "Prompt clinic (kind: rubric, zadanie praktyczne R1-prompt)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (SklepDemo, fikcyjne wymagania). ZERO realnych danych klienta/PII.",
+    "note": "Egzemplarz referencyjny typu rubric z zadaniem praktycznym. Wariant S1 SKRÓCONY: ekrany 3-4 scalone (onlyForPaths), few-shot zredukowany."
+  },
+  "module": "M7",
+  "intro": "Prompt không rõ ràng = kết quả không rõ ràng = lãng phí thời gian và rủi ro người kiểm thử coi một ảo giác là sự thật. Một prompt tốt giúp tăng khả năng kiểm soát mô hình và làm cho việc kiểm chứng output dễ dàng hơn.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Tại sao người kiểm thử cần prompt engineering",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Mục tiêu của mô-đun là viết được những prompt cho ra output có tính lặp lại, kiểm chứng được để phục vụ công việc QA. Bạn sẽ tìm hiểu cấu trúc của một prompt, cách cải thiện một prompt tệ, kỹ thuật few-shot và những giới hạn của prompt."
+        }
+      ]
+    },
+    {
+      "id": "s2-anatomia",
+      "title": "Cấu trúc của prompt: 7 thành phần",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "list",
+          "items": [
+            "Vai trò — mô hình trả lời từ góc nhìn của ai (ví dụ „bạn là một kỹ sư QA”).",
+            "Mục tiêu — cần tạo ra cái gì.",
+            "Bối cảnh — thông tin nền mà mô hình không biết (một đoạn yêu cầu tổng hợp).",
+            "Dữ liệu đầu vào — tài liệu cụ thể cần xử lý.",
+            "Ràng buộc — những gì mô hình KHÔNG được làm / các giới hạn.",
+            "Tiêu chí chất lượng — căn cứ để nhận biết output tốt (đo lường được).",
+            "Định dạng đầu ra — cấu trúc (bảng, danh sách, JSON) giúp việc kiểm chứng dễ dàng hơn."
+          ]
+        },
+        {
+          "kind": "paragraph",
+          "onlyForPaths": [
+            "S2",
+            "S3"
+          ],
+          "text": "Ví dụ với một nhiệm vụ QA: „Bạn là một kỹ sư QA. Hãy tạo các trường hợp kiểm thử cho tính năng đăng nhập trong SklepDemo theo yêu cầu đã cho; không bịa ra các trường nằm ngoài yêu cầu; trả về một bảng: ID | các bước | dữ liệu | kết quả mong đợi.”"
+        }
+      ]
+    },
+    {
+      "id": "s34-s1-min",
+      "title": "Các thành phần của prompt — tối thiểu (S1)",
+      "type": "content",
+      "onlyForPaths": [
+        "S1"
+      ],
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Trong phiên bản rút gọn, hãy ghi nhớ phần tối thiểu: nêu vai trò và mục tiêu, kèm theo bối cảnh và dữ liệu, thêm ràng buộc và định dạng đầu ra. Đây là những thành phần quyết định mạnh nhất tới chất lượng và khả năng kiểm chứng của output."
+        }
+      ]
+    },
+    {
+      "id": "s3-pierwsza-polowa",
+      "title": "Nửa đầu: vai trò, mục tiêu, bối cảnh, dữ liệu",
+      "type": "content",
+      "onlyForPaths": [
+        "S2",
+        "S3"
+      ],
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Vai trò thiết lập góc nhìn, mục tiêu nói rõ cần tạo ra cái gì, bối cảnh cung cấp thông tin nền mà mô hình không biết, còn dữ liệu đầu vào là tài liệu cần xử lý. Cùng một mục tiêu, có bối cảnh và không có bối cảnh sẽ cho ra chất lượng output khác biệt rõ rệt."
+        }
+      ]
+    },
+    {
+      "id": "s4-druga-polowa",
+      "title": "Nửa sau: ràng buộc, tiêu chí chất lượng, định dạng",
+      "type": "content",
+      "onlyForPaths": [
+        "S2",
+        "S3"
+      ],
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Ràng buộc nói rõ những gì mô hình KHÔNG được làm (ví dụ „không bịa ra các trường nằm ngoài yêu cầu”). Tiêu chí chất lượng phải đo lường được và kiểm chứng được. Định dạng đầu ra (bảng/danh sách/JSON) giúp việc kiểm soát về sau dễ dàng hơn. Ràng buộc + tiêu chí là đòn bẩy cho khả năng kiểm chứng và an toàn."
+        }
+      ]
+    },
+    {
+      "id": "s5-fewshot",
+      "title": "Few-shot: khi nào nên đưa ví dụ vào",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "definition",
+          "term": "Few-shot",
+          "original": "một vài ví dụ trong prompt",
+          "text": "việc chèn 1–3 cặp mẫu đầu vào→đầu ra khi định dạng hoặc văn phong cần phải lặp lại nhất quán."
+        },
+        {
+          "kind": "paragraph",
+          "onlyForPaths": [
+            "S2",
+            "S3"
+          ],
+          "text": "Tương phản với zero-shot (không có ví dụ): hãy dùng few-shot để đảm bảo tính lặp lại của định dạng, chứ không phải để „bù đắp kiến thức còn thiếu”. Ví dụ: 2 trường hợp kiểm thử mẫu → mô hình giữ nguyên bố cục đó cho các trường hợp tiếp theo."
+        }
+      ]
+    },
+    {
+      "id": "s6-rubryka",
+      "title": "Sửa một prompt tệ theo bộ tiêu chí (rubric)",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Bộ tiêu chí đánh giá prompt có 5 trục: tính đầy đủ, an toàn, khả năng kiểm chứng, định dạng, ràng buộc. Vòng lặp sửa chữa: output tệ → chẩn đoán theo bộ tiêu chí → một sửa đổi cụ thể → output tốt hơn."
+        },
+        {
+          "kind": "callout",
+          "variant": "info",
+          "text": "Màn hình này chuẩn bị trực tiếp cho phần tương tác „Prompt clinic” ở bên dưới."
+        }
+      ]
+    },
+    {
+      "id": "s7-granice",
+      "title": "Giới hạn của prompt: khi nào prompt không giúp được",
+      "type": "decision",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Prompt không phải phép màu. Khi thiếu dữ liệu (mô hình không có thông tin trong bối cảnh), thì dù có „chăm chút” prompt đến đâu cũng không tạo ra được sự thật — chỉ sinh ra ảo giác."
+        },
+        {
+          "kind": "callout",
+          "variant": "warn",
+          "title": "Thay vào đó nên làm gì",
+          "text": "Hãy cung cấp dữ liệu (bối cảnh/RAG), tra cứu nguồn gốc hoặc giao nhiệm vụ cho con người. Tín hiệu cảnh báo: prompt cứ dài thêm mà output vẫn bịa đặt. Tìm hiểu thêm trong M11."
+        }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "rubric",
+    "id": "m7-prompt-clinic",
+    "title": "Prompt clinic",
+    "intro": "Prompt lỗi: „Viết các bài kiểm thử cho tính năng đăng nhập.” Với mỗi trục của bộ tiêu chí, hãy chọn sửa đổi đáp ứng được trục đó. Bài đánh giá được tính là nhiệm vụ thực hành R1-prompt trên lộ trình S2 (ngưỡng 4/5); trên S3 đây là bài luyện tập có phản hồi.",
+    "rubricId": "R1-prompt",
+    "recordsPractical": true,
+    "scaleMax": 5,
+    "passThreshold": 4,
+    "criteria": [
+      {
+        "id": "K1",
+        "name": "Vai trò và mục tiêu",
+        "points": 1,
+        "hint": "Thêm vai trò và mục tiêu rõ ràng: ai trả lời và cần tạo ra cái gì.",
+        "options": [
+          {
+            "id": "a",
+            "text": "„Bạn là một kỹ sư QA. Hãy tạo các trường hợp kiểm thử cho tính năng đăng nhập trong SklepDemo.”"
+          },
+          {
+            "id": "b",
+            "text": "Để nguyên „Viết các bài kiểm thử cho tính năng đăng nhập” không thay đổi."
+          },
+          {
+            "id": "c",
+            "text": "Thêm „hãy sáng tạo và làm tôi bất ngờ”."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K2",
+        "name": "Bối cảnh và dữ liệu đầu vào (không có dữ liệu nhạy cảm)",
+        "points": 1,
+        "hint": "Kèm theo một yêu cầu tổng hợp; không dán dữ liệu người dùng thật.",
+        "options": [
+          {
+            "id": "a",
+            "text": "Kèm theo yêu cầu đăng nhập tổng hợp của SklepDemo (khóa sau 3 lần lỗi, liên kết đặt lại có hiệu lực 30 phút)."
+          },
+          {
+            "id": "b",
+            "text": "Dán một log production thật có chứa e-mail của người dùng."
+          },
+          {
+            "id": "c",
+            "text": "Không cung cấp bối cảnh — mô hình „sẽ tự đoán”."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K3",
+        "name": "Ràng buộc và tiêu chí chất lượng",
+        "points": 1,
+        "hint": "Nói rõ những gì mô hình KHÔNG được làm, và thêm các tiêu chí đo lường được.",
+        "options": [
+          {
+            "id": "a",
+            "text": "„Không bịa ra các trường nằm ngoài yêu cầu; bao phủ các trường hợp biên; mỗi bài kiểm thử đều có kết quả mong đợi.”"
+          },
+          {
+            "id": "b",
+            "text": "„Viết càng nhiều bài kiểm thử càng tốt, số lượng mới là quan trọng.”"
+          },
+          {
+            "id": "c",
+            "text": "Không có ràng buộc — để mô hình tự quyết định."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K4",
+        "name": "Định dạng đầu ra (kiểm chứng được)",
+        "points": 1,
+        "hint": "Yêu cầu một cấu trúc cố định; với những thứ cần lặp lại, hãy cân nhắc few-shot.",
+        "options": [
+          {
+            "id": "a",
+            "text": "„Trả về một bảng: ID | các bước | dữ liệu đầu vào | kết quả mong đợi” + 2 ví dụ mẫu (few-shot)."
+          },
+          {
+            "id": "b",
+            "text": "„Hãy trả lời bằng một đoạn văn tự do.”"
+          },
+          {
+            "id": "c",
+            "text": "Không xác định định dạng."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K5",
+        "name": "An toàn và khả năng kiểm chứng",
+        "points": 1,
+        "hint": "Yêu cầu dữ liệu tổng hợp và đánh dấu những chỗ chưa chắc chắn cần kiểm chứng.",
+        "options": [
+          {
+            "id": "a",
+            "text": "„Chỉ sử dụng dữ liệu tổng hợp; đánh dấu những giả định cần kiểm chứng đối chiếu với yêu cầu.”"
+          },
+          {
+            "id": "b",
+            "text": "„Nếu không biết điều gì đó, hãy bịa ra một giá trị có vẻ hợp lý.”"
+          },
+          {
+            "id": "c",
+            "text": "„Bạn có thể dùng dữ liệu thật nếu nó giúp đẩy nhanh công việc.”"
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Một prompt tốt có 7 thành phần: vai trò, mục tiêu, bối cảnh, dữ liệu, ràng buộc, tiêu chí, định dạng.",
+      "Cải thiện prompt theo bộ tiêu chí 5 trục: tính đầy đủ, an toàn, khả năng kiểm chứng, định dạng, ràng buộc.",
+      "Dùng few-shot để đảm bảo tính lặp lại của định dạng, không phải để bù đắp kiến thức còn thiếu.",
+      "Khi thiếu dữ liệu, prompt sẽ không giúp được — hãy cung cấp nguồn hoặc giao nhiệm vụ cho con người."
+    ],
+    "checklist": [
+      "Prompt đã có vai trò, mục tiêu, bối cảnh và dữ liệu chưa?",
+      "Đã có ràng buộc và tiêu chí chất lượng đo lường được chưa?",
+      "Định dạng đầu ra có kiểm chứng được không?",
+      "Tôi đã bắt buộc dùng dữ liệu tổng hợp và đánh dấu chỗ chưa chắc chắn chưa?"
+    ],
+    "checklistTitle": "Danh sách kiểm tra — prompt QA hoàn chỉnh",
+    "nextStep": "Bước tiếp theo: M8 — các ứng dụng của GenAI trong QA (tạo và đánh giá các trường hợp kiểm thử)."
+  }
+}

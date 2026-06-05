@@ -15,6 +15,13 @@ export const LANG_KEY = "genai-training:lang";
 export const LOCALES = [
   { code: "pl", name: "Polski", hasData: true },
   { code: "en", name: "English", hasData: true }, // M11: pełne dane EN w data/en/ (#82/#83) → UI i dane po EN
+  // M17 (#126–#131): pełne dane data/<lang>/ + katalog UI <lang>.json + strona prywatności privacy-<lang>.html.
+  { code: "es", name: "Español", hasData: true },
+  { code: "fr", name: "Français", hasData: true },
+  { code: "de", name: "Deutsch", hasData: true },
+  { code: "it", name: "Italiano", hasData: true },
+  { code: "uk", name: "Українська", hasData: true },
+  { code: "vi", name: "Tiếng Việt", hasData: true },
 ];
 export function isSupportedLocale(code) {
   return LOCALES.some((l) => l.code === code);
@@ -76,8 +83,12 @@ export function getLocale() {
 
 // Strona prywatności jest statyczna i per-locale (#81). Wspólne źródło prawdy dla WSZYSTKICH linków
 // (path-select, footer) — żeby aktywny locale i plik nie rozjechały się między miejscami.
+const PRIVACY_PAGES = {
+  pl: "prywatnosc.html", en: "privacy.html", es: "privacy-es.html", fr: "privacy-fr.html",
+  de: "privacy-de.html", it: "privacy-it.html", uk: "privacy-uk.html", vi: "privacy-vi.html",
+};
 export function privacyHref() {
-  return activeLocale === "en" ? "privacy.html" : "prywatnosc.html";
+  return PRIVACY_PAGES[activeLocale] || PRIVACY_PAGES[FALLBACK_LOCALE];
 }
 
 /** Czysta wartość z katalogu locale dla klucza, albo null gdy brak / pusta. */

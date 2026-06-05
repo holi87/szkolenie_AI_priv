@@ -1,0 +1,534 @@
+{
+  "_meta": {
+    "module": "M8",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M8. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q061",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Học viên phân tích bộ test case do LLM tạo ra và chỉ ra lỗ hổng độ phủ (coverage gap) so với yêu cầu.",
+      "prompt": "Yêu cầu cho ứng dụng NotkaApp (hư cấu): người dùng đặt lại mật khẩu qua liên kết e-mail có hiệu lực 30 phút; sau 3 lần đăng nhập sai, tài khoản bị khóa 15 phút. LLM đã tạo các test case: TC1 — đặt lại đúng; TC2 — liên kết hết hạn sau 30 phút; TC3 — 3 lần sai mật khẩu -> khóa tài khoản. Lỗ hổng độ phủ nào ở đây là quan trọng nhất cần bổ sung?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Thiếu test case dùng lại chính liên kết đặt lại đó (liên kết dùng một lần bị dùng hai lần)"
+        },
+        {
+          "id": "B",
+          "text": "Thiếu test case kiểm tra màu của nút Đặt lại mật khẩu"
+        },
+        {
+          "id": "C",
+          "text": "Thiếu test case với thời lượng phiên quản trị viên đúng 30 phút"
+        },
+        {
+          "id": "D",
+          "text": "Thiếu test case xác minh logo ứng dụng trên trang đăng nhập"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Liên kết đặt lại về bản chất là dùng một lần và có thời hạn, nên việc thiếu test kiểm tra việc dùng lại nó là một lỗ hổng bảo mật thực sự trong độ phủ của yêu cầu.",
+      "feedbackIncorrect": "Lỗ hổng độ phủ liên quan đến hành vi theo đúng yêu cầu (thời hạn và tính dùng một lần của liên kết), chứ không phải các yếu tố hình thức. Hãy quay lại màn hình về lỗ hổng độ phủ.",
+      "references": [
+        "M8.3",
+        "M8.2"
+      ]
+    },
+    {
+      "id": "Q062",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Học viên nhận ra trong output của LLM một test case giả (assertion không kiểm tra gì) và phân biệt nó với một test có giá trị.",
+      "prompt": "Trong bộ test case cho NotkaApp, bạn tìm thấy: TC4 — 'Mở biểu mẫu đặt lại mật khẩu và kiểm tra rằng biểu mẫu mở ra; kết quả mong đợi: không có'. Nên phân loại TC4 như thế nào?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Test giả — không có kết quả mong đợi được định nghĩa, assertion thực chất không kiểm tra gì"
+        },
+        {
+          "id": "B",
+          "text": "Test case âm hợp lệ cho kịch bản khóa tài khoản"
+        },
+        {
+          "id": "C",
+          "text": "Test case biên hợp lệ cho thời hạn liên kết 30 phút"
+        },
+        {
+          "id": "D",
+          "text": "Bản trùng lặp của TC1 đặt lại đúng, có thể gộp ngay lập tức"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Không có kết quả mong đợi được xác định, test sẽ luôn 'pass' và không kiểm tra gì cả — đó chính là định nghĩa của test giả.",
+      "feedbackIncorrect": "Điểm mấu chốt là thiếu kết quả mong đợi, chứ không phải loại kịch bản hay sự giống với một TC khác. Hãy xem lại màn hình về test trùng lặp và test giả.",
+      "references": [
+        "M8.4"
+      ]
+    },
+    {
+      "id": "Q063",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Học viên đánh giá xem output do LLM tạo ra có phù hợp để đưa vào tài liệu QA hay không, bằng cách nhận diện một sự thật bịa đặt mâu thuẫn với yêu cầu.",
+      "prompt": "LLM đã tạo mô tả test case cho NotkaApp với ghi chú: 'Sau 3 lần thử sai, tài khoản bị khóa 24 giờ, còn liên kết đặt lại có hiệu lực vô thời hạn'. Yêu cầu ghi: khóa 15 phút, liên kết có hiệu lực 30 phút. Quyết định kiểm soát nội dung nào là phù hợp nhất trước khi dán vào tài liệu?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Loại bỏ đoạn này — nó chứa các sự thật mâu thuẫn với yêu cầu (các giá trị bịa đặt 24 giờ và vô thời hạn), cần sửa trước khi dùng"
+        },
+        {
+          "id": "B",
+          "text": "Chấp nhận nguyên trạng — LLM thường đưa ra các giá trị gần với thực tế hơn so với yêu cầu"
+        },
+        {
+          "id": "C",
+          "text": "Chấp nhận và thêm chú thích rằng các giá trị có thể khác nhau tùy phiên bản ứng dụng"
+        },
+        {
+          "id": "D",
+          "text": "Loại bỏ toàn bộ mô-đun test đặt lại mật khẩu, vì output chứa một lỗi"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Output mâu thuẫn với yêu cầu chứa các sự thật bịa đặt (ảo giác) và không thể đưa vào tài liệu nếu chưa sửa — kiểm soát nội dung kết thúc bằng quyết định 'sửa/loại bỏ đoạn'.",
+      "feedbackIncorrect": "Yêu cầu là nguồn sự thật, không phải output của LLM; đồng thời cũng không nên loại bỏ toàn bộ công việc chỉ vì một đoạn. Hãy quay lại tiêu chí chấp nhận/sửa/loại bỏ.",
+      "references": [
+        "M8.6"
+      ]
+    },
+    {
+      "id": "Q064",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Học viên xác định ranh giới human-in-the-loop, chỉ ra tác vụ QA mà ở đó LLM vẫn là trợ lý còn con người là người ra quyết định.",
+      "prompt": "Nhóm QA muốn dùng LLM khi kiểm thử NotkaApp. Đề xuất nào phản ánh tốt nhất nguyên tắc 'trợ lý, không phải người quyết định'?",
+      "options": [
+        {
+          "id": "A",
+          "text": "LLM tạo bản nháp test case và checklist rủi ro, còn tester phê duyệt phạm vi kiểm thử và quyết định cho phép phát hành"
+        },
+        {
+          "id": "B",
+          "text": "LLM tự phê duyệt phát hành lên production nếu các test được tạo ra đều pass"
+        },
+        {
+          "id": "C",
+          "text": "LLM đánh giá cuối cùng về rủi ro nghiêm trọng và đóng defect mà không cần tester tham gia"
+        },
+        {
+          "id": "D",
+          "text": "Tester viết lại thủ công từng test case, còn LLM không được dùng ở bất kỳ giai đoạn nào"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "LLM giúp đẩy nhanh việc tạo bản nháp và đề xuất, nhưng các quyết định về chấp nhận, rủi ro nghiêm trọng và phát hành thuộc về con người (human-in-the-loop).",
+      "feedbackIncorrect": "Quyết định về phát hành và đánh giá rủi ro nghiêm trọng không thể giao cho LLM, nhưng việc loại bỏ hoàn toàn trợ lý lại lãng phí giá trị của nó. Hãy xem lại màn hình trợ lý vs người quyết định.",
+      "references": [
+        "M8.7",
+        "M8.1"
+      ]
+    },
+    {
+      "id": "Q065",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Học viên chỉ ra các nhóm lỗ hổng độ phủ mà LLM thường không tạo ra nếu không có chỉ dẫn rõ ràng.",
+      "prompt": "Bạn tạo test case cho chức năng đặt lại mật khẩu trong NotkaApp. Những nhóm nào thường bị LLM bỏ sót nhất và cần được bổ sung một cách có ý thức? Hãy chọn tất cả các đáp án đúng.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Các trường hợp biên (ví dụ: liên kết được dùng đúng ở phút thứ 30)"
+        },
+        {
+          "id": "B",
+          "text": "Các luồng lỗi và trạng thái ngoại lệ (ví dụ: liên kết được dùng lần thứ hai, các phiên song song)"
+        },
+        {
+          "id": "C",
+          "text": "Happy path đặt lại mật khẩu với dữ liệu đúng"
+        },
+        {
+          "id": "D",
+          "text": "Dữ liệu test cho các giá trị cực đại (ví dụ: e-mail có độ dài tối đa)"
+        },
+        {
+          "id": "E",
+          "text": "Tiêu đề cửa sổ trình duyệt trên trang xác nhận"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "D"
+      ],
+      "feedbackCorrect": "LLM thường phủ tốt happy path, nhưng bỏ sót các trường hợp biên, luồng lỗi và dữ liệu cực đại — đó chính là nơi ta tìm lỗ hổng độ phủ.",
+      "feedbackIncorrect": "Happy path thường đã được phủ, còn tiêu đề cửa sổ là chi tiết hình thức; lỗ hổng nằm ở các trường hợp biên, luồng lỗi và dữ liệu cực đại. Hãy quay lại màn hình về lỗ hổng độ phủ.",
+      "references": [
+        "M8.3",
+        "M8.2"
+      ]
+    },
+    {
+      "id": "Q066",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Học viên nhận ra đặc điểm của test trùng lặp và test giả trong bộ test case được tạo ra.",
+      "prompt": "Bạn rà soát bộ test case được tạo cho NotkaApp về mặt chất lượng. Những phát biểu nào về test trùng lặp và test giả là đúng? Hãy chọn tất cả các đáp án đúng.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Hai test case kiểm tra cùng những điều kiện với mô tả khác nhau là trùng lặp, dù nội dung khác nhau"
+        },
+        {
+          "id": "B",
+          "text": "Test case không có kết quả mong đợi là test giả, vì assertion của nó không kiểm tra gì"
+        },
+        {
+          "id": "C",
+          "text": "Số lượng test case được tạo ra càng nhiều thì luôn có nghĩa là độ phủ càng tốt"
+        },
+        {
+          "id": "D",
+          "text": "Test với assertion 'true == true' không liên quan đến chức năng là test giả"
+        },
+        {
+          "id": "E",
+          "text": "Test trùng lặp là vô hại, vì hai test giống hệt nhau làm tăng độ tin cậy của kết quả"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "D"
+      ],
+      "feedbackCorrect": "Trùng lặp là cùng những điều kiện được mô tả khác đi, còn test giả có assertion không kiểm tra gì; số lượng test case không phải là thước đo độ phủ.",
+      "feedbackIncorrect": "Số lượng test nhiều hơn không đồng nghĩa với độ phủ tốt hơn, còn test trùng lặp làm tăng chi phí bảo trì mà không tạo giá trị. Hãy xem lại màn hình về test trùng lặp và test giả.",
+      "references": [
+        "M8.4"
+      ]
+    },
+    {
+      "id": "Q067",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Học viên áp dụng các tiêu chí kiểm soát nội dung mà output của LLM phải đáp ứng để được đưa vào tài liệu QA.",
+      "prompt": "Trước khi dán bộ test case do LLM tạo ra vào tài liệu QA chính thức của SklepDemo (hư cấu), những tiêu chí kiểm soát nội dung nào phải được đáp ứng? Hãy chọn tất cả các đáp án đúng.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Sự phù hợp với yêu cầu (không có giá trị mâu thuẫn với tiêu chí chấp nhận)"
+        },
+        {
+          "id": "B",
+          "text": "Không có sự thật bịa đặt (ảo giác) và nội dung có thể kiểm chứng được"
+        },
+        {
+          "id": "C",
+          "text": "Không có dữ liệu nhạy cảm và PII thật trong các ví dụ"
+        },
+        {
+          "id": "D",
+          "text": "Output phải càng dài càng tốt, vì dung lượng lớn hơn chứng tỏ chất lượng"
+        },
+        {
+          "id": "E",
+          "text": "Output phải được chấp nhận chỉ vì nó được tạo ra bởi một mô hình mới hơn"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Việc đưa vào tài liệu đòi hỏi sự phù hợp với yêu cầu, không có ảo giác, khả năng kiểm chứng và không có dữ liệu nhạy cảm — dung lượng và phiên bản mô hình không phải là tiêu chí.",
+      "feedbackIncorrect": "Độ dài văn bản và phiên bản mô hình không phải là tiêu chí chất lượng; điều quan trọng là sự phù hợp, khả năng kiểm chứng và không có dữ liệu nhạy cảm. Hãy quay lại tiêu chí kiểm soát nội dung.",
+      "references": [
+        "M8.6"
+      ]
+    },
+    {
+      "id": "Q068",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Học viên phân biệt các tác vụ QA mà LLM đóng vai trò trợ lý với các quyết định dành riêng cho con người.",
+      "prompt": "Những tác vụ QA nào có thể giao một cách an toàn cho LLM với vai trò trợ lý (có kiểm soát của con người sau đó)? Hãy chọn tất cả các đáp án đúng.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Bản nháp test case từ yêu cầu, làm điểm khởi đầu"
+        },
+        {
+          "id": "B",
+          "text": "Đề xuất các nhóm rủi ro cho checklist risk-based testing"
+        },
+        {
+          "id": "C",
+          "text": "Diễn đạt lại và sắp xếp lại các mô tả test hiện có"
+        },
+        {
+          "id": "D",
+          "text": "Quyết định cuối cùng về việc cho phép phát hành lên production"
+        },
+        {
+          "id": "E",
+          "text": "Tự đóng defect nghiêm trọng mà không có sự xác minh của tester"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Bản nháp, đề xuất nhóm rủi ro và sắp xếp nội dung là công việc của trợ lý; các quyết định về phát hành và defect nghiêm trọng thuộc về con người.",
+      "feedbackIncorrect": "Quyết định về phát hành và việc đóng các defect nghiêm trọng là vai trò của người quyết định (con người), không phải của LLM. Hãy xem lại màn hình trợ lý vs người quyết định.",
+      "references": [
+        "M8.7",
+        "M8.1"
+      ]
+    },
+    {
+      "id": "Q069",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Học viên gán chức năng của NotkaApp vào đúng nhóm rủi ro trong checklist risk-based testing.",
+      "prompt": "Hãy ghép chức năng hoặc artefact của NotkaApp với nhóm rủi ro phù hợp nhất trong checklist risk-based testing.",
+      "pairs": [
+        {
+          "left": "Khóa tài khoản sau 3 lần đăng nhập sai",
+          "right": "Bảo mật (bảo vệ trước tấn công brute-force)"
+        },
+        {
+          "left": "Lưu trữ e-mail của người dùng trong cơ sở dữ liệu",
+          "right": "Dữ liệu (bảo vệ dữ liệu cá nhân và tính bảo mật)"
+        },
+        {
+          "left": "Thời gian tạo liên kết đặt lại khi tải cao",
+          "right": "Hiệu năng (thời gian phản hồi dưới tải)"
+        },
+        {
+          "left": "Xử lý biểu mẫu đặt lại bằng trình đọc màn hình",
+          "right": "Khả năng tiếp cận (tuân thủ WCAG)"
+        }
+      ],
+      "feedbackCorrect": "Mỗi chức năng được đưa vào nhóm rủi ro mô tả tốt nhất mối đe dọa chính của nó — đó là cốt lõi của checklist risk-based testing.",
+      "feedbackIncorrect": "Các nhóm dễ bị nhầm khi bạn nhìn vào công nghệ thay vì mối đe dọa chính của chức năng (bảo mật, dữ liệu, hiệu năng, khả năng tiếp cận). Hãy xem lại màn hình về checklist rủi ro.",
+      "references": [
+        "M8.5"
+      ]
+    },
+    {
+      "id": "Q070",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Học viên gán một lỗi điển hình của test case được tạo ra vào hệ quả của nó trong QA.",
+      "prompt": "Hãy ghép lỗi điển hình của test case do LLM tạo ra cho yêu cầu SklepDemo (hư cấu) với hệ quả chính của nó trong QA.",
+      "pairs": [
+        {
+          "left": "Test case được tạo ra mà không có kết quả mong đợi",
+          "right": "Test giả — luôn pass, không phát hiện được defect"
+        },
+        {
+          "left": "Hai test case có cùng các bước và dữ liệu",
+          "right": "Trùng lặp — làm phình bộ test mà không thêm độ phủ mới"
+        },
+        {
+          "left": "Test case kiểm tra một trường không có trong yêu cầu",
+          "right": "Ảo giác về phạm vi — test nằm ngoài yêu cầu"
+        },
+        {
+          "left": "Thiếu test case cho luồng lỗi được mô tả trong yêu cầu",
+          "right": "Lỗ hổng độ phủ — kịch bản từ yêu cầu chưa được kiểm thử"
+        }
+      ],
+      "feedbackCorrect": "Mỗi lỗi có một hệ quả khác nhau đối với chất lượng của bộ test: test giả không phát hiện lỗi, trùng lặp không thêm độ phủ, ảo giác về phạm vi kiểm thử một thứ ngoài yêu cầu, còn lỗ hổng độ phủ để lại rủi ro chưa được kiểm thử.",
+      "feedbackIncorrect": "Hãy phân biệt các lỗi theo hệ quả: thiếu kết quả mong đợi = test giả, cùng các bước = trùng lặp, trường ngoài yêu cầu = ảo giác về phạm vi, thiếu luồng lỗi = lỗ hổng độ phủ. Hãy xem lại màn hình QA workbench về lỗ hổng và test giả.",
+      "references": [
+        "M8.6",
+        "M8.7"
+      ]
+    },
+    {
+      "id": "Q071",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Học viên gán một rủi ro cụ thể của chức năng NotkaApp vào test case xác minh nó.",
+      "prompt": "Hãy ghép rủi ro liên quan đến chức năng đặt lại mật khẩu của NotkaApp với test case xác minh nó.",
+      "pairs": [
+        {
+          "left": "Rủi ro: liên kết đặt lại vẫn hoạt động sau khi hết hạn",
+          "right": "Test: thử dùng liên kết sau khi đã quá 30 phút"
+        },
+        {
+          "left": "Rủi ro: liên kết dùng một lần lại hoạt động nhiều lần",
+          "right": "Test: dùng hai lần chính liên kết đặt lại đó"
+        },
+        {
+          "left": "Rủi ro: tài khoản không bị khóa sau các lần thử sai",
+          "right": "Test: 3 lần đăng nhập sai liên tiếp và kiểm tra việc khóa"
+        },
+        {
+          "left": "Rủi ro: đặt lại hoạt động cho tài khoản không tồn tại",
+          "right": "Test: yêu cầu đặt lại cho một e-mail chưa đăng ký"
+        }
+      ],
+      "feedbackCorrect": "Mỗi rủi ro được xác minh bằng một test case trực tiếp cố gắng kích hoạt hành vi không mong muốn — đó là điều liên kết risk-based testing với độ phủ.",
+      "feedbackIncorrect": "Test phải nhắm chính xác vào mối đe dọa được mô tả bởi rủi ro (ví dụ: dùng lại liên kết, không khóa). Hãy xem lại màn hình về checklist rủi ro và lỗ hổng độ phủ.",
+      "references": [
+        "M8.5",
+        "M8.3"
+      ]
+    },
+    {
+      "id": "Q072",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Học viên gán một vấn đề chất lượng của output được tạo ra vào đúng hành động kiểm soát của tester.",
+      "prompt": "Hãy ghép vấn đề được phát hiện trong artefact QA do LLM tạo ra với hành động kiểm soát phù hợp.",
+      "pairs": [
+        {
+          "left": "Hai test case kiểm tra cùng những điều kiện với mô tả khác nhau",
+          "right": "Gộp các bản trùng lặp và giữ lại một test case"
+        },
+        {
+          "left": "Test case không có kết quả mong đợi được xác định",
+          "right": "Xóa hoặc bổ sung assertion (test giả)"
+        },
+        {
+          "left": "Thiếu test case cho việc khóa tài khoản sau 3 lần thử",
+          "right": "Thêm test case bù đắp lỗ hổng độ phủ"
+        },
+        {
+          "left": "Output ghi khóa 24 giờ thay vì 15 phút",
+          "right": "Sửa sự thật mâu thuẫn với yêu cầu trước khi dùng"
+        }
+      ],
+      "feedbackCorrect": "Mỗi loại vấn đề trong output có hành động tương ứng: gộp bản trùng lặp, sửa test giả, bù đắp lỗ hổng hoặc hiệu chỉnh sự thật bịa đặt.",
+      "feedbackIncorrect": "Hành động kiểm soát phụ thuộc vào loại vấn đề — đừng nhầm trùng lặp với lỗ hổng độ phủ, cũng đừng nhầm test giả với ảo giác. Hãy xem lại các màn hình về test trùng lặp và kiểm soát output.",
+      "references": [
+        "M8.4",
+        "M8.6"
+      ]
+    }
+  ]
+}

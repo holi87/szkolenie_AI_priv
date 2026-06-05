@@ -1,0 +1,102 @@
+{
+  "_meta": {
+    "issue": "#122 [M16] Rozdzielenie diagnozy Skali Holaka — wymiar OSOBISTY (v2.1p)",
+    "adr": "docs/adr/0008-modul-skali-holaka-msh.md",
+    "interaction": "Self-check dojrzałości osobistej (kind: maturity-check) — NON-gating, neutralny framing",
+    "source": "Model dojrzałości adopcji AI „Skala Holaka”: wymiar osobisty v2.1p (osoba, 0–11). Atrybucja: quality-blog.eu/pl/blog/skala-holaka-private.",
+    "dataPolicy": "WSZYSTKIE zdania self-checku SYNTETYCZNE i ogólne (zero realnych danych/PII). Diagnoza orientacyjna — NIE da się jej „oblać”. Heurystyka punktacji uproszczona (liczba zaznaczeń → poziom 0–11) do weryfikacji przez eksperta dziedzinowego (SME)."
+  },
+  "module": "MSHP",
+  "intro": "La Escala de Holak en su dimensión personal (v2.1p) te ayuda a poner nombre a la madurez de tu propia forma de trabajar con la IA: dónde estás hoy y cuál es el siguiente paso realista. Es una autoevaluación, no un examen: no hay resultado «aprobado/suspenso», solo un nivel orientativo 0–11 y una pista sobre cómo avanzar. Puedes hacerla con independencia del diagnóstico de la organización (MSHO).",
+  "screens": [
+    {
+      "id": "mshp-s1-czym-jest",
+      "title": "Qué es la Escala de Holak personal",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "La versión personal (v2.1p) describe la madurez de tu oficio de trabajar con la IA en 12 niveles (0–11): desde los primeros usos hasta una práctica consciente, medida y mejorada de forma continua. Ayuda a evitar dos trampas: «uso la IA, así que soy maduro» y «es solo un juguete»." },
+        { "kind": "list", "items": [
+          "Evalúas únicamente TU práctica, con independencia de lo madura que sea la organización.",
+          "Lo que cuenta es CÓMO usas la IA (contexto, verificación, reversibilidad), no el número de herramientas.",
+          "El diagnóstico de la organización (Escala de Holak v2.1e) lo haces aparte en el módulo MSHO."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "De dónde viene el nombre y quién está detrás del modelo", "text": "La Escala de Holak fue ideada por Grzegorz Holak con el apoyo de Konrad Gomulski; de ahí el nombre. Ambos son Senior Test Development Engineer en Sii Polska y miembros de SJSI, además de cofundadores de quality-blog.eu; Grzegorz Holak es, asimismo, Test Architect y AI Ambassador en SCIB. La usamos como herramienta de autorreflexión, no de certificación.",
+          "links": [
+            { "label": "Escala de Holak — dimensión personal (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka-private" },
+            { "label": "Escala de Holak — dimensión organizativa (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mshp-s2-osie-i-granice",
+      "title": "Cómo reconocer el nivel: ejes y dos umbrales",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Los niveles más altos no los reconocerás por el número de herramientas, sino por los hábitos (a partir del nivel ~4 en adelante): formular el prompt de forma consciente, gestionar el contexto y el coste, verificar las respuestas críticas frente a la fuente, diseñar el trabajo de modo que las decisiones sean reversibles y medir el impacto real de la IA en tu calidad y tu tiempo." },
+        { "kind": "list", "items": [
+          "Barrera: el hábito cuya ausencia bloquea el avance al siguiente nivel.",
+          "Éxito: lo que realmente funciona cuando el nivel está alcanzado.",
+          "Trampa: una falsa sensación de madurez que hace retroceder el desarrollo."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Dos umbrales críticos (personales)", "text": "Umbral 8→9: pasar de «usuario competente» a diseñar el trabajo de modo que las decisiones apoyadas en la IA sean comprobables y reversibles, y a compartir prácticas. Umbral 10→11: pasar de la rutina a medir tu propio impacto de la IA y a mejorar de forma continua tu oficio." }
+      ]
+    },
+    {
+      "id": "mshp-s3-jak-czytac",
+      "title": "Cómo leer tu resultado",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Dentro de un momento marcarás las afirmaciones que hoy son ciertas para tu propia práctica. El número de afirmaciones marcadas da un nivel orientativo 0–11 y una pista de «dónde estás / cómo avanzar». Marca con honestidad solo aquello que realmente haces en tu día a día." },
+        { "kind": "callout", "variant": "safe", "title": "Es un diagnóstico, no una calificación", "text": "No hay respuestas correctas ni incorrectas ni umbral de aprobado. El resultado no influye en la finalización de la ruta ni en ningún examen: es un espejo, no un examen." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "maturity-check",
+    "id": "mshp-selfcheck",
+    "title": "Escala de Holak v2.1p — autoevaluación de madurez personal",
+    "intro": "Marca las afirmaciones que hoy son ciertas para tu propia forma de trabajar con la IA. Tras comprobarlo verás un nivel orientativo 0–11 y el siguiente paso, sin calificaciones de aprobado/suspenso.",
+    "scales": [
+      {
+        "id": "person",
+        "label": "Persona (Escala de Holak v2.1p)",
+        "intro": "¿Cómo de madura es tu propia forma de trabajar con la IA? Marca lo que haces en tu día a día.",
+        "max": 11,
+        "statements": [
+          { "id": "per-1", "text": "Uso la IA para tareas concretas y repetibles." },
+          { "id": "per-2", "text": "Formulo el prompt de forma consciente: rol, objetivo, contexto, formato de salida." },
+          { "id": "per-3", "text": "Reconozco que el output a veces es erróneo pese a tener una forma creíble." },
+          { "id": "per-4", "text": "Verifico las respuestas críticas frente a la fuente antes de usarlas." },
+          { "id": "per-5", "text": "Elijo la herramienta/modelo según la tarea; no uso una sola para todo." },
+          { "id": "per-6", "text": "Gestiono el contexto: aporto solo lo necesario y cuido el coste." },
+          { "id": "per-7", "text": "Sé cuándo NO usar la IA: falta de datos, riesgo alto, irreversibilidad." },
+          { "id": "per-8", "text": "Diseño el trabajo de modo que las decisiones apoyadas en la IA sean reversibles y comprobables." },
+          { "id": "per-9", "text": "Comparto prácticas y, junto con otras personas, calibro la evaluación del output." },
+          { "id": "per-10", "text": "Mido el impacto real de la IA en mi calidad y mi tiempo, y corrijo el enfoque." },
+          { "id": "per-11", "text": "Trato el trabajo con la IA como una mejora continua de mi propio oficio." }
+        ],
+        "bands": [
+          { "min": 0, "max": 2, "label": "Nivel 0–2: Primeros usos", "advice": "Barrera: tratar la IA como un oráculo. Siguiente paso: empieza a formular el prompt de forma consciente y a comprobar cada respuesta que quieras usar." },
+          { "min": 3, "max": 5, "label": "Nivel 3–5: Usuario consciente", "advice": "Éxito: verificas el output y eliges la herramienta según la tarea. Siguiente paso: aprende a gestionar el contexto y el coste, y a reconocer cuándo NO usar la IA." },
+          { "min": 6, "max": 8, "label": "Nivel 6–8: Profesional en práctica", "advice": "Éxito: conoces los límites y gestionas el contexto. Umbral 8→9: diseña el trabajo de modo que las decisiones sean reversibles y comprobables, y comparte prácticas con el equipo." },
+          { "min": 9, "max": 11, "label": "Nivel 9–11: Maestría del oficio", "advice": "Trampa: rutina sin medición ni reflexión. Umbral 10→11: mide el impacto real de la IA en tu trabajo y trata tu oficio como una mejora continua." }
+        ]
+      }
+    ]
+  },
+  "summary": {
+    "points": [
+      "La Escala de Holak v2.1p mide CÓMO usas la IA (contexto, verificabilidad, reversibilidad), no el número de herramientas.",
+      "Evalúas únicamente tu propia práctica; la organización la diagnosticas aparte (MSHO).",
+      "Es un diagnóstico orientativo: sin aprobado/suspenso, sin influir en la finalización; sirve para señalar el siguiente paso."
+    ],
+    "checklist": [
+      "¿Has puesto nombre a tu nivel personal orientativo (0–11)?",
+      "¿Sabes cuál es la barrera más próxima que superar?",
+      "¿Conoces un siguiente paso concreto para avanzar?"
+    ],
+    "checklistTitle": "Lista de verificación — tras la autoevaluación personal",
+    "nextStep": "Siguiente paso: elige una barrera de un nivel superior y planifica un único experimento pequeño y reversible en tu propio trabajo."
+  }
+}

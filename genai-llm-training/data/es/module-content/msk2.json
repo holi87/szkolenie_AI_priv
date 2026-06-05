@@ -1,0 +1,113 @@
+{
+  "_meta": {
+    "issue": "#124 [M16] Ścieżka formatywna S4 — agenci AI (moduł szkoleniowy, interakcja tune)",
+    "adr": "docs/adr/0009-sciezka-formatywna-s4-skala-holaka.md",
+    "interaction": "Strojenie parametrów agenta (kind: tune) — ćwiczenie formatywne, NIE scorowane do zaliczenia",
+    "source": "Osie dojrzałości Skali Holaka: weryfikowalność outputu, odwracalność decyzji, kontrola agentów. Atrybucja: quality-blog.eu/pl/blog/skala-holaka.",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE i ogólne (zero realnych danych/PII). Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MSK2",
+  "intro": "Un agente no es un chatbot: ejecuta pasos y usa herramientas, por lo que puede cambiar el mundo de forma real — archivos, correos, datos, repositorio. Trabajar con un agente de forma madura consiste en ajustar la autonomía al riesgo: cuanto más difícil sea deshacer el efecto y verificar el output, más estrechos deben ser los permisos y mayor el control humano. Este módulo enseña a regular esas palancas. Es un ejercicio de desarrollo, no un examen.",
+  "screens": [
+    {
+      "id": "msk2-s1-od-chatbota-do-agenta",
+      "title": "Del chatbot al agente",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Un chatbot responde con texto. Un workflow con una herramienta ejecuta un único paso definido. Un agente planifica y ejecuta varios pasos, recurriendo por sí mismo a las herramientas — y justo por eso necesita límites. La pregunta no es «¿puede hacerlo el agente?», sino «¿qué pasará si se equivoca y llegaremos a tiempo de deshacerlo?»." },
+        { "kind": "list", "items": [
+          "Chatbot — propone, no ejecuta nada.",
+          "Workflow con una herramienta — ejecuta un único paso definido.",
+          "Agente — planifica y ejecuta varios pasos con acceso a herramientas."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Eje de la Escala de Holak", "text": "Diseñar el trabajo de modo que las decisiones apoyadas en IA (también las acciones del agente) sean verificables y reversibles es la señal de pasar a un nivel superior.",
+          "links": [ { "label": "Escala de Holak — modelo de madurez (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka" } ]
+        }
+      ]
+    },
+    {
+      "id": "msk2-s2-trzy-dzwignie",
+      "title": "Tres palancas de control del agente",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "La seguridad de un agente no se basa en la confianza, sino en ajustar tres palancas: el alcance de los permisos (qué puede hacer el agente), el punto de aprobación por parte de una persona (cuándo debe preguntar) y el rastro de auditoría y la reversibilidad (si se puede comprobar y deshacer lo que hizo)." },
+        { "kind": "list", "items": [
+          "Alcance de los permisos — desde solo lectura hasta escritura total en producción.",
+          "Human-in-the-loop — aprobación siempre, solo para acciones irreversibles, o nunca.",
+          "Rastro y reversibilidad — log completo con rollback, log básico, o ninguno."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "La trampa del «el agente se las arreglará»", "text": "Cuanto más amplio el acceso y menor el control, más barato resulta… hasta el primer error irreversible. Por defecto, restringe los permisos y exige aprobación allí donde el efecto sea difícil de deshacer." }
+      ]
+    },
+    {
+      "id": "msk2-s3-jak-cwiczyc",
+      "title": "Cómo practicarlo",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "A continuación ajustarás tres parámetros del agente y verás en vivo cómo cambia el perfil de riesgo. Después, en el checkpoint, elegirás una configuración segura para una tarea con efectos irreversibles. Sin umbral de aprobación — se trata de adquirir el reflejo de ajustar la autonomía al riesgo." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "tune",
+    "id": "msk2-tune",
+    "title": "Ajusta la autonomía y el control del agente",
+    "intro": "Configura las tres palancas y observa el perfil de riesgo. Después responde al checkpoint — es un ejercicio de desarrollo, no un examen.",
+    "outputLabel": "Perfil de riesgo del agente (en vivo):",
+    "controls": [
+      {
+        "id": "scope",
+        "label": "Alcance de los permisos",
+        "levels": [
+          { "value": "read", "label": "Solo lectura", "effect": "El agente no cambia nada — el riesgo más bajo, ideal para análisis y propuestas." },
+          { "value": "sandbox", "label": "Escritura en sandbox", "effect": "Cambios solo en un entorno aislado — fáciles de descartar." },
+          { "value": "prod", "label": "Escritura total en producción", "effect": "El agente puede modificar de forma permanente los datos de producción — el riesgo más alto, requiere control." }
+        ]
+      },
+      {
+        "id": "approval",
+        "label": "Aprobación por parte de una persona",
+        "levels": [
+          { "value": "always", "label": "Siempre antes de actuar", "effect": "Una persona aprueba cada paso — más lento, pero totalmente controlado." },
+          { "value": "irreversible", "label": "Para decisiones irreversibles", "effect": "Se exige aprobación cuando el efecto no se puede deshacer — un compromiso razonable por defecto." },
+          { "value": "never", "label": "Nunca (autonomía total)", "effect": "El agente actúa sin preguntar — rápido, pero un error puede pasar inadvertido." }
+        ]
+      },
+      {
+        "id": "audit",
+        "label": "Rastro de auditoría y reversibilidad",
+        "levels": [
+          { "value": "full", "label": "Log completo + rollback", "effect": "Cada acción queda registrada y se puede deshacer — verificabilidad total." },
+          { "value": "basic", "label": "Log básico", "effect": "Se sabe qué pasó, pero deshacerlo suele ser manual y difícil." },
+          { "value": "none", "label": "Sin rastro", "effect": "No se sabe qué hizo el agente ni por qué — sin verificabilidad." }
+        ]
+      }
+    ],
+    "checkpoint": {
+      "prompt": "El agente debe ayudar en una tarea que puede modificar de forma PERMANENTE los datos de producción (efecto difícil de deshacer). ¿Qué conjunto de ajustes es el más seguro para empezar?",
+      "type": "single_choice",
+      "options": [
+        { "id": "a", "text": "Escritura total en producción, aprobación nunca, sin rastro — «el agente se las arreglará»." },
+        { "id": "b", "text": "Solo lectura o sandbox, aprobación humana para acciones irreversibles, log completo con rollback." },
+        { "id": "c", "text": "Escritura total en producción, log básico, sin aprobación — «aceleramos y comprobamos después»." }
+      ],
+      "correct": ["b"],
+      "feedbackCorrect": "Correcto. Ante efectos irreversibles restringes los permisos, exiges la aprobación de una persona y garantizas un rastro completo con posibilidad de deshacer.",
+      "feedbackIncorrect": "Ante efectos irreversibles, la autonomía sin control ni rastro es buscarse un error irreversible. Restringe los permisos, añade aprobación humana y un log completo con rollback."
+    }
+  },
+  "summary": {
+    "points": [
+      "El agente puede cambiar el mundo de forma real — ajusta la autonomía al riesgo y a la reversibilidad de la tarea.",
+      "Tres palancas de control: alcance de los permisos, aprobación por parte de una persona, rastro de auditoría con rollback.",
+      "Por defecto, restringe los permisos; cuanto más difícil sea deshacer el efecto, mayor debe ser el control humano."
+    ],
+    "checklist": [
+      "¿Sé qué es lo peor que puede hacer el agente con los permisos actuales?",
+      "¿Las acciones irreversibles requieren la aprobación de una persona?",
+      "¿Queda un rastro de auditoría y se puede deshacer la acción del agente?"
+    ],
+    "checklistTitle": "Checklist — antes de dar paso al agente",
+    "nextStep": "Siguiente paso: para una tarea real del agente, escribe el peor efecto posible y ajusta a él el alcance de los permisos, el punto de aprobación y el rastro de auditoría."
+  }
+}

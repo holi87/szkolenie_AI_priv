@@ -1,0 +1,102 @@
+{
+  "_meta": {
+    "issue": "#122 [M16] Rozdzielenie diagnozy Skali Holaka — wymiar ORGANIZACYJNY (v2.1e)",
+    "adr": "docs/adr/0008-modul-skali-holaka-msh.md",
+    "interaction": "Self-check della maturità organizzativa (kind: maturity-check) — NON gating, framing neutro",
+    "source": "Modello di maturità nell'adozione dell'AI «Scala di Holak»: dimensione organizzativa v2.1e (organizzazione, 0–11). Attribuzione: quality-blog.eu/pl/blog/skala-holaka.",
+    "dataPolicy": "TUTTE le affermazioni del self-check sono SINTETICHE e generiche (nessun dato reale/PII). Diagnosi orientativa — NON è possibile «bocciarla». Euristica di punteggio semplificata (numero di selezioni → livello 0–11), da verificare con un esperto di dominio (SME)."
+  },
+  "module": "MSHO",
+  "intro": "La Scala di Holak nella dimensione organizzativa (v2.1e) aiuta a dare un nome alla maturità nell'adozione dell'AI nel tuo team o nella tua azienda — dove si trova oggi l'organizzazione e qual è il vero passo successivo. È un'autodiagnosi, non un test: non c'è un esito «superato/bocciato», c'è un livello orientativo 0–11 e un'indicazione su come salire più in alto. Puoi farla indipendentemente dalla diagnosi personale (MSHP).",
+  "screens": [
+    {
+      "id": "msho-s1-czym-jest",
+      "title": "Che cos'è la Scala di Holak organizzativa",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "La versione organizzativa (v2.1e) descrive la maturità nell'adozione dell'AI nel team/azienda su 12 livelli (0–11) — dagli esperimenti dal basso fino a un'adozione consapevole, misurata e migliorata di continuo, integrata nella strategia. Aiuta a evitare due trappole: «abbiamo l'AI, quindi siamo maturi» e «è solo un giocattolo»." },
+        { "kind": "list", "items": [
+          "Valuti l'adozione dell'AI nell'ORGANIZZAZIONE — indipendentemente dalla maturità del singolo individuo.",
+          "L'organizzazione può trovarsi più in alto o più in basso rispetto al suo miglior professionista.",
+          "La diagnosi della tua pratica personale (Scala di Holak v2.1p) la fai separatamente nel modulo MSHP."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Da dove viene il nome e chi c'è dietro il modello", "text": "La Scala di Holak è stata ideata da Grzegorz Holak con il supporto di Konrad Gomulski — da qui il nome. Entrambi sono Senior Test Development Engineer in Sii Polska e membri di SJSI, nonché cofondatori di quality-blog.eu; Grzegorz Holak è inoltre Test Architect e AI Ambassador presso SCIB. La usiamo come strumento di autoriflessione, non di certificazione.",
+          "links": [
+            { "label": "Scala di Holak — dimensione organizzativa (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka" },
+            { "label": "Scala di Holak — dimensione personale (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka-private" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "msho-s2-osie-i-granice",
+      "title": "Da cosa si riconosce il livello: assi e due confini",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "La maturità di un'organizzazione non la riconosci dal numero di licenze, ma dal fatto che l'AI sia integrata nei processi: una policy di uso accettabile messa per iscritto, usi consentiti, verifica obbligatoria degli output nei processi critici, misurazione dell'impatto su qualità e tempo e reversibilità delle decisioni con tracciabilità di audit." },
+        { "kind": "list", "items": [
+          "Barriera — ciò che manca all'organizzazione per salire più in alto.",
+          "Successo — ciò che funziona davvero quando il livello è raggiunto.",
+          "Trappola — considerare la maturità uno stato concluso invece di un miglioramento continuo."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Due confini critici (organizzativi)", "text": "Confine 8→9: dalle «buone pratiche individuali» all'integrazione dell'AI nel processo con una chiara separazione assistente/decisore e tracciabilità di audit. Confine 10→11: da singoli miglioramenti a un miglioramento continuo e alla calibrazione dell'adozione come elemento della strategia." }
+      ]
+    },
+    {
+      "id": "msho-s3-jak-czytac",
+      "title": "Come leggere il risultato dell'organizzazione",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Tra poco selezionerai le affermazioni vere oggi per la tua organizzazione. Il numero di selezioni fornisce un livello orientativo 0–11 e l'indicazione «dove siete / come salire più in alto». Seleziona onestamente solo ciò che è realmente attuato — non ciò che è pianificato." },
+        { "kind": "callout", "variant": "safe", "title": "È una diagnosi, non una valutazione", "text": "Non ci sono risposte giuste o sbagliate né una soglia di superamento. Il risultato non influisce sul completamento del percorso né su alcun test — è uno specchio, non un audit." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "maturity-check",
+    "id": "msho-selfcheck",
+    "title": "Scala di Holak v2.1e — autodiagnosi della maturità dell'organizzazione",
+    "intro": "Seleziona le affermazioni vere oggi per il tuo team/azienda. Dopo la verifica vedrai un livello orientativo 0–11 e il passo successivo — senza valutazioni pass/fail.",
+    "scales": [
+      {
+        "id": "org",
+        "label": "Organizzazione (Scala di Holak v2.1e)",
+        "intro": "Quanto è matura l'adozione dell'AI nel tuo team/azienda? Seleziona ciò che è realmente attuato.",
+        "max": 11,
+        "statements": [
+          { "id": "org-1", "text": "Ci sono persone che usano l'AI per singoli compiti." },
+          { "id": "org-2", "text": "Esiste uno scambio informale di buone pratiche d'uso dell'AI." },
+          { "id": "org-3", "text": "È stata messa per iscritto una policy di uso accettabile dell'AI (dati, privacy, IP)." },
+          { "id": "org-4", "text": "Alcuni processi hanno usi dell'AI definiti e consentiti." },
+          { "id": "org-5", "text": "Gli output dell'AI nei processi critici sono verificati obbligatoriamente da una persona." },
+          { "id": "org-6", "text": "I team misurano l'impatto dell'AI su qualità e tempo, non solo il fatto di averla usata." },
+          { "id": "org-7", "text": "C'è una gestione consapevole del contesto e del costo dei token nei compiti ripetitivi." },
+          { "id": "org-8", "text": "Le decisioni supportate dall'AI sono reversibili e lasciano una traccia di audit." },
+          { "id": "org-9", "text": "L'AI è integrata nei processi con una chiara separazione: assistente vs decisore." },
+          { "id": "org-10", "text": "L'organizzazione calibra e audita regolarmente il proprio uso dell'AI." },
+          { "id": "org-11", "text": "L'adozione dell'AI è un elemento della strategia e del miglioramento continuo, non un'iniziativa una tantum." }
+        ],
+        "bands": [
+          { "min": 0, "max": 2, "label": "Livello 0–2: Esperimenti dal basso", "advice": "Barriera: assenza di regole comuni e di un obiettivo. Passo successivo: metti per iscritto una semplice policy di uso accettabile dell'AI (dati, privacy) e individua 1–2 processi pilota." },
+          { "min": 3, "max": 5, "label": "Livello 3–5: Primi quadri di riferimento", "advice": "Successo: ci sono regole e usi consentiti. Passo successivo: introduci la verifica obbligatoria degli output nei processi critici e inizia a misurare l'impatto." },
+          { "min": 6, "max": 8, "label": "Livello 6–8: Processi consapevoli", "advice": "Successo: misuri l'impatto e gestisci il contesto. Confine 8→9: integra l'AI nel processo con una chiara separazione assistente/decisore e una traccia di audit per le decisioni." },
+          { "min": 9, "max": 11, "label": "Livello 9–11: Adozione matura", "advice": "Trappola: considerare la maturità uno stato concluso e non un miglioramento continuo. Confine 10→11: rendi la calibrazione e l'audit dell'uso dell'AI un elemento della strategia e della routine del team." }
+        ]
+      }
+    ]
+  },
+  "summary": {
+    "points": [
+      "La Scala di Holak v2.1e misura se l'AI è integrata nei processi (regole, verifica, misurazione), non il numero di licenze.",
+      "Valuti l'adozione nell'organizzazione — la tua pratica personale la diagnostichi separatamente (MSHP).",
+      "È una diagnosi orientativa: senza pass/fail, senza impatto sul completamento — deve indicare il passo successivo."
+    ],
+    "checklist": [
+      "Avete dato un nome al livello orientativo dell'organizzazione (0–11)?",
+      "Sapete qual è la barriera più vicina da superare?",
+      "Conoscete un passo successivo concreto per salire più in alto?"
+    ],
+    "checklistTitle": "Checklist — dopo l'autodiagnosi dell'organizzazione",
+    "nextStep": "Passo successivo: scegliete una barriera del livello superiore e pianificate un piccolo passo di adozione reversibile."
+  }
+}

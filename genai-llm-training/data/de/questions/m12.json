@@ -1,0 +1,549 @@
+{
+  "_meta": {
+    "module": "M12",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M12. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q105",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Prüft, ob die teilnehmende Person die passende Qualitätsmetrik zum Symptom eines fehlerhaften LLM/RAG-Antwortverhaltens auswählt.",
+      "prompt": "Die bewertete Modellantwort im Korpus SklepDemo enthält einen Satz, der dem Inhalt des Quelldokuments widerspricht (sie behauptet, der Link zum Zurücksetzen des Passworts sei mehrfach verwendbar, obwohl die Quelle sagt: einmalig). Welche Qualitätsmetrik erfasst dieses Problem am treffendsten?",
+      "options": [
+        {
+          "id": "A",
+          "text": "faithfulness (Quellentreue)"
+        },
+        {
+          "id": "B",
+          "text": "relevance (Relevanz zur Frage)"
+        },
+        {
+          "id": "C",
+          "text": "completeness (Vollständigkeit)"
+        },
+        {
+          "id": "D",
+          "text": "accuracy verstanden als allgemeine faktische Korrektheit der Antwort, unabhängig von der Quelle"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Ein Widerspruch der Antwort zum Inhalt der Quelle ist ein klassisches Symptom niedriger faithfulness — die Antwort ist der Quelle, auf die sie sich stützen sollte, nicht treu.",
+      "feedbackIncorrect": "Hier geht es nicht um die thematische Treffsicherheit (relevance), nicht um fehlende Teile der Antwort (completeness) und nicht um die allgemeine faktische Korrektheit (accuracy) — die Antwort könnte „korrekt“ klingen und trotzdem einer konkreten Quelle widersprechen. Es geht um die Übereinstimmung mit der Quelle, also faithfulness. Wiederhole die Definition auf dem Bildschirm zu den Qualitätsmetriken.",
+      "references": [
+        "M12.4",
+        "M12.5"
+      ]
+    },
+    {
+      "id": "Q106",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Prüft das Verständnis dafür, warum eine Rubrik für LLM-as-a-judge Anker-Beispiele und Definitionen der Stufen enthalten muss.",
+      "prompt": "Warum enthält eine gute Bewertungsrubrik (evaluation rubric) für LLM-as-a-judge die Definition jeder Skalenstufe sowie Anker-Beispiele (anchor examples)?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Weil sie die Wiederholbarkeit der Bewertung erhöhen — verschiedene Durchläufe bewerten gleich, nach denselben Kriterien statt nach einem allgemeinen Eindruck"
+        },
+        {
+          "id": "B",
+          "text": "Weil sie den Prompt des Bewerters verkürzen und die Token-Kosten senken"
+        },
+        {
+          "id": "C",
+          "text": "Weil sie golden set und ground truth ersetzen, sodass keine Quelle der Wahrheit dokumentiert werden muss"
+        },
+        {
+          "id": "D",
+          "text": "Weil sie garantieren, dass die automatische Bewertung niemals von der Bewertung einer Expertin oder eines Experten abweicht"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Definitionen der Stufen und Anker legen einen gemeinsamen Bezugspunkt fest, sodass die Bewertung wiederholbar wird, statt ein nicht reproduzierbares 'Ist das gut?' zu sein.",
+      "feedbackIncorrect": "Die Rubrik ersetzt weder das golden set noch garantiert sie die Übereinstimmung mit dem Experten; ihr Ziel ist die Wiederholbarkeit der Bewertung. Kehre zum Bildschirm über die Rubrik für LLM-as-a-judge zurück.",
+      "references": [
+        "M12.6"
+      ]
+    },
+    {
+      "id": "Q107",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Prüft die Fähigkeit, position bias anhand des Bewertungsmusters im paarweisen Vergleich zu erkennen.",
+      "prompt": "Im Kalibrierungslabor gab der bewertende LLM im Paar A3 vs. A4 (zwei Antwortvarianten zum selben Kriterium WYM-koszyk) der zuerst gezeigten Variante die höhere Note (A3: 2/2, A4: 1/2), während die QA-Expertin bzw. der QA-Experte die zweite Variante höher bewertete (A3: 1/2, A4: 2/2). Was erklärt diese Abweichung am besten?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Position bias — der Bewerter bevorzugt die zuerst gezeigte Antwort, unabhängig von ihrer tatsächlichen Qualität"
+        },
+        {
+          "id": "B",
+          "text": "Niedrige faithfulness beider Antworten gegenüber der Quelle"
+        },
+        {
+          "id": "C",
+          "text": "Fehlen repräsentativer Fragen im golden set"
+        },
+        {
+          "id": "D",
+          "text": "Der Experte hat einen Fehler gemacht, denn die automatische Bewertung ist per Definition objektiver"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Das Urteil hängt von der Reihenfolge der Präsentation ab, nicht vom Inhalt — das ist das definitorische Symptom von position bias; ein Vertauschen der Reihenfolge A3/A4 würde das Ergebnis des Judges wahrscheinlich umkehren.",
+      "feedbackIncorrect": "Das Muster 'höher bewertet wird die zuerst gezeigte Position' deutet auf Positions-Verzerrung hin und nicht auf ein Problem mit der Quelle oder dem golden set. Wiederhole den Bildschirm über bias und position bias.",
+      "references": [
+        "M12.7",
+        "M12.10"
+      ]
+    },
+    {
+      "id": "Q108",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Prüft die Fähigkeit, die Inter-Rater-Übereinstimmung und die Grenzen der rohen Übereinstimmungsquote in% zu interpretieren.",
+      "prompt": "Auf dem golden set GS-SklepDemo haben 90% der Positionen die Bewertung 'pass', und der bewertende LLM und der Experte stimmen im Urteil in 90% der Fälle überein. Warum kann allein die 'Übereinstimmung von 90%' als Beleg für die Kalibrierung des Bewerters irreführend sein?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Weil sich bei stark ungleicher Verteilung der Bewertungen ein hoher Prozentsatz an Übereinstimmung fast zufällig erreichen lässt — man muss prüfen, ob sie auch bei den seltenen 'fail'-Fällen übereinstimmen"
+        },
+        {
+          "id": "B",
+          "text": "Weil 90% immer eine zu niedrige Schwelle ist und 100% Übereinstimmung gefordert werden muss"
+        },
+        {
+          "id": "C",
+          "text": "Weil bei ungleicher Klassenverteilung die Übereinstimmungsquote verworfen und die Bewertung ausschließlich auf das Urteil des Experten gestützt werden muss"
+        },
+        {
+          "id": "D",
+          "text": "Weil die Übereinstimmungsquote in% die Geschwindigkeit der Bewertung misst und nicht ihre Qualität"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Wenn fast alles 'pass' ist, ist Übereinstimmung 'beim pass' billig — entscheidend ist, ob der Bewerter die seltenen, riskanten 'fail'-Fälle trifft.",
+      "feedbackIncorrect": "Das Problem ist weder der Schwellenwert selbst (B) noch das Verwerfen der Übereinstimmungsquote zugunsten allein des Experten (C) — es ist der Effekt der ungleichen Klassenverteilung: bei einer Übermacht an 'pass' ist ein hoher Prozentsatz an Übereinstimmung billig, deshalb muss man die Trefferquote bei den seltenen 'fail'-Fällen prüfen. Kehre zum Bildschirm über Kalibrierung und Inter-Rater-Übereinstimmung zurück.",
+      "references": [
+        "M12.8"
+      ]
+    },
+    {
+      "id": "Q109",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Prüft, ob die teilnehmende Person die Elemente erkennt, die ein gutes golden set enthalten sollte.",
+      "prompt": "Was sollte ein gut konzipiertes golden set (Referenzdatensatz) für den QA-Anwendungsfall in SklepDemo enthalten? Markiere alle richtigen Antworten.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Repräsentative Fragen, die die typischen Szenarien des Anwendungsfalls abdecken"
+        },
+        {
+          "id": "B",
+          "text": "Randfälle und bekannte Fallstricke (z. B. eine Frage außerhalb des Umfangs der Quelle)"
+        },
+        {
+          "id": "C",
+          "text": "Eine dokumentierte Quelle der Wahrheit (ground truth) für jede Position"
+        },
+        {
+          "id": "D",
+          "text": "Zufällig gesammelte Produktionslogs mit Rohdaten von Kunden"
+        },
+        {
+          "id": "E",
+          "text": "Positionen mit mehrdeutiger Erwartung, die sich nicht entscheiden lässt"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Ein golden set sind 'Regressionstests für Modellantworten': repräsentative Fragen, Randfälle und eine eindeutige, dokumentierte Quelle der Wahrheit für jede Position.",
+      "feedbackIncorrect": "Rohe Produktionslogs (PII) sowie Positionen ohne entscheidbare Erwartung gehören nicht in ein golden set. Wiederhole den Bildschirm 'Golden set für den Anwendungsfall'.",
+      "references": [
+        "M12.2",
+        "M12.3"
+      ]
+    },
+    {
+      "id": "Q110",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Prüft das Erkennen von Signalen, die auf einen position bias des Bewerters hindeuten.",
+      "prompt": "Welche der folgenden Signale deuten darauf hin, dass der bewertende LLM von einer Positions-Verzerrung (position bias) betroffen sein könnte? Markiere alle richtigen.",
+      "options": [
+        {
+          "id": "A",
+          "text": "In paarweisen Vergleichen wählt der Judge konsequent die zuerst präsentierte Antwort"
+        },
+        {
+          "id": "B",
+          "text": "Nach dem Vertauschen der Reihenfolge zweier Antworten kehrt sich das Urteil des Judges um, obwohl sich der Inhalt nicht verändert hat"
+        },
+        {
+          "id": "C",
+          "text": "Das Urteil des Judges weicht von der Bewertung des Experten genau in den reihenfolgeabhängigen Vergleichspaaren ab"
+        },
+        {
+          "id": "D",
+          "text": "Der Judge bewertet die Antworten einzeln (ohne Vergleich) und gibt allen der Quelle widersprechenden Antworten niedrige Noten"
+        },
+        {
+          "id": "E",
+          "text": "Der Judge vergibt identische Noten unabhängig von der Reihenfolge der Präsentation"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Position bias zeigt sich in der Abhängigkeit des Urteils von der Reihenfolge: durch Bevorzugung der ersten Position, Umkehrung des Urteils nach dem Vertauschen und Abweichungen, die sich auf die Vergleichspaare konzentrieren.",
+      "feedbackIncorrect": "Die Unabhängigkeit von der Reihenfolge (E) sowie eine konsistente Bewertung von der Quelle widersprechenden Inhalten (D) belegen das Fehlen eines position bias. Kehre zum Bildschirm über position bias und seine Diagnose zurück.",
+      "references": [
+        "M12.7",
+        "M12.10"
+      ]
+    },
+    {
+      "id": "Q111",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L4",
+      "bloom": "evaluation",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Prüft die Fähigkeit, einen Satz von Metriken auszuwählen, der einer komplexen Qualitätsfrage angemessen ist.",
+      "prompt": "Die Qualitätsfrage lautet: 'Nennt die Modellantwort alle Zahlungsbedingungen aus dem Quelldokument und fügt sie keine Bedingungen außerhalb der Quelle hinzu?'. Welche Metriken decken eine solche Bewertung am besten gemeinsam ab? Markiere alle zutreffenden.",
+      "options": [
+        {
+          "id": "A",
+          "text": "completeness — ob alle vom Kriterium geforderten Zahlungsbedingungen abgedeckt wurden"
+        },
+        {
+          "id": "B",
+          "text": "faithfulness — ob die Antwort keine der Quelle widersprechenden oder in ihr nicht vorhandenen Bedingungen hinzufügt"
+        },
+        {
+          "id": "C",
+          "text": "groundedness — ob sich die genannten Bedingungen im übergebenen Kontext verankern lassen"
+        },
+        {
+          "id": "D",
+          "text": "position bias allein als einzelne Metrik für die Inhaltsqualität"
+        },
+        {
+          "id": "E",
+          "text": "ausschließlich relevance, weil die Frage Zahlungen betrifft"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Die Frage hat zwei Dimensionen: die Abdeckung aller Bedingungen (completeness) sowie das Fehlen von Inhalten außerhalb der Quelle und die Verankerung im Kontext (faithfulness, groundedness).",
+      "feedbackIncorrect": "Position bias ist ein Risiko des Bewerters, keine Inhaltsmetrik; relevance allein misst weder die Vollständigkeit noch die Quellentreue. Wiederhole die Bildschirme über die Metriken und ihre Auswahl.",
+      "references": [
+        "M12.4",
+        "M12.5"
+      ]
+    },
+    {
+      "id": "Q112",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L4",
+      "bloom": "evaluation",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Prüft die Fähigkeit zu beurteilen, welche Elemente eine Rubrik für LLM-as-a-judge glaubwürdig und bias-resistent machen.",
+      "prompt": "Du entwirfst eine Rubrik für einen LLM-as-a-judge, der die faithfulness von Antworten in GS-SklepDemo bewertet. Welche Elemente sollten darin enthalten sein, damit die Bewertung wiederholbar und resistent gegen Verzerrungen ist? Markiere alle zutreffenden.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Ein klares Bewertungskriterium und eine Skala mit der Definition jeder Stufe (z. B. 0–2)"
+        },
+        {
+          "id": "B",
+          "text": "Anker-Beispiele (anchor examples) für die extremen und mittleren Stufen"
+        },
+        {
+          "id": "C",
+          "text": "Die Anweisung 'bewerte ausschließlich gegenüber der Quelle' und nicht gegenüber dem allgemeinen Wissen des Modells"
+        },
+        {
+          "id": "D",
+          "text": "Die Regel, in paarweisen Vergleichen die Reihenfolge zu vertauschen, um position bias zu begrenzen"
+        },
+        {
+          "id": "E",
+          "text": "Eine Regel, längere Antworten zu belohnen, weil sie grundsätzlich vollständiger seien"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "feedbackCorrect": "Eine wiederholbare und bias-resistente Rubrik verbindet ein klares Kriterium, eine definierte Skala, Anker, die Bewertung gegenüber der Quelle sowie die Minderung von position bias durch das Vertauschen der Reihenfolge.",
+      "feedbackIncorrect": "Das Belohnen von Länge ist length bias — es überschätzt die Bewertung unabhängig vom Inhalt. Kehre zu den Bildschirmen über die Rubrik sowie über bias/position bias zurück.",
+      "references": [
+        "M12.6",
+        "M12.7"
+      ]
+    },
+    {
+      "id": "Q113",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Prüft die Interpretation einer Abweichung, bei der der Bewerter die Note gegenüber dem Experten bei einer der Quelle widersprechenden Antwort überschätzt.",
+      "prompt": "Im Kalibrierungslabor hat die Position A2 (eine Frage zur Frist der Rückgabepolitik in SklepDemo) eine faithfulness-Bewertung des Experten von 0/2 — die Antwort widerspricht der Quelle —, während der bewertende LLM 2/2 vergeben hat. Wie lässt sich diese Abweichung am besten interpretieren und was ist damit zu tun?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Der Judge überschätzt die Bewertung einer der Quelle widersprechenden Antwort — das ist ein Signal, die Rubrik zu verbessern (eine eindringliche Anweisung 'Widerspruch zur Quelle = 0') und neu zu bewerten, und nicht es zu ignorieren"
+        },
+        {
+          "id": "B",
+          "text": "Da der Judge 2/2 vergeben hat, ist die Antwort gut — man sollte das golden set aktualisieren und die ground truth auf 2/2 anheben"
+        },
+        {
+          "id": "C",
+          "text": "Die Abweichung ist unerheblich, weil es nur eine Position ist — man kann sie im Bericht weglassen"
+        },
+        {
+          "id": "D",
+          "text": "Das ist position bias, deshalb genügt es, die Reihenfolge der Antworten zu vertauschen, und das Problem verschwindet"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Ein vom Experten mit 0/2 und vom Judge mit 2/2 bewerteter Widerspruch zur Quelle ist eine Überschätzung, die eine Korrektur der Rubrik und eine erneute Bewertung erfordert — das golden set (ground truth) ist hier der Maßstab.",
+      "feedbackIncorrect": "Man darf die ground truth nicht an den Fehler des Judges anpassen und die Abweichung nicht weglassen; es ist kein position bias (es gibt kein Vergleichspaar). Wiederhole die Kalibrierungsschleife aus dem Bildschirm über die Übereinstimmung der Bewerter.",
+      "references": [
+        "M12.8",
+        "M12.10"
+      ]
+    },
+    {
+      "id": "Q114",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L4",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Prüft die Wahl der korrekten Minderung nach der Erkennung von position bias im Kalibrierungsablauf.",
+      "prompt": "Die Diagnose im Labor bestätigt position bias im Paar A3/A4: der Judge bevorzugt die zuerst gezeigte Variante. Du sollst das Team davon überzeugen, wie dieser Effekt zuverlässig bestätigt und begrenzt werden kann, bevor die Akzeptanzschwelle festgelegt wird. Welche Entscheidung ist die beste?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Die Bewertung mit vertauschter Reihenfolge A4/A3 wiederholen (und/oder beide Anordnungen mitteln) — kehrt sich das Urteil um, bestätigt das den bias; das Vertauschen der Reihenfolge dauerhaft in die Rubrik einbauen"
+        },
+        {
+          "id": "B",
+          "text": "Dem ersten Urteil des Judges vertrauen, weil die automatische Bewertung schneller und günstiger ist als ein Experte"
+        },
+        {
+          "id": "C",
+          "text": "Das Paar A3/A4 aus dem golden set entfernen, damit die Übereinstimmung in% steigt"
+        },
+        {
+          "id": "D",
+          "text": "Die Akzeptanzschwelle für alle Positionen anheben, um die Unsicherheit der Bewertung auszugleichen"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Das Vertauschen der Reihenfolge (und das Mitteln beider Anordnungen) bestätigt position bias und neutralisiert ihn zugleich — das ist die standardmäßige Minderung, die vor der Entscheidung über die Schwelle in die Rubrik eingetragen wird.",
+      "feedbackIncorrect": "Dem reihenfolgeabhängigen Urteil zu vertrauen, unbequeme Positionen zu entfernen oder die Schwelle blind anzuheben beseitigt den bias nicht — es verschleiert ihn. Kehre zu den Bildschirmen über position bias und Kalibrierung zurück.",
+      "references": [
+        "M12.7",
+        "M12.10"
+      ]
+    },
+    {
+      "id": "Q115",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L4",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Prüft das Treffen einer konservativen Go/No-Go-Entscheidung gegenüber einer festgelegten Akzeptanzschwelle.",
+      "prompt": "Die Akzeptanzschwelle für das Ausrollen eines neuen Prompts in SklepDemo lautet: 'faithfulness ≥ 0,9 auf dem golden set UND null Positionen, die der Quelle widersprechen'. Die neue Version erreicht eine durchschnittliche faithfulness von 0,93, aber eine Position (analog zu A2) widerspricht der Quelle. Welche Entscheidung ist korrekt?",
+      "options": [
+        {
+          "id": "A",
+          "text": "No-go — die Bedingung 'null Positionen, die der Quelle widersprechen' ist trotz des guten Durchschnitts nicht erfüllt; beseitige zuerst den Widerspruch, dann bewerte erneut"
+        },
+        {
+          "id": "B",
+          "text": "Go — der Durchschnitt 0,93 übersteigt 0,9, also ist die Schwelle unabhängig von der einzelnen Position erfüllt"
+        },
+        {
+          "id": "C",
+          "text": "Go mit Absenkung der Schwelle auf 0,85, da nur eine Position versagt"
+        },
+        {
+          "id": "D",
+          "text": "Bedingtes Go — in die Produktion ausrollen und die widersprüchliche Position laufend überwachen"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Die Schwelle ist eine Konjunktion von Bedingungen; die nicht erfüllte harte Bedingung 'null Widersprüche' erzwingt ein No-go unabhängig vom guten Durchschnitt — konservatives Standardverhalten.",
+      "feedbackIncorrect": "Man darf die harte Bedingung nicht durch den Durchschnitt umgehen, die Schwelle nicht absenken und nicht 'zur Probe' ausrollen — das ist ein Umgehen des Akzeptanzkriteriums. Wiederhole den Bildschirm über die Schwelle und die Go/No-Go-Entscheidung.",
+      "references": [
+        "M12.9"
+      ]
+    },
+    {
+      "id": "Q116",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L4",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Prüft, unter welcher Bedingung die automatische Bewertung nach erfolgreicher Kalibrierung zur Go/No-Go-Entscheidung zugelassen werden darf.",
+      "prompt": "Nach zwei Iterationen der Verbesserung der Rubrik ist die Übereinstimmung des bewertenden LLM mit dem Experten auf dem golden set GS-SklepDemo von 4/6 auf 6/6 gestiegen, und die Abweichungen sind verschwunden. Das Team möchte die automatische Bewertung für die Go/No-Go-Entscheidung über das Release nutzen. Welche Bedingung lässt die automatische Bewertung für diese Entscheidung angemessen zu?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Eine Akzeptanzschwelle festlegen (erforderliche Übereinstimmung mit dem Experten auf dem golden set und deren Beibehaltung auf einer frischen Stichprobe) sowie eine regelmäßige Rekalibrierung mit dem Experten — ein einzelner Durchlauf mit 6/6 garantiert keine Beständigkeit."
+        },
+        {
+          "id": "B",
+          "text": "Ein einmal erreichtes 6/6 garantiert die Treffsicherheit für immer — man kann den Experten aus dem Prozess entfernen."
+        },
+        {
+          "id": "C",
+          "text": "Die automatische Bewertung nur dann zulassen, wenn der Judge mit jeder zukünftigen Antwort zu 100% übereinstimmt, sonst sie nie verwenden."
+        },
+        {
+          "id": "D",
+          "text": "Eine Akzeptanzschwelle ist überflüssig, weil LLM-as-a-judge per Definition objektiv ist."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Das Zulassen der automatischen Bewertung erfordert eine festgelegte Akzeptanzschwelle und deren Beibehaltung auf einer frischen Stichprobe sowie eine regelmäßige Rekalibrierung mit dem Experten — die Kalibrierung ist fortlaufend, nicht einmalig.",
+      "feedbackIncorrect": "Weder „einmal 6/6 = für immer“ noch „100% bei jeder zukünftigen Antwort“ noch „der Judge ist objektiv“ sind angemessen — nötig sind eine Akzeptanzschwelle und eine regelmäßige Rekalibrierung. Kehre zum Bildschirm über die Akzeptanzschwelle für Qualität zurück.",
+      "references": [
+        "M12.9",
+        "M12.10"
+      ]
+    }
+  ]
+}

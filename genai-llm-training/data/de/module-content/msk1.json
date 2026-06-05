@@ -1,0 +1,100 @@
+{
+  "_meta": {
+    "issue": "#112-#118 [M15] / #124 [M16] Ścieżka formatywna S4 — Skala Holaka (moduł szkoleniowy, rozbudowa)",
+    "adr": "docs/adr/0009-sciezka-formatywna-s4-skala-holaka.md",
+    "interaction": "Klasyfikacja praktyk (kind: classify) — ćwiczenie formatywne, NIE scorowane do zaliczenia",
+    "source": "Osie dojrzałości Skali Holaka: zarządzanie kontekstem, oszczędność tokenów, powtarzalne workflowy (skille). Atrybucja: quality-blog.eu/pl/blog/skala-holaka.",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE i ogólne (zero realnych danych/PII). Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MSK1",
+  "intro": "Höhere Reifegrade im Umgang mit KI erkennst du nicht an der Anzahl der Werkzeuge, sondern daran, WIE du dem Modell Kontext lieferst, was das kostet und ob du eine wiederkehrende Aufgabe in einen Skill verwandeln kannst. Dieses Modul vermittelt Kontexthygiene, das Bewusstsein für Token-Kosten und den Aufbau wiederholbarer Workflows. Es ist eine Übung zur Weiterentwicklung, kein Test.",
+  "screens": [
+    {
+      "id": "msk1-s1-po-co",
+      "title": "Warum Kontext und Kosten verwalten",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Das Modell sieht nur das, was in das Kontextfenster passt. Zu wenig Kontext → eine allgemeine oder falsche Antwort; zu viel irrelevanter Inhalt → das Modell verliert das Signal und die Token-Kosten steigen. Reife Praxis bedeutet, genau das zu liefern, was nötig ist — nicht mehr, nicht weniger." },
+        { "kind": "list", "items": [
+          "Kontext = die Daten, Anweisungen und Beispiele, die die Aufgabe tatsächlich beeinflussen.",
+          "Die Token-Kosten steigen mit jedem eingefügten Zeichen — auch mit jedem überflüssigen.",
+          "Wiederkehrende Aufgaben profitieren am meisten von Vorlagen und Kontexthygiene."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Eine Achse der Holak-Skala", "text": "Das bewusste Verwalten von Kontext und Kosten ist eine der Achsen, die den Reifegrad „Ich nutze KI“ von „Ich nutze KI reif“ unterscheiden.",
+          "links": [ { "label": "Holak-Skala — Reifegradmodell (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka" } ]
+        }
+      ]
+    },
+    {
+      "id": "msk1-s2-praktyki",
+      "title": "Sparsam vs. verschwenderisch",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Sparsame Praxis selektiert den Kontext und verwendet bewährte Vorlagen mehrfach. Verschwenderische Praxis fügt „alles für alle Fälle“ ein, vermischt Themen und beschreibt den Kontext jedes Mal von Grund auf neu." },
+        { "kind": "table", "headers": ["Dimension", "Sparsam", "Verschwenderisch"], "rows": [
+          ["Kontextauswahl", "Nur die für die Aufgabe relevanten Fragmente", "Die gesamte Wissensbasis „für alle Fälle“"],
+          ["Wiederholbarkeit", "Prompt-Vorlage mit Platzhaltern für die Daten", "Jedes Mal eine Beschreibung von Grund auf, mit anderen Worten"],
+          ["Hygiene", "Ich entferne veraltete und widersprüchliche Inhalte", "Ich halte Dutzende Themen in einem einzigen Chat"]
+        ], "textAlt": "Vergleich sparsamer und verschwenderischer Praktiken in drei Dimensionen: Kontextauswahl, Wiederholbarkeit, Hygiene." },
+        { "kind": "callout", "variant": "warn", "title": "Die Falle „für alle Fälle“", "text": "Die gesamte Wissensbasis in jeden Prompt einzufügen erhöht nicht die Treffsicherheit — häufiger verwässert es die Aufgabe und treibt die Kosten in die Höhe. Dosiere den Kontext bewusst." }
+      ]
+    },
+    {
+      "id": "msk1-s3-skille",
+      "title": "Skills: ein wiederholbarer Workflow statt eines einmaligen Prompts",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Ein Skill ist ein einmal beschriebener, wiederholbarer Workflow: eine Anleitung „wann und wie“ eine typische Aufgabe auszuführen ist, mit festgelegtem Kontext, Ausgabeformat und Verifizierungsschritten. Statt jedes Mal einen Prompt zu erfinden, startest du ein bewährtes Rezept — günstiger, schneller und konsistenter." },
+        { "kind": "list", "ordered": true, "items": [
+          "Benenne die Aufgabe und die Auslösebedingung (wann dieser Skill anzuwenden ist).",
+          "Lege den festen Kontext und das Ausgabeformat fest (was du lieferst, was zurückkommen soll).",
+          "Füge einen Schritt zur Verifizierung des Ergebnisses hinzu, bevor du es verwendest.",
+          "Speichere es als Vorlage/Skill und verbessere es nach jeder Nutzung."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Warum das Kontext spart", "text": "Ein Skill kodiert einmal das, was du sonst mehrfach beschreibst — ein fester, durchdachter Kontext ersetzt das zufällige Einfügen und senkt die Token-Kosten bei gleichbleibender Qualität." }
+      ]
+    },
+    {
+      "id": "msk1-s4-jak-cwiczyc",
+      "title": "Wie man das übt",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Gleich klassifizierst du Praktiken als sparsam oder verschwenderisch — darunter auch Praktiken zum Aufbau von Skills. Es gibt hier keine Bestehensschwelle; die Reihenfolge der Einträge ist zufällig, also zählt der Inhalt, nicht das Muster. Das Ziel ist, das Muster zu erkennen, das du auf deine eigene Arbeit überträgst." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "msk1-classify",
+    "title": "Sparsame oder verschwenderische Kontextpraxis?",
+    "intro": "Ordne jede Praktik zu. Dies ist eine Übung zur Weiterentwicklung — das Feedback erklärt, warum eine bestimmte Praktik (un)sparsam ist.",
+    "categories": [
+      { "id": "lean", "label": "Sparsame Praktik", "desc": "Selektiert den Kontext, kontrolliert die Kosten, nutzt Vorlagen/Skills." },
+      { "id": "wasteful", "label": "Verschwenderische Praktik", "desc": "Fügt Überflüssiges hinzu, vermischt Themen, beschreibt alles von Grund auf neu." }
+    ],
+    "items": [
+      { "id": "msk1-i1", "text": "Ich liefere nur die für die Aufgabe relevanten Dokumentfragmente.", "correctCategory": "lean", "rationale": "Die Selektion des Kontexts erhöht die Treffsicherheit und senkt die Kosten." },
+      { "id": "msk1-i2", "text": "Ich füge die gesamte Wissensbasis „für alle Fälle“ in jeden Prompt ein.", "correctCategory": "wasteful", "rationale": "Überfluss verwässert das Signal und treibt die Token-Kosten in die Höhe." },
+      { "id": "msk1-i3", "text": "Eine wiederkehrende Aufgabe habe ich als Prompt-Vorlage mit Platzhaltern für die Daten.", "correctCategory": "lean", "rationale": "Eine Vorlage steht für Wiederholbarkeit und Kontexthygiene." },
+      { "id": "msk1-i4", "text": "Jedes Mal beschreibe ich den Kontext von Grund auf neu, mit anderen Worten.", "correctCategory": "wasteful", "rationale": "Keine Vorlage = vergeudete Zeit und inkonsistente Ergebnisse." },
+      { "id": "msk1-i5", "text": "Ich habe einen Skill (einen beschriebenen Workflow) für meine häufigste KI-Aufgabe.", "correctCategory": "lean", "rationale": "Ein Skill kodiert festen Kontext und Schritte — günstiger und konsistenter." },
+      { "id": "msk1-i6", "text": "Ich halte Dutzende unzusammenhängender Themen in einem einzigen Chat.", "correctCategory": "wasteful", "rationale": "Das Vermischen von Themen vermüllt den Kontext und verwirrt das Modell." },
+      { "id": "msk1-i7", "text": "Ich entferne veraltete und widersprüchliche Informationen vor der Frage aus dem Kontext.", "correctCategory": "lean", "rationale": "Ein sauberer Kontext verringert das Risiko von Fehlern und Halluzinationen." },
+      { "id": "msk1-i8", "text": "Ich kopiere einen langen Gesprächsverlauf ohne Selektion in eine neue Aufgabe.", "correctCategory": "wasteful", "rationale": "Übertragener Überfluss erhöht die Kosten und bringt irrelevanten Kontext mit." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Liefere genau den Kontext, der die Aufgabe beeinflusst — nicht mehr.",
+      "Verwandle wiederkehrende Aufgaben in Vorlagen und Skills mit festgelegtem Kontext und einem Verifizierungsschritt.",
+      "Jedes eingefügte Zeichen hat seinen Preis — dosiere den Kontext bewusst."
+    ],
+    "checklist": [
+      "Kann ich angeben, welche Teile des Kontexts wirklich nötig sind?",
+      "Habe ich einen Skill/eine Vorlage für meine häufigste KI-Aufgabe?",
+      "Bereinige ich den Kontext von veralteten und widersprüchlichen Inhalten?"
+    ],
+    "checklistTitle": "Checkliste — Kontexthygiene und Skills",
+    "nextStep": "Nächster Schritt: Nimm eine wiederkehrende Aufgabe und verwandle sie in einen Skill — eine Vorlage mit festgelegtem Kontext, Ausgabeformat und einem Verifizierungsschritt."
+  }
+}

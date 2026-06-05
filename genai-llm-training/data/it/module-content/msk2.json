@@ -1,0 +1,113 @@
+{
+  "_meta": {
+    "issue": "#124 [M16] Ścieżka formatywna S4 — agenci AI (moduł szkoleniowy, interakcja tune)",
+    "adr": "docs/adr/0009-sciezka-formatywna-s4-skala-holaka.md",
+    "interaction": "Strojenie parametrów agenta (kind: tune) — ćwiczenie formatywne, NIE scorowane do zaliczenia",
+    "source": "Osie dojrzałości Skali Holaka: weryfikowalność outputu, odwracalność decyzji, kontrola agentów. Atrybucja: quality-blog.eu/pl/blog/skala-holaka.",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE i ogólne (zero realnych danych/PII). Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MSK2",
+  "intro": "Un agente non è un chatbot: esegue passi e usa strumenti, quindi può cambiare realmente il mondo — file, email, dati, repository. Lavorare con maturità con un agente significa adattare l'autonomia al rischio: quanto più è difficile annullare un effetto e verificare l'output, tanto più ristretti sono i permessi e maggiore è il controllo umano. Questo modulo insegna a regolare queste leve. È un esercizio di crescita, non un test.",
+  "screens": [
+    {
+      "id": "msk2-s1-od-chatbota-do-agenta",
+      "title": "Dal chatbot all'agente",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Il chatbot risponde con del testo. Un workflow con uno strumento esegue un singolo passo definito. L'agente pianifica ed esegue molti passi, ricorrendo da solo agli strumenti — ed è proprio per questo che ha bisogno di limiti. La domanda non è «l'agente è capace», bensì «cosa succede se sbaglia, e faremo in tempo ad annullarlo»." },
+        { "kind": "list", "items": [
+          "Chatbot — propone, non esegue nulla.",
+          "Workflow con uno strumento — esegue un singolo passo definito.",
+          "Agente — pianifica ed esegue molti passi con accesso agli strumenti."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Asse della Scala di Holak", "text": "Progettare il lavoro in modo che le decisioni supportate dall'AI (comprese le azioni dell'agente) siano verificabili e reversibili è il segno del passaggio a un livello superiore.",
+          "links": [ { "label": "Scala di Holak — modello di maturità (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka" } ]
+        }
+      ]
+    },
+    {
+      "id": "msk2-s2-trzy-dzwignie",
+      "title": "Tre leve di controllo dell'agente",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "La sicurezza dell'agente non si basa sulla fiducia, ma sull'impostazione di tre leve: l'ambito dei permessi (cosa può fare l'agente in generale), il punto di approvazione da parte dell'uomo (quando deve chiedere) e la traccia di audit con la reversibilità (se è possibile verificare e annullare ciò che ha fatto)." },
+        { "kind": "list", "items": [
+          "Ambito dei permessi — dalla sola lettura fino alla piena scrittura in produzione.",
+          "Human-in-the-loop — approvazione sempre, solo per le azioni irreversibili, oppure mai.",
+          "Traccia e reversibilità — log completo con rollback, log di base, oppure assente."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "La trappola «l'agente se la caverà»", "text": "Quanto più ampio è l'accesso e minore il controllo, tanto più costa poco… fino al primo errore irreversibile. Per impostazione predefinita restringi i permessi e richiedi l'approvazione laddove l'effetto è difficile da annullare." }
+      ]
+    },
+    {
+      "id": "msk2-s3-jak-cwiczyc",
+      "title": "Come allenarlo",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Qui sotto imposterai tre parametri dell'agente e vedrai in tempo reale come cambia il profilo di rischio. Poi, nel checkpoint, sceglierai un set sicuro per un compito dagli effetti irreversibili. Senza soglia di superamento — si tratta dell'automatismo di adattare l'autonomia al rischio." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "tune",
+    "id": "msk2-tune",
+    "title": "Regola l'autonomia e il controllo dell'agente",
+    "intro": "Imposta le tre leve e osserva il profilo di rischio. Poi rispondi al checkpoint — è un esercizio di crescita, non un test.",
+    "outputLabel": "Profilo di rischio dell'agente (in tempo reale):",
+    "controls": [
+      {
+        "id": "scope",
+        "label": "Ambito dei permessi",
+        "levels": [
+          { "value": "read", "label": "Sola lettura", "effect": "L'agente non cambia nulla — rischio minimo, adatto all'analisi e alle proposte." },
+          { "value": "sandbox", "label": "Scrittura in sandbox", "effect": "Modifiche solo in un ambiente isolato — facili da scartare." },
+          { "value": "prod", "label": "Piena scrittura in produzione", "effect": "L'agente può modificare in modo permanente i dati di produzione — rischio massimo, richiede controllo." }
+        ]
+      },
+      {
+        "id": "approval",
+        "label": "Approvazione da parte dell'uomo",
+        "levels": [
+          { "value": "always", "label": "Sempre prima dell'azione", "effect": "L'uomo approva ogni passo — più lento, ma pienamente sotto controllo." },
+          { "value": "irreversible", "label": "Per le decisioni irreversibili", "effect": "Consenso richiesto quando l'effetto non si può annullare — un compromesso predefinito ragionevole." },
+          { "value": "never", "label": "Mai (piena autonomia)", "effect": "L'agente agisce senza chiedere — veloce, ma un errore può passare inosservato." }
+        ]
+      },
+      {
+        "id": "audit",
+        "label": "Traccia di audit e reversibilità",
+        "levels": [
+          { "value": "full", "label": "Log completo + rollback", "effect": "Ogni azione registrata e annullabile — piena verificabilità." },
+          { "value": "basic", "label": "Log di base", "effect": "Si sa cosa è successo, ma l'annullamento è spesso manuale e difficile." },
+          { "value": "none", "label": "Nessuna traccia", "effect": "Non si sa cosa l'agente abbia fatto né perché — nessuna verificabilità." }
+        ]
+      }
+    ],
+    "checkpoint": {
+      "prompt": "L'agente deve aiutare in un compito che può cambiare in modo PERMANENTE i dati di produzione (effetto difficile da annullare). Quale set di impostazioni è il più sicuro per iniziare?",
+      "type": "single_choice",
+      "options": [
+        { "id": "a", "text": "Piena scrittura in produzione, approvazione mai, nessuna traccia — «l'agente se la caverà»." },
+        { "id": "b", "text": "Sola lettura o sandbox, approvazione umana per le azioni irreversibili, log completo con rollback." },
+        { "id": "c", "text": "Piena scrittura in produzione, log di base, senza approvazione — «acceleriamo, controlleremo dopo»." }
+      ],
+      "correct": ["b"],
+      "feedbackCorrect": "Sì. Con effetti irreversibili restringi i permessi, richiedi il consenso dell'uomo e garantisci una traccia completa con possibilità di annullamento.",
+      "feedbackIncorrect": "Con effetti irreversibili, l'autonomia senza controllo né traccia è un invito all'errore irreversibile. Restringi i permessi, aggiungi l'approvazione umana e un log completo con rollback."
+    }
+  },
+  "summary": {
+    "points": [
+      "L'agente può cambiare realmente il mondo — adatta l'autonomia al rischio e alla reversibilità del compito.",
+      "Tre leve di controllo: ambito dei permessi, approvazione da parte dell'uomo, traccia di audit con rollback.",
+      "Per impostazione predefinita restringi i permessi; quanto più è difficile annullare un effetto, tanto maggiore è il controllo umano."
+    ],
+    "checklist": [
+      "So qual è la cosa peggiore che l'agente può fare con i permessi attuali?",
+      "Le azioni irreversibili richiedono l'approvazione da parte dell'uomo?",
+      "Resta una traccia di audit ed è possibile annullare l'azione dell'agente?"
+    ],
+    "checklistTitle": "Checklist — prima di far entrare l'agente",
+    "nextStep": "Prossimo passo: per un compito reale dell'agente scrivi il peggior effetto possibile e abbinagli l'ambito dei permessi, il punto di approvazione e la traccia di audit."
+  }
+}

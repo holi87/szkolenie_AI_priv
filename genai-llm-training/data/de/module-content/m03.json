@@ -1,0 +1,116 @@
+{
+  "_meta": {
+    "issue": "#21 [21][M4] Wdroż moduły M3-M6",
+    "storyboard": "docs/storyboard/m03-parametry.md",
+    "interaction": "Suwaki generacji (kind: tune)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (SklepDemo/NotkaApp). Output interakcji jest prerenderowany (nie z żywego modelu). ZERO PII.",
+    "note": "Egzemplarz referencyjny typu tune: parametry → autorskie efekty (dane) + scorowany checkpoint."
+  },
+  "module": "M3",
+  "intro": "Dieselben Eingabedaten und dasselbe Modell können unterschiedliche Antworten liefern, weil die Generierung über Parameter gesteuert wird. Im QA ist die Reproduzierbarkeit des Ergebnisses das Fundament verlässlicher Dokumentation und Regression — unkontrollierte Parameter führen zu unvorhersehbarem Output.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Wozu die Generierung kontrollieren?",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Drei Steuergrößen bestimmen die Gestalt der Antwort: Temperature und top-p (Zufälligkeit) sowie max tokens (Länge). Bevor du dem Output in der Testdokumentation vertraust, musst du wissen, wie du sie einstellst." },
+        { "kind": "callout", "variant": "info", "title": "Scheinbarer Determinismus", "text": "Eine niedrige Temperatur verringert die Zufälligkeit, garantiert aber kein identisches Ergebnis bei jedem Durchlauf — es bleibt ein probabilistisches Modell." }
+      ]
+    },
+    {
+      "id": "s2-temperature",
+      "title": "Temperature — von formell bis kreativ",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Temperature", "original": "Temperatur", "text": "Steuergröße für die Zufälligkeit bei der Auswahl des nächsten Tokens." },
+        { "kind": "list", "items": [
+          "Niedrig (~0,0–0,3): zurückhaltende, reproduzierbare, formelle Antworten — für Dokumentation und Testschritte.",
+          "Hoch (~0,8–1,2): vielfältige, kreative, weniger vorhersehbare Antworten — für Brainstorming zu Testdaten."
+        ] }
+      ]
+    },
+    {
+      "id": "s3-wysoka-losowosc",
+      "title": "Hohe Zufälligkeit und die QA-Arbeit",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Eine hohe Temperatur bedeutet im QA fehlende Reproduzierbarkeit (zwei Durchläufe = zwei verschiedene Schritte), inhaltliche Drift, erschwerte Durchsicht und Auditierung sowie das Risiko stiller Änderungen in der Regression." },
+        { "kind": "callout", "variant": "warn", "title": "Regel", "text": "Wenn Reproduzierbarkeit und Übereinstimmung mit der Anforderung zählen — senke die Zufälligkeit." }
+      ]
+    },
+    {
+      "id": "s4-top-p",
+      "title": "top-p — die zweite Steuergröße für Zufälligkeit",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "top-p", "original": "nucleus sampling", "text": "Schwellenwert der kumulierten Wahrscheinlichkeit — engt die Kandidatenmenge für das nächste Token auf die wahrscheinlichsten ein, die sich zu p summieren." },
+        { "kind": "paragraph", "text": "Beide Parameter steuern die Vielfalt; üblicherweise reguliert man nur einen auf einmal. Niedriges top-p = engere, sicherere Auswahl (stabiles Vokabular an QA-Begriffen); hohes = breitere, riskantere Formulierungen." }
+      ]
+    },
+    {
+      "id": "s5-max-tokens",
+      "title": "max tokens — wann die Antwort abbricht",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "max tokens", "original": "maximale Anzahl an Antwort-Tokens", "text": "harte Längenbegrenzung des Outputs." },
+        { "kind": "paragraph", "text": "Wird das Limit überschritten, bricht die Antwort mitten im Satz, in der Tabelle oder in der Liste ab — die letzten Schritte oder Akzeptanzkriterien fehlen. Du erkennst das an einem abgebrochenen Satz und einer nicht abgeschlossenen Liste. Reaktion: erhöhe das Limit oder bitte um ein kürzeres Format." }
+      ]
+    },
+    {
+      "id": "s6-decyzja",
+      "title": "Welche Einstellung für die Testdokumentation?",
+      "type": "decision",
+      "blocks": [
+        { "kind": "paragraph", "text": "Vergleiche zwei Presets für dieselbe Aufgabe (das Festhalten der Schritte eines Testfalls). Variante A: temp 0,2 / top-p 0,3 / hohes Limit. Variante B: temp 1,0 / top-p 0,95 / niedriges Limit." },
+        { "kind": "paragraph", "text": "Für die Dokumentation wähle die niedrigere Zufälligkeit und Reserve bei der Länge — das sorgt für Reproduzierbarkeit und keinen Abbruch. Gleich prüfst du das mit den Schiebereglern." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "tune",
+    "id": "m3-suwaki",
+    "title": "Schieberegler der Generierung",
+    "intro": "Stelle die Parameter ein und sieh, wie sich der simulierte Output für die Aufgabe „liste die Testschritte für den Login in SklepDemo auf“ verändert. Beantworte anschließend den Checkpoint.",
+    "outputLabel": "Simulierter Output für die gewählten Einstellungen:",
+    "controls": [
+      { "id": "temp", "label": "Temperature", "levels": [
+        { "value": "0.2", "label": "Niedrig (0,2)", "effect": "Formalität: hoch. Testschritte reproduzierbar, dasselbe Layout bei jedem Durchlauf." },
+        { "value": "1.0", "label": "Hoch (1,0)", "effect": "Formalität: niedrig. Die Schritte unterscheiden sich zwischen den Durchläufen — keine Reproduzierbarkeit, Risiko inhaltlicher Drift." }
+      ] },
+      { "id": "topp", "label": "top-p", "levels": [
+        { "value": "0.3", "label": "Niedrig (0,3)", "effect": "Vokabular der QA-Begriffe stabil und vorhersehbar." },
+        { "value": "0.95", "label": "Hoch (0,95)", "effect": "Breitere, mitunter riskante Formulierungen — schwieriger in der Durchsicht." }
+      ] },
+      { "id": "maxtok", "label": "max tokens", "levels": [
+        { "value": "512", "label": "Hohes Limit (512)", "effect": "Vollständigkeit: vollständig. Alle Schritte und Akzeptanzkriterien passen hinein." },
+        { "value": "64", "label": "Niedriges Limit (64)", "effect": "⚠ Antwort abgeschnitten — die Liste der Schritte bricht in der Mitte ab, keine Zusammenfassung. Erhöhe das Limit." }
+      ] }
+    ],
+    "checkpoint": {
+      "prompt": "Für das Festhalten der Schritte eines Testfalls (Reproduzierbarkeit und Vollständigkeit zählen) — welche Einstellung ist sicherer?",
+      "type": "single_choice",
+      "options": [
+        { "id": "A", "text": "temp 0,2 / top-p 0,3 / hohes Limit — niedrige Zufälligkeit und Längenreserve" },
+        { "id": "B", "text": "temp 1,0 / top-p 0,95 / niedriges Limit — kreativ und kurz" }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Richtig: niedrige Zufälligkeit sorgt für Reproduzierbarkeit, und ein hohes Limit schützt vor dem Abschneiden der Schrittliste.",
+      "feedbackIncorrect": "Hohe Zufälligkeit zerstört die Reproduzierbarkeit, und ein niedriges Limit schneidet die Schritte ab — das ist schlecht für die Dokumentation. Wähle eine niedrige Temperatur und eine Längenreserve."
+    }
+  },
+  "summary": {
+    "points": [
+      "Temperature und top-p steuern die Zufälligkeit; max tokens steuert die Länge der Antwort.",
+      "Bevorzuge für QA niedrige Zufälligkeit und eine Längenreserve — Reproduzierbarkeit und kein Abbruch.",
+      "Überprüfe stets die Reproduzierbarkeit und Vollständigkeit des Outputs, bevor du ihn in der Dokumentation verwendest."
+    ],
+    "checklist": [
+      "Habe ich die Zufälligkeit dort gesenkt, wo Reproduzierbarkeit zählt?",
+      "Reicht das Längenlimit für die gesamte Antwort?",
+      "Ist der Output bei einem erneuten Durchlauf derselbe?"
+    ],
+    "checklistTitle": "Checkliste — Kontrolle der Generierung",
+    "nextStep": "Nächster Schritt: M4 — Embeddings und semantische Ähnlichkeit (oder das nächste Pflichtmodul des Pfads)."
+  }
+}

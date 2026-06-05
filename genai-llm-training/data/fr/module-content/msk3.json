@@ -1,0 +1,86 @@
+{
+  "_meta": {
+    "issue": "#112-#118 [M15] / #124 [M16] Ścieżka formatywna S4 — Skala Holaka (moduł szkoleniowy, rozbudowa)",
+    "adr": "docs/adr/0009-sciezka-formatywna-s4-skala-holaka.md",
+    "interaction": "Klasyfikacja danych i zastosowań (kind: classify) — ćwiczenie formatywne, NIE scorowane do zaliczenia",
+    "source": "Oś dojrzałości Skali Holaka: bezpieczeństwo, prywatność danych i governance użycia AI (w tym integracje/MCP). Atrybucja: quality-blog.eu/pl/blog/skala-holaka.",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE i ogólne (zero realnych danych/PII). Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MSK3",
+  "intro": "Une adoption mature de l'IA, ce n'est pas seulement l'efficacité, mais aussi l'hygiène des données : ce que l'on peut fournir au modèle, ce qu'il faut d'abord anonymiser, et ce qu'il ne faut jamais utiliser — y compris lorsque l'IA accède aux données via des intégrations et le MCP. Ce module apprend à classer les données et à définir des règles minimales de governance. C'est un exercice de développement, pas un test.",
+  "screens": [
+    {
+      "id": "msk3-s1-trzy-kosze",
+      "title": "Trois corbeilles de données : autorisées, à anonymiser, interdites",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Avant de coller quoi que ce soit dans le modèle, attribuez les données à l'une des trois corbeilles. Autorisées : données publiques ou synthétiques. À anonymiser : données pouvant identifier une personne ou un système, mais sûres une fois masquées. Interdites : secrets et données sensibles qu'il ne faut pas exposer." },
+        { "kind": "list", "items": [
+          "Autorisées — données publiques, synthétiques, non identifiantes.",
+          "À anonymiser — supprimez ou remplacez par un placeholder ce qui identifie une personne/un système.",
+          "Interdites — mots de passe, clés, secrets, données sensibles sans fondement pour leur utilisation."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "L'axe de l'Échelle de Holak", "text": "Une politique écrite d'usage acceptable de l'IA (données, confidentialité, propriété intellectuelle) et une trace d'audit minimale sont le signe d'une governance mature.",
+          "links": [ { "label": "Échelle de Holak — modèle de maturité (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka" } ]
+        }
+      ]
+    },
+    {
+      "id": "msk3-s2-mcp-integracje",
+      "title": "Intégrations et MCP : la frontière des données se déplace plus loin",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Lorsque vous connectez l'IA à des outils via des intégrations ou le MCP (Model Context Protocol), le modèle ne voit plus seulement ce que vous collez — il peut accéder à des fichiers, des bases de données ou des e-mails. C'est pratique et puissant, mais la frontière des données se déplace : il faut limiter consciemment ce à quoi l'intégration a accès." },
+        { "kind": "list", "items": [
+          "Principe de l'accès minimal — l'intégration ne voit que ce qui est nécessaire à la tâche.",
+          "Filtrez ou masquez les données sensibles AVANT leur entrée dans le modèle, pas après.",
+          "Traitez chaque intégration comme une nouvelle entrée de données — soumettez-la à la même politique."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Le piège du « ce n'est qu'un test »", "text": "« Je connecte l'intégration à la production juste une fois, pour vérifier » est la fuite la plus fréquente. Des données partagées une seule fois ont pu échapper à votre contrôle — limitez l'accès et masquez toujours, même lors d'une expérimentation." }
+      ]
+    },
+    {
+      "id": "msk3-s3-jak-cwiczyc",
+      "title": "Comment s'exercer",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Dans un instant, vous allez attribuer des données aux corbeilles : autorisées, à anonymiser, interdites. L'ordre des éléments est aléatoire, donc c'est le contenu qui compte, pas un schéma. Sans seuil de réussite — il s'agit d'acquérir le réflexe de classer les données avant qu'elles n'arrivent au modèle ou à une intégration." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "msk3-classify",
+    "title": "Autorisées, à anonymiser ou interdites ?",
+    "intro": "Attribuez chaque cas de données à la bonne corbeille. Le feedback explique la règle de confidentialité et de governance.",
+    "categories": [
+      { "id": "allowed", "label": "Autorisées", "desc": "Données publiques ou synthétiques, non identifiantes." },
+      { "id": "anonymize", "label": "À anonymiser", "desc": "Sûres seulement après masquage des identifiants." },
+      { "id": "disallowed", "label": "Interdites", "desc": "Secrets et données sensibles sans fondement pour leur utilisation." }
+    ],
+    "items": [
+      { "id": "msk3-i1", "text": "Extrait public de la documentation d'un projet open-source.", "correctCategory": "allowed", "rationale": "Données publiques, non identifiantes — utilisables." },
+      { "id": "msk3-i2", "text": "Données de test fictives et synthétiques sans lien avec une personne réelle.", "correctCategory": "allowed", "rationale": "Les données synthétiques sont sûres par définition." },
+      { "id": "msk3-i3", "text": "Rapport de bug avec un identifiant utilisateur que vous remplacez par un placeholder.", "correctCategory": "anonymize", "rationale": "Vous supprimez/masquez l'identifiant — c'est alors sûr." },
+      { "id": "msk3-i4", "text": "Journaux contenant les coordonnées de clients, à masquer avant utilisation.", "correctCategory": "anonymize", "rationale": "Après anonymisation, les données ne désignent plus une personne." },
+      { "id": "msk3-i5", "text": "Mots de passe et clés d'accès au système de production.", "correctCategory": "disallowed", "rationale": "Les secrets n'arrivent jamais dans le prompt ni dans une intégration." },
+      { "id": "msk3-i6", "text": "Intégration MCP avec accès complet à la base clients de production « par commodité ».", "correctCategory": "disallowed", "rationale": "Accès excessif de l'intégration à des données sensibles — viole l'accès minimal." },
+      { "id": "msk3-i7", "text": "Export de tickets aux données personnelles masquées, fourni pour analyse.", "correctCategory": "anonymize", "rationale": "Le masquage avant l'entrée dans le modèle rend les données sûres." },
+      { "id": "msk3-i8", "text": "Données personnelles complètes d'un client collées directement dans un modèle public.", "correctCategory": "disallowed", "rationale": "Données sensibles identifiantes sans fondement ni anonymisation — interdites." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Avant tout envoi, attribuez chaque donnée à une corbeille : autorisée / à anonymiser / interdite.",
+      "Les intégrations et le MCP déplacent la frontière des données — appliquez le principe de l'accès minimal et masquez avant l'entrée dans le modèle.",
+      "Rédigez une politique simple et laissez une trace minimale de l'usage de l'IA dans les processus critiques."
+    ],
+    "checklist": [
+      "Suis-je capable d'attribuer mes données typiques aux trois corbeilles ?",
+      "Mes intégrations/MCP ont-elles uniquement l'accès minimal nécessaire ?",
+      "Est-ce que je sais ce qu'il ne faut jamais partager (secrets, données sensibles) ?"
+    ],
+    "checklistTitle": "Checklist — hygiène des données pour l'IA",
+    "nextStep": "Prochaine étape : rédigez pour l'équipe une page de règles : usages autorisés, anonymisation, accès minimal des intégrations, interdiction des secrets, trace d'audit simple."
+  }
+}

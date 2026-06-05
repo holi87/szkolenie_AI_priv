@@ -1,0 +1,428 @@
+{
+  "_meta": {
+    "issue": "#23 [23][M4] Wdroż moduły M10-M12",
+    "storyboard": "docs/storyboard/m12-evaluation.md",
+    "interaction": "Judge calibration lab (kind: rubric, zadanie praktyczne R3-eval)",
+    "scenario": "SC-EVAL-01 (rozjazd oceny człowiek vs LLM-as-a-judge; EX1 length bias, EX2 position bias)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (SklepDemo, golden set GS-SklepDemo, odpowiedzi A1-A6, QA-ekspert anon.). ZERO realnych danych klienta/PII.",
+    "note": "Element interaktywny typu rubric = warunek konieczny S3, próg 70% (score >= 3,5 / 5). Wszystkie 9 ekranów wspólne dla S1/S2/S3; charakter ROZSZERZONY/pełny realizuje warstwa pogłębiona na ekranie 8 (onlyForPaths blokiem)."
+  },
+  "module": "M12",
+  "intro": "« Ça marche à vue d'œil » ne suffit pas : sans mesure, vous ne savez pas si une modification du prompt ou du pipeline RAG a amélioré ou dégradé la qualité. Ce module apprend à mesurer la qualité des LLM et du RAG avec les outils du testeur : golden set, métriques, grille de l'évaluateur, calibration avec un expert et seuil de décision.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "À quoi sert l'évaluation des LLM et du RAG pour un testeur",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Sans mesure de la qualité, chaque modification du prompt ou du pipeline RAG est un coup dans le noir — on ne sait pas si elle a amélioré ou dégradé les réponses. Le testeur apporte ici ce qu'il sait faire de mieux : critères d'acceptation, reproductibilité et protection contre les régressions."
+        },
+        {
+          "kind": "list",
+          "items": [
+            "Golden set — un ensemble de référence, c'est-à-dire des « tests de régression pour les réponses du modèle ».",
+            "Métriques de qualité — avec quoi mesurer une bonne réponse.",
+            "Grille d'évaluation pour le modèle évaluateur (en anglais : LLM-as-a-judge).",
+            "Calibration avec un expert et accord entre évaluateurs (en anglais : inter-rater agreement).",
+            "Seuil d'acceptation et décision « continuer / suspendre » (en anglais : go / no-go)."
+          ]
+        },
+        {
+          "kind": "callout",
+          "variant": "info",
+          "text": "Durée du module environ 90 minutes. À la fin, un élément interactif « Judge calibration lab » qui réunit grille, biais et calibration dans un seul flux."
+        }
+      ]
+    },
+    {
+      "id": "s2-golden-set",
+      "title": "Golden set pour un cas d'usage",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "definition",
+          "term": "Golden set (ensemble de référence)",
+          "original": "liste de cas synthétiques entrée → réponse attendue",
+          "text": "un ensemble documenté : question, attente correcte et source de vérité (en anglais : ground truth). Il joue le rôle de tests de régression pour les réponses du modèle."
+        },
+        {
+          "kind": "paragraph",
+          "text": "Un bon golden set contient des questions représentatives du cas d'usage, des cas limites ainsi que des pièges connus. Exemple synthétique « GS-SklepDemo » : questions sur la limite d'articles dans le panier, sur la politique de retour et sur le critère d'acceptation WYM-koszyk."
+        },
+        {
+          "kind": "callout",
+          "variant": "warn",
+          "title": "Ce que le golden set N'EST PAS",
+          "text": "Ce n'est pas un ensemble de logs aléatoires ni de données de production. Une entrée sans attente décidable et sans source de vérité ne se met pas dans le golden set."
+        }
+      ]
+    },
+    {
+      "id": "s3-ocen-projekt",
+      "title": "Évaluez la conception du golden set",
+      "type": "decision",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Observez les candidats au golden set « GS-SklepDemo » et déterminez lesquels conviennent à l'ensemble et lesquels sont défectueux. Le défaut est souvent : absence de source de vérité, attente ambiguë, doublon ou question non testable."
+        },
+        {
+          "kind": "list",
+          "items": [
+            "Bon : « Quelle est la limite d'articles dans le panier ? » — l'attente découle de WYM-koszyk, source documentée.",
+            "Défectueux : « L'application est-elle sympa ? » — attente ambiguë, non testable.",
+            "Défectueux : question sans source de vérité indiquée — on ne sait pas par rapport à quoi évaluer.",
+            "Défectueux : copie d'une entrée existante — un doublon n'augmente pas la couverture."
+          ]
+        },
+        {
+          "kind": "callout",
+          "variant": "safe",
+          "text": "Règle : chaque entrée du golden set a une attente non ambiguë et une source de vérité documentée. L'absence de l'une d'elles = l'entrée est écartée."
+        }
+      ]
+    },
+    {
+      "id": "s4-piec-metryk",
+      "title": "Cinq métriques de qualité",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Pour évaluer les réponses des LLM et du RAG, nous utilisons cinq métriques. Chacune mesure une dimension différente de la qualité et présente un symptôme typique de manque."
+        },
+        {
+          "kind": "table",
+          "headers": [
+            "Métrique",
+            "Ce qu'elle mesure",
+            "Symptôme typique de manque"
+          ],
+          "rows": [
+            [
+              "exactitude (accuracy)",
+              "si la réponse est factuellement correcte",
+              "affirmation fausse présentée comme un fait"
+            ],
+            [
+              "fidélité aux sources (faithfulness)",
+              "si la réponse est conforme à la source",
+              "phrase contredisant le document source"
+            ],
+            [
+              "ancrage (groundedness)",
+              "si le contenu peut s'appuyer sur le contexte fourni",
+              "affirmation sans appui dans le fragment récupéré"
+            ],
+            [
+              "pertinence (relevance)",
+              "si la réponse concerne la question posée",
+              "réponse à une question différente de celle posée"
+            ],
+            [
+              "complétude (completeness)",
+              "si toutes les conditions requises sont couvertes",
+              "absence d'une partie des conditions du critère d'acceptation"
+            ]
+          ],
+          "textAlt": "Cinq métriques de qualité. Exactitude (accuracy) : si la réponse est factuellement correcte ; le symptôme de manque est une affirmation fausse présentée comme un fait. Fidélité aux sources (faithfulness) : si la réponse est conforme à la source ; le symptôme de manque est une phrase contredisant le document source. Ancrage (groundedness) : si le contenu peut s'appuyer sur le contexte fourni ; le symptôme de manque est une affirmation sans appui dans le fragment récupéré. Pertinence (relevance) : si la réponse concerne la question posée ; le symptôme de manque est une réponse à une question différente de celle posée. Complétude (completeness) : si toutes les conditions requises sont couvertes ; le symptôme de manque est l'absence d'une partie des conditions du critère d'acceptation."
+        },
+        {
+          "kind": "callout",
+          "variant": "info",
+          "text": "Lien avec M6 : une faithfulness ou une groundedness basse indique souvent la couche de génération du RAG, tandis que des lacunes dans les sources récupérées pointent vers la couche de récupération (retrieval)."
+        },
+        {
+          "kind": "callout",
+          "variant": "info",
+          "title": "Note : faithfulness vs groundedness",
+          "text": "Dans de nombreuses sources, la « fidélité aux sources » et l'« ancrage » sont parfois traités ensemble — comme une seule mesure « si la réponse s'en tient au contexte fourni ». Nous les distinguons ici à des fins pédagogiques : la faithfulness demande si la réponse ne contredit pas la source, et la groundedness — si chaque affirmation a un appui dans le fragment récupéré. En pratique, on vérifie généralement les deux à la fois."
+        }
+      ]
+    },
+    {
+      "id": "s5-dobierz-metryke",
+      "title": "Choisissez la métrique adaptée à la question",
+      "type": "decision",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Pour une question qualitative donnée, choisissez la métrique qui la tranche. Le piège le plus fréquent est de confondre la pertinence (relevance) avec l'exactitude (accuracy)."
+        },
+        {
+          "kind": "list",
+          "items": [
+            "« La réponse est-elle conforme au contenu de la source ? » → faithfulness (et ancrage / groundedness).",
+            "« La réponse couvre-t-elle toutes les conditions du critère d'acceptation ? » → completeness.",
+            "« La réponse concerne-t-elle vraiment la question posée ? » → relevance.",
+            "« La valeur donnée est-elle factuellement correcte ? » → accuracy."
+          ]
+        },
+        {
+          "kind": "callout",
+          "variant": "warn",
+          "text": "Piège : une réponse peut être pertinente (dans le sujet) tout en étant contradictoire avec la source. La relevance ne remplace pas la faithfulness."
+        }
+      ]
+    },
+    {
+      "id": "s6-rubryka",
+      "title": "Grille pour le LLM-as-a-judge",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "definition",
+          "term": "LLM-as-a-judge",
+          "original": "modèle de langage dans le rôle d'évaluateur",
+          "text": "un modèle qui évalue les réponses d'un autre modèle selon une grille. Sans grille, il répond à un vague « est-ce que c'est bon ? » et l'évaluation n'est pas reproductible."
+        },
+        {
+          "kind": "paragraph",
+          "text": "Une bonne grille d'évaluation (en anglais : evaluation rubric) comporte : un critère clair, une échelle (par ex. 0–2 ou 1–5), la définition de chaque niveau, des exemples d'ancrage (en anglais : anchor examples) ainsi que l'instruction « évalue uniquement par rapport à la source »."
+        },
+        {
+          "kind": "callout",
+          "variant": "warn",
+          "title": "Anti-mythe",
+          "text": "« Demande au modèle si la réponse est bonne » sans grille donne une évaluation soumise au caprice de l'exécution. Les définitions des niveaux et les ancrages rendent l'évaluation reproductible."
+        }
+      ]
+    },
+    {
+      "id": "s7-bias-position",
+      "title": "Partialité de l'évaluateur et position bias",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "L'évaluateur LLM a des partialités (en anglais : bias). Sans contrôle, l'évaluation automatique peut donner un faux « vert », c'est-à-dire valider une réponse qui devrait être écartée."
+        },
+        {
+          "kind": "definition",
+          "term": "Position bias (partialité positionnelle)",
+          "original": "préférence de position dans la comparaison par paires",
+          "text": "lors de la comparaison de deux réponses, l'évaluateur choisit plus souvent celle présentée en premier, indépendamment de sa qualité réelle."
+        },
+        {
+          "kind": "list",
+          "items": [
+            "Length bias : surévaluation de la réponse plus longue uniquement pour sa longueur.",
+            "Évaluation « de complaisance » : note surévaluée indépendamment du contenu.",
+            "Divergence avec l'évaluation humaine : le judge donne une note différente de celle de l'expert."
+          ]
+        },
+        {
+          "kind": "callout",
+          "variant": "info",
+          "text": "Mesures d'atténuation (développées plus loin) : inversion de l'ordre dans les comparaisons par paires, grille non ambiguë et calibration avec un expert."
+        }
+      ]
+    },
+    {
+      "id": "s8-kalibracja",
+      "title": "Calibration avec un expert et accord entre évaluateurs",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Pour faire confiance à l'évaluation automatique, comparez-la à l'évaluation d'un expert sur le même golden set et calculez l'accord entre évaluateurs (en anglais : inter-rater agreement). Les endroits où les évaluations divergent sont un signal pour améliorer la grille, et non pour l'ignorer."
+        },
+        {
+          "kind": "list",
+          "ordered": true,
+          "items": [
+            "Évaluez les réponses avec l'évaluateur LLM selon la grille.",
+            "Comparez avec l'évaluation de l'expert sur le même golden set.",
+            "Repérez la divergence et diagnostiquez-en la cause (biais ou lacune de la grille).",
+            "Corrigez la grille et réévaluez."
+          ]
+        },
+        {
+          "kind": "callout",
+          "variant": "warn",
+          "onlyForPaths": [
+            "S2",
+            "S3"
+          ],
+          "title": "Approfondissement : pourquoi le simple « % d'accord » induit en erreur",
+          "text": "Avec une distribution des notes fortement déséquilibrée (par ex. presque tout en « pass »), un pourcentage d'accord élevé peut s'obtenir de façon quasi aléatoire. L'essentiel est de savoir si l'évaluateur touche juste sur les cas « fail » rares et risqués, et pas seulement s'il s'accorde « sur les pass »."
+        }
+      ]
+    },
+    {
+      "id": "s9-prog-go-nogo",
+      "title": "Seuil d'acceptation et décision go/no-go",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Le seuil d'acceptation de la qualité (en anglais : acceptance threshold) détermine quand la qualité est « assez bonne ». Exemple : « faithfulness ≥ 0,9 sur le golden set ET zéro entrée contradictoire avec la source ». Le seuil se choisit selon le risque du cas d'usage, le coût de l'erreur et le résultat de la version précédente (baseline)."
+        },
+        {
+          "kind": "definition",
+          "term": "Décision go / no-go (« continuer / suspendre »)",
+          "original": "go / no-go decision",
+          "text": "la décision de savoir si la version peut être publiée. Le seuil agit aussi en régression : il compare la nouvelle version à la précédente."
+        },
+        {
+          "kind": "callout",
+          "variant": "safe",
+          "title": "Valeur par défaut conservatrice",
+          "text": "Absence de données pour évaluer ou condition stricte non remplie (par ex. une seule entrée contradictoire avec la source) = no-go. Une bonne moyenne ne dispense pas de la condition stricte."
+        }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "rubric",
+    "id": "m12-judge-calibration",
+    "title": "Judge calibration lab",
+    "intro": "Ensemble synthétique : réponses A1–A6 aux questions du golden set « GS-SklepDemo », évaluées par un QA-expert (anon.) et par un évaluateur LLM. Il contient un position bias intentionnellement injecté (paire A3/A4) ainsi qu'une surévaluation (A2) et une lacune de grille (A5). Pour chaque critère de la grille R3-eval, sélectionnez la décision de conception d'évaluation qui le satisfait. L'évaluation compte comme tâche pratique R3-eval sur le parcours S3 et constitue une condition nécessaire — le seuil de réussite est de 70 % (score ≥ 3,5 / 5).",
+    "rubricId": "R3-eval",
+    "recordsPractical": true,
+    "scaleMax": 5,
+    "passThreshold": 3.5,
+    "criteria": [
+      {
+        "id": "K1",
+        "name": "Golden set adapté au cas d'usage",
+        "points": 1,
+        "hint": "Le golden set a des questions représentatives, des cas limites et une source de vérité documentée — pas des logs aléatoires.",
+        "prompt": "Comment construire le golden set « GS-SklepDemo » pour évaluer les réponses sur le panier et les retours ?",
+        "options": [
+          {
+            "id": "a",
+            "text": "Des questions représentatives sur WYM-koszyk et la politique de retour, des cas limites (question hors du périmètre de la source), chaque entrée avec une source de vérité documentée."
+          },
+          {
+            "id": "b",
+            "text": "Des logs de production collectés au hasard avec des données clients brutes — ils seront les plus « vrais »."
+          },
+          {
+            "id": "c",
+            "text": "Uniquement des questions générales du type « l'application est-elle bonne ? », sans attente indiquée ni source."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K2",
+        "name": "Métriques justifiées",
+        "points": 1,
+        "hint": "Adaptez les métriques à ce que la question vérifie réellement : couverture des conditions = completeness, conformité et appui dans la source = faithfulness/groundedness.",
+        "prompt": "Question qualitative : « La réponse énumère-t-elle toutes les conditions de paiement de la source et n'ajoute-t-elle pas de conditions hors source ? ». Quelles métriques choisir ?",
+        "options": [
+          {
+            "id": "a",
+            "text": "completeness (couverture de toutes les conditions) ainsi que faithfulness et groundedness (absence de contenu hors source et appui dans le contexte) — chacune justifiée par une dimension de la question."
+          },
+          {
+            "id": "b",
+            "text": "Uniquement la relevance, car la question porte sur les paiements — cela suffit pour évaluer le contenu."
+          },
+          {
+            "id": "c",
+            "text": "Le position bias comme métrique de qualité du contenu, parce que ça sonne technique."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K3",
+        "name": "Grille LLM-as-a-judge (non ambiguë)",
+        "points": 1,
+        "hint": "Une grille non ambiguë a un critère clair, une échelle avec la définition de chaque niveau, des ancrages et l'instruction « évalue par rapport à la source ».",
+        "prompt": "L'entrée A5 (complétude des conditions de paiement) diverge, car la grille ne précise pas quand « il manque 1 condition » constitue déjà un niveau inférieur. Comment la corriger ?",
+        "options": [
+          {
+            "id": "a",
+            "text": "Ajouter les définitions des niveaux de l'échelle (par ex. 2 = toutes les conditions ; 1 = il manque une condition ; 0 = il manque la plupart) avec des exemples d'ancrage et l'instruction « évalue uniquement par rapport à la source »."
+          },
+          {
+            "id": "b",
+            "text": "Laisser la grille telle quelle « évalue si la réponse est bonne » et se fier à l'intuition de l'évaluateur."
+          },
+          {
+            "id": "c",
+            "text": "Supprimer l'échelle et ne recueillir qu'un commentaire libre de l'évaluateur pour chaque entrée."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K4",
+        "name": "Bias/position bias + calibration avec l'expert",
+        "points": 1,
+        "hint": "Le position bias se confirme et se neutralise par l'inversion de l'ordre (A3/A4) ; le length bias est la surévaluation pour la longueur ; validez toujours le verdict avec l'évaluation de l'expert sur le golden set.",
+        "prompt": "La paire A3/A4 (même variante WYM-koszyk) ainsi que l'entrée où le judge surévalue la réponse plus longue — comment détecter et limiter rigoureusement le biais avant de fixer le seuil ?",
+        "options": [
+          {
+            "id": "a",
+            "text": "Répéter l'évaluation de A3/A4 avec l'ordre inversé (et moyenner les deux dispositions) : l'inversion du verdict confirme le position bias, il faut donc inscrire l'inversion de l'ordre dans la grille ; ne pas récompenser une réponse pour sa seule longueur ; calibrer chaque note par rapport à l'évaluation de l'expert sur le golden set."
+          },
+          {
+            "id": "b",
+            "text": "Récompenser la réponse plus longue comme par principe plus complète et se fier au premier verdict du judge, car l'évaluation automatique est plus rapide et objective."
+          },
+          {
+            "id": "c",
+            "text": "Retirer la paire gênante A3/A4 du golden set pour que le pourcentage d'accord augmente, et omettre la comparaison avec l'expert."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K5",
+        "name": "Seuil d'acceptation de la qualité",
+        "points": 1,
+        "hint": "Le seuil est parfois une conjonction : moyenne ET condition stricte « zéro contradiction ». Absence de données ou condition stricte non remplie = no-go (valeur par défaut conservatrice).",
+        "prompt": "Seuil : « faithfulness ≥ 0,9 sur le golden set ET zéro entrée contradictoire avec la source ». La nouvelle version a une moyenne de 0,93, mais l'entrée A2 est contradictoire avec la source. Quelle décision ?",
+        "options": [
+          {
+            "id": "a",
+            "text": "No-go : la condition stricte « zéro contradiction » n'est pas remplie malgré une bonne moyenne — supprimez d'abord la contradiction de A2, puis réévaluez ; n'autorisez l'évaluation automatique qu'après calibration et avec une recalibration périodique avec l'expert."
+          },
+          {
+            "id": "b",
+            "text": "Go : la moyenne de 0,93 dépasse 0,9, donc le seuil est rempli indépendamment d'une seule entrée contradictoire."
+          },
+          {
+            "id": "c",
+            "text": "Go en abaissant le seuil à 0,85, puisqu'une seule entrée échoue — ou déployer « à l'essai » et surveiller."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Le golden set (ensemble de référence) est un ensemble de tests de régression pour les réponses du modèle : questions représentatives, cas limites, source de vérité documentée.",
+      "Cinq métriques : exactitude, fidélité aux sources, ancrage, pertinence, complétude — choisissez chacune selon la dimension de la question.",
+      "La grille pour le LLM-as-a-judge doit être non ambiguë : critère, échelle avec définition des niveaux, ancrages, évaluation par rapport à la source.",
+      "L'évaluateur a des biais (notamment le position bias et le length bias) — détectez-les par l'inversion de l'ordre et la calibration avec un expert (accord entre évaluateurs).",
+      "Le seuil d'acceptation est parfois une conjonction de conditions ; une condition stricte non remplie ou l'absence de données = no-go."
+    ],
+    "checklist": [
+      "Le golden set a-t-il une attente non ambiguë et une source de vérité pour chaque entrée ?",
+      "Les métriques sont-elles adaptées à ce que la question vérifie réellement ?",
+      "La grille de l'évaluateur a-t-elle des définitions de niveaux, des ancrages et une évaluation par rapport à la source ?",
+      "Ai-je vérifié le position bias par l'inversion de l'ordre et calibré l'évaluation avec un expert ?",
+      "Le seuil d'acceptation a-t-il une condition stricte, et l'absence de données donne-t-elle un no-go ?"
+    ],
+    "checklistTitle": "Checklist — évaluation des LLM et du RAG prête",
+    "nextStep": "Étape suivante : pour S3, généralement le test final et les annexes. Répétez la boucle : golden set → métriques → grille → calibration → seuil → décision."
+  }
+}

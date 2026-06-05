@@ -1,0 +1,138 @@
+{
+  "_meta": {
+    "module": "M2",
+    "issue": "#20 [M2] Architektura LLM na poziomie praktycznym (z wariantem S1 skróconym)",
+    "storyboard": "docs/storyboard/m02-architektura.md",
+    "interaction": "Licznik kontekstu (kind: tune)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (PipeDemo/SklepDemo/NotkaApp, identyfikatory testowe). Output interakcji jest prerenderowany (lookup po poziomie), nie z żywego modelu. ZERO PII, ZERO realnych domen.",
+    "note": "6 ekranów treści + interakcja tune + podsumowanie. Wariant S1 SKRÓCONY realizowany przez onlyForPaths na blokach (token: przykład liczbowy S2/S3; transformer/attention: rdzeń S1 vs diagram S2/S3; inference cost S3). Quiz inline = pula questions/m02.json (Q14–Q15 mają paths S2/S3 — pominięcie kolejności dla S1 jest już tam wyegzekwowane)."
+  },
+  "module": "M2",
+  "intro": "Ein Modell „liest“ ein Dokument nicht wie ein Mensch — es arbeitet mit Tokens und hat ein begrenztes Kontextfenster. Für Tester ist das keine Kuriosität: eine abgeschnittene Anforderung, ein übersprungener Abschnitt der Spezifikation oder eine Halluzination bei zu langer Eingabe verschlechtern die Entscheidungsqualität unmittelbar. Dieses Modul vermittelt die Intuition (ohne Mathematik): Token, Kontextfenster, Transformer und Attention sowie der Grund, warum mehr Parameter nicht besser bedeutet.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Wozu Tester die LLM-Architektur brauchen",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Bevor du der Antwort eines Modells auf eine Frage zur Spezifikation oder zu einem Defekt vertraust, lohnt es sich zu wissen, wie das Modell den Text überhaupt „sieht“. Es liest ihn nicht wie ein Mensch — es zerlegt ihn in Tokens und fasst nur so viel, wie in das Kontextfenster passt." },
+        { "kind": "list", "items": [
+          "Abgeschnittene Anforderung — das Modell antwortet ohne den Teil, der aus dem Fenster gefallen ist.",
+          "Übersprungener Abschnitt der Spezifikation — das entscheidende Kriterium ist nie in den Kontext gelangt.",
+          "Halluzination bei zu langer Eingabe — fehlende Daten werden durch Erfundenes ersetzt."
+        ] },
+        { "kind": "paragraph", "text": "Du lernst vier Dinge kennen: was ein Token und das Kontextfenster ist, drei Folgen eines zu kleinen Kontexts, die Intuition von Transformer und Attention sowie die Tatsache, dass die Anzahl der Parameter keine Garantie für Qualität ist. Zum Schluss verkleinerst du in der Interaktion „Kontextzähler“ selbst das Kontextfenster." },
+        { "kind": "callout", "variant": "info", "onlyForPaths": ["S1"], "title": "Kurzfassung für deinen Lernpfad", "text": "Die wichtigste geschäftliche Frage lautet: „Passt dieses Dokument überhaupt in das Fenster des Modells?“. Falls nicht — das Modell antwortet trotzdem, kann aber das Wesentliche auslassen." }
+      ]
+    },
+    {
+      "id": "s2-token",
+      "title": "Token und Tokenisierung",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Token", "original": "token", "text": "der kleinste Textbaustein, mit dem das Modell arbeitet — kein ganzes Wort, sondern ein Wortteil, ein einzelnes Zeichen oder ein Leerzeichen." },
+        { "kind": "definition", "term": "Tokenisierung", "original": "tokenization", "text": "die Zerlegung des Textes in Tokens, die das Modell ausführt, bevor es überhaupt etwas verarbeitet." },
+        { "kind": "paragraph", "text": "Schlussfolgerung für den Alltag: Kosten und Limits werden in Tokens gezählt, nicht in Wörtern oder Seiten. Ein „kurzer“ Absatz auf Deutsch kann mehr Tokens beanspruchen, als man denkt." },
+        { "kind": "callout", "variant": "info", "onlyForPaths": ["S2", "S3"], "title": "Orientierungsbeispiel", "text": "Der Satz aus einem fiktiven Bericht „Auftrag ZX-204 hat die Validierung nicht bestanden“ entspricht ungefähr einem Dutzend Tokens — weil „ZX-204“ in mehrere Fragmente zerfällt und deutsche Endungen weitere hinzufügen. Faustregel: 1 Token ≈ einige Zeichen, und Deutsch ist in Tokens mitunter „teurer“ als Englisch." }
+      ]
+    },
+    {
+      "id": "s3-okno-kontekstu",
+      "title": "Kontextfenster — warum ein langes Dokument nicht vollständig hineinpasst",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Kontextfenster", "original": "context window", "text": "die maximale Anzahl an Tokens, die ein Modell auf einmal „sieht“ — sie umfasst sowohl die Eingabe (Dokument, Frage) als auch die generierte Antwort." },
+        { "kind": "paragraph", "text": "Wenn Dokument plus Frage plus Antwort dieses Limit überschreiten, muss ein Teil der Eingabe herausfallen — das Modell sieht ihn schlicht nicht." },
+        { "kind": "paragraph", "text": "Der Mechanismus selbst variiert je nach Werkzeug: manche geben einen Fehler „Limit überschritten“ zurück, andere schneiden stillschweigend den ältesten Inhalt ab, wieder andere verwenden ein gleitendes Fenster. Selbst wenn alles hineinpasst, wird ein sehr langer Kontext in der Mitte oft schlechter genutzt (Effekt „lost in the middle“). Die Schlussfolgerung für den Tester bleibt jedoch dieselbe: Geh nicht davon aus, dass das Modell das Ganze gesehen und genutzt hat — überprüfe es." },
+        { "kind": "callout", "variant": "info", "title": "Schreibtisch-Analogie", "text": "Das Kontextfenster ist ein Schreibtisch mit fester Fläche. Jedes neue Blatt schiebt die ältesten über die Kante — sie verschwinden nicht, weil sie „unwichtig“ sind, sondern weil der Platz fehlte." },
+        { "kind": "callout", "variant": "warn", "title": "Entscheidungsregel", "text": "„Ich habe das ganze Dokument eingefügt“ bedeutet nicht „das Modell hat es gelesen“. Prüfe zuerst, ob der Inhalt in das Kontextfenster passt." }
+      ]
+    },
+    {
+      "id": "s4-trzy-skutki",
+      "title": "Drei Folgen eines zu kleinen Kontexts",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Wenn ein wichtiger Teil aus dem Fenster fällt, treten drei typische Folgen auf — alle gefährlich für die Qualität von Testentscheidungen." },
+        { "kind": "list", "ordered": true, "items": [
+          "Auslassen von Informationen — das Modell antwortet ohne die entscheidende Anforderung, weil es sie nicht gesehen hat.",
+          "Inkonsistenz — in einem langen Gespräch „vergisst“ das Modell frühere Festlegungen, die aus dem Fenster gefallen sind.",
+          "Halluzination und Raten — fehlende Daten werden durch erfundenen, aber selbstsicher klingenden Inhalt ersetzt."
+        ] },
+        { "kind": "paragraph", "onlyForPaths": ["S2", "S3"], "text": "QA-Mini-Beispiele: Das Modell fasst die PipeDemo-Spezifikation zusammen, lässt aber ein Kriterium aus einem Abschnitt aus, der herausgefallen ist (Auslassen); in einem langen Thread zum Defekt ORD-TEST-777 beginnt es, die Festlegungen vom Anfang zu ignorieren (Inkonsistenz); nach einer im Kontext nicht mehr vorhandenen Anforderung gefragt, gibt es sie „aus dem Gedächtnis“ an (Halluzination)." },
+        { "kind": "callout", "variant": "warn", "onlyForPaths": ["S1"], "title": "Warum das ein Qualitätsrisiko ist", "text": "Jede dieser Folgen sieht aus wie eine ganz normale Antwort — das Modell warnt nicht, dass es etwas nicht gesehen hat. Deshalb kann eine auf einer solchen Antwort beruhende Entscheidung still und leise falsch sein." }
+      ]
+    },
+    {
+      "id": "s5-transformer-uwaga",
+      "title": "Transformer und Attention — die Intuition",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "onlyForPaths": ["S1"], "text": "Vereinfacht: Das Modell lernt Zusammenhänge zwischen Textbausteinen, wodurch es versteht, dass sich weit auseinanderliegende Wörter aufeinander beziehen können. Das ist alles, was du dir hier merken musst." },
+        { "kind": "definition", "onlyForPaths": ["S2", "S3"], "term": "Transformer", "original": "transformer", "text": "eine Architektur, die lernt, welche Tokens miteinander zusammenhängen — unabhängig davon, wie weit sie im Text voneinander entfernt liegen." },
+        { "kind": "definition", "onlyForPaths": ["S2", "S3"], "term": "Attention", "original": "attention", "text": "der Mechanismus „worauf das Modell schaut“ — er erlaubt es, z. B. ein Pronomen mit einem Substantiv von vor vielen Sätzen zu verbinden, indem er die Zusammenhänge zwischen Tokens gewichtet." },
+        { "kind": "diagram", "onlyForPaths": ["S2", "S3"], "textAlt": "Der Ablauf vom Text zur Antwort in fünf Schritten: 1) der Eingabetext wird in Tokens zerlegt (Tokenisierung); 2) die Tokens gelangen in das Kontextfenster; 3) das Modell gewichtet mithilfe von Attention die Zusammenhänge zwischen den Tokens; 4) das Modell generiert nacheinander die Tokens der Antwort; 5) die Antwort-Tokens werden wieder zu einem lesbaren Text zusammengesetzt.", "ascii": "Text -> [Tokenisierung] -> Tokens -> [Kontextfenster] -> [Attention: Zusammenhaenge] -> [Generierung] -> Antwort-Tokens -> Text" },
+        { "kind": "paragraph", "onlyForPaths": ["S3"], "text": "Vertiefung: Attention vergleicht jeden Token mit den anderen, daher steigen ihre Kosten mit der Länge der Eingabe. Ein sehr langes Kontextfenster bedeutet mehr Berechnungen, also höhere Inferenzkosten (inference cost) und eine längere Antwortzeit — ein zusätzliches Argument dafür, nur die für die Frage relevanten Abschnitte anzugeben." }
+      ]
+    },
+    {
+      "id": "s6-parametry",
+      "title": "Mehr Parameter ≠ bessere Qualität",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Parameter", "original": "parameters", "text": "die internen Gewichte des Modells — man kann sie als „Kapazität“ des Modells betrachten, doch ihre bloße Anzahl entscheidet nicht über die Treffsicherheit bei einer konkreten QA-Aufgabe." },
+        { "kind": "paragraph", "text": "Über das Ergebnis entscheiden tatsächlich: die Passung des Modells zur Aufgabe, die Datenqualität, die Länge des Kontextfensters und die Art des Promptings — nicht die bloße Anzahl an Milliarden Parametern." },
+        { "kind": "table", "onlyForPaths": ["S2", "S3"], "caption": "Was wirklich die Treffsicherheit der Antwort beeinflusst", "headers": ["Faktor", "Einfluss auf die Qualität"], "rows": [
+          ["Anzahl der Parameter", "Hilft, garantiert aber keine Treffsicherheit bei einer konkreten Aufgabe"],
+          ["Passung zur Aufgabe", "Oft wichtiger als die Größe des Modells"],
+          ["Kontextfenster und Auswahl der Abschnitte", "Entscheidet, ob das Modell die benötigten Daten überhaupt sieht"],
+          ["Art des Promptings", "Beeinflusst die Präzision und Reproduzierbarkeit der Antworten"]
+        ], "textAlt": "Tabelle mit vier Faktoren und ihrem Einfluss auf die Qualität: Die Anzahl der Parameter hilft, garantiert aber keine Treffsicherheit; die Passung zur Aufgabe ist oft wichtiger als die Größe; Kontextfenster und Auswahl der Abschnitte entscheiden, ob das Modell die benötigten Daten sieht; die Art des Promptings beeinflusst die Präzision und Reproduzierbarkeit." },
+        { "kind": "callout", "variant": "warn", "title": "Antimuster", "text": "Die Wahl eines Modells „weil es mehr Milliarden Parameter hat“. Synthetisches Beispiel: Das größere Modell verwechselt das fiktive Format der Defekt-ID in SklepDemo, während das kleinere mit besserem Kontext richtig liegt. Kauf nicht nach der Anzahl der Parameter — prüf es an deiner eigenen Aufgabe." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "tune",
+    "id": "m2-licznik-kontekstu",
+    "title": "Kontextzähler",
+    "intro": "Du arbeitest mit einer synthetischen PipeDemo-Spezifikation aus sechs der Reihe nach angeordneten Abschnitten: (1) Umfang ZX-204, (2) Akzeptanzkriterien, (3) Testdaten, (4) Umgebung, (5) Risiken, (6) Glossar. Verkleinere das Kontextfenster und beobachte, welche Abschnitte herausfallen und welche Kontrollfragen sich nicht mehr beantworten lassen. Regel: Je kleiner das Fenster, desto früher fallen die weiter hinten liegenden Abschnitte heraus (zuerst das Glossar, zuletzt der Umfang). Löse anschließend den Checkpoint.",
+    "outputLabel": "Zustand des Dokuments im Fenster für das gewählte Limit:",
+    "controls": [
+      { "id": "limit", "label": "Kontextlimit", "levels": [
+        { "value": "duzy", "label": "Groß", "effect": "In das Fenster passen alle sechs Abschnitte (Umfang ZX-204, Akzeptanzkriterien, Testdaten, Umgebung, Risiken, Glossar). Jede Kontrollfrage hat eine Grundlage im verfügbaren Abschnitt — alle vier Fragen lassen sich korrekt beantworten." },
+        { "value": "sredni", "label": "Mittel", "effect": "Im Fenster bleiben die Abschnitte 1–3 (Umfang ZX-204, Akzeptanzkriterien, Testdaten). Außerhalb des Kontexts liegen: Umgebung, Risiken und Glossar. Die Grundlage verlieren die Fragen zur Laufzeitumgebung und zur Definition aus dem Glossar; die Fragen zum Umfang und zu den Akzeptanzkriterien bleiben weiterhin möglich." },
+        { "value": "maly", "label": "Klein", "effect": "Im Fenster bleibt nur Abschnitt 1 (Umfang ZX-204). Außerhalb des Kontexts fallen heraus: Akzeptanzkriterien, Testdaten, Umgebung, Risiken und Glossar. Möglich ist nur die Frage zum Auftragsumfang; die Fragen zu den Akzeptanzkriterien, zu den Testdaten, zur Umgebung und zum Glossar verlieren ihre Grundlage — das Modell würde ohne Quelle antworten." }
+      ] }
+    ],
+    "checkpoint": {
+      "prompt": "Du setzt das Kontextlimit auf „Klein“ (im Fenster bleibt nur der Abschnitt Umfang ZX-204). Welche der folgenden Kontrollfragen wird das Modell NICHT korrekt beantworten, weil ihr Abschnitt aus dem Fenster gefallen ist?",
+      "type": "single_choice",
+      "options": [
+        { "id": "A", "text": "Was sind die Akzeptanzkriterien des Auftrags ZX-204?" },
+        { "id": "B", "text": "Worum geht es im Umfang des Auftrags ZX-204?" },
+        { "id": "C", "text": "Wie lautet die Nummer des in der Spezifikation beschriebenen Auftrags?" },
+        { "id": "D", "text": "Wie heißt die analysierte Spezifikation?" }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Richtig: Bei einem kleinen Limit bleibt im Fenster nur der Abschnitt „Umfang ZX-204“. Der Abschnitt „Akzeptanzkriterien“ ist herausgefallen, also hat das Modell keine Grundlage für eine Antwort zu den Kriterien — ein typisches Beispiel für das Auslassen von Informationen.",
+      "feedbackIncorrect": "Die übrigen Fragen lassen sich aus dem Abschnitt „Umfang ZX-204“ beantworten, der im Fenster geblieben ist. Das Problem ist die Frage zu den Akzeptanzkriterien — dieser Abschnitt ist bei einem kleinen Limit aus dem Fenster gefallen, sodass das Modell ohne Quelle antworten würde."
+    }
+  },
+  "summary": {
+    "points": [
+      "Das Modell arbeitet mit Tokens, nicht mit Wörtern — Kosten und Limits werden in Tokens gezählt.",
+      "Das Kontextfenster ist endlich; wenn ein Dokument es überschreitet, fällt ein Teil der Eingabe heraus und das Modell sieht ihn nicht.",
+      "Ein zu kleines Fenster führt zu drei Folgen: Auslassen von Informationen, Inkonsistenz und Halluzination.",
+      "Der Transformer lernt Zusammenhänge zwischen Tokens (Attention); die Anzahl der Parameter ist für sich genommen keine Garantie für Qualität."
+    ],
+    "checklist": [
+      "Habe ich geprüft, dass das Dokument in das Kontextfenster des Modells passt?",
+      "Habe ich dem Modell nur die für die Frage relevanten Abschnitte gegeben, wenn das Ganze zu lang war?",
+      "Vertraue ich der Antwort nicht allein deshalb, weil das Werkzeug den gesamten Text angenommen hat?",
+      "Bewerte ich das Modell nach der Passung zur Aufgabe und nicht nach der bloßen Anzahl der Parameter?"
+    ],
+    "checklistTitle": "Checkliste — das Kontextfenster in der QA-Praxis",
+    "nextStep": "Nächster Schritt: M3 — Generierungsparameter (Temperature, Top-p, Max Tokens)."
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "_meta": {
+    "issue": "#20 [20][M4] Wdroż moduły M1-M2",
+    "storyboard": "docs/storyboard/m01-fundamenty.md",
+    "interaction": "Klasyfikator zadań (kind: classify)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (NotkaApp/SklepDemo/PipeDemo, domena przyklad.test). ZERO realnych danych klienta/PII.",
+    "note": "Egzemplarz referencyjny typu classify dla pozostałych modułów."
+  },
+  "module": "M1",
+  "intro": "Sempre più spesso il tester riceve dall'LLM un output già pronto: una bozza di caso di test, una sintesi dei requisiti, un report. Per valutare se fidarsi, devi sapere da dove proviene quella risposta e in cosa la GenAI differisce dal ML classico. Questo modulo ti fornisce questa mappa concettuale e ti allena ad abbinare la tecnologia al compito.",
+  "screens": [
+    {
+      "id": "s1-cel",
+      "title": "A cosa ti serve questo modulo",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Senza distinguere GenAI, LLM e ML classico è facile usare uno strumento per il compito sbagliato oppure prendere una risposta inventata per un fatto. È un rischio concreto nel lavoro di QA, quando l'output del modello finisce nella documentazione di test." },
+        { "kind": "list", "items": [
+          "Distinguerai tre tipi di soluzione: generative, di classificazione e basate su regole.",
+          "Capirai da dove proviene la risposta di un LLM e perché non è una verità garantita.",
+          "Classificherai un compito di QA verso la tecnologia corretta."
+        ] }
+      ]
+    },
+    {
+      "id": "s2-mapa-pojec",
+      "title": "GenAI, LLM e ML classico — mappa concettuale",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "ML classico", "original": "machine learning", "text": "il modello apprende uno schema e di solito classifica oppure prevede un valore (es. «spam / non spam»)." },
+        { "kind": "definition", "term": "GenAI", "original": "generative AI", "text": "intelligenza artificiale che crea nuovi contenuti: testo, immagini, audio o codice." },
+        { "kind": "definition", "term": "LLM", "original": "large language model", "text": "sottoinsieme della GenAI specializzato nel linguaggio — prevede il frammento di testo successivo più probabile." },
+        { "kind": "diagram", "textAlt": "Tre insiemi: il più grande è la GenAI (creazione di contenuti). L'LLM è contenuto nella GenAI come suo sottoinsieme linguistico. Il ML classico è un insieme separato accanto alla GenAI — classifica e prevede, non crea. Conclusione: ogni LLM è GenAI, ma non ogni GenAI è un LLM; il ML classico è un'altra famiglia.", "ascii": "[ GenAI ........ ]   [ ML classico ]\n  [ LLM ]\n(crea contenuto)    (classifica/prevede)" }
+      ]
+    },
+    {
+      "id": "s3-piec-przykladow",
+      "title": "Cinque esempi a confronto",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Guarda l'input e l'output del compito: se in uscita nasce un nuovo contenuto, è GenAI/LLM; se è un'etichetta da un insieme già pronto, è ML classico." },
+        { "kind": "table",
+          "caption": "Cinque esempi sintetici e la loro classificazione",
+          "headers": ["Esempio", "Output", "Categoria"],
+          "rows": [
+            ["Classificazione di una segnalazione come errore/domanda/richiesta", "etichetta da un insieme già pronto", "ML classico"],
+            ["Bozza di un caso di test a partire dalla descrizione di un requisito", "nuovo testo", "LLM / GenAI"],
+            ["Rilevamento di anomalie nelle metriche di performance", "flag di scostamento dalla norma", "ML classico"],
+            ["Sintesi di una lunga nota di riunione", "testo nuovo e più breve", "LLM"],
+            ["Generazione di un'immagine per una presentazione", "nuova immagine", "GenAI (non LLM)"]
+          ],
+          "textAlt": "Tre esempi che creano nuovi contenuti (bozza di test, sintesi, immagine) sono GenAI/LLM; due che assegnano un'etichetta (classificazione della segnalazione, anomalia nelle metriche) sono ML classico. L'immagine è GenAI, ma non LLM." }
+      ]
+    },
+    {
+      "id": "s4-skad-odpowiedz",
+      "title": "Da dove proviene la risposta di un LLM",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "L'LLM prevede il frammento di testo successivo più probabile in base agli schemi appresi durante l'addestramento. Non è un motore di ricerca della verità né una base di fatti — una forma probabile può essere errata nel merito." },
+        { "kind": "definition", "term": "Allucinazione", "original": "hallucination", "text": "un risultato che suona credibile, ma non è supportato dai dati." },
+        { "kind": "callout", "variant": "warn", "title": "Conseguenza per il QA", "text": "Ogni output di un LLM richiede una verifica prima di essere usato come fatto. La checklist completa di verifica la imparerai nel modulo M11." }
+      ]
+    },
+    {
+      "id": "s5-trening-wnioskowanie",
+      "title": "Addestramento vs. inferenza",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Addestramento", "original": "training", "text": "l'apprendimento una tantum del modello su un grande insieme di dati — fissa gli schemi." },
+        { "kind": "definition", "term": "Inferenza", "original": "inference", "text": "ogni utilizzo del modello sul tuo input — è qui che nasce la risposta." },
+        { "kind": "paragraph", "text": "Conclusione per il tester: il modello non «impara» da un tuo singolo prompt e non conosce gli eventi successivi alla data di addestramento." },
+        { "kind": "paragraph", "onlyForPaths": ["S2", "S3"], "text": "Per i percorsi tecnici: il costo dell'inferenza (inference cost) cresce con la lunghezza dell'input e dell'output, per questo un contesto ridondante costa e non sempre migliora la qualità." }
+      ]
+    },
+    {
+      "id": "s6-trzy-typy",
+      "title": "Tre tipi di compiti: generativi / di classificazione / deterministici",
+      "type": "decision",
+      "blocks": [
+        { "kind": "list", "items": [
+          "Generativo — crea nuovi contenuti (LLM / GenAI).",
+          "Di classificazione — assegna un'etichetta da un insieme già pronto (ML classico).",
+          "Deterministico — lo stesso input produce sempre lo stesso risultato secondo una regola esplicita (sistema basato su regole)."
+        ] },
+        { "kind": "paragraph", "text": "Poniti la domanda: di che tipo è il compito che hai ora sulla scrivania? Tra poco lo eserciterai su 12 compiti sintetici." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "m1-klasyfikator",
+    "title": "Classificatore di compiti",
+    "intro": "Assegna ogni compito di QA sintetico alla categoria di soluzione più adatta. Dopo la verifica, vedrai la motivazione accanto a ciascun compito.",
+    "categories": [
+      { "id": "llm", "label": "LLM", "desc": "compito linguistico-generativo (crea nuovi contenuti)" },
+      { "id": "ml", "label": "ML classico", "desc": "classificazione/predizione da etichette già pronte" },
+      { "id": "rule", "label": "Sistema basato su regole", "desc": "regola esplicita e pienamente prevedibile" },
+      { "id": "human", "label": "Esperto umano", "desc": "decisione con responsabilità e giudizio" }
+    ],
+    "items": [
+      { "id": "t1", "text": "Scrivi una bozza di 5 casi di test per il requisito di login in NotkaApp.", "correctCategory": "llm", "rationale": "Nasce un nuovo contenuto testuale — compito generativo, LLM." },
+      { "id": "t2", "text": "Sintetizza in cinque punti una lunga nota della riunione del team QA.", "correctCategory": "llm", "rationale": "Generare un testo più breve da uno più lungo è un compito linguistico da LLM." },
+      { "id": "t3", "text": "Proponi il testo del messaggio di errore per il modulo di pagamento in SklepDemo.", "correctCategory": "llm", "rationale": "Creare un nuovo messaggio è generazione di testo — LLM." },
+      { "id": "t4", "text": "Etichetta una segnalazione in arrivo come «errore», «domanda» oppure «richiesta».", "correctCategory": "ml", "rationale": "Assegnare un'etichetta da un insieme già pronto è classificazione — ML classico." },
+      { "id": "t5", "text": "Rileva un'anomalia nelle metriche di performance rispetto alla norma.", "correctCategory": "ml", "rationale": "Rilevare scostamenti da uno schema è ML classico, non generazione." },
+      { "id": "t6", "text": "Prevedi se una nuova segnalazione finirà nel gruppo «urgente» o «ordinario».", "correctCategory": "ml", "rationale": "La predizione di una categoria a partire dai dati è ML classico." },
+      { "id": "t7", "text": "Verifica se il codice postale ha il formato NN-NNN.", "correctCategory": "rule", "rationale": "Una regola di formato esplicita dà un risultato deterministico — sistema basato su regole." },
+      { "id": "t8", "text": "Valida se il numero d'ordine corrisponde al modello ORD-TEST-NNN.", "correctCategory": "rule", "rationale": "La validazione di un modello è pienamente prevedibile — regola, non LLM." },
+      { "id": "t9", "text": "Converti l'importo netto in lordo secondo l'aliquota fissa del 23%.", "correctCategory": "rule", "rationale": "Un calcolo secondo una regola fissa è deterministico — sistema basato su regole." },
+      { "id": "t10", "text": "Decidi se sospendere il rilascio a causa di un rischio legale.", "correctCategory": "human", "rationale": "Una decisione con responsabilità e contesto legale spetta all'esperto umano." },
+      { "id": "t11", "text": "Approva un rischio critico di sicurezza prima del rilascio.", "correctCategory": "human", "rationale": "L'accettazione del rischio è un giudizio responsabile dell'essere umano, non un compito del modello." },
+      { "id": "t12", "text": "Dirimi una disputa tra due team sulla priorità di un difetto.", "correctCategory": "human", "rationale": "Dirimere un conflitto richiede giudizio e responsabilità — esperto umano." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "La GenAI crea contenuti, il ML classico classifica/prevede, l'LLM prevede il testo più probabile — non la verità.",
+      "La scelta della tecnologia dipende dal tipo di compito: generativo, di classificazione o deterministico.",
+      "L'output di un LLM è probabilistico, quindi richiede una verifica prima di diventare un fatto."
+    ],
+    "checklist": [
+      "Il compito richiede un nuovo contenuto oppure un'etichetta/un risultato da una regola?",
+      "Posso verificare la risposta del modello rispetto a una fonte?",
+      "La decisione non richiede la responsabilità di un essere umano?"
+    ],
+    "checklistTitle": "Checklist — prima di usare un LLM",
+    "nextStep": "Prossimo passo: M2 — architettura dell'LLM: token e context window."
+  }
+}

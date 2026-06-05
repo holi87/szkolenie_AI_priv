@@ -1,0 +1,549 @@
+{
+  "_meta": {
+    "module": "M12",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M12. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q105",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Kiểm tra xem học viên có chọn đúng chỉ số chất lượng phù hợp với triệu chứng lỗi của câu trả lời LLM/RAG hay không.",
+      "prompt": "Câu trả lời được đánh giá của mô hình trong kho ngữ liệu SklepDemo có một câu mâu thuẫn với nội dung của tài liệu nguồn (nó khẳng định liên kết đặt lại mật khẩu có thể dùng nhiều lần, dù nguồn nói rằng: dùng một lần). Chỉ số chất lượng nào nắm bắt vấn đề này chính xác nhất?",
+      "options": [
+        {
+          "id": "A",
+          "text": "faithfulness (độ trung thành với nguồn)"
+        },
+        {
+          "id": "B",
+          "text": "relevance (mức độ liên quan tới câu hỏi)"
+        },
+        {
+          "id": "C",
+          "text": "completeness (tính đầy đủ)"
+        },
+        {
+          "id": "D",
+          "text": "accuracy hiểu theo nghĩa độ chính xác sự kiện tổng quát của câu trả lời, không phụ thuộc vào nguồn"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Câu trả lời mâu thuẫn với nội dung của nguồn là triệu chứng kinh điển của faithfulness thấp — câu trả lời không trung thành với nguồn mà đáng lẽ nó phải dựa vào.",
+      "feedbackIncorrect": "Ở đây không phải vấn đề mức độ trúng chủ đề (relevance), thiếu một phần câu trả lời (completeness) hay độ chính xác sự kiện tổng quát (accuracy) — câu trả lời có thể nghe có vẻ „đúng” mà vẫn mâu thuẫn với một nguồn cụ thể. Vấn đề là sự nhất quán với nguồn, tức là faithfulness. Hãy ôn lại định nghĩa trên màn hình về các chỉ số chất lượng.",
+      "references": [
+        "M12.4",
+        "M12.5"
+      ]
+    },
+    {
+      "id": "Q106",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Kiểm tra việc hiểu vì sao thang chấm điểm (rubric) cho LLM-as-a-judge phải chứa các ví dụ neo và định nghĩa từng mức.",
+      "prompt": "Vì sao một thang chấm điểm đánh giá (evaluation rubric) tốt cho LLM-as-a-judge lại chứa định nghĩa của từng mức trên thang lẫn các ví dụ neo (anchor examples)?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Vì chúng tăng tính lặp lại của việc chấm — các lần chạy khác nhau chấm giống nhau, theo cùng các tiêu chí thay vì theo cảm nhận chung chung"
+        },
+        {
+          "id": "B",
+          "text": "Vì chúng rút ngắn prompt của bộ chấm và giảm chi phí token"
+        },
+        {
+          "id": "C",
+          "text": "Vì chúng thay thế golden set và ground truth, nên không cần tài liệu hóa nguồn sự thật"
+        },
+        {
+          "id": "D",
+          "text": "Vì chúng bảo đảm rằng đánh giá tự động không bao giờ lệch khỏi đánh giá của chuyên gia"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Định nghĩa các mức và các điểm neo thiết lập một điểm tham chiếu chung, nên việc chấm trở nên lặp lại được thay vì là câu hỏi không thể tái lập 'cái này có tốt không?'.",
+      "feedbackIncorrect": "Thang chấm điểm không thay thế golden set và cũng không bảo đảm sự nhất quán với chuyên gia; mục tiêu của nó là tính lặp lại của việc chấm. Hãy quay lại màn hình về thang chấm điểm cho LLM-as-a-judge.",
+      "references": [
+        "M12.6"
+      ]
+    },
+    {
+      "id": "Q107",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Kiểm tra khả năng nhận diện position bias dựa trên mẫu hình điểm số trong so sánh theo cặp.",
+      "prompt": "Trong phòng lab hiệu chỉnh, ở cặp A3 vs A4 (hai biến thể câu trả lời cho cùng một tiêu chí WYM-giỏ-hàng), bộ chấm LLM đã cho điểm cao hơn cho biến thể được trình bày trước (A3: 2/2, A4: 1/2), trong khi chuyên gia QA lại đánh giá cao hơn biến thể thứ hai (A3: 1/2, A4: 2/2). Điều gì giải thích tốt nhất sự lệch này?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Position bias — bộ chấm thiên vị câu trả lời được trình bày trước, bất kể chất lượng thực tế của nó"
+        },
+        {
+          "id": "B",
+          "text": "faithfulness thấp của cả hai câu trả lời so với nguồn"
+        },
+        {
+          "id": "C",
+          "text": "Thiếu các câu hỏi đại diện trong golden set"
+        },
+        {
+          "id": "D",
+          "text": "Chuyên gia đã mắc lỗi, vì đánh giá tự động về bản chất khách quan hơn"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Phán quyết phụ thuộc vào thứ tự trình bày chứ không phải nội dung — đó là triệu chứng định nghĩa của position bias; việc đổi thứ tự A3/A4 nhiều khả năng sẽ đảo ngược kết quả của bộ chấm.",
+      "feedbackIncorrect": "Mẫu hình 'vị trí được trình bày trước được chấm cao hơn' chỉ ra thiên kiến vị trí, chứ không phải vấn đề với nguồn hay golden set. Hãy ôn lại màn hình về bias và position bias.",
+      "references": [
+        "M12.7",
+        "M12.10"
+      ]
+    },
+    {
+      "id": "Q108",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Kiểm tra khả năng diễn giải mức độ đồng thuận giữa các bộ chấm và những hạn chế của chỉ số thô % đồng thuận.",
+      "prompt": "Trên golden set GS-SklepDemo, 90% mục có điểm 'pass', và bộ chấm LLM cùng chuyên gia đồng thuận về phán quyết trong 90% trường hợp. Vì sao bản thân con số 'đồng thuận 90%' lại có thể gây hiểu lầm khi dùng làm bằng chứng cho việc hiệu chỉnh bộ chấm?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Vì khi phân bố điểm số rất mất cân bằng, có thể đạt được % đồng thuận cao gần như ngẫu nhiên — cần kiểm tra xem họ có đồng thuận cả ở các trường hợp 'fail' hiếm gặp hay không"
+        },
+        {
+          "id": "B",
+          "text": "Vì 90% luôn là ngưỡng quá thấp và phải yêu cầu đồng thuận 100%"
+        },
+        {
+          "id": "C",
+          "text": "Vì khi phân bố lớp mất cân bằng thì phải loại bỏ chỉ số đồng thuận và chỉ dựa hoàn toàn vào phán quyết của chuyên gia"
+        },
+        {
+          "id": "D",
+          "text": "Vì % đồng thuận đo tốc độ chấm chứ không đo chất lượng của nó"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Khi gần như mọi thứ đều là 'pass', việc đồng thuận 'ở pass' là rẻ tiền — điều then chốt là liệu bộ chấm có bắt trúng các trường hợp 'fail' hiếm gặp, rủi ro hay không.",
+      "feedbackIncorrect": "Vấn đề không phải là bản thân giá trị ngưỡng (B) hay loại bỏ chỉ số đồng thuận để chỉ dựa vào chuyên gia (C) — đó là hệ quả của phân bố lớp mất cân bằng: khi 'pass' chiếm ưu thế, % đồng thuận cao là rẻ tiền, nên cần kiểm tra độ trúng ở các trường hợp 'fail' hiếm gặp. Hãy quay lại màn hình về hiệu chỉnh và mức đồng thuận giữa các bộ chấm.",
+      "references": [
+        "M12.8"
+      ]
+    },
+    {
+      "id": "Q109",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Kiểm tra xem học viên có nhận diện được các thành phần mà một golden set tốt cần có hay không.",
+      "prompt": "Một golden set (bộ chuẩn) được thiết kế tốt cho ca sử dụng QA trong SklepDemo cần chứa những gì? Hãy chọn tất cả các đáp án đúng.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Các câu hỏi đại diện bao phủ những kịch bản điển hình của ca sử dụng"
+        },
+        {
+          "id": "B",
+          "text": "Các trường hợp biên và những cái bẫy đã biết (ví dụ câu hỏi nằm ngoài phạm vi nguồn)"
+        },
+        {
+          "id": "C",
+          "text": "Nguồn sự thật (ground truth) được tài liệu hóa cho từng mục"
+        },
+        {
+          "id": "D",
+          "text": "Log production thu thập ngẫu nhiên với dữ liệu khách hàng thô"
+        },
+        {
+          "id": "E",
+          "text": "Các mục có kỳ vọng mơ hồ, không thể phân định được"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Golden set là 'bộ test hồi quy cho câu trả lời của mô hình': các câu hỏi đại diện, các trường hợp biên và rõ ràng, cùng nguồn sự thật được tài liệu hóa cho từng mục.",
+      "feedbackIncorrect": "Log production thô (PII) cùng các mục không có kỳ vọng phân định được thì không thuộc golden set. Hãy ôn lại màn hình 'Golden set cho ca sử dụng'.",
+      "references": [
+        "M12.2",
+        "M12.3"
+      ]
+    },
+    {
+      "id": "Q110",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Kiểm tra việc nhận diện các tín hiệu cho thấy position bias của bộ chấm.",
+      "prompt": "Những tín hiệu nào dưới đây cho thấy bộ chấm LLM có thể đang bị thiên kiến vị trí (position bias)? Hãy chọn tất cả các đáp án đúng.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Trong các so sánh theo cặp, bộ chấm liên tục chọn câu trả lời được trình bày trước"
+        },
+        {
+          "id": "B",
+          "text": "Sau khi đổi thứ tự hai câu trả lời, phán quyết của bộ chấm bị đảo ngược dù nội dung không thay đổi"
+        },
+        {
+          "id": "C",
+          "text": "Phán quyết của bộ chấm lệch khỏi đánh giá của chuyên gia đúng ở những cặp so sánh phụ thuộc vào thứ tự"
+        },
+        {
+          "id": "D",
+          "text": "Bộ chấm đánh giá các câu trả lời riêng lẻ (không so sánh) và cho điểm thấp cho mọi câu mâu thuẫn với nguồn"
+        },
+        {
+          "id": "E",
+          "text": "Bộ chấm cho điểm như nhau bất kể thứ tự trình bày"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Position bias biểu hiện ở sự phụ thuộc của phán quyết vào thứ tự: thiên vị vị trí đầu tiên, đảo ngược phán quyết sau khi đổi chỗ, và các sai lệch tập trung ở các cặp so sánh.",
+      "feedbackIncorrect": "Tính bền vững với thứ tự (E) cùng việc đánh giá nhất quán nội dung mâu thuẫn với nguồn (D) chứng tỏ không có position bias. Hãy quay lại màn hình về position bias và cách chẩn đoán nó.",
+      "references": [
+        "M12.7",
+        "M12.10"
+      ]
+    },
+    {
+      "id": "Q111",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L4",
+      "bloom": "evaluation",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Kiểm tra khả năng chọn bộ chỉ số đầy đủ phù hợp với một câu hỏi chất lượng phức tạp.",
+      "prompt": "Câu hỏi chất lượng là: 'Câu trả lời của mô hình có liệt kê tất cả các điều kiện thanh toán từ tài liệu nguồn và không thêm điều kiện nằm ngoài nguồn hay không?'. Những chỉ số nào kết hợp lại bao phủ tốt nhất việc đánh giá này? Hãy chọn tất cả các đáp án trúng.",
+      "options": [
+        {
+          "id": "A",
+          "text": "completeness — liệu đã bao phủ tất cả các điều kiện thanh toán mà tiêu chí yêu cầu hay chưa"
+        },
+        {
+          "id": "B",
+          "text": "faithfulness — liệu câu trả lời có thêm các điều kiện mâu thuẫn với nguồn hoặc không có trong nguồn hay không"
+        },
+        {
+          "id": "C",
+          "text": "groundedness — liệu các điều kiện được nêu có thể được ground trong ngữ cảnh đã cung cấp hay không"
+        },
+        {
+          "id": "D",
+          "text": "chỉ riêng position bias như một chỉ số đơn lẻ về chất lượng nội dung"
+        },
+        {
+          "id": "E",
+          "text": "chỉ relevance, vì câu hỏi liên quan đến thanh toán"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Câu hỏi có hai chiều: bao phủ tất cả các điều kiện (completeness) cùng việc không có nội dung nằm ngoài nguồn và được ground trong ngữ cảnh (faithfulness, groundedness).",
+      "feedbackIncorrect": "Position bias là rủi ro của bộ chấm, không phải chỉ số về nội dung; chỉ riêng relevance không đo được tính đầy đủ lẫn độ trung thành với nguồn. Hãy ôn lại các màn hình về các chỉ số và cách chọn chúng.",
+      "references": [
+        "M12.4",
+        "M12.5"
+      ]
+    },
+    {
+      "id": "Q112",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L4",
+      "bloom": "evaluation",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Kiểm tra khả năng đánh giá những thành phần nào khiến thang chấm điểm LLM-as-a-judge đáng tin cậy và bền vững với bias.",
+      "prompt": "Bạn đang thiết kế một thang chấm điểm cho LLM-as-a-judge để đánh giá faithfulness của các câu trả lời trong GS-SklepDemo. Những thành phần nào nên có trong đó để việc chấm điểm lặp lại được và bền vững với thiên kiến? Hãy chọn tất cả các đáp án trúng.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Tiêu chí chấm rõ ràng và một thang điểm có định nghĩa cho từng mức (ví dụ 0–2)"
+        },
+        {
+          "id": "B",
+          "text": "Các ví dụ neo (anchor examples) cho các mức cực biên và trung gian"
+        },
+        {
+          "id": "C",
+          "text": "Hướng dẫn 'chỉ chấm dựa theo nguồn', chứ không dựa theo kiến thức chung của mô hình"
+        },
+        {
+          "id": "D",
+          "text": "Quy tắc đổi thứ tự trong các so sánh theo cặp, nhằm hạn chế position bias"
+        },
+        {
+          "id": "E",
+          "text": "Quy tắc thưởng điểm cho các câu trả lời dài hơn vì cho rằng chúng đầy đủ hơn"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "feedbackCorrect": "Một thang chấm điểm lặp lại được và bền vững với bias kết hợp tiêu chí rõ ràng, thang điểm có định nghĩa, các điểm neo, việc chấm dựa theo nguồn cùng biện pháp giảm thiểu position bias bằng cách đổi thứ tự.",
+      "feedbackIncorrect": "Thưởng điểm theo độ dài là length bias — nó nâng điểm bất kể nội dung. Hãy quay lại các màn hình về thang chấm điểm cùng về bias/position bias.",
+      "references": [
+        "M12.6",
+        "M12.7"
+      ]
+    },
+    {
+      "id": "Q113",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Kiểm tra việc diễn giải một sai lệch, trong đó bộ chấm nâng điểm so với chuyên gia đối với một câu trả lời mâu thuẫn với nguồn.",
+      "prompt": "Trong phòng lab hiệu chỉnh, mục A2 (câu hỏi về thời hạn của chính sách đổi trả trong SklepDemo) có điểm faithfulness của chuyên gia là 0/2 — câu trả lời mâu thuẫn với nguồn — còn bộ chấm LLM cho 2/2. Diễn giải sai lệch này thế nào là tốt nhất và nên làm gì với nó?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Bộ chấm nâng điểm cho câu trả lời mâu thuẫn với nguồn — đó là tín hiệu để cải thiện thang chấm điểm (hướng dẫn dứt khoát 'mâu thuẫn với nguồn = 0') và chấm lại, chứ không phải để bỏ qua"
+        },
+        {
+          "id": "B",
+          "text": "Vì bộ chấm cho 2/2 nên câu trả lời là tốt — cần cập nhật golden set, nâng ground truth lên 2/2"
+        },
+        {
+          "id": "C",
+          "text": "Sai lệch này không quan trọng vì chỉ là một mục — có thể bỏ qua nó trong báo cáo"
+        },
+        {
+          "id": "D",
+          "text": "Đây là position bias, nên chỉ cần đổi thứ tự các câu trả lời là vấn đề sẽ biến mất"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Một câu mâu thuẫn với nguồn được chuyên gia chấm 0/2 mà bộ chấm cho 2/2 là sự nâng điểm cần hiệu chỉnh thang chấm và chấm lại — golden set (ground truth) ở đây là thước đo.",
+      "feedbackIncorrect": "Không được điều chỉnh ground truth cho khớp với lỗi của bộ chấm và cũng không được bỏ qua sai lệch; đây không phải position bias (không có cặp so sánh). Hãy lặp lại vòng hiệu chỉnh từ màn hình về mức đồng thuận giữa các bộ chấm.",
+      "references": [
+        "M12.8",
+        "M12.10"
+      ]
+    },
+    {
+      "id": "Q114",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L4",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Kiểm tra việc chọn biện pháp giảm thiểu đúng sau khi phát hiện position bias trong luồng hiệu chỉnh.",
+      "prompt": "Chẩn đoán trong phòng lab xác nhận có position bias ở cặp A3/A4: bộ chấm thiên vị biến thể được trình bày trước. Bạn phải thuyết phục nhóm về cách xác nhận và hạn chế hiệu ứng này một cách nghiêm túc trước khi ấn định ngưỡng chấp nhận. Quyết định nào là tốt nhất?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Lặp lại việc chấm với thứ tự đảo A4/A3 (và/hoặc lấy trung bình cả hai cách sắp xếp) — nếu phán quyết bị đảo ngược thì điều đó xác nhận bias; cố định việc đổi thứ tự vào thang chấm điểm một cách thường trực"
+        },
+        {
+          "id": "B",
+          "text": "Tin vào phán quyết đầu tiên của bộ chấm, vì đánh giá tự động nhanh hơn và rẻ hơn chuyên gia"
+        },
+        {
+          "id": "C",
+          "text": "Loại cặp A3/A4 khỏi golden set để % đồng thuận tăng lên"
+        },
+        {
+          "id": "D",
+          "text": "Nâng ngưỡng chấp nhận cho tất cả các mục để bù lại sự bất định của việc chấm"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Đổi thứ tự (và lấy trung bình cả hai cách sắp xếp) đồng thời xác nhận position bias lẫn vô hiệu hóa nó — đó là biện pháp giảm thiểu tiêu chuẩn được ghi vào thang chấm điểm trước khi quyết định về ngưỡng.",
+      "feedbackIncorrect": "Tin vào phán quyết phụ thuộc vào thứ tự, loại bỏ các mục bất tiện hay nâng ngưỡng một cách mù quáng đều không loại bỏ bias — chúng chỉ che giấu nó. Hãy quay lại các màn hình về position bias và hiệu chỉnh.",
+      "references": [
+        "M12.7",
+        "M12.10"
+      ]
+    },
+    {
+      "id": "Q115",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L4",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Kiểm tra việc đưa ra quyết định go/no-go thận trọng đối với ngưỡng chấp nhận đã ấn định.",
+      "prompt": "Ngưỡng chấp nhận cho việc triển khai một prompt mới trong SklepDemo là: 'faithfulness ≥ 0,9 trên golden set VÀ không có mục nào mâu thuẫn với nguồn'. Phiên bản mới đạt faithfulness trung bình 0,93, nhưng một mục (tương tự A2) mâu thuẫn với nguồn. Quyết định nào là đúng?",
+      "options": [
+        {
+          "id": "A",
+          "text": "No-go — điều kiện 'không có mục nào mâu thuẫn với nguồn' không được thỏa mãn, dù trung bình tốt; trước hết hãy loại bỏ mâu thuẫn, rồi mới đánh giá lại"
+        },
+        {
+          "id": "B",
+          "text": "Go — trung bình 0,93 vượt 0,9, nên ngưỡng được thỏa mãn bất kể một mục đơn lẻ"
+        },
+        {
+          "id": "C",
+          "text": "Go kèm hạ ngưỡng xuống 0,85, vì chỉ có một mục không đạt"
+        },
+        {
+          "id": "D",
+          "text": "Go có điều kiện — triển khai lên production và theo dõi mục mâu thuẫn trong quá trình"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Ngưỡng là một phép hội các điều kiện; điều kiện cứng 'không mâu thuẫn' không được thỏa mãn buộc phải no-go bất kể trung bình tốt — hành vi mặc định thận trọng.",
+      "feedbackIncorrect": "Không được lách điều kiện cứng bằng trung bình, cũng không được hạ ngưỡng hay triển khai 'thử nghiệm' — đó là né tránh tiêu chí chấp nhận. Hãy ôn lại màn hình về ngưỡng và quyết định go/no-go.",
+      "references": [
+        "M12.9"
+      ]
+    },
+    {
+      "id": "Q116",
+      "module": "M12",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L4",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Kiểm tra với điều kiện nào thì được phép cho đánh giá tự động tham gia vào quyết định go/no-go sau một lần hiệu chỉnh thành công.",
+      "prompt": "Sau hai vòng cải thiện thang chấm điểm, mức đồng thuận của bộ chấm LLM với chuyên gia trên golden set GS-SklepDemo đã tăng từ 4/6 lên 6/6, và các sai lệch đã biến mất. Nhóm muốn dùng đánh giá tự động cho quyết định go/no-go về việc phát hành. Điều kiện nào thực sự cho phép đánh giá tự động tham gia vào quyết định này?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Ấn định ngưỡng chấp nhận (mức đồng thuận yêu cầu với chuyên gia trên golden set và việc duy trì nó trên một mẫu mới) cùng việc tái hiệu chỉnh định kỳ với chuyên gia — một lần chạy 6/6 đơn lẻ không bảo đảm tính bền vững."
+        },
+        {
+          "id": "B",
+          "text": "6/6 đạt được một lần là bảo đảm độ trúng mãi mãi — có thể loại chuyên gia khỏi quy trình."
+        },
+        {
+          "id": "C",
+          "text": "Chỉ cho phép đánh giá tự động nếu bộ chấm đồng thuận 100% với mọi câu trả lời tương lai, nếu không thì không bao giờ dùng nó."
+        },
+        {
+          "id": "D",
+          "text": "Ngưỡng chấp nhận là thừa, vì LLM-as-a-judge về bản chất là khách quan."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Cho phép đánh giá tự động đòi hỏi một ngưỡng chấp nhận đã ấn định và việc duy trì nó trên một mẫu mới, cùng việc tái hiệu chỉnh định kỳ với chuyên gia — hiệu chỉnh là liên tục chứ không phải một lần.",
+      "feedbackIncorrect": "Cả „một lần 6/6 = mãi mãi”, „100% trên mọi câu trả lời tương lai”, lẫn „bộ chấm là khách quan” đều không đúng — cần có ngưỡng chấp nhận và việc tái hiệu chỉnh định kỳ. Hãy quay lại màn hình về ngưỡng chấp nhận chất lượng.",
+      "references": [
+        "M12.9",
+        "M12.10"
+      ]
+    }
+  ]
+}

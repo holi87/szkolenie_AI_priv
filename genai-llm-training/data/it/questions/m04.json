@@ -1,0 +1,371 @@
+{
+  "_meta": {
+    "module": "M4",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M4. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q025",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Il partecipante spiega che cos'è un embedding come rappresentazione numerica del significato di un testo.",
+      "prompt": "Un modello di embedding converte una frase della documentazione QA in un embedding. Che cosa rappresenta in realtà il vettore di numeri risultante?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Il significato semantico del testo in forma numerica — frasi di significato simile producono vettori simili."
+        },
+        {
+          "id": "B",
+          "text": "Il numero di parole nella frase e la sua lunghezza in caratteri."
+        },
+        {
+          "id": "C",
+          "text": "La trascrizione esatta delle lettere consecutive codificate come codici ASCII."
+        },
+        {
+          "id": "D",
+          "text": "Un punteggio numerico per la correttezza grammaticale e stilistica del testo."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Un embedding codifica il significato del testo come vettore di numeri, così che frasi vicine per significato (ad esempio «login» e «autenticazione») finiscano vicine tra loro.",
+      "feedbackIncorrect": "Un embedding non conta caratteri, lettere o grammatica — codifica il significato. Torna alla schermata «Una parola come vettore».",
+      "references": [
+        "M4.1",
+        "M4.2"
+      ]
+    },
+    {
+      "id": "Q026",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Il partecipante interpreta la cosine similarity come misura della direzione dei vettori, indipendente dalla lunghezza del testo.",
+      "prompt": "Nel corpus NotkaApp hai una breve descrizione «Reset della password: link e-mail valido 30 min» e un lungo paragrafo articolato che descrive la stessa procedura di reset. Perché la loro cosine similarity è alta nonostante la grande differenza di lunghezza dei testi?",
+      "options": [
+        {
+          "id": "A",
+          "text": "La cosine similarity misura l'angolo (la direzione) tra i vettori di significato, non la loro lunghezza — entrambi i testi puntano nella stessa direzione."
+        },
+        {
+          "id": "B",
+          "text": "La cosine similarity cresce con il numero di parole, quindi un testo più lungo ha sempre una similarità più alta."
+        },
+        {
+          "id": "C",
+          "text": "La cosine similarity confronta il numero di parole in comune, ed entrambi i testi contengono la parola «reset»."
+        },
+        {
+          "id": "D",
+          "text": "La cosine similarity restituisce sempre 1.0 quando i testi riguardano lo stesso prodotto."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "La cosine similarity calcola l'angolo tra i vettori, cioè la concordanza nella direzione del significato — la lunghezza/«peso» del testo non influisce sul risultato, quindi una descrizione breve e una lunga della stessa cosa sono vicine.",
+      "feedbackIncorrect": "Non è il numero di parole né i token in comune a decidere, ma la direzione del vettore di significato. Ripassa «Cosine similarity — direzione, non lunghezza».",
+      "references": [
+        "M4.3"
+      ]
+    },
+    {
+      "id": "Q027",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Il partecipante interpreta correttamente un ranking dei nearest neighbors e comprende la natura convenzionale della soglia di similarità.",
+      "prompt": "Una ricerca semantica ha restituito un elenco di nearest neighbors con i risultati: frammento A = 0.91, frammento B = 0.74, frammento C = 0.62. Come dovrebbe interpretarlo un tester?",
+      "options": [
+        {
+          "id": "A",
+          "text": "L'elenco è ordinato in modo decrescente per similarità, ma una posizione alta non garantisce la rilevanza dal punto di vista del business — il contenuto va verificato."
+        },
+        {
+          "id": "B",
+          "text": "Il frammento A con punteggio 0.91 è sicuramente la risposta corretta, perché supera la soglia di 0.9."
+        },
+        {
+          "id": "C",
+          "text": "I risultati sotto 0.75 sono sempre errati e possono essere scartati senza verifica."
+        },
+        {
+          "id": "D",
+          "text": "Un punteggio di 0.62 significa che il frammento C è corretto esattamente al 62% nel merito."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Il ranking ordina i risultati in modo decrescente, ma la soglia è convenzionale e dipende dal corpus — una posizione alta è un segnale, non una prova di rilevanza.",
+      "feedbackIncorrect": "Non esiste una soglia fissa e universale, e un punteggio numerico non è una «percentuale di correttezza». Torna a «Come leggere un ranking di similarità».",
+      "references": [
+        "M4.4"
+      ]
+    },
+    {
+      "id": "Q028",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Il partecipante seleziona le caratteristiche di una buona query per la ricerca semantica.",
+      "prompt": "Vuoi trovare nella documentazione di NotkaApp le informazioni sul periodo di validità del link di reset della password nella versione attuale. Quali pratiche di formulazione di una query semantica aumenteranno la rilevanza dei risultati? Seleziona tutte le risposte corrette.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Usare una frase completa che esprima l'intenzione, ad esempio «periodo di validità del link di reset della password», invece di una singola parola."
+        },
+        {
+          "id": "B",
+          "text": "Precisare il contesto e la versione, ad esempio «reset della password in NotkaApp v2», se ci interessa la formulazione attuale."
+        },
+        {
+          "id": "C",
+          "text": "Formulare la query come sola negazione, ad esempio «non token di sessione», per filtrare gli altri risultati."
+        },
+        {
+          "id": "D",
+          "text": "Digitare una singola parola generica «password», sperando che il modello indovini da solo l'intenzione."
+        },
+        {
+          "id": "E",
+          "text": "Includere l'oggetto chiave della query (il link di reset), per allontanarsi da concetti simili ma diversi (il token di sessione)."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "E"
+      ],
+      "feedbackCorrect": "Una frase completa che esprime l'intenzione, la precisazione del contesto/versione e l'indicazione dell'oggetto chiave orientano il vettore della query verso il significato giusto.",
+      "feedbackIncorrect": "Una singola parola è troppo generica, e la sola negazione funziona male nella ricerca semantica (il modello codifica comunque il tema «token di sessione»). Ripassa «Scelta della query per la ricerca semantica».",
+      "references": [
+        "M4.7"
+      ]
+    },
+    {
+      "id": "Q029",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Il partecipante riconosce le situazioni in cui un'alta similarità non significa una risposta corretta.",
+      "prompt": "In quali delle seguenti situazioni un alto punteggio di cosine similarity può trarre in inganno, restituendo un frammento semanticamente vicino ma scorretto dal punto di vista del business? Seleziona tutte le risposte corrette.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Il frammento «il login non funziona» risulta vicino alla query «il login funziona» (negazione/antonimo)."
+        },
+        {
+          "id": "B",
+          "text": "La descrizione della funzionalità di pagamento risulta vicina a una segnalazione di errore della stessa funzionalità (stesso tema, intenzione diversa)."
+        },
+        {
+          "id": "C",
+          "text": "Un frammento su un «token» di sicurezza risulta vicino a una query su un «token» nel senso di unità di un LLM (ambiguità/polisemia)."
+        },
+        {
+          "id": "D",
+          "text": "La vecchia formulazione di un requisito è molto simile a quella nuova, sebbene corretta sia solo quella nuova (versione obsoleta)."
+        },
+        {
+          "id": "E",
+          "text": "Due frammenti che descrivono esattamente la stessa procedura attuale di reset della password producono un'alta similarità."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "feedbackCorrect": "Sono quattro trappole classiche della similarità: negazione, stesso tema con intenzione diversa, polisemia e versione obsoleta — un embedding codifica il tema più fortemente delle piccole differenze critiche.",
+      "feedbackIncorrect": "L'opzione E è il caso in cui un'alta similarità è RILEVANTE (due descrizioni coerenti e attuali della stessa cosa). Ripassa «Trappola: simile ≠ corretto — 4 casi».",
+      "references": [
+        "M4.5",
+        "M4.6"
+      ]
+    },
+    {
+      "id": "Q030",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Il partecipante valuta perché gli embedding confondono differenze critiche e trae la giusta conclusione per il lavoro di QA.",
+      "prompt": "Perché un modello di embedding confonde coppie come «il login funziona» / «il login non funziona», e quale conclusione dovrebbe trarne un tester? Seleziona tutte le affermazioni corrette.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Un embedding codifica il tema e lo stile di una frase più fortemente delle differenze piccole ma critiche, come una negazione o un numero di versione."
+        },
+        {
+          "id": "B",
+          "text": "Un ranking di similarità è un segnale di supporto, non un verdetto — il risultato richiede la verifica del contenuto del frammento."
+        },
+        {
+          "id": "C",
+          "text": "Conviene supportare la ricerca con un filtraggio per metadati (ad esempio versione, tipo di documento) per limitare i risultati fuorvianti."
+        },
+        {
+          "id": "D",
+          "text": "Poiché il modello confonde queste coppie, la ricerca semantica andrebbe abbandonata del tutto nel QA."
+        },
+        {
+          "id": "E",
+          "text": "Basta alzare la soglia di similarità a 0.95 per eliminare automaticamente tutte le trappole."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Un embedding codifica il tema più fortemente di una negazione o di una versione, perciò trattiamo il ranking come un segnale che richiede la verifica del contenuto, supportato dal filtraggio per metadati.",
+      "feedbackIncorrect": "Abbandonare la ricerca (D) e una soglia rigida (E) sono soluzioni false — una coppia con una negazione può essere così simile che nessuna soglia la filtra. Ripassa «Approfondimento: perché il modello sbaglia».",
+      "references": [
+        "M4.6",
+        "M4.5"
+      ]
+    },
+    {
+      "id": "Q031",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Il partecipante diagnostica, su un caso concreto, perché un'alta similarità ha restituito un frammento scorretto dal punto di vista del business.",
+      "prompt": "Nel corpus NotkaApp inserisci la query «Dopo quanto tempo scade il link di reset della password?». Come risultato più vicino la ricerca restituisce DOC1: «Procedura di login: il token di sessione scade dopo 30 min di inattività» (0.86), e solo più in basso DOC3: «Reset della password: link e-mail valido 30 min, monouso» (0.71). Che cosa spiega meglio questo risultato?",
+      "options": [
+        {
+          "id": "A",
+          "text": "DOC1 è semanticamente vicino perché condivide con la query il motivo «qualcosa scade dopo 30 min», ma riguarda un oggetto diverso (il token di sessione), quindi la fonte corretta è DOC3 — questa è la trappola «simile ma concetto diverso» (stesso motivo, oggetto diverso)."
+        },
+        {
+          "id": "B",
+          "text": "DOC1 è la risposta corretta, perché ha un punteggio di similarità più alto di DOC3."
+        },
+        {
+          "id": "C",
+          "text": "Il risultato è un errore del modello di embedding, che va segnalato come difetto della libreria."
+        },
+        {
+          "id": "D",
+          "text": "DOC3 è scorretto, perché il suo punteggio di 0.71 è sotto la soglia di rilevanza universale di 0.75."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Il motivo condiviso «scade dopo 30 min» avvicina DOC1 alla query, anche se riguarda il token di sessione e non il link di reset — la fonte corretta è DOC3, nonostante il punteggio più basso.",
+      "feedbackIncorrect": "Il punteggio più alto non determina la rilevanza, e 0.75 non è alcuna soglia universale — è la classica trappola «simile ma concetto diverso». Ripassa le schermate «Trappola: simile ≠ corretto» e «Mappa semantica».",
+      "references": [
+        "M4.5",
+        "M4.9"
+      ]
+    },
+    {
+      "id": "Q032",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Il partecipante riconosce la trappola della negazione nei risultati di ricerca e sceglie una decisione di QA sicura.",
+      "prompt": "Sulla «Mappa semantica» inserisci la query «il login non funziona dopo l'aggiornamento». Il frammento più vicino (0.89) risulta essere «il login funziona correttamente», mentre il frammento «bug noto: il login si blocca dopo l'update v2» è solo terzo (0.77). Come valutare al meglio questa situazione e reagire?",
+      "options": [
+        {
+          "id": "A",
+          "text": "È la trappola della negazione: l'embedding codifica il tema condiviso «login», ma perde «non funziona» rispetto a «funziona» — bisogna verificare il contenuto e scegliere il frammento sul bug noto, nonostante il punteggio più basso."
+        },
+        {
+          "id": "B",
+          "text": "Accettare il frammento «il login funziona correttamente», perché ha la similarità più alta 0.89, e chiudere l'analisi."
+        },
+        {
+          "id": "C",
+          "text": "Considerare i due frammenti equivalenti, dato che entrambi riguardano il login, e non decidere oltre."
+        },
+        {
+          "id": "D",
+          "text": "Abbassare la soglia a 0.5 affinché il ranking sposti automaticamente il frammento giusto in prima posizione."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "«Funziona» e «non funziona» sono semanticamente vicini perché li distingue solo la negazione — il punteggio più alto qui è fuorviante, quindi verifichiamo il contenuto e scegliamo il frammento sul bug noto.",
+      "feedbackIncorrect": "Il punteggio più alto è la trappola della negazione, e manipolare la soglia non corregge la direzione del vettore — bisogna controllare il contenuto. Ripassa «Trappola: simile ≠ corretto» e «Mappa semantica».",
+      "references": [
+        "M4.5",
+        "M4.9"
+      ]
+    }
+  ]
+}

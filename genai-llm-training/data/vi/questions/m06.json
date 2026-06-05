@@ -1,0 +1,403 @@
+{
+  "_meta": {
+    "module": "M6",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M6. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q041",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "kolejnosc_procesu",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Học viên sắp xếp toàn bộ pipeline RAG từ tài liệu nguồn đến câu trả lời kèm trích dẫn theo đúng thứ tự.",
+      "prompt": "Hãy sắp xếp các bước của một pipeline RAG (Retrieval-Augmented Generation) đầy đủ theo đúng thứ tự — từ khâu chuẩn bị kho ngữ liệu „SklepDemo” đến câu trả lời hoàn chỉnh kèm trích dẫn.",
+      "sequence": [
+        "Chia tài liệu nguồn thành các đoạn (chunking)",
+        "Tính toán embeddings cho các đoạn",
+        "Lưu các đoạn và embeddings vào chỉ mục / cơ sở dữ liệu vector",
+        "Tiếp nhận truy vấn của người dùng",
+        "Tìm các đoạn gần nhất (retrieval, top-k)",
+        "Chèn ngữ cảnh đã truy xuất vào prompt và sinh câu trả lời kèm trích dẫn"
+      ],
+      "feedbackCorrect": "Các đoạn phải được tạo ra và đưa vào chỉ mục trước (chunking → embeddings → chỉ mục), trước khi truy vấn có thể kích hoạt retrieval, và chỉ ngữ cảnh đã truy xuất mới cấp dữ liệu cho khâu sinh kèm trích dẫn.",
+      "feedbackIncorrect": "Giai đoạn lập chỉ mục (chunking, embeddings, chỉ mục) độc lập với truy vấn và luôn diễn ra trước nó; retrieval phải đứng trước generation vì nó cung cấp ngữ cảnh cho khâu này. Hãy xem lại màn hình „Pipeline RAG từ đầu đến cuối”.",
+      "references": [
+        "M6.2",
+        "M6.3"
+      ]
+    },
+    {
+      "id": "Q042",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "kolejnosc_procesu",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Học viên sắp xếp đúng thứ tự giai đoạn dựng chỉ mục (offline) của pipeline RAG trên kho ngữ liệu tài liệu yêu cầu.",
+      "prompt": "Nhóm chuẩn bị chỉ mục cho kho ngữ liệu yêu cầu „SklepDemo” trước khi có ai đặt câu hỏi. Hãy sắp xếp các bước của giai đoạn lập chỉ mục này theo đúng thứ tự.",
+      "sequence": [
+        "Thu thập các tài liệu nguồn của kho ngữ liệu „SklepDemo”",
+        "Chia mỗi tài liệu thành các đoạn (chunking), giữ lại tiêu đề và mã định danh trong metadata",
+        "Tính toán embeddings cho từng đoạn",
+        "Lưu các đoạn cùng với embeddings và metadata vào chỉ mục / cơ sở dữ liệu vector"
+      ],
+      "feedbackCorrect": "Giai đoạn lập chỉ mục làm việc trên tài liệu (không phải trên truy vấn): trước hết là thu thập, rồi chia thành đoạn, rồi tính embeddings, cuối cùng lưu vào chỉ mục sẵn sàng cho retrieval.",
+      "feedbackIncorrect": "Chỉ có thể tính embeddings cho các đoạn đã tồn tại, và đoạn được đưa vào chỉ mục cùng với embedding và metadata — thứ tự bị ràng buộc bởi sự phụ thuộc dữ liệu. Hãy quay lại phần mô tả về chunking và embeddings.",
+      "references": [
+        "M6.2",
+        "M6.4"
+      ]
+    },
+    {
+      "id": "Q043",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "kolejnosc_procesu",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Học viên sắp xếp đúng thứ tự đường xử lý truy vấn (query-time) có reranking và kiểm soát mức độ bám nguồn (grounding), nhận diện vị trí của từng bước.",
+      "prompt": "Chỉ mục của kho ngữ liệu „SklepDemo” đã sẵn sàng. Hãy sắp xếp các bước của đường xử lý một truy vấn người dùng, bao gồm cả việc sắp xếp lại kết quả và kiểm soát mức độ bám nguồn của câu trả lời.",
+      "sequence": [
+        "Tiếp nhận truy vấn của người dùng và tính embedding của nó",
+        "Tìm các đoạn ứng viên trong chỉ mục (retrieval, top-k)",
+        "Sắp xếp lại các ứng viên theo mức độ liên quan (reranking)",
+        "Chèn các đoạn tốt nhất làm ngữ cảnh vào prompt",
+        "Sinh câu trả lời kèm trích dẫn tới các đoạn",
+        "Kiểm tra mức độ bám nguồn (grounding): liệu mỗi câu có cơ sở trong đoạn đã truy xuất hay không"
+      ],
+      "feedbackCorrect": "Reranking làm việc trên kết quả của retrieval sơ bộ (nên nó đứng sau retrieval và trước khi chèn ngữ cảnh), còn kiểm tra grounding diễn ra sau khi sinh câu trả lời — nó đối chiếu văn bản đã tạo với nguồn.",
+      "feedbackIncorrect": "Reranking không có gì để sắp xếp nếu không có retrieval trước đó, còn grounding đánh giá câu trả lời đã hoàn thiện nên nó đứng cuối. Hãy xem lại phần đào sâu kỹ thuật về reranking và grounding.",
+      "references": [
+        "M6.3",
+        "M6.9"
+      ]
+    },
+    {
+      "id": "Q044",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Học viên nhận diện vai trò của phần gối đầu (overlap) khi chia tài liệu yêu cầu thành các đoạn.",
+      "prompt": "Khi chia tài liệu yêu cầu thành các đoạn (chunking), người ta áp dụng phần gối đầu (overlap) giữa các đoạn liền kề. Để làm gì?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Để một câu hoặc một tiêu chí chấp nhận nằm ngay ranh giới cắt không bị xé rời và vẫn nằm trong ngữ cảnh mạch lạc của ít nhất một đoạn"
+        },
+        {
+          "id": "B",
+          "text": "Để giảm số lượng đoạn và qua đó giảm kích thước chỉ mục vector"
+        },
+        {
+          "id": "C",
+          "text": "Để mô hình sinh câu trả lời không còn phải trích dẫn nguồn nữa"
+        },
+        {
+          "id": "D",
+          "text": "Để tăng tốc việc tính embeddings cho toàn bộ kho ngữ liệu"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Overlap nhân bản một đoạn văn bản tại ranh giới cắt, nhờ đó nội dung bị cắt ở một đoạn (ví dụ một tiêu chí chấp nhận) vẫn giữ được ngữ cảnh trong đoạn liền kề.",
+      "feedbackIncorrect": "Overlap làm tăng chứ không giảm số lượng và dung lượng các đoạn; mục đích của nó là bảo vệ ngữ cảnh tại các ranh giới cắt, không phải hiệu năng hay trích dẫn. Hãy xem lại màn hình về chunking và tham số overlap.",
+      "references": [
+        "M6.4"
+      ]
+    },
+    {
+      "id": "Q045",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Học viên chọn RAG thay vì fine-tuning cho nhu cầu cần kiến thức thực tế mới, có thể trích dẫn.",
+      "prompt": "Nhóm QA muốn trợ lý trả lời các câu hỏi về yêu cầu hiện hành của „SklepDemo” và ở mỗi câu trả lời chỉ ra đoạn đặc tả cụ thể. Đặc tả thay đổi sau mỗi sprint. Cách tiếp cận nào là phù hợp?",
+      "options": [
+        {
+          "id": "A",
+          "text": "RAG — vì cần kiến thức thực tế mới, hay thay đổi, với khả năng trích dẫn nguồn"
+        },
+        {
+          "id": "B",
+          "text": "Fine-tuning — vì tinh chỉnh mô hình trên đặc tả sẽ dạy nó nội dung yêu cầu một cách lâu dài"
+        },
+        {
+          "id": "C",
+          "text": "Fine-tuning — vì chỉ mô hình đã tinh chỉnh mới có thể đưa ra trích dẫn tới tài liệu"
+        },
+        {
+          "id": "D",
+          "text": "Không cần RAG lẫn fine-tuning — chỉ cần một prompt dài hơn với các chỉ dẫn chung về phong cách là đủ"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "RAG cung cấp cho mô hình các đoạn mới từ đặc tả hiện hành và cho phép trích dẫn chúng; dữ kiện thực tế thay đổi sau mỗi sprint là trường hợp kinh điển của RAG, không phải tinh chỉnh.",
+      "feedbackIncorrect": "Fine-tuning cố định phong cách/hành vi chứ không phải dữ kiện thực tế hiện hành, và không bảo đảm trích dẫn tới nguồn — với đặc tả hay thay đổi, nó sẽ nhanh chóng lỗi thời. Hãy xem lại màn hình „RAG hay fine-tuning” và lời phản bác lầm tưởng về việc dạy mô hình tài liệu.",
+      "references": [
+        "M6.6"
+      ]
+    },
+    {
+      "id": "Q046",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Học viên phân biệt các dấu hiệu của lỗi retrieval, lỗi generation và lỗi nguồn dựa trên câu trả lời và ngữ cảnh đã truy xuất.",
+      "prompt": "Tình huống nào chỉ ra rõ ràng đây là lỗi sinh (generation), chứ không phải lỗi tìm kiếm (retrieval) hay lỗi nguồn?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Đoạn đúng với tiêu chí đúng đã được đưa vào ngữ cảnh, vậy mà câu trả lời của mô hình lại mâu thuẫn với nó"
+        },
+        {
+          "id": "B",
+          "text": "Trong số các đoạn đã truy xuất hoàn toàn không có đoạn chứa câu trả lời cho câu hỏi"
+        },
+        {
+          "id": "C",
+          "text": "Mô hình trích dẫn đoạn đúng, nhưng chính nội dung trong tài liệu nguồn đã lỗi thời"
+        },
+        {
+          "id": "D",
+          "text": "Top-k được đặt thành 0, nên không có đoạn nào lọt vào prompt"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Khi đoạn đúng đã có trong ngữ cảnh nhưng câu trả lời lại mâu thuẫn với nó, khâu sinh đã thất bại — mô hình đã dùng sai một nguồn đúng.",
+      "feedbackIncorrect": "Thiếu đoạn đúng (B, D) là lỗi retrieval, còn trích dẫn đúng nhưng nội dung tài liệu sai (C) là lỗi nguồn. Hãy xem lại màn hình „Ba tầng lỗi trong RAG”.",
+      "references": [
+        "M6.7",
+        "M6.8"
+      ]
+    },
+    {
+      "id": "Q047",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Học viên chọn chiến lược chunking bảo toàn tính trọn vẹn của một yêu cầu đơn lẻ cùng với mã định danh của nó.",
+      "prompt": "Trong kho ngữ liệu „SklepDemo”, mỗi yêu cầu có một mã định danh (ví dụ „WYM-014”) và tiêu chí chấp nhận riêng, đôi khi dài vài câu. Trước đây, việc cắt tùy tiện theo một số ký tự cố định khiến tiêu chí bị cắt làm đôi và retrieval trả về đoạn không có kết luận. Nên chọn chiến lược chunking nào?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Chia theo từng yêu cầu — một yêu cầu kèm mã định danh và tiêu chí chấp nhận đầy đủ = một đoạn mạch lạc, mã định danh nằm trong metadata"
+        },
+        {
+          "id": "B",
+          "text": "Giữ cách cắt cố định theo cùng một số ký tự, chỉ giảm kích thước đoạn để có nhiều đoạn hơn"
+        },
+        {
+          "id": "C",
+          "text": "Đưa cả tài liệu vào làm một đoạn duy nhất, để không thể cắt mất bất cứ thứ gì"
+        },
+        {
+          "id": "D",
+          "text": "Chia ngẫu nhiên, nhưng tăng top-k với hy vọng đoạn đúng dù sao cũng sẽ trúng"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Ranh giới logic „một yêu cầu = một đoạn” với mã định danh trong metadata giữ được tiêu chí trọn vẹn và nguồn trích dẫn rõ ràng — đúng thứ đã thiếu khi cắt cố định.",
+      "feedbackIncorrect": "Các đoạn cố định nhỏ hơn cắt tiêu chí còn thường xuyên hơn, đưa cả tài liệu làm một đoạn phá hỏng độ liên quan của retrieval, còn chia ngẫu nhiên với top-k lớn không bảo đảm tính trọn vẹn của yêu cầu. Hãy xem lại quy tắc QA về chunking theo yêu cầu.",
+      "references": [
+        "M6.4",
+        "M6.5"
+      ]
+    },
+    {
+      "id": "Q048",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Học viên quyết định giữa RAG và fine-tuning, nhận diện nhu cầu về định dạng đầu ra cố định thay vì dữ kiện thực tế mới.",
+      "prompt": "Trợ lý QA luôn phải trả về báo cáo kết quả thực thi kiểm thử theo bố cục mục và giọng văn cố định của công ty, bất kể câu hỏi là gì. Nội dung báo cáo đến từ log kiểm thử hiện tại, nhưng vấn đề ở đây là định dạng và phong cách lặp lại. Nên chọn gì cho riêng yêu cầu về định dạng?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Fine-tuning (hoặc mẫu trong prompt) — cố định phong cách và định dạng đầu ra là nhiệm vụ tinh chỉnh điển hình, không phải dữ kiện thực tế mới"
+        },
+        {
+          "id": "B",
+          "text": "RAG — vì chỉ retrieval mới có thể áp đặt cho mô hình bố cục mục cố định của báo cáo"
+        },
+        {
+          "id": "C",
+          "text": "RAG trên một tài liệu mô tả định dạng — vì mọi khía cạnh hành vi của mô hình đều nên giải quyết bằng retrieval"
+        },
+        {
+          "id": "D",
+          "text": "Không cách nào trong số đó — định dạng đầu ra hoàn toàn không thể kiểm soát được trong các mô hình LLM"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Phong cách và định dạng đầu ra cố định là hành vi của mô hình, được cố định bằng fine-tuning (hoặc mẫu trong prompt) — đây không phải kiến thức thực tế mới cần đến RAG.",
+      "feedbackIncorrect": "RAG chịu trách nhiệm về dữ kiện thực tế mới và trích dẫn, chứ không phải áp đặt định dạng; lầm tưởng „mọi thứ đều bằng retrieval” là sai, và định dạng đầu ra hoàn toàn có thể kiểm soát được. Hãy xem lại sự phân biệt RAG với fine-tuning.",
+      "references": [
+        "M6.6"
+      ]
+    },
+    {
+      "id": "Q049",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Học viên nhận diện tầng lỗi dựa trên ngữ cảnh đã truy xuất và trích dẫn trong câu trả lời của mô hình.",
+      "prompt": "Trên kho ngữ liệu „NotkaApp” (DOC1: token phiên hết hạn sau 30 phút; DOC3: liên kết đặt lại mật khẩu có hiệu lực 30 phút, dùng một lần) có câu hỏi „Liên kết đặt lại mật khẩu hết hạn sau bao lâu?”. Mô hình chỉ truy xuất và trích dẫn DOC1 và trả lời: „Hết hạn sau 30 phút không hoạt động [DOC1]”. Con số tình cờ trùng khớp, nhưng trích dẫn liên quan đến token phiên, không phải liên kết đặt lại. Tầng nào đã thất bại?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Retrieval — đã truy xuất một đoạn tương tự về ngữ nghĩa nhưng không đúng (DOC1), còn đoạn đúng (DOC3) lại thiếu trong ngữ cảnh"
+        },
+        {
+          "id": "B",
+          "text": "Generation — ngữ cảnh đã có DOC3, nhưng mô hình vẫn tóm tắt sai đoạn đúng đó"
+        },
+        {
+          "id": "C",
+          "text": "Lỗi nguồn — DOC3 chứa thông tin sai về thời gian hiệu lực của liên kết"
+        },
+        {
+          "id": "D",
+          "text": "Không có lỗi — vì con số „30 phút” đã khớp, câu trả lời hoàn toàn bám nguồn"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Trích dẫn chỉ tới DOC1 (token phiên) chứ không phải DOC3 đúng (liên kết đặt lại) — đây là trường hợp similar-but-useless kinh điển: retrieval đã thất bại, dù con số tình cờ khớp.",
+      "feedbackIncorrect": "DOC3 không lọt vào ngữ cảnh, nên đây không phải lỗi generation hay lỗi nguồn; con số trùng khớp tình cờ không có nghĩa là bám nguồn — trích dẫn liên quan đến tài liệu sai. Hãy xem lại cách chẩn đoán các tầng lỗi và cái bẫy similar-but-useless.",
+      "references": [
+        "M6.8",
+        "M6.7"
+      ]
+    },
+    {
+      "id": "Q050",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Học viên chỉ ra các dấu hiệu cho thấy lỗi tìm kiếm (retrieval) trong câu trả lời RAG.",
+      "prompt": "Những dấu hiệu nào dưới đây cho thấy trong pipeline RAG khâu tìm kiếm (retrieval) đã thất bại, chứ không phải khâu sinh (generation)? Hãy chọn tất cả đáp án đúng.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Trong số các đoạn đã truy xuất (top-k) hoàn toàn không có đoạn chứa câu trả lời cho câu hỏi"
+        },
+        {
+          "id": "B",
+          "text": "Nguồn đúng đã bị loại khỏi chỉ mục, nên không thể được truy xuất"
+        },
+        {
+          "id": "C",
+          "text": "Top-k được đặt giá trị quá nhỏ và đoạn đúng rơi ra ngoài danh sách đã truy xuất"
+        },
+        {
+          "id": "D",
+          "text": "Đã truy xuất đoạn đúng với tiêu chí đúng, nhưng câu trả lời của mô hình lại mâu thuẫn với nó"
+        },
+        {
+          "id": "E",
+          "text": "Đoạn đã truy xuất và trích dẫn là đúng, nhưng nội dung trong chính tài liệu nguồn đã lỗi thời"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Thiếu đoạn đúng trong top-k, nguồn bị loại bỏ và top-k quá nhỏ đều là những tình huống mà ngữ cảnh đúng không đến được mô hình — tức là lỗi retrieval.",
+      "feedbackIncorrect": "Mâu thuẫn dù ngữ cảnh đúng (D) là lỗi generation, còn nội dung lỗi thời trong tài liệu được trích dẫn đúng (E) là lỗi nguồn — không cái nào liên quan đến tìm kiếm. Hãy xem lại ba tầng lỗi trong RAG.",
+      "references": [
+        "M6.7",
+        "M6.8"
+      ]
+    }
+  ]
+}

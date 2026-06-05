@@ -1,0 +1,180 @@
+{
+  "_meta": {
+    "issue": "#22 [22][M4] Wdroż moduły M7-M9",
+    "storyboard": "docs/storyboard/m08-qa-use-cases.md",
+    "interaction": "QA workbench (kind: rubric, ĆWICZENIOWE — rubryka R4-qa-workbench, bez progu)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (NotkaApp, SklepDemo, przyklad.test, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Egzemplarz typu rubric ĆWICZENIOWY: pominięto passThreshold i recordsPractical (feedback bez bramki). M8 obowiązkowy S2/S3, opcjonalny S1 — bez wariantu skróconego, ten sam ciąg ekranów dla wszystkich ścieżek. Treść interakcji oparta na SC-QA-01 (reset hasła NotkaApp)."
+  },
+  "module": "M8",
+  "intro": "La GenAI accélère le travail d'AQ : elle ébauche des cas de test, des listes de contrôle de risques et la revue de la documentation. Mais un LLM génère le texte le plus probable, et non une vérité vérifiée — c'est pourquoi le testeur reste le décideur et le modèle un assistant.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Pourquoi la GenAI en AQ — et où s'arrête son rôle",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Un LLM accélère la création et l'analyse des artefacts d'AQ : cas de test, listes de contrôle de risques, revue de la documentation. Il génère toutefois le texte le plus probable, et non une vérité vérifiée — c'est vous qui décidez de ce qui finit dans la documentation." },
+        { "kind": "list", "items": [
+          "E1 — vous générez des cas de test à partir d'une exigence et vous repérez les lacunes de couverture.",
+          "E2 — vous détectez les doublons et les tests factices (sans réelle valeur de vérification).",
+          "E3 — vous créez une liste de contrôle de risques (risk-based testing).",
+          "E4 — vous évaluez si l'output convient à la documentation d'AQ après un contrôle de fond.",
+          "E5 — vous indiquez où le LLM est un assistant, et où c'est l'humain qui prend la décision."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "En quoi cela diffère-t-il du M7", "text": "Le M7 enseignait la rédaction de prompts. Le M8 se concentre sur l'application du LLM à des tâches d'AQ réelles et sur l'évaluation de son output. Principe directeur : le LLM comme assistant, le testeur comme décideur." }
+      ]
+    },
+    {
+      "id": "s2-generowanie",
+      "title": "Générer des cas de test à partir d'une exigence",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "À partir d'une exigence synthétique (par ex. « Champ mot de passe : min. 8 caractères, min. 1 chiffre »), vous demandez au LLM des cas de test : correct, limite, négatif. Un bon prompt indique le rôle, l'exigence et le format de sortie (tableau : ID | étapes | données | résultat attendu)." },
+        { "kind": "list", "items": [
+          "CT correct — le mot de passe respecte toutes les règles, l'inscription aboutit.",
+          "CT limite — mot de passe de longueur exactement minimale (8 caractères).",
+          "CT négatif — mot de passe sans chiffre, message d'erreur attendu."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Conclusion", "text": "Le LLM fournit une ossature rapide liée aux critères d'acceptation (acceptance criteria) et à la traçabilité (traceability) exigence→test. C'est un point de départ, pas un jeu prêt à l'emploi." }
+      ]
+    },
+    {
+      "id": "s3-braki-pokrycia",
+      "title": "Lacunes de couverture — ce que le LLM n'a pas imaginé",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Lisez l'output en cherchant les lacunes de couverture (coverage gaps) : absence de cas limites, absence de chemins d'erreur, états omis, absence de données de test pour les valeurs extrêmes. Technique : confrontez le jeu de cas générés à une liste de catégories de risque et cherchez les cases vides." },
+        { "kind": "callout", "variant": "warn", "title": "Exemple synthétique", "text": "Pour la connexion, le LLM a couvert le « happy path », mais a omis le verrouillage après 5 tentatives échouées. Le plus souvent, ce sont les limites, les chemins d'erreur et les données extrêmes qui manquent — c'est là qu'il faut chercher les lacunes." }
+      ]
+    },
+    {
+      "id": "s4-duplikaty-pozorne",
+      "title": "Doublons et tests factices",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Test factice", "original": "test sans réelle valeur de vérification", "text": "cas dont l'assertion ne vérifie rien — pas de résultat attendu, « le test passe toujours »." },
+        { "kind": "definition", "term": "Doublon", "text": "deux cas vérifiant les mêmes conditions sous une description différente ; ils gonflent le jeu sans apporter de nouvelle couverture." },
+        { "kind": "callout", "variant": "warn", "title": "Conclusion", "text": "Un plus grand nombre de cas ≠ une meilleure couverture. Un doublon augmente le coût de maintenance, et un test factice donne un faux sentiment de sécurité." }
+      ]
+    },
+    {
+      "id": "s5-checklista-ryzyk",
+      "title": "Liste de contrôle de risques pour une fonctionnalité",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Le LLM ébauche une liste de contrôle de risques (risk-based testing) par catégorie : sécurité, données, performance, accessibilité, conformité. Chaque entrée : risque + impact + domaine à tester." },
+        { "kind": "table",
+          "title": "Liste de contrôle synthétique — fonction « réinitialisation du mot de passe » de NotkaApp",
+          "headers": ["Catégorie", "Risque", "Domaine à tester"],
+          "rows": [
+            ["Sécurité", "Le lien de réinitialisation fonctionne après expiration ou plusieurs fois", "Validité de 30 min, usage unique du lien"],
+            ["Données", "E-mail de l'utilisateur divulgué dans un message d'erreur", "Contenu de la réponse pour un compte inconnu"],
+            ["Accessibilité", "Formulaire inutilisable au lecteur d'écran", "Conformité WCAG, focus et étiquettes"]
+          ],
+          "textAlt": "Tableau de la liste de contrôle de risques pour la réinitialisation du mot de passe de NotkaApp : catégorie Sécurité — risque que le lien fonctionne après expiration ou plusieurs fois, le domaine étant la validité de 30 min et l'usage unique ; catégorie Données — risque de divulgation de l'e-mail dans une erreur, le domaine étant le contenu de la réponse pour un compte inconnu ; catégorie Accessibilité — risque d'absence de prise en charge du lecteur d'écran, le domaine étant la conformité WCAG, le focus et les étiquettes." },
+        { "kind": "callout", "variant": "info", "text": "Le LLM propose des catégories, le testeur les priorise et écarte celles qui sont hors sujet." }
+      ]
+    },
+    {
+      "id": "s6-do-dokumentacji",
+      "title": "Cet output convient-il à la documentation d'AQ ?",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Avant de coller l'output dans la documentation, faites un contrôle de fond (review checklist) : conformité à l'exigence, exhaustivité, absence de faits inventés (hallucinations), vérifiabilité, absence de données sensibles." },
+        { "kind": "list", "ordered": true, "items": [
+          "Accepter — output conforme à l'exigence, complet, vérifiable, sans données sensibles.",
+          "Corriger — légères lacunes ou un fait inventé à corriger au regard de l'exigence.",
+          "Rejeter — faits contredisant l'exigence ou données sensibles ; ne pas utiliser sans retravail."
+        ] },
+        { "kind": "callout", "variant": "info", "text": "Lien vers le M11 (vérification de l'output) et le M10 (données et confidentialité)." }
+      ]
+    },
+    {
+      "id": "s7-asystent-decydent",
+      "title": "Assistant ou décideur — où placer la limite",
+      "type": "decision",
+      "blocks": [
+        { "kind": "paragraph", "text": "Le LLM peut soutenir des tâches en tant qu'assistant : ébauche de cas, brouillon de liste de contrôle, remue-méninges. La décision revient à l'humain (human-in-the-loop) : acceptation des cas, évaluation du risque critique, validation pour la release." },
+        { "kind": "table",
+          "title": "Assistant vs décideur — 3 situations synthétiques",
+          "headers": ["Situation", "Assistant (LLM)", "Décideur (humain)"],
+          "rows": [
+            ["Ébauche de cas de test à partir d'une exigence", "Génère une proposition", "Valide le périmètre"],
+            ["Évaluation du risque critique", "Propose des catégories", "Décide de la priorité"],
+            ["Validation de la mise en release", "Ne décide pas", "Prend la décision"]
+          ],
+          "textAlt": "Tableau de trois situations d'AQ réparties entre le rôle d'assistant (LLM) et celui de décideur (humain) : ébauche de cas de test — le LLM génère une proposition, l'humain valide le périmètre ; évaluation du risque critique — le LLM propose des catégories, l'humain décide de la priorité ; validation de la mise en release — le LLM ne décide pas, l'humain prend la décision." },
+        { "kind": "callout", "variant": "safe", "title": "La limite", "text": "Plus l'enjeu de la décision est élevé (release, risque critique, clôture d'un défaut), plus le rôle revient fortement à l'humain. Le LLM accélère, mais ne valide pas." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "rubric",
+    "id": "m8-qa-workbench",
+    "title": "QA workbench",
+    "intro": "Exigence NotkaApp (fictive) : l'utilisateur réinitialise son mot de passe via un lien e-mail valable 30 minutes ; après 3 tentatives de connexion erronées, le compte est bloqué pour 15 minutes. Le LLM a généré des cas : TC1 — réinitialisation correcte ; TC2 — lien expiré après 30 min ; TC3 — 3 mots de passe erronés → blocage du compte. Évaluez cet output selon les cinq axes de la rubrique. C'est un exercice en mode apprentissage — vous recevez un feedback, sans seuil de réussite.",
+    "rubricId": "R4-qa-workbench",
+    "scaleMax": 5,
+    "criteria": [
+      { "id": "K1", "name": "Couverture des tests", "points": 1,
+        "prompt": "Quels comportements de l'exigence NotkaApp l'output du LLM COUVRE-t-il réellement (TC1–TC3) ?",
+        "hint": "L'output couvre le happy path de la réinitialisation, l'expiration du lien après 30 min et le blocage du compte après 3 tentatives erronées.",
+        "options": [
+          { "id": "a", "text": "Réinitialisation correcte (TC1), expiration du lien après 30 min (TC2) et blocage du compte après 3 tentatives erronées (TC3)." },
+          { "id": "b", "text": "Réutilisation du même lien de réinitialisation et sessions utilisateur parallèles." },
+          { "id": "c", "text": "Uniquement le cosmétique : couleur du bouton « Réinitialiser le mot de passe » et logo sur la page de connexion." }
+        ], "correctOptionIds": ["a"] },
+      { "id": "K2", "name": "Lacunes de couverture", "points": 1,
+        "prompt": "Quels cas MANQUENT dans l'output du LLM au regard de l'exigence NotkaApp ? Cochez exactement toutes les lacunes.",
+        "hint": "Trois lacunes ont été omises : e-mail vide, lien à usage unique utilisé deux fois et sessions parallèles. L'expiration du lien (TC2) et le blocage après 3 tentatives (TC3) sont déjà couverts.",
+        "options": [
+          { "id": "a", "text": "Réinitialisation avec un champ e-mail vide (validation des données d'entrée)." },
+          { "id": "b", "text": "Réutilisation du même lien de réinitialisation (lien à usage unique utilisé deux fois)." },
+          { "id": "c", "text": "Sessions parallèles de réinitialisation du mot de passe pour le même compte." },
+          { "id": "d", "text": "Expiration du lien après 30 minutes — c'est déjà couvert par TC2." }
+        ], "correctOptionIds": ["a", "b", "c"] },
+      { "id": "K3", "name": "Tests factices / doublons", "points": 1,
+        "prompt": "On a ajouté au jeu le TC4 : « Ouvrir le formulaire de réinitialisation et vérifier que le formulaire s'ouvre ; résultat attendu : aucun ». Comment le qualifier ?",
+        "hint": "Sans résultat attendu défini, l'assertion ne vérifie rien — c'est un test factice, pas un cas limite de valeur.",
+        "options": [
+          { "id": "a", "text": "Test factice — pas de résultat attendu, l'assertion ne vérifie en réalité rien." },
+          { "id": "b", "text": "Cas limite correct pour la validité de 30 minutes du lien." },
+          { "id": "c", "text": "Cas négatif de valeur pour le scénario de blocage du compte." }
+        ], "correctOptionIds": ["a"] },
+      { "id": "K4", "name": "Risques / hypothèses erronées", "points": 1,
+        "prompt": "Dans une note à l'output, le LLM a écrit : « le blocage du compte dure 24 heures, et le lien de réinitialisation est valable indéfiniment ». Comment l'évaluer au regard de l'exigence ?",
+        "hint": "L'exigence dit : blocage de 15 minutes, lien valable 30 minutes. Les valeurs 24 h et « indéfiniment » sont des faits inventés (hallucinations) contredisant l'exigence — des hypothèses erronées à rejeter ou corriger.",
+        "options": [
+          { "id": "a", "text": "Hypothèses erronées contredisant l'exigence (24 h et « indéfiniment » inventés) — corriger ou rejeter avant utilisation." },
+          { "id": "b", "text": "Acceptable — le LLM donne généralement des valeurs plus proches de la réalité que l'exigence." },
+          { "id": "c", "text": "Accepter avec une note précisant que les valeurs peuvent varier selon la version de l'application." }
+        ], "correctOptionIds": ["a"] },
+      { "id": "K5", "name": "Limite de décision (vérification humaine)", "points": 1,
+        "prompt": "Comment répartir les rôles entre le LLM et le testeur pour ce jeu, selon le principe « assistant, pas décideur » ?",
+        "hint": "Le LLM ébauche les cas et la liste de contrôle de risques ; l'acceptation du périmètre, l'évaluation du risque critique et la décision de release reviennent à l'humain (human-in-the-loop).",
+        "options": [
+          { "id": "a", "text": "Le LLM génère une ébauche de cas et une liste de contrôle de risques, et le testeur valide le périmètre et décide de l'admission à la release." },
+          { "id": "b", "text": "Le LLM valide seul la mise en production si les tests générés passent." },
+          { "id": "c", "text": "Le LLM évalue en dernier ressort le risque critique et clôt les défauts sans la participation du testeur." }
+        ], "correctOptionIds": ["a"] }
+    ]
+  },
+  "summary": {
+    "points": [
+      "E1 — à partir d'une exigence, vous générez une ébauche de cas de test et vous lisez l'output en cherchant les lacunes de couverture (limites, chemins d'erreur, données extrêmes).",
+      "E2 — vous reconnaissez les doublons (mêmes conditions sous une description différente) et les tests factices (assertion sans résultat attendu) ; plus de cas ≠ une meilleure couverture.",
+      "E3 — vous ébauchez une liste de contrôle de risques (sécurité, données, performance, accessibilité, conformité), et vous la priorisez vous-même.",
+      "E4 — avant la documentation, vous appliquez un contrôle de fond : accepter / corriger / rejeter (conformité à l'exigence, absence d'hallucinations, absence de données sensibles).",
+      "E5 — le LLM est un assistant ; l'acceptation, le risque critique et la release reviennent à l'humain (human-in-the-loop)."
+    ],
+    "checklist": [
+      "L'output couvre-t-il le happy path, les limites et les chemins d'erreur de l'exigence ?",
+      "Ai-je repéré les lacunes de couverture ainsi que les doublons et les tests factices ?",
+      "Ai-je vérifié l'output en cherchant des faits contredisant l'exigence (hallucinations) ?",
+      "Les décisions sur le risque critique et la release sont-elles restées du ressort de l'humain ?"
+    ],
+    "checklistTitle": "Liste de contrôle — évaluation de l'output du LLM en AQ",
+    "nextStep": "Étape suivante : M9 — intégrations et agents (pour S3 et en option S2) ; pour S1, retour à la voie obligatoire."
+  }
+}

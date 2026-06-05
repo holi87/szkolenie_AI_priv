@@ -1,0 +1,292 @@
+{
+  "_meta": {
+    "issue": "#22 [22][M4] Wdroż moduły M7-M9",
+    "storyboard": "docs/storyboard/m07-prompt-engineering.md",
+    "interaction": "Prompt clinic (kind: rubric, zadanie praktyczne R1-prompt)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (SklepDemo, fikcyjne wymagania). ZERO realnych danych klienta/PII.",
+    "note": "Egzemplarz referencyjny typu rubric z zadaniem praktycznym. Wariant S1 SKRÓCONY: ekrany 3-4 scalone (onlyForPaths), few-shot zredukowany."
+  },
+  "module": "M7",
+  "intro": "Un prompt ambiguo = un resultado ambiguo = tiempo perdido y el riesgo de que el tester tome una alucinación por un hecho. Un buen prompt aumenta el control sobre el modelo y facilita la verificación del output.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "¿Para qué necesita el tester el prompt engineering?",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "El objetivo del módulo es escribir prompts que produzcan un output reproducible y verificable para el trabajo de QA. Conocerás la anatomía del prompt, la mejora de un prompt deficiente, el few-shot y los límites del prompt."
+        }
+      ]
+    },
+    {
+      "id": "s2-anatomia",
+      "title": "Anatomía del prompt: 7 elementos",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "list",
+          "items": [
+            "Rol — desde qué perspectiva responde el modelo (p. ej., «eres ingeniero de QA»).",
+            "Objetivo — qué se debe producir.",
+            "Contexto — la información de fondo que el modelo no conoce (un fragmento de un requisito sintético).",
+            "Datos de entrada — el material concreto que hay que procesar.",
+            "Restricciones — qué NO debe hacer el modelo / límites.",
+            "Criterios de calidad — cómo sabremos que el output es bueno (medibles).",
+            "Formato de salida — la estructura (tabla, lista, JSON) que facilita la verificación."
+          ]
+        },
+        {
+          "kind": "paragraph",
+          "onlyForPaths": [
+            "S2",
+            "S3"
+          ],
+          "text": "Ejemplo en una tarea de QA: «Eres ingeniero de QA. Genera casos de prueba para el inicio de sesión en SklepDemo según el requisito indicado; no inventes campos que no figuren en el requisito; devuelve una tabla: ID | pasos | datos | resultado esperado.»"
+        }
+      ]
+    },
+    {
+      "id": "s34-s1-min",
+      "title": "Elementos del prompt — lo mínimo (S1)",
+      "type": "content",
+      "onlyForPaths": [
+        "S1"
+      ],
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "En la versión abreviada, recuerda lo mínimo: indica el rol y el objetivo, adjunta el contexto y los datos, añade las restricciones y el formato de salida. Estos elementos son los que más determinan la calidad y la verificabilidad del output."
+        }
+      ]
+    },
+    {
+      "id": "s3-pierwsza-polowa",
+      "title": "Primera mitad: rol, objetivo, contexto, datos",
+      "type": "content",
+      "onlyForPaths": [
+        "S2",
+        "S3"
+      ],
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "El rol fija la perspectiva, el objetivo dice qué se debe producir, el contexto aporta la información de fondo que el modelo no conoce, y los datos de entrada son el material que hay que procesar. El mismo objetivo con contexto y sin él da una calidad del output claramente distinta."
+        }
+      ]
+    },
+    {
+      "id": "s4-druga-polowa",
+      "title": "Segunda mitad: restricciones, criterios de calidad, formato",
+      "type": "content",
+      "onlyForPaths": [
+        "S2",
+        "S3"
+      ],
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Las restricciones dicen qué NO debe hacer el modelo (p. ej., «no inventes campos que no figuren en el requisito»). Los criterios de calidad son medibles y verificables. El formato de salida (tabla/lista/JSON) facilita el control posterior. Restricciones + criterios son la palanca de la verificabilidad y la seguridad."
+        }
+      ]
+    },
+    {
+      "id": "s5-fewshot",
+      "title": "Few-shot: cuándo mostrar ejemplos",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "definition",
+          "term": "Few-shot",
+          "original": "unos pocos ejemplos en el prompt",
+          "text": "insertar de 1 a 3 pares modelo de entrada→salida cuando el formato o el estilo deben ser reproducibles."
+        },
+        {
+          "kind": "paragraph",
+          "onlyForPaths": [
+            "S2",
+            "S3"
+          ],
+          "text": "Contraste con el zero-shot (sin ejemplos): usa el few-shot para la reproducibilidad del formato, no para «suplir conocimiento que falta». Ejemplo: 2 casos de prueba modelo → el modelo mantiene ese formato para los siguientes."
+        }
+      ]
+    },
+    {
+      "id": "s6-rubryka",
+      "title": "Reparación de un prompt deficiente según la rúbrica",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "La rúbrica de evaluación del prompt tiene 5 ejes: completitud, seguridad, verificabilidad, formato, restricciones. El ciclo de reparación: output deficiente → diagnóstico según la rúbrica → corrección concreta → mejor output."
+        },
+        {
+          "kind": "callout",
+          "variant": "info",
+          "text": "Esta pantalla prepara directamente para la interacción «Prompt clinic» que aparece a continuación."
+        }
+      ]
+    },
+    {
+      "id": "s7-granice",
+      "title": "Límites del prompt: cuándo el prompt no ayudará",
+      "type": "decision",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "El prompt no es magia. Cuando faltan datos (el modelo no tiene la información en el contexto), ningún «retoque» del prompt generará la verdad: surgirá una alucinación."
+        },
+        {
+          "kind": "callout",
+          "variant": "warn",
+          "title": "Qué hacer en su lugar",
+          "text": "Aporta los datos (contexto/RAG), acude a la fuente o entrega la tarea a una persona. Señal de alarma: el prompt crece y el output sigue inventando. Más en M11."
+        }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "rubric",
+    "id": "m7-prompt-clinic",
+    "title": "Prompt clinic",
+    "intro": "Prompt defectuoso: «Escribe pruebas para el inicio de sesión.» Para cada eje de la rúbrica, marca la corrección que lo cumple. La evaluación cuenta como tarea práctica R1-prompt en la ruta S2 (umbral 4/5); en S3 es un ejercicio con feedback.",
+    "rubricId": "R1-prompt",
+    "recordsPractical": true,
+    "scaleMax": 5,
+    "passThreshold": 4,
+    "criteria": [
+      {
+        "id": "K1",
+        "name": "Rol y objetivo",
+        "points": 1,
+        "hint": "Añade el rol y un objetivo claro: quién responde y qué se debe producir.",
+        "options": [
+          {
+            "id": "a",
+            "text": "«Eres ingeniero de QA. Genera casos de prueba para el inicio de sesión en SklepDemo.»"
+          },
+          {
+            "id": "b",
+            "text": "Deja «Escribe pruebas para el inicio de sesión» sin cambios."
+          },
+          {
+            "id": "c",
+            "text": "Añade «sé creativo y sorpréndeme»."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K2",
+        "name": "Contexto y datos de entrada (sin datos sensibles)",
+        "points": 1,
+        "hint": "Adjunta un requisito sintético; no pegues datos reales de usuarios.",
+        "options": [
+          {
+            "id": "a",
+            "text": "Adjunta un requisito sintético de inicio de sesión de SklepDemo (bloqueo tras 3 errores, enlace de restablecimiento de 30 min)."
+          },
+          {
+            "id": "b",
+            "text": "Pega un log de producción real con los correos electrónicos de los usuarios."
+          },
+          {
+            "id": "c",
+            "text": "No facilites el contexto: el modelo «ya lo deducirá»."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K3",
+        "name": "Restricciones y criterios de calidad",
+        "points": 1,
+        "hint": "Di qué NO debe hacer el modelo y añade criterios medibles.",
+        "options": [
+          {
+            "id": "a",
+            "text": "«No inventes campos que no figuren en el requisito; cubre los casos límite; cada prueba tiene un resultado esperado.»"
+          },
+          {
+            "id": "b",
+            "text": "«Escribe el mayor número posible de pruebas, lo que cuenta es la cantidad.»"
+          },
+          {
+            "id": "c",
+            "text": "Sin restricciones: que el modelo decida por sí mismo."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K4",
+        "name": "Formato de salida (verificable)",
+        "points": 1,
+        "hint": "Exige una estructura fija; ante la reproducibilidad, considera el few-shot.",
+        "options": [
+          {
+            "id": "a",
+            "text": "«Devuelve una tabla: ID | pasos | datos de entrada | resultado esperado» + 2 ejemplos modelo (few-shot)."
+          },
+          {
+            "id": "b",
+            "text": "«Responde con un párrafo libre.»"
+          },
+          {
+            "id": "c",
+            "text": "No definas el formato."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K5",
+        "name": "Seguridad y verificabilidad",
+        "points": 1,
+        "hint": "Exige datos sintéticos y que se marquen los puntos inciertos para su verificación.",
+        "options": [
+          {
+            "id": "a",
+            "text": "«Usa exclusivamente datos sintéticos; marca las suposiciones que requieran verificación frente al requisito.»"
+          },
+          {
+            "id": "b",
+            "text": "«Si no sabes algo, inventa un valor probable.»"
+          },
+          {
+            "id": "c",
+            "text": "«Puedes usar datos reales si aceleran el trabajo.»"
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Un buen prompt tiene 7 elementos: rol, objetivo, contexto, datos, restricciones, criterios, formato.",
+      "Corrige el prompt según la rúbrica de 5 ejes: completitud, seguridad, verificabilidad, formato, restricciones.",
+      "Usa el few-shot para la reproducibilidad del formato, no para suplir la falta de conocimiento.",
+      "Cuando faltan datos, el prompt no ayudará: aporta la fuente o entrega la tarea a una persona."
+    ],
+    "checklist": [
+      "¿El prompt tiene rol, objetivo, contexto y datos?",
+      "¿Hay restricciones y criterios de calidad medibles?",
+      "¿El formato de salida es verificable?",
+      "¿He forzado datos sintéticos y el marcado de la incertidumbre?"
+    ],
+    "checklistTitle": "Checklist — prompt de QA listo",
+    "nextStep": "Siguiente paso: M8 — aplicaciones de GenAI en QA (generación y evaluación de casos de prueba)."
+  }
+}

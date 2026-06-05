@@ -6,7 +6,7 @@
 // z długością serii wynikającą z wstrzyknięcia. Wzorzec izolacji danych: cpSync + VALIDATE_DATA_DIR (jak data-negative).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { cpSync, writeFileSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { cpSync, writeFileSync, mkdtempSync, readFileSync, rmSync, readdirSync, existsSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
@@ -31,10 +31,16 @@ function runValidator(dataDir) {
 function copyData() {
   const dir = mkdtempSync(join(tmpdir(), "genai-cluster-"));
   cpSync(DATA, join(dir, "data"), { recursive: true });
-  // Lint klastrowania to higiena POZYCJI w PL (locale-agnostyczna). Usuwamy data/en z kopii, by korupcja
-  // pola `correct` w PL nie wywołała błędu parytetu en↔pl i nie zaciemniła sprawdzanego WARN-a (M11).
-  rmSync(join(dir, "data", "en"), { recursive: true, force: true });
-  return join(dir, "data");
+  // Lint klastrowania to higiena POZYCJI w PL (locale-agnostyczna). Usuwamy WSZYSTKIE locale poza kanonem PL
+  // (locale = podkatalog z questions/), by korupcja pola `correct` w PL nie wywołała błędu parytetu <lang>↔pl
+  // i nie zaciemniła sprawdzanego WARN-a (M11: tylko en; M17 #126–#131: także es/fr/de/it/uk/vi — stąd generalizacja).
+  const dataDir = join(dir, "data");
+  for (const e of readdirSync(dataDir, { withFileTypes: true })) {
+    if (e.isDirectory() && e.name !== "pl" && existsSync(join(dataDir, e.name, "questions"))) {
+      rmSync(join(dataDir, e.name), { recursive: true, force: true });
+    }
+  }
+  return dataDir;
 }
 // Ustawia pozycję poprawnej (correct) dla kolejnych single-correct pytań M1 wg `pick(i, options)`.
 // Zwraca liczbę zmodyfikowanych pytań (długość serii w teście klastra).

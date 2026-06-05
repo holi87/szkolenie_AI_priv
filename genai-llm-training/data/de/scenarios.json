@@ -1,0 +1,122 @@
+{
+  "_meta": {
+    "issue": "#8 [08][M1] Przygotuj syntetyczne scenariusze szkoleniowe",
+    "version": "0.1",
+    "doc": "docs/scenariusze.md",
+    "dataPolicy": "WSZYSTKIE dane są SYNTETYCZNE i fikcyjne. Domena e-mail: przyklad.test (zarezerwowana). Produkty/firmy fikcyjne. Identyfikatory w formatach jawnie testowych. PESEL/numery to placeholdery nieprawidłowe. ZERO realnych danych klienta/PII.",
+    "source": "wymagania/06 (moduły, interakcje), wymagania/07 (typy pytań), docs/storyboard/"
+  },
+  "scenarios": [
+    {
+      "id": "SC-QA-01",
+      "title": "Testfälle aus einer Anforderung generieren",
+      "modules": ["M8"],
+      "paths": ["S2", "S3"],
+      "competency": "Generiert Testfälle und erkennt Abdeckungslücken (E: M8)",
+      "usedBy": ["QA workbench", "pytania Q61-Q64"],
+      "data": {
+        "wymaganie": "Anwendung NotkaApp (fiktiv): Der Nutzer setzt sein Passwort über einen E-Mail-Link zurück, der 30 Minuten gültig ist; nach 3 fehlerhaften Versuchen wird das Konto für 15 Minuten gesperrt.",
+        "outputLLM": "Generierte Testfälle: TC1 erfolgreicher Reset; TC2 abgelaufener Link; TC3 falsches Passwort 3x → Sperre. (fehlt: leere E-Mail, Link zweimal verwendet, parallele Sitzungen)"
+      }
+    },
+    {
+      "id": "SC-PII-01",
+      "title": "Meldung mit personenbezogenen Daten — Entscheidung über das Einfügen in ein LLM",
+      "modules": ["M10"],
+      "paths": ["S1", "S2", "S3"],
+      "competency": "Klassifiziert Daten als zulässig / anonymisierungsbedürftig / unzulässig (E: M10, kritische Fragen)",
+      "usedBy": ["Data safety gate", "pytania krytyczne Q81-Q85"],
+      "data": {
+        "zgloszenie": "Der Kunde Jan Kowalski (jan.kowalski@przyklad.test, Kunden-ID KLI-000123, PESEL 00000000000 [synthetisch, ungültig]) meldet einen Zahlungsfehler in SklepDemo.",
+        "pytanie": "Darf die gesamte Meldung in ein öffentliches LLM eingefügt werden, um den Fehler zu analysieren?",
+        "poprawnaDecyzja": "Identifizierende Daten anonymisieren oder ein freigegebenes Werkzeug mit Kontrollen verwenden; keine Rohdaten einfügen."
+      }
+    },
+    {
+      "id": "SC-PII-02",
+      "title": "Anwendungslog mit Datenfragmenten — was zu anonymisieren ist",
+      "modules": ["M10"],
+      "paths": ["S2", "S3"],
+      "competency": "Benennt die im Log anonymisierungsbedürftigen Daten (E: M10)",
+      "usedBy": ["Data safety gate", "pytania Q86-Q90"],
+      "data": {
+        "log": "2026-01-02 ERROR user=anna.nowak@przyklad.test ip=10.0.0.5 token=tok_test_ABC123 order=ORD-TEST-777 msg=payment_failed",
+        "doAnonimizacji": ["e-mail", "token", "potenziell Bestell-ID im Kundenkontext"]
+      }
+    },
+    {
+      "id": "SC-RAG-01",
+      "title": "Mini-Korpus aus QA-Dokumentation für Retrieval/RAG",
+      "modules": ["M4", "M5", "M6"],
+      "paths": ["S3"],
+      "competency": "Wählt das passende Retrieval, diagnostiziert similar-but-useless und baut eine RAG-Pipeline auf (E: M4/M5/M6)",
+      "usedBy": ["Mapa semantyczna", "Retrieval debugger", "Zbuduj pipeline RAG", "pytania Q33-Q50"],
+      "data": {
+        "korpus": [
+          { "id": "DOC1", "text": "Anmeldeprozedur in NotkaApp: Das Sitzungstoken läuft nach 30 Min. Inaktivität ab." },
+          { "id": "DOC2", "text": "Passwortrichtlinie von NotkaApp: mind. 12 Zeichen, Sperre nach 3 Fehlversuchen." },
+          { "id": "DOC3", "text": "Passwort-Reset: E-Mail-Link 30 Min. gültig, einmalig verwendbar." },
+          { "id": "DOC4", "text": "Marketing-FAQ von NotkaApp: Produktvorteile und Preisliste." }
+        ],
+        "zapytanie": "Nach welcher Zeit läuft der Link zum Passwort-Reset ab?",
+        "pulapka": "DOC1 (Sitzungstoken 30 Min.) ist semantisch ähnlich, aber die korrekte Quelle ist DOC3 (Reset-Link)."
+      }
+    },
+    {
+      "id": "SC-AGENT-01",
+      "title": "Berechtigungen an einen QA-Agenten vergeben",
+      "modules": ["M9"],
+      "paths": ["S3"],
+      "competency": "Entwirft minimale Berechtigungskontrolle, Logs, Human-in-the-Loop und Rollback (E: M9)",
+      "usedBy": ["Agent permission board", "pytania Q76-Q78"],
+      "data": {
+        "agent": "Agent, der Regressionstests in der TEST-Umgebung ausführt (fiktives CI 'PipeDemo').",
+        "zadania": ["Tests ausführen", "Logs auslesen", "Bericht erstellen", "Defekt melden", "Umgebungskonfiguration ändern"],
+        "ryzyko": "Konfigurationsänderungen und Schreibvorgänge außerhalb von TEST erfordern eine menschliche Freigabe und Rollback; kein Zugriff auf die Produktion."
+      }
+    },
+    {
+      "id": "SC-VERIFY-01",
+      "title": "LLM-Antwort mit einer Mischung aus begründeten Inhalten und Halluzinationen",
+      "modules": ["M11"],
+      "paths": ["S1", "S2", "S3"],
+      "competency": "Kennzeichnet Aussagen als korrekt / unbegründet / quellenbedürftig / riskant (E: M11)",
+      "usedBy": ["Output verifier", "pytania Q95-Q98"],
+      "data": {
+        "odpowiedzLLM": [
+          "Der Passwort-Reset in NotkaApp verwendet einen 30 Minuten gültigen Link. [im Einklang mit DOC3]",
+          "Der Link kann beliebig oft bis zum Erfolg verwendet werden. [unbegründet — im Widerspruch zu DOC3]",
+          "Die Kontosperre dauert 24 Stunden. [quellenbedürftig — widerspricht der Anforderung von 15 Min.]",
+          "NotkaApp ist nach ISO 27001 zertifiziert. [riskant — keine Quelle]"
+        ]
+      }
+    },
+    {
+      "id": "SC-PROMPT-01",
+      "title": "Fehlerhafter Prompt zur Verbesserung",
+      "modules": ["M7"],
+      "paths": ["S1", "S2", "S3"],
+      "competency": "Verbessert einen ungenauen Prompt nach Rubrik (E: M7)",
+      "usedBy": ["Prompt clinic", "pytania Q57-Q60", "rubryka R1"],
+      "data": {
+        "wadliwyPrompt": "Schreib Tests für die Anmeldung.",
+        "braki": ["keine Rolle/kein Ziel", "kein Kontext (welche Anwendung, welche Anforderung)", "keine Einschränkungen und Kriterien", "kein Ausgabeformat"]
+      }
+    },
+    {
+      "id": "SC-EVAL-01",
+      "title": "Abweichung zwischen menschlicher Bewertung und LLM-as-a-judge",
+      "modules": ["M12"],
+      "paths": ["S3"],
+      "competency": "Erkennt Bias/Position-Bias und kalibriert die Rubrik (E: M12)",
+      "usedBy": ["Judge calibration lab", "pytania Q113-Q116", "rubryka R3"],
+      "data": {
+        "przyklady": [
+          { "id": "EX1", "ocenaCzlowiek": 4, "ocenaJudge": 5, "uwaga": "Judge bevorzugt die längere Antwort" },
+          { "id": "EX2", "ocenaCzlowiek": 2, "ocenaJudge": 4, "uwaga": "Position-Bias — erste Antwort" }
+        ],
+        "zadanie": "Benenne die Ursache der Abweichung und verbessere die Rubrik."
+      }
+    }
+  ]
+}

@@ -1,0 +1,301 @@
+{
+  "_meta": {
+    "module": "M3",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M3. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q018",
+      "module": "M3",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Il partecipante seleziona l'intervallo di temperature adatto a un compito che richiede formalità e ripetibilità.",
+      "prompt": "Devi generare i passi di un caso di test per la documentazione in NotkaApp — il risultato deve essere formale e il più ripetibile possibile quando lo esegui di nuovo. Quale intervallo di temperature è il più appropriato?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Basso, circa 0,0-0,3"
+        },
+        {
+          "id": "B",
+          "text": "Medio, circa 0,5-0,7"
+        },
+        {
+          "id": "C",
+          "text": "Alto, circa 0,8-1,2"
+        },
+        {
+          "id": "D",
+          "text": "Massimo, circa 1,3-1,5"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Una temperature bassa (~0,0-0,3) produce risposte conservative e più ripetibili, ovvero proprio ciò che richiede la documentazione di test.",
+      "feedbackIncorrect": "Più alta è la temperature, maggiore è la casualità e minore la ripetibilità — il contrario di ciò che vogliamo nella documentazione. Rivedi la schermata M3.2 sulla scala della temperature.",
+      "references": [
+        "M3.2"
+      ]
+    },
+    {
+      "id": "Q019",
+      "module": "M3",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Il partecipante individua il rischio principale di una temperature alta nei compiti di QA.",
+      "prompt": "Un team esegue due volte lo stesso prompt sui casi di test di SklepDemo con temperature 1,1. Quale rischio per il lavoro di QA è qui più caratteristico?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Mancanza di ripetibilità — due esecuzioni producono passi divergenti, il che complica la revisione e la regressione"
+        },
+        {
+          "id": "B",
+          "text": "La risposta viene sempre troncata a metà frase"
+        },
+        {
+          "id": "C",
+          "text": "Le risposte diventano più brevi e più concise rispetto a una temperature bassa"
+        },
+        {
+          "id": "D",
+          "text": "Il risultato diventa identico a ogni esecuzione"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Un'elevata casualità provoca deriva dei contenuti e mancanza di ripetibilità tra le esecuzioni, il che mina l'affidabilità della documentazione e della regressione.",
+      "feedbackIncorrect": "Il troncamento dipende da max tokens, mentre la ripetibilità diminuisce (non aumenta) all'aumentare della temperature. Rivedi la schermata M3.3 sul rischio di un'elevata casualità nel QA.",
+      "references": [
+        "M3.3"
+      ]
+    },
+    {
+      "id": "Q020",
+      "module": "M3",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Il partecipante riconosce i sintomi di una risposta troncata dal limite di max tokens.",
+      "prompt": "Dopo aver generato un elenco di casi di test, la risposta termina con una frase interrotta e un elenco non chiuso, senza riepilogo. Cosa è successo con maggiore probabilità?",
+      "options": [
+        {
+          "id": "A",
+          "text": "La risposta è stata troncata al raggiungimento del limite di max tokens"
+        },
+        {
+          "id": "B",
+          "text": "La temperature era impostata troppo bassa"
+        },
+        {
+          "id": "C",
+          "text": "top-p ha ristretto il vocabolario dei termini di QA"
+        },
+        {
+          "id": "D",
+          "text": "Il modello ha ritenuto il compito non conforme alla policy"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Una frase interrotta, un elenco non chiuso e l'assenza di riepilogo sono i sintomi tipici del superamento del limite di max tokens.",
+      "feedbackIncorrect": "Temperature e top-p governano la casualità, non la lunghezza — è max tokens a limitare in modo netto il numero di token della risposta. Rivedi la schermata M3.5 sul riconoscimento del troncamento.",
+      "references": [
+        "M3.5"
+      ]
+    },
+    {
+      "id": "Q021",
+      "module": "M3",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Il partecipante adatta l'impostazione della casualità alla natura del compito (creativo vs formale).",
+      "prompt": "Un tester ha due compiti: (1) un brainstorming di dati di test insoliti per un modulo in SklepDemo e (2) la stesura dei passi definitivi di un caso di test per la documentazione. Come impostare ragionevolmente la temperature per ciascuno di essi?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Compito 1 — temperature più alta; compito 2 — temperature bassa"
+        },
+        {
+          "id": "B",
+          "text": "Compito 1 — temperature bassa; compito 2 — temperature più alta"
+        },
+        {
+          "id": "C",
+          "text": "Entrambi i compiti — temperature massima per un risultato più ricco"
+        },
+        {
+          "id": "D",
+          "text": "Entrambi i compiti — temperature 0,0, perché è sempre il più sicuro"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Il brainstorming trae vantaggio dalla varietà (temperature più alta), mentre la documentazione richiede ripetibilità e formalità (temperature bassa).",
+      "feedbackIncorrect": "La scelta è invertita: il compito creativo guadagna da una casualità più alta, quello formale da una bassa. Rivedi la schermata M3.2 sulla mappatura della temperature al tipo di compito.",
+      "references": [
+        "M3.2"
+      ]
+    },
+    {
+      "id": "Q022",
+      "module": "M3",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Il partecipante collega l'impostazione di un parametro al suo effetto su formalità, varietà e lunghezza dell'output.",
+      "prompt": "Abbina l'impostazione del parametro di generazione al suo effetto sull'output.",
+      "pairs": [
+        {
+          "left": "Temperature bassa",
+          "right": "Risposta più ripetibile e formale"
+        },
+        {
+          "left": "Temperature alta",
+          "right": "Risposta più varia e creativa"
+        },
+        {
+          "left": "max tokens basso",
+          "right": "Risposta troncata prima della fine"
+        },
+        {
+          "left": "top-p basso",
+          "right": "Selezione più ristretta e stabile dei token successivi"
+        }
+      ],
+      "feedbackCorrect": "La temperature governa formalità/varietà, max tokens la lunghezza e top-p l'ampiezza del pool di candidati per il token successivo.",
+      "feedbackIncorrect": "I ruoli si sono confusi: la casualità (temperature, top-p) non è la stessa cosa della lunghezza (max tokens). Rivedi le schermate M3.2 e M3.4 sui regolatori della generazione.",
+      "references": [
+        "M3.2",
+        "M3.4"
+      ]
+    },
+    {
+      "id": "Q023",
+      "module": "M3",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Il partecipante collega l'impostazione di un parametro al suo rischio o al suo impiego nel lavoro di QA.",
+      "prompt": "Abbina l'impostazione del parametro di generazione alla sua conseguenza nel contesto della documentazione di test di QA.",
+      "pairs": [
+        {
+          "left": "Temperature alta",
+          "right": "Divergenza dei passi tra due esecuzioni dello stesso prompt"
+        },
+        {
+          "left": "max tokens basso",
+          "right": "Assenza degli ultimi passi o dei criteri di accettazione nella risposta"
+        },
+        {
+          "left": "top-p basso",
+          "right": "Vocabolario dei termini di QA stabile e sicuro"
+        },
+        {
+          "left": "top-p alto",
+          "right": "Formulazioni più ampie e più rischiose"
+        }
+      ],
+      "feedbackCorrect": "Un'elevata casualità rischia di compromettere la ripetibilità, un max tokens troppo basso perde la parte finale del documento e top-p regola quanto è ampia e rischiosa la scelta delle parole.",
+      "feedbackIncorrect": "Nota che è la casualità (temperature/top-p) a determinare il rischio dei contenuti, mentre max tokens determina l'assenza della parte finale. Rivedi le schermate M3.3 e M3.4.",
+      "references": [
+        "M3.3",
+        "M3.4"
+      ]
+    },
+    {
+      "id": "Q024",
+      "module": "M3",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Il partecipante confronta due preset di generazione e sceglie quello più sicuro per la documentazione di test.",
+      "prompt": "Devi redigere i passi di un caso di test di login a NotkaApp come documentazione permanente. A disposizione ci sono due preset per lo stesso compito:\nVariante A: temperature 0,2 / top-p 0,3 / max tokens alto.\nVariante B: temperature 1,0 / top-p 0,95 / max tokens basso.\nQuale scelta è più sicura e perché?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Variante A — la bassa casualità garantisce ripetibilità e formalità, mentre un max tokens alto protegge dal troncamento del documento"
+        },
+        {
+          "id": "B",
+          "text": "Variante B — una temperature e un top-p alti daranno una descrizione dei passi più ricca e dettagliata"
+        },
+        {
+          "id": "C",
+          "text": "Variante B — un max tokens basso imporrà concisione, il che è sempre meglio nella documentazione"
+        },
+        {
+          "id": "D",
+          "text": "Indifferente — i parametri di generazione non influiscono sulla documentazione di test"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Per la documentazione contano ripetibilità e completezza: la bassa casualità (A) limita la deriva e un margine di max tokens protegge dall'interruzione dei passi.",
+      "feedbackIncorrect": "Un'elevata casualità minaccia la ripetibilità e un max tokens basso rischia di troncare il documento — questi non sono vantaggi nella documentazione. Rivedi la schermata M3.6 sulla scelta del preset più sicuro.",
+      "references": [
+        "M3.6"
+      ]
+    }
+  ]
+}

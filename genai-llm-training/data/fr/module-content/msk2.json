@@ -1,0 +1,113 @@
+{
+  "_meta": {
+    "issue": "#124 [M16] Parcours formatif S4 — agents IA (module de formation, interaction tune)",
+    "adr": "docs/adr/0009-sciezka-formatywna-s4-skala-holaka.md",
+    "interaction": "Réglage des paramètres de l'agent (kind: tune) — exercice formatif, NON noté pour la validation",
+    "source": "Axes de maturité de l'Échelle de Holak : vérifiabilité de l'output, réversibilité des décisions, contrôle des agents. Attribution : quality-blog.eu/pl/blog/skala-holaka.",
+    "dataPolicy": "TOUS les exemples sont SYNTHÉTIQUES et génériques (aucune donnée réelle ni PII). Module formatif — sans seuil de validation ni certificat."
+  },
+  "module": "MSK2",
+  "intro": "Un agent n'est pas un chatbot : il exécute des étapes et utilise des outils, donc il peut réellement changer le monde — fichiers, e-mails, données, dépôt de code. Un travail mature avec un agent consiste à ajuster l'autonomie au risque : plus l'effet est difficile à annuler et l'output difficile à vérifier, plus les permissions doivent être restreintes et le contrôle humain présent. Ce module vous apprend à régler ces leviers. C'est un exercice de développement, pas un test.",
+  "screens": [
+    {
+      "id": "msk2-s1-od-chatbota-do-agenta",
+      "title": "Du chatbot à l'agent",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Un chatbot répond par du texte. Un workflow avec un outil exécute une seule étape définie. Un agent planifie et exécute plusieurs étapes, en recourant lui-même aux outils — et c'est précisément pour cela qu'il a besoin de limites. La question n'est pas « l'agent sait-il faire », mais « que se passe-t-il s'il se trompe, et aurons-nous le temps d'annuler »." },
+        { "kind": "list", "items": [
+          "Chatbot — il propose, il n'exécute rien.",
+          "Workflow avec un outil — il exécute une seule étape définie.",
+          "Agent — il planifie et exécute plusieurs étapes avec accès aux outils."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Axe de l'Échelle de Holak", "text": "Concevoir le travail de sorte que les décisions appuyées par l'IA (y compris les actions de l'agent) restent vérifiables et réversibles est le signe d'un passage à un niveau supérieur.",
+          "links": [ { "label": "Échelle de Holak — modèle de maturité (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka" } ]
+        }
+      ]
+    },
+    {
+      "id": "msk2-s2-trzy-dzwignie",
+      "title": "Trois leviers de contrôle de l'agent",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "La sécurité d'un agent ne repose pas sur la confiance, mais sur le réglage de trois leviers : l'étendue des permissions (ce que l'agent peut faire en tout), le point de validation par l'humain (quand il doit demander) ainsi que la trace d'audit et la réversibilité (peut-on vérifier et annuler ce qu'il a fait)." },
+        { "kind": "list", "items": [
+          "Étendue des permissions — de la lecture seule à l'écriture complète en production.",
+          "Human-in-the-loop — validation toujours, uniquement pour les actions irréversibles, ou jamais.",
+          "Trace et réversibilité — journal complet avec rollback, journal de base, ou aucun."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Le piège « l'agent se débrouillera »", "text": "Plus l'accès est large et le contrôle faible, moins c'est cher… jusqu'à la première erreur irréversible. Par défaut, restreignez les permissions et exigez une validation là où l'effet est difficile à annuler." }
+      ]
+    },
+    {
+      "id": "msk2-s3-jak-cwiczyc",
+      "title": "Comment s'exercer",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Ci-dessous, vous réglerez trois paramètres de l'agent et verrez en direct l'évolution du profil de risque. Ensuite, dans le checkpoint, vous choisirez un jeu sûr pour une tâche aux effets irréversibles. Sans seuil de validation — il s'agit d'acquérir le réflexe d'ajuster l'autonomie au risque." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "tune",
+    "id": "msk2-tune",
+    "title": "Réglez l'autonomie et le contrôle de l'agent",
+    "intro": "Réglez les trois leviers et observez le profil de risque. Puis répondez au checkpoint — c'est un exercice de développement, pas un test.",
+    "outputLabel": "Profil de risque de l'agent (en direct) :",
+    "controls": [
+      {
+        "id": "scope",
+        "label": "Étendue des permissions",
+        "levels": [
+          { "value": "read", "label": "Lecture seule", "effect": "L'agent ne change rien — risque le plus faible, idéal pour l'analyse et les propositions." },
+          { "value": "sandbox", "label": "Écriture en bac à sable", "effect": "Modifications uniquement dans un environnement isolé — faciles à rejeter." },
+          { "value": "prod", "label": "Écriture complète en production", "effect": "L'agent peut modifier durablement les données de production — risque le plus élevé, exige un contrôle." }
+        ]
+      },
+      {
+        "id": "approval",
+        "label": "Validation par l'humain",
+        "levels": [
+          { "value": "always", "label": "Toujours avant d'agir", "effect": "L'humain valide chaque étape — plus lent, mais entièrement contrôlé." },
+          { "value": "irreversible", "label": "Pour les décisions irréversibles", "effect": "Accord requis lorsque l'effet ne peut pas être annulé — un compromis par défaut raisonnable." },
+          { "value": "never", "label": "Jamais (autonomie totale)", "effect": "L'agent agit sans demander — rapide, mais une erreur peut passer inaperçue." }
+        ]
+      },
+      {
+        "id": "audit",
+        "label": "Trace d'audit et réversibilité",
+        "levels": [
+          { "value": "full", "label": "Journal complet + rollback", "effect": "Chaque action enregistrée et annulable — vérifiabilité complète." },
+          { "value": "basic", "label": "Journal de base", "effect": "On sait ce qui s'est passé, mais l'annulation est souvent manuelle et difficile." },
+          { "value": "none", "label": "Aucune trace", "effect": "On ne sait pas ce que l'agent a fait ni pourquoi — aucune vérifiabilité." }
+        ]
+      }
+    ],
+    "checkpoint": {
+      "prompt": "L'agent doit aider sur une tâche qui peut modifier DURABLEMENT les données de production (effet difficile à annuler). Quel jeu de réglages est le plus sûr pour démarrer ?",
+      "type": "single_choice",
+      "options": [
+        { "id": "a", "text": "Écriture complète en production, validation jamais, aucune trace — « l'agent se débrouillera »." },
+        { "id": "b", "text": "Lecture seule ou bac à sable, validation humaine pour les actions irréversibles, journal complet avec rollback." },
+        { "id": "c", "text": "Écriture complète en production, journal de base, sans validation — « on accélère, on vérifiera plus tard »." }
+      ],
+      "correct": ["b"],
+      "feedbackCorrect": "Oui. Face à des effets irréversibles, vous restreignez les permissions, exigez l'accord de l'humain et assurez une trace complète avec possibilité d'annulation.",
+      "feedbackIncorrect": "Face à des effets irréversibles, l'autonomie sans contrôle ni trace, c'est chercher l'erreur irréversible. Restreignez les permissions, ajoutez la validation humaine et un journal complet avec rollback."
+    }
+  },
+  "summary": {
+    "points": [
+      "Un agent peut réellement changer le monde — ajustez l'autonomie au risque et à la réversibilité de la tâche.",
+      "Trois leviers de contrôle : étendue des permissions, validation par l'humain, trace d'audit avec rollback.",
+      "Par défaut, restreignez les permissions ; plus l'effet est difficile à annuler, plus le contrôle humain doit être présent."
+    ],
+    "checklist": [
+      "Est-ce que je sais ce que l'agent peut faire de pire avec ses permissions actuelles ?",
+      "Les actions irréversibles exigent-elles une validation par l'humain ?",
+      "Une trace d'audit est-elle conservée et l'action de l'agent peut-elle être annulée ?"
+    ],
+    "checklistTitle": "Checklist — avant de laisser entrer un agent",
+    "nextStep": "Étape suivante : pour une tâche réelle d'agent, notez le pire effet possible et ajustez-y l'étendue des permissions, le point de validation et la trace d'audit."
+  }
+}

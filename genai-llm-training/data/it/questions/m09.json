@@ -1,0 +1,370 @@
+{
+  "_meta": {
+    "module": "M9",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M9. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q073",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Il partecipante distingue un agente da un chatbot e da un workflow con uno strumento in base a chi decide i passi successivi e se si producono effetti collaterali.",
+      "prompt": "In cosa si differenzia un agente da un chatbot e da un workflow con un singolo strumento (tool use)?",
+      "options": [
+        {
+          "id": "A",
+          "text": "L'agente pianifica ed esegue autonomamente una sequenza di passi e decide da solo quale strumento richiamare e quando."
+        },
+        {
+          "id": "B",
+          "text": "L'agente è un chatbot con un'interfaccia più curata — genera solo testo e non esegue alcuna azione."
+        },
+        {
+          "id": "C",
+          "text": "L'agente richiama sempre esattamente uno strumento prestabilito in un flusso rigido e immutabile."
+        },
+        {
+          "id": "D",
+          "text": "L'agente si differenzia dal chatbot soltanto perché risponde più velocemente e gestisce un contesto più lungo."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Sì — la caratteristica che definisce un agente è la capacità di pianificare e scegliere autonomamente i passi successivi e gli strumenti, cosa che non fanno né il chatbot né un workflow rigido.",
+      "feedbackIncorrect": "Queste sono descrizioni del chatbot (solo testo) o del workflow con tool use (un unico strumento prestabilito). Ripassa la schermata sulle tre modalità di integrazione e nota chi decide i passi.",
+      "references": [
+        "M9.2"
+      ]
+    },
+    {
+      "id": "Q074",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Il partecipante riconosce correttamente il significato della leva di controllo rollback nel modello di controllo minimo dell'operato di un agente.",
+      "prompt": "Nel modello delle „4 leve di controllo” dell'operato di un agente — che cosa significa la leva rollback?",
+      "options": [
+        {
+          "id": "A",
+          "text": "La possibilità di annullare una modifica introdotta dall'agente, riportandola allo stato precedente alla sua esecuzione."
+        },
+        {
+          "id": "B",
+          "text": "La registrazione di tutte le azioni dell'agente insieme all'orario in cui sono state eseguite."
+        },
+        {
+          "id": "C",
+          "text": "Un cancello in cui una persona approva l'azione prima che l'agente la esegua."
+        },
+        {
+          "id": "D",
+          "text": "La limitazione dell'agente al più piccolo ambito di accesso necessario."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Il rollback è la capacità di annullare una modifica — distingue le azioni reversibili da quelle irreversibili e determina la forza delle altre protezioni.",
+      "feedbackIncorrect": "Stai confondendo le leve: B è l'audit log, C è l'human-in-the-loop, D è il permission scope. Ripassa la schermata sulle quattro leve di controllo.",
+      "references": [
+        "M9.6"
+      ]
+    },
+    {
+      "id": "Q075",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Il partecipante classifica una descrizione concreta del funzionamento di uno strumento AI come agente, e non come chatbot o workflow, sulla base di una catena di passi autonoma.",
+      "prompt": "Uno strumento nell'ambiente TEST legge da solo il backlog da TestRail-SANDBOX, decide quali segnalazioni sono duplicati, le unisce e apre 5 pull request nel repository synt-shop — senza che gli venga fornito un elenco di passi. Di quale modalità di integrazione si tratta?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Agente — pianifica ed esegue autonomamente più passi e seleziona gli strumenti."
+        },
+        {
+          "id": "B",
+          "text": "Chatbot — risponde solo con del testo alle domande sul backlog."
+        },
+        {
+          "id": "C",
+          "text": "Workflow con tool use — un unico strumento prestabilito in un flusso rigido."
+        },
+        {
+          "id": "D",
+          "text": "Una normale ricerca full-text nel sistema di gestione dei test."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Sì — lo strumento sceglie da solo i passi (analisi, unione, apertura di 5 PR) e strumenti diversi senza uno scenario fornito, il che è una caratteristica dell'agente.",
+      "feedbackIncorrect": "Il chatbot genera solo testo, mentre il workflow esegue un unico strumento prestabilito. Qui lo strumento concatena da solo più passi e opera su un repository — è un agente. Ripassa la distinzione tra le modalità.",
+      "references": [
+        "M9.2",
+        "M9.3"
+      ]
+    },
+    {
+      "id": "Q076",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Il partecipante seleziona l'ambito di accesso minimo e il cancello di controllo adeguato per un compito con effetto irreversibile (invio di un'email).",
+      "prompt": "Deleghi a un agente il compito Z3: „Invia il report settimanale a qa-team@przyklad.test”. L'email inviata è irreversibile (non si può annullare). Come configurare i permessi e il controllo per questo compito?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Accesso all'invio dell'email + human-in-the-loop: una persona approva il contenuto prima dell'invio."
+        },
+        {
+          "id": "B",
+          "text": "Accesso completo alla casella di posta (lettura e invio) senza approvazione, perché è solo un report interno."
+        },
+        {
+          "id": "C",
+          "text": "Accesso all'invio senza cancello, ma con il rollback dell'email abilitato dopo il rilevamento di un errore."
+        },
+        {
+          "id": "D",
+          "text": "Nessun accesso all'email — l'agente salva il report nel repository synt-shop e non invia mai nulla."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Un'azione irreversibile (email inviata) richiede un cancello HITL prima dell'effetto, con un ambito minimo limitato all'invio — esattamente ciò di cui ha bisogno Z3.",
+      "feedbackIncorrect": "L'email non si può annullare, quindi il rollback non esiste (C), e l'assenza di un cancello con un accesso eccessivo è un rischio elevato (B). D non realizza il compito. Ripassa la scelta del cancello per le azioni irreversibili.",
+      "references": [
+        "M9.8",
+        "M9.6"
+      ]
+    },
+    {
+      "id": "Q077",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Il partecipante seleziona l'ambito di accesso minimo al repository, limitando l'agente al ramo di lavoro con un cancello di review invece della scrittura su main.",
+      "prompt": "Compito Z4: l'agente deve „Aprire una pull request con una correzione nel repository synt-shop”. Quale ambito di accesso è minimo e sicuro?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Scrittura limitata al ramo di lavoro con apertura della PR; nessun diritto di scrittura (push/merge) sul ramo main."
+        },
+        {
+          "id": "B",
+          "text": "Scrittura sul ramo main, così l'agente unisce subito la correzione senza attendere la review."
+        },
+        {
+          "id": "C",
+          "text": "Accesso amministrativo completo al repository, inclusa l'eliminazione di rami e la modifica delle impostazioni."
+        },
+        {
+          "id": "D",
+          "text": "Solo lettura del repository — l'agente descrive la correzione in un commento, ma non apre la PR."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "La scrittura sul ramo di lavoro + PR offre un cancello di review naturale, mentre l'assenza del diritto su main mantiene l'ambito minimo necessario al compito.",
+      "feedbackIncorrect": "La scrittura su main o l'accesso da amministratore sono permessi eccessivi con un grande effetto (B, C), mentre la sola lettura non realizza il compito (D). Ripassa il principio del minimo ambito necessario e il ruolo della PR come cancello.",
+      "references": [
+        "M9.8",
+        "M9.7"
+      ]
+    },
+    {
+      "id": "Q078",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Il partecipante valuta quale dei compiti delegati comporti il maggiore rischio residuo e richieda il controllo più forte, ponderando reversibilità ed effetto.",
+      "prompt": "Un agente nella CI di PipeDemo (ambiente TEST) ha quattro compiti da eseguire. Quale richiede il controllo PIÙ FORTE (cancello HITL + log completo + limitazione dell'ambito), perché combina il maggiore effetto con la reversibilità più difficile?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Modifica la configurazione dell'ambiente TEST di PipeDemo (potenziale scrittura al di fuori di TEST, difficile da annullare)."
+        },
+        {
+          "id": "B",
+          "text": "Riassumi 10 segnalazioni da TestRail-SANDBOX (sola lettura, nessuna modifica)."
+        },
+        {
+          "id": "C",
+          "text": "Leggi i log dell'esecuzione dei test di regressione (sola lettura)."
+        },
+        {
+          "id": "D",
+          "text": "Crea un report testuale interno dai risultati (scrittura locale, facile da sovrascrivere)."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "La modifica della configurazione dell'ambiente ha un grande effetto e il rischio di scrittura al di fuori di TEST, ed è difficile da annullare — la regola empirica „irreversibile + grande effetto = cancello + audit completo” punta proprio a questa.",
+      "feedbackIncorrect": "Le operazioni di sola lettura (B, C) non modificano lo stato, e un report locale è facile da sovrascrivere (D). Il controllo più forte lo richiede l'azione con grande effetto e reversibilità difficile. Ripassa la classificazione dei compiti che richiedono audit.",
+      "references": [
+        "M9.7",
+        "M9.8"
+      ]
+    },
+    {
+      "id": "Q079",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Il partecipante individua diversi rischi concreti derivanti dal concedere a un agente l'accesso a file, email, repository e sistema di test.",
+      "prompt": "Quali dei seguenti sono rischi concreti del concedere a un agente un ampio accesso a file, email, repository e sistema di gestione dei test? Indica tutte le risposte corrette.",
+      "options": [
+        {
+          "id": "A",
+          "text": "L'agente può cadere vittima di una prompt injection nascosta nel contenuto che legge (ad es. nel commento di una segnalazione) ed eseguire un'azione non intenzionale."
+        },
+        {
+          "id": "B",
+          "text": "Una decisione errata nel primo passo si propaga ai passi successivi, perché l'agente opera senza pausa."
+        },
+        {
+          "id": "C",
+          "text": "L'agente può produrre un effetto irreversibile, ad es. inviare un'email all'esterno oppure eliminare file che non si possono ripristinare."
+        },
+        {
+          "id": "D",
+          "text": "Concedere semplicemente un ampio accesso è sicuro, finché l'agente usa un modello con la memoria delle conversazioni disattivata."
+        },
+        {
+          "id": "E",
+          "text": "La cifratura end-to-end della comunicazione elimina i rischi derivanti dalle azioni eseguite dall'agente."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "I rischi concreti sono la vulnerabilità alla prompt injection, la propagazione dell'errore tra i passi e gli effetti irreversibili. Il controllo consiste nel limitare l'ambito e nell'HITL — non nella memoria delle conversazioni né nella sola cifratura.",
+      "feedbackIncorrect": "D ed E sono promesse ingannevoli: la memoria delle conversazioni disattivata non limita i permessi, e la cifratura del trasporto non ferma l'azione dell'agente in sé. Ripassa la mappa degli accessi e le fonti di rischio (M9.4–M9.5).",
+      "references": [
+        "M9.4",
+        "M9.5"
+      ]
+    },
+    {
+      "id": "Q080",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Il partecipante individua gli elementi del controllo e dell'audit minimo dell'operato di un agente, distinguendoli dalle protezioni apparenti.",
+      "prompt": "Quali elementi compongono realmente il controllo e l'audit minimo dell'operato di un agente QA? Indica tutte le risposte corrette.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Permission scope — limitazione dell'agente al più piccolo ambito di accesso necessario."
+        },
+        {
+          "id": "B",
+          "text": "Audit log — registrazione di cosa ha fatto l'agente e quando, che consente di ricostruire lo svolgimento."
+        },
+        {
+          "id": "C",
+          "text": "Human-in-the-loop — cancello di approvazione da parte di una persona prima di un effetto irreversibile."
+        },
+        {
+          "id": "D",
+          "text": "Rollback — possibilità di annullare una modifica introdotta, riportandola allo stato precedente."
+        },
+        {
+          "id": "E",
+          "text": "Concedere all'agente permessi completi di amministratore, per non bloccarlo con la mancanza di accesso."
+        },
+        {
+          "id": "F",
+          "text": "Disattivare i log, in modo che l'agente operi più velocemente e non lasci tracce."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "feedbackCorrect": "Le quattro leve di controllo sono: l'ambito dei permessi, il log di audit, il cancello HITL e il rollback. Insieme garantiscono un controllo minimo e l'audabilità.",
+      "feedbackIncorrect": "E ed F sono anti-pattern: i permessi completi di amministratore aumentano il rischio, e la disattivazione dei log distrugge l'audit. Ripassa il modello delle „4 leve di controllo” e il ruolo dell'audit log (M9.6, M9.8).",
+      "references": [
+        "M9.6",
+        "M9.8"
+      ]
+    }
+  ]
+}

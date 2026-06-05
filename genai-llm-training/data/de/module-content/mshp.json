@@ -1,0 +1,102 @@
+{
+  "_meta": {
+    "issue": "#122 [M16] Aufteilung der Holak-Skala-Diagnose — PERSÖNLICHE Dimension (v2.1p)",
+    "adr": "docs/adr/0008-modul-skali-holaka-msh.md",
+    "interaction": "Self-Check zur persönlichen Reife (kind: maturity-check) — NON-gating, neutrales Framing",
+    "source": "KI-Adoptions-Reifegradmodell „Holak-Skala“: persönliche Dimension v2.1p (Person, 0–11). Attribution: quality-blog.eu/pl/blog/skala-holaka-private.",
+    "dataPolicy": "ALLE Aussagen des Self-Checks sind SYNTHETISCH und allgemein (keine echten Daten/PII). Eine orientierende Diagnose — sie lässt sich nicht „nicht bestehen“. Die Bewertungsheuristik ist vereinfacht (Anzahl der Markierungen → Stufe 0–11) und unterliegt der Prüfung durch eine Fachexpertin oder einen Fachexperten (SME)."
+  },
+  "module": "MSHP",
+  "intro": "Die persönliche Dimension der Holak-Skala (v2.1p) hilft dir, die Reife deiner eigenen Praxis im Umgang mit KI zu benennen — wo du heute stehst und was der realistische nächste Schritt ist. Es ist eine Selbstdiagnose, kein Test: Es gibt kein „bestanden/nicht bestanden“-Ergebnis, sondern eine orientierende Stufe 0–11 und einen Hinweis, wie man höher kommt. Du kannst sie unabhängig von der Diagnose der Organisation (MSHO) durchführen.",
+  "screens": [
+    {
+      "id": "mshp-s1-czym-jest",
+      "title": "Was die persönliche Holak-Skala ist",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Die persönliche Version (v2.1p) beschreibt die Reife deines Handwerks im Umgang mit KI auf 12 Stufen (0–11) — von den ersten Anwendungen bis zu einer bewussten, gemessenen und kontinuierlich verbesserten Praxis. Sie hilft, zwei Fallen zu vermeiden: „Ich nutze KI, also bin ich reif“ und „Das ist nur eine Spielerei“." },
+        { "kind": "list", "items": [
+          "Du bewertest ausschließlich DEINE eigene Praxis — unabhängig davon, wie reif die Organisation ist.",
+          "Entscheidend ist, WIE du KI nutzt (Kontext, Verifizierung, Umkehrbarkeit), nicht die Anzahl der Werkzeuge.",
+          "Die Diagnose der Organisation (Holak-Skala v2.1e) führst du separat im Modul MSHO durch."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Woher der Name und das Modell stammen", "text": "Die Holak-Skala wurde von Grzegorz Holak mit Unterstützung von Konrad Gomulski entwickelt — daher der Name. Beide sind Senior Test Development Engineer bei Sii Polska und Mitglieder der SJSI sowie Mitbegründer von quality-blog.eu; Grzegorz Holak ist zusätzlich Test Architect und AI Ambassador bei SCIB. Wir nutzen sie als Werkzeug zur Selbstreflexion, nicht zur Zertifizierung.",
+          "links": [
+            { "label": "Holak-Skala — persönliche Dimension (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka-private" },
+            { "label": "Holak-Skala — organisatorische Dimension (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mshp-s2-osie-i-granice",
+      "title": "Woran man die Stufe erkennt: Achsen und zwei Schwellen",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Höhere Stufen erkennst du nicht an der Anzahl der Werkzeuge, sondern an den Gewohnheiten (ab Stufe ~4 aufwärts): bewusstes Formulieren des Prompts, Verwalten von Kontext und Kosten, Verifizieren kritischer Antworten anhand der Quelle, Gestalten der Arbeit so, dass Entscheidungen umkehrbar sind, sowie das Messen der realen Wirkung von KI auf deine Qualität und deine Zeit." },
+        { "kind": "list", "items": [
+          "Barriere — eine Gewohnheit, deren Fehlen den Aufstieg blockiert.",
+          "Erfolg — was tatsächlich funktioniert, wenn die Stufe erreicht ist.",
+          "Falle — ein falsches Reifegefühl, das die Entwicklung zurückwirft."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Zwei kritische Schwellen (persönlich)", "text": "Schwelle 8→9: vom „versierten Nutzer“ zum Gestalten der Arbeit so, dass KI-gestützte Entscheidungen überprüfbar und umkehrbar sind, sowie zum Teilen von Praktiken. Schwelle 10→11: von der Routine zum Messen der eigenen KI-Wirkung und zur kontinuierlichen Verbesserung des Handwerks." }
+      ]
+    },
+    {
+      "id": "mshp-s3-jak-czytac",
+      "title": "Wie du dein Ergebnis liest",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Gleich markierst du Aussagen, die heute für deine eigene Praxis zutreffen. Die Anzahl der Markierungen ergibt eine orientierende Stufe 0–11 sowie einen Hinweis „wo du stehst / wie du höher kommst“. Markiere ehrlich nur das, was du tatsächlich täglich tust." },
+        { "kind": "callout", "variant": "safe", "title": "Das ist eine Diagnose, keine Bewertung", "text": "Es gibt keine richtigen und falschen Antworten und keine Bestehensgrenze. Das Ergebnis beeinflusst weder den Abschluss des Pfades noch irgendeinen Test — es ist ein Spiegel, keine Prüfung." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "maturity-check",
+    "id": "mshp-selfcheck",
+    "title": "Holak-Skala v2.1p — Selbstdiagnose der persönlichen Reife",
+    "intro": "Markiere die Aussagen, die heute für deine eigene Praxis im Umgang mit KI zutreffen. Nach der Auswertung siehst du eine orientierende Stufe 0–11 und den nächsten Schritt — ohne pass/fail-Bewertung.",
+    "scales": [
+      {
+        "id": "person",
+        "label": "Person (Holak-Skala v2.1p)",
+        "intro": "Wie reif ist deine eigene Praxis im Umgang mit KI? Markiere das, was du täglich tust.",
+        "max": 11,
+        "statements": [
+          { "id": "per-1", "text": "Ich nutze KI für konkrete, wiederkehrende Aufgaben." },
+          { "id": "per-2", "text": "Ich formuliere den Prompt bewusst: Rolle, Ziel, Kontext, Ausgabeformat." },
+          { "id": "per-3", "text": "Ich erkenne, dass der Output trotz glaubwürdiger Form fehlerhaft sein kann." },
+          { "id": "per-4", "text": "Ich verifiziere kritische Antworten anhand der Quelle, bevor ich sie verwende." },
+          { "id": "per-5", "text": "Ich wähle Werkzeug/Modell passend zur Aufgabe und nutze nicht eines für alles." },
+          { "id": "per-6", "text": "Ich verwalte den Kontext: Ich gebe nur das Nötige an und achte auf die Kosten." },
+          { "id": "per-7", "text": "Ich weiß, wann ich KI NICHT einsetzen sollte: fehlende Daten, hohes Risiko, Unumkehrbarkeit." },
+          { "id": "per-8", "text": "Ich gestalte die Arbeit so, dass KI-gestützte Entscheidungen umkehrbar und überprüfbar sind." },
+          { "id": "per-9", "text": "Ich teile Praktiken und kalibriere gemeinsam mit anderen die Bewertung des Outputs." },
+          { "id": "per-10", "text": "Ich messe die reale Wirkung von KI auf meine Qualität und Zeit und passe mein Vorgehen an." },
+          { "id": "per-11", "text": "Ich betrachte die Arbeit mit KI als kontinuierliche Verbesserung meines eigenen Handwerks." }
+        ],
+        "bands": [
+          { "min": 0, "max": 2, "label": "Stufe 0–2: Erste Anwendungen", "advice": "Barriere: KI wie ein Orakel zu behandeln. Nächster Schritt: Beginne, den Prompt bewusst zu formulieren und jede Antwort, die du verwenden willst, zu überprüfen." },
+          { "min": 3, "max": 5, "label": "Stufe 3–5: Bewusster Nutzer", "advice": "Erfolg: Du verifizierst den Output und wählst das Werkzeug passend zur Aufgabe. Nächster Schritt: Lerne, Kontext und Kosten zu verwalten und zu erkennen, wann du KI NICHT einsetzen solltest." },
+          { "min": 6, "max": 8, "label": "Stufe 6–8: Praktiker", "advice": "Erfolg: Du kennst die Grenzen und verwaltest den Kontext. Schwelle 8→9: Gestalte die Arbeit so, dass Entscheidungen umkehrbar und überprüfbar sind, und teile Praktiken mit dem Team." },
+          { "min": 9, "max": 11, "label": "Stufe 9–11: Meisterschaft des Handwerks", "advice": "Falle: Routine ohne Messung und Reflexion. Schwelle 10→11: Miss die reale Wirkung von KI auf deine Arbeit und betrachte dein Handwerk als kontinuierliche Verbesserung." }
+        ]
+      }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Die Holak-Skala v2.1p misst, WIE du KI nutzt (Kontext, Überprüfbarkeit, Umkehrbarkeit), nicht die Anzahl der Werkzeuge.",
+      "Du bewertest ausschließlich deine eigene Praxis — die Organisation diagnostizierst du separat (MSHO).",
+      "Es ist eine orientierende Diagnose: ohne pass/fail, ohne Einfluss auf den Abschluss — sie soll den nächsten Schritt aufzeigen."
+    ],
+    "checklist": [
+      "Hast du deine orientierende persönliche Stufe (0–11) benannt?",
+      "Weißt du, was die nächste zu überwindende Barriere ist?",
+      "Kennst du einen konkreten nächsten Schritt, um höher zu kommen?"
+    ],
+    "checklistTitle": "Checkliste — nach der persönlichen Selbstdiagnose",
+    "nextStep": "Nächster Schritt: Wähle eine Barriere der höheren Stufe und plane ein kleines, umkehrbares Experiment in deiner eigenen Arbeit."
+  }
+}

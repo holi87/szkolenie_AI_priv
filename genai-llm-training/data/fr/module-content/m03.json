@@ -1,0 +1,116 @@
+{
+  "_meta": {
+    "issue": "#21 [21][M4] Wdroż moduły M3-M6",
+    "storyboard": "docs/storyboard/m03-parametry.md",
+    "interaction": "Suwaki generacji (kind: tune)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (SklepDemo/NotkaApp). Output interakcji jest prerenderowany (nie z żywego modelu). ZERO PII.",
+    "note": "Egzemplarz referencyjny typu tune: parametry → autorskie efekty (dane) + scorowany checkpoint."
+  },
+  "module": "M3",
+  "intro": "Les mêmes données d'entrée et le même modèle peuvent produire des réponses différentes, car la génération est pilotée par des paramètres. En QA, la reproductibilité du résultat est le fondement d'une documentation et d'une régression fiables — des paramètres non maîtrisés produisent un output imprévisible.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Pourquoi maîtriser la génération ?",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Trois commandes déterminent la forme de la réponse : temperature et top-p (aléa) ainsi que max tokens (longueur). Avant de faire confiance à un output dans la documentation de test, vous devez savoir comment les régler." },
+        { "kind": "callout", "variant": "info", "title": "Déterminisme apparent", "text": "Une température basse réduit l'aléa, mais ne garantit pas un résultat identique à chaque exécution — il s'agit toujours d'un modèle probabiliste." }
+      ]
+    },
+    {
+      "id": "s2-temperature",
+      "title": "Temperature — du formel au créatif",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Temperature", "original": "température", "text": "commande de l'aléa dans le choix du token suivant." },
+        { "kind": "list", "items": [
+          "Basse (~0,0–0,3) : réponses prudentes, reproductibles, formelles — pour la documentation et les étapes de test.",
+          "Haute (~0,8–1,2) : réponses variées, créatives, moins prévisibles — pour le brainstorming de données de test."
+        ] }
+      ]
+    },
+    {
+      "id": "s3-wysoka-losowosc",
+      "title": "Aléa élevé et travail QA",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Une température haute en QA signifie une absence de reproductibilité (deux exécutions = deux étapes différentes), une dérive du contenu, une difficulté de relecture et d'audit, ainsi qu'un risque de changements silencieux en régression." },
+        { "kind": "callout", "variant": "warn", "title": "Règle", "text": "Quand la reproductibilité et la conformité à l'exigence comptent — réduisez l'aléa." }
+      ]
+    },
+    {
+      "id": "s4-top-p",
+      "title": "top-p — la deuxième commande d'aléa",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "top-p", "original": "nucleus sampling", "text": "seuil de probabilité cumulée — il restreint l'ensemble des candidats pour le token suivant aux plus probables dont la somme atteint p." },
+        { "kind": "paragraph", "text": "Les deux paramètres pilotent la diversité ; on en règle habituellement un seul à la fois. Un top-p bas = un choix plus étroit et plus sûr (vocabulaire stable des termes QA) ; un top-p élevé = des formulations plus larges et risquées." }
+      ]
+    },
+    {
+      "id": "s5-max-tokens",
+      "title": "max tokens — quand la réponse s'interrompt",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "max tokens", "original": "nombre maximal de tokens de la réponse", "text": "limite stricte de longueur de l'output." },
+        { "kind": "paragraph", "text": "Le dépassement de la limite coupe la réponse au milieu d'une phrase, d'un tableau ou d'une liste — il manque les dernières étapes ou les critères d'acceptation. Vous le reconnaîtrez à une phrase tronquée et à une liste non terminée. Réaction : augmentez la limite ou demandez un format plus court." }
+      ]
+    },
+    {
+      "id": "s6-decyzja",
+      "title": "Quel réglage pour la documentation de test ?",
+      "type": "decision",
+      "blocks": [
+        { "kind": "paragraph", "text": "Comparez deux presets pour la même tâche (rédaction des étapes d'un cas de test). Variante A : temp 0,2 / top-p 0,3 / limite élevée. Variante B : temp 1,0 / top-p 0,95 / limite basse." },
+        { "kind": "paragraph", "text": "Pour la documentation, choisissez un aléa plus bas et une marge de longueur — cela garantit la reproductibilité et l'absence de troncature. Vous allez le vérifier dans un instant à l'aide des curseurs." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "tune",
+    "id": "m3-suwaki",
+    "title": "Curseurs de génération",
+    "intro": "Réglez les paramètres et observez comment évolue l'output simulé pour la tâche « lister les étapes de test de connexion dans SklepDemo ». Répondez ensuite au checkpoint.",
+    "outputLabel": "Output simulé pour les réglages choisis :",
+    "controls": [
+      { "id": "temp", "label": "Temperature", "levels": [
+        { "value": "0.2", "label": "Basse (0,2)", "effect": "Formalisme : élevé. Étapes de test reproductibles, même structure à chaque exécution." },
+        { "value": "1.0", "label": "Haute (1,0)", "effect": "Formalisme : faible. Les étapes diffèrent d'une exécution à l'autre — absence de reproductibilité, risque de dérive du contenu." }
+      ] },
+      { "id": "topp", "label": "top-p", "levels": [
+        { "value": "0.3", "label": "Bas (0,3)", "effect": "Vocabulaire des termes QA stable et prévisible." },
+        { "value": "0.95", "label": "Élevé (0,95)", "effect": "Formulations plus larges, parfois risquées — plus difficiles à relire." }
+      ] },
+      { "id": "maxtok", "label": "max tokens", "levels": [
+        { "value": "512", "label": "Limite élevée (512)", "effect": "Complétude : totale. Toutes les étapes et les critères d'acceptation tiennent." },
+        { "value": "64", "label": "Limite basse (64)", "effect": "⚠ Réponse tronquée — la liste des étapes s'interrompt au milieu, pas de récapitulatif. Augmentez la limite." }
+      ] }
+    ],
+    "checkpoint": {
+      "prompt": "Pour la rédaction des étapes d'un cas de test (la reproductibilité et l'exhaustivité comptent) quel réglage est le plus sûr ?",
+      "type": "single_choice",
+      "options": [
+        { "id": "A", "text": "temp 0,2 / top-p 0,3 / limite élevée — aléa bas et marge de longueur" },
+        { "id": "B", "text": "temp 1,0 / top-p 0,95 / limite basse — créatif et court" }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Bien : un aléa bas assure la reproductibilité, et une limite élevée protège contre la troncature de la liste d'étapes.",
+      "feedbackIncorrect": "Un aléa élevé casse la reproductibilité, et une limite basse coupe les étapes — c'est néfaste pour la documentation. Choisissez une température basse et une marge de longueur."
+    }
+  },
+  "summary": {
+    "points": [
+      "Temperature et top-p pilotent l'aléa ; max tokens pilote la longueur de la réponse.",
+      "Pour la QA, privilégiez un aléa bas et une marge de longueur — reproductibilité et absence de troncature.",
+      "Vérifiez toujours la reproductibilité et la complétude de l'output avant de l'utiliser dans la documentation."
+    ],
+    "checklist": [
+      "Ai-je réduit l'aléa là où la reproductibilité compte ?",
+      "La limite de longueur peut-elle contenir toute la réponse ?",
+      "L'output est-il identique lors d'une nouvelle exécution ?"
+    ],
+    "checklistTitle": "Checklist — maîtrise de la génération",
+    "nextStep": "Étape suivante : M4 — embeddings et similarité sémantique (ou le prochain module obligatoire du parcours)."
+  }
+}

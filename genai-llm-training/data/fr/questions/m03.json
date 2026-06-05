@@ -1,0 +1,301 @@
+{
+  "_meta": {
+    "module": "M3",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M3. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q018",
+      "module": "M3",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Le participant choisit la plage de temperature adaptée à une tâche exigeant formalité et reproductibilité.",
+      "prompt": "Vous devez générer les étapes d'un cas de test pour la documentation dans NotkaApp — le résultat doit être formel et aussi reproductible que possible lors d'une nouvelle exécution. Quelle plage de temperature est la plus appropriée ?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Basse, environ 0,0-0,3"
+        },
+        {
+          "id": "B",
+          "text": "Moyenne, environ 0,5-0,7"
+        },
+        {
+          "id": "C",
+          "text": "Élevée, environ 0,8-1,2"
+        },
+        {
+          "id": "D",
+          "text": "Maximale, environ 1,3-1,5"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Une temperature basse (~0,0-0,3) produit des réponses prudentes et plus reproductibles, c'est-à-dire exactement ce qu'exige la documentation de test.",
+      "feedbackIncorrect": "Plus la temperature est élevée, plus l'aléatoire est grand et plus la reproductibilité diminue — l'inverse de ce que l'on souhaite dans la documentation. Revoyez l'écran M3.2 sur l'échelle de temperature.",
+      "references": [
+        "M3.2"
+      ]
+    },
+    {
+      "id": "Q019",
+      "module": "M3",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Le participant identifie le principal risque d'une temperature élevée dans les tâches QA.",
+      "prompt": "Une équipe exécute deux fois le même prompt portant sur des cas de test de SklepDemo avec une temperature de 1,1. Quel risque pour le travail QA est ici le plus caractéristique ?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Absence de reproductibilité — deux exécutions donnent des étapes divergentes, ce qui complique la revue et la régression"
+        },
+        {
+          "id": "B",
+          "text": "La réponse est toujours coupée au milieu d'une phrase"
+        },
+        {
+          "id": "C",
+          "text": "Les réponses deviennent plus courtes et plus concises qu'avec une temperature basse"
+        },
+        {
+          "id": "D",
+          "text": "Le résultat devient identique à chaque exécution"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Un fort aléatoire provoque une dérive du contenu et un manque de reproductibilité entre les exécutions, ce qui mine la fiabilité de la documentation et de la régression.",
+      "feedbackIncorrect": "La coupure relève du max tokens, et la reproductibilité diminue (elle n'augmente pas) à mesure que la temperature monte. Revoyez l'écran M3.3 sur le risque d'un fort aléatoire en QA.",
+      "references": [
+        "M3.3"
+      ]
+    },
+    {
+      "id": "Q020",
+      "module": "M3",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Le participant reconnaît les symptômes d'une réponse coupée par la limite max tokens.",
+      "prompt": "Après la génération d'une liste de cas de test, la réponse se termine par une phrase tronquée et une liste non close, sans synthèse. Que s'est-il très probablement passé ?",
+      "options": [
+        {
+          "id": "A",
+          "text": "La réponse a été coupée une fois la limite max tokens atteinte"
+        },
+        {
+          "id": "B",
+          "text": "La temperature était réglée trop bas"
+        },
+        {
+          "id": "C",
+          "text": "Le top-p a restreint le vocabulaire des termes QA"
+        },
+        {
+          "id": "D",
+          "text": "Le modèle a jugé la tâche non conforme à la politique"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Une phrase tronquée, une liste non close et l'absence de synthèse sont les symptômes typiques d'un dépassement de la limite max tokens.",
+      "feedbackIncorrect": "La temperature et le top-p pilotent l'aléatoire, et non la longueur — c'est le max tokens qui limite strictement le nombre de tokens de la réponse. Revoyez l'écran M3.5 sur la reconnaissance d'une coupure.",
+      "references": [
+        "M3.5"
+      ]
+    },
+    {
+      "id": "Q021",
+      "module": "M3",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Le participant adapte le réglage de l'aléatoire à la nature de la tâche (créative vs formelle).",
+      "prompt": "Un testeur a deux tâches : (1) un brainstorming de données de test inhabituelles pour un formulaire de SklepDemo et (2) la rédaction des étapes définitives d'un cas de test destinées à la documentation. Comment régler raisonnablement la temperature pour chacune d'elles ?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Tâche 1 — temperature plus élevée ; tâche 2 — temperature basse"
+        },
+        {
+          "id": "B",
+          "text": "Tâche 1 — temperature basse ; tâche 2 — temperature plus élevée"
+        },
+        {
+          "id": "C",
+          "text": "Les deux tâches — temperature maximale pour un résultat plus riche"
+        },
+        {
+          "id": "D",
+          "text": "Les deux tâches — temperature 0,0, car c'est toujours le plus sûr"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Le brainstorming tire parti de la diversité (temperature plus élevée), tandis que la documentation exige reproductibilité et formalité (temperature basse).",
+      "feedbackIncorrect": "Le choix est inversé : la tâche créative gagne à un aléatoire plus élevé, et la tâche formelle à un aléatoire bas. Revoyez l'écran M3.2 sur la correspondance entre temperature et type de tâche.",
+      "references": [
+        "M3.2"
+      ]
+    },
+    {
+      "id": "Q022",
+      "module": "M3",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Le participant relie un réglage de paramètre à son effet sur la formalité, la diversité et la longueur de l'output.",
+      "prompt": "Associez le réglage du paramètre de génération à son effet sur l'output.",
+      "pairs": [
+        {
+          "left": "Temperature basse",
+          "right": "Réponse plus reproductible et plus formelle"
+        },
+        {
+          "left": "Temperature élevée",
+          "right": "Réponse plus diversifiée et plus créative"
+        },
+        {
+          "left": "max tokens bas",
+          "right": "Réponse coupée avant la fin"
+        },
+        {
+          "left": "top-p bas",
+          "right": "Choix plus étroit et plus stable des tokens suivants"
+        }
+      ],
+      "feedbackCorrect": "La temperature pilote la formalité/diversité, le max tokens la longueur, et le top-p la largeur du pool de candidats pour le token suivant.",
+      "feedbackIncorrect": "Les rôles ont été confondus : l'aléatoire (temperature, top-p) n'est pas la même chose que la longueur (max tokens). Revoyez les écrans M3.2 et M3.4 sur les leviers de génération.",
+      "references": [
+        "M3.2",
+        "M3.4"
+      ]
+    },
+    {
+      "id": "Q023",
+      "module": "M3",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Le participant relie un réglage de paramètre à son risque ou à son usage dans le travail QA.",
+      "prompt": "Associez le réglage du paramètre de génération à sa conséquence dans le contexte de la documentation de test QA.",
+      "pairs": [
+        {
+          "left": "Temperature élevée",
+          "right": "Divergence des étapes entre deux exécutions du même prompt"
+        },
+        {
+          "left": "max tokens bas",
+          "right": "Absence des dernières étapes ou des critères d'acceptation dans la réponse"
+        },
+        {
+          "left": "top-p bas",
+          "right": "Vocabulaire stable et sûr des termes QA"
+        },
+        {
+          "left": "top-p élevé",
+          "right": "Formulations plus larges et plus risquées"
+        }
+      ],
+      "feedbackCorrect": "Un fort aléatoire menace la reproductibilité, un max tokens trop bas perd la fin du document, et le top-p règle la largeur et le risque du choix des mots.",
+      "feedbackIncorrect": "Notez que c'est l'aléatoire (temperature/top-p) qui est responsable du risque sur le contenu, et le max tokens de l'absence de fin. Revoyez les écrans M3.3 et M3.4.",
+      "references": [
+        "M3.3",
+        "M3.4"
+      ]
+    },
+    {
+      "id": "Q024",
+      "module": "M3",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Le participant compare deux préréglages de génération et choisit le plus sûr pour la documentation de test.",
+      "prompt": "Vous devez rédiger les étapes d'un cas de test de connexion à NotkaApp comme documentation durable. Deux préréglages sont proposés pour la même tâche :\nVariante A : temperature 0,2 / top-p 0,3 / max tokens élevé.\nVariante B : temperature 1,0 / top-p 0,95 / max tokens bas.\nQuel choix est le plus sûr et pourquoi ?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Variante A — un faible aléatoire assure reproductibilité et formalité, tandis qu'un max tokens élevé protège contre la coupure du document"
+        },
+        {
+          "id": "B",
+          "text": "Variante B — une temperature et un top-p élevés donneront une description des étapes plus riche et plus détaillée"
+        },
+        {
+          "id": "C",
+          "text": "Variante B — un max tokens bas imposera de la concision, ce qui est toujours préférable dans la documentation"
+        },
+        {
+          "id": "D",
+          "text": "N'importe lequel — les paramètres de génération n'influencent pas la documentation de test"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Pour la documentation, ce qui compte est la reproductibilité et l'exhaustivité : un faible aléatoire (A) limite la dérive, et une marge de max tokens protège contre la troncature des étapes.",
+      "feedbackIncorrect": "Un fort aléatoire menace la reproductibilité, et un max tokens bas risque de couper le document — ce ne sont pas des atouts dans la documentation. Revoyez l'écran M3.6 sur le choix du préréglage le plus sûr.",
+      "references": [
+        "M3.6"
+      ]
+    }
+  ]
+}

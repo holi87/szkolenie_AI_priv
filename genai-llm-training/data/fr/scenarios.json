@@ -1,0 +1,122 @@
+{
+  "_meta": {
+    "issue": "#8 [08][M1] Przygotuj syntetyczne scenariusze szkoleniowe",
+    "version": "0.1",
+    "doc": "docs/scenariusze.md",
+    "dataPolicy": "WSZYSTKIE dane są SYNTETYCZNE i fikcyjne. Domena e-mail: przyklad.test (zarezerwowana). Produkty/firmy fikcyjne. Identyfikatory w formatach jawnie testowych. PESEL/numery to placeholdery nieprawidłowe. ZERO realnych danych klienta/PII.",
+    "source": "wymagania/06 (moduły, interakcje), wymagania/07 (typy pytań), docs/storyboard/"
+  },
+  "scenarios": [
+    {
+      "id": "SC-QA-01",
+      "title": "Génération de cas de test à partir d'une exigence",
+      "modules": ["M8"],
+      "paths": ["S2", "S3"],
+      "competency": "Génère des cas de test et détecte les lacunes de couverture (E : M8)",
+      "usedBy": ["QA workbench", "pytania Q61-Q64"],
+      "data": {
+        "wymaganie": "Application NotkaApp (fictive) : l'utilisateur réinitialise son mot de passe via un lien e-mail valable 30 minutes ; après 3 tentatives erronées, le compte est bloqué pendant 15 minutes.",
+        "outputLLM": "Cas générés : TC1 réinitialisation correcte ; TC2 lien expiré ; TC3 mot de passe erroné 3x → blocage. (manquants : e-mail vide, lien utilisé deux fois, sessions parallèles)"
+      }
+    },
+    {
+      "id": "SC-PII-01",
+      "title": "Ticket contenant des données personnelles — décision de le coller dans un LLM",
+      "modules": ["M10"],
+      "paths": ["S1", "S2", "S3"],
+      "competency": "Classe les données comme autorisées / nécessitant une anonymisation / interdites (E : M10, questions critiques)",
+      "usedBy": ["Data safety gate", "pytania krytyczne Q81-Q85"],
+      "data": {
+        "zgloszenie": "Le client Jan Kowalski (jan.kowalski@przyklad.test, ID client KLI-000123, PESEL 00000000000 [synthétique, invalide]) signale une erreur de paiement dans SklepDemo.",
+        "pytanie": "Est-il permis de coller l'intégralité du ticket dans un LLM public afin d'analyser l'erreur ?",
+        "poprawnaDecyzja": "Anonymiser les données identifiantes ou utiliser un outil approuvé doté de contrôles ; ne pas coller de données brutes."
+      }
+    },
+    {
+      "id": "SC-PII-02",
+      "title": "Journal applicatif avec des fragments de données — que faut-il anonymiser",
+      "modules": ["M10"],
+      "paths": ["S2", "S3"],
+      "competency": "Identifie les données nécessitant une anonymisation dans un journal (E : M10)",
+      "usedBy": ["Data safety gate", "pytania Q86-Q90"],
+      "data": {
+        "log": "2026-01-02 ERROR user=anna.nowak@przyklad.test ip=10.0.0.5 token=tok_test_ABC123 order=ORD-TEST-777 msg=payment_failed",
+        "doAnonimizacji": ["e-mail", "token", "potentiellement l'identifiant de commande dans le contexte d'un client"]
+      }
+    },
+    {
+      "id": "SC-RAG-01",
+      "title": "Mini-corpus de documentation QA pour le retrieval/RAG",
+      "modules": ["M4", "M5", "M6"],
+      "paths": ["S3"],
+      "competency": "Choisit le retrieval et diagnostique le similar-but-useless ; agence un pipeline RAG (E : M4/M5/M6)",
+      "usedBy": ["Mapa semantyczna", "Retrieval debugger", "Zbuduj pipeline RAG", "pytania Q33-Q50"],
+      "data": {
+        "korpus": [
+          { "id": "DOC1", "text": "Procédure de connexion dans NotkaApp : le jeton de session expire après 30 min d'inactivité." },
+          { "id": "DOC2", "text": "Politique de mots de passe NotkaApp : min. 12 caractères, blocage après 3 erreurs." },
+          { "id": "DOC3", "text": "Réinitialisation du mot de passe : lien e-mail valable 30 min, à usage unique." },
+          { "id": "DOC4", "text": "FAQ marketing NotkaApp : avantages du produit et tarifs." }
+        ],
+        "zapytanie": "Au bout de combien de temps le lien de réinitialisation du mot de passe expire-t-il ?",
+        "pulapka": "DOC1 (jeton de session 30 min) est sémantiquement proche, mais la source correcte est DOC3 (lien de réinitialisation)."
+      }
+    },
+    {
+      "id": "SC-AGENT-01",
+      "title": "Attribution de permissions à un agent QA",
+      "modules": ["M9"],
+      "paths": ["S3"],
+      "competency": "Conçoit un contrôle minimal des permissions, des journaux, un human-in-the-loop et un rollback (E : M9)",
+      "usedBy": ["Agent permission board", "pytania Q76-Q78"],
+      "data": {
+        "agent": "Agent exécutant les tests de régression dans l'environnement TEST (CI fictif « PipeDemo »).",
+        "zadania": ["lancer les tests", "lire les journaux", "créer un rapport", "signaler un défaut", "modifier la configuration de l'environnement"],
+        "ryzyko": "La modification de la configuration et toute écriture hors de TEST exigent l'approbation d'un humain et un rollback ; aucun accès à la production."
+      }
+    },
+    {
+      "id": "SC-VERIFY-01",
+      "title": "Réponse d'un LLM mêlant contenus justifiés et hallucinations",
+      "modules": ["M11"],
+      "paths": ["S1", "S2", "S3"],
+      "competency": "Marque les phrases comme correctes / non justifiées / nécessitant une source / risquées (E : M11)",
+      "usedBy": ["Output verifier", "pytania Q95-Q98"],
+      "data": {
+        "odpowiedzLLM": [
+          "La réinitialisation du mot de passe dans NotkaApp utilise un lien valable 30 minutes. [conforme à DOC3]",
+          "Le lien peut être utilisé plusieurs fois jusqu'à réussite. [non justifié — contredit DOC3]",
+          "Le blocage du compte dure 24 heures. [nécessite une source — non conforme à l'exigence des 15 min]",
+          "NotkaApp possède la certification ISO 27001. [risqué — aucune source]"
+        ]
+      }
+    },
+    {
+      "id": "SC-PROMPT-01",
+      "title": "Prompt défectueux à améliorer",
+      "modules": ["M7"],
+      "paths": ["S1", "S2", "S3"],
+      "competency": "Améliore un prompt imprécis selon une grille (E : M7)",
+      "usedBy": ["Prompt clinic", "pytania Q57-Q60", "rubryka R1"],
+      "data": {
+        "wadliwyPrompt": "Écris des tests pour la connexion.",
+        "braki": ["absence de rôle/objectif", "absence de contexte (quelle application, quelle exigence)", "absence de contraintes et de critères", "absence de format de sortie"]
+      }
+    },
+    {
+      "id": "SC-EVAL-01",
+      "title": "Écart entre l'évaluation humaine et le LLM-as-a-judge",
+      "modules": ["M12"],
+      "paths": ["S3"],
+      "competency": "Détecte le bias/position bias et calibre la grille (E : M12)",
+      "usedBy": ["Judge calibration lab", "pytania Q113-Q116", "rubryka R3"],
+      "data": {
+        "przyklady": [
+          { "id": "EX1", "ocenaCzlowiek": 4, "ocenaJudge": 5, "uwaga": "le juge favorise la réponse plus longue" },
+          { "id": "EX2", "ocenaCzlowiek": 2, "ocenaJudge": 4, "uwaga": "position bias — première réponse" }
+        ],
+        "zadanie": "Identifie la source de l'écart et corrige la grille."
+      }
+    }
+  ]
+}

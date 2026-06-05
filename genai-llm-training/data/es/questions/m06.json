@@ -1,0 +1,403 @@
+{
+  "_meta": {
+    "module": "M6",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M6. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q041",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "kolejnosc_procesu",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "El participante ordena el pipeline RAG completo, desde los documentos fuente hasta la respuesta con citas, en el orden correcto.",
+      "prompt": "Ordena correctamente los pasos del pipeline RAG completo (en inglés, Retrieval-Augmented Generation) — desde la preparación del corpus «SklepDemo» hasta la respuesta final con citas.",
+      "sequence": [
+        "Divide los documentos fuente en fragmentos (chunking)",
+        "Calcula los embeddings para los fragmentos",
+        "Guarda los fragmentos y los embeddings en el índice / base de datos vectorial",
+        "Recibe la consulta del usuario",
+        "Busca los fragmentos más cercanos (retrieval, top-k)",
+        "Inyecta el contexto recuperado en el prompt y genera la respuesta con citas"
+      ],
+      "feedbackCorrect": "Los fragmentos deben crearse primero y entrar en el índice (chunking → embeddings → índice) antes de que la consulta active el retrieval; solo entonces el contexto recuperado alimenta la generación con citas.",
+      "feedbackIncorrect": "La fase de indexación (chunking, embeddings, índice) es independiente de la consulta y siempre la precede; el retrieval debe ir antes de la generación, porque le proporciona el contexto. Repasa la pantalla «Pipeline RAG de principio a fin».",
+      "references": [
+        "M6.2",
+        "M6.3"
+      ]
+    },
+    {
+      "id": "Q042",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "kolejnosc_procesu",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "El participante ordena la fase de construcción del índice (offline) del pipeline RAG sobre un corpus de documentación de requisitos.",
+      "prompt": "El equipo prepara el índice del corpus de requisitos «SklepDemo» antes de que nadie formule una pregunta. Ordena correctamente los pasos de esta fase de indexación.",
+      "sequence": [
+        "Reúne los documentos fuente del corpus «SklepDemo»",
+        "Divide cada documento en fragmentos (chunking) conservando los encabezados y los identificadores en los metadatos",
+        "Calcula los embeddings para cada fragmento",
+        "Guarda los fragmentos junto con sus embeddings y metadatos en el índice / base de datos vectorial"
+      ],
+      "feedbackCorrect": "La fase de indexación opera sobre los documentos (no sobre la consulta): primero la recopilación, luego la división en fragmentos, después los embeddings y, por último, el guardado en el índice listo para el retrieval.",
+      "feedbackIncorrect": "Los embeddings solo pueden calcularse para fragmentos que ya existen, y al índice entra el fragmento junto con su embedding y sus metadatos — el orden viene impuesto por la dependencia de los datos. Vuelve a la descripción del chunking y de los embeddings.",
+      "references": [
+        "M6.2",
+        "M6.4"
+      ]
+    },
+    {
+      "id": "Q043",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "kolejnosc_procesu",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "El participante ordena la ruta de consulta (query-time) con reranking y control de fundamentación, reconociendo el lugar de cada paso.",
+      "prompt": "El índice del corpus «SklepDemo» ya está listo. Ordena los pasos de la ruta que atiende una sola consulta del usuario, incluyendo el reordenamiento de los resultados y el control de fundamentación de la respuesta.",
+      "sequence": [
+        "Recibe la consulta del usuario y calcula su embedding",
+        "Busca los fragmentos candidatos en el índice (retrieval, top-k)",
+        "Reordena los candidatos según su relevancia (reranking)",
+        "Inyecta los mejores fragmentos como contexto en el prompt",
+        "Genera la respuesta con citas a los fragmentos",
+        "Comprueba la fundamentación (grounding): si cada frase tiene respaldo en un fragmento recuperado"
+      ],
+      "feedbackCorrect": "El reranking opera sobre los resultados del retrieval inicial (por eso va después de él y antes de inyectar el contexto), y el control de grounding ocurre tras generar la respuesta — verifica el texto producido frente a las fuentes.",
+      "feedbackIncorrect": "El reranking no tiene nada que ordenar sin un retrieval previo, y el grounding evalúa la respuesta ya generada, por lo que va al final. Repasa la profundización de ingeniería sobre reranking y grounding.",
+      "references": [
+        "M6.3",
+        "M6.9"
+      ]
+    },
+    {
+      "id": "Q044",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "El participante reconoce el papel del solapamiento (overlap) al dividir la documentación de requisitos en fragmentos.",
+      "prompt": "Al dividir la documentación de requisitos en fragmentos (chunking) se aplica un solapamiento (en inglés, overlap) entre fragmentos contiguos. ¿Para qué?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Para que una frase o un criterio de aceptación situado en el límite del corte no quede partido y permanezca en el contexto coherente de al menos un fragmento"
+        },
+        {
+          "id": "B",
+          "text": "Para reducir el número de fragmentos y, con ello, el tamaño del índice vectorial"
+        },
+        {
+          "id": "C",
+          "text": "Para que el modelo que genera la respuesta ya no tenga que citar las fuentes"
+        },
+        {
+          "id": "D",
+          "text": "Para acelerar el cálculo de los embeddings de todo el corpus"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "El overlap duplica el fragmento de texto en el límite del corte, de modo que el contenido cortado en un fragmento (p. ej., un criterio de aceptación) conserva el contexto en el contiguo.",
+      "feedbackIncorrect": "El overlap aumenta, no reduce, el número y el volumen de los fragmentos; su objetivo es proteger el contexto en los límites del corte, no el rendimiento ni la citación. Repasa la pantalla sobre el chunking y el parámetro overlap.",
+      "references": [
+        "M6.4"
+      ]
+    },
+    {
+      "id": "Q045",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "El participante elige RAG en lugar de fine-tuning ante la necesidad de conocimiento factual reciente y citable.",
+      "prompt": "El equipo de QA quiere que el asistente responda preguntas sobre los requisitos actuales de «SklepDemo» y que, en cada respuesta, indique el fragmento concreto de la especificación. La especificación cambia cada sprint. ¿Qué enfoque es el adecuado?",
+      "options": [
+        {
+          "id": "A",
+          "text": "RAG — porque se necesita conocimiento factual reciente y cambiante, con posibilidad de citar la fuente"
+        },
+        {
+          "id": "B",
+          "text": "Fine-tuning — porque ajustar el modelo sobre la especificación le enseñará el contenido de los requisitos de forma permanente"
+        },
+        {
+          "id": "C",
+          "text": "Fine-tuning — porque solo un modelo ajustado es capaz de aportar citas a los documentos"
+        },
+        {
+          "id": "D",
+          "text": "Ni RAG ni fine-tuning — basta con un prompt más largo con instrucciones generales de estilo"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "RAG le proporciona al modelo fragmentos recientes de la especificación actual y permite citarlos; un conocimiento factual que cambia cada sprint es el caso clásico para RAG, no para el ajuste.",
+      "feedbackIncorrect": "El fine-tuning fija el estilo o el comportamiento, no el conocimiento factual actual, y no garantiza citas a las fuentes — con una especificación cambiante quedaría desactualizado rápidamente. Repasa la pantalla «¿RAG o fine-tuning?» y el antimito de enseñar la documentación al modelo.",
+      "references": [
+        "M6.6"
+      ]
+    },
+    {
+      "id": "Q046",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "El participante distingue las señales de error de retrieval, de generation y de error en la fuente a partir de la respuesta y del contexto recuperado.",
+      "prompt": "¿Qué situación indica inequívocamente un error de generación (en inglés, generation), y no un error de búsqueda (retrieval) ni un error en la fuente?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Al contexto se recuperó el fragmento correcto, con el criterio correcto, y aun así la respuesta del modelo lo contradice"
+        },
+        {
+          "id": "B",
+          "text": "Entre los fragmentos recuperados no está, en absoluto, el que contiene la respuesta a la pregunta"
+        },
+        {
+          "id": "C",
+          "text": "El modelo citó el fragmento correctamente, pero el propio contenido del documento fuente estaba desactualizado"
+        },
+        {
+          "id": "D",
+          "text": "Se fijó top-k en 0, así que al prompt no llegó ningún fragmento"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Cuando el fragmento correcto estaba en el contexto pero la respuesta lo contradice, falló la fase de generación — el modelo usó mal una fuente correcta.",
+      "feedbackIncorrect": "La ausencia del fragmento correcto (B, D) es un error de retrieval, y una cita correcta con contenido erróneo del documento (C) es un error en la fuente. Repasa la pantalla «Las tres capas de error en RAG».",
+      "references": [
+        "M6.7",
+        "M6.8"
+      ]
+    },
+    {
+      "id": "Q047",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "El participante elige una estrategia de chunking que proteja la integridad de un requisito individual junto con su identificador.",
+      "prompt": "En el corpus «SklepDemo», cada requisito tiene un identificador (p. ej., «WYM-014») y su propio criterio de aceptación, a veces de varias frases. Antes, un corte arbitrario cada cierto número fijo de caracteres hacía que el criterio quedara partido por la mitad y que el retrieval devolviera un fragmento sin conclusión. ¿Qué estrategia de chunking elegir?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Dividir por requisito individual — un requisito con su identificador y su criterio de aceptación completo = un fragmento coherente, con el identificador en los metadatos"
+        },
+        {
+          "id": "B",
+          "text": "Mantener el corte fijo cada el mismo número de caracteres, solo reduciendo el tamaño del fragmento para que haya más"
+        },
+        {
+          "id": "C",
+          "text": "Meter el documento entero como un solo fragmento, para que nada pueda quedar cortado"
+        },
+        {
+          "id": "D",
+          "text": "Dividir al azar, pero aumentar top-k contando con que el fragmento adecuado caiga de todos modos"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "El límite lógico «un requisito = un fragmento» con el identificador en los metadatos conserva el criterio completo y una fuente de cita legible — exactamente lo que faltaba con el corte fijo.",
+      "feedbackIncorrect": "Los fragmentos fijos más pequeños cortan los criterios aún más a menudo, el documento entero como un solo fragmento estropea la relevancia del retrieval, y una división aleatoria con un top-k grande no garantiza la integridad del requisito. Repasa la regla de QA sobre el chunking por requisito.",
+      "references": [
+        "M6.4",
+        "M6.5"
+      ]
+    },
+    {
+      "id": "Q048",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "El participante decide entre RAG y fine-tuning, reconociendo la necesidad de un formato de salida constante en lugar de nuevo conocimiento factual.",
+      "prompt": "El asistente de QA debe devolver siempre el informe de ejecución de pruebas con una disposición de secciones y un tono corporativos constantes, independientemente de la pregunta. El contenido del informe procede de los logs de pruebas actuales, pero lo que importa es un formato y un estilo repetibles. ¿Qué elegir para el requisito de formato en sí?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Fine-tuning (o una plantilla en el prompt) — fijar un estilo y un formato de salida constantes es una tarea típica de ajuste, no de nuevo conocimiento factual"
+        },
+        {
+          "id": "B",
+          "text": "RAG — porque solo el retrieval es capaz de imponer al modelo una disposición fija de las secciones del informe"
+        },
+        {
+          "id": "C",
+          "text": "RAG sobre un documento que describa el formato — porque cada aspecto del comportamiento del modelo debe resolverse con retrieval"
+        },
+        {
+          "id": "D",
+          "text": "Nada de eso — el formato de salida no se puede controlar en absoluto en los modelos LLM"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Un estilo y un formato de salida constantes son un comportamiento del modelo que fija el fine-tuning (o una plantilla en el prompt) — no es conocimiento factual reciente que requiera RAG.",
+      "feedbackIncorrect": "RAG se encarga del conocimiento factual reciente y de las citas, no de imponer el formato; el mito de «todo con retrieval» es erróneo, y el formato de salida sí que se puede controlar. Repasa la distinción entre RAG y fine-tuning.",
+      "references": [
+        "M6.6"
+      ]
+    },
+    {
+      "id": "Q049",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "El participante reconoce la capa de error a partir del contexto recuperado y de la cita en la respuesta del modelo.",
+      "prompt": "Sobre el corpus «NotkaApp» (DOC1: el token de sesión caduca a los 30 min; DOC3: el enlace de restablecimiento de contraseña es válido 30 min, de un solo uso) llega la pregunta «¿Al cabo de cuánto tiempo caduca el enlace de restablecimiento de contraseña?». El modelo recuperó y citó solo DOC1 y responde: «Caduca a los 30 minutos de inactividad [DOC1]». El número casualmente coincide, pero la cita se refiere al token de sesión, no al enlace de restablecimiento. ¿Qué capa falló?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Retrieval — se recuperó un fragmento semánticamente parecido, pero incorrecto (DOC1), y faltó el correcto (DOC3) en el contexto"
+        },
+        {
+          "id": "B",
+          "text": "Generation — el contexto tenía DOC3, pero el modelo aun así resumió mal el fragmento correcto"
+        },
+        {
+          "id": "C",
+          "text": "Error en la fuente — DOC3 contiene información incorrecta sobre el tiempo de validez del enlace"
+        },
+        {
+          "id": "D",
+          "text": "Sin error — dado que el número «30 minutos» coincide, la respuesta está plenamente fundamentada"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "La cita apunta a DOC1 (token de sesión), y no al correcto DOC3 (enlace de restablecimiento) — es un clásico similar-but-useless: falló el retrieval, aunque el número coincida por casualidad.",
+      "feedbackIncorrect": "DOC3 no llegó al contexto, así que no es un error de generación ni de fuente; la coincidencia casual del número no significa fundamentación — la cita se refiere al documento equivocado. Repasa el diagnóstico de las capas de error y la trampa similar-but-useless.",
+      "references": [
+        "M6.8",
+        "M6.7"
+      ]
+    },
+    {
+      "id": "Q050",
+      "module": "M6",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "El participante identifica las señales que evidencian un error de búsqueda (retrieval) en una respuesta RAG.",
+      "prompt": "¿Cuáles de las siguientes señales indican que en el pipeline RAG falló la fase de búsqueda (en inglés, retrieval), y no la de generación? Marca todas las correctas.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Entre los fragmentos recuperados (top-k) no está, en absoluto, el que contiene la respuesta a la pregunta"
+        },
+        {
+          "id": "B",
+          "text": "La fuente correcta estaba excluida del índice, así que no pudo recuperarse"
+        },
+        {
+          "id": "C",
+          "text": "Se fijó top-k en un valor demasiado bajo y el fragmento correcto quedó fuera de la lista de recuperados"
+        },
+        {
+          "id": "D",
+          "text": "Se recuperó el fragmento correcto, con el criterio correcto, pero la respuesta del modelo lo contradice"
+        },
+        {
+          "id": "E",
+          "text": "El fragmento recuperado y citado era correcto, pero el contenido del propio documento fuente está desactualizado"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "La ausencia del fragmento correcto en el top-k, una fuente excluida y un top-k demasiado bajo son todas situaciones en las que el contexto correcto no llegó al modelo — es decir, un error de retrieval.",
+      "feedbackIncorrect": "Una contradicción pese a un contexto correcto (D) es un error de generación, y el contenido desactualizado de un documento citado correctamente (E) es un error en la fuente — ninguno de los dos tiene que ver con la búsqueda. Repasa las tres capas de error en RAG.",
+      "references": [
+        "M6.7",
+        "M6.8"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,102 @@
+{
+  "_meta": {
+    "issue": "#122 [M16] Aufteilung der Holak-Skala-Diagnose — ORGANISATORISCHE Dimension (v2.1e)",
+    "adr": "docs/adr/0008-modul-skali-holaka-msh.md",
+    "interaction": "Self-Check zur Organisationsreife (kind: maturity-check) — NON-gating, neutrales Framing",
+    "source": "KI-Adoptions-Reifegradmodell „Holak-Skala“: organisatorische Dimension v2.1e (Organisation, 0–11). Attribution: quality-blog.eu/pl/blog/skala-holaka.",
+    "dataPolicy": "ALLE Aussagen des Self-Checks sind SYNTHETISCH und allgemein (keine echten Daten/PII). Eine orientierende Diagnose — sie lässt sich nicht „nicht bestehen“. Die Bewertungsheuristik ist vereinfacht (Anzahl der Markierungen → Stufe 0–11) und unterliegt der Prüfung durch eine Fachexpertin oder einen Fachexperten (SME)."
+  },
+  "module": "MSHO",
+  "intro": "Die organisatorische Dimension der Holak-Skala (v2.1e) hilft dir, die Reife der KI-Adoption in deinem Team oder Unternehmen zu benennen — wo die Organisation heute steht und was der realistische nächste Schritt ist. Es ist eine Selbstdiagnose, kein Test: Es gibt kein „bestanden/nicht bestanden“-Ergebnis, sondern eine orientierende Stufe 0–11 und einen Hinweis, wie man höher kommt. Du kannst sie unabhängig von der persönlichen Diagnose (MSHP) durchführen.",
+  "screens": [
+    {
+      "id": "msho-s1-czym-jest",
+      "title": "Was die organisatorische Holak-Skala ist",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Die organisatorische Version (v2.1e) beschreibt die Reife der KI-Adoption in einem Team/Unternehmen auf 12 Stufen (0–11) — von Experimenten an der Basis bis hin zu einer bewussten, gemessenen und kontinuierlich verbesserten Adoption, die in der Strategie verankert ist. Sie hilft, zwei Fallen zu vermeiden: „Wir haben KI, also sind wir reif“ und „Das ist nur Spielerei“." },
+        { "kind": "list", "items": [
+          "Du bewertest die KI-Adoption in der ORGANISATION — unabhängig von der Reife einer einzelnen Person.",
+          "Eine Organisation kann höher oder niedriger stehen als ihre beste Fachkraft.",
+          "Die Diagnose deiner eigenen Praxis (Holak-Skala v2.1p) machst du getrennt im Modul MSHP."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Woher der Name und das Modell stammen", "text": "Die Holak-Skala wurde von Grzegorz Holak mit Unterstützung von Konrad Gomulski entwickelt — daher der Name. Beide sind Senior Test Development Engineer bei Sii Polska und Mitglieder der SJSI sowie Mitbegründer von quality-blog.eu; Grzegorz Holak ist zusätzlich Test Architect und AI Ambassador bei SCIB. Wir nutzen sie als Werkzeug zur Selbstreflexion, nicht zur Zertifizierung.",
+          "links": [
+            { "label": "Holak-Skala — organisatorische Dimension (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka" },
+            { "label": "Holak-Skala — persönliche Dimension (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka-private" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "msho-s2-osie-i-granice",
+      "title": "Woran man die Stufe erkennt: Achsen und zwei Schwellen",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Die Reife einer Organisation erkennst du nicht an der Anzahl der Lizenzen, sondern daran, ob KI in die Prozesse eingebunden ist: eine schriftlich festgehaltene Richtlinie zur akzeptablen Nutzung, erlaubte Anwendungen, verpflichtende Überprüfung der Ausgaben in kritischen Prozessen, Messung der Auswirkung auf Qualität und Zeit sowie Umkehrbarkeit von Entscheidungen mit Audit-Trail." },
+        { "kind": "list", "items": [
+          "Barriere — was der Organisation fehlt, um höher zu kommen.",
+          "Erfolg — was wirklich funktioniert, sobald die Stufe erreicht ist.",
+          "Falle — Reife als fertigen Zustand zu betrachten statt als kontinuierliche Verbesserung."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Zwei kritische Schwellen (organisatorisch)", "text": "Schwelle 8→9: von „individuellen guten Praktiken“ zur Einbindung von KI in einen Prozess mit klarer Aufteilung Assistent/Entscheider und Audit-Trail. Schwelle 10→11: von einzelnen Verbesserungen zur kontinuierlichen Verbesserung und Kalibrierung der Adoption als Teil der Strategie." }
+      ]
+    },
+    {
+      "id": "msho-s3-jak-czytac",
+      "title": "Wie man das Ergebnis der Organisation liest",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Gleich markierst du die Aussagen, die heute für deine Organisation zutreffen. Die Anzahl der Markierungen ergibt eine orientierende Stufe 0–11 sowie einen Hinweis „wo ihr steht / wie ihr höher kommt“. Markiere ehrlich nur das, was wirklich umgesetzt ist — nicht das, was geplant ist." },
+        { "kind": "callout", "variant": "safe", "title": "Das ist eine Diagnose, keine Bewertung", "text": "Es gibt keine richtigen und falschen Antworten und keine Bestehensgrenze. Das Ergebnis beeinflusst weder den Abschluss des Pfades noch irgendeinen Test — es ist ein Spiegel, kein Audit." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "maturity-check",
+    "id": "msho-selfcheck",
+    "title": "Holak-Skala v2.1e — Selbstdiagnose der Organisationsreife",
+    "intro": "Markiere die Aussagen, die heute für dein Team/Unternehmen zutreffen. Nach der Prüfung siehst du eine orientierende Stufe 0–11 und den nächsten Schritt — ohne pass/fail-Bewertung.",
+    "scales": [
+      {
+        "id": "org",
+        "label": "Organisation (Holak-Skala v2.1e)",
+        "intro": "Wie reif ist die KI-Adoption in deinem Team/Unternehmen? Markiere, was wirklich umgesetzt ist.",
+        "max": 11,
+        "statements": [
+          { "id": "org-1", "text": "Es gibt Personen, die KI für einzelne Aufgaben nutzen." },
+          { "id": "org-2", "text": "Es findet ein informeller Austausch über gute Praktiken der KI-Nutzung statt." },
+          { "id": "org-3", "text": "Eine Richtlinie zur akzeptablen Nutzung von KI wurde schriftlich festgehalten (Daten, Datenschutz, IP)." },
+          { "id": "org-4", "text": "Ausgewählte Prozesse haben definierte, erlaubte KI-Anwendungen." },
+          { "id": "org-5", "text": "KI-Ausgaben in kritischen Prozessen werden verpflichtend von einem Menschen überprüft." },
+          { "id": "org-6", "text": "Teams messen die Auswirkung von KI auf Qualität und Zeit, nicht nur die Tatsache der Nutzung." },
+          { "id": "org-7", "text": "Es gibt ein bewusstes Management von Kontext und Token-Kosten bei wiederholbaren Aufgaben." },
+          { "id": "org-8", "text": "KI-gestützte Entscheidungen sind umkehrbar und hinterlassen einen Audit-Trail." },
+          { "id": "org-9", "text": "KI ist in die Prozesse eingebunden mit klarer Aufteilung: Assistent vs. Entscheider." },
+          { "id": "org-10", "text": "Die Organisation kalibriert und auditiert regelmäßig die eigene KI-Nutzung." },
+          { "id": "org-11", "text": "Die KI-Adoption ist Teil der Strategie und der kontinuierlichen Verbesserung, keine einmalige Initiative." }
+        ],
+        "bands": [
+          { "min": 0, "max": 2, "label": "Stufe 0–2: Experimente an der Basis", "advice": "Barriere: keine gemeinsamen Regeln und kein Ziel. Nächster Schritt: Halte eine einfache Richtlinie zur akzeptablen Nutzung von KI schriftlich fest (Daten, Datenschutz) und benenne 1–2 Pilotprozesse." },
+          { "min": 3, "max": 5, "label": "Stufe 3–5: Erste Rahmen", "advice": "Erfolg: Es gibt Regeln und erlaubte Anwendungen. Nächster Schritt: Führe die verpflichtende Überprüfung der Ausgaben in kritischen Prozessen ein und beginne, die Auswirkung zu messen." },
+          { "min": 6, "max": 8, "label": "Stufe 6–8: Bewusste Prozesse", "advice": "Erfolg: Du misst die Auswirkung und steuerst den Kontext. Schwelle 8→9: Binde KI in einen Prozess ein mit klarer Aufteilung Assistent/Entscheider sowie einem Audit-Trail für Entscheidungen." },
+          { "min": 9, "max": 11, "label": "Stufe 9–11: Reife Adoption", "advice": "Falle: Reife als fertigen Zustand zu betrachten statt als kontinuierliche Verbesserung. Schwelle 10→11: Mache Kalibrierung und Audit der KI-Nutzung zum Teil der Strategie und der Team-Routine." }
+        ]
+      }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Die Holak-Skala v2.1e misst, ob KI in die Prozesse eingebunden ist (Regeln, Überprüfung, Messung), nicht die Anzahl der Lizenzen.",
+      "Du bewertest die Adoption in der Organisation — die eigene Praxis diagnostizierst du getrennt (MSHP).",
+      "Es ist eine orientierende Diagnose: ohne pass/fail, ohne Einfluss auf den Abschluss — sie soll den nächsten Schritt aufzeigen."
+    ],
+    "checklist": [
+      "Habt ihr die orientierende Stufe der Organisation benannt (0–11)?",
+      "Wisst ihr, welches die nächste zu überwindende Barriere ist?",
+      "Kennt ihr einen konkreten nächsten Schritt, um höher zu kommen?"
+    ],
+    "checklistTitle": "Checkliste — nach der Selbstdiagnose der Organisation",
+    "nextStep": "Nächster Schritt: Wählt eine Barriere aus einer höheren Stufe und plant einen einzelnen kleinen, umkehrbaren Adoptionsschritt."
+  }
+}

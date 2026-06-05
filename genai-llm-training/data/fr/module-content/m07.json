@@ -1,0 +1,292 @@
+{
+  "_meta": {
+    "issue": "#22 [22][M4] Wdroż moduły M7-M9",
+    "storyboard": "docs/storyboard/m07-prompt-engineering.md",
+    "interaction": "Prompt clinic (kind: rubric, zadanie praktyczne R1-prompt)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (SklepDemo, fikcyjne wymagania). ZERO realnych danych klienta/PII.",
+    "note": "Egzemplarz referencyjny typu rubric z zadaniem praktycznym. Wariant S1 SKRÓCONY: ekrany 3-4 scalone (onlyForPaths), few-shot zredukowany."
+  },
+  "module": "M7",
+  "intro": "Un prompt flou = un résultat flou = du temps perdu et le risque qu'un testeur prenne une hallucination pour un fait. Un bon prompt renforce le contrôle sur le modèle et facilite la vérification de l'output.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Pourquoi un testeur a besoin du prompt engineering",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "L'objectif de ce module est de rédiger des prompts produisant un output reproductible et vérifiable pour le travail QA. Tu découvriras l'anatomie d'un prompt, la correction d'un mauvais prompt, le few-shot et les limites d'un prompt."
+        }
+      ]
+    },
+    {
+      "id": "s2-anatomia",
+      "title": "Anatomie d'un prompt : 7 éléments",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "list",
+          "items": [
+            "Rôle — du point de vue de qui le modèle répond (par ex. « tu es un ingénieur QA »).",
+            "Objectif — ce qui doit être produit.",
+            "Contexte — l'arrière-plan que le modèle ne connaît pas (un fragment d'une exigence synthétique).",
+            "Données d'entrée — le matériau concret à traiter.",
+            "Contraintes — ce que le modèle ne doit PAS faire / les limites.",
+            "Critères de qualité — à quoi l'on reconnaît qu'un output est bon (mesurables).",
+            "Format de sortie — la structure (tableau, liste, JSON) qui facilite la vérification."
+          ]
+        },
+        {
+          "kind": "paragraph",
+          "onlyForPaths": [
+            "S2",
+            "S3"
+          ],
+          "text": "Exemple sur une tâche QA : « Tu es un ingénieur QA. Génère des cas de test pour la connexion dans SklepDemo selon l'exigence fournie ; n'invente pas de champs hors de l'exigence ; renvoie un tableau : ID | étapes | données | résultat attendu. »"
+        }
+      ]
+    },
+    {
+      "id": "s34-s1-min",
+      "title": "Éléments du prompt — le minimum (S1)",
+      "type": "content",
+      "onlyForPaths": [
+        "S1"
+      ],
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Dans la version abrégée, retiens le minimum : indique un rôle et un objectif, ajoute le contexte et les données, ajoute des contraintes ainsi qu'un format de sortie. Ce sont ces éléments qui déterminent le plus fortement la qualité et la vérifiabilité de l'output."
+        }
+      ]
+    },
+    {
+      "id": "s3-pierwsza-polowa",
+      "title": "Première moitié : rôle, objectif, contexte, données",
+      "type": "content",
+      "onlyForPaths": [
+        "S2",
+        "S3"
+      ],
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Le rôle fixe la perspective, l'objectif dit ce qui doit être produit, le contexte fournit l'arrière-plan que le modèle ne connaît pas, et les données d'entrée sont le matériau à traiter. Le même objectif avec et sans contexte donne une qualité d'output nettement différente."
+        }
+      ]
+    },
+    {
+      "id": "s4-druga-polowa",
+      "title": "Seconde moitié : contraintes, critères de qualité, format",
+      "type": "content",
+      "onlyForPaths": [
+        "S2",
+        "S3"
+      ],
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Les contraintes disent ce que le modèle ne doit PAS faire (par ex. « n'invente pas de champs hors de l'exigence »). Les critères de qualité sont mesurables et vérifiables. Le format de sortie (tableau/liste/JSON) facilite le contrôle ultérieur. Contraintes + critères constituent le levier de la vérifiabilité et de la sécurité."
+        }
+      ]
+    },
+    {
+      "id": "s5-fewshot",
+      "title": "Few-shot : quand montrer des exemples",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "definition",
+          "term": "Few-shot",
+          "original": "quelques exemples dans le prompt",
+          "text": "insertion de 1 à 3 paires modèles entrée→sortie, lorsque le format ou le style doit être reproductible."
+        },
+        {
+          "kind": "paragraph",
+          "onlyForPaths": [
+            "S2",
+            "S3"
+          ],
+          "text": "Contraste avec le zero-shot (sans exemples) : utilise le few-shot pour la reproductibilité du format, pas pour « combler une connaissance manquante ». Exemple : 2 cas de test modèles → le modèle conserve cette mise en forme pour les suivants."
+        }
+      ]
+    },
+    {
+      "id": "s6-rubryka",
+      "title": "Corriger un mauvais prompt selon une grille",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "La grille d'évaluation d'un prompt a 5 axes : complétude, sécurité, vérifiabilité, format, contraintes. La boucle de correction : mauvais output → diagnostic selon la grille → correction concrète → meilleur output."
+        },
+        {
+          "kind": "callout",
+          "variant": "info",
+          "text": "Cet écran prépare directement à l'interaction « Prompt clinic » ci-dessous."
+        }
+      ]
+    },
+    {
+      "id": "s7-granice",
+      "title": "Limites d'un prompt : quand un prompt n'aidera pas",
+      "type": "decision",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Un prompt n'est pas magique. Lorsque des données manquent (le modèle n'a pas l'information dans le contexte), aucun « peaufinage » du prompt ne générera la vérité — il en résultera une hallucination."
+        },
+        {
+          "kind": "callout",
+          "variant": "warn",
+          "title": "Que faire à la place",
+          "text": "Fournis les données (contexte/RAG), va à la source ou confie la tâche à un humain. Signal d'alerte : le prompt grossit, mais l'output continue d'inventer. Plus de détails dans M11."
+        }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "rubric",
+    "id": "m7-prompt-clinic",
+    "title": "Prompt clinic",
+    "intro": "Un prompt défectueux : « Écris des tests de connexion. » Pour chaque axe de la grille, coche la correction qui le satisfait. L'évaluation compte comme tâche pratique R1-prompt sur le parcours S2 (seuil 4/5) ; sur S3, c'est un exercice avec feedback.",
+    "rubricId": "R1-prompt",
+    "recordsPractical": true,
+    "scaleMax": 5,
+    "passThreshold": 4,
+    "criteria": [
+      {
+        "id": "K1",
+        "name": "Rôle et objectif",
+        "points": 1,
+        "hint": "Ajoute un rôle et un objectif clair : qui répond et ce qui doit être produit.",
+        "options": [
+          {
+            "id": "a",
+            "text": "« Tu es un ingénieur QA. Génère des cas de test pour la connexion dans SklepDemo. »"
+          },
+          {
+            "id": "b",
+            "text": "Laisse « Écris des tests de connexion » sans changement."
+          },
+          {
+            "id": "c",
+            "text": "Ajoute « sois créatif et surprends-moi »."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K2",
+        "name": "Contexte et données d'entrée (sans données sensibles)",
+        "points": 1,
+        "hint": "Inclus une exigence synthétique ; ne colle pas de vraies données utilisateur.",
+        "options": [
+          {
+            "id": "a",
+            "text": "Inclus une exigence synthétique de connexion SklepDemo (blocage après 3 erreurs, lien de réinitialisation valable 30 min)."
+          },
+          {
+            "id": "b",
+            "text": "Colle un vrai journal de production contenant des e-mails d'utilisateurs."
+          },
+          {
+            "id": "c",
+            "text": "Ne fournis pas de contexte — le modèle « devinera »."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K3",
+        "name": "Contraintes et critères de qualité",
+        "points": 1,
+        "hint": "Dis ce que le modèle ne doit PAS faire, et ajoute des critères mesurables.",
+        "options": [
+          {
+            "id": "a",
+            "text": "« N'invente pas de champs hors de l'exigence ; couvre les cas limites ; chaque test a un résultat attendu. »"
+          },
+          {
+            "id": "b",
+            "text": "« Écris le plus de tests possible, c'est la quantité qui compte. »"
+          },
+          {
+            "id": "c",
+            "text": "Aucune contrainte — laisse le modèle décider tout seul."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K4",
+        "name": "Format de sortie (vérifiable)",
+        "points": 1,
+        "hint": "Exige une structure fixe ; pour la reproductibilité, envisage le few-shot.",
+        "options": [
+          {
+            "id": "a",
+            "text": "« Renvoie un tableau : ID | étapes | données d'entrée | résultat attendu » + 2 exemples modèles (few-shot)."
+          },
+          {
+            "id": "b",
+            "text": "« Réponds par un paragraphe libre. »"
+          },
+          {
+            "id": "c",
+            "text": "Ne précise pas de format."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K5",
+        "name": "Sécurité et vérifiabilité",
+        "points": 1,
+        "hint": "Exige des données synthétiques et le marquage des points incertains à vérifier.",
+        "options": [
+          {
+            "id": "a",
+            "text": "« Utilise uniquement des données synthétiques ; signale les hypothèses nécessitant une vérification par rapport à l'exigence. »"
+          },
+          {
+            "id": "b",
+            "text": "« Si tu ne sais pas quelque chose, invente une valeur plausible. »"
+          },
+          {
+            "id": "c",
+            "text": "« Tu peux utiliser de vraies données si elles accélèrent le travail. »"
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Un bon prompt a 7 éléments : rôle, objectif, contexte, données, contraintes, critères, format.",
+      "Corrige le prompt selon une grille à 5 axes : complétude, sécurité, vérifiabilité, format, contraintes.",
+      "Utilise le few-shot pour la reproductibilité du format, pas pour combler un manque de connaissance.",
+      "Quand des données manquent, un prompt n'aidera pas — fournis la source ou confie la tâche à un humain."
+    ],
+    "checklist": [
+      "Le prompt a-t-il un rôle, un objectif, un contexte et des données ?",
+      "Y a-t-il des contraintes et des critères de qualité mesurables ?",
+      "Le format de sortie est-il vérifiable ?",
+      "Ai-je imposé des données synthétiques et le marquage de l'incertitude ?"
+    ],
+    "checklistTitle": "Checklist — un prompt QA prêt",
+    "nextStep": "Prochaine étape : M8 — applications de la GenAI en QA (génération et évaluation de cas de test)."
+  }
+}

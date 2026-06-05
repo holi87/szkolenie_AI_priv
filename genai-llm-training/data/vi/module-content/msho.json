@@ -1,0 +1,102 @@
+{
+  "_meta": {
+    "issue": "#122 [M16] Tách chẩn đoán Thang đo Holak — chiều TỔ CHỨC (v2.1e)",
+    "adr": "docs/adr/0008-modul-skali-holaka-msh.md",
+    "interaction": "Tự kiểm tra mức độ trưởng thành của tổ chức (kind: maturity-check) — KHÔNG mang tính cổng chặn, khung diễn giải trung lập",
+    "source": "Mô hình trưởng thành ứng dụng AI „Thang đo Holak”: chiều tổ chức v2.1e (tổ chức, 0–11). Ghi nguồn: quality-blog.eu/pl/blog/skala-holaka.",
+    "dataPolicy": "TẤT CẢ các phát biểu trong phần tự kiểm tra đều là TỔNG HỢP và mang tính khái quát (không có dữ liệu thật/PII). Đây là chẩn đoán định hướng — không thể „trượt”. Phương pháp tính điểm được đơn giản hóa (số lượng mục được chọn → mức 0–11) và cần được chuyên gia lĩnh vực (SME) thẩm định."
+  },
+  "module": "MSHO",
+  "intro": "Thang đo Holak ở chiều tổ chức (v2.1e) giúp bạn gọi tên mức độ trưởng thành trong việc ứng dụng AI tại nhóm hoặc công ty của bạn — tổ chức đang ở đâu hôm nay và bước tiếp theo thực tế là gì. Đây là bài tự chẩn đoán, không phải bài kiểm tra: không có kết quả „đạt/trượt”, chỉ có mức định hướng 0–11 và gợi ý cách tiến lên cao hơn. Bạn có thể làm bài này độc lập với chẩn đoán cá nhân (MSHP).",
+  "screens": [
+    {
+      "id": "msho-s1-czym-jest",
+      "title": "Thang đo Holak ở chiều tổ chức là gì",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Phiên bản tổ chức (v2.1e) mô tả mức độ trưởng thành trong việc ứng dụng AI tại nhóm/công ty theo 12 mức (0–11) — từ những thử nghiệm tự phát ở cấp cơ sở cho đến việc ứng dụng một cách có ý thức, được đo lường và liên tục cải tiến, gắn vào chiến lược. Nó giúp tránh hai cái bẫy: „chúng tôi có AI nên chúng tôi đã trưởng thành” và „đây chỉ là đồ chơi”." },
+        { "kind": "list", "items": [
+          "Bạn đánh giá việc ứng dụng AI trong TỔ CHỨC — độc lập với mức độ trưởng thành của từng cá nhân.",
+          "Tổ chức có thể ở cao hơn hoặc thấp hơn người thực hành giỏi nhất của mình.",
+          "Việc chẩn đoán thực hành cá nhân của bạn (Thang đo Holak v2.1p) được làm riêng trong mô-đun MSHP."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Tên gọi từ đâu ra và ai đứng sau mô hình", "text": "Thang đo Holak do Grzegorz Holak nghĩ ra với sự hỗ trợ của Konrad Gomulski — tên gọi bắt nguồn từ đó. Cả hai đều là Senior Test Development Engineer tại Sii Polska và là thành viên của SJSI cũng như đồng sáng lập quality-blog.eu; Grzegorz Holak ngoài ra còn là Test Architect và AI Ambassador tại SCIB. Chúng ta dùng nó như một công cụ tự suy ngẫm, không phải để cấp chứng nhận.",
+          "links": [
+            { "label": "Thang đo Holak — chiều tổ chức (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka" },
+            { "label": "Thang đo Holak — chiều cá nhân (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka-private" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "msho-s2-osie-i-granice",
+      "title": "Nhận biết mức độ qua đâu: các trục và hai ranh giới",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Bạn nhận biết mức độ trưởng thành của tổ chức không phải qua số lượng giấy phép, mà qua việc AI có được gắn vào quy trình hay không: chính sách sử dụng được chấp nhận đã được viết thành văn bản, các ứng dụng được cho phép, việc bắt buộc kiểm chứng kết quả AI trong các quy trình quan trọng, đo lường tác động lên chất lượng và thời gian, cùng khả năng đảo ngược quyết định với dấu vết kiểm toán." },
+        { "kind": "list", "items": [
+          "Rào cản — tổ chức còn thiếu gì để tiến lên cao hơn.",
+          "Thành công — điều gì thực sự vận hành khi đạt được mức này.",
+          "Cái bẫy — coi sự trưởng thành là một trạng thái đã hoàn tất thay vì việc cải tiến liên tục."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Hai ranh giới quan trọng (cấp tổ chức)", "text": "Ranh giới 8→9: từ „các thực hành tốt mang tính cá nhân” đến việc gắn AI vào quy trình với sự phân định rõ ràng trợ lý/người ra quyết định và dấu vết kiểm toán. Ranh giới 10→11: từ những cải tiến đơn lẻ đến việc liên tục cải tiến và hiệu chỉnh việc ứng dụng như một phần của chiến lược." }
+      ]
+    },
+    {
+      "id": "msho-s3-jak-czytac",
+      "title": "Cách đọc kết quả của tổ chức",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Ngay sau đây bạn sẽ đánh dấu những phát biểu đúng với tổ chức của bạn ở thời điểm hiện tại. Số lượng mục được đánh dấu cho ra mức định hướng 0–11 cùng gợi ý „các bạn đang ở đâu / làm sao tiến lên cao hơn”. Hãy đánh dấu một cách trung thực chỉ những gì đã thực sự triển khai — không phải những gì còn đang dự kiến." },
+        { "kind": "callout", "variant": "safe", "title": "Đây là chẩn đoán, không phải đánh giá", "text": "Không có câu trả lời đúng hay sai, cũng không có ngưỡng đạt. Kết quả không ảnh hưởng đến việc hoàn thành lộ trình hay bất kỳ bài kiểm tra nào — đây là tấm gương, không phải cuộc kiểm toán." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "maturity-check",
+    "id": "msho-selfcheck",
+    "title": "Thang đo Holak v2.1e — tự chẩn đoán mức độ trưởng thành của tổ chức",
+    "intro": "Hãy đánh dấu những phát biểu đúng với nhóm/công ty của bạn ở thời điểm hiện tại. Sau khi kiểm tra, bạn sẽ thấy mức định hướng 0–11 và bước tiếp theo — không có đánh giá đạt/trượt.",
+    "scales": [
+      {
+        "id": "org",
+        "label": "Tổ chức (Thang đo Holak v2.1e)",
+        "intro": "Việc ứng dụng AI trong nhóm/công ty của bạn trưởng thành đến mức nào? Hãy đánh dấu những gì đã thực sự triển khai.",
+        "max": 11,
+        "statements": [
+          { "id": "org-1", "text": "Có những người dùng AI cho các tác vụ đơn lẻ." },
+          { "id": "org-2", "text": "Có sự trao đổi không chính thức về các thực hành tốt khi sử dụng AI." },
+          { "id": "org-3", "text": "Đã viết thành văn bản chính sách sử dụng AI được chấp nhận (dữ liệu, quyền riêng tư, sở hữu trí tuệ)." },
+          { "id": "org-4", "text": "Một số quy trình được chọn có các ứng dụng AI được định nghĩa và cho phép." },
+          { "id": "org-5", "text": "Kết quả AI trong các quy trình quan trọng bắt buộc phải được con người kiểm chứng." },
+          { "id": "org-6", "text": "Các nhóm đo lường tác động của AI lên chất lượng và thời gian, không chỉ ghi nhận việc đã sử dụng." },
+          { "id": "org-7", "text": "Có việc quản lý một cách có ý thức ngữ cảnh và chi phí token trong các tác vụ lặp đi lặp lại." },
+          { "id": "org-8", "text": "Các quyết định có sự hỗ trợ của AI đều có thể đảo ngược và để lại dấu vết kiểm toán." },
+          { "id": "org-9", "text": "AI được gắn vào quy trình với sự phân định rõ ràng: trợ lý và người ra quyết định." },
+          { "id": "org-10", "text": "Tổ chức thường xuyên hiệu chỉnh và kiểm toán việc sử dụng AI của chính mình." },
+          { "id": "org-11", "text": "Việc ứng dụng AI là một phần của chiến lược và việc cải tiến liên tục, không phải một sáng kiến nhất thời." }
+        ],
+        "bands": [
+          { "min": 0, "max": 2, "label": "Mức 0–2: Thử nghiệm tự phát", "advice": "Rào cản: thiếu nguyên tắc chung và mục tiêu chung. Bước tiếp theo: viết một chính sách đơn giản về việc sử dụng AI được chấp nhận (dữ liệu, quyền riêng tư) và chỉ ra 1–2 quy trình thí điểm." },
+          { "min": 3, "max": 5, "label": "Mức 3–5: Những khung đầu tiên", "advice": "Thành công: đã có nguyên tắc và các ứng dụng được cho phép. Bước tiếp theo: đưa vào việc bắt buộc kiểm chứng kết quả trong các quy trình quan trọng và bắt đầu đo lường tác động." },
+          { "min": 6, "max": 8, "label": "Mức 6–8: Quy trình có ý thức", "advice": "Thành công: bạn đo lường tác động và quản lý ngữ cảnh. Ranh giới 8→9: gắn AI vào quy trình với sự phân định rõ ràng trợ lý/người ra quyết định cùng dấu vết kiểm toán cho các quyết định." },
+          { "min": 9, "max": 11, "label": "Mức 9–11: Ứng dụng trưởng thành", "advice": "Cái bẫy: coi sự trưởng thành là một trạng thái đã hoàn tất, không phải việc cải tiến liên tục. Ranh giới 10→11: biến việc hiệu chỉnh và kiểm toán sử dụng AI thành một phần của chiến lược và thói quen của nhóm." }
+        ]
+      }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Thang đo Holak v2.1e đo lường việc AI có được gắn vào quy trình hay không (nguyên tắc, kiểm chứng, đo lường), chứ không phải số lượng giấy phép.",
+      "Bạn đánh giá việc ứng dụng trong tổ chức — thực hành cá nhân của bạn được chẩn đoán riêng (MSHP).",
+      "Đây là chẩn đoán định hướng: không đạt/trượt, không ảnh hưởng đến việc hoàn thành — nhằm chỉ ra bước tiếp theo."
+    ],
+    "checklist": [
+      "Các bạn đã gọi tên mức định hướng của tổ chức (0–11) chưa?",
+      "Các bạn có biết rào cản gần nhất cần vượt qua là gì không?",
+      "Các bạn có biết một bước tiếp theo cụ thể để tiến lên cao hơn không?"
+    ],
+    "checklistTitle": "Danh sách kiểm tra — sau khi tự chẩn đoán tổ chức",
+    "nextStep": "Bước tiếp theo: hãy chọn một rào cản từ mức cao hơn và lập kế hoạch cho một bước ứng dụng nhỏ, có thể đảo ngược."
+  }
+}

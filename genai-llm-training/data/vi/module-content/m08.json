@@ -1,0 +1,180 @@
+{
+  "_meta": {
+    "issue": "#22 [22][M4] Wdroż moduły M7-M9",
+    "storyboard": "docs/storyboard/m08-qa-use-cases.md",
+    "interaction": "QA workbench (kind: rubric, ĆWICZENIOWE — rubryka R4-qa-workbench, bez progu)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (NotkaApp, SklepDemo, przyklad.test, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Egzemplarz typu rubric ĆWICZENIOWY: pominięto passThreshold i recordsPractical (feedback bez bramki). M8 obowiązkowy S2/S3, opcjonalny S1 — bez wariantu skróconego, ten sam ciąg ekranów dla wszystkich ścieżek. Treść interakcji oparta na SC-QA-01 (reset hasła NotkaApp)."
+  },
+  "module": "M8",
+  "intro": "GenAI tăng tốc công việc QA: phác thảo các trường hợp kiểm thử, danh sách kiểm tra rủi ro và rà soát tài liệu. Nhưng LLM tạo ra văn bản có khả năng cao nhất, không phải sự thật đã được kiểm chứng — vì vậy người kiểm thử vẫn là người ra quyết định, còn mô hình là trợ lý.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Tại sao cần GenAI trong QA — và vai trò của nó kết thúc ở đâu",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "LLM tăng tốc việc tạo và phân tích các sản phẩm QA: trường hợp kiểm thử, danh sách kiểm tra rủi ro, rà soát tài liệu. Tuy nhiên nó tạo ra văn bản có khả năng cao nhất, chứ không phải sự thật đã được kiểm chứng — chính bạn là người đánh giá những gì sẽ được đưa vào tài liệu." },
+        { "kind": "list", "items": [
+          "E1 — bạn tạo các trường hợp kiểm thử từ yêu cầu và chỉ ra những thiếu sót trong độ bao phủ.",
+          "E2 — bạn phát hiện trùng lặp và các bài kiểm thử giả tạo (không có giá trị kiểm chứng thực sự).",
+          "E3 — bạn tạo danh sách kiểm tra rủi ro (risk-based testing).",
+          "E4 — bạn đánh giá output có phù hợp để đưa vào tài liệu QA hay không sau khi kiểm soát về nội dung.",
+          "E5 — bạn chỉ ra nơi LLM đóng vai trò trợ lý, và nơi con người là người ra quyết định."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Điều này khác gì so với M7", "text": "M7 dạy cách viết prompt. M8 tập trung vào việc ứng dụng LLM trong các nhiệm vụ QA thực tế và đánh giá output của nó. Nguyên tắc dẫn dắt: LLM là trợ lý, người kiểm thử là người ra quyết định." }
+      ]
+    },
+    {
+      "id": "s2-generowanie",
+      "title": "Tạo các trường hợp kiểm thử từ yêu cầu",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Từ một yêu cầu tổng hợp (ví dụ „Trường mật khẩu: tối thiểu 8 ký tự, tối thiểu 1 chữ số”), bạn yêu cầu LLM tạo các trường hợp kiểm thử: hợp lệ, biên, tiêu cực. Một prompt tốt nêu rõ vai trò, yêu cầu và định dạng đầu ra (bảng: ID | các bước | dữ liệu | kết quả mong đợi)." },
+        { "kind": "list", "items": [
+          "TC hợp lệ — mật khẩu thỏa mãn mọi quy tắc, đăng ký thành công.",
+          "TC biên — mật khẩu có độ dài tối thiểu chính xác (8 ký tự).",
+          "TC tiêu cực — mật khẩu không có chữ số, thông báo lỗi được mong đợi."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Kết luận", "text": "LLM cung cấp một bộ khung nhanh chóng liên kết với tiêu chí chấp nhận (acceptance criteria) và dấu vết liên kết (traceability) yêu cầu→kiểm thử. Đây là điểm khởi đầu, không phải bộ hoàn chỉnh." }
+      ]
+    },
+    {
+      "id": "s3-braki-pokrycia",
+      "title": "Thiếu sót trong độ bao phủ — những gì LLM chưa nghĩ ra",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Hãy đọc output dưới góc độ những lỗ hổng trong độ bao phủ (coverage gaps): thiếu các trường hợp biên, thiếu các đường dẫn lỗi, các trạng thái bị bỏ sót, thiếu dữ liệu kiểm thử cho các giá trị cực đoan. Kỹ thuật: đối chiếu tập trường hợp đã tạo với danh sách các loại rủi ro và tìm những ô trống." },
+        { "kind": "callout", "variant": "warn", "title": "Ví dụ tổng hợp", "text": "Đối với đăng nhập, LLM đã bao phủ „happy path”, nhưng bỏ sót việc khóa tài khoản sau 5 lần thử thất bại. Thường thiếu nhất là các giá trị biên, đường dẫn lỗi và dữ liệu cực đoan — hãy tìm lỗ hổng ở đó." }
+      ]
+    },
+    {
+      "id": "s4-duplikaty-pozorne",
+      "title": "Trùng lặp và các bài kiểm thử giả tạo",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Bài kiểm thử giả tạo", "original": "bài kiểm thử không có giá trị xác minh thực sự", "text": "trường hợp mà phần khẳng định (assertion) không kiểm tra điều gì — không có kết quả mong đợi, „bài kiểm thử luôn luôn vượt qua”." },
+        { "kind": "definition", "term": "Trùng lặp", "text": "hai trường hợp kiểm tra cùng những điều kiện với mô tả khác nhau; chúng làm phình to tập kiểm thử mà không tăng độ bao phủ." },
+        { "kind": "callout", "variant": "warn", "title": "Kết luận", "text": "Số lượng trường hợp nhiều hơn ≠ độ bao phủ tốt hơn. Trùng lặp làm tăng chi phí bảo trì, còn bài kiểm thử giả tạo tạo ra cảm giác an toàn sai lầm." }
+      ]
+    },
+    {
+      "id": "s5-checklista-ryzyk",
+      "title": "Danh sách kiểm tra rủi ro cho tính năng",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "LLM phác thảo danh sách kiểm tra rủi ro (risk-based testing) theo các loại: bảo mật, dữ liệu, hiệu năng, khả năng tiếp cận, tuân thủ. Mỗi mục: rủi ro + tác động + khu vực cần kiểm thử." },
+        { "kind": "table",
+          "title": "Danh sách kiểm tra tổng hợp — tính năng „đặt lại mật khẩu” của NotkaApp",
+          "headers": ["Loại", "Rủi ro", "Khu vực cần kiểm thử"],
+          "rows": [
+            ["Bảo mật", "Liên kết đặt lại vẫn hoạt động sau khi hết hạn hoặc dùng nhiều lần", "Hiệu lực 30 phút, tính dùng một lần của liên kết"],
+            ["Dữ liệu", "E-mail của người dùng bị lộ trong thông báo lỗi", "Nội dung phản hồi khi tài khoản không tồn tại"],
+            ["Khả năng tiếp cận", "Biểu mẫu không thao tác được bằng trình đọc màn hình", "Tuân thủ WCAG, focus và nhãn"]
+          ],
+          "textAlt": "Bảng danh sách kiểm tra rủi ro cho việc đặt lại mật khẩu của NotkaApp: loại Bảo mật — rủi ro liên kết vẫn hoạt động sau khi hết hạn hoặc dùng nhiều lần, khu vực là hiệu lực 30 phút và tính dùng một lần; loại Dữ liệu — rủi ro lộ e-mail trong lỗi, khu vực là nội dung phản hồi khi tài khoản không tồn tại; loại Khả năng tiếp cận — rủi ro không hỗ trợ trình đọc màn hình, khu vực là tuân thủ WCAG, focus và nhãn." },
+        { "kind": "callout", "variant": "info", "text": "LLM đề xuất các loại, người kiểm thử ưu tiên hóa và loại bỏ những đề xuất không phù hợp." }
+      ]
+    },
+    {
+      "id": "s6-do-dokumentacji",
+      "title": "Output này có phù hợp để đưa vào tài liệu QA không?",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Trước khi dán output vào tài liệu, hãy thực hiện kiểm soát về nội dung (review checklist): sự phù hợp với yêu cầu, tính đầy đủ, không có sự thật bịa đặt (ảo giác), khả năng kiểm chứng, không có dữ liệu nhạy cảm." },
+        { "kind": "list", "ordered": true, "items": [
+          "Chấp nhận — output phù hợp với yêu cầu, đầy đủ, có thể kiểm chứng, không có dữ liệu nhạy cảm.",
+          "Sửa lại — thiếu sót nhỏ hoặc một sự thật bịa đặt cần chỉnh sửa theo yêu cầu.",
+          "Từ chối — các sự thật mâu thuẫn với yêu cầu hoặc có dữ liệu nhạy cảm; không sử dụng khi chưa chỉnh sửa."
+        ] },
+        { "kind": "callout", "variant": "info", "text": "Liên kết tới M11 (kiểm chứng output) và M10 (dữ liệu và quyền riêng tư)." }
+      ]
+    },
+    {
+      "id": "s7-asystent-decydent",
+      "title": "Trợ lý hay người ra quyết định — đặt ranh giới ở đâu",
+      "type": "decision",
+      "blocks": [
+        { "kind": "paragraph", "text": "LLM có thể hỗ trợ các nhiệm vụ với vai trò trợ lý: phác thảo trường hợp kiểm thử, bản nháp danh sách kiểm tra, động não ý tưởng. Con người là người ra quyết định (human-in-the-loop): chấp nhận các trường hợp, đánh giá rủi ro nghiêm trọng, phê duyệt để phát hành." },
+        { "kind": "table",
+          "title": "Trợ lý vs người ra quyết định — 3 tình huống tổng hợp",
+          "headers": ["Tình huống", "Trợ lý (LLM)", "Người ra quyết định (con người)"],
+          "rows": [
+            ["Phác thảo các trường hợp kiểm thử từ yêu cầu", "Tạo ra đề xuất", "Phê duyệt phạm vi"],
+            ["Đánh giá rủi ro nghiêm trọng", "Đề xuất các loại", "Quyết định về mức độ ưu tiên"],
+            ["Phê duyệt phát hành để release", "Không quyết định", "Đưa ra quyết định"]
+          ],
+          "textAlt": "Bảng ba tình huống QA với sự phân chia vai trò trợ lý (LLM) và người ra quyết định (con người): phác thảo trường hợp kiểm thử — LLM tạo ra đề xuất, con người phê duyệt phạm vi; đánh giá rủi ro nghiêm trọng — LLM đề xuất các loại, con người quyết định mức độ ưu tiên; phê duyệt phát hành để release — LLM không quyết định, con người đưa ra quyết định." },
+        { "kind": "callout", "variant": "safe", "title": "Ranh giới", "text": "Mức rủi ro của quyết định càng cao (release, rủi ro nghiêm trọng, đóng defect), vai trò càng thuộc về con người. LLM tăng tốc, nhưng không phê duyệt." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "rubric",
+    "id": "m8-qa-workbench",
+    "title": "QA workbench",
+    "intro": "Yêu cầu NotkaApp (hư cấu): người dùng đặt lại mật khẩu qua liên kết e-mail có hiệu lực 30 phút; sau 3 lần đăng nhập sai, tài khoản bị khóa 15 phút. LLM đã tạo các trường hợp: TC1 — đặt lại đúng; TC2 — liên kết hết hạn sau 30 phút; TC3 — 3 lần sai mật khẩu → khóa tài khoản. Hãy đánh giá output này theo năm trục của rubric. Đây là bài tập ở chế độ học tập — bạn nhận được phản hồi, không có ngưỡng đạt.",
+    "rubricId": "R4-qa-workbench",
+    "scaleMax": 5,
+    "criteria": [
+      { "id": "K1", "name": "Độ bao phủ kiểm thử", "points": 1,
+        "prompt": "Những hành vi nào từ yêu cầu NotkaApp mà output của LLM thực sự BAO PHỦ (TC1–TC3)?",
+        "hint": "Output bao phủ happy path của việc đặt lại, liên kết hết hạn sau 30 phút và khóa tài khoản sau 3 lần thử sai.",
+        "options": [
+          { "id": "a", "text": "Đặt lại đúng (TC1), liên kết hết hạn sau 30 phút (TC2) và khóa tài khoản sau 3 lần thử sai (TC3)." },
+          { "id": "b", "text": "Sử dụng lại cùng một liên kết đặt lại và các phiên người dùng song song." },
+          { "id": "c", "text": "Chỉ phần thẩm mỹ: màu của nút „Đặt lại mật khẩu” và logo trên trang đăng nhập." }
+        ], "correctOptionIds": ["a"] },
+      { "id": "K2", "name": "Thiếu sót độ bao phủ", "points": 1,
+        "prompt": "Những trường hợp nào còn THIẾU trong output của LLM so với yêu cầu NotkaApp? Hãy đánh dấu chính xác mọi lỗ hổng.",
+        "hint": "Đã bỏ sót ba lỗ hổng: e-mail trống, liên kết dùng một lần bị dùng hai lần và các phiên song song. Liên kết hết hạn (TC2) và khóa sau 3 lần thử (TC3) đã được bao phủ.",
+        "options": [
+          { "id": "a", "text": "Đặt lại với trường e-mail trống (kiểm tra dữ liệu đầu vào)." },
+          { "id": "b", "text": "Sử dụng lại cùng một liên kết đặt lại (liên kết dùng một lần bị dùng hai lần)." },
+          { "id": "c", "text": "Các phiên đặt lại mật khẩu song song cho cùng một tài khoản." },
+          { "id": "d", "text": "Liên kết hết hạn sau 30 phút — điều này đã bao phủ bởi TC2." }
+        ], "correctOptionIds": ["a", "b", "c"] },
+      { "id": "K3", "name": "Bài kiểm thử giả tạo / trùng lặp", "points": 1,
+        "prompt": "Vào tập kiểm thử có thêm TC4: „Mở biểu mẫu đặt lại và kiểm tra rằng biểu mẫu mở ra; kết quả mong đợi: không có”. Phân loại nó như thế nào?",
+        "hint": "Khi không có kết quả mong đợi được định nghĩa, phần khẳng định không kiểm chứng điều gì — đó là bài kiểm thử giả tạo, không phải một trường hợp biên có giá trị.",
+        "options": [
+          { "id": "a", "text": "Bài kiểm thử giả tạo — không có kết quả mong đợi, phần khẳng định thực sự không kiểm tra điều gì." },
+          { "id": "b", "text": "Trường hợp biên hợp lệ cho hiệu lực liên kết 30 phút." },
+          { "id": "c", "text": "Trường hợp tiêu cực có giá trị cho kịch bản khóa tài khoản." }
+        ], "correctOptionIds": ["a"] },
+      { "id": "K4", "name": "Rủi ro / giả định sai", "points": 1,
+        "prompt": "Trong ghi chú cho output, LLM đã viết: „khóa tài khoản kéo dài 24 giờ, còn liên kết đặt lại có hiệu lực vô thời hạn”. Đánh giá điều này như thế nào so với yêu cầu?",
+        "hint": "Yêu cầu nói: khóa 15 phút, liên kết có hiệu lực 30 phút. Các giá trị 24 giờ và „vô thời hạn” là những sự thật bịa đặt (ảo giác) mâu thuẫn với yêu cầu — giả định sai cần từ chối hoặc sửa lại.",
+        "options": [
+          { "id": "a", "text": "Giả định sai mâu thuẫn với yêu cầu (bịa đặt 24 giờ và „vô thời hạn”) — sửa lại hoặc từ chối trước khi sử dụng." },
+          { "id": "b", "text": "Chấp nhận được — LLM thường đưa ra các giá trị gần với thực tế hơn cả yêu cầu." },
+          { "id": "c", "text": "Chấp nhận kèm chú thích rằng các giá trị có thể khác nhau tùy phiên bản ứng dụng." }
+        ], "correctOptionIds": ["a"] },
+      { "id": "K5", "name": "Ranh giới quyết định (kiểm chứng của con người)", "points": 1,
+        "prompt": "Phân chia vai trò giữa LLM và người kiểm thử với tập này như thế nào theo nguyên tắc „trợ lý, không phải người ra quyết định”?",
+        "hint": "LLM phác thảo các trường hợp và danh sách kiểm tra rủi ro; việc chấp nhận phạm vi, đánh giá rủi ro nghiêm trọng và quyết định về release thuộc về con người (human-in-the-loop).",
+        "options": [
+          { "id": "a", "text": "LLM tạo bản phác thảo các trường hợp và danh sách kiểm tra rủi ro, còn người kiểm thử phê duyệt phạm vi và quyết định việc cho phép release." },
+          { "id": "b", "text": "LLM tự mình phê duyệt phát hành lên production nếu các bài kiểm thử đã tạo vượt qua." },
+          { "id": "c", "text": "LLM đánh giá cuối cùng về rủi ro nghiêm trọng và đóng defect mà không cần sự tham gia của người kiểm thử." }
+        ], "correctOptionIds": ["a"] }
+    ]
+  },
+  "summary": {
+    "points": [
+      "E1 — từ yêu cầu, bạn tạo bản phác thảo các trường hợp kiểm thử và đọc output dưới góc độ những thiếu sót trong độ bao phủ (giá trị biên, đường dẫn lỗi, dữ liệu cực đoan).",
+      "E2 — bạn nhận diện trùng lặp (cùng điều kiện với mô tả khác) và bài kiểm thử giả tạo (phần khẳng định không có kết quả mong đợi); nhiều trường hợp hơn ≠ độ bao phủ tốt hơn.",
+      "E3 — bạn phác thảo danh sách kiểm tra rủi ro (bảo mật, dữ liệu, hiệu năng, khả năng tiếp cận, tuân thủ), và tự mình ưu tiên hóa.",
+      "E4 — trước khi đưa vào tài liệu, bạn áp dụng kiểm soát về nội dung: chấp nhận / sửa lại / từ chối (phù hợp với yêu cầu, không có ảo giác, không có dữ liệu nhạy cảm).",
+      "E5 — LLM là trợ lý; việc chấp nhận, rủi ro nghiêm trọng và release thuộc về con người (human-in-the-loop)."
+    ],
+    "checklist": [
+      "Output có bao phủ happy path, các giá trị biên và đường dẫn lỗi từ yêu cầu không?",
+      "Tôi đã chỉ ra những thiếu sót trong độ bao phủ cùng với trùng lặp và bài kiểm thử giả tạo chưa?",
+      "Tôi đã kiểm tra output dưới góc độ các sự thật mâu thuẫn với yêu cầu (ảo giác) chưa?",
+      "Các quyết định về rủi ro nghiêm trọng và release có còn thuộc về con người không?"
+    ],
+    "checklistTitle": "Danh sách kiểm tra — đánh giá output của LLM trong QA",
+    "nextStep": "Bước tiếp theo: M9 — tích hợp và agent (cho S3 và tùy chọn S2); với S1 quay lại lộ trình bắt buộc."
+  }
+}

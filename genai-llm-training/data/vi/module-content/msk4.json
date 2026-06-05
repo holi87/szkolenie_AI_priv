@@ -1,0 +1,114 @@
+{
+  "_meta": {
+    "issue": "#124 [M16] Ścieżka formatywna S4 — skille i mierzenie wpływu (moduł szkoleniowy, interakcja rubric)",
+    "adr": "docs/adr/0009-sciezka-formatywna-s4-skala-holaka.md",
+    "interaction": "Ocena dojrzałości workflow wg rubryki (kind: rubric) — ćwiczenie formatywne, NIE scorowane do zaliczenia (bez rubricId/progu)",
+    "source": "Skala Holaka — dwie krytyczne granice dojrzałości: 8→9 i 10→11; skille i mierzenie wpływu. Atrybucja: quality-blog.eu/pl/blog/skala-holaka.",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE i ogólne (zero realnych danych/PII). Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MSK4",
+  "intro": "Khó nhất không phải là những cấp độ đầu tiên, mà là hai ranh giới: 8→9 (từ thực hành tốt của cá nhân đến việc tích hợp AI vào quy trình) và 10→11 (từ những cải tiến đơn lẻ đến cải tiến liên tục). Phép thử về độ trưởng thành là một workflow (skill) cụ thể, có thể lặp lại: nó có ngữ cảnh ổn định, có kiểm chứng, có khả năng hoàn tác và có đo lường tác động hay không. Mô-đun này dạy cách đánh giá độ trưởng thành của một skill theo rubric. Đây là một bài tập phát triển, không phải bài kiểm tra.",
+  "screens": [
+    {
+      "id": "msk4-s1-dwie-granice",
+      "title": "Hai ranh giới mà sự phát triển thường mắc kẹt",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Nhiều người và nhiều nhóm dừng lại ngay trước cấp độ 9 hoặc 11. Ranh giới 8→9 là thời điểm thực hành tốt của một người trở thành một phần của quy trình: phân định rõ ràng giữa trợ lý/người ra quyết định, khả năng hoàn tác và dấu vết kiểm toán. Ranh giới 10→11 là thời điểm những cải tiến biến thành thói quen đo lường, hiệu chỉnh và cải tiến liên tục." },
+        { "kind": "list", "items": [
+          "8→9: thực hành cá nhân → quy trình có kiểm soát và dấu vết.",
+          "10→11: những cải tiến đơn lẻ → hệ thống được đo lường, hiệu chỉnh liên tục.",
+          "Ở cả hai ranh giới, chìa khóa không phải là công cụ mới, mà là thói quen làm việc mới."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Skala Holaka", "text": "Ranh giới 8→9 và 10→11 là những điểm thường gặp nhất khi việc áp dụng AI bị mắc kẹt.",
+          "links": [ { "label": "Skala Holaka — mô hình độ trưởng thành (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka" } ]
+        }
+      ]
+    },
+    {
+      "id": "msk4-s2-skill-jako-probka",
+      "title": "Skill như một mẫu thử về độ trưởng thành",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Độ trưởng thành thể hiện rõ nhất qua một workflow (skill) cụ thể, có thể lặp lại. Một skill chưa trưởng thành là kiểu „prompt làm vội”: ngữ cảnh thay đổi, không kiểm chứng, không dấu vết, thành công được đo bằng cảm giác. Một skill trưởng thành có ngữ cảnh và định dạng ổn định, có bước kiểm chứng tường minh, có khả năng hoàn tác kèm dấu vết và có đo lường tác động đến chất lượng và thời gian." },
+        { "kind": "callout", "variant": "warn", "title": "Dấu hiệu mắc kẹt", "text": "Nếu bạn sử dụng AI thành thạo nhưng không đo lường tác động của nó và không hiệu chỉnh việc đánh giá output — có lẽ bạn đang đứng ở cấp 10, chứ không phải 11." }
+      ]
+    },
+    {
+      "id": "msk4-s3-jak-cwiczyc",
+      "title": "Luyện tập như thế nào",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Dưới đây bạn sẽ đánh giá độ trưởng thành của một skill mẫu theo bốn tiêu chí. Trong mỗi tiêu chí, hãy đánh dấu những đặc điểm cho thấy độ trưởng thành — đánh dấu tất cả (kể cả các phương án gây nhiễu) sẽ không vượt qua tiêu chí. Không có ngưỡng đạt: phản hồi cho thấy điều còn thiếu để lên cấp độ cao hơn." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "rubric",
+    "id": "msk4-rubric",
+    "title": "Đánh giá độ trưởng thành của workflow AI (skill)",
+    "intro": "Với mỗi tiêu chí, hãy đánh dấu những đặc điểm cho thấy độ trưởng thành của skill. Đây là bài tập phát triển — không có ngưỡng đạt; phản hồi chỉ ra điều còn thiếu.",
+    "criteria": [
+      {
+        "id": "K1",
+        "name": "Ngữ cảnh và khả năng lặp lại",
+        "prompt": "Điều gì cho thấy việc quản lý ngữ cảnh trong skill này đã trưởng thành?",
+        "hint": "Độ trưởng thành là ngữ cảnh ổn định, được chọn lọc — không phải mô tả lại từ đầu mỗi lần.",
+        "options": [
+          { "id": "a", "text": "Ngữ cảnh và định dạng đầu ra ổn định, được cân nhắc kỹ." },
+          { "id": "b", "text": "Ngữ cảnh được mô tả lại từ đầu, bằng cách diễn đạt khác, mỗi lần." },
+          { "id": "c", "text": "Chỉ chọn lọc những dữ liệu thiết yếu cho nhiệm vụ." }
+        ],
+        "correctOptionIds": ["a", "c"]
+      },
+      {
+        "id": "K2",
+        "name": "Khả năng kiểm chứng",
+        "prompt": "Điều gì khiến skill có thể kiểm chứng trước khi dùng kết quả?",
+        "hint": "Giọng điệu tự tin của mô hình không phải là bằng chứng — cần một bước kiểm tra tường minh.",
+        "options": [
+          { "id": "a", "text": "Một bước kiểm tra output tường minh đối chiếu với nguồn." },
+          { "id": "b", "text": "Tin vào giọng điệu tự tin trong câu trả lời của mô hình." }
+        ],
+        "correctOptionIds": ["a"]
+      },
+      {
+        "id": "K3",
+        "name": "Khả năng hoàn tác và dấu vết",
+        "prompt": "Điều gì khiến các quyết định có sự hỗ trợ của skill trở nên an toàn?",
+        "hint": "Ranh giới 8→9: kiểm soát và dấu vết thay vì những hành động không thể hoàn tác mà không được phê duyệt.",
+        "options": [
+          { "id": "a", "text": "Các hành động để lại dấu vết và có thể hoàn tác." },
+          { "id": "b", "text": "Những quyết định không thể hoàn tác được thực hiện mà không có sự phê duyệt của con người." }
+        ],
+        "correctOptionIds": ["a"]
+      },
+      {
+        "id": "K4",
+        "name": "Đo lường tác động",
+        "prompt": "Điều gì phân biệt cấp độ 11 (cải tiến liên tục) với việc chỉ đơn thuần sử dụng AI?",
+        "hint": "Ranh giới 10→11: tác động được đo lường và hiệu chỉnh, không phải bản thân việc sử dụng.",
+        "options": [
+          { "id": "a", "text": "Tác động đến chất lượng và thời gian được đo lường, cùng với việc điều chỉnh cách tiếp cận." },
+          { "id": "b", "text": "Chỉ cần riêng việc chúng ta sử dụng AI là đủ." },
+          { "id": "c", "text": "Hiệu chỉnh đều đặn việc đánh giá output." }
+        ],
+        "correctOptionIds": ["a", "c"]
+      }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Độ trưởng thành thể hiện qua một skill cụ thể: ngữ cảnh ổn định, kiểm chứng, khả năng hoàn tác kèm dấu vết, tác động được đo lường.",
+      "Ranh giới 8→9: biến thực hành cá nhân thành quy trình có kiểm soát và dấu vết.",
+      "Ranh giới 10→11: biến những cải tiến thành thói quen đo lường, hiệu chỉnh và cải tiến liên tục."
+    ],
+    "checklist": [
+      "Skill thường dùng nhất của tôi có ngữ cảnh và định dạng đầu ra ổn định không?",
+      "Nó có bước kiểm chứng tường minh và có để lại dấu vết không?",
+      "Tôi có đo lường tác động của nó đến chất lượng và thời gian không, hay chỉ đơn thuần sử dụng nó?"
+    ],
+    "checklistTitle": "Danh sách kiểm tra — độ trưởng thành của skill",
+    "nextStep": "Bước tiếp theo: hãy lấy một skill của bạn và bổ sung tiêu chí còn thiếu có điểm thấp nhất — thường là bước kiểm chứng hoặc đo lường tác động."
+  }
+}

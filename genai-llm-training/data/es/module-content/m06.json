@@ -1,0 +1,500 @@
+{
+  "_meta": {
+    "issue": "#23 [23][M4] Wdroż moduł M6 RAG",
+    "storyboard": "docs/storyboard/m06-rag.md",
+    "interaction": "Zbuduj pipeline RAG (kind: rubric, zadanie praktyczne R2-rag, warunek konieczny S3, próg 70% = 3.5/5)",
+    "scenario": "SC-RAG-01 (mini-korpus dokumentacji QA, korpus SklepDemo/NotkaApp)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (SklepDemo, NotkaApp, fikcyjne wymagania WYM-koszyk/WYM-zwroty). ZERO realnych danych klienta/PII.",
+    "note": "Wariant S1 ŚWIADOMOŚCIOWY: ekrany techniczne (chunking, ćwiczenia, pogłębienie inżynierskie) skrócone/pominięte przez onlyForPaths/hideForPaths. S2 PRAKTYCZNY i S3 PEŁNY: pełny przebieg. Treść rozróżnia błąd retrieval/generation/źródłowy oraz RAG vs fine-tuning (E3, E4)."
+  },
+  "module": "M6",
+  "intro": "Un LLM sin acceso a la documentación de tu empresa se inventa los detalles de los requisitos. RAG (en inglés Retrieval-Augmented Generation) permite que el modelo busque en tus documentos y responda basándose en ellos, con citas. En este módulo montarás un pipeline RAG, elegirás una estrategia de chunking, distinguirás RAG del ajuste fino del modelo (fine-tuning) y aprenderás a reconocer las tres capas de error.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Para qué necesita el tester RAG",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Un modelo de lenguaje no conoce la especificación de tu empresa. Cuando se le pregunta por el detalle de un requisito, a menudo se inventa una respuesta que suena plausible pero es falsa. RAG (en inglés Retrieval-Augmented Generation) es el enfoque de «deja que el modelo busque en nuestros documentos y responda basándose en ellos»."
+        },
+        {
+          "kind": "paragraph",
+          "text": "Para QA esto trae beneficios concretos: respuestas sobre los requisitos actuales, ayuda al escribir casos de prueba con referencia a la especificación, y la búsqueda rápida de un criterio de aceptación — siempre con una cita a la fuente que se puede verificar."
+        },
+        {
+          "kind": "callout",
+          "variant": "info",
+          "onlyForPaths": [
+            "S1"
+          ],
+          "title": "Cuándo plantearse siquiera RAG",
+          "text": "Si las preguntas se refieren a vuestra documentación cambiante y la respuesta tiene que señalar una fuente — es un caso para RAG. El resto del módulo muestra cómo funciona paso a paso."
+        },
+        {
+          "kind": "list",
+          "hideForPaths": [
+            "S1"
+          ],
+          "items": [
+            "E1 — ordenarás los pasos del pipeline RAG en la secuencia correcta.",
+            "E2 — elegirás una estrategia para dividir la documentación en fragmentos (chunking).",
+            "E3 — distinguirás un caso para RAG de un caso para el ajuste fino del modelo (fine-tuning).",
+            "E4 — reconocerás un error de búsqueda, un error de generación y un error de fuente."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s2-pipeline",
+      "title": "El pipeline RAG de principio a fin",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Todo el proceso en una sola pantalla. La fase de construcción del índice (offline) prepara los documentos; la fase de consulta (online) atiende la pregunta del usuario. El principio clave: la respuesta debe estar fundamentada (en inglés grounding) en las fuentes recuperadas, no en la memoria del modelo."
+        },
+        {
+          "kind": "list",
+          "ordered": true,
+          "items": [
+            "Los documentos fuente del corpus «SklepDemo» llegan a la entrada.",
+            "División en fragmentos (en inglés chunking) — el documento se corta en trozos más pequeños y coherentes.",
+            "Vectores semánticos (en inglés embeddings) — cada fragmento recibe una representación vectorial de su significado.",
+            "Índice / base de datos vectorial — los fragmentos, los embeddings y los metadatos se almacenan para poder buscarlos.",
+            "Consulta del usuario — p. ej. «¿Cuál es el criterio de aceptación para el límite de artículos en el carrito?».",
+            "Búsqueda (en inglés retrieval, top-k) — el índice devuelve los fragmentos más cercanos.",
+            "Reordenamiento (en inglés reranking) — una mejora opcional de la relevancia del top-k.",
+            "Inyección del contexto recuperado en el prompt.",
+            "Generación de la respuesta con citas (en inglés citations) que señalan el fragmento fuente."
+          ]
+        },
+        {
+          "kind": "diagram",
+          "title": "Esquema del pipeline RAG",
+          "caption": "Fase del índice (offline) y fase de consulta (online).",
+          "textAlt": "Fase del índice (offline): documentos fuente → chunking → embeddings → índice/base de datos vectorial. Fase de consulta (online): consulta del usuario → retrieval (top-k) desde el índice → (opcionalmente) reranking → inyección del contexto en el prompt → generación de la respuesta con citas. El índice enlaza ambas fases: se construye offline y se consulta online.",
+          "onlyForPaths": [
+            "S2",
+            "S3"
+          ]
+        },
+        {
+          "kind": "diagram",
+          "title": "Esquema ilustrativo de RAG",
+          "caption": "Versión simplificada.",
+          "textAlt": "Documentos → índice → búsqueda de los fragmentos que encajan con la consulta → respuesta con citas basadas en esos fragmentos.",
+          "onlyForPaths": [
+            "S1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s3-kolejnosc",
+      "title": "El orden de los pasos importa",
+      "type": "content",
+      "onlyForPaths": [
+        "S2",
+        "S3"
+      ],
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "El orden no es arbitrario — lo impone la dependencia de los datos. El chunking debe ir antes que los embeddings, porque los embeddings se calculan para fragmentos ya existentes. El índice se construye antes del retrieval, porque no se puede buscar algo que todavía no se ha almacenado. El retrieval debe ir antes de la generación, porque le proporciona el contexto."
+        },
+        {
+          "kind": "callout",
+          "variant": "info",
+          "title": "Dos fases",
+          "text": "La fase del índice (chunking → embeddings → índice) opera sobre los documentos y es independiente de la pregunta — se ejecuta una vez, offline. La fase de consulta (retrieval → reranking → generación) se ejecuta con cada pregunta."
+        },
+        {
+          "kind": "callout",
+          "variant": "warn",
+          "title": "El error de ordenación más frecuente",
+          "text": "Confundir el orden de embeddings y chunking, o colocar la generación antes del retrieval. La generación sin un retrieval previo es simplemente un modelo adivinando de memoria — exactamente lo que RAG pretende evitar."
+        }
+      ]
+    },
+    {
+      "id": "s4-chunking",
+      "title": "Chunking para la documentación de requisitos",
+      "type": "content",
+      "onlyForPaths": [
+        "S2",
+        "S3"
+      ],
+      "blocks": [
+        {
+          "kind": "definition",
+          "term": "Chunking",
+          "original": "división en fragmentos",
+          "text": "dividir un documento en trozos más pequeños y coherentes, aptos para el embedding y la búsqueda. No se puede meter el documento entero de golpe — sería demasiado grande e impreciso en el retrieval."
+        },
+        {
+          "kind": "list",
+          "items": [
+            "Tamaño del fragmento — cuánto texto cabe en un trozo.",
+            "Solapamiento (en inglés overlap) — los fragmentos se superponen parcialmente para que el contenido en el límite del corte no quede partido.",
+            "Límites lógicos — una sección, un único requisito o un paso, en lugar de un corte a mitad de frase."
+          ]
+        },
+        {
+          "kind": "callout",
+          "variant": "safe",
+          "title": "Regla de QA",
+          "text": "Un requisito o un escenario = un fragmento coherente. Conserva los encabezados y los identificadores (p. ej. «WYM-koszyk §3») en los metadatos — son lo que convierte una cita en algo verificable."
+        },
+        {
+          "kind": "paragraph",
+          "text": "Las consecuencias de un mal chunking en el documento sintético «SklepDemo — koszyk»: un corte arbitrario cada cierto número fijo de caracteres trunca el criterio de aceptación a la mitad, y el retrieval devuelve un fragmento sin conclusión. El overlap protege los límites; la división por requisito protege la completitud."
+        }
+      ]
+    },
+    {
+      "id": "s5-dobierz-chunking",
+      "title": "Elige el chunking — una decisión rápida",
+      "type": "decision",
+      "onlyForPaths": [
+        "S2",
+        "S3"
+      ],
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Un fragmento de la especificación «SklepDemo — koszyk»: cada requisito tiene un identificador (p. ej. «WYM-koszyk-014») y su propio criterio de aceptación, a veces de varias frases de largo. Antes, un corte fijo cada el mismo número de caracteres truncaba el criterio a la mitad. ¿Qué estrategia elegir?"
+        },
+        {
+          "kind": "list",
+          "items": [
+            "Por requisito individual — un requisito con su identificador y su criterio completo = un fragmento, identificador en los metadatos. CORRECTO.",
+            "Tamaño fijo sin overlap, solo más pequeño — corta los criterios aún más a menudo.",
+            "El documento entero como un único fragmento — arruina la relevancia del retrieval, el modelo recibe demasiado ruido."
+          ]
+        },
+        {
+          "kind": "callout",
+          "variant": "safe",
+          "title": "Por qué por requisito",
+          "text": "El límite lógico «un requisito = un fragmento» conserva el criterio completo y una fuente de cita legible — exactamente lo que faltaba con el corte fijo. Es la preparación para las preguntas de escenario del módulo."
+        }
+      ]
+    },
+    {
+      "id": "s6-rag-vs-finetuning",
+      "title": "RAG o fine-tuning",
+      "type": "decision",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Esta es una distinción clave. RAG proporciona al modelo un conocimiento factual fresco y cambiante y le permite citarlo. El fine-tuning (ajuste fino) fija un estilo, un formato y un comportamiento estables del modelo — no nuevos hechos."
+        },
+        {
+          "kind": "table",
+          "title": "RAG frente a fine-tuning",
+          "headers": [
+            "Dimensión",
+            "RAG",
+            "Fine-tuning"
+          ],
+          "rows": [
+            [
+              "Para qué",
+              "Conocimiento factual fresco y cambiante",
+              "Estilo, formato y comportamiento estables"
+            ],
+            [
+              "Citas a la fuente",
+              "Sí — señala el fragmento recuperado",
+              "No — conocimiento integrado en los pesos del modelo"
+            ],
+            [
+              "Actualización",
+              "Sustituye el documento en el índice",
+              "Requiere un nuevo ajuste"
+            ],
+            [
+              "Caso típico de QA",
+              "«Las respuestas deben citar la especificación actual»",
+              "«El informe siempre en nuestra disposición de secciones»"
+            ]
+          ],
+          "textAlt": "Comparación: RAG sirve para un conocimiento factual fresco y cambiante, da citas a la fuente y se actualiza sustituyendo el documento en el índice; un caso típico de QA son las respuestas que citan la especificación actual. El fine-tuning sirve para fijar un estilo y un formato estables, no da citas, y la actualización requiere un nuevo ajuste; un caso típico de QA es un informe siempre en una disposición de secciones fija."
+        },
+        {
+          "kind": "callout",
+          "variant": "warn",
+          "title": "Anti-mito",
+          "text": "«El fine-tuning le enseñará al modelo nuestra documentación.» No. Para hechos cambiantes usa RAG — el fine-tuning fija el estilo, pero los hechos se quedarán obsoletos rápidamente y no darán citas."
+        },
+        {
+          "kind": "paragraph",
+          "hideForPaths": [
+            "S1"
+          ],
+          "text": "Decisiones sobre casos sintéticos de QA: «el asistente debe citar requisitos actuales que cambian cada sprint» → RAG; «el asistente debe devolver siempre un informe en la disposición de secciones de la empresa» → fine-tuning (o una plantilla en el prompt)."
+        }
+      ]
+    },
+    {
+      "id": "s7-trzy-warstwy",
+      "title": "Tres capas de error en RAG",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "La misma respuesta errónea puede tener orígenes distintos, y cada uno requiere una corrección diferente. El tester debe distinguir qué capa falló antes de empezar a corregir nada."
+        },
+        {
+          "kind": "definition",
+          "term": "Error de búsqueda (retrieval)",
+          "text": "el fragmento correcto nunca llegó al contexto — porque el top-k era demasiado pequeño, la fuente correcta quedó excluida del índice o solo se recuperó un fragmento semánticamente similar. Corrección: mejor retrieval (top-k mayor, filtros de metadatos, las fuentes correctas)."
+        },
+        {
+          "kind": "definition",
+          "term": "Error de generación (generation)",
+          "text": "el fragmento correcto estaba en el contexto, pero el modelo igualmente se lo inventó o lo resumió mal — la respuesta contradice la fuente correcta. Corrección: un mejor prompt, fundamentación forzada."
+        },
+        {
+          "kind": "definition",
+          "term": "Error de fuente",
+          "text": "el modelo recuperó y citó correctamente el fragmento, pero el propio contenido del documento era erróneo o estaba desactualizado. Corrección: corregir la documentación en la fuente — ningún retrieval ni prompt arreglará esto."
+        },
+        {
+          "kind": "callout",
+          "variant": "info",
+          "onlyForPaths": [
+            "S1"
+          ],
+          "title": "En resumen",
+          "text": "Antes de concluir que «el modelo se equivoca», comprueba: si recibió el fragmento correcto (retrieval), si lo usó bien (generation), si el propio documento era correcto (fuente)."
+        }
+      ]
+    },
+    {
+      "id": "s8-diagnoza",
+      "title": "Diagnóstico: qué capa falló",
+      "type": "decision",
+      "onlyForPaths": [
+        "S2",
+        "S3"
+      ],
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Corpus sintético «NotkaApp»: DOC1 — el token de sesión caduca tras 30 min de inactividad; DOC3 — el enlace de restablecimiento de contraseña es válido durante 30 min, de un solo uso. Pregunta: «¿Tras cuánto tiempo caduca el enlace de restablecimiento de contraseña?». Lee las señales del contexto recuperado y de la cita."
+        },
+        {
+          "kind": "table",
+          "title": "Señales de las capas de error",
+          "headers": [
+            "Observación",
+            "Capa de error"
+          ],
+          "rows": [
+            [
+              "El modelo recuperó y citó DOC1 (token de sesión): «Caduca tras 30 minutos [DOC1]». El número coincide por casualidad, pero la cita se refiere al documento equivocado; DOC3 nunca llegó al contexto",
+              "Retrieval (similar-but-useless)"
+            ],
+            [
+              "DOC3 estaba en el contexto, pero la respuesta del modelo lo contradice",
+              "Generation"
+            ],
+            [
+              "El modelo citó correctamente DOC3, pero el contenido de DOC3 estaba desactualizado",
+              "Fuente"
+            ],
+            [
+              "Cada frase de la respuesta tiene fundamento en la cita correcta y adecuada",
+              "Sin error"
+            ]
+          ],
+          "textAlt": "Tabla de señales. Cuando se cita DOC1 (token de sesión) en lugar de DOC3 (enlace de restablecimiento), y el fragmento correcto nunca llegó al contexto — es un error de retrieval, la trampa similar-but-useless; una coincidencia casual del número no significa fundamentación. Cuando DOC3 estaba en el contexto, pero la respuesta lo contradice — un error de generation. Cuando DOC3 se citó correctamente, pero su contenido está desactualizado — un error de fuente. Cuando cada frase tiene fundamento en la cita correcta y adecuada — sin error."
+        },
+        {
+          "kind": "callout",
+          "variant": "warn",
+          "title": "La trampa",
+          "text": "Una coincidencia casual del número («30 minutos») no significa fundamentación si la cita señala el documento equivocado. Comprueba siempre si el fragmento citado realmente responde a la pregunta."
+        }
+      ]
+    },
+    {
+      "id": "s9-reranking-grounding",
+      "title": "Profundización de ingeniería: reranking y grounding",
+      "type": "content",
+      "onlyForPaths": [
+        "S3"
+      ],
+      "blocks": [
+        {
+          "kind": "definition",
+          "term": "Reranking",
+          "original": "reordenamiento de los resultados",
+          "text": "tras el retrieval inicial, una segunda etapa más precisa ordena los candidatos por relevancia. Opera sobre los resultados del retrieval — por tanto, después de él y antes de la inyección del contexto. Mejora la calidad del top-k realmente utilizado."
+        },
+        {
+          "kind": "definition",
+          "term": "Grounding",
+          "original": "fundamentación",
+          "text": "comprobar que cada frase de la respuesta tiene fundamento en un fragmento recuperado. Sucede tras generar la respuesta — verifica el texto producido frente a las fuentes y fuerza las citas."
+        },
+        {
+          "kind": "paragraph",
+          "text": "Práctica de verificación: para cada frase de la respuesta, señala el fragmento del que se deriva. Una frase sin fundamento en ningún fragmento recuperado es una señal de un error de generación o de una laguna en el retrieval — en ambos casos la respuesta no se puede considerar fundamentada."
+        },
+        {
+          "kind": "callout",
+          "variant": "info",
+          "title": "Medir la calidad de RAG",
+          "text": "Cómo medir sistemáticamente la relevancia del retrieval y la calidad de la respuesta es el tema de M12 (evaluación). Aquí basta con el principio: sin fundamentación no hay respuesta de confianza."
+        }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "rubric",
+    "id": "m6-pipeline-rag",
+    "title": "Monta un pipeline RAG",
+    "intro": "El corpus «SklepDemo» (especificación del carrito WYM-koszyk, política de devoluciones WYM-zwroty, checklists de pagos). Pregunta del usuario: «¿Cuál es el criterio de aceptación para el límite de artículos en el carrito?». Para cada criterio de la rúbrica marca la decisión de configuración del pipeline que lo cumple. La evaluación cuenta como la tarea práctica R2-rag en la ruta S3 y es una condición necesaria — el umbral de aprobado es el 70% (score ≥ 3,5 / 5).",
+    "rubricId": "R2-rag",
+    "recordsPractical": true,
+    "scaleMax": 5,
+    "passThreshold": 3.5,
+    "criteria": [
+      {
+        "id": "K1",
+        "name": "Fuentes y grounding",
+        "points": 1,
+        "hint": "Activa solo las fuentes que responden a la pregunta y fundamenta la respuesta en ellas; activarlo todo añade ruido, omitir la fuente correcta hace imposible la cita.",
+        "options": [
+          {
+            "id": "a",
+            "text": "Incluye en el índice la fuente del carrito (WYM-koszyk), porque es la que contiene la respuesta; fuerza que la respuesta esté fundamentada en el fragmento recuperado."
+          },
+          {
+            "id": "b",
+            "text": "Desactiva todas las fuentes y deja que el modelo responda de memoria — será más rápido."
+          },
+          {
+            "id": "c",
+            "text": "Activa todas las fuentes y, además, pídele al modelo que no cite, para que la respuesta sea más corta."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K2",
+        "name": "Chunking + overlap",
+        "points": 1,
+        "hint": "Corta por requisito individual con un pequeño overlap y el identificador en los metadatos; un corte fijo trunca el criterio de aceptación.",
+        "options": [
+          {
+            "id": "a",
+            "text": "Divide por requisito individual (un WYM = un fragmento) con un pequeño overlap y el identificador «WYM-koszyk-…» en los metadatos."
+          },
+          {
+            "id": "b",
+            "text": "Corta cada cierto número fijo de caracteres sin overlap — es más sencillo de implementar."
+          },
+          {
+            "id": "c",
+            "text": "Vuelca toda la especificación del carrito como un único fragmento enorme, para que no se corte nada."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K3",
+        "name": "Retrieval (top-k, filtros de metadatos)",
+        "points": 1,
+        "hint": "Pon top-k > 0, lo bastante grande para que quepa el fragmento correcto, y acótalo con un filtro de metadatos al documento del carrito; top-k = 0 no recupera nada.",
+        "options": [
+          {
+            "id": "a",
+            "text": "Pon top-k en unos cuantos fragmentos y añade un filtro de metadatos que lo limite al documento del carrito, para que el fragmento relevante entre con seguridad en el contexto."
+          },
+          {
+            "id": "b",
+            "text": "Pon top-k = 0 para que el modelo no se disperse con los fragmentos recuperados."
+          },
+          {
+            "id": "c",
+            "text": "Pon top-k = 1 sin filtros y confía en que ese único fragmento recuperado resulte ser el correcto."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K4",
+        "name": "Citas / verificabilidad",
+        "points": 1,
+        "hint": "Fuerza una cita con el identificador del fragmento (p. ej. «[WYM-koszyk §3]») para que la respuesta se pueda verificar frente a la fuente.",
+        "options": [
+          {
+            "id": "a",
+            "text": "Fuerza en cada afirmación una cita con el identificador del fragmento, p. ej. «[WYM-koszyk §3]», para que se pueda comprobar en la fuente."
+          },
+          {
+            "id": "b",
+            "text": "Pide un párrafo fluido sin citas — se lee de forma más agradable."
+          },
+          {
+            "id": "c",
+            "text": "Deja que el modelo invente números de sección si encajan con el tema — de todos modos suenan creíbles."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K5",
+        "name": "Diagnóstico de errores (retrieval / generation / fuente)",
+        "points": 1,
+        "hint": "Primero comprueba si el fragmento correcto estaba en el contexto (retrieval), luego si la respuesta no lo contradice (generation), luego si el propio documento es correcto (fuente) — cada capa tiene una corrección distinta.",
+        "options": [
+          {
+            "id": "a",
+            "text": "Cuando la respuesta es errónea, determina la capa: falta del fragmento correcto en el contexto = retrieval; el fragmento era bueno, pero la respuesta lo contradice = generation; la cita es correcta, pero el contenido del documento es erróneo = fuente — y corrige la capa adecuada."
+          },
+          {
+            "id": "b",
+            "text": "Trata todo resultado erróneo por igual y retoca siempre el propio prompt, sin importar lo que hubiera en el contexto."
+          },
+          {
+            "id": "c",
+            "text": "Si el número de la respuesta coincide por casualidad, da la respuesta por correcta sin comprobar a qué documento se refiere la cita."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      }
+    ]
+  },
+  "summary": {
+    "points": [
+      "El pipeline RAG tiene un orden forzado: chunking → embeddings → índice (offline), luego retrieval → reranking → generación con citas (online).",
+      "Para la documentación de requisitos, corta por requisito individual con overlap y el identificador en los metadatos — esto protege la completitud del criterio y la claridad de la cita.",
+      "RAG = hechos frescos, cambiantes y citables; fine-tuning = estilo y formato estables. «El fine-tuning le enseñará al modelo la documentación» es un mito.",
+      "Las tres capas de error tienen tres correcciones distintas: retrieval (el fragmento correcto no llegó), generation (buen fragmento, mala respuesta), fuente (cita correcta, documento erróneo)."
+    ],
+    "checklist": [
+      "¿Están los pasos del pipeline en el orden correcto (retrieval antes de la generación)?",
+      "¿El chunking conserva el requisito completo y su identificador en los metadatos?",
+      "¿Es un caso para RAG (hechos frescos + citas) y no para fine-tuning (formato estable)?",
+      "¿Sé identificar la capa de error: retrieval, generation o fuente?"
+    ],
+    "checklistTitle": "Checklist — un pipeline RAG listo para QA",
+    "nextStep": "Siguiente paso: M7 — prompt engineering: cómo escribir un prompt que use el contexto recuperado."
+  }
+}

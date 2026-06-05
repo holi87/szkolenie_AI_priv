@@ -1,0 +1,371 @@
+{
+  "_meta": {
+    "module": "M4",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M4. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q025",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Le participant explique ce qu'est un embedding en tant que représentation numérique du sens d'un texte.",
+      "prompt": "Un modèle d'embedding convertit une phrase de la documentation QA en embedding. Que représente réellement le vecteur de nombres ainsi obtenu ?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Le sens sémantique du texte sous forme numérique — des phrases de sens proche produisent des vecteurs proches."
+        },
+        {
+          "id": "B",
+          "text": "Le nombre de mots de la phrase ainsi que sa longueur en caractères."
+        },
+        {
+          "id": "C",
+          "text": "La transcription exacte des lettres successives encodées sous forme de codes ASCII."
+        },
+        {
+          "id": "D",
+          "text": "Une évaluation de la correction grammaticale et stylistique du texte sur une échelle numérique."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "L'embedding encode le sens du texte sous forme de vecteur de nombres, de sorte que des phrases proches par le sens (par ex. « connexion » et « authentification ») se retrouvent proches les unes des autres.",
+      "feedbackIncorrect": "L'embedding ne compte ni les caractères, ni les lettres, ni la grammaire — il encode le sens. Reviens à l'écran « Un mot comme vecteur ».",
+      "references": [
+        "M4.1",
+        "M4.2"
+      ]
+    },
+    {
+      "id": "Q026",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Le participant interprète la similarité cosinus comme une mesure de la direction des vecteurs, indépendante de la longueur du texte.",
+      "prompt": "Dans le corpus NotkaApp, tu disposes d'une courte description « Réinitialisation du mot de passe : lien e-mail valable 30 min » ainsi que d'un long paragraphe détaillé décrivant la même procédure de réinitialisation. Pourquoi leur similarité cosinus est-elle élevée malgré la grande différence de longueur des textes ?",
+      "options": [
+        {
+          "id": "A",
+          "text": "La similarité cosinus mesure l'angle (la direction) entre les vecteurs de sens, et non leur longueur — les deux textes pointent dans la même direction."
+        },
+        {
+          "id": "B",
+          "text": "La similarité cosinus augmente avec le nombre de mots, donc un texte plus long a toujours une similarité plus élevée."
+        },
+        {
+          "id": "C",
+          "text": "La similarité cosinus compare le nombre de mots communs, et les deux textes contiennent le mot « réinitialisation »."
+        },
+        {
+          "id": "D",
+          "text": "La similarité cosinus renvoie toujours 1.0 lorsque les textes concernent le même produit."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "La similarité cosinus calcule l'angle entre les vecteurs, c'est-à-dire la concordance de direction du sens — la longueur ou la « force » du texte n'influence pas le résultat, si bien qu'une description courte et une description longue de la même chose sont proches.",
+      "feedbackIncorrect": "Ce n'est ni le nombre de mots ni les tokens communs qui décident, mais la direction du vecteur de sens. Revois « Similarité cosinus — la direction, pas la longueur ».",
+      "references": [
+        "M4.3"
+      ]
+    },
+    {
+      "id": "Q027",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Le participant interprète correctement le classement des plus proches voisins et comprend le caractère conventionnel du seuil de similarité.",
+      "prompt": "Un moteur de recherche sémantique a renvoyé une liste de nearest neighbors avec les résultats suivants : fragment A = 0.91, fragment B = 0.74, fragment C = 0.62. Comment le testeur doit-il interpréter cela ?",
+      "options": [
+        {
+          "id": "A",
+          "text": "La liste est triée par ordre décroissant de similarité, mais une position élevée ne garantit pas la pertinence métier — il faut vérifier le contenu."
+        },
+        {
+          "id": "B",
+          "text": "Le fragment A, avec un score de 0.91, est forcément la bonne réponse, car il dépasse le seuil de 0.9."
+        },
+        {
+          "id": "C",
+          "text": "Les résultats inférieurs à 0.75 sont toujours erronés et peuvent être rejetés sans vérification."
+        },
+        {
+          "id": "D",
+          "text": "Un score de 0.62 signifie que le fragment C est correct sur le fond exactement à 62 %."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Le classement ordonne les résultats par ordre décroissant, mais le seuil est conventionnel et dépend du corpus — une position élevée est un signal, pas une preuve de pertinence.",
+      "feedbackIncorrect": "Il n'existe pas de seuil fixe et universel, et le score numérique n'est pas un « pourcentage de justesse ». Reviens à « Comment lire un classement de similarité ».",
+      "references": [
+        "M4.4"
+      ]
+    },
+    {
+      "id": "Q028",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Le participant choisit les caractéristiques d'une bonne requête pour la recherche sémantique.",
+      "prompt": "Tu veux trouver dans la documentation NotkaApp l'information sur la durée de validité du lien de réinitialisation du mot de passe dans la version actuelle. Quelles pratiques de formulation d'une requête sémantique augmenteront la pertinence des résultats ? Coche toutes les bonnes réponses.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Utiliser une phrase complète rendant l'intention, par ex. « durée de validité du lien de réinitialisation du mot de passe », plutôt qu'un seul mot."
+        },
+        {
+          "id": "B",
+          "text": "Préciser le contexte et la version, par ex. « réinitialisation du mot de passe dans NotkaApp v2 », si l'on tient à la formulation actuelle."
+        },
+        {
+          "id": "C",
+          "text": "Formuler la requête comme une simple négation, par ex. « pas le token de session », pour filtrer les autres résultats."
+        },
+        {
+          "id": "D",
+          "text": "Saisir un seul mot général « mot de passe », en comptant sur le modèle pour deviner lui-même l'intention."
+        },
+        {
+          "id": "E",
+          "text": "Inclure l'objet clé de la requête (le lien de réinitialisation), afin de s'éloigner de notions proches mais différentes (le token de session)."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "E"
+      ],
+      "feedbackCorrect": "Une phrase complète rendant l'intention, la précision du contexte/de la version et l'indication de l'objet clé orientent le vecteur de la requête vers le bon sens.",
+      "feedbackIncorrect": "Un seul mot est trop général, et une simple négation fonctionne mal en recherche sémantique (le modèle encode de toute façon le sujet « token de session »). Revois « Choisir la requête pour la recherche sémantique ».",
+      "references": [
+        "M4.7"
+      ]
+    },
+    {
+      "id": "Q029",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Le participant reconnaît les situations dans lesquelles une similarité élevée ne signifie pas une réponse correcte.",
+      "prompt": "Dans lesquelles des situations suivantes un score de similarité cosinus élevé peut-il induire en erreur, en renvoyant un fragment sémantiquement proche mais incorrect sur le plan métier ? Coche toutes les bonnes réponses.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Le fragment « la connexion ne fonctionne pas » ressort comme proche de la requête « la connexion fonctionne » (négation/antonyme)."
+        },
+        {
+          "id": "B",
+          "text": "La description de la fonction de paiement ressort comme proche d'un signalement de bug de cette même fonction (même sujet, intention différente)."
+        },
+        {
+          "id": "C",
+          "text": "Un fragment sur le « token » de sécurité ressort pour une requête sur le « token » au sens d'unité LLM (ambiguïté/polysémie)."
+        },
+        {
+          "id": "D",
+          "text": "Une ancienne formulation d'une exigence est très proche de la nouvelle, alors que seule la nouvelle est correcte (version obsolète)."
+        },
+        {
+          "id": "E",
+          "text": "Deux fragments décrivant exactement la même procédure actuelle de réinitialisation du mot de passe donnent une similarité élevée."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "feedbackCorrect": "Voilà quatre pièges classiques de la similarité : la négation, le même sujet avec une intention différente, la polysémie et la version obsolète — l'embedding encode le sujet plus fortement que de petites différences pourtant critiques.",
+      "feedbackIncorrect": "L'option E est le cas où une similarité élevée est PERTINENTE (deux descriptions concordantes et actuelles de la même chose). Revois « Piège : proche ≠ correct — 4 cas ».",
+      "references": [
+        "M4.5",
+        "M4.6"
+      ]
+    },
+    {
+      "id": "Q030",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Le participant évalue pourquoi les embeddings confondent des différences critiques et en tire la conclusion appropriée pour le travail QA.",
+      "prompt": "Pourquoi un modèle d'embedding confond-il des paires telles que « la connexion fonctionne » / « la connexion ne fonctionne pas », et quelle conclusion le testeur doit-il en tirer ? Coche toutes les affirmations pertinentes.",
+      "options": [
+        {
+          "id": "A",
+          "text": "L'embedding encode plus fortement le sujet et le style de la phrase que de petites différences pourtant critiques, comme une négation ou un numéro de version."
+        },
+        {
+          "id": "B",
+          "text": "Le classement de similarité est un signal d'appui, et non un verdict — le résultat exige la vérification du contenu du fragment."
+        },
+        {
+          "id": "C",
+          "text": "Il est utile d'appuyer la recherche par un filtrage sur les métadonnées (par ex. version, type de document), afin de limiter les correspondances trompeuses."
+        },
+        {
+          "id": "D",
+          "text": "Puisque le modèle confond ces paires, il faut renoncer totalement à la recherche sémantique en QA."
+        },
+        {
+          "id": "E",
+          "text": "Il suffit de relever le seuil de similarité à 0.95 pour éliminer automatiquement tous les pièges."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "L'embedding encode le sujet plus fortement que la négation ou la version, c'est pourquoi nous traitons le classement comme un signal exigeant une vérification du contenu, appuyée par un filtrage des métadonnées.",
+      "feedbackIncorrect": "Renoncer à la recherche (D) et fixer un seuil rigide (E) sont de fausses solutions — une paire avec négation peut être si proche qu'aucun seuil ne la filtre. Revois « Approfondissement : pourquoi le modèle se trompe ».",
+      "references": [
+        "M4.6",
+        "M4.5"
+      ]
+    },
+    {
+      "id": "Q031",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Le participant diagnostique, sur un cas concret, pourquoi une similarité élevée a renvoyé un fragment incorrect sur le plan métier.",
+      "prompt": "Dans le corpus NotkaApp, tu saisis la requête « Au bout de combien de temps le lien de réinitialisation du mot de passe expire-t-il ? ». Le moteur renvoie comme plus proche DOC1 : « Procédure de connexion : le token de session expire après 30 min d'inactivité » (0.86), et seulement plus bas DOC3 : « Réinitialisation du mot de passe : lien e-mail valable 30 min, à usage unique » (0.71). Qu'est-ce qui explique le mieux ce résultat ?",
+      "options": [
+        {
+          "id": "A",
+          "text": "DOC1 est sémantiquement proche car il partage avec la requête le motif « quelque chose expire après 30 min », mais il concerne un autre objet (le token de session) ; la bonne source est donc DOC3 — c'est le piège « proche, mais notion différente » (même motif, autre objet)."
+        },
+        {
+          "id": "B",
+          "text": "DOC1 est la bonne réponse, car il a un score de similarité plus élevé que DOC3."
+        },
+        {
+          "id": "C",
+          "text": "Le résultat est une erreur du modèle d'embedding, qu'il faut signaler comme défaut de la bibliothèque."
+        },
+        {
+          "id": "D",
+          "text": "DOC3 est incorrect, car son score de 0.71 est inférieur au seuil universel de pertinence de 0.75."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Le motif commun « expire après 30 min » rapproche DOC1 de la requête, bien qu'il concerne le token de session et non le lien de réinitialisation — la bonne source est DOC3, malgré son score plus faible.",
+      "feedbackIncorrect": "Le score le plus élevé ne décide pas de la pertinence, et 0.75 n'est en rien un seuil universel — c'est le piège classique « proche, mais notion différente ». Revois l'écran « Piège : proche ≠ correct » et « Carte sémantique ».",
+      "references": [
+        "M4.5",
+        "M4.9"
+      ]
+    },
+    {
+      "id": "Q032",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Le participant reconnaît le piège de la négation dans les résultats de recherche et choisit une décision QA sûre.",
+      "prompt": "Sur la « Carte sémantique », tu saisis la requête « la connexion ne fonctionne pas après la mise à jour ». Le fragment le plus proche (0.89) se révèle être « la connexion fonctionne correctement », tandis que le fragment « bug connu : la connexion se bloque après l'update v2 » n'arrive qu'en troisième position (0.77). Comment évaluer au mieux cette situation et réagir ?",
+      "options": [
+        {
+          "id": "A",
+          "text": "C'est le piège de la négation : l'embedding encode le sujet commun « connexion », mais perd la distinction « ne fonctionne pas » vs « fonctionne » — il faut vérifier le contenu et choisir le fragment sur le bug connu, malgré son score plus faible."
+        },
+        {
+          "id": "B",
+          "text": "Retenir le fragment « la connexion fonctionne correctement », car il a la similarité la plus élevée (0.89), et clore l'analyse."
+        },
+        {
+          "id": "C",
+          "text": "Considérer les deux fragments comme équivalents, puisque les deux concernent la connexion, et ne pas trancher davantage."
+        },
+        {
+          "id": "D",
+          "text": "Abaisser le seuil à 0.5 pour que le classement remonte automatiquement le bon fragment en première position."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "« Fonctionne » et « ne fonctionne pas » sont sémantiquement proches, car seule la négation les sépare — le score le plus élevé est ici trompeur, on vérifie donc le contenu et on choisit le fragment sur le bug connu.",
+      "feedbackIncorrect": "Le score le plus élevé est le piège de la négation, et manipuler le seuil ne corrige pas la direction du vecteur — il faut vérifier le contenu. Revois « Piège : proche ≠ correct » et « Carte sémantique ».",
+      "references": [
+        "M4.5",
+        "M4.9"
+      ]
+    }
+  ]
+}
