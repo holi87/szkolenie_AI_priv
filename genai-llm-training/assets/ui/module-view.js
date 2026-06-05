@@ -12,11 +12,21 @@ function visibleForPath(item, pathId) {
   return true;
 }
 
+// Źródła klikalne (#121): lista linków ZEWNĘTRZNYCH (absolutne https://). Tekst linku = opisowy label z danych
+// (WCAG 2.4.4, nie „kliknij tu”). Link otwierany w nowej karcie z rel bezpieczeństwa (target/rel wg konwencji).
+function renderBlockLinks(links) {
+  if (!Array.isArray(links) || links.length === 0) return null;
+  return el("ul", { class: "block-links" }, links.map((l) =>
+    el("li", {}, [el("a", { attrs: { href: l.href, target: "_blank", rel: "noopener noreferrer" }, text: l.label })])));
+}
+
 function renderBlock(b, pathId) {
   if (!visibleForPath(b, pathId)) return null;
+  const links = renderBlockLinks(b.links); // #121: klikalne źródła (opcjonalne, każdy rodzaj bloku)
   switch (b.kind) {
     case "paragraph":
-      return el("p", { text: b.text });
+      // Linki to blok blokowy (<ul>), więc poza <p> — opakowujemy paragraf i listę linków w kontener.
+      return links ? el("div", { class: "block-group" }, [el("p", { text: b.text }), links]) : el("p", { text: b.text });
     case "list":
       return el(b.ordered ? "ol" : "ul", {}, (b.items || []).map((it) => el("li", { text: it })));
     case "definition":
@@ -26,9 +36,11 @@ function renderBlock(b, pathId) {
         ` — ${b.text}`,
       ]);
     case "callout":
+      // Linki renderowane WEWNĄTRZ calloutu (div) — semantycznie spójne ze źródłem w treści.
       return el("div", { class: `callout callout--${b.variant || "info"}`, attrs: { role: "note" } }, [
         b.title ? el("p", { class: "callout__title" }, [el("span", { class: "callout__icon", attrs: { "aria-hidden": "true" } }, [icon(calloutIcon(b.variant))]), b.title]) : null,
         el("p", { text: b.text }),
+        links,
       ]);
     case "table":
       return renderTable(b);
@@ -39,7 +51,7 @@ function renderBlock(b, pathId) {
         el("figcaption", { class: "diagram__alt" }, [el("strong", { text: t("module.diagram.descLabel") }), b.textAlt]),
       ]);
     default:
-      return el("p", { text: b.text || "" });
+      return links ? el("div", { class: "block-group" }, [el("p", { text: b.text || "" }), links]) : el("p", { text: b.text || "" });
   }
 }
 

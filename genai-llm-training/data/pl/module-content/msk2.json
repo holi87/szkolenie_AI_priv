@@ -1,35 +1,42 @@
 {
   "_meta": {
-    "issue": "#112-#118 [M15] Ścieżka formatywna S4 — Skala Holaka (moduł szkoleniowy)",
+    "issue": "#124 [M16] Ścieżka formatywna S4 — agenci AI (moduł szkoleniowy, interakcja tune)",
     "adr": "docs/adr/0009-sciezka-formatywna-s4-skala-holaka.md",
-    "interaction": "Klasyfikacja decyzji (kind: classify) — ćwiczenie formatywne, NIE scorowane do zaliczenia",
-    "source": "Osie dojrzałości Skali Holaka: weryfikowalność outputu, odwracalność decyzji. Atrybucja: quality-blog.eu/pl/blog/skala-holaka.",
+    "interaction": "Strojenie parametrów agenta (kind: tune) — ćwiczenie formatywne, NIE scorowane do zaliczenia",
+    "source": "Osie dojrzałości Skali Holaka: weryfikowalność outputu, odwracalność decyzji, kontrola agentów. Atrybucja: quality-blog.eu/pl/blog/skala-holaka.",
     "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE i ogólne (zero realnych danych/PII). Moduł formatywny — bez progu zaliczenia i certyfikatu."
   },
   "module": "MSK2",
-  "intro": "Dojrzała praca z AI nie pyta tylko „czy model umie”, ale „czy output da się sprawdzić” i „czy decyzję da się cofnąć”. Ten moduł uczy oceniać weryfikowalność i odwracalność, zanim zaufasz odpowiedzi. To ćwiczenie rozwojowe, nie test.",
+  "intro": "Agent to nie chatbot: wykonuje kroki i używa narzędzi, więc może realnie zmieniać świat — pliki, maile, dane, repozytorium. Dojrzała praca z agentem to dobranie autonomii do ryzyka: im trudniej cofnąć skutek i zweryfikować output, tym węższe uprawnienia i więcej kontroli człowieka. Ten moduł uczy stroić te dźwignie. To ćwiczenie rozwojowe, nie test.",
   "screens": [
     {
-      "id": "msk2-s1-dwie-osie",
-      "title": "Dwie osie zaufania: weryfikowalność i odwracalność",
+      "id": "msk2-s1-od-chatbota-do-agenta",
+      "title": "Od chatbota do agenta",
       "type": "content",
       "blocks": [
-        { "kind": "paragraph", "text": "Output bywa przekonujący w formie, a błędny w treści. Zanim go użyjesz, zadaj dwa pytania: czy mogę go zweryfikować wobec źródła oraz czy decyzję na jego podstawie da się cofnąć. Im trudniejsza weryfikacja i im mniejsza odwracalność, tym więcej kontroli człowieka." },
+        { "kind": "paragraph", "text": "Chatbot odpowiada tekstem. Workflow z narzędziem wykonuje jeden zdefiniowany krok. Agent planuje i wykonuje wiele kroków, sam sięgając po narzędzia — i właśnie dlatego wymaga granic. Pytanie nie brzmi „czy agent umie”, lecz „co się stanie, jeśli się pomyli, i czy zdążymy to cofnąć”." },
         { "kind": "list", "items": [
-          "Weryfikowalność — czy mam jak sprawdzić, że odpowiedź jest prawdziwa.",
-          "Odwracalność — czy skutki decyzji da się wycofać bez dużej szkody.",
-          "Ślad audytowy — czy zostaje zapis, na podstawie czego podjęto decyzję."
+          "Chatbot — proponuje, nic nie wykonuje.",
+          "Workflow z narzędziem — wykonuje jeden zdefiniowany krok.",
+          "Agent — planuje i wykonuje wiele kroków z dostępem do narzędzi."
         ] },
-        { "kind": "callout", "variant": "info", "title": "Oś Skali Holaka", "text": "Projektowanie pracy tak, by decyzje wsparte AI były sprawdzalne i odwracalne, to znak wejścia na wyższy poziom. Więcej: quality-blog.eu/pl/blog/skala-holaka." }
+        { "kind": "callout", "variant": "info", "title": "Oś Skali Holaka", "text": "Projektowanie pracy tak, by decyzje wsparte AI (także działania agenta) były sprawdzalne i odwracalne, to znak wejścia na wyższy poziom.",
+          "links": [ { "label": "Skala Holaka — model dojrzałości (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka" } ]
+        }
       ]
     },
     {
-      "id": "msk2-s2-granica",
-      "title": "Kiedy wystarczy weryfikacja, a kiedy potrzebny człowiek",
+      "id": "msk2-s2-trzy-dzwignie",
+      "title": "Trzy dźwignie kontroli agenta",
       "type": "content",
       "blocks": [
-        { "kind": "paragraph", "text": "Niskie ryzyko: output łatwo sprawdzić, a decyzję cofnąć (np. szkic, propozycja do przeglądu). Wysokie ryzyko: skutek trudno odwrócić lub trudno zweryfikować (np. wysłanie komunikatu do klienta, trwała zmiana danych) — tam człowiek zatwierdza." },
-        { "kind": "callout", "variant": "warn", "title": "Pułapka gładkiej odpowiedzi", "text": "Pewny ton modelu nie jest dowodem poprawności. Brak możliwości weryfikacji to sygnał, by NIE polegać na odpowiedzi w decyzji krytycznej." }
+        { "kind": "paragraph", "text": "Bezpieczeństwo agenta nie polega na zaufaniu, lecz na ustawieniu trzech dźwigni: zakresu uprawnień (co agent w ogóle może), punktu zatwierdzania przez człowieka (kiedy musi zapytać) oraz śladu audytowego i odwracalności (czy da się sprawdzić i cofnąć, co zrobił)." },
+        { "kind": "list", "items": [
+          "Zakres uprawnień — od tylko-do-odczytu po pełny zapis produkcyjny.",
+          "Human-in-the-loop — zatwierdzanie zawsze, tylko dla nieodwracalnych, albo nigdy.",
+          "Ślad i odwracalność — pełny log z rollbackiem, podstawowy log, albo brak."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Pułapka „agent sobie poradzi”", "text": "Im szerszy dostęp i mniej kontroli, tym taniej… aż do pierwszego nieodwracalnego błędu. Domyślnie zawężaj uprawnienia i wymagaj zatwierdzenia tam, gdzie skutek jest trudny do cofnięcia." }
       ]
     },
     {
@@ -37,40 +44,70 @@
       "title": "Jak to ćwiczyć",
       "type": "content",
       "blocks": [
-        { "kind": "paragraph", "text": "Za chwilę sklasyfikujesz sytuacje jako niskiego ryzyka (output weryfikowalny i decyzja odwracalna) lub wymagające kontroli człowieka. Bez progu zaliczenia — chodzi o wyrobienie odruchu pytania o weryfikację i odwracalność." }
+        { "kind": "paragraph", "text": "Poniżej ustawisz trzy parametry agenta i zobaczysz na żywo, jak zmienia się profil ryzyka. Następnie w checkpoincie wybierzesz bezpieczny zestaw dla zadania o nieodwracalnych skutkach. Bez progu zaliczenia — chodzi o odruch dopasowania autonomii do ryzyka." }
       ]
     }
   ],
   "interaction": {
-    "kind": "classify",
-    "id": "msk2-classify",
-    "title": "Niskie ryzyko czy kontrola człowieka?",
-    "intro": "Oceń każdą sytuację. Feedback wyjaśnia, jak weryfikowalność i odwracalność wpływają na potrzebę kontroli.",
-    "categories": [
-      { "id": "safe", "label": "Niskie ryzyko (po weryfikacji)", "desc": "Output łatwo sprawdzić, decyzja odwracalna." },
-      { "id": "control", "label": "Wymaga kontroli człowieka", "desc": "Trudna weryfikacja lub nieodwracalny skutek." }
+    "kind": "tune",
+    "id": "msk2-tune",
+    "title": "Dostrój autonomię i kontrolę agenta",
+    "intro": "Ustaw trzy dźwignie i obserwuj profil ryzyka. Potem odpowiedz na checkpoint — to ćwiczenie rozwojowe, nie test.",
+    "outputLabel": "Profil ryzyka agenta (na żywo):",
+    "controls": [
+      {
+        "id": "scope",
+        "label": "Zakres uprawnień",
+        "levels": [
+          { "value": "read", "label": "Tylko do odczytu", "effect": "Agent niczego nie zmienia — najniższe ryzyko, dobre do analizy i propozycji." },
+          { "value": "sandbox", "label": "Zapis w piaskownicy", "effect": "Zmiany tylko w środowisku odizolowanym — łatwe do odrzucenia." },
+          { "value": "prod", "label": "Pełny zapis produkcyjny", "effect": "Agent może trwale zmieniać dane produkcyjne — najwyższe ryzyko, wymaga kontroli." }
+        ]
+      },
+      {
+        "id": "approval",
+        "label": "Zatwierdzanie przez człowieka",
+        "levels": [
+          { "value": "always", "label": "Zawsze przed działaniem", "effect": "Człowiek zatwierdza każdy krok — wolniej, ale w pełni kontrolowane." },
+          { "value": "irreversible", "label": "Dla decyzji nieodwracalnych", "effect": "Zgoda wymagana, gdy skutku nie da się cofnąć — rozsądny domyślny kompromis." },
+          { "value": "never", "label": "Nigdy (pełna autonomia)", "effect": "Agent działa bez pytania — szybko, ale błąd może przejść niezauważony." }
+        ]
+      },
+      {
+        "id": "audit",
+        "label": "Ślad audytowy i odwracalność",
+        "levels": [
+          { "value": "full", "label": "Pełny log + rollback", "effect": "Każde działanie zapisane i możliwe do cofnięcia — pełna sprawdzalność." },
+          { "value": "basic", "label": "Podstawowy log", "effect": "Wiadomo, co się stało, ale cofnięcie bywa ręczne i trudne." },
+          { "value": "none", "label": "Brak śladu", "effect": "Nie wiadomo, co i dlaczego agent zrobił — brak sprawdzalności." }
+        ]
+      }
     ],
-    "items": [
-      { "id": "msk2-i1", "text": "AI proponuje szkic notatki, którą i tak przejrzysz i zredagujesz.", "correctCategory": "safe", "rationale": "Łatwa weryfikacja i pełna odwracalność — niskie ryzyko." },
-      { "id": "msk2-i2", "text": "AI generuje treść wysyłaną automatycznie do klienta bez przeglądu.", "correctCategory": "control", "rationale": "Skutek trudny do cofnięcia — wymaga zatwierdzenia człowieka." },
-      { "id": "msk2-i3", "text": "AI sugeruje przypadki testowe, które porównasz z wymaganiem.", "correctCategory": "safe", "rationale": "Możesz zweryfikować wobec źródła, nim użyjesz." },
-      { "id": "msk2-i4", "text": "AI decyduje o trwałym usunięciu rekordów w bazie produkcyjnej.", "correctCategory": "control", "rationale": "Nieodwracalne i trudne do weryfikacji — pełna kontrola człowieka." },
-      { "id": "msk2-i5", "text": "AI podsumowuje dokument, a Ty masz dostęp do oryginału.", "correctCategory": "safe", "rationale": "Źródło dostępne → łatwa weryfikacja; podsumowanie odwracalne." },
-      { "id": "msk2-i6", "text": "AI ustala ocenę kandydata, której nikt później nie sprawdza.", "correctCategory": "control", "rationale": "Brak weryfikacji + duży wpływ → wymaga człowieka i śladu audytowego." }
-    ]
+    "checkpoint": {
+      "prompt": "Agent ma pomagać przy zadaniu, które może TRWALE zmienić dane produkcyjne (skutek trudny do cofnięcia). Który zestaw ustawień jest najbezpieczniejszy na start?",
+      "type": "single_choice",
+      "options": [
+        { "id": "a", "text": "Pełny zapis produkcyjny, zatwierdzanie nigdy, brak śladu — „agent sobie poradzi”." },
+        { "id": "b", "text": "Tylko do odczytu lub piaskownica, zatwierdzanie człowieka dla nieodwracalnych, pełny log z rollbackiem." },
+        { "id": "c", "text": "Pełny zapis produkcyjny, podstawowy log, bez zatwierdzania — „przyspieszymy, sprawdzimy później”." }
+      ],
+      "correct": ["b"],
+      "feedbackCorrect": "Tak. Przy nieodwracalnych skutkach zawężasz uprawnienia, wymagasz zgody człowieka i zapewniasz pełny ślad z możliwością cofnięcia.",
+      "feedbackIncorrect": "Przy nieodwracalnych skutkach autonomia bez kontroli i śladu to proszenie się o nieodwracalny błąd. Zawęź uprawnienia, dodaj zatwierdzanie człowieka i pełny log z rollbackiem."
+    }
   },
   "summary": {
     "points": [
-      "Przed użyciem outputu pytaj: czy umiem to zweryfikować i czy decyzję da się cofnąć.",
-      "Im trudniejsza weryfikacja i mniejsza odwracalność, tym więcej kontroli człowieka.",
-      "Pewny ton modelu nie zastępuje dowodu — zostaw ślad, na czym oparto decyzję."
+      "Agent może realnie zmieniać świat — dobierz autonomię do ryzyka i odwracalności zadania.",
+      "Trzy dźwignie kontroli: zakres uprawnień, zatwierdzanie przez człowieka, ślad audytowy z rollbackiem.",
+      "Domyślnie zawężaj uprawnienia; im trudniej cofnąć skutek, tym więcej kontroli człowieka."
     ],
     "checklist": [
-      "Czy wiem, jak sprawdzić tę odpowiedź wobec źródła?",
-      "Czy skutki tej decyzji da się odwrócić?",
-      "Czy zostaje ślad audytowy dla decyzji krytycznej?"
+      "Czy wiem, co najgorszego agent może zrobić przy obecnych uprawnieniach?",
+      "Czy nieodwracalne działania wymagają zatwierdzenia przez człowieka?",
+      "Czy zostaje ślad audytowy i da się cofnąć działanie agenta?"
     ],
-    "checklistTitle": "Checklista — zanim zaufasz outputowi",
-    "nextStep": "Następny krok: w jednym swoim procesie dopisz krok weryfikacji i zasadę „decyzja nieodwracalna = zatwierdza człowiek”."
+    "checklistTitle": "Checklista — zanim wpuścisz agenta",
+    "nextStep": "Następny krok: dla jednego realnego zadania agenta wypisz najgorszy możliwy skutek i dobierz do niego zakres uprawnień, punkt zatwierdzania i ślad audytowy."
   }
 }

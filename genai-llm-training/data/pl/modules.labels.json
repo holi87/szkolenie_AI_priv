@@ -241,22 +241,38 @@
       "Kalibruje ocenę automatyczną przez porównanie z oceną eksperta i ustala próg akceptacji"
     ]
   },
-  "MSH": {
-    "name": "Skala Holaka — autodiagnoza dojrzałości AI",
+  "MSHP": {
+    "name": "Skala Holaka — autodiagnoza dojrzałości osobistej (v2.1p)",
     "level": "wszystkie poziomy",
-    "interactiveElement": "Self-check dojrzałości (Skala Holaka)",
+    "interactiveElement": "Self-check dojrzałości osobistej (Skala Holaka v2.1p)",
     "keyConcepts": [
-      "dojrzałość adopcji AI",
-      "Skala Holaka v2.1e (organizacja)",
+      "dojrzałość własnej praktyki AI",
       "Skala Holaka v2.1p (osoba)",
-      "zarządzanie kontekstem",
       "weryfikowalność outputu",
-      "odwracalność decyzji"
+      "odwracalność decyzji",
+      "zarządzanie kontekstem"
+    ],
+    "learningOutcomes": [
+      "Określa orientacyjny poziom dojrzałości własnej praktyki AI (0–11)",
+      "Wskazuje barierę i następny krok wejścia wyżej we własnym warsztacie",
+      "Rozpoznaje pułapkę fałszywego poczucia dojrzałości osobistej"
+    ]
+  },
+  "MSHO": {
+    "name": "Skala Holaka — autodiagnoza dojrzałości organizacji (v2.1e)",
+    "level": "wszystkie poziomy",
+    "interactiveElement": "Self-check dojrzałości organizacji (Skala Holaka v2.1e)",
+    "keyConcepts": [
+      "dojrzałość adopcji AI w organizacji",
+      "Skala Holaka v2.1e (organizacja)",
+      "polityka akceptowalnego użycia",
+      "ślad audytowy",
+      "mierzenie wpływu AI"
     ],
     "learningOutcomes": [
       "Określa orientacyjny poziom dojrzałości adopcji AI w organizacji (0–11)",
-      "Określa orientacyjny poziom dojrzałości własnej praktyki AI (0–11)",
-      "Wskazuje barierę i następny krok wejścia na wyższy poziom"
+      "Wskazuje barierę i następny krok adopcji na poziomie zespołu/firmy",
+      "Rozróżnia mierzoną, ciągle doskonaloną adopcję od jednorazowej inicjatywy"
     ]
   },
   "MSK1": {
@@ -277,20 +293,21 @@
     ]
   },
   "MSK2": {
-    "name": "Weryfikowalność outputu i odwracalność decyzji",
+    "name": "Agenci AI: autonomia, uprawnienia i kontrola człowieka",
     "level": "wszystkie poziomy",
-    "interactiveElement": "Klasyfikacja decyzji wg ryzyka i odwracalności",
+    "interactiveElement": "Dostrajanie autonomii i kontroli agenta (tune)",
     "keyConcepts": [
-      "weryfikowalność",
-      "odwracalność",
-      "ślad audytowy",
-      "decyzja krytyczna",
-      "human-in-the-loop"
+      "agent",
+      "tool use",
+      "human-in-the-loop",
+      "zakres uprawnień",
+      "odwracalność i ślad audytowy",
+      "weryfikowalność outputu"
     ],
     "learningOutcomes": [
-      "Ocenia, czy output AI da się zweryfikować przed użyciem",
-      "Rozpoznaje decyzje nieodwracalne wymagające kontroli człowieka",
-      "Projektuje pracę tak, by decyzje wsparte AI były sprawdzalne i odwracalne"
+      "Rozróżnia chatbota, workflow z narzędziem i agenta wykonującego kroki",
+      "Dobiera poziom autonomii agenta do ryzyka i odwracalności zadania",
+      "Projektuje granice uprawnień, zatwierdzanie człowieka i ślad audytowy dla agenta"
     ]
   },
   "MSK3": {
@@ -311,20 +328,20 @@
     ]
   },
   "MSK4": {
-    "name": "Wchodzenie wyżej: granice dojrzałości 8→9 i 10→11",
+    "name": "Skille i mierzenie wpływu: ocena dojrzałości workflow AI",
     "level": "wszystkie poziomy",
-    "interactiveElement": "Klasyfikacja kroków rozwoju dojrzałości",
+    "interactiveElement": "Ocena dojrzałości workflow AI wg rubryki (rubric)",
     "keyConcepts": [
-      "granica 8→9",
-      "granica 10→11",
-      "asystent vs decydent",
-      "kalibracja użycia AI",
-      "ciągłe doskonalenie"
+      "skille / powtarzalne workflowy",
+      "granica 8→9 i 10→11",
+      "mierzenie wpływu AI",
+      "kalibracja i ciągłe doskonalenie",
+      "rubryka dojrzałości"
     ],
     "learningOutcomes": [
+      "Ocenia dojrzałość powtarzalnego workflow AI (skilla) wg konkretnych kryteriów",
       "Rozpoznaje, co odróżnia poziom 8 od 9 oraz 10 od 11",
-      "Wskazuje konkretny, odwracalny krok wejścia na wyższy poziom",
-      "Odróżnia realny rozwój od fałszywego poczucia dojrzałości"
+      "Odróżnia mierzony, kalibrowany rozwój od fałszywego poczucia dojrzałości"
     ]
   }
 }

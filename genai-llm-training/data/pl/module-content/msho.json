@@ -1,0 +1,102 @@
+{
+  "_meta": {
+    "issue": "#122 [M16] Rozdzielenie diagnozy Skali Holaka — wymiar ORGANIZACYJNY (v2.1e)",
+    "adr": "docs/adr/0008-modul-skali-holaka-msh.md",
+    "interaction": "Self-check dojrzałości organizacji (kind: maturity-check) — NON-gating, neutralny framing",
+    "source": "Model dojrzałości adopcji AI „Skala Holaka”: wymiar organizacyjny v2.1e (organizacja, 0–11). Atrybucja: quality-blog.eu/pl/blog/skala-holaka.",
+    "dataPolicy": "WSZYSTKIE zdania self-checku SYNTETYCZNE i ogólne (zero realnych danych/PII). Diagnoza orientacyjna — NIE da się jej „oblać”. Heurystyka punktacji uproszczona (liczba zaznaczeń → poziom 0–11) do weryfikacji przez eksperta dziedzinowego (SME)."
+  },
+  "module": "MSHO",
+  "intro": "Skala Holaka w wymiarze organizacyjnym (v2.1e) pomaga nazwać dojrzałość adopcji AI w Twoim zespole lub firmie — gdzie organizacja jest dziś i jaki jest realny następny krok. To autodiagnoza, nie test: nie ma wyniku „zaliczone/oblane”, jest orientacyjny poziom 0–11 i wskazówka, jak wejść wyżej. Możesz ją zrobić niezależnie od diagnozy osobistej (MSHP).",
+  "screens": [
+    {
+      "id": "msho-s1-czym-jest",
+      "title": "Czym jest organizacyjna Skala Holaka",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Wersja organizacyjna (v2.1e) opisuje dojrzałość adopcji AI w zespole/firmie na 12 poziomach (0–11) — od oddolnych eksperymentów po świadomą, mierzoną i ciągle doskonaloną adopcję wpisaną w strategię. Pomaga uniknąć dwóch pułapek: „mamy AI, więc jesteśmy dojrzali” oraz „to tylko zabawka”." },
+        { "kind": "list", "items": [
+          "Oceniasz adopcję AI w ORGANIZACJI — niezależnie od dojrzałości pojedynczej osoby.",
+          "Organizacja może być wyżej lub niżej niż jej najlepszy praktyk.",
+          "Diagnozę własnej praktyki (Skala Holaka v2.1p) robisz osobno w module MSHP."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Skąd nazwa i kto stoi za modelem", "text": "Skalę Holaka wymyślił Grzegorz Holak przy wsparciu Konrada Gomulskiego — stąd nazwa. Obaj są Senior Test Development Engineer w Sii Polska i członkami SJSI oraz współzałożycielami quality-blog.eu; Grzegorz Holak jest dodatkowo Test Architectem i AI Ambassadorem w SCIB. Używamy jej jako narzędzia autorefleksji, nie certyfikacji.",
+          "links": [
+            { "label": "Skala Holaka — wymiar organizacyjny (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka" },
+            { "label": "Skala Holaka — wymiar osobisty (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka-private" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "msho-s2-osie-i-granice",
+      "title": "Po czym poznać poziom: osie i dwie granice",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Dojrzałość organizacji poznasz nie po liczbie licencji, ale po tym, czy AI jest wpięte w procesy: spisana polityka akceptowalnego użycia, dozwolone zastosowania, obowiązkowa weryfikacja outputów w procesach krytycznych, mierzenie wpływu na jakość i czas oraz odwracalność decyzji ze śladem audytowym." },
+        { "kind": "list", "items": [
+          "Bariera — czego organizacji brakuje, by wejść wyżej.",
+          "Sukces — co realnie działa, gdy poziom jest osiągnięty.",
+          "Pułapka — uznanie dojrzałości za stan gotowy zamiast ciągłego doskonalenia."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Dwie krytyczne granice (organizacyjne)", "text": "Granica 8→9: od „indywidualnych dobrych praktyk” do wpięcia AI w proces z jasnym podziałem asystent/decydent i śladem audytowym. Granica 10→11: od pojedynczych usprawnień do ciągłego doskonalenia i kalibracji adopcji jako elementu strategii." }
+      ]
+    },
+    {
+      "id": "msho-s3-jak-czytac",
+      "title": "Jak czytać wynik organizacji",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Za chwilę zaznaczysz zdania prawdziwe dziś dla Twojej organizacji. Liczba zaznaczeń daje orientacyjny poziom 0–11 oraz wskazówkę „gdzie jesteście / jak wejść wyżej”. Zaznaczaj uczciwie tylko to, co realnie wdrożone — nie to, co planowane." },
+        { "kind": "callout", "variant": "safe", "title": "To diagnoza, nie ocena", "text": "Nie ma poprawnych i błędnych odpowiedzi ani progu zaliczenia. Wynik nie wpływa na ukończenie ścieżki ani na żaden test — to lustro, nie audyt." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "maturity-check",
+    "id": "msho-selfcheck",
+    "title": "Skala Holaka v2.1e — autodiagnoza dojrzałości organizacji",
+    "intro": "Zaznacz zdania prawdziwe dziś dla Twojego zespołu/firmy. Po sprawdzeniu zobaczysz orientacyjny poziom 0–11 i następny krok — bez ocen pass/fail.",
+    "scales": [
+      {
+        "id": "org",
+        "label": "Organizacja (Skala Holaka v2.1e)",
+        "intro": "Jak dojrzała jest adopcja AI w Twoim zespole/firmie? Zaznacz to, co realnie wdrożone.",
+        "max": 11,
+        "statements": [
+          { "id": "org-1", "text": "Są osoby, które używają AI do pojedynczych zadań." },
+          { "id": "org-2", "text": "Istnieje nieformalna wymiana dobrych praktyk korzystania z AI." },
+          { "id": "org-3", "text": "Spisano politykę akceptowalnego użycia AI (dane, prywatność, IP)." },
+          { "id": "org-4", "text": "Wybrane procesy mają zdefiniowane, dozwolone zastosowania AI." },
+          { "id": "org-5", "text": "Outputy AI w procesach krytycznych są obowiązkowo weryfikowane przez człowieka." },
+          { "id": "org-6", "text": "Zespoły mierzą wpływ AI na jakość i czas, a nie tylko fakt użycia." },
+          { "id": "org-7", "text": "Jest świadome zarządzanie kontekstem i kosztem tokenów w powtarzalnych zadaniach." },
+          { "id": "org-8", "text": "Decyzje wspierane przez AI są odwracalne i zostawiają ślad audytowy." },
+          { "id": "org-9", "text": "AI jest wpięte w procesy z jasnym podziałem: asystent vs decydent." },
+          { "id": "org-10", "text": "Organizacja regularnie kalibruje i audytuje własne użycie AI." },
+          { "id": "org-11", "text": "Adopcja AI jest elementem strategii i ciągłego doskonalenia, nie jednorazową inicjatywą." }
+        ],
+        "bands": [
+          { "min": 0, "max": 2, "label": "Poziom 0–2: Eksperymenty oddolne", "advice": "Bariera: brak wspólnych zasad i celu. Następny krok: spisz prostą politykę akceptowalnego użycia AI (dane, prywatność) i wskaż 1–2 procesy pilotażowe." },
+          { "min": 3, "max": 5, "label": "Poziom 3–5: Pierwsze ramy", "advice": "Sukces: są zasady i dozwolone zastosowania. Następny krok: wprowadź obowiązkową weryfikację outputów w procesach krytycznych i zacznij mierzyć wpływ." },
+          { "min": 6, "max": 8, "label": "Poziom 6–8: Świadome procesy", "advice": "Sukces: mierzysz wpływ i zarządzasz kontekstem. Granica 8→9: wpnij AI w proces z jasnym podziałem asystent/decydent oraz śladem audytowym dla decyzji." },
+          { "min": 9, "max": 11, "label": "Poziom 9–11: Dojrzała adopcja", "advice": "Pułapka: uznanie dojrzałości za stan gotowy, nie za ciągłe doskonalenie. Granica 10→11: uczyń kalibrację i audyt użycia AI elementem strategii i rutyny zespołu." }
+        ]
+      }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Skala Holaka v2.1e mierzy, czy AI jest wpięte w procesy (zasady, weryfikacja, pomiar), nie liczbę licencji.",
+      "Oceniasz adopcję w organizacji — własną praktykę diagnozujesz osobno (MSHP).",
+      "To diagnoza orientacyjna: bez pass/fail, bez wpływu na zaliczenie — ma wskazać następny krok."
+    ],
+    "checklist": [
+      "Czy nazwaliście orientacyjny poziom organizacji (0–11)?",
+      "Czy wiecie, jaka jest najbliższa bariera do pokonania?",
+      "Czy znacie jeden konkretny następny krok wejścia wyżej?"
+    ],
+    "checklistTitle": "Checklista — po autodiagnozie organizacji",
+    "nextStep": "Następny krok: wybierzcie jedną barierę z wyższego poziomu i zaplanujcie jeden mały, odwracalny krok adopcji."
+  }
+}

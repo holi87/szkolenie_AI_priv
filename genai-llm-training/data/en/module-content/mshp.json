@@ -1,0 +1,102 @@
+{
+  "_meta": {
+    "issue": "#122 [M16] Splitting the Holak Scale diagnosis — PERSONAL dimension (v2.1p)",
+    "adr": "docs/adr/0008-modul-skali-holaka-msh.md",
+    "interaction": "Personal maturity self-check (kind: maturity-check) — NON-gating, neutral framing",
+    "source": "AI adoption maturity model „Holak Scale”: personal dimension v2.1p (individual, 0–11). Attribution: quality-blog.eu/pl/blog/skala-holaka-private.",
+    "dataPolicy": "ALL self-check statements are SYNTHETIC and generic (no real data/PII). An indicative diagnosis — it cannot be „failed”. Scoring heuristic is simplified (count of checks → level 0–11) and subject to subject-matter-expert (SME) review."
+  },
+  "module": "MSHP",
+  "intro": "The Holak Scale's personal dimension (v2.1p) helps you name the maturity of your own way of working with AI — where you are today and what the realistic next step is. It's a self-check, not a test: there is no „pass/fail” result, just an indicative level 0–11 and a hint on how to move up. You can take it independently of the organizational diagnosis (MSHO).",
+  "screens": [
+    {
+      "id": "mshp-s1-czym-jest",
+      "title": "What the personal Holak Scale is",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "The personal version (v2.1p) describes the maturity of your AI craft across 12 levels (0–11) — from first uses to a conscious, measured, continuously improved practice. It helps avoid two traps: „I use AI, so I'm mature” and „it's just a toy”." },
+        { "kind": "list", "items": [
+          "You assess only YOUR practice — regardless of how mature the organization is.",
+          "What matters is HOW you use AI (context, verification, reversibility), not the number of tools.",
+          "You take the organizational diagnosis (Holak Scale v2.1e) separately in module MSHO."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Where the name and the model come from", "text": "The Holak Scale was devised by Grzegorz Holak with support from Konrad Gomulski — hence the name. Both are Senior Test Development Engineers at Sii Poland and members of SJSI, and co-founders of quality-blog.eu; Grzegorz Holak is additionally a Test Architect and AI Ambassador at SCIB. We use it as a self-reflection tool, not a certification.",
+          "links": [
+            { "label": "Holak Scale — personal dimension (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka-private" },
+            { "label": "Holak Scale — organizational dimension (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mshp-s2-osie-i-granice",
+      "title": "How to tell your level: axes and two thresholds",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "You recognize higher levels not by the number of tools, but by habits (from roughly level 4 up): deliberate prompt framing, managing context and cost, verifying critical answers against a source, designing work so decisions stay reversible, and measuring AI's real impact on your quality and time." },
+        { "kind": "list", "items": [
+          "Barrier — the habit whose absence blocks moving up.",
+          "Success — what truly works once the level is reached.",
+          "Trap — a false sense of maturity that sets development back."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Two critical thresholds (personal)", "text": "Threshold 8→9: from „capable user” to designing work so AI-supported decisions are checkable and reversible, and sharing practices. Threshold 10→11: from routine to measuring your own AI impact and continuously improving your craft." }
+      ]
+    },
+    {
+      "id": "mshp-s3-jak-czytac",
+      "title": "How to read your result",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Next you'll check the statements that are true today for your own practice. The number of checks gives an indicative level 0–11 plus a „where you are / how to move up” hint. Check honestly only what you actually do day to day." },
+        { "kind": "callout", "variant": "safe", "title": "It's a diagnosis, not a grade", "text": "There are no correct or incorrect answers here and no pass threshold. The result does not affect path completion or any test — it's a mirror, not an exam." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "maturity-check",
+    "id": "mshp-selfcheck",
+    "title": "Holak Scale v2.1p — personal maturity self-check",
+    "intro": "Check the statements true today for your own way of working with AI. After checking you'll see an indicative level 0–11 and a next step — with no pass/fail grading.",
+    "scales": [
+      {
+        "id": "person",
+        "label": "Individual (Holak Scale v2.1p)",
+        "intro": "How mature is your own way of working with AI? Check what you do day to day.",
+        "max": 11,
+        "statements": [
+          { "id": "per-1", "text": "I use AI for specific, repeatable tasks." },
+          { "id": "per-2", "text": "I deliberately frame the prompt: role, goal, context, output format." },
+          { "id": "per-3", "text": "I recognize that output can be wrong despite a credible form." },
+          { "id": "per-4", "text": "I verify critical answers against a source before I use them." },
+          { "id": "per-5", "text": "I match the tool/model to the task; I don't use one for everything." },
+          { "id": "per-6", "text": "I manage context: I provide only what's needed and watch the cost." },
+          { "id": "per-7", "text": "I know when NOT to use AI: missing data, high risk, irreversibility." },
+          { "id": "per-8", "text": "I design work so AI-supported decisions are reversible and checkable." },
+          { "id": "per-9", "text": "I share practices and calibrate output assessment together with others." },
+          { "id": "per-10", "text": "I measure AI's real impact on my quality and time, and adjust my approach." },
+          { "id": "per-11", "text": "I treat working with AI as continuous improvement of my craft." }
+        ],
+        "bands": [
+          { "min": 0, "max": 2, "label": "Level 0–2: First uses", "advice": "Barrier: treating AI as an oracle. Next step: start framing prompts deliberately and verifying every answer you intend to use." },
+          { "min": 3, "max": 5, "label": "Level 3–5: Conscious user", "advice": "Success: you verify output and match the tool to the task. Next step: learn to manage context and cost, and to recognize when NOT to use AI." },
+          { "min": 6, "max": 8, "label": "Level 6–8: Practitioner", "advice": "Success: you know the limits and manage context. Threshold 8→9: design work so decisions are reversible and checkable, and share practices with your team." },
+          { "min": 9, "max": 11, "label": "Level 9–11: Craft mastery", "advice": "Trap: routine without measurement or reflection. Threshold 10→11: measure AI's real impact on your work and treat your craft as continuous improvement." }
+        ]
+      }
+    ]
+  },
+  "summary": {
+    "points": [
+      "The Holak Scale v2.1p measures HOW you use AI (context, verifiability, reversibility), not the number of tools.",
+      "You assess only your own practice — the organization is diagnosed separately (MSHO).",
+      "It's an indicative diagnosis: no pass/fail, no effect on completion — it's there to point out the next step."
+    ],
+    "checklist": [
+      "Have you named your indicative personal level (0–11)?",
+      "Do you know the nearest barrier to overcome?",
+      "Do you know one concrete next step to move up?"
+    ],
+    "checklistTitle": "Checklist — after the personal self-check",
+    "nextStep": "Next step: pick one barrier from a higher level and plan a single small, reversible experiment in your own work."
+  }
+}

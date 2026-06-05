@@ -22,23 +22,29 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const CDIR = join(HERE, "..", "..", "data", "pl", "module-content");
 const readContent = (id) => JSON.parse(readFileSync(join(CDIR, `${id}.json`), "utf8"));
 const MSK_IDS = ["msk1", "msk2", "msk3", "msk4"];
+// M16/#124: S4 używa PEŁNEGO wachlarza interakcji (nie tylko classify) — MSK2→tune (agenci), MSK4→rubric (skille).
+const MSK_EXPECTED_KIND = { msk1: "classify", msk2: "tune", msk3: "classify", msk4: "rubric" };
 
-test("S4 jest ścieżką formatywną; persona-set = MSH + 4 MSK (moduły kursu M1-M12 wykluczone)", () => {
+test("S4 jest ścieżką formatywną; persona-set = MSHP + MSHO + 4 MSK (moduły kursu M1-M12 wykluczone)", () => {
   assert.equal(isFormativePath(pathsData, "S4"), true, "S4 musi mieć formative:true");
   for (const pathId of ["S1", "S2", "S3"]) assert.equal(isFormativePath(pathsData, pathId), false, `${pathId} nie jest formatywna`);
   const vis = pathVisibleModuleIds(pathsData, "S4");
-  assert.deepEqual([...vis].sort(), ["MSH", "MSK1", "MSK2", "MSK3", "MSK4"], "persona-set S4 = diagnoza + 4 moduły szkoleniowe");
+  assert.deepEqual([...vis].sort(), ["MSHO", "MSHP", "MSK1", "MSK2", "MSK3", "MSK4"], "persona-set S4 = 2 diagnozy + 4 moduły szkoleniowe");
   for (const id of ["M1", "M6", "M10", "M12"]) assert.ok(!vis.has(id), `moduł kursu ${id} poza ścieżką formatywną S4`);
 });
 
-test("MSK1-4: treść + interakcja classify renderują się i zaliczają pełny cykl (render→evaluate→feedback) bez wyjątku", () => {
+test("MSK1-4: pełen wachlarz interakcji (classify/tune/rubric) render→evaluate→feedback bez wyjątku (#124)", () => {
+  const kindsSeen = new Set();
   for (const id of MSK_IDS) {
     const c = readContent(id);
-    assert.equal(c.interaction.kind, "classify", `${id}: moduł szkoleniowy S4 używa interakcji classify (non-practical)`);
+    assert.equal(c.interaction.kind, MSK_EXPECTED_KIND[id], `${id}: oczekiwany typ interakcji (#124 — wachlarz, nie tylko classify)`);
     assert.ok(!c.interaction.recordsPractical, `${id}: interakcja NIE może być zadaniem praktycznym (S4 nie dotyka rubryk/bramek)`);
+    kindsSeen.add(c.interaction.kind);
     // Integralność classify (jak walidator): correctCategory każdego itemu wskazuje istniejącą kategorię.
-    const catIds = new Set(c.interaction.categories.map((k) => k.id));
-    for (const it of c.interaction.items) assert.ok(catIds.has(it.correctCategory), `${id}: item ${it.id} correctCategory spoza categories`);
+    if (c.interaction.kind === "classify") {
+      const catIds = new Set(c.interaction.categories.map((k) => k.id));
+      for (const it of c.interaction.items) assert.ok(catIds.has(it.correctCategory), `${id}: item ${it.id} correctCategory spoza categories`);
+    }
 
     const wrap = globalThis.document.createElement("div");
     for (const sec of renderScreens(c.screens, "S4")) wrap.appendChild(sec);
@@ -51,6 +57,8 @@ test("MSK1-4: treść + interakcja classify renderują się i zaliczają pełny 
     view.showFeedback(result);
     view.focusFirst();
   }
+  // Wachlarz interakcji w S4 (#124): co najmniej classify + tune + rubric wśród modułów MSK.
+  for (const k of ["classify", "tune", "rubric"]) assert.ok(kindsSeen.has(k), `S4/MSK musi obejmować interakcję ${k} (pełen wachlarz #124)`);
 });
 
 test("hub S4 (finalTest=null): brak karty testu końcowego; nav S4: brak pozycji testu", () => {
@@ -68,7 +76,7 @@ test("hub S4 (finalTest=null): brak karty testu końcowego; nav S4: brak pozycji
   assert.doesNotMatch(hub.textContent || "", /odblokuje się/, "intro formatywny nie może obiecywać odblokowania testu");
 
   const navEl = globalThis.document.createElement("nav");
-  renderNav(navEl, { modules, finalTest: null, activeModuleId: "MSH", onSelectModule: () => {}, onSelectFinalTest: () => {} });
+  renderNav(navEl, { modules, finalTest: null, activeModuleId: "MSHP", onSelectModule: () => {}, onSelectFinalTest: () => {} });
   assert.doesNotMatch(navEl.textContent || "", /Test końcowy/, "nav formatywny nie może mieć pozycji testu końcowego");
   assert.equal(queryAll(navEl, (e) => e.tagName === "BUTTON").length, modules.length, "nav = przyciski tylko modułów (bez testu)");
 });

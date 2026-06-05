@@ -38,7 +38,7 @@
             "modules": {
               "type": "object",
               "patternProperties": {
-                "^M([1-9]|1[0-2]|SH|SK[1-9])$": {
+                "^M([1-9]|1[0-2]|SHO|SHP|SK[1-9])$": {
                   "type": "object",
                   "required": ["required", "variant"],
                   "properties": {

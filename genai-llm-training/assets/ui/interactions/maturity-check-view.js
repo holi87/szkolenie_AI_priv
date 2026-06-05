@@ -1,7 +1,7 @@
-// maturity-check-view.js — render autodiagnozy „Skala Holaka" (MSH / M14, ADR-0008). NON-gating, NEUTRALNY:
-// zero kolorów pass/fail (klasa „feedback" bez --correct/--incorrect), zero słowa „zaliczone". Dwie skale 0–11
-// (organizacja + osoba) jako grupy checkboxów — w pełni klawiaturowe (WCAG 1.3.1/2.1.1). Po sprawdzeniu:
-// orientacyjny poziom + „gdzie jesteś / jak wejść wyżej" (label + advice z band w per-locale msh.json).
+// maturity-check-view.js — render autodiagnozy „Skala Holaka" (MSHP/MSHO / M14, ADR-0008; rozdzielone M16/#122).
+// NON-gating, NEUTRALNY: zero kolorów pass/fail (klasa „feedback" bez --correct/--incorrect), zero słowa „zaliczone".
+// Skale 0–11 (MSHP: osoba; MSHO: organizacja) jako grupy checkboxów — w pełni klawiaturowe (WCAG 1.3.1/2.1.1).
+// Po sprawdzeniu: orientacyjny poziom + „gdzie jesteś / jak wejść wyżej" (label + advice z band w per-locale mshp/msho.json).
 import { el } from "../dom.js";
 import { icon } from "../icon.js";
 import { t } from "../../i18n/i18n.js";
