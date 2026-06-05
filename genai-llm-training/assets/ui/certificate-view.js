@@ -79,11 +79,17 @@ function passBadge() {
   ]);
 }
 
-/** Duży wynik % + etykieta (centerpiece ekranu Wynik, zarówno PASS jak i FAIL). */
-function scoreBlock(scorePct) {
-  return el("p", { class: "result__score" }, [
-    el("strong", { class: "result__score-value", text: `${scorePct}%` }),
-    el("span", { class: "result__score-label", text: t("result.score.label") }),
+/** Duży wynik % jako pierścień CSS (centerpiece ekranu Wynik). --pct steruje łukiem conic-gradient w CSS. */
+function scoreBlock(scorePct, passed) {
+  const ringColor = passed ? "var(--color-ok)" : "var(--color-warn)";
+  return el("div", {
+    class: "result__score",
+    attrs: { style: `--pct:${scorePct};--ring-c:${ringColor}`, role: "img", "aria-label": `${scorePct}% — ${t("result.score.label")}` },
+  }, [
+    el("span", { class: "result__score-inner" }, [
+      el("strong", { class: "result__score-value", text: `${scorePct}%` }),
+      el("span", { class: "result__score-label", text: t("result.score.label") }),
+    ]),
   ]);
 }
 
@@ -110,7 +116,7 @@ export function renderResult(result, opts = {}) {
   if (result.passed) {
     root.appendChild(el("h1", { text: t("result.passed.heading") }));
     root.appendChild(passBadge());
-    root.appendChild(scoreBlock(result.scorePct));
+    root.appendChild(scoreBlock(result.scorePct, true));
     const gIssued = gatesBlock(opts.gates);
     if (gIssued) root.appendChild(gIssued);
     if (progress) root.appendChild(exportButtons(progress, pathName));
@@ -118,6 +124,7 @@ export function renderResult(result, opts = {}) {
     if (wa) root.appendChild(wa);
   } else {
     root.appendChild(el("h1", { text: t("result.failed.heading") }));
+    root.appendChild(scoreBlock(result.scorePct, false));
     // result.scorePct to WAŻONY wynik ścieżki (quiz inline + test + praktyka), nie sam wynik testu.
     // "spełnij bramki poniżej" tylko gdy lista bramek faktycznie jest renderowana (gates dostępne).
     const gFail = gatesBlock(opts.gates);

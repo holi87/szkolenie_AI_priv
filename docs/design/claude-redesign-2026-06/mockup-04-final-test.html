@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="pl" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Makieta 04 — Test końcowy · GenAI i LLM (QualityCat)</title>
+<style>
+:root{
+  --color-bg:#0F1219; --color-surface:#161A22; --color-surface-2:#1E232E; --color-surface-3:#262C39;
+  --color-fg:#EAEDF3; --color-muted:#A7B0C0;
+  --color-border:#2A3140; --color-border-strong:#6B7588;
+  --color-accent:#6EA8FE; --color-accent-fg:#07101F; --color-accent-quiet:#18233A; --color-accent-2:#9C8CFA;
+  --color-ok:#4ADE80; --color-warn:#FBBF24; --color-bad:#F87171; --color-locked:#6B7280;
+  --font-base:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --font-reading:Georgia,"Iowan Old Style","Palatino Linotype","Times New Roman",serif;
+  --font-mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --fs-300:.8rem; --fs-400:.9rem; --fs-500:1rem; --fs-600:1.2rem; --fs-700:1.6rem; --fs-800:2.2rem;
+  --fw-medium:600; --fw-bold:700; --lh-tight:1.2; --fs-base:var(--fs-500); --lh:1.65; --lh-reading:1.75;
+  --sp-1:.25rem; --sp-2:.5rem; --sp-3:.75rem; --sp-4:1rem; --sp-5:1.5rem; --sp-6:2rem;
+  --radius:10px; --radius-sm:7px; --radius-lg:16px; --radius-pill:999px; --gap:var(--sp-4);
+  --maxw-content:70ch;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.32); --shadow-md:0 8px 24px rgba(0,0,0,.34);
+  --ring-accent:0 0 0 3px rgba(110,168,254,.35);
+  --dur-fast:120ms; --dur-base:240ms; --ease:cubic-bezier(.4,0,.2,1); --focus:3px solid var(--color-accent);
+}
+:root[data-theme="light"]{
+  --color-bg:#F5F7FA; --color-surface:#FFFFFF; --color-surface-2:#EDF0F5; --color-surface-3:#E3E8F0;
+  --color-fg:#161922; --color-muted:#4F5765;
+  --color-border:#DCE1EA; --color-border-strong:#707A8B;
+  --color-accent:#1D4ED8; --color-accent-fg:#FFFFFF; --color-accent-quiet:#E7EDFD; --color-accent-2:#6D3FE0;
+  --color-ok:#127334; --color-warn:#B45309; --color-bad:#B91C1C; --color-locked:#5C6473;
+  --shadow-sm:0 1px 2px rgba(15,23,42,.10); --shadow-md:0 8px 24px rgba(15,23,42,.10);
+  --ring-accent:0 0 0 3px rgba(29,78,216,.30);
+}
+*{box-sizing:border-box;}
+body{margin:0;background:#06080c;font-family:var(--font-base);}
+.mk-bar{position:sticky;top:0;z-index:200;display:flex;flex-wrap:wrap;align-items:center;gap:1rem;justify-content:space-between;padding:.6rem 1rem;background:#0b0e14;border-bottom:1px solid #232a36;color:#cfd6e4;}
+.mk-bar__title{display:flex;align-items:center;gap:.6rem;font-size:.82rem;} .mk-bar__title b{color:#fff;font-weight:600;}
+.mk-bar__tag{font-size:.66rem;text-transform:uppercase;letter-spacing:.12em;color:#8b94a6;border:1px solid #2c3442;border-radius:999px;padding:.15rem .55rem;}
+.mk-groups{display:flex;flex-wrap:wrap;gap:.5rem;}
+.mk-seg{display:inline-flex;background:#11151d;border:1px solid #2c3442;border-radius:999px;padding:2px;}
+.mk-seg button{font:inherit;font-size:.76rem;color:#aab3c4;background:none;border:0;padding:.32rem .8rem;border-radius:999px;cursor:pointer;}
+.mk-seg button[aria-pressed="true"]{background:#2a6fdb;color:#fff;}
+.mk-seg button:focus-visible{outline:2px solid #6ea8fe;outline-offset:2px;}
+.mk-stage{padding:clamp(.5rem,3vw,2rem);display:flex;justify-content:center;}
+.frame{width:100%;max-width:1180px;background:var(--color-bg);color:var(--color-fg);border-radius:14px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.5);container-type:inline-size;border:1px solid rgba(255,255,255,.05);}
+.frame.is-mobile{max-width:380px;border-radius:30px;border:8px solid #05070b;}
+.app{background:var(--color-bg);color:var(--color-fg);font-size:var(--fs-base);line-height:var(--lh);min-height:60vh;}
+.app h1,.app h2,.app h3{line-height:var(--lh-tight);}
+.app p{margin:0 0 1rem;}
+.app a{color:var(--color-accent);}
+.app :focus-visible{outline:var(--focus);outline-offset:2px;border-radius:4px;}
+.skip-link{position:absolute;left:.5rem;top:-3rem;background:var(--color-accent);color:var(--color-accent-fg);padding:.5rem .9rem;border-radius:var(--radius);z-index:100;transition:top .15s ease;text-decoration:none;}
+.skip-link:focus{top:.5rem;}
+.app-header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--color-surface) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--color-border);}
+.app-header__bar{display:flex;align-items:center;justify-content:space-between;gap:var(--gap);padding:.7rem clamp(1rem,3vw,1.6rem);flex-wrap:wrap;}
+.brand{display:flex;align-items:center;gap:.6rem;}
+.brand__logo{display:inline-flex;width:34px;height:34px;align-items:center;justify-content:center;border-radius:9px;background:var(--color-accent-quiet);color:var(--color-accent);border:1px solid var(--color-border-strong);}
+.brand__logo svg{width:18px;height:18px;display:block;}
+.brand__text{display:flex;flex-direction:column;line-height:1.15;}
+.brand__name{font-weight:700;font-size:.98rem;letter-spacing:-.01em;}
+.brand__sub{font-size:.7rem;color:var(--color-muted);letter-spacing:.04em;text-transform:uppercase;}
+.app-header__meta{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;}
+.path-badge{font-size:var(--fs-300);padding:.25rem .7rem;border:1px solid var(--color-border-strong);border-radius:var(--radius-pill);color:var(--color-fg);background:var(--color-surface-2);font-weight:600;}
+.path-badge--eyebrow{border-color:transparent;background:var(--color-accent-quiet);color:var(--color-accent);}
+.lang-switch__trigger,.theme-toggle{gap:.4rem;padding:.42rem .7rem;}
+.lang-switch__flag-wrap{display:inline-flex;border-radius:2px;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(120,130,150,.7);width:18px;height:13px;}
+.lang-switch__flag-wrap span{display:block;width:100%;height:50%;}
+.lang-switch__flag-wrap .w{background:#fff;} .lang-switch__flag-wrap .r{background:#dc143c;}
+.lang-switch__label{font-weight:600;font-size:var(--fs-400);} .lang-switch__caret{font-size:.7em;opacity:.8;}
+.theme-toggle__icon{display:block;width:16px;height:16px;} .theme-toggle__icon--light{display:none;}
+:root[data-theme="light"] .theme-toggle__icon--dark{display:none;} :root[data-theme="light"] .theme-toggle__icon--light{display:block;}
+.theme-toggle__label{font-size:var(--fs-400);font-weight:600;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;font:inherit;font-weight:600;cursor:pointer;padding:.6rem 1.05rem;min-height:44px;border-radius:9px;border:1px solid var(--color-accent);background:var(--color-accent);color:var(--color-accent-fg);transition:filter var(--dur-fast) var(--ease);text-decoration:none;}
+.btn:hover{filter:brightness(1.08);}
+.btn[disabled]{opacity:.5;cursor:not-allowed;}
+.btn--ghost{background:transparent;color:var(--color-fg);border-color:var(--color-border-strong);}
+.btn--ghost:hover{background:var(--color-surface-2);}
+.btn--sm{min-height:38px;padding:.4rem .8rem;font-size:var(--fs-400);}
+.icon{flex:none;vertical-align:-.125em;}
+.eyebrow{display:inline-block;font-size:var(--fs-300);font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent);margin:0 0 .5rem;}
+.muted{color:var(--color-muted);}
+/* Test layout */
+.layout{max-width:840px;margin:0 auto;padding:clamp(1rem,3vw,1.8rem);}
+.view{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:clamp(1.2rem,3.5vw,2.4rem);box-shadow:var(--shadow-sm);}
+.test-title{font-family:var(--font-reading);font-size:var(--fs-800);margin:0 0 .5rem;letter-spacing:-.01em;}
+.test-meta{font-size:var(--fs-400);color:var(--color-muted);max-width:var(--maxw-content);margin:0 0 1rem;}
+.test-meta b{color:var(--color-fg);}
+.notice{display:flex;gap:.6rem;align-items:flex-start;padding:.8rem 1rem;border:1px solid var(--color-border);border-left:3px solid var(--color-warn);border-radius:var(--radius);background:color-mix(in srgb,var(--color-warn) 9%,transparent);margin:0 0 1.2rem;font-size:var(--fs-400);}
+.notice__icon{color:var(--color-warn);flex:none;margin-top:.1rem;}
+.notice__icon svg{width:1.2em;height:1.2em;}
+.test-progress{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-bottom:.8rem;}
+.test-progress__counter{font-weight:700;font-size:var(--fs-400);white-space:nowrap;}
+.test-progress__bar{flex:1;min-width:140px;height:8px;border-radius:999px;background:var(--color-surface-2);border:1px solid var(--color-border-strong);overflow:hidden;}
+.test-progress__fill{display:block;height:100%;background:var(--color-accent);border-radius:999px;}
+.test-progress__attempt{font-size:var(--fs-300);color:var(--color-muted);white-space:nowrap;}
+.q-palette{display:flex;flex-wrap:wrap;gap:.4rem;margin:0 0 1.4rem;padding:.9rem;border:1px solid var(--color-border);border-radius:var(--radius);background:var(--color-surface-2);}
+.q-dot{position:relative;width:40px;height:40px;border-radius:9px;border:1px solid var(--color-border-strong);background:var(--color-surface);color:var(--color-fg);font-weight:700;font-size:var(--fs-400);cursor:pointer;}
+.q-dot:hover{border-color:var(--color-accent);}
+.q-dot.answered{border-color:var(--color-ok);color:var(--color-ok);}
+.q-dot.answered::after{content:"";position:absolute;top:4px;right:4px;width:6px;height:6px;border-radius:50%;background:var(--color-ok);}
+.q-dot[aria-current="true"]{border-color:var(--color-accent);background:var(--color-accent-quiet);color:var(--color-accent);box-shadow:inset 0 0 0 1px var(--color-accent);}
+.quiz-question{border:1px solid var(--color-border);border-radius:var(--radius);padding:1.2rem;background:var(--color-surface);box-shadow:var(--shadow-sm);}
+fieldset{min-width:0;border:0;margin:0;padding:0;} legend{max-width:100%;padding:0;}
+.quiz-question__prompt{font-weight:600;font-size:var(--fs-600);display:block;margin-bottom:.5rem;line-height:1.4;}
+.quiz-chips{display:flex;flex-wrap:wrap;gap:.4rem;margin:0 0 .9rem;}
+.quiz-chip{font-size:var(--fs-300);padding:.12rem .55rem;border:1px solid var(--color-border);border-radius:999px;color:var(--color-muted);background:var(--color-surface-2);}
+.quiz-chip--crit{color:var(--color-warn);border-color:var(--color-warn);}
+.options{list-style:none;margin:0;padding:0;display:grid;gap:.5rem;}
+.option{display:flex;align-items:flex-start;gap:.65rem;padding:.75rem .85rem;border:1px solid var(--color-border-strong);border-radius:9px;background:var(--color-surface-2);min-height:44px;cursor:pointer;transition:border-color var(--dur-fast) var(--ease),background var(--dur-fast) var(--ease);}
+.option:hover{border-color:var(--color-accent);}
+.option input{margin-top:.1rem;width:18px;height:18px;accent-color:var(--color-accent);flex:none;}
+.option:has(input:checked){border-color:var(--color-accent);background:var(--color-accent-quiet);box-shadow:inset 0 0 0 1px var(--color-accent);}
+.option label{min-width:0;cursor:pointer;}
+.test-nav{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:space-between;align-items:center;margin-top:1.6rem;padding-top:1.2rem;border-top:1px solid var(--color-border);}
+.test-nav__group{display:flex;gap:.6rem;flex-wrap:wrap;}
+.app-footer{color:var(--color-muted);font-size:var(--fs-400);text-align:center;padding:1.6rem 1rem;border-top:1px solid var(--color-border);}
+.app-footer a{color:var(--color-accent);}
+@container (max-width:560px){
+  .test-title{font-size:1.85rem;}
+  .theme-toggle__label,.brand__sub{display:none;}
+  .test-nav{flex-direction:column;align-items:stretch;}
+  .test-nav__group{flex-direction:column;}
+  .test-nav .btn{width:100%;}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important;}}
+</style>
+</head>
+<body>
+<div class="mk-bar">
+  <div class="mk-bar__title"><span class="mk-bar__tag">Makieta 04</span> <b>Test końcowy</b> — tryb testu</div>
+  <div class="mk-groups">
+    <div class="mk-seg" role="group" aria-label="Motyw"><button data-theme-btn="dark" aria-pressed="true">Ciemny</button><button data-theme-btn="light" aria-pressed="false">Jasny</button></div>
+    <div class="mk-seg" role="group" aria-label="Widok"><button data-vp-btn="desktop" aria-pressed="true">Desktop</button><button data-vp-btn="mobile" aria-pressed="false">Mobile 360</button></div>
+  </div>
+</div>
+<div class="mk-stage">
+<div class="frame" id="frame">
+<div class="app">
+  <a class="skip-link" href="#view">Przejdź do treści</a>
+  <header class="app-header"><div class="app-header__bar">
+    <div class="brand">
+      <span class="brand__logo" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M8 1.5 14.5 8 8 14.5 1.5 8Z" fill="currentColor"/></svg></span>
+      <span class="brand__text"><span class="brand__name">Szkolenie GenAI i LLM</span><span class="brand__sub">QualityCat</span></span>
+    </div>
+    <div class="app-header__meta">
+      <button class="btn btn--ghost lang-switch__trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Język: polski"><span class="lang-switch__flag-wrap" aria-hidden="true"><span class="w"></span><span class="r"></span></span><span class="lang-switch__label">PL</span><span class="lang-switch__caret" aria-hidden="true">▾</span></button>
+      <button id="theme-toggle" class="btn btn--ghost theme-toggle" type="button" aria-pressed="false" aria-label="Przełącz motyw jasny/ciemny"><svg class="theme-toggle__icon theme-toggle__icon--dark" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M6 1.5A6.5 6.5 0 1 0 14.5 10 5 5 0 0 1 6 1.5Z"/></svg><svg class="theme-toggle__icon theme-toggle__icon--light" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="3.2" fill="currentColor"/><g stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3 3l1.4 1.4M11.6 11.6 13 13M13 3l-1.4 1.4M4.4 11.6 3 13"/></g></svg><span class="theme-toggle__label">Motyw</span></button>
+      <span class="path-badge path-badge--eyebrow">Ścieżka S2</span>
+      <button class="btn btn--ghost btn--sm" type="button">Moduły</button>
+    </div>
+  </div></header>
+
+  <div class="layout"><main id="view" class="view" tabindex="-1">
+    <p class="eyebrow">Test końcowy</p>
+    <h1 class="test-title">Tester / QA — ścieżka S2</h1>
+    <p class="test-meta"><b>25 pytań</b> · próg zaliczenia <b>75%</b> · wszystkie pytania krytyczne muszą być poprawne.</p>
+    <div class="notice"><span class="notice__icon" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M8 2.6 14.4 13H1.6Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 6.4v3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="11.3" r=".85" fill="currentColor"/></svg></span><span>Tryb testu: feedback i wynik pojawią się dopiero po zakończeniu podejścia.</span></div>
+
+    <div class="test-progress">
+      <span class="test-progress__counter">Pytanie 7 z 25</span>
+      <span class="test-progress__bar" role="img" aria-label="Postęp testu: 7 z 25"><span class="test-progress__fill" style="width:28%"></span></span>
+      <span class="test-progress__attempt">Podejście 1 z 3</span>
+    </div>
+
+    <div class="q-palette" role="group" aria-label="Pytania">
+      <button class="q-dot answered" type="button" aria-label="Pytanie 1, odpowiedziane">1</button>
+      <button class="q-dot answered" type="button" aria-label="Pytanie 2, odpowiedziane">2</button>
+      <button class="q-dot answered" type="button" aria-label="Pytanie 3, odpowiedziane">3</button>
+      <button class="q-dot answered" type="button" aria-label="Pytanie 4, odpowiedziane">4</button>
+      <button class="q-dot answered" type="button" aria-label="Pytanie 5, odpowiedziane">5</button>
+      <button class="q-dot answered" type="button" aria-label="Pytanie 6, odpowiedziane">6</button>
+      <button class="q-dot" type="button" aria-current="true" aria-label="Pytanie 7, bieżące">7</button>
+      <button class="q-dot" type="button" aria-label="Pytanie 8, bez odpowiedzi">8</button>
+      <button class="q-dot" type="button" aria-label="Pytanie 9, bez odpowiedzi">9</button>
+      <button class="q-dot" type="button" aria-label="Pytanie 10, bez odpowiedzi">10</button>
+      <button class="q-dot" type="button" aria-label="Pytanie 11, bez odpowiedzi">11</button>
+      <button class="q-dot" type="button" aria-label="Pytanie 12, bez odpowiedzi">12</button>
+    </div>
+
+    <fieldset class="quiz-question">
+      <legend class="quiz-question__prompt">Zespół chce użyć LLM do generowania danych testowych z prawdziwej bazy klientów. Co jest najpoważniejszym ryzykiem, które musisz zaadresować jako pierwsze?</legend>
+      <div class="quiz-chips"><span class="quiz-chip">Scenariusz decyzyjny</span><span class="quiz-chip">2 pkt</span><span class="quiz-chip quiz-chip--crit">Pytanie krytyczne</span></div>
+      <ul class="options">
+        <li class="option"><input type="radio" name="q7" id="q7-a" value="a"><label for="q7-a">Model może wygenerować zbyt mało rekordów do pokrycia przypadków brzegowych.</label></li>
+        <li class="option"><input type="radio" name="q7" id="q7-b" value="b"><label for="q7-b">Wysłanie danych osobowych (PII) do zewnętrznego modelu narusza prywatność i politykę bezpieczeństwa.</label></li>
+        <li class="option"><input type="radio" name="q7" id="q7-c" value="c"><label for="q7-c">Generowanie danych może potrwać dłużej niż napisanie ich ręcznie.</label></li>
+        <li class="option"><input type="radio" name="q7" id="q7-d" value="d"><label for="q7-d">Format wyjścia może wymagać ręcznej konwersji do CSV.</label></li>
+      </ul>
+    </fieldset>
+
+    <div class="test-nav">
+      <button class="btn btn--ghost" type="button">← Poprzednie</button>
+      <div class="test-nav__group">
+        <button class="btn btn--ghost" type="button">Następne →</button>
+        <button class="btn" type="button">Zakończ podejście i sprawdź wynik</button>
+      </div>
+    </div>
+  </main></div>
+
+  <footer class="app-footer"><p><span>Szkolenie statyczne (GitHub Pages). Postęp zapisujemy lokalnie w tej przeglądarce; nic nie wysyłamy na serwer, brak cookies.</span> <a href="#">Prywatność</a></p></footer>
+</div>
+</div>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, frame=document.getElementById('frame');
+  function setTheme(t){root.setAttribute('data-theme',t);document.querySelectorAll('[data-theme-btn]').forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-theme-btn')===t));});var tt=document.getElementById('theme-toggle');if(tt)tt.setAttribute('aria-pressed',String(t==='light'));}
+  function setVp(v){frame.classList.toggle('is-mobile',v==='mobile');document.querySelectorAll('[data-vp-btn]').forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-vp-btn')===v));});}
+  document.querySelectorAll('[data-theme-btn]').forEach(function(b){b.addEventListener('click',function(){setTheme(b.getAttribute('data-theme-btn'));});});
+  document.querySelectorAll('[data-vp-btn]').forEach(function(b){b.addEventListener('click',function(){setVp(b.getAttribute('data-vp-btn'));});});
+  var tt=document.getElementById('theme-toggle');if(tt)tt.addEventListener('click',function(){setTheme(root.getAttribute('data-theme')==='light'?'dark':'light');});
+})();
+</script>
+</body>
+</html>

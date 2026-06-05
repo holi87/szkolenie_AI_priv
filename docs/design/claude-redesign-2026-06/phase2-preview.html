@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pl" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Phase 2 — Podgląd komponentów CSS</title>
+<link rel="stylesheet" href="assets/styles.css">
+<script>
+  (function(){var t=localStorage.getItem("genai-training:theme");if(t!=="light"&&t!=="dark")t="dark";document.documentElement.setAttribute("data-theme",t);})();
+</script>
+<style>
+  body { padding-bottom: 4rem; }
+  .demo-section { max-width: 900px; margin: 2rem auto; padding: 0 1.5rem; }
+  .demo-label { font-family: var(--font-mono); font-size: .7rem; letter-spacing:.12em; text-transform:uppercase; color: var(--color-muted); margin: 2.4rem 0 .6rem; border-top: 1px solid var(--color-border-subtle); padding-top: .8rem; }
+</style>
+</head>
+<body>
+
+<!-- HEADER — brand lockup  -->
+<header class="app-header">
+  <div class="app-header__bar">
+    <div class="brand">
+      <span class="brand__logo" aria-hidden="true">
+        <svg viewBox="0 0 16 16" width="16" height="16" focusable="false"><path d="M8 1.5 14.5 8 8 14.5 1.5 8Z" fill="currentColor"/></svg>
+      </span>
+      <span class="brand__text">
+        <span class="brand__name">Szkolenie GenAI i LLM</span>
+        <span class="brand__sub" aria-hidden="true">QualityCat</span>
+      </span>
+    </div>
+    <div class="app-header__meta">
+      <button class="btn btn--ghost lang-switch__trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Język: polski">
+        <span class="lang-switch__label">PL</span><span class="lang-switch__caret" aria-hidden="true">▾</span>
+      </button>
+      <button id="theme-toggle" class="btn btn--ghost theme-toggle" type="button" aria-pressed="false" aria-label="Przełącz motyw jasny/ciemny">
+        <svg class="theme-toggle__icon theme-toggle__icon--dark" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M6 1.5A6.5 6.5 0 1 0 14.5 10 5 5 0 0 1 6 1.5Z"/></svg>
+        <svg class="theme-toggle__icon theme-toggle__icon--light" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><circle cx="8" cy="8" r="3.2" fill="currentColor"/><g stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3 3l1.4 1.4M11.6 11.6 13 13M13 3l-1.4 1.4M4.4 11.6 3 13"/></g></svg>
+        <span class="theme-toggle__label">Motyw</span>
+      </button>
+      <span class="path-badge">Ścieżka S2</span>
+    </div>
+  </div>
+</header>
+
+<div class="demo-section">
+
+  <p class="demo-label">Hero — serif display + eyebrow</p>
+  <section class="hero" style="max-width:800px">
+    <p style="display:inline-block;font-size:.75rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent);margin:0 0 .5rem;">Interaktywne szkolenie · 7 języków</p>
+    <h1 class="hero__title">Opanuj <span class="hero__accent">GenAI i LLM</span> w pracy QA</h1>
+    <p class="hero__lead">Samodzielne szkolenie dopasowane do Twojej roli: krótkie koncepcje, interakcje i quizy z natychmiastowym feedbackiem.</p>
+  </section>
+
+  <p class="demo-label">Path card — sigil + head (normal + formative)</p>
+  <div style="display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+    <article class="path-card path-card--recommended" style="max-width:none">
+      <p class="path-card__badge">★ Rekomendowana</p>
+      <div class="path-card__head">
+        <span class="path-card__sigil" aria-hidden="true">S2</span>
+        <h3 class="path-card__name">Tester / QA</h3>
+      </div>
+      <p class="path-card__meta">Czas: ~4 h · Test: 25 pytań · Próg: 75%</p>
+      <button class="btn path-card__cta" type="button">Wybierz S2</button>
+    </article>
+    <article class="path-card path-card--formative" style="max-width:none">
+      <div class="path-card__head">
+        <span class="path-card__sigil" aria-hidden="true">S4</span>
+        <h3 class="path-card__name">Skala Holaka</h3>
+      </div>
+      <p class="path-card__meta">Czas: ~1,5 h · diagnoza + rozwój, bez egzaminu</p>
+      <button class="btn btn--ghost path-card__cta" type="button">Wybierz S4</button>
+    </article>
+  </div>
+
+  <p class="demo-label">Hub card — statusy</p>
+  <div style="display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(16rem,1fr))">
+    <article class="hub-card status--completed">
+      <div class="hub-card__top"><span class="hub-card__id">M1</span><span class="hub-card__status"><svg class="hub-card__status-icon" viewBox="0 0 16 16" fill="none" style="width:1em;height:1em"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Ukończony</span></div>
+      <h3 class="hub-card__name">Czym jest LLM i jak działa</h3>
+      <p class="hub-card__meta">Wymagany · Fundamenty · ~25 min</p>
+      <p class="hub-card__quiz">Wynik quizu: 92%</p>
+      <button class="btn btn--ghost hub-card__cta" type="button">Przejrzyj ponownie</button>
+    </article>
+    <article class="hub-card status--in_progress">
+      <div class="hub-card__top"><span class="hub-card__id">M3</span><span class="hub-card__status"><svg style="width:1em;height:1em" viewBox="0 0 16 16"><circle cx="8" cy="8" r="3.6" fill="currentColor"/></svg>W toku</span></div>
+      <h3 class="hub-card__name">Parametry generacji</h3>
+      <p class="hub-card__meta">Wymagany · Fundamenty · ~30 min</p>
+      <button class="btn hub-card__cta" type="button">Kontynuuj</button>
+    </article>
+    <article class="hub-card hub-card--final status--locked">
+      <div class="hub-card__top"><span class="hub-card__id">⬡</span><span class="hub-card__status"><svg style="width:1em;height:1em" viewBox="0 0 16 16" fill="none"><rect x="3.5" y="7" width="9" height="6.5" rx="1.2" fill="currentColor"/><path d="M5.5 7V5.4a2.5 2.5 0 0 1 5 0V7" stroke="currentColor" stroke-width="1.7"/></svg>Zablokowany</span></div>
+      <h3 class="hub-card__name">Test końcowy</h3>
+      <p class="hub-card__meta">Ukończ moduły wymagane: M3, M7.</p>
+      <button class="btn hub-card__cta" type="button" disabled aria-disabled="true">Zablokowany</button>
+    </article>
+  </div>
+
+  <p class="demo-label">Module reading — serif prose + definition callout</p>
+  <div class="view" style="max-width:700px;padding:1.4rem 2rem">
+    <section class="module-screen">
+      <h2>Temperatura i powtarzalność</h2>
+      <p>Model językowy nie zwraca jednej „prawdziwej" odpowiedzi — losuje kolejne tokeny z rozkładu prawdopodobieństwa. Parametry generacji decydują, jak bardzo to losowanie jest zachowawcze.</p>
+      <p class="definition"><strong>Temperatura</strong> <em>(temperature)</em> — skaluje rozkład prawdopodobieństwa. Niska (0,0–0,2) = wyjścia powtarzalne i przewidywalne; wysoka (&gt;1,0) = bardziej różnorodne, lecz trudniejsze do testowania.</p>
+    </section>
+  </div>
+
+  <p class="demo-label">Quiz — opcja zaznaczona (accent-quiet) + feedback</p>
+  <fieldset class="quiz-question" style="max-width:640px">
+    <legend class="quiz-question__prompt">Jak ustawisz temperaturę do testu regresyjnego?</legend>
+    <div class="quiz-chips"><span class="quiz-chip">Wybór jednokrotny</span><span class="quiz-chip">1 pkt</span></div>
+    <ul class="options">
+      <li class="option"><input type="radio" name="qp" id="qp-a" value="a"><label for="qp-a">Wysoka (~1,0)</label></li>
+      <li class="option"><input type="radio" name="qp" id="qp-b" value="b" checked><label for="qp-b">Niska (~0,0–0,2)</label></li>
+      <li class="option"><input type="radio" name="qp" id="qp-c" value="c"><label for="qp-c">Bez znaczenia</label></li>
+    </ul>
+    <div class="feedback feedback--correct" style="margin-top:.9rem" role="status">
+      <p class="feedback__head"><svg viewBox="0 0 16 16" fill="none" style="width:1.15em;height:1.15em"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Poprawnie</p>
+      <p>Niska temperatura daje powtarzalne wyjścia niezbędne do asercji regresyjnych.</p>
+    </div>
+  </fieldset>
+
+  <p class="demo-label">Score ring — zaliczony 86% / niezaliczony 62%</p>
+  <div style="display:flex;gap:2.5rem;flex-wrap:wrap;align-items:center">
+    <div class="result__score" style="--pct:86;--ring-c:var(--color-ok)" role="img" aria-label="86% — wynik ścieżki">
+      <span class="result__score-inner">
+        <strong class="result__score-value">86%</strong>
+        <span class="result__score-label">wynik ścieżki</span>
+      </span>
+    </div>
+    <div class="result__score" style="--pct:62;--ring-c:var(--color-warn)" role="img" aria-label="62% — wynik ścieżki">
+      <span class="result__score-inner">
+        <strong class="result__score-value">62%</strong>
+        <span class="result__score-label">wynik ścieżki</span>
+      </span>
+    </div>
+    <div>
+      <p class="result-status result-status--pass" style="display:inline-flex"><svg viewBox="0 0 16 16" fill="none" style="width:1.1em;height:1.1em;flex:none"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Zaliczone</span></p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  var tt=document.getElementById('theme-toggle');
+  if(tt)tt.addEventListener('click',function(){
+    var root=document.documentElement;
+    var next=root.getAttribute('data-theme')==='light'?'dark':'light';
+    root.setAttribute('data-theme',next);
+    tt.setAttribute('aria-pressed',String(next==='light'));
+    localStorage.setItem('genai-training:theme',next);
+  });
+</script>
+</body>
+</html>

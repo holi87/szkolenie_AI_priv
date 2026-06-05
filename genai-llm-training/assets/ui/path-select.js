@@ -18,7 +18,10 @@ function pathCard(pathsData, modulesData, pathId, onSelect) {
   if (p.formative === true) {
     const moduleNames = Object.keys(p.modules || {}).map((id) => `${id} ${nameById[id] || ""}`.trim());
     return el("article", { class: "path-card path-card--formative" }, [
-      el("h3", { class: "path-card__name", text: t("path.card.name", { pathId, pathName: p.name }) }),
+      el("div", { class: "path-card__head" }, [
+        el("span", { class: "path-card__sigil", attrs: { "aria-hidden": "true" }, text: pathId }),
+        el("h3", { class: "path-card__name", text: t("path.card.name", { pathId, pathName: p.name }) }),
+      ]),
       el("p", { class: "path-card__meta", text: t("path.card.meta.formative", { time: p.assumedPathTime || "—" }) }),
       el("p", { class: "path-card__meta", text: t("path.card.meta.modulesFormative", { count: moduleNames.length }) }),
       el("details", { class: "path-card__details" }, [
@@ -35,7 +38,10 @@ function pathCard(pathsData, modulesData, pathId, onSelect) {
   return el("article", { class: `path-card${recommended ? " path-card--recommended" : ""}` }, [
     // Pasek + plakietka rekomendacji (gradient = sygnał wizualny, słowo = nośnik treści, WCAG 1.4.1).
     recommended ? el("p", { class: "path-card__badge", text: t("path.badge.recommended") }) : null,
-    el("h3", { class: "path-card__name", text: t("path.card.name", { pathId, pathName: p.name }) }),
+    el("div", { class: "path-card__head" }, [
+      el("span", { class: "path-card__sigil", attrs: { "aria-hidden": "true" }, text: pathId }),
+      el("h3", { class: "path-card__name", text: t("path.card.name", { pathId, pathName: p.name }) }),
+    ]),
     el("p", { class: "path-card__meta", text: t("path.card.meta.timeTestThreshold", { time: p.assumedPathTime || "—", questions: p.finalTestQuestions, threshold: p.passThresholdPct }) }),
     el("p", { class: "path-card__meta", text: t("path.card.meta.modules", { required: (p.requiredModules || []).length, optional: optionalCount }) }),
     el("details", { class: "path-card__details" }, [
