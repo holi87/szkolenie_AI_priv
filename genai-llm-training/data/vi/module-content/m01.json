@@ -1,0 +1,130 @@
+{
+  "_meta": {
+    "issue": "#20 [20][M4] Wdroż moduły M1-M2",
+    "storyboard": "docs/storyboard/m01-fundamenty.md",
+    "interaction": "Klasyfikator zadań (kind: classify)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (NotkaApp/SklepDemo/PipeDemo, domena przyklad.test). ZERO realnych danych klienta/PII.",
+    "note": "Egzemplarz referencyjny typu classify dla pozostałych modułów."
+  },
+  "module": "M1",
+  "intro": "Người kiểm thử ngày càng thường xuyên nhận được output có sẵn từ một LLM — bản nháp ca kiểm thử, bản tóm tắt yêu cầu, một báo cáo. Để đánh giá có nên tin tưởng nó hay không, bạn cần biết câu trả lời đó đến từ đâu và GenAI khác với ML cổ điển như thế nào. Module này trao cho bạn tấm bản đồ khái niệm đó và rèn luyện việc chọn công nghệ phù hợp với nhiệm vụ.",
+  "screens": [
+    {
+      "id": "s1-cel",
+      "title": "Vì sao bạn cần module này",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Nếu không phân biệt được GenAI, LLM và ML cổ điển, rất dễ dùng một công cụ cho sai nhiệm vụ hoặc coi một câu trả lời bịa đặt là sự thật. Đó là rủi ro thực sự trong công việc QA, khi output của mô hình lọt vào tài liệu kiểm thử." },
+        { "kind": "list", "items": [
+          "Bạn sẽ phân biệt được ba loại giải pháp: sinh nội dung, phân loại và dựa trên quy tắc.",
+          "Bạn sẽ hiểu câu trả lời của LLM đến từ đâu và vì sao nó không phải là sự thật được bảo đảm.",
+          "Bạn sẽ phân loại một nhiệm vụ QA vào đúng công nghệ."
+        ] }
+      ]
+    },
+    {
+      "id": "s2-mapa-pojec",
+      "title": "GenAI, LLM và ML cổ điển — bản đồ khái niệm",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "ML cổ điển", "original": "machine learning", "text": "mô hình học một mẫu hình và thường phân loại hoặc dự đoán một giá trị (ví dụ „spam / không phải spam”)." },
+        { "kind": "definition", "term": "GenAI", "original": "generative AI", "text": "trí tuệ nhân tạo tạo ra nội dung mới: văn bản, hình ảnh, âm thanh hoặc mã." },
+        { "kind": "definition", "term": "LLM", "original": "large language model", "text": "một tập con của GenAI chuyên về ngôn ngữ — nó dự đoán đoạn văn bản kế tiếp có khả năng xảy ra cao nhất." },
+        { "kind": "diagram", "textAlt": "Ba tập hợp: lớn nhất là GenAI (tạo nội dung). LLM nằm trong GenAI như tập con ngôn ngữ của nó. ML cổ điển là một tập hợp riêng bên cạnh GenAI — nó phân loại và dự đoán, không tạo ra nội dung. Kết luận: mọi LLM đều là GenAI, nhưng không phải mọi GenAI đều là LLM; ML cổ điển là một họ khác.", "ascii": "[ GenAI ........ ]   [ ML cổ điển ]\n  [ LLM ]\n(tạo nội dung)       (phân loại/dự đoán)" }
+      ]
+    },
+    {
+      "id": "s3-piec-przykladow",
+      "title": "Năm ví dụ đặt cạnh nhau",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Hãy nhìn vào đầu vào và đầu ra của nhiệm vụ: nếu đầu ra là nội dung mới — đó là GenAI/LLM; nếu là một nhãn từ một tập có sẵn — đó là ML cổ điển." },
+        { "kind": "table",
+          "caption": "Năm ví dụ tổng hợp và cách phân loại chúng",
+          "headers": ["Ví dụ", "Đầu ra", "Hạng mục"],
+          "rows": [
+            ["Phân loại một phiếu báo là lỗi/câu hỏi/yêu cầu", "một nhãn từ tập có sẵn", "ML cổ điển"],
+            ["Bản nháp ca kiểm thử từ mô tả yêu cầu", "văn bản mới", "LLM / GenAI"],
+            ["Phát hiện bất thường trong các chỉ số hiệu năng", "cờ báo lệch so với chuẩn", "ML cổ điển"],
+            ["Tóm tắt một ghi chú cuộc họp dài", "văn bản mới, ngắn hơn", "LLM"],
+            ["Tạo một hình ảnh cho bài trình bày", "một hình ảnh mới", "GenAI (không phải LLM)"]
+          ],
+          "textAlt": "Ba ví dụ tạo ra nội dung mới (bản nháp kiểm thử, bản tóm tắt, hình ảnh) là GenAI/LLM; hai ví dụ gán nhãn (phân loại phiếu báo, bất thường chỉ số) là ML cổ điển. Hình ảnh là GenAI, nhưng không phải LLM." }
+      ]
+    },
+    {
+      "id": "s4-skad-odpowiedz",
+      "title": "Câu trả lời của LLM đến từ đâu",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "LLM dự đoán đoạn văn bản kế tiếp có khả năng xảy ra cao nhất dựa trên các mẫu hình từ quá trình huấn luyện. Đây không phải công cụ tìm kiếm sự thật cũng không phải cơ sở dữ liệu sự kiện — một hình thức có vẻ hợp lý đôi khi lại sai về nội dung." },
+        { "kind": "definition", "term": "Ảo giác", "original": "hallucination", "text": "kết quả nghe có vẻ đáng tin nhưng không được dữ liệu chứng thực." },
+        { "kind": "callout", "variant": "warn", "title": "Hệ quả đối với QA", "text": "Mọi output của LLM đều cần được kiểm chứng trước khi dùng làm sự thật. Bạn sẽ học được checklist kiểm chứng đầy đủ trong module M11." }
+      ]
+    },
+    {
+      "id": "s5-trening-wnioskowanie",
+      "title": "Huấn luyện và suy luận",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Huấn luyện", "original": "training", "text": "việc dạy mô hình một lần duy nhất trên một tập dữ liệu lớn — thiết lập các mẫu hình." },
+        { "kind": "definition", "term": "Suy luận", "original": "inference", "text": "mỗi lần dùng mô hình trên đầu vào của bạn — đây là nơi câu trả lời được tạo ra." },
+        { "kind": "paragraph", "text": "Bài học cho người kiểm thử: mô hình không „học thêm” từ một prompt đơn lẻ của bạn và không biết các sự kiện xảy ra sau ngày huấn luyện của nó." },
+        { "kind": "paragraph", "onlyForPaths": ["S2", "S3"], "text": "Với các lộ trình kỹ thuật: chi phí suy luận (inference cost) tăng theo độ dài của đầu vào và đầu ra, vì vậy ngữ cảnh dư thừa vừa tốn kém vừa không phải lúc nào cũng cải thiện chất lượng." }
+      ]
+    },
+    {
+      "id": "s6-trzy-typy",
+      "title": "Ba loại nhiệm vụ: sinh nội dung / phân loại / tất định",
+      "type": "decision",
+      "blocks": [
+        { "kind": "list", "items": [
+          "Sinh nội dung — tạo ra nội dung mới (LLM / GenAI).",
+          "Phân loại — gán một nhãn từ một tập có sẵn (ML cổ điển).",
+          "Tất định — cùng một đầu vào luôn cho ra cùng một kết quả theo một quy tắc tường minh (hệ thống dựa trên quy tắc)."
+        ] },
+        { "kind": "paragraph", "text": "Hãy tự hỏi: nhiệm vụ bạn đang có trên bàn ngay lúc này thuộc loại nào? Ngay sau đây bạn sẽ luyện tập điều này trên 12 nhiệm vụ tổng hợp." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "m1-klasyfikator",
+    "title": "Bộ phân loại nhiệm vụ",
+    "intro": "Hãy gán mỗi nhiệm vụ QA tổng hợp vào hạng mục giải pháp phù hợp nhất. Sau khi kiểm tra, bạn sẽ thấy lý giải bên cạnh mỗi nhiệm vụ.",
+    "categories": [
+      { "id": "llm", "label": "LLM", "desc": "nhiệm vụ ngôn ngữ - sinh nội dung (tạo ra nội dung mới)" },
+      { "id": "ml", "label": "ML cổ điển", "desc": "phân loại/dự đoán từ tập nhãn có sẵn" },
+      { "id": "rule", "label": "Hệ thống dựa trên quy tắc", "desc": "quy tắc tường minh, hoàn toàn dự đoán được" },
+      { "id": "human", "label": "Chuyên gia là con người", "desc": "quyết định đi kèm trách nhiệm và sự phán đoán" }
+    ],
+    "items": [
+      { "id": "t1", "text": "Viết bản nháp 5 ca kiểm thử cho yêu cầu đăng nhập trong NotkaApp.", "correctCategory": "llm", "rationale": "Nội dung văn bản mới được tạo ra — một nhiệm vụ sinh nội dung, LLM." },
+      { "id": "t2", "text": "Tóm tắt một ghi chú dài từ cuộc họp của nhóm QA thành năm gạch đầu dòng.", "correctCategory": "llm", "rationale": "Sinh ra văn bản ngắn hơn từ văn bản dài hơn là nhiệm vụ ngôn ngữ cho LLM." },
+      { "id": "t3", "text": "Đề xuất nội dung thông báo lỗi cho biểu mẫu thanh toán trong SklepDemo.", "correctCategory": "llm", "rationale": "Tạo một thông báo mới là việc sinh văn bản — LLM." },
+      { "id": "t4", "text": "Gắn nhãn một phiếu báo đến là „lỗi”, „câu hỏi” hoặc „yêu cầu”.", "correctCategory": "ml", "rationale": "Gán một nhãn từ tập có sẵn là phân loại — ML cổ điển." },
+      { "id": "t5", "text": "Phát hiện bất thường trong các chỉ số hiệu năng so với chuẩn.", "correctCategory": "ml", "rationale": "Phát hiện độ lệch so với một mẫu hình là ML cổ điển, không phải sinh nội dung." },
+      { "id": "t6", "text": "Dự đoán xem một phiếu báo mới sẽ rơi vào nhóm „khẩn cấp” hay „thông thường”.", "correctCategory": "ml", "rationale": "Dự đoán một hạng mục từ dữ liệu là ML cổ điển." },
+      { "id": "t7", "text": "Kiểm tra xem mã bưu chính có đúng định dạng NN-NNN hay không.", "correctCategory": "rule", "rationale": "Một quy tắc định dạng tường minh cho ra kết quả tất định — hệ thống dựa trên quy tắc." },
+      { "id": "t8", "text": "Xác thực xem số đơn hàng có khớp mẫu ORD-TEST-NNN hay không.", "correctCategory": "rule", "rationale": "Việc xác thực theo mẫu hoàn toàn dự đoán được — quy tắc, không phải LLM." },
+      { "id": "t9", "text": "Quy đổi số tiền chưa thuế sang đã thuế theo mức cố định 23%.", "correctCategory": "rule", "rationale": "Phép tính theo một quy tắc cố định là tất định — hệ thống dựa trên quy tắc." },
+      { "id": "t10", "text": "Quyết định có hoãn phát hành vì rủi ro pháp lý hay không.", "correctCategory": "human", "rationale": "Quyết định đi kèm trách nhiệm và bối cảnh pháp lý thuộc về chuyên gia là con người." },
+      { "id": "t11", "text": "Phê duyệt một rủi ro bảo mật nghiêm trọng trước khi phát hành.", "correctCategory": "human", "rationale": "Chấp nhận rủi ro là sự phán đoán có trách nhiệm của con người, không phải nhiệm vụ của mô hình." },
+      { "id": "t12", "text": "Phân xử tranh chấp giữa hai nhóm về mức ưu tiên của một lỗi.", "correctCategory": "human", "rationale": "Phân xử xung đột đòi hỏi sự phán đoán và trách nhiệm — chuyên gia là con người." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "GenAI tạo nội dung, ML cổ điển phân loại/dự đoán, LLM dự đoán văn bản có khả năng xảy ra cao nhất — không phải sự thật.",
+      "Việc chọn công nghệ phụ thuộc vào loại nhiệm vụ: sinh nội dung, phân loại hay tất định.",
+      "Output của LLM mang tính xác suất, nên cần được kiểm chứng trước khi trở thành sự thật."
+    ],
+    "checklist": [
+      "Nhiệm vụ này cần nội dung mới, hay cần một nhãn/kết quả từ một quy tắc?",
+      "Tôi có thể kiểm chứng câu trả lời của mô hình so với một nguồn hay không?",
+      "Quyết định này có nằm ngoài phạm vi cần trách nhiệm của con người hay không?"
+    ],
+    "checklistTitle": "Checklist — trước khi bạn dùng LLM",
+    "nextStep": "Bước tiếp theo: M2 — kiến trúc LLM: token và cửa sổ ngữ cảnh."
+  }
+}

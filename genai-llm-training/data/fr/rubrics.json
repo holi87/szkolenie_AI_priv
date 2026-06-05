@@ -1,0 +1,95 @@
+{
+  "_meta": {
+    "issue": "#7 [07][M1] Zdefiniuj rubryki zadań praktycznych",
+    "version": "0.1",
+    "doc": "docs/rubryki-zadan.md",
+    "source": "wymagania/07 (skale 0-5 i 0-3, progi, feedback), wymagania/06 (moduły, efekty)",
+    "notes": "Kryteria binarne (1/0) sumują się do maxScore. Progi: S2 promptowe >=4/5; S3 RAG i ewaluacja >=70% (>=3.5/5) jako warunek konieczny w M6 i M12."
+  },
+  "rubrics": [
+    {
+      "id": "R1-prompt",
+      "task": "Tâche de prompting (Prompt clinic)",
+      "module": "M7",
+      "paths": ["S2", "S3"],
+      "scaleMax": 5,
+      "passThreshold": 4,
+      "passScope": "S2 : condition obligatoire",
+      "criteria": [
+        { "id": "K1", "name": "Rôle et objectif", "points": 1 },
+        { "id": "K2", "name": "Contexte et données d'entrée (sans données sensibles)", "points": 1 },
+        { "id": "K3", "name": "Contraintes et critères de qualité", "points": 1 },
+        { "id": "K4", "name": "Format de sortie (vérifiable)", "points": 1 },
+        { "id": "K5", "name": "Sécurité et vérifiabilité", "points": 1 }
+      ],
+      "belowThresholdFeedback": "Manquant : {failedCriteria}. Complétez le rôle/objectif, le contexte, les contraintes et les critères, le format de sortie ainsi que l'hygiène des données."
+    },
+    {
+      "id": "R2-rag",
+      "task": "Tâche de préparation au RAG",
+      "module": "M6",
+      "paths": ["S3"],
+      "scaleMax": 5,
+      "passThreshold": 3.5,
+      "passScope": "S3 : condition obligatoire (>=70% en M6)",
+      "criteria": [
+        { "id": "K1", "name": "Sources et grounding", "points": 1 },
+        { "id": "K2", "name": "Chunking + overlap", "points": 1 },
+        { "id": "K3", "name": "Retrieval (top-k, filtres de métadonnées)", "points": 1 },
+        { "id": "K4", "name": "Citations / vérifiabilité", "points": 1 },
+        { "id": "K5", "name": "Diagnostic des erreurs (retrieval/génération/source)", "points": 1 }
+      ],
+      "belowThresholdFeedback": "En dessous du seuil en M6. Manquant : {failedCriteria}. Revenez aux écrans pipeline/chunking/diagnostic des erreurs."
+    },
+    {
+      "id": "R3-eval",
+      "task": "Tâche d'évaluation (Judge/golden set)",
+      "module": "M12",
+      "paths": ["S3"],
+      "scaleMax": 5,
+      "passThreshold": 3.5,
+      "passScope": "S3 : condition obligatoire (>=70% en M12)",
+      "criteria": [
+        { "id": "K1", "name": "Golden set adapté au cas d'usage", "points": 1 },
+        { "id": "K2", "name": "Métriques avec justification", "points": 1 },
+        { "id": "K3", "name": "Rubrique LLM-as-a-judge (sans ambiguïté)", "points": 1 },
+        { "id": "K4", "name": "Biais / position bias + calibration avec un expert", "points": 1 },
+        { "id": "K5", "name": "Seuil d'acceptation de la qualité", "points": 1 }
+      ],
+      "belowThresholdFeedback": "En dessous du seuil en M12. Manquant : {failedCriteria}. Revenez au golden set / aux métriques / à la rubrique / à la calibration."
+    },
+    {
+      "id": "R4-qa-workbench",
+      "task": "QA workbench (évaluation de l'output QA)",
+      "module": "M8",
+      "paths": ["S2", "S3"],
+      "scaleMax": 5,
+      "passThreshold": null,
+      "passScope": "exercice (feedback / contribue au quiz)",
+      "criteria": [
+        { "id": "K1", "name": "Couverture des tests", "points": 1 },
+        { "id": "K2", "name": "Lacunes de couverture", "points": 1 },
+        { "id": "K3", "name": "Tests factices / doublons", "points": 1 },
+        { "id": "K4", "name": "Risques / hypothèses erronées", "points": 1 },
+        { "id": "K5", "name": "Limite de décision (vérification humaine)", "points": 1 }
+      ],
+      "belowThresholdFeedback": "Manquant : {failedCriteria}."
+    },
+    {
+      "id": "R5-output-analysis",
+      "task": "Analyse de l'output (Output verifier)",
+      "module": "M11",
+      "paths": ["S1", "S2", "S3"],
+      "scaleMax": 3,
+      "passThreshold": null,
+      "passScope": "exercice",
+      "levels": [
+        { "points": 3, "descriptor": "Toutes les phrases clés correctement classées ; les phrases risquées et non étayées repérées" },
+        { "points": 2, "descriptor": "Majoritairement correct ; une seule erreur non critique" },
+        { "points": 1, "descriptor": "Partiel ; un risque important omis ou une erreur sur une phrase critique" },
+        { "points": 0, "descriptor": "Aucune reconnaissance du risque / acceptation de contenus non étayés" }
+      ],
+      "belowThresholdFeedback": "Oublié : {kategorie}. Revenez à la check-list de vérification de l'output."
+    }
+  ]
+}

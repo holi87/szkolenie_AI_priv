@@ -119,7 +119,12 @@ const TECHNICAL_MODULES = new Set(["M4", "M5", "M6", "M12"]);
 const GOLDEN_DIFF = { L1: 8, L2: 10, L3: 5, L4: 1 };
 // Locale-aware prefiks konserwatywnego komunikatu pytania krytycznego (ADR-0004 D-policy; #80).
 // Treść jest tłumaczona per-locale, ale MUSI zaczynać się od ostrzeżenia bezpieczeństwa właściwego dla języka.
-const CRITICAL_PREFIX = { pl: "To jest błąd bezpieczeństwa.", en: "This is a security error." };
+const CRITICAL_PREFIX = {
+  pl: "To jest błąd bezpieczeństwa.", en: "This is a security error.",
+  es: "Esto es un error de seguridad.", fr: "Ceci est une erreur de sécurité.", // M17 (#126–#131)
+  de: "Dies ist ein Sicherheitsfehler.", it: "Questo è un errore di sicurezza.",
+  uk: "Це помилка безпеки.", vi: "Đây là lỗi bảo mật.",
+};
 // Pola SCORINGOWE pytania — muszą być IDENTYCZNE między locale (parytet strukturalny, PL kanon).
 const PARITY_FIELDS = ["correct", "difficulty", "points", "paths", "isCritical", "golden", "type", "module"];
 // Lint danych syntetycznych (#64): defense-in-depth, by realne PII/sekrety nie trafiły do repo.
@@ -601,6 +606,15 @@ function loadModuleContent(locale) {
 }
 const contentMods = CANON ? loadModuleContent(CANON) : null;
 if (contentMods) report.push(`Treść modułów: ${contentMods.length}/18 (${contentMods.join(",")})`);
+// M17 (#126–#131): bramkujemy treść modułów dla WSZYSTKICH locale (nie tylko CANON) — schemat + integralność
+// interakcji + lint syntetyczny. Zamyka znany GAP M16 (treść nie-CANON dotąd poza bramką CI). Parytet ID rubryk
+// (parityIdSet rubrics.json) gwarantuje, że rubricId w treści nie-CANON wskazuje na istniejącą rubrykę CANON.
+for (const lang of LOCALES) {
+  if (lang === CANON) continue;
+  const mods = loadModuleContent(lang);
+  if (mods && mods.length !== 18) fail(`treść modułów ${lang}: ${mods.length}/18 plików`);
+  else if (mods) report.push(`Treść modułów ${lang}: ${mods.length}/18 — schemat + integralność + lint OK`);
+}
 
 // ---------------- Próbka wyników pilotażu (kalibracja #28) — schemat + integralność + lint syntetyczny ----------------
 // W repo trzymamy WYŁĄCZNIE syntetyczny przykład (realne wyniki pilotażu powstają poza repo).

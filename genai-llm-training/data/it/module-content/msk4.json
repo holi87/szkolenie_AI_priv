@@ -1,0 +1,114 @@
+{
+  "_meta": {
+    "issue": "#124 [M16] Ścieżka formatywna S4 — skille i mierzenie wpływu (moduł szkoleniowy, interakcja rubric)",
+    "adr": "docs/adr/0009-sciezka-formatywna-s4-skala-holaka.md",
+    "interaction": "Ocena dojrzałości workflow wg rubryki (kind: rubric) — ćwiczenie formatywne, NIE scorowane do zaliczenia (bez rubricId/progu)",
+    "source": "Skala Holaka — dwie krytyczne granice dojrzałości: 8→9 i 10→11; skille i mierzenie wpływu. Atrybucja: quality-blog.eu/pl/blog/skala-holaka.",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE i ogólne (zero realnych danych/PII). Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MSK4",
+  "intro": "La parte più difficile non sono i primi livelli, ma due soglie: 8→9 (dalla buona pratica individuale all'integrazione dell'AI in un processo) e 10→11 (dai miglioramenti occasionali al miglioramento continuo). La prova della maturità è un workflow concreto e ripetibile (uno skill): ha un contesto stabile, una verifica, la reversibilità e un impatto misurato? Questo modulo insegna a valutare la maturità di uno skill secondo una rubrica. È un esercizio di sviluppo, non un test.",
+  "screens": [
+    {
+      "id": "msk4-s1-dwie-granice",
+      "title": "Due soglie su cui la crescita si blocca",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Molte persone e molti team si fermano poco prima del livello 9 o 11. La soglia 8→9 è il momento in cui la buona pratica di una persona diventa parte di un processo: una netta separazione assistente/decisore, la reversibilità e una traccia di audit. La soglia 10→11 è il momento in cui i miglioramenti si trasformano in una routine di misurazione, calibrazione e miglioramento continuo." },
+        { "kind": "list", "items": [
+          "8→9: pratica individuale → processo con controllo e traccia.",
+          "10→11: miglioramenti occasionali → sistema misurato e continuamente calibrato.",
+          "Su entrambe le soglie la chiave non è un nuovo strumento, ma una nuova abitudine di lavoro."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Scala di Holak", "text": "Le soglie 8→9 e 10→11 sono i punti in cui l'adozione dell'AI si blocca più spesso.",
+          "links": [ { "label": "Scala di Holak — modello di maturità (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka" } ]
+        }
+      ]
+    },
+    {
+      "id": "msk4-s2-skill-jako-probka",
+      "title": "Lo skill come campione di maturità",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "La maturità si vede meglio su un workflow concreto e ripetibile (uno skill). Uno skill immaturo è un «prompt al volo»: contesto mutevole, nessuna verifica, nessuna traccia, successo misurato a sensazione. Uno skill maturo ha un contesto e un formato stabili, un passo di verifica esplicito, la reversibilità con traccia e un impatto misurato su qualità e tempo." },
+        { "kind": "callout", "variant": "warn", "title": "Segnale di blocco", "text": "Se usi l'AI con disinvoltura, ma non ne misuri l'impatto e non calibri la valutazione dell'output — probabilmente sei al 10, non all'11." }
+      ]
+    },
+    {
+      "id": "msk4-s3-jak-cwiczyc",
+      "title": "Come esercitarsi",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Qui sotto valuterai la maturità di uno skill di esempio secondo quattro criteri. In ogni criterio seleziona le caratteristiche che indicano maturità — selezionare tutto (compresi i distrattori) non soddisfa il criterio. Senza soglia di superamento: il feedback mostra cosa manca per raggiungere un livello più alto." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "rubric",
+    "id": "msk4-rubric",
+    "title": "Valuta la maturità di un workflow AI (uno skill)",
+    "intro": "Per ogni criterio seleziona le caratteristiche che indicano la maturità di uno skill. È un esercizio di sviluppo — senza soglia di superamento; il feedback indica cosa manca.",
+    "criteria": [
+      {
+        "id": "K1",
+        "name": "Contesto e ripetibilità",
+        "prompt": "Cosa indica una gestione matura del contesto in questo skill?",
+        "hint": "La maturità è un contesto stabile e selezionato — non una descrizione da zero ogni volta.",
+        "options": [
+          { "id": "a", "text": "Contesto e formato di output stabili e ben ponderati." },
+          { "id": "b", "text": "Contesto descritto da zero, con parole diverse, ogni volta." },
+          { "id": "c", "text": "Selezione dei soli dati rilevanti per il compito." }
+        ],
+        "correctOptionIds": ["a", "c"]
+      },
+      {
+        "id": "K2",
+        "name": "Verificabilità",
+        "prompt": "Cosa rende lo skill verificabile prima di usare il risultato?",
+        "hint": "Il tono sicuro del modello non è una prova — serve un passo di controllo esplicito.",
+        "options": [
+          { "id": "a", "text": "Un passo esplicito di controllo dell'output rispetto alla fonte." },
+          { "id": "b", "text": "La fiducia nel tono sicuro della risposta del modello." }
+        ],
+        "correctOptionIds": ["a"]
+      },
+      {
+        "id": "K3",
+        "name": "Reversibilità e traccia",
+        "prompt": "Cosa rende sicure le decisioni supportate dallo skill?",
+        "hint": "Soglia 8→9: controllo e traccia invece di azioni irreversibili senza approvazione.",
+        "options": [
+          { "id": "a", "text": "Le azioni lasciano una traccia e si possono annullare." },
+          { "id": "b", "text": "Decisioni irreversibili eseguite senza l'approvazione di una persona." }
+        ],
+        "correctOptionIds": ["a"]
+      },
+      {
+        "id": "K4",
+        "name": "Misurazione dell'impatto",
+        "prompt": "Cosa distingue il livello 11 (miglioramento continuo) dal semplice uso dell'AI?",
+        "hint": "Soglia 10→11: impatto misurato e calibrazione, non il semplice fatto di usarla.",
+        "options": [
+          { "id": "a", "text": "Impatto misurato su qualità e tempo e correzione dell'approccio." },
+          { "id": "b", "text": "Conta il semplice fatto che usiamo l'AI." },
+          { "id": "c", "text": "Calibrazione regolare della valutazione dell'output." }
+        ],
+        "correctOptionIds": ["a", "c"]
+      }
+    ]
+  },
+  "summary": {
+    "points": [
+      "La maturità si vede su uno skill concreto: contesto stabile, verifica, reversibilità con traccia, impatto misurato.",
+      "Soglia 8→9: trasforma la pratica individuale in un processo con controllo e traccia.",
+      "Soglia 10→11: trasforma i miglioramenti in una routine di misurazione, calibrazione e miglioramento continuo."
+    ],
+    "checklist": [
+      "Il mio skill più frequente ha un contesto e un formato di output stabili?",
+      "Ha un passo di verifica esplicito e lascia una traccia?",
+      "Ne misuro l'impatto su qualità e tempo, o mi limito a usarlo?"
+    ],
+    "checklistTitle": "Checklist — maturità di uno skill",
+    "nextStep": "Prossimo passo: prendi un tuo skill e aggiungi il criterio mancante con la valutazione più bassa — il più delle volte è il passo di verifica o la misurazione dell'impatto."
+  }
+}

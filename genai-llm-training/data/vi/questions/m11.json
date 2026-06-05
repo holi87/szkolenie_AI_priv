@@ -1,0 +1,476 @@
+{
+  "_meta": {
+    "module": "M11",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M11. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q095",
+      "module": "M11",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Học viên nhận ra trong một output có sẵn của LLM dạng ảo giác là một nguồn bịa đặt, không tồn tại.",
+      "prompt": "Kiểm thử viên hỏi LLM cách cấu hình ghi log trong tài liệu `synt-API v2`. Mô hình trả lời với giọng điệu chắc chắn: \"Toàn bộ cấu hình được mô tả trong mục 7.4 của tài liệu `synt-API v2`\". Kiểm thử viên kiểm tra tài liệu và thấy rằng nó kết thúc ở mục 6 — mục 7.4 không tồn tại. Cách phân loại chính xác nhất cho câu này là gì?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Đây là ảo giác — mô hình đưa ra một nguồn nghe đáng tin nhưng không có căn cứ (mục này không tồn tại)."
+        },
+        {
+          "id": "B",
+          "text": "Đây là câu trả lời đúng mà kiểm thử viên chỉ là chưa kịp xác minh thôi."
+        },
+        {
+          "id": "C",
+          "text": "Đây là lỗi của người dùng — prompt được diễn đạt kém nên mô hình không có lỗi."
+        },
+        {
+          "id": "D",
+          "text": "Đây là tín hiệu của sự không chắc chắn — mô hình đã nói rõ rằng nó không chắc về mục 7.4."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Việc dẫn chiếu một cách chắc chắn tới một mục không tồn tại là ảo giác điển hình — output trông đáng tin nhưng không có căn cứ trong dữ liệu.",
+      "feedbackIncorrect": "Mô hình không hề báo hiệu sự không chắc chắn và cũng không trích dẫn một nguồn có thật — nó đã bịa ra mục đó. Hãy ôn lại định nghĩa ảo giác (output đáng tin nhưng không có căn cứ trong dữ liệu).",
+      "references": [
+        "M11.2",
+        "M11.8"
+      ]
+    },
+    {
+      "id": "Q096",
+      "module": "M11",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Học viên chỉ ra rằng việc ép một câu trả lời cụ thể bằng prompt (prompt pressure) là nguyên nhân gây ảo giác khi mô hình không có thông tin đó.",
+      "prompt": "Kiểm thử viên viết cho LLM: \"Hãy cho biết chính xác số phiên bản mà NotkaApp bổ sung tính năng xoay vòng log — chỉ trả lời bằng con số.\" Mặc dù không có thông tin này trong ngữ cảnh, mô hình vẫn trả lời: \"2.5\". Nguyên nhân ảo giác nào dẫn đến kết quả này?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Áp lực từ prompt (prompt pressure) — prompt đã ép một câu trả lời cụ thể mà mô hình không có, nên nó đã tự bổ sung ra."
+        },
+        {
+          "id": "B",
+          "text": "Xung đột dữ liệu — trong ngữ cảnh có hai phiên bản số mâu thuẫn nhau."
+        },
+        {
+          "id": "C",
+          "text": "Nguồn thiếu chính xác — mô hình lấy trung bình từ vài tài liệu tương tự về xoay vòng log."
+        },
+        {
+          "id": "D",
+          "text": "Ngữ cảnh lỗi thời — câu hỏi liên quan tới trạng thái trước ngày huấn luyện của mô hình."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Yêu cầu \"cho biết chính xác con số\" buộc mô hình phải đưa ra một câu trả lời cụ thể dù không có dữ liệu — đó chính là định nghĩa của áp lực từ prompt.",
+      "feedbackIncorrect": "Trong kịch bản này không có nguồn mâu thuẫn hay lấy trung bình; vấn đề là yêu cầu một thông tin cụ thể mà mô hình không có. Hãy ôn lại nguyên nhân 'áp lực từ prompt' trong danh mục năm nguyên nhân.",
+      "references": [
+        "M11.4"
+      ]
+    },
+    {
+      "id": "Q097",
+      "module": "M11",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Học viên gán đúng loại nhãn cho một câu trong output, phân biệt câu có thể kiểm chứng mà không có trích dẫn với câu mâu thuẫn rõ ràng với tài liệu.",
+      "prompt": "Trong câu trả lời của LLM về NotkaApp xuất hiện câu: \"Mức log mặc định là DEBUG.\" Khẳng định này cụ thể và có thể kiểm chứng, nhưng mô hình không đưa ra nguồn nào, còn kiểm thử viên không có sẵn tài liệu để xác nhận hay bác bỏ. Nên gán loại nhãn nào cho câu này?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Cần nguồn — khẳng định có thể kiểm chứng, nhưng thiếu trích dẫn, nên phải xác nhận trong tài liệu."
+        },
+        {
+          "id": "B",
+          "text": "Không có căn cứ — câu này mâu thuẫn trực tiếp với một yêu cầu đã biết."
+        },
+        {
+          "id": "C",
+          "text": "Cần loại bỏ — câu này dẫn chiếu tới một nguồn không tồn tại."
+        },
+        {
+          "id": "D",
+          "text": "Đúng — khẳng định nghe có vẻ chắc chắn, nên có thể chấp nhận mà không cần xác minh thêm."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Một khẳng định cụ thể, có thể kiểm chứng nhưng thiếu trích dẫn thì chưa phải là sai — nó thuộc loại 'cần nguồn', cho tới khi ta xác nhận được trong tài liệu.",
+      "feedbackIncorrect": "Không có gì cho thấy câu này mâu thuẫn hay bịa đặt — đơn giản là nó thiếu trích dẫn. Hãy ôn lại sự khác biệt giữa 'cần nguồn' và 'không có căn cứ'/'cần loại bỏ'.",
+      "references": [
+        "M11.7",
+        "M11.8"
+      ]
+    },
+    {
+      "id": "Q098",
+      "module": "M11",
+      "pillar": "security_governance",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Học viên đưa ra quyết định quản trị (governance) về việc từ chối LLM khi kết quả vừa không thể kiểm chứng vừa có tác động lớn nếu sai.",
+      "prompt": "LLM tư vấn trong câu trả lời về NotkaApp: \"Bạn có thể an toàn tắt việc ghi log lỗi trên môi trường production, điều đó sẽ không ảnh hưởng tới tính tuân thủ.\" Kiểm thử viên không có cách nào xác minh khẳng định này, còn việc tắt log trên production là một quyết định khó đảo ngược và có tác động lớn. Quyết định nào là an toàn nhất?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Không dựa vào LLM — kết quả không thể kiểm chứng, còn lỗi có tác động lớn; đánh dấu đoạn này là rủi ro và chuyển quyết định cho chuyên gia/nguồn."
+        },
+        {
+          "id": "B",
+          "text": "Triển khai khuyến nghị — mô hình đã phát biểu với giọng điệu chắc chắn và dùng từ \"an toàn\"."
+        },
+        {
+          "id": "C",
+          "text": "Triển khai ngay lên production, và chỉ khôi phục log nếu xuất hiện vấn đề."
+        },
+        {
+          "id": "D",
+          "text": "Yêu cầu chính mô hình đó xác nhận câu trả lời của mình và hành động theo câu trả lời thứ hai."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Quy tắc ngón tay cái: không thể kiểm chứng HOẶC lỗi có tác động lớn = đừng dựa vào LLM. Ở đây cả hai điều kiện đều xảy ra, nên con người/nguồn phải tiếp quản quyết định.",
+      "feedbackIncorrect": "Giọng điệu chắc chắn và việc mô hình tự xác nhận không phải là bằng chứng; với kết quả không thể kiểm chứng và có tác động lớn thì không được dựa vào LLM. Hãy ôn lại quy tắc 'khi nào không dùng LLM'.",
+      "references": [
+        "M11.6",
+        "M11.7"
+      ]
+    },
+    {
+      "id": "Q099",
+      "module": "M11",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Học viên phân biệt ảo giác với câu trả lời trong đó mô hình báo hiệu rõ ràng sự không chắc chắn.",
+      "prompt": "Câu nào dưới đây mô tả tốt nhất ảo giác (hallucination) của LLM?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Output nghe đáng tin và được đưa ra với giọng điệu chắc chắn, nhưng không có căn cứ trong dữ liệu (sự thật bịa đặt, nguồn không tồn tại, chi tiết sai)."
+        },
+        {
+          "id": "B",
+          "text": "Câu trả lời trong đó mô hình nói rõ rằng nó không chắc chắn và đề nghị làm rõ thêm."
+        },
+        {
+          "id": "C",
+          "text": "Bất kỳ câu trả lời nào mà người dùng chưa kịp kiểm tra trong tài liệu."
+        },
+        {
+          "id": "D",
+          "text": "Thông báo lỗi do API của mô hình trả về khi prompt quá dài."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Ảo giác là nội dung đáng tin về hình thức nhưng không có căn cứ trong dữ liệu — giọng điệu chắc chắn không có nghĩa là đúng.",
+      "feedbackIncorrect": "Sự không chắc chắn được nêu rõ, việc chưa xác minh, hay lỗi API đều không phải là ảo giác. Hãy ôn lại định nghĩa: giọng điệu đáng tin + không có căn cứ trong dữ liệu.",
+      "references": [
+        "M11.2"
+      ]
+    },
+    {
+      "id": "Q100",
+      "module": "M11",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Học viên nhận ra ngữ cảnh lỗi thời (training cutoff) là nguyên nhân gây ảo giác khi hỏi về trạng thái sau ngày huấn luyện.",
+      "prompt": "Kiểm thử viên hỏi LLM về chi tiết của một tính năng được phát hành tuần trước, tức là đã sau ngày cắt dữ liệu huấn luyện của mô hình. Dù vậy, mô hình vẫn mô tả cách hoạt động được cho là của tính năng đó. Nguyên nhân ảo giác chính ở đây là gì?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Ngữ cảnh lỗi thời (training cutoff) — câu hỏi liên quan tới trạng thái sau ngày huấn luyện của mô hình."
+        },
+        {
+          "id": "B",
+          "text": "Áp lực từ prompt — prompt được diễn đạt dưới dạng mệnh lệnh chứ không phải câu hỏi."
+        },
+        {
+          "id": "C",
+          "text": "Xung đột dữ liệu — trong dữ liệu huấn luyện có hai phiên bản tính năng mâu thuẫn nhau."
+        },
+        {
+          "id": "D",
+          "text": "Nguồn thiếu chính xác — mô hình nhầm lẫn hai tài liệu tương tự."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Tính năng ra đời sau ngày cắt dữ liệu — mô hình không thể biết về nó và 'tự bổ sung', đó là nguyên nhân thuộc loại ngữ cảnh lỗi thời.",
+      "feedbackIncorrect": "Vấn đề không phải là hình thức của prompt hay việc trộn lẫn nguồn, mà là thiếu kiến thức về các sự kiện sau training cutoff. Hãy ôn lại nguyên nhân 'ngữ cảnh lỗi thời'.",
+      "references": [
+        "M11.4"
+      ]
+    },
+    {
+      "id": "Q101",
+      "module": "M11",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Học viên hình thành ngưỡng từ chối LLM dựa trên khả năng kiểm chứng kết quả và tác động của lỗi.",
+      "prompt": "Theo quy tắc 'khi nào KHÔNG dùng LLM' — khi nào kiểm thử viên không nên dựa vào câu trả lời của mô hình?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Khi không thể kiểm chứng kết quả HOẶC lỗi có tác động lớn, khó đảo ngược."
+        },
+        {
+          "id": "B",
+          "text": "Chỉ khi câu trả lời dài và chứa nhiều chi tiết kỹ thuật."
+        },
+        {
+          "id": "C",
+          "text": "Chỉ khi đồng thời không thể kiểm chứng kết quả VÀ lỗi có tác động lớn."
+        },
+        {
+          "id": "D",
+          "text": "Không bao giờ — câu trả lời của LLM luôn có thể chấp nhận, miễn là mô hình nghe có vẻ chắc chắn."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Quy tắc là phép tuyển (HOẶC): chỉ cần không thể kiểm chứng hoặc lỗi có tác động lớn là đủ để không dựa vào LLM.",
+      "feedbackIncorrect": "Đây không phải phép hội — chỉ cần một trong các điều kiện là đủ. Độ dài câu trả lời và giọng điệu chắc chắn không phải là tiêu chí. Hãy ôn lại quy tắc ngón tay cái ở màn hình 'Khi nào KHÔNG dùng LLM'.",
+      "references": [
+        "M11.6"
+      ]
+    },
+    {
+      "id": "Q102",
+      "module": "M11",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Học viên chỉ ra tất cả các bước của checklist kiểm chứng output LLM.",
+      "prompt": "Những yếu tố nào thuộc về checklist kiểm chứng output LLM (cần kiểm tra gì trước khi tin vào câu trả lời)? Hãy chọn tất cả đáp án đúng.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Output có chứa các khẳng định cụ thể, có thể kiểm chứng hay không (con số, tên gọi, trích dẫn, các bước)."
+        },
+        {
+          "id": "B",
+          "text": "Nguồn được trích dẫn có tồn tại và có thực sự nói điều mà mô hình khẳng định hay không."
+        },
+        {
+          "id": "C",
+          "text": "Nội dung có lỗi thời so với trạng thái hiện tại hay không."
+        },
+        {
+          "id": "D",
+          "text": "Trong câu trả lời có mâu thuẫn nội tại hay không."
+        },
+        {
+          "id": "E",
+          "text": "Câu trả lời có dài hơn và chi tiết hơn so với phiên bản trước hay không."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "feedbackCorrect": "Checklist kiểm tra các khẳng định có thể kiểm chứng, sự tồn tại và sự khớp của nguồn, tính cập nhật cũng như sự nhất quán nội tại — không phải độ dài câu trả lời.",
+      "feedbackIncorrect": "Độ dài/chi tiết không phải là tiêu chí về chất lượng; phần còn lại là các bước của checklist (a–d). Hãy ôn lại màn hình 'Checklist kiểm chứng output'.",
+      "references": [
+        "M11.5"
+      ]
+    },
+    {
+      "id": "Q103",
+      "module": "M11",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Học viên nhận ra trong output LLM các tín hiệu cảnh báo có thể cho thấy đó là ảo giác.",
+      "prompt": "Những điều nào dưới đây là tín hiệu cảnh báo thực sự cho thấy một đoạn trong câu trả lời của LLM có thể là ảo giác? Hãy chọn tất cả đáp án đúng.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Dẫn chiếu tới một mục hoặc tài liệu không thể tìm thấy trong nguồn."
+        },
+        {
+          "id": "B",
+          "text": "Một con số hoặc số phiên bản cụ thể được đưa ra mà không có bất kỳ trích dẫn hay tham chiếu nào."
+        },
+        {
+          "id": "C",
+          "text": "Một phát biểu mâu thuẫn với một đoạn khác trong cùng câu trả lời đó."
+        },
+        {
+          "id": "D",
+          "text": "Mô tả một tình trạng chỉ có thể hình thành sau ngày cắt dữ liệu của mô hình."
+        },
+        {
+          "id": "E",
+          "text": "Mô hình ghi rõ ràng: \"tôi không chắc chắn, hãy kiểm tra trong tài liệu\"."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "feedbackCorrect": "Nguồn không tồn tại, thông tin cụ thể không có trích dẫn, mâu thuẫn nội tại và nội dung sau training cutoff là những tín hiệu cảnh báo điển hình; sự không chắc chắn được nêu rõ thì không phải là ảo giác.",
+      "feedbackIncorrect": "Việc nêu rõ sự không chắc chắn là một tín hiệu trung thực, không phải cảnh báo về ảo giác. Hãy ôn lại các tín hiệu cảnh báo của những nguyên nhân gây ảo giác.",
+      "references": [
+        "M11.4",
+        "M11.2"
+      ]
+    },
+    {
+      "id": "Q104",
+      "module": "M11",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Học viên chỉ ra những đoạn trong câu trả lời cần được đánh dấu là cần nguồn hoặc cần chuyên gia, thay vì chấp nhận hay loại bỏ toàn bộ.",
+      "prompt": "Trong câu trả lời của LLM về NotkaApp có các câu dưới đây. Những câu nào cần được đánh dấu là cần nguồn hoặc cần chuyên gia (không chấp nhận ngay)? Hãy chọn tất cả đáp án đúng.",
+      "options": [
+        {
+          "id": "A",
+          "text": "\"Việc khóa tài khoản kéo dài 24 giờ.\" — con số có thể kiểm chứng nhưng thiếu trích dẫn, cần xác nhận trong yêu cầu."
+        },
+        {
+          "id": "B",
+          "text": "\"NotkaApp có chứng chỉ ISO 27001.\" — khẳng định có tác động lớn, được đưa ra mà không có nguồn."
+        },
+        {
+          "id": "C",
+          "text": "\"Bạn có thể an toàn tắt việc ghi log lỗi trên production.\" — quyết định quan trọng cần chuyên gia."
+        },
+        {
+          "id": "D",
+          "text": "\"Đặt lại mật khẩu dùng một liên kết có hiệu lực 30 phút.\" — khớp với DOC3, đã được xác nhận trong tài liệu."
+        },
+        {
+          "id": "E",
+          "text": "\"NotkaApp là một ứng dụng ghi chú.\" — mô tả sản phẩm chung chung, không thể bàn cãi."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Các khẳng định có thể kiểm chứng mà thiếu trích dẫn (A, B) cần nguồn, còn quyết định quan trọng (C) cần chuyên gia; những câu đã được xác nhận hoặc không thể bàn cãi thì không cần đánh dấu.",
+      "feedbackIncorrect": "Câu khớp với DOC3 và mô tả sản phẩm chung chung thì không cần đánh dấu; ta đánh dấu những đoạn có thể kiểm chứng mà thiếu trích dẫn và các quyết định quan trọng. Hãy ôn lại mức độ chi tiết của việc đánh dấu (màn hình 'Đánh dấu các đoạn').",
+      "references": [
+        "M11.7",
+        "M11.8"
+      ]
+    }
+  ]
+}

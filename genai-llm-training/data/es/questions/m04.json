@@ -1,0 +1,371 @@
+{
+  "_meta": {
+    "module": "M4",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M4. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q025",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "El participante explica qué es un embedding como representación numérica del significado del texto.",
+      "prompt": "Un modelo de embeddings convierte una frase de la documentación de QA en un embedding. ¿Qué representa realmente el vector de números resultante?",
+      "options": [
+        {
+          "id": "A",
+          "text": "El significado semántico del texto en forma numérica: las frases con significado cercano producen vectores cercanos."
+        },
+        {
+          "id": "B",
+          "text": "El número de palabras de la frase y su longitud en caracteres."
+        },
+        {
+          "id": "C",
+          "text": "El registro exacto de las letras consecutivas codificadas como códigos ASCII."
+        },
+        {
+          "id": "D",
+          "text": "Una puntuación numérica de la corrección gramatical y estilística del texto."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "El embedding codifica el significado del texto como un vector de números, de modo que las frases cercanas en significado (p. ej. «inicio de sesión» y «autenticación») acaban próximas entre sí.",
+      "feedbackIncorrect": "El embedding no cuenta caracteres, letras ni gramática: codifica el significado. Vuelve a la pantalla «La palabra como vector».",
+      "references": [
+        "M4.1",
+        "M4.2"
+      ]
+    },
+    {
+      "id": "Q026",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "El participante interpreta la similitud del coseno como una medida de la dirección de los vectores, independiente de la longitud del texto.",
+      "prompt": "En el corpus de NotkaApp tienes una descripción breve, «Restablecer contraseña: enlace de correo válido 30 min», y un párrafo largo y detallado que describe el mismo procedimiento de restablecimiento. ¿Por qué su similitud del coseno es alta a pesar de la gran diferencia de longitud entre los textos?",
+      "options": [
+        {
+          "id": "A",
+          "text": "La similitud del coseno mide el ángulo (la dirección) entre los vectores de significado, no su longitud: ambos textos apuntan en la misma dirección."
+        },
+        {
+          "id": "B",
+          "text": "La similitud del coseno aumenta con el número de palabras, así que el texto más largo siempre tiene mayor similitud."
+        },
+        {
+          "id": "C",
+          "text": "La similitud del coseno compara el número de palabras compartidas, y ambos textos contienen la palabra «restablecer»."
+        },
+        {
+          "id": "D",
+          "text": "La similitud del coseno siempre devuelve 1.0 cuando los textos tratan del mismo producto."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "La similitud del coseno calcula el ángulo entre los vectores, es decir, la coincidencia de dirección del significado; la longitud o la «intensidad» del texto no influye en el resultado, así que una descripción corta y otra larga de lo mismo quedan próximas.",
+      "feedbackIncorrect": "No deciden ni el número de palabras ni los tokens compartidos, sino la dirección del vector de significado. Repasa «Similitud del coseno: dirección, no longitud».",
+      "references": [
+        "M4.3"
+      ]
+    },
+    {
+      "id": "Q027",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "El participante interpreta correctamente el ranking de vecinos más cercanos y entiende el carácter convencional del umbral de similitud.",
+      "prompt": "Un buscador semántico devolvió una lista de vecinos más cercanos con estos resultados: fragmento A = 0.91, fragmento B = 0.74, fragmento C = 0.62. ¿Cómo debería interpretarlo el tester?",
+      "options": [
+        {
+          "id": "A",
+          "text": "La lista está ordenada de mayor a menor por similitud, pero una posición alta no garantiza la relevancia de negocio: el contenido hay que verificarlo."
+        },
+        {
+          "id": "B",
+          "text": "El fragmento A, con 0.91, es sin duda la respuesta correcta porque supera el umbral de 0.9."
+        },
+        {
+          "id": "C",
+          "text": "Los resultados por debajo de 0.75 son siempre erróneos y se pueden descartar sin comprobarlos."
+        },
+        {
+          "id": "D",
+          "text": "El resultado 0.62 significa que el fragmento C es correcto de contenido exactamente en un 62%."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "El ranking ordena los resultados de mayor a menor, pero el umbral es convencional y depende del corpus: una posición alta es una señal, no una prueba de relevancia.",
+      "feedbackIncorrect": "No existe un umbral fijo y universal, y el valor numérico no es un «porcentaje de corrección». Vuelve a «Cómo leer el ranking de similitud».",
+      "references": [
+        "M4.4"
+      ]
+    },
+    {
+      "id": "Q028",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "El participante selecciona las características de una buena consulta para la búsqueda semántica.",
+      "prompt": "Quieres encontrar en la documentación de NotkaApp la información sobre el tiempo de validez del enlace de restablecimiento de contraseña en la versión actual. ¿Qué prácticas de formulación de la consulta semántica aumentarán la relevancia de los resultados? Marca todas las correctas.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Usar una frase completa que recoja la intención, p. ej. «tiempo de validez del enlace de restablecimiento de contraseña», en lugar de una sola palabra."
+        },
+        {
+          "id": "B",
+          "text": "Precisar el contexto y la versión, p. ej. «restablecimiento de contraseña en NotkaApp v2», si lo que nos importa es la redacción actual."
+        },
+        {
+          "id": "C",
+          "text": "Formular la consulta solo como una negación, p. ej. «no token de sesión», para filtrar otros resultados."
+        },
+        {
+          "id": "D",
+          "text": "Escribir una única palabra genérica, «contraseña», confiando en que el modelo adivine por sí mismo la intención."
+        },
+        {
+          "id": "E",
+          "text": "Incluir el objeto clave de la consulta (el enlace de restablecimiento) para alejarse de conceptos parecidos pero distintos (el token de sesión)."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "E"
+      ],
+      "feedbackCorrect": "Una frase completa que recoge la intención, la precisión del contexto o la versión y la indicación del objeto clave dirigen el vector de la consulta hacia el significado adecuado.",
+      "feedbackIncorrect": "Una sola palabra es demasiado genérica, y la negación por sí sola funciona mal en la búsqueda semántica (el modelo codifica igualmente el tema «token de sesión»). Repasa «Elección de la consulta para la búsqueda semántica».",
+      "references": [
+        "M4.7"
+      ]
+    },
+    {
+      "id": "Q029",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "El participante reconoce las situaciones en las que una similitud alta no significa que la respuesta sea correcta.",
+      "prompt": "¿En cuáles de las siguientes situaciones un valor alto de similitud del coseno puede inducir a error, devolviendo un fragmento semánticamente cercano pero incorrecto desde el punto de vista de negocio? Marca todas las correctas.",
+      "options": [
+        {
+          "id": "A",
+          "text": "El fragmento «el inicio de sesión no funciona» aparece como cercano para la consulta «el inicio de sesión funciona» (negación/antónimo)."
+        },
+        {
+          "id": "B",
+          "text": "La descripción de la función de pagos aparece como cercana para el reporte de un error de esa misma función (mismo tema, intención distinta)."
+        },
+        {
+          "id": "C",
+          "text": "Un fragmento sobre el «token» de seguridad aparece para una consulta sobre «token» en el sentido de unidad de un LLM (ambigüedad/polisemia)."
+        },
+        {
+          "id": "D",
+          "text": "La redacción antigua de un requisito es muy parecida a la nueva, aunque solo la nueva es correcta (versión desactualizada)."
+        },
+        {
+          "id": "E",
+          "text": "Dos fragmentos que describen exactamente el mismo procedimiento actual de restablecimiento de contraseña dan una similitud alta."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "feedbackCorrect": "Son cuatro trampas clásicas de la similitud: la negación, el mismo tema con intención distinta, la polisemia y la versión desactualizada; el embedding codifica el tema con más fuerza que las diferencias pequeñas pero críticas.",
+      "feedbackIncorrect": "La opción E es el caso en el que la similitud alta es RELEVANTE (dos descripciones coincidentes y actuales de lo mismo). Repasa «Trampa: parecido ≠ correcto — 4 casos».",
+      "references": [
+        "M4.5",
+        "M4.6"
+      ]
+    },
+    {
+      "id": "Q030",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "El participante evalúa por qué los embeddings confunden diferencias críticas y extrae la conclusión adecuada para el trabajo de QA.",
+      "prompt": "¿Por qué el modelo de embeddings confunde pares como «el inicio de sesión funciona» / «el inicio de sesión no funciona» y qué conclusión debería sacar de ello el tester? Marca todas las afirmaciones acertadas.",
+      "options": [
+        {
+          "id": "A",
+          "text": "El embedding codifica con más fuerza el tema y el estilo de la frase que las diferencias pequeñas pero críticas, como la negación o el número de versión."
+        },
+        {
+          "id": "B",
+          "text": "El ranking de similitud es una señal de apoyo, no un veredicto: el resultado exige verificar el contenido del fragmento."
+        },
+        {
+          "id": "C",
+          "text": "Conviene reforzar la búsqueda con el filtrado por metadatos (p. ej. versión, tipo de documento) para reducir los aciertos engañosos."
+        },
+        {
+          "id": "D",
+          "text": "Dado que el modelo confunde estos pares, hay que renunciar por completo a la búsqueda semántica en QA."
+        },
+        {
+          "id": "E",
+          "text": "Basta con subir el umbral de similitud a 0.95 para eliminar automáticamente todas las trampas."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "El embedding codifica el tema con más fuerza que la negación o la versión, por eso tratamos el ranking como una señal que exige verificar el contenido, apoyada en el filtrado por metadatos.",
+      "feedbackIncorrect": "Renunciar a la búsqueda (D) y fijar un umbral rígido (E) son soluciones falsas: un par con negación puede ser tan parecido que ningún umbral lo descarte. Repasa «Profundización: por qué se equivoca el modelo».",
+      "references": [
+        "M4.6",
+        "M4.5"
+      ]
+    },
+    {
+      "id": "Q031",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "El participante diagnostica en un caso concreto por qué una similitud alta devolvió un fragmento incorrecto desde el punto de vista de negocio.",
+      "prompt": "En el corpus de NotkaApp introduces la consulta «¿Al cabo de cuánto tiempo caduca el enlace de restablecimiento de contraseña?». El buscador devuelve como más cercano el DOC1: «Procedimiento de inicio de sesión: el token de sesión caduca tras 30 min de inactividad» (0.86), y solo más abajo el DOC3: «Restablecer contraseña: enlace de correo válido 30 min, de un solo uso» (0.71). ¿Qué explica mejor este resultado?",
+      "options": [
+        {
+          "id": "A",
+          "text": "El DOC1 está semánticamente cerca porque comparte con la consulta el motivo «algo caduca tras 30 min», pero se refiere a otro objeto (el token de sesión), así que la fuente correcta es el DOC3: es la trampa «parecido, pero concepto distinto» (mismo motivo, otro objeto)."
+        },
+        {
+          "id": "B",
+          "text": "El DOC1 es la respuesta correcta porque tiene una similitud mayor que el DOC3."
+        },
+        {
+          "id": "C",
+          "text": "El resultado es un fallo del modelo de embeddings que hay que reportar como defecto de la biblioteca."
+        },
+        {
+          "id": "D",
+          "text": "El DOC3 es incorrecto porque su resultado de 0.71 está por debajo del umbral universal de relevancia de 0.75."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "El motivo común «caduca tras 30 min» acerca el DOC1 a la consulta, aunque se refiere al token de sesión y no al enlace de restablecimiento; la fuente correcta es el DOC3, a pesar de su resultado más bajo.",
+      "feedbackIncorrect": "El resultado más alto no decide la relevancia, y 0.75 no es ningún umbral universal: es la trampa clásica «parecido, pero concepto distinto». Repasa la pantalla «Trampa: parecido ≠ correcto» y «Mapa semántico».",
+      "references": [
+        "M4.5",
+        "M4.9"
+      ]
+    },
+    {
+      "id": "Q032",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "El participante reconoce la trampa de la negación en los resultados de búsqueda y elige una decisión de QA segura.",
+      "prompt": "En el «Mapa semántico» introduces la consulta «el inicio de sesión no funciona tras la actualización». El fragmento más cercano (0.89) resulta ser «el inicio de sesión funciona correctamente», mientras que el fragmento «error conocido: el inicio de sesión se bloquea tras la actualización v2» aparece apenas en tercera posición (0.77). ¿Cómo conviene evaluar esta situación y reaccionar?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Es la trampa de la negación: el embedding codifica el tema común «inicio de sesión», pero pierde «no funciona» frente a «funciona»; hay que verificar el contenido y elegir el fragmento del error conocido, a pesar de su resultado más bajo."
+        },
+        {
+          "id": "B",
+          "text": "Aceptar el fragmento «el inicio de sesión funciona correctamente» porque tiene la mayor similitud, 0.89, y cerrar el análisis."
+        },
+        {
+          "id": "C",
+          "text": "Considerar ambos fragmentos equivalentes, dado que los dos tratan del inicio de sesión, y no resolver nada más."
+        },
+        {
+          "id": "D",
+          "text": "Bajar el umbral a 0.5 para que el ranking desplace automáticamente el fragmento correcto a la primera posición."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "«Funciona» y «no funciona» están semánticamente cerca porque solo los separa la negación; aquí el resultado más alto es engañoso, así que verificamos el contenido y elegimos el fragmento del error conocido.",
+      "feedbackIncorrect": "El resultado más alto es la trampa de la negación, y manipular el umbral no corrige la dirección del vector: hay que comprobar el contenido. Repasa «Trampa: parecido ≠ correcto» y «Mapa semántico».",
+      "references": [
+        "M4.5",
+        "M4.9"
+      ]
+    }
+  ]
+}

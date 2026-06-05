@@ -1,0 +1,534 @@
+{
+  "_meta": {
+    "module": "M8",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M8. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q061",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Die teilnehmende Person analysiert einen von einem LLM generierten Satz von Testfällen und benennt eine Lücke in der Abdeckung (coverage gap) gegenüber einer Anforderung.",
+      "prompt": "Anforderung für die Anwendung NotkaApp (fiktiv): Eine Nutzerin oder ein Nutzer setzt das Passwort über einen 30 Minuten gültigen E-Mail-Link zurück; nach 3 fehlgeschlagenen Anmeldeversuchen wird das Konto für 15 Minuten gesperrt. Das LLM hat folgende Fälle generiert: TC1 — korrektes Zurücksetzen; TC2 — Link nach 30 Min. abgelaufen; TC3 — 3 falsche Passwörter -> Kontosperre. Welche Abdeckungslücke ist hier am wichtigsten zu ergänzen?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Fehlender Fall der erneuten Verwendung desselben Reset-Links (ein Einmal-Link zweimal verwendet)"
+        },
+        {
+          "id": "B",
+          "text": "Fehlender Fall, der die Farbe der Schaltfläche „Passwort zurücksetzen“ prüft"
+        },
+        {
+          "id": "C",
+          "text": "Fehlender Fall mit einer genau 30-minütigen Sitzungsdauer der Administratorin oder des Administrators"
+        },
+        {
+          "id": "D",
+          "text": "Fehlender Fall, der das Logo der Anwendung auf der Anmeldeseite überprüft"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Ein Reset-Link ist von Natur aus einmalig und zeitlich begrenzt, daher ist das Fehlen eines Tests für seine erneute Verwendung eine reale Sicherheitslücke in der Abdeckung der Anforderung.",
+      "feedbackIncorrect": "Die Abdeckungslücke betrifft das anforderungskonforme Verhalten (Gültigkeit und Einmaligkeit des Links) und nicht kosmetische Elemente. Kehre zum Bildschirm über Abdeckungslücken zurück.",
+      "references": [
+        "M8.3",
+        "M8.2"
+      ]
+    },
+    {
+      "id": "Q062",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Die teilnehmende Person erkennt im LLM-Output einen Scheinfall (eine Assertion, die nichts verifiziert) und unterscheidet ihn von einem wertvollen Test.",
+      "prompt": "Im Satz von Fällen für NotkaApp findest du: TC4 — „Öffne das Formular zum Zurücksetzen des Passworts und prüfe, dass sich das Formular öffnet; erwartetes Ergebnis: keines“. Wie ist TC4 einzustufen?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Scheintest — kein definiertes erwartetes Ergebnis, die Assertion prüft faktisch nichts"
+        },
+        {
+          "id": "B",
+          "text": "Korrekter Negativfall für das Szenario der Kontosperre"
+        },
+        {
+          "id": "C",
+          "text": "Korrekter Grenzfall für die 30-minütige Gültigkeit des Links"
+        },
+        {
+          "id": "D",
+          "text": "Duplikat des Falls TC1 korrektes Zurücksetzen, das sich sofort zusammenführen lässt"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Ohne festgelegtes erwartetes Ergebnis „besteht“ der Test immer und verifiziert nichts — das ist die Definition eines Scheintests.",
+      "feedbackIncorrect": "Der Schlüssel ist das fehlende erwartete Ergebnis und nicht der Szenariotyp oder die Ähnlichkeit zu einem anderen TC. Wiederhole den Bildschirm über Duplikate und Scheintests.",
+      "references": [
+        "M8.4"
+      ]
+    },
+    {
+      "id": "Q063",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Die teilnehmende Person bewertet, ob ein generierter LLM-Output für die QA-Dokumentation geeignet ist, und identifiziert eine erfundene, mit der Anforderung widersprüchliche Tatsache.",
+      "prompt": "Das LLM hat eine Fallbeschreibung für NotkaApp mit der Notiz generiert: „Nach 3 fehlgeschlagenen Versuchen wird das Konto für 24 Stunden gesperrt, und der Reset-Link ist unbefristet gültig“. Die Anforderung lautet: Sperre 15 Minuten, Link 30 Minuten gültig. Welche Entscheidung der fachlichen Kontrolle ist vor dem Einfügen in die Dokumentation am angemessensten?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Verwirf das Fragment — es enthält mit der Anforderung widersprüchliche Tatsachen (erfundene Werte 24 h und unbefristet) und muss vor der Verwendung korrigiert werden"
+        },
+        {
+          "id": "B",
+          "text": "Lass es unverändert zu — das LLM nennt meist Werte, die näher an der Realität liegen als die Anforderung"
+        },
+        {
+          "id": "C",
+          "text": "Lass es zu und füge eine Anmerkung hinzu, dass die Werte je nach Anwendungsversion variieren können"
+        },
+        {
+          "id": "D",
+          "text": "Verwirf das gesamte Testmodul zum Zurücksetzen des Passworts, weil der Output einen Fehler enthält"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Ein mit der Anforderung widersprüchlicher Output enthält erfundene Tatsachen (Halluzinationen) und darf ohne Korrektur nicht in die Dokumentation gelangen — die fachliche Kontrolle endet mit der Entscheidung „Fragment korrigieren/verwerfen“.",
+      "feedbackIncorrect": "Die Anforderung ist die Quelle der Wahrheit, nicht der LLM-Output; zugleich sollte nicht die gesamte Arbeit wegen eines einzelnen Fragments verworfen werden. Kehre zur Rubrik zulassen/korrigieren/verwerfen zurück.",
+      "references": [
+        "M8.6"
+      ]
+    },
+    {
+      "id": "Q064",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Die teilnehmende Person bestimmt die Grenzen des Human-in-the-Loop, indem sie eine QA-Aufgabe benennt, bei der das LLM Assistent bleibt und die Entscheidung der Mensch trifft.",
+      "prompt": "Ein QA-Team möchte ein LLM bei den Tests von NotkaApp einsetzen. Welcher Vorschlag spiegelt das Prinzip „Assistent, nicht Entscheider“ am besten wider?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Das LLM erzeugt einen Entwurf von Testfällen und eine Risiko-Checkliste, und die Testerin oder der Tester genehmigt den Testumfang und entscheidet über die Freigabe zum Release"
+        },
+        {
+          "id": "B",
+          "text": "Das LLM gibt eigenständig die Veröffentlichung in die Produktion frei, wenn die generierten Tests bestehen"
+        },
+        {
+          "id": "C",
+          "text": "Das LLM bewertet endgültig das kritische Risiko und schließt Defekte ohne Beteiligung der Testerin oder des Testers"
+        },
+        {
+          "id": "D",
+          "text": "Die Testerin oder der Tester schreibt jeden Fall manuell neu, und das LLM wird in keiner Phase verwendet"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Das LLM beschleunigt das Erstellen von Entwürfen und Vorschlägen, aber Entscheidungen über Akzeptanz, kritisches Risiko und Release gehören dem Menschen (Human-in-the-Loop).",
+      "feedbackIncorrect": "Entscheidungen über das Release und die Bewertung des kritischen Risikos dürfen nicht dem LLM überlassen werden, aber ein vollständiger Verzicht auf den Assistenten verschenkt seinen Wert. Wiederhole den Bildschirm Assistent vs. Entscheider.",
+      "references": [
+        "M8.7",
+        "M8.1"
+      ]
+    },
+    {
+      "id": "Q065",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Die teilnehmende Person benennt Kategorien von Abdeckungslücken, die ein LLM ohne ausdrückliche Aufforderung häufig nicht generiert.",
+      "prompt": "Du generierst Testfälle für die Funktion zum Zurücksetzen des Passworts in NotkaApp. Welche Kategorien werden vom LLM am häufigsten ausgelassen und müssen bewusst ergänzt werden? Wähle alle korrekten aus.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Grenzfälle (z. B. Link genau in der 30. Minute verwendet)"
+        },
+        {
+          "id": "B",
+          "text": "Fehlerpfade und Ausnahmezustände (z. B. Link ein zweites Mal verwendet, parallele Sitzungen)"
+        },
+        {
+          "id": "C",
+          "text": "Happy Path des Zurücksetzens des Passworts mit korrekten Daten"
+        },
+        {
+          "id": "D",
+          "text": "Testdaten für Extremwerte (z. B. E-Mail mit maximaler Länge)"
+        },
+        {
+          "id": "E",
+          "text": "Titel des Browserfensters auf der Bestätigungsseite"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "D"
+      ],
+      "feedbackCorrect": "Das LLM deckt den Happy Path meist gut ab und lässt Grenzfälle, Fehlerpfade und Extremdaten aus — genau dort suchen wir nach Abdeckungslücken.",
+      "feedbackIncorrect": "Der Happy Path ist meist abgedeckt, und der Fenstertitel ist ein kosmetisches Detail; die Lücken betreffen Grenzen, Fehlerpfade und Extremdaten. Kehre zum Bildschirm über Abdeckungslücken zurück.",
+      "references": [
+        "M8.3",
+        "M8.2"
+      ]
+    },
+    {
+      "id": "Q066",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Die teilnehmende Person erkennt Merkmale eines Duplikats und eines Scheintests in einem generierten Satz von Fällen.",
+      "prompt": "Du prüfst einen generierten Satz von Fällen für NotkaApp im Hinblick auf die Qualität. Welche Aussagen über Duplikate und Scheintests sind wahr? Wähle alle korrekten aus.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Zwei Fälle, die dieselben Bedingungen mit anderer Beschreibung prüfen, sind ein Duplikat, trotz unterschiedlichen Inhalts"
+        },
+        {
+          "id": "B",
+          "text": "Ein Fall ohne erwartetes Ergebnis ist ein Scheinfall, weil seine Assertion nichts verifiziert"
+        },
+        {
+          "id": "C",
+          "text": "Eine größere Anzahl generierter Fälle bedeutet immer eine bessere Abdeckung"
+        },
+        {
+          "id": "D",
+          "text": "Ein Test mit der Assertion „true == true“, die nicht mit der Funktion zusammenhängt, ist ein Scheinfall"
+        },
+        {
+          "id": "E",
+          "text": "Ein Duplikat ist unschädlich, weil zwei identische Tests die Sicherheit des Ergebnisses erhöhen"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "D"
+      ],
+      "feedbackCorrect": "Ein Duplikat sind dieselben Bedingungen, nur anders beschrieben, und ein Scheintest hat eine Assertion, die nichts verifiziert; die Anzahl der Fälle ist kein Maß für die Abdeckung.",
+      "feedbackIncorrect": "Eine größere Anzahl von Tests bedeutet nicht eine bessere Abdeckung, und ein Duplikat erhöht die Wartungskosten ohne Mehrwert. Wiederhole den Bildschirm über Duplikate und Scheintests.",
+      "references": [
+        "M8.4"
+      ]
+    },
+    {
+      "id": "Q067",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Die teilnehmende Person wendet die Kriterien der fachlichen Kontrolle an, die ein LLM-Output erfüllen muss, um in die QA-Dokumentation zu gelangen.",
+      "prompt": "Bevor du einen vom LLM generierten Satz von Fällen in die offizielle QA-Dokumentation von SklepDemo (fiktiv) einfügst, welche Kriterien der fachlichen Kontrolle müssen erfüllt sein? Wähle alle korrekten aus.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Übereinstimmung mit der Anforderung (keine Werte, die den Akzeptanzkriterien widersprechen)"
+        },
+        {
+          "id": "B",
+          "text": "Keine erfundenen Tatsachen (Halluzinationen) und Verifizierbarkeit des Inhalts"
+        },
+        {
+          "id": "C",
+          "text": "Keine sensiblen Daten und keine realen PII in den Beispielen"
+        },
+        {
+          "id": "D",
+          "text": "Der Output soll so lang wie möglich sein, weil ein größerer Umfang von Qualität zeugt"
+        },
+        {
+          "id": "E",
+          "text": "Der Output soll allein deshalb akzeptiert werden, weil ein neueres Modell ihn generiert hat"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Die Zulassung zur Dokumentation erfordert Übereinstimmung mit der Anforderung, das Fehlen von Halluzinationen, Verifizierbarkeit und das Fehlen sensibler Daten — Umfang und Modellversion sind keine Kriterien.",
+      "feedbackIncorrect": "Textlänge und Modellversion sind keine Qualitätskriterien; es zählen Übereinstimmung, Verifizierbarkeit und das Fehlen sensibler Daten. Kehre zur Rubrik der fachlichen Kontrolle zurück.",
+      "references": [
+        "M8.6"
+      ]
+    },
+    {
+      "id": "Q068",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Die teilnehmende Person unterscheidet QA-Aufgaben, bei denen das LLM Assistent ist, von Entscheidungen, die dem Menschen vorbehalten sind.",
+      "prompt": "Welche QA-Aufgaben können dem LLM sicher als Assistent (mit späterer menschlicher Kontrolle) übertragen werden? Wähle alle korrekten aus.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Entwurf von Testfällen aus der Anforderung als Ausgangspunkt"
+        },
+        {
+          "id": "B",
+          "text": "Vorschlag von Risikokategorien für die Checkliste des risk-based testing"
+        },
+        {
+          "id": "C",
+          "text": "Umformulieren und Ordnen vorhandener Testbeschreibungen"
+        },
+        {
+          "id": "D",
+          "text": "Endgültige Entscheidung über die Freigabe der Veröffentlichung in die Produktion"
+        },
+        {
+          "id": "E",
+          "text": "Eigenständiges Schließen eines kritischen Defekts ohne Verifizierung durch die Testerin oder den Tester"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Entwürfe, Vorschläge von Risikokategorien und das Ordnen von Inhalten sind Aufgaben eines Assistenten; Entscheidungen über das Release und kritische Defekte gehören dem Menschen.",
+      "feedbackIncorrect": "Die Entscheidung über das Release und das Schließen kritischer Defekte ist die Rolle des Entscheiders (des Menschen) und nicht des LLM. Wiederhole den Bildschirm Assistent vs. Entscheider.",
+      "references": [
+        "M8.7",
+        "M8.1"
+      ]
+    },
+    {
+      "id": "Q069",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Die teilnehmende Person ordnet eine Funktionalität von NotkaApp der passenden Risikokategorie in der Checkliste des risk-based testing zu.",
+      "prompt": "Ordne eine Funktionalität oder ein Artefakt von NotkaApp der am besten passenden Risikokategorie in der Checkliste des risk-based testing zu.",
+      "pairs": [
+        {
+          "left": "Kontosperre nach 3 fehlgeschlagenen Anmeldeversuchen",
+          "right": "Sicherheit (Schutz vor Brute-Force-Angriffen)"
+        },
+        {
+          "left": "Speicherung der E-Mail der Nutzerin oder des Nutzers in der Datenbank",
+          "right": "Daten (Schutz personenbezogener Daten und Vertraulichkeit)"
+        },
+        {
+          "left": "Erzeugungszeit des Reset-Links bei hoher Last",
+          "right": "Performance (Antwortzeit unter Last)"
+        },
+        {
+          "left": "Bedienung des Reset-Formulars per Screenreader",
+          "right": "Barrierefreiheit (Konformität mit WCAG)"
+        }
+      ],
+      "feedbackCorrect": "Jede Funktionalität gehört in die Risikokategorie, die die Hauptbedrohung am besten beschreibt — das ist der Kern der Checkliste des risk-based testing.",
+      "feedbackIncorrect": "Die Kategorien werden verwechselt, wenn du auf die Technologie statt auf die Hauptbedrohung der Funktion schaust (Sicherheit, Daten, Performance, Barrierefreiheit). Wiederhole den Bildschirm über die Risiko-Checkliste.",
+      "references": [
+        "M8.5"
+      ]
+    },
+    {
+      "id": "Q070",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Die teilnehmende Person ordnet einen typischen Defekt generierter Testfälle seiner Konsequenz in der QA zu.",
+      "prompt": "Ordne einen typischen Defekt von Testfällen, die ein LLM für eine Anforderung von SklepDemo (fiktiv) generiert hat, seiner wichtigsten Konsequenz in der QA zu.",
+      "pairs": [
+        {
+          "left": "Generierter Fall ohne erwartetes Ergebnis",
+          "right": "Scheintest — besteht immer, erkennt keinen Defekt"
+        },
+        {
+          "left": "Zwei Fälle mit denselben Schritten und Daten",
+          "right": "Duplikat — Aufblähung des Satzes ohne neue Abdeckung"
+        },
+        {
+          "left": "Fall, der ein Feld prüft, das nicht in der Anforderung steht",
+          "right": "Umfangshalluzination — Test außerhalb der Anforderung"
+        },
+        {
+          "left": "Fehlender Fall für einen in der Anforderung beschriebenen Fehlerpfad",
+          "right": "Abdeckungslücke — ungetestetes Szenario aus der Anforderung"
+        }
+      ],
+      "feedbackCorrect": "Jeder Defekt hat eine andere Konsequenz für die Qualität des Satzes: Ein Scheintest erkennt keine Fehler, ein Duplikat fügt keine Abdeckung hinzu, eine Umfangshalluzination testet etwas außerhalb der Anforderung, und eine Abdeckungslücke lässt ein Risiko ungetestet.",
+      "feedbackIncorrect": "Unterscheide die Defekte nach ihrer Wirkung: fehlendes erwartetes Ergebnis = Scheintest, dieselben Schritte = Duplikat, Feld außerhalb der Anforderung = Umfangshalluzination, fehlender Fehlerpfad = Abdeckungslücke. Wiederhole den Bildschirm der QA-Workbench über Lücken und Scheintests.",
+      "references": [
+        "M8.6",
+        "M8.7"
+      ]
+    },
+    {
+      "id": "Q071",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Die teilnehmende Person ordnet ein konkretes Risiko aus einer Funktion von NotkaApp dem Testfall zu, der es verifiziert.",
+      "prompt": "Ordne ein Risiko, das mit der Funktion zum Zurücksetzen des Passworts von NotkaApp verbunden ist, dem Testfall zu, der es verifiziert.",
+      "pairs": [
+        {
+          "left": "Risiko: Reset-Link funktioniert nach Ablauf",
+          "right": "Test: Versuch, den Link nach Ablauf von 30 Minuten zu verwenden"
+        },
+        {
+          "left": "Risiko: Einmal-Link funktioniert mehrfach",
+          "right": "Test: zweimalige Verwendung desselben Reset-Links"
+        },
+        {
+          "left": "Risiko: Konto wird nach fehlgeschlagenen Versuchen nicht gesperrt",
+          "right": "Test: 3 aufeinanderfolgende fehlgeschlagene Anmeldeversuche und Prüfung der Sperre"
+        },
+        {
+          "left": "Risiko: Reset funktioniert für ein nicht existierendes Konto",
+          "right": "Test: Reset-Anforderung für eine nicht registrierte E-Mail"
+        }
+      ],
+      "feedbackCorrect": "Jedes Risiko wird durch einen Fall verifiziert, der direkt versucht, das unerwünschte Verhalten auszulösen — das verbindet risk-based testing mit der Abdeckung.",
+      "feedbackIncorrect": "Der Test muss genau auf die durch das Risiko beschriebene Bedrohung zielen (z. B. erneute Verwendung des Links, fehlende Sperre). Wiederhole den Bildschirm über die Risiko-Checkliste und Abdeckungslücken.",
+      "references": [
+        "M8.5",
+        "M8.3"
+      ]
+    },
+    {
+      "id": "Q072",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Die teilnehmende Person ordnet ein Qualitätsproblem des generierten Outputs der passenden Kontrollmaßnahme der Testerin oder des Testers zu.",
+      "prompt": "Ordne ein erkanntes Problem in einem vom LLM generierten QA-Artefakt der passenden Kontrollmaßnahme zu.",
+      "pairs": [
+        {
+          "left": "Zwei Fälle prüfen dieselben Bedingungen mit anderer Beschreibung",
+          "right": "Führe die Duplikate zusammen und behalte einen Fall"
+        },
+        {
+          "left": "Fall ohne definiertes erwartetes Ergebnis",
+          "right": "Entferne oder ergänze die Assertion (Scheintest)"
+        },
+        {
+          "left": "Fehlender Fall für die Kontosperre nach 3 Versuchen",
+          "right": "Füge einen Fall hinzu, der die Abdeckungslücke schließt"
+        },
+        {
+          "left": "Output nennt eine Sperre von 24 h statt 15 Min.",
+          "right": "Korrigiere die mit der Anforderung widersprüchliche Tatsache vor der Verwendung"
+        }
+      ],
+      "feedbackCorrect": "Jeder Problemtyp im Output hat eine angemessene Maßnahme: Zusammenführen des Duplikats, Beheben des Scheintests, Schließen der Lücke oder Korrektur der erfundenen Tatsache.",
+      "feedbackIncorrect": "Die Kontrollmaßnahme hängt von der Art des Problems ab — verwechsle ein Duplikat nicht mit einer Abdeckungslücke und einen Scheintest nicht mit einer Halluzination. Wiederhole die Bildschirme über Duplikate und Output-Kontrolle.",
+      "references": [
+        "M8.4",
+        "M8.6"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,179 @@
+{
+  "_meta": {
+    "issue": "#23 [23][M4] Wdroż moduł M11 — halucynacje, granice, weryfikacja outputu",
+    "storyboard": "docs/storyboard/m11-verification.md",
+    "interaction": "Output verifier (kind: classify)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (NotkaApp/SklepDemo/PipeDemo, domena przyklad.test, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "M11 obowiązkowy dla S1/S2/S3 — żaden ekran nie znika przez gating; tylko ekran 3 ma blok pogłębienia S2/S3. Wzmacnia zasadę KONTROLI outputu (#23). Scenariusz bazowy: SC-VERIFY-01."
+  },
+  "module": "M11",
+  "intro": "Người kiểm thử nhận từ LLM một sản phẩm hoàn chỉnh — báo cáo kiểm thử, ca kiểm thử, bản tóm tắt yêu cầu, một đoạn tài liệu — và phải quyết định có nên tin nó hay không. Như bạn còn nhớ từ M1, LLM trả về văn bản có xác suất cao nhất, không phải sự thật được bảo đảm. Nếu không có thói quen kiểm chứng, rất dễ để một nội dung bịa đặt lọt qua như một sự thật. Mô-đun này trao cho bạn năm nguyên nhân gây ảo giác, một danh sách kiểm tra để kiểm chứng, và quy tắc khi nào nên đơn giản là từ chối LLM.",
+  "screens": [
+    {
+      "id": "s1-cel",
+      "title": "Mô-đun này để làm gì",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Câu trả lời của LLM có thể nghe rất đáng tin và chắc chắn, nhưng đồng thời chứa một sự thật bịa đặt hoặc một nguồn không tồn tại. Nếu một đoạn như vậy lọt vào tài liệu kiểm thử hay quyết định phát hành mà không được kiểm tra, lỗi đó trở thành lỗi của bạn, chứ không phải của mô hình. Vì thế kiểm soát đầu ra là năng lực cốt lõi của người kiểm thử — quan trọng nhất chính ở nơi mà người kiểm thử không phải là chuyên gia trong lĩnh vực đó." },
+        { "kind": "list", "items": [
+          "Bạn sẽ nhận ra ảo giác bắt nguồn từ đâu — năm nguyên nhân điển hình.",
+          "Bạn sẽ đi qua danh sách kiểm tra để kiểm chứng, trước khi tin vào câu trả lời.",
+          "Bạn sẽ từ chối LLM khi kết quả không thể kiểm chứng được hoặc khi lỗi có tác động cao.",
+          "Bạn sẽ đánh dấu những đoạn cần nguồn hoặc chuyên gia, thay vì chấp nhận hay từ chối toàn bộ."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Điều đang chờ bạn", "text": "Khoảng 60 phút: các màn hình lý thuyết ngắn, quyết định „dùng hay từ chối”, bài tập „Output verifier” (bạn đánh dấu các câu trong câu trả lời của LLM) cùng bài trắc nghiệm với phản hồi tức thì. Mô-đun này bắt buộc trên mọi lộ trình." }
+      ]
+    },
+    {
+      "id": "s2-czym-jest-halucynacja",
+      "title": "Ảo giác là gì (và không phải là gì)",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Ảo giác", "original": "hallucination", "text": "đầu ra nghe đáng tin nhưng không có cơ sở từ dữ liệu — một sự thật bịa đặt, một nguồn không tồn tại hoặc một chi tiết sai được nói bằng giọng điệu chắc chắn." },
+        { "kind": "paragraph", "text": "Nguyên tắc cốt lõi: giọng điệu chắc chắn không có nghĩa là đúng. Mô hình diễn đạt câu chữ trơn tru như nhau dù nó có cơ sở trong dữ liệu hay không." },
+        { "kind": "list", "items": [
+          "Đây KHÔNG phải ảo giác: lỗi của người dùng, tức là prompt được đặt sai hoặc mơ hồ.",
+          "Đây KHÔNG phải ảo giác: câu trả lời trong đó mô hình công khai báo hiệu sự không chắc chắn („tôi không chắc, hãy kiểm tra trong tài liệu”).",
+          "Đây KHÔNG phải ảo giác: câu trả lời đúng mà chỉ là chưa được kiểm chứng."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Ví dụ", "text": "Trước câu hỏi về NotkaApp, mô hình trả lời: „Cấu hình được mô tả ở mục 9.2 của tài liệu”. Người kiểm thử kiểm tra — tài liệu kết thúc ở mục 6. Mục 9.2 không tồn tại: đó là ảo giác, dù hình thức trông hoàn toàn đáng tin." }
+      ]
+    },
+    {
+      "id": "s3-mechanizm",
+      "title": "Ảo giác bắt nguồn từ đâu — cơ chế",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Mô hình không có tín hiệu „tôi không biết” được tích hợp sẵn. Khi nó thiếu kiến thức hoặc thiếu khuôn mẫu cho câu hỏi của bạn, thay vì thừa nhận không biết, nó „nói thêm” những gì nghe có vẻ hợp lý nhất. Vì vậy ảo giác là hệ quả của cơ chế hoạt động, chứ không phải là một sự cố." },
+        { "kind": "paragraph", "onlyForPaths": ["S2", "S3"], "text": "Đào sâu kỹ thuật: LLM dự đoán token tiếp theo dựa trên phân phối xác suất từ quá trình huấn luyện, chứ không truy vấn một cơ sở dữ liệu sự thật. Nhiệt độ cao hơn làm tăng tính ngẫu nhiên trong việc chọn token, còn việc không có quyền truy cập đến một nguồn thực trong lúc sinh khiến mô hình lấp các khoảng trống bằng chuỗi có xác suất cao nhất — từ đó sinh ra các chi tiết nghe chắc chắn nhưng được bịa ra." },
+        { "kind": "callout", "variant": "info", "title": "Kết luận cho người kiểm thử", "text": "Vì việc bịa đặt đã được ghi sẵn vào cơ chế, kiểm chứng không phải là một lựa chọn „phòng khi cần” — đó là một bước thường trực khi làm việc với đầu ra của LLM." }
+      ]
+    },
+    {
+      "id": "s4-piec-przyczyn",
+      "title": "Năm nguyên nhân gây ảo giác",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Chính những nguyên nhân này lặp lại trong hầu hết mọi trường hợp bịa đặt. Nhận ra nguyên nhân giúp quyết định nên làm gì với đoạn nội dung đó." },
+        { "kind": "table",
+          "caption": "Năm nguyên nhân gây ảo giác kèm tín hiệu cảnh báo tổng hợp",
+          "headers": ["Nguyên nhân", "Cơ chế", "Tín hiệu cảnh báo"],
+          "rows": [
+            ["Thiếu dữ liệu", "câu hỏi nằm ngoài kiến thức của mô hình", "viện dẫn một mục hoặc tài liệu mà không thể tìm thấy"],
+            ["Xung đột dữ liệu", "thông tin mâu thuẫn trong ngữ cảnh hoặc trong huấn luyện", "hai phiên bản của cùng một sự thật trong một câu trả lời"],
+            ["Áp lực từ prompt", "prompt ép câu trả lời mà mô hình không có (ví dụ „cho số phiên bản chính xác”)", "một con số hoặc tên cụ thể được đưa ra dù không có cơ sở"],
+            ["Ngữ cảnh lỗi thời", "câu hỏi về trạng thái sau ngày huấn luyện hoặc về một tài liệu đã lỗi thời", "mô tả một tính năng có thể đã ra đời sau ngày cắt dữ liệu"],
+            ["Nguồn không chính xác", "mô hình lẫn lộn hoặc lấy trung bình các tài liệu tương tự", "một chi tiết khớp với một sản phẩm khác, tương tự"]
+          ],
+          "textAlt": "Năm nguyên nhân gây ảo giác. 1) Thiếu dữ liệu — câu hỏi nằm ngoài kiến thức của mô hình; tín hiệu: viện dẫn một nguồn không thể tìm thấy. 2) Xung đột dữ liệu — thông tin mâu thuẫn; tín hiệu: hai phiên bản của một sự thật cùng lúc. 3) Áp lực từ prompt — prompt ép câu trả lời mà mô hình không có; tín hiệu: chi tiết cụ thể được đưa ra không có cơ sở. 4) Ngữ cảnh lỗi thời — câu hỏi về trạng thái sau ngày huấn luyện; tín hiệu: mô tả một tính năng ra đời sau ngày cắt dữ liệu. 5) Nguồn không chính xác — mô hình lẫn lộn các tài liệu tương tự; tín hiệu: chi tiết từ một sản phẩm khác, tương tự." }
+      ]
+    },
+    {
+      "id": "s5-checklista",
+      "title": "Danh sách kiểm tra để kiểm chứng đầu ra",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Trước khi tin vào câu trả lời, hãy đi qua nó theo từng bước. Mỗi đoạn sẽ kết thúc bằng việc được gán vào một trong năm hạng mục đánh dấu, mà bạn sẽ làm quen ở những màn hình tiếp theo." },
+        { "kind": "list", "ordered": true, "items": [
+          "Có các khẳng định cụ thể, kiểm chứng được không — con số, tên, trích dẫn, các bước?",
+          "Nguồn được trích dẫn có tồn tại và thực sự nói điều mà mô hình khẳng định không?",
+          "Nội dung có bị lỗi thời so với trạng thái hiện tại không?",
+          "Trong câu trả lời có mâu thuẫn nội tại nào không?",
+          "Đoạn này có liên quan đến một quyết định trọng yếu mà tôi phải kiểm tra với chuyên gia không?"
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Khi nào đầu ra là chưa được kiểm chứng", "text": "Nếu các khẳng định có thể kiểm chứng được, nhưng bạn chưa xác nhận chúng trong nguồn, thì đầu ra vẫn ở trạng thái CHƯA ĐƯỢC KIỂM CHỨNG — không được phép chuyển nó đi tiếp như một sự thật. Độ dài và mức độ chi tiết của câu trả lời không phải là bằng chứng về chất lượng." }
+      ]
+    },
+    {
+      "id": "s6-kiedy-nie-uzywac",
+      "title": "Khi nào KHÔNG dùng LLM",
+      "type": "decision",
+      "blocks": [
+        { "kind": "paragraph", "text": "Trước khi dùng đầu ra, hãy cân nhắc hai trục: kết quả có thể kiểm chứng được không (tính kiểm chứng) và tác động của lỗi là gì (đảo ngược được và thấp so với không đảo ngược được và cao)." },
+        { "kind": "callout", "variant": "warn", "title": "Quy tắc ngón tay cái", "text": "Không thể kiểm chứng được HOẶC lỗi có tác động cao, khó đảo ngược → đừng dựa vào LLM. Hãy từ chối kết quả hoặc yêu cầu sự kiểm chứng của con người hoặc của nguồn. Đây là quan hệ hoặc: chỉ cần một trong các điều kiện là đủ." },
+        { "kind": "paragraph", "text": "Câu hỏi dẫn dắt: nếu câu trả lời này bị bịa đặt, hậu quả tệ nhất có thể tin được là gì và liệu tôi có phát hiện ra nó không?" },
+        { "kind": "table",
+          "caption": "Các trường hợp sử dụng xanh và đỏ tổng hợp",
+          "headers": ["Trường hợp sử dụng", "Kiểm chứng được?", "Tác động của lỗi", "Quyết định"],
+          "rows": [
+            ["Bản nháp các ca kiểm thử cho phần đăng nhập NotkaApp, mà bạn dù sao cũng sẽ rà soát", "có, qua rà soát", "thấp, đảo ngược được", "xanh — có thể dùng"],
+            ["Tóm tắt một ghi chú dài từ cuộc họp QA", "có, đối chiếu với ghi chú", "thấp", "xanh — có thể dùng, sau khi kiểm tra"],
+            ["Quyết định có nên tắt ghi log lỗi trên môi trường production của SklepDemo hay không", "khó", "cao, khó đảo ngược", "đỏ — chuyên gia, không phải LLM"],
+            ["Xác nhận tuân thủ một tiêu chuẩn mà không có quyền truy cập đến nguồn", "không", "cao", "đỏ — từ chối hoặc yêu cầu nguồn"]
+          ],
+          "textAlt": "Bốn trường hợp sử dụng. Xanh (có thể dùng sau khi kiểm chứng): bản nháp các ca kiểm thử được người kiểm thử rà soát và tóm tắt ghi chú — kiểm chứng được và tác động thấp. Đỏ (không dùng LLM): quyết định tắt ghi log trên production (khó kiểm tra, tác động cao) và xác nhận tuân thủ tiêu chuẩn mà không có nguồn (không kiểm chứng được, tác động cao)." }
+      ]
+    },
+    {
+      "id": "s7-oznaczanie-fragmentow",
+      "title": "Đánh dấu các đoạn: nguồn và chuyên gia",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Câu trả lời của LLM hiếm khi tốt toàn bộ hoặc sai toàn bộ — thường nó trộn lẫn các đoạn chắc chắn, không chắc chắn và rủi ro. Thay vì chấp nhận hay từ chối toàn bộ, bạn đánh dấu từng đoạn riêng biệt." },
+        { "kind": "list", "items": [
+          "Đúng — đoạn được xác nhận trong nguồn hoặc không thể bàn cãi.",
+          "Không có cơ sở — đoạn mâu thuẫn với một yêu cầu hoặc nguồn đã biết.",
+          "Cần nguồn — khẳng định kiểm chứng được, nhưng đưa ra không có trích dẫn; cần phải xác nhận nó.",
+          "Rủi ro — khẳng định có tác động cao mà không có nguồn hoặc một quyết định trọng yếu dành cho chuyên gia.",
+          "Cần loại bỏ — đoạn viện dẫn một nguồn không tồn tại hoặc rõ ràng là bịa đặt."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Phân cấp thay vì nhị phân không-một", "text": "Năm hạng mục này là ngôn ngữ của bài tập „Output verifier” ở màn hình kế tiếp. „Cần nguồn” là thiếu trích dẫn, chứ không phải lỗi; „không có cơ sở” và „cần loại bỏ” thì đã là vấn đề thực sự về nội dung." }
+      ]
+    },
+    {
+      "id": "s10-karta",
+      "title": "Thẻ kiểm chứng để dùng trong công việc",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Bản tóm tắt cô đọng để giữ bên cạnh bàn làm việc — tổng hợp các màn hình 4–7, không có nội dung mới." },
+        { "kind": "list", "items": [
+          "Năm nguyên nhân: thiếu dữ liệu, xung đột dữ liệu, áp lực từ prompt, ngữ cảnh lỗi thời, nguồn không chính xác.",
+          "Danh sách kiểm tra: (a) khẳng định kiểm chứng được, (b) nguồn tồn tại và xác nhận điều đó, (c) tính cập nhật, (d) không có mâu thuẫn nội tại, (e) quyết định trọng yếu → chuyên gia.",
+          "Quy tắc: không thể kiểm chứng được HOẶC lỗi có tác động cao → đừng dựa vào LLM.",
+          "Năm hạng mục đánh dấu: đúng, không có cơ sở, cần nguồn, rủi ro, cần loại bỏ."
+        ] }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "m11-output-verifier",
+    "title": "Output verifier",
+    "intro": "Bạn phân tích một câu trả lời tổng hợp của LLM theo từng câu một — trước câu hỏi của người kiểm thử về NotkaApp và SklepDemo. Hãy gán cho mỗi câu một trong năm hạng mục. Sau khi kiểm tra, bạn sẽ thấy lý giải kèm nguyên nhân gây ảo giác ở từng câu cùng đánh giá xem bạn có bắt được các đoạn trọng yếu hay không.",
+    "categories": [
+      { "id": "poprawne", "label": "Đúng", "desc": "được xác nhận trong nguồn hoặc không thể bàn cãi — có thể chấp nhận" },
+      { "id": "nieuzasadnione", "label": "Không có cơ sở", "desc": "mâu thuẫn với một yêu cầu hoặc nguồn đã biết" },
+      { "id": "wymaga_zrodla", "label": "Cần nguồn", "desc": "khẳng định kiểm chứng được, nhưng không có trích dẫn — cần xác nhận" },
+      { "id": "ryzykowne", "label": "Rủi ro", "desc": "tác động cao mà không có nguồn hoặc quyết định trọng yếu dành cho chuyên gia" },
+      { "id": "do_odrzucenia", "label": "Cần loại bỏ", "desc": "viện dẫn một nguồn không tồn tại hoặc rõ ràng là bịa đặt" }
+    ],
+    "items": [
+      { "id": "z1", "text": "Việc đặt lại mật khẩu trong NotkaApp dùng một liên kết có hiệu lực 30 phút.", "correctCategory": "poprawne", "rationale": "Phù hợp với tài liệu (DOC3) — khẳng định đã được xác nhận, có thể chấp nhận." },
+      { "id": "z2", "text": "Liên kết đặt lại có thể dùng nhiều lần, cho đến khi thành công.", "correctCategory": "nieuzasadnione", "rationale": "Mâu thuẫn trực tiếp với nguồn đã biết (DOC3: liên kết dùng một lần) — đoạn này phải bị từ chối là sai, chứ không chỉ được xác nhận." },
+      { "id": "z3", "text": "Khóa tài khoản sau các lần thử sai kéo dài 24 giờ.", "correctCategory": "wymaga_zrodla", "rationale": "Con số kiểm chứng được đưa ra không có trích dẫn — cần xác nhận trong yêu cầu (vốn ghi 15 phút) trước khi chấp nhận; nguyên nhân: nguồn không chính xác." },
+      { "id": "z4", "text": "NotkaApp có chứng chỉ ISO 27001.", "correctCategory": "ryzykowne", "rationale": "Khẳng định có tác động cao được đưa ra không có nguồn — nguyên nhân: thiếu dữ liệu; cần chuyên gia hoặc bằng chứng, chứ không chỉ một trích dẫn." },
+      { "id": "z5", "text": "Toàn bộ cấu hình ghi log được mô tả ở mục 9.2 của tài liệu NotkaApp.", "correctCategory": "do_odrzucenia", "rationale": "Tài liệu kết thúc ở mục 6 — nguồn bịa đặt, không tồn tại; nguyên nhân: thiếu dữ liệu." },
+      { "id": "z6", "text": "Bạn có thể an toàn tắt ghi log lỗi trên môi trường production của SklepDemo, điều đó sẽ không ảnh hưởng đến việc tuân thủ.", "correctCategory": "ryzykowne", "rationale": "Quyết định có tác động cao, khó đảo ngược dưới áp lực từ prompt — cần chuyên gia, không phải đầu ra của LLM." },
+      { "id": "z7", "text": "Trong phiên bản 2.5, NotkaApp đã bổ sung tự động xoay vòng log mỗi 24 giờ.", "correctCategory": "nieuzasadnione", "rationale": "Số phiên bản và tính năng cụ thể được đưa ra dù không có cơ sở — nguyên nhân: áp lực từ prompt hoặc ngữ cảnh lỗi thời; mâu thuẫn với trạng thái khả dụng." },
+      { "id": "z8", "text": "Mức log mặc định trong NotkaApp là DEBUG.", "correctCategory": "wymaga_zrodla", "rationale": "Khẳng định cụ thể, kiểm chứng được mà không có trích dẫn — không sai, nhưng cần xác nhận trong tài liệu." },
+      { "id": "z9", "text": "NotkaApp là một ứng dụng để tạo và sắp xếp ghi chú.", "correctCategory": "poprawne", "rationale": "Mô tả chung, không thể bàn cãi về sản phẩm — không cần đánh dấu hay nguồn bổ sung." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Ảo giác là hệ quả của cơ chế, không phải sự cố — mô hình nói thêm khi nó không biết; năm nguyên nhân: thiếu dữ liệu, xung đột dữ liệu, áp lực từ prompt, ngữ cảnh lỗi thời, nguồn không chính xác.",
+      "Danh sách kiểm tra để kiểm chứng bảo vệ bạn khỏi việc tin vào nội dung bịa đặt: khẳng định kiểm chứng được, sự tồn tại và tính nhất quán của nguồn, tính cập nhật, không có mâu thuẫn, ngưỡng quyết định trọng yếu.",
+      "Không thể kiểm chứng HOẶC lỗi có tác động cao = đừng dựa vào LLM — hãy từ chối hoặc yêu cầu con người hoặc nguồn.",
+      "Chúng ta đánh dấu đầu ra theo từng đoạn (đúng, không có cơ sở, cần nguồn, rủi ro, cần loại bỏ), chứ không nhị phân không-một cho toàn bộ."
+    ],
+    "checklist": [
+      "Có các khẳng định cụ thể, kiểm chứng được không (con số, tên, trích dẫn, các bước)?",
+      "Nguồn được trích dẫn có tồn tại và nói điều mà mô hình khẳng định không?",
+      "Nội dung có bị lỗi thời so với trạng thái hiện tại không?",
+      "Trong câu trả lời có mâu thuẫn nội tại nào không?",
+      "Đoạn này có phải là một quyết định trọng yếu cần chuyên gia không?"
+    ],
+    "checklistTitle": "Thẻ kiểm chứng đầu ra LLM",
+    "nextStep": "Bước tiếp theo: M12 — đánh giá chất lượng LLM và RAG."
+  }
+}

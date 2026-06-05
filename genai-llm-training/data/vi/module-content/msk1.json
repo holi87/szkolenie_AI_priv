@@ -1,0 +1,100 @@
+{
+  "_meta": {
+    "issue": "#112-#118 [M15] / #124 [M16] Ścieżka formatywna S4 — Skala Holaka (moduł szkoleniowy, rozbudowa)",
+    "adr": "docs/adr/0009-sciezka-formatywna-s4-skala-holaka.md",
+    "interaction": "Klasyfikacja praktyk (kind: classify) — ćwiczenie formatywne, NIE scorowane do zaliczenia",
+    "source": "Osie dojrzałości Skali Holaka: zarządzanie kontekstem, oszczędność tokenów, powtarzalne workflowy (skille). Atrybucja: quality-blog.eu/pl/blog/skala-holaka.",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE i ogólne (zero realnych danych/PII). Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MSK1",
+  "intro": "Bạn nhận ra các cấp độ trưởng thành cao hơn về AI không phải qua số lượng công cụ, mà qua CÁCH bạn cung cấp ngữ cảnh cho mô hình, chi phí của việc đó và liệu bạn có biết biến một tác vụ lặp đi lặp lại thành một skill hay không. Mô-đun này dạy về vệ sinh ngữ cảnh, ý thức về chi phí token và việc xây dựng các quy trình làm việc lặp lại được. Đây là một bài tập phát triển, không phải bài kiểm tra.",
+  "screens": [
+    {
+      "id": "msk1-s1-po-co",
+      "title": "Tại sao phải quản lý ngữ cảnh và chi phí",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Mô hình chỉ nhìn thấy những gì vừa với cửa sổ ngữ cảnh. Quá ít ngữ cảnh → câu trả lời chung chung hoặc sai; quá nhiều nội dung không liên quan → mô hình đánh mất tín hiệu, còn chi phí token thì tăng lên. Thực hành trưởng thành là cung cấp chính xác những gì cần thiết — không nhiều hơn, không ít hơn." },
+        { "kind": "list", "items": [
+          "Ngữ cảnh = dữ liệu, hướng dẫn và ví dụ thực sự ảnh hưởng đến tác vụ.",
+          "Chi phí token tăng lên theo từng ký tự dán vào — kể cả những ký tự không cần thiết.",
+          "Các tác vụ lặp đi lặp lại hưởng lợi nhiều nhất từ mẫu (template) và vệ sinh ngữ cảnh."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Trục của Skala Holaka", "text": "Quản lý ngữ cảnh và chi phí một cách có ý thức là một trong những trục phân biệt cấp độ „dùng AI” với „dùng AI một cách trưởng thành”.",
+          "links": [ { "label": "Skala Holaka — mô hình trưởng thành (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka" } ]
+        }
+      ]
+    },
+    {
+      "id": "msk1-s2-praktyki",
+      "title": "Tiết kiệm vs lãng phí",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Thực hành tiết kiệm chọn lọc ngữ cảnh và tái sử dụng nhiều lần các mẫu đã được kiểm chứng. Thực hành lãng phí dán „tất cả cho chắc”, trộn lẫn các chủ đề và mô tả ngữ cảnh lại từ đầu mỗi lần." },
+        { "kind": "table", "headers": ["Khía cạnh", "Tiết kiệm", "Lãng phí"], "rows": [
+          ["Lựa chọn ngữ cảnh", "Chỉ những đoạn liên quan đến tác vụ", "Toàn bộ kho tri thức „cho chắc”"],
+          ["Tính lặp lại", "Mẫu prompt với các chỗ trống để điền dữ liệu", "Mỗi lần lại mô tả từ đầu, bằng cách diễn đạt khác"],
+          ["Vệ sinh", "Tôi xóa bỏ nội dung lỗi thời và mâu thuẫn", "Tôi giữ hàng chục chủ đề trong cùng một cuộc trò chuyện"]
+        ], "textAlt": "So sánh thực hành tiết kiệm và lãng phí trên ba khía cạnh: lựa chọn ngữ cảnh, tính lặp lại, vệ sinh." },
+        { "kind": "callout", "variant": "warn", "title": "Cái bẫy „cho chắc”", "text": "Dán toàn bộ kho tri thức vào mỗi prompt không làm tăng độ chính xác — mà thường làm loãng tác vụ và đẩy chi phí lên cao. Hãy cấp ngữ cảnh một cách có ý thức." }
+      ]
+    },
+    {
+      "id": "msk1-s3-skille",
+      "title": "Skill: quy trình làm việc lặp lại thay cho prompt dùng một lần",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Skill là một quy trình làm việc lặp lại được mô tả một lần: hướng dẫn „khi nào và làm thế nào” để thực hiện một tác vụ điển hình, với ngữ cảnh đã định, định dạng đầu ra và các bước kiểm tra. Thay vì nghĩ ra prompt mỗi lần, bạn chạy một công thức đã được kiểm chứng — rẻ hơn, nhanh hơn và nhất quán hơn." },
+        { "kind": "list", "ordered": true, "items": [
+          "Đặt tên cho tác vụ và điều kiện kích hoạt (khi nào thì áp dụng skill này).",
+          "Định ra ngữ cảnh cố định và định dạng đầu ra (bạn cung cấp gì, kết quả trả về phải là gì).",
+          "Thêm một bước kiểm tra kết quả trước khi sử dụng nó.",
+          "Lưu lại dưới dạng mẫu/skill và cải thiện sau mỗi lần dùng."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Tại sao đây là sự tiết kiệm ngữ cảnh", "text": "Skill mã hóa một lần những gì lẽ ra bạn phải mô tả nhiều lần — một ngữ cảnh cố định, được cân nhắc kỹ thay thế cho việc dán tùy tiện và giảm chi phí token mà vẫn giữ chất lượng ổn định." }
+      ]
+    },
+    {
+      "id": "msk1-s4-jak-cwiczyc",
+      "title": "Cách luyện tập",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Ngay sau đây bạn sẽ phân loại các thực hành là tiết kiệm hay lãng phí — trong đó có cả các thực hành xây dựng skill. Ở đây không có ngưỡng đạt; thứ tự các mục là ngẫu nhiên, nên điều quan trọng là nội dung, không phải khuôn mẫu. Mục tiêu là nhận ra mô thức mà bạn sẽ áp dụng vào công việc của chính mình." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "msk1-classify",
+    "title": "Thực hành ngữ cảnh tiết kiệm hay lãng phí?",
+    "intro": "Hãy gán mỗi thực hành vào nhóm phù hợp. Đây là bài tập phát triển — phần phản hồi giải thích vì sao một thực hành là (không) tiết kiệm.",
+    "categories": [
+      { "id": "lean", "label": "Thực hành tiết kiệm", "desc": "Chọn lọc ngữ cảnh, kiểm soát chi phí, dùng mẫu/skill." },
+      { "id": "wasteful", "label": "Thực hành lãng phí", "desc": "Thêm phần dư thừa, trộn lẫn chủ đề, mô tả mọi thứ lại từ đầu." }
+    ],
+    "items": [
+      { "id": "msk1-i1", "text": "Tôi chỉ cung cấp những đoạn của tài liệu liên quan đến tác vụ.", "correctCategory": "lean", "rationale": "Chọn lọc ngữ cảnh làm tăng độ chính xác và giảm chi phí." },
+      { "id": "msk1-i2", "text": "Tôi dán toàn bộ kho tri thức vào mỗi prompt „cho chắc”.", "correctCategory": "wasteful", "rationale": "Phần dư thừa làm loãng tín hiệu và đẩy chi phí token lên cao." },
+      { "id": "msk1-i3", "text": "Tác vụ lặp lại thì tôi có sẵn dưới dạng mẫu prompt với các chỗ trống để điền dữ liệu.", "correctCategory": "lean", "rationale": "Mẫu nghĩa là tính lặp lại và vệ sinh ngữ cảnh." },
+      { "id": "msk1-i4", "text": "Mỗi lần tôi lại mô tả ngữ cảnh từ đầu, bằng cách diễn đạt khác.", "correctCategory": "wasteful", "rationale": "Không có mẫu = lãng phí thời gian và kết quả không nhất quán." },
+      { "id": "msk1-i5", "text": "Tôi có một skill (quy trình làm việc đã mô tả) cho tác vụ AI thường xuyên nhất của mình.", "correctCategory": "lean", "rationale": "Skill mã hóa ngữ cảnh và các bước cố định — rẻ hơn và nhất quán hơn." },
+      { "id": "msk1-i6", "text": "Tôi giữ hàng chục chủ đề không liên quan trong cùng một cuộc trò chuyện.", "correctCategory": "wasteful", "rationale": "Trộn lẫn chủ đề làm nghẽn ngữ cảnh và gây nhầm lẫn cho mô hình." },
+      { "id": "msk1-i7", "text": "Tôi xóa khỏi ngữ cảnh những thông tin lỗi thời và mâu thuẫn trước khi đặt câu hỏi.", "correctCategory": "lean", "rationale": "Ngữ cảnh sạch giảm nguy cơ sai sót và ảo giác." },
+      { "id": "msk1-i8", "text": "Tôi sao chép cả lịch sử trò chuyện dài sang tác vụ mới mà không chọn lọc.", "correctCategory": "wasteful", "rationale": "Phần dư thừa được mang theo làm tăng chi phí và đưa vào ngữ cảnh không liên quan." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Hãy cung cấp chính xác phần ngữ cảnh ảnh hưởng đến tác vụ — không nhiều hơn.",
+      "Hãy biến các tác vụ lặp lại thành mẫu và skill với ngữ cảnh đã định cùng một bước kiểm tra.",
+      "Mỗi ký tự dán vào đều có chi phí — hãy cấp ngữ cảnh một cách có ý thức."
+    ],
+    "checklist": [
+      "Tôi có biết chỉ ra phần nào của ngữ cảnh là thực sự cần thiết không?",
+      "Tôi có một skill/mẫu cho tác vụ AI thường xuyên nhất của mình không?",
+      "Tôi có làm sạch ngữ cảnh khỏi những nội dung lỗi thời và mâu thuẫn không?"
+    ],
+    "checklistTitle": "Danh sách kiểm tra — vệ sinh ngữ cảnh và skill",
+    "nextStep": "Bước tiếp theo: hãy lấy một tác vụ lặp lại và biến nó thành một skill — một mẫu với ngữ cảnh đã định, định dạng đầu ra và một bước kiểm tra."
+  }
+}

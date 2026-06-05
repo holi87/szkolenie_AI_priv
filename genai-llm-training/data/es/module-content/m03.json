@@ -1,0 +1,116 @@
+{
+  "_meta": {
+    "issue": "#21 [21][M4] Wdroż moduły M3-M6",
+    "storyboard": "docs/storyboard/m03-parametry.md",
+    "interaction": "Suwaki generacji (kind: tune)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (SklepDemo/NotkaApp). Output interakcji jest prerenderowany (nie z żywego modelu). ZERO PII.",
+    "note": "Egzemplarz referencyjny typu tune: parametry → autorskie efekty (dane) + scorowany checkpoint."
+  },
+  "module": "M3",
+  "intro": "Los mismos datos de entrada y el mismo modelo pueden dar respuestas diferentes, porque la generación se controla mediante parámetros. En QA, la reproducibilidad del resultado es la base de una documentación y una regresión fiables: unos parámetros sin control producen un output impredecible.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "¿Para qué controlar la generación?",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Tres controles deciden la forma de la respuesta: temperature y top-p (aleatoriedad) y max tokens (longitud). Antes de confiar en el output dentro de la documentación de pruebas, debes saber cómo ajustarlos." },
+        { "kind": "callout", "variant": "info", "title": "Determinismo aparente", "text": "Una temperatura baja reduce la aleatoriedad, pero no garantiza un resultado idéntico en cada ejecución: sigue siendo un modelo probabilístico." }
+      ]
+    },
+    {
+      "id": "s2-temperature",
+      "title": "Temperature — de lo formal a lo creativo",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Temperature", "original": "temperatura", "text": "control de la aleatoriedad en la elección del siguiente token." },
+        { "kind": "list", "items": [
+          "Baja (~0,0–0,3): respuestas conservadoras, reproducibles, formales — para documentación y pasos de prueba.",
+          "Alta (~0,8–1,2): respuestas variadas, creativas, menos predecibles — para una lluvia de ideas sobre datos de prueba."
+        ] }
+      ]
+    },
+    {
+      "id": "s3-wysoka-losowosc",
+      "title": "Aleatoriedad alta y el trabajo de QA",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Una temperatura alta en QA implica falta de reproducibilidad (dos ejecuciones = dos pasos diferentes), deriva del contenido, dificultad para revisar y auditar, además del riesgo de cambios silenciosos en la regresión." },
+        { "kind": "callout", "variant": "warn", "title": "Regla", "text": "Cuando lo que importa es la reproducibilidad y la conformidad con el requisito, reduce la aleatoriedad." }
+      ]
+    },
+    {
+      "id": "s4-top-p",
+      "title": "top-p — el segundo control de aleatoriedad",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "top-p", "original": "nucleus sampling", "text": "umbral de probabilidad acumulada — reduce el conjunto de candidatos al siguiente token a los más probables que sumen p." },
+        { "kind": "paragraph", "text": "Ambos parámetros controlan la variedad; normalmente se ajusta solo uno a la vez. Un top-p bajo = una elección más estrecha y segura (vocabulario estable de términos de QA); uno alto = formulaciones más amplias y arriesgadas." }
+      ]
+    },
+    {
+      "id": "s5-max-tokens",
+      "title": "max tokens — cuándo se corta la respuesta",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "max tokens", "original": "número máximo de tokens de la respuesta", "text": "límite estricto de longitud del output." },
+        { "kind": "paragraph", "text": "Superar el límite corta la respuesta a mitad de una frase, una tabla o una lista: faltan los últimos pasos o criterios de aceptación. Lo reconocerás por la frase cortada y la lista sin cerrar. Reacción: aumenta el límite o pide un formato más breve." }
+      ]
+    },
+    {
+      "id": "s6-decyzja",
+      "title": "¿Qué ajuste usar para la documentación de pruebas?",
+      "type": "decision",
+      "blocks": [
+        { "kind": "paragraph", "text": "Compara dos presets para la misma tarea (redactar los pasos de un caso de prueba). Variante A: temp 0,2 / top-p 0,3 / límite alto. Variante B: temp 1,0 / top-p 0,95 / límite bajo." },
+        { "kind": "paragraph", "text": "Para la documentación elige una aleatoriedad más baja y margen de longitud: eso da reproducibilidad y evita el corte. Ahora lo comprobarás con los controles deslizantes." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "tune",
+    "id": "m3-suwaki",
+    "title": "Controles deslizantes de generación",
+    "intro": "Ajusta los parámetros y observa cómo cambia el output simulado para la tarea «enumera los pasos de prueba de inicio de sesión en SklepDemo». A continuación, responde al checkpoint.",
+    "outputLabel": "Output simulado para los ajustes seleccionados:",
+    "controls": [
+      { "id": "temp", "label": "Temperature", "levels": [
+        { "value": "0.2", "label": "Baja (0,2)", "effect": "Formalidad: alta. Pasos de prueba reproducibles, el mismo formato en cada ejecución." },
+        { "value": "1.0", "label": "Alta (1,0)", "effect": "Formalidad: baja. Los pasos varían entre ejecuciones — falta de reproducibilidad, riesgo de deriva del contenido." }
+      ] },
+      { "id": "topp", "label": "top-p", "levels": [
+        { "value": "0.3", "label": "Bajo (0,3)", "effect": "Vocabulario de términos de QA estable y predecible." },
+        { "value": "0.95", "label": "Alto (0,95)", "effect": "Formulaciones más amplias, a veces arriesgadas — más difíciles de revisar." }
+      ] },
+      { "id": "maxtok", "label": "max tokens", "levels": [
+        { "value": "512", "label": "Límite alto (512)", "effect": "Completitud: total. Todos los pasos y criterios de aceptación caben." },
+        { "value": "64", "label": "Límite bajo (64)", "effect": "⚠ Respuesta cortada — la lista de pasos se corta a la mitad, sin resumen. Aumenta el límite." }
+      ] }
+    ],
+    "checkpoint": {
+      "prompt": "Para redactar los pasos de un caso de prueba (donde importan la reproducibilidad y la completitud), ¿qué ajuste es más seguro?",
+      "type": "single_choice",
+      "options": [
+        { "id": "A", "text": "temp 0,2 / top-p 0,3 / límite alto — aleatoriedad baja y margen de longitud" },
+        { "id": "B", "text": "temp 1,0 / top-p 0,95 / límite bajo — creativo y breve" }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Correcto: una aleatoriedad baja da reproducibilidad, y un límite alto protege frente al corte de la lista de pasos.",
+      "feedbackIncorrect": "Una aleatoriedad alta arruina la reproducibilidad, y un límite bajo corta los pasos: es malo para la documentación. Elige una temperatura baja y margen de longitud."
+    }
+  },
+  "summary": {
+    "points": [
+      "Temperature y top-p controlan la aleatoriedad; max tokens controla la longitud de la respuesta.",
+      "Para QA prefiere una aleatoriedad baja y margen de longitud — reproducibilidad y ausencia de cortes.",
+      "Verifica siempre la reproducibilidad y la completitud del output antes de usarlo en la documentación."
+    ],
+    "checklist": [
+      "¿He reducido la aleatoriedad donde importa la reproducibilidad?",
+      "¿El límite de longitud cabe toda la respuesta?",
+      "¿El output es el mismo al volver a ejecutarlo?"
+    ],
+    "checklistTitle": "Checklist — control de la generación",
+    "nextStep": "Siguiente paso: M4 — embeddings y similitud semántica (o el siguiente módulo obligatorio de la ruta)."
+  }
+}

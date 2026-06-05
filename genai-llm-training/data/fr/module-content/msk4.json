@@ -1,0 +1,114 @@
+{
+  "_meta": {
+    "issue": "#124 [M16] Parcours formatif S4 — compétences et mesure de l'impact (module de formation, interaction rubric)",
+    "adr": "docs/adr/0009-sciezka-formatywna-s4-skala-holaka.md",
+    "interaction": "Évaluation de la maturité du workflow selon une grille (kind: rubric) — exercice formatif, NON noté pour la validation (sans rubricId/seuil)",
+    "source": "Échelle de Holak — deux seuils de maturité critiques : 8→9 et 10→11 ; compétences et mesure de l'impact. Attribution : quality-blog.eu/pl/blog/skala-holaka.",
+    "dataPolicy": "TOUS les exemples sont SYNTHÉTIQUES et génériques (aucune donnée réelle/PII). Module formatif — sans seuil de validation ni certificat."
+  },
+  "module": "MSK4",
+  "intro": "Le plus difficile, ce ne sont pas les premiers niveaux, mais deux seuils : 8→9 (passer d'une bonne pratique individuelle à l'intégration de l'IA dans un processus) et 10→11 (passer d'améliorations ponctuelles à l'amélioration continue). Le test de maturité est un workflow concret et reproductible (une compétence) : a-t-il un contexte stable, une vérification, une réversibilité et un impact mesuré ? Ce module apprend à évaluer la maturité d'une compétence selon une grille. C'est un exercice de développement, pas un test.",
+  "screens": [
+    {
+      "id": "msk4-s1-dwie-granice",
+      "title": "Deux seuils où la progression s'enlise",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Beaucoup de personnes et d'équipes s'arrêtent juste avant le niveau 9 ou 11. Le seuil 8→9 est le moment où la bonne pratique d'une personne devient un élément du processus : répartition claire assistant/décideur, réversibilité et trace d'audit. Le seuil 10→11 est le moment où les améliorations se transforment en une routine de mesure, de calibrage et d'amélioration continue." },
+        { "kind": "list", "items": [
+          "8→9 : pratique individuelle → processus avec contrôle et trace.",
+          "10→11 : améliorations ponctuelles → système mesuré et continuellement calibré.",
+          "Aux deux seuils, la clé n'est pas un nouvel outil, mais une nouvelle habitude de travail."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Échelle de Holak", "text": "Les seuils 8→9 et 10→11 sont les points où l'adoption de l'IA s'enlise le plus souvent.",
+          "links": [ { "label": "Échelle de Holak — modèle de maturité (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka" } ]
+        }
+      ]
+    },
+    {
+      "id": "msk4-s2-skill-jako-probka",
+      "title": "La compétence comme échantillon de maturité",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "La maturité se voit le mieux sur un workflow concret et reproductible (une compétence). Une compétence immature, c'est un « prompt à la va-vite » : contexte variable, absence de vérification, absence de trace, succès mesuré à l'impression. Une compétence mature a un contexte et un format stables, une étape de vérification explicite, une réversibilité avec trace et un impact mesuré sur la qualité et le temps." },
+        { "kind": "callout", "variant": "warn", "title": "Signal d'enlisement", "text": "Si vous utilisez l'IA avec aisance, mais sans mesurer son impact ni calibrer votre évaluation de l'output — vous êtes probablement au niveau 10, pas au 11." }
+      ]
+    },
+    {
+      "id": "msk4-s3-jak-cwiczyc",
+      "title": "Comment s'exercer",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Ci-dessous, vous évaluerez la maturité d'une compétence d'exemple selon quatre critères. Pour chaque critère, cochez les caractéristiques qui témoignent de la maturité — tout cocher (y compris les distracteurs) ne valide pas le critère. Sans seuil de validation : le feedback montre ce qui manque pour atteindre un niveau supérieur." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "rubric",
+    "id": "msk4-rubric",
+    "title": "Évaluez la maturité d'un workflow IA (d'une compétence)",
+    "intro": "Pour chaque critère, cochez les caractéristiques qui témoignent de la maturité de la compétence. C'est un exercice de développement — sans seuil de validation ; le feedback indique ce qui manque.",
+    "criteria": [
+      {
+        "id": "K1",
+        "name": "Contexte et reproductibilité",
+        "prompt": "Qu'est-ce qui témoigne d'une gestion mature du contexte dans cette compétence ?",
+        "hint": "La maturité, c'est un contexte stable et sélectionné — pas une description repartant de zéro à chaque fois.",
+        "options": [
+          { "id": "a", "text": "Un contexte et un format de sortie stables et réfléchis." },
+          { "id": "b", "text": "Un contexte décrit de zéro, autrement, à chaque fois." },
+          { "id": "c", "text": "Sélection des seules données pertinentes pour la tâche." }
+        ],
+        "correctOptionIds": ["a", "c"]
+      },
+      {
+        "id": "K2",
+        "name": "Vérifiabilité",
+        "prompt": "Qu'est-ce qui rend une compétence vérifiable avant d'utiliser le résultat ?",
+        "hint": "Le ton assuré du modèle n'est pas une preuve — il faut une étape de vérification explicite.",
+        "options": [
+          { "id": "a", "text": "Une étape explicite de vérification de l'output par rapport à la source." },
+          { "id": "b", "text": "La confiance dans le ton assuré de la réponse du modèle." }
+        ],
+        "correctOptionIds": ["a"]
+      },
+      {
+        "id": "K3",
+        "name": "Réversibilité et trace",
+        "prompt": "Qu'est-ce qui rend sûres les décisions appuyées par une compétence ?",
+        "hint": "Seuil 8→9 : contrôle et trace plutôt qu'actions irréversibles sans approbation.",
+        "options": [
+          { "id": "a", "text": "Les actions laissent une trace et peuvent être annulées." },
+          { "id": "b", "text": "Des décisions irréversibles exécutées sans approbation humaine." }
+        ],
+        "correctOptionIds": ["a"]
+      },
+      {
+        "id": "K4",
+        "name": "Mesure de l'impact",
+        "prompt": "Qu'est-ce qui distingue le niveau 11 (amélioration continue) du simple usage de l'IA ?",
+        "hint": "Seuil 10→11 : impact mesuré et calibrage, et non le simple fait d'utiliser l'IA.",
+        "options": [
+          { "id": "a", "text": "Un impact mesuré sur la qualité et le temps ainsi qu'un ajustement de l'approche." },
+          { "id": "b", "text": "Seul compte le simple fait que nous utilisons l'IA." },
+          { "id": "c", "text": "Un calibrage régulier de l'évaluation de l'output." }
+        ],
+        "correctOptionIds": ["a", "c"]
+      }
+    ]
+  },
+  "summary": {
+    "points": [
+      "La maturité se voit sur une compétence concrète : contexte stable, vérification, réversibilité avec trace, impact mesuré.",
+      "Seuil 8→9 : transformez la pratique individuelle en un processus avec contrôle et trace.",
+      "Seuil 10→11 : transformez les améliorations en une routine de mesure, de calibrage et d'amélioration continue."
+    ],
+    "checklist": [
+      "Ma compétence la plus fréquente a-t-elle un contexte et un format de sortie stables ?",
+      "A-t-elle une étape de vérification explicite et laisse-t-elle une trace ?",
+      "Est-ce que je mesure son impact sur la qualité et le temps, ou est-ce que je me contente de l'utiliser ?"
+    ],
+    "checklistTitle": "Checklist — maturité d'une compétence",
+    "nextStep": "Prochaine étape : prenez l'une de vos compétences et ajoutez le critère manquant ayant la note la plus basse — il s'agit le plus souvent de l'étape de vérification ou de la mesure de l'impact."
+  }
+}

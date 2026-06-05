@@ -1,0 +1,122 @@
+{
+  "_meta": {
+    "issue": "#8 [08][M1] Przygotuj syntetyczne scenariusze szkoleniowe",
+    "version": "0.1",
+    "doc": "docs/scenariusze.md",
+    "dataPolicy": "WSZYSTKIE dane są SYNTETYCZNE i fikcyjne. Domena e-mail: przyklad.test (zarezerwowana). Produkty/firmy fikcyjne. Identyfikatory w formatach jawnie testowych. PESEL/numery to placeholdery nieprawidłowe. ZERO realnych danych klienta/PII.",
+    "source": "wymagania/06 (moduły, interakcje), wymagania/07 (typy pytań), docs/storyboard/"
+  },
+  "scenarios": [
+    {
+      "id": "SC-QA-01",
+      "title": "Tạo các trường hợp kiểm thử từ yêu cầu",
+      "modules": ["M8"],
+      "paths": ["S2", "S3"],
+      "competency": "Tạo các trường hợp kiểm thử và phát hiện khoảng trống độ bao phủ (E: M8)",
+      "usedBy": ["QA workbench", "pytania Q61-Q64"],
+      "data": {
+        "wymaganie": "Ứng dụng NotkaApp (hư cấu): người dùng đặt lại mật khẩu qua liên kết e-mail có hiệu lực 30 phút; sau 3 lần thử sai, tài khoản bị khóa trong 15 phút.",
+        "outputLLM": "Các trường hợp kiểm thử được tạo: TC1 đặt lại đúng; TC2 liên kết hết hạn; TC3 mật khẩu sai 3 lần → khóa. (thiếu: e-mail trống, liên kết dùng hai lần, các phiên song song)"
+      }
+    },
+    {
+      "id": "SC-PII-01",
+      "title": "Yêu cầu hỗ trợ chứa dữ liệu cá nhân — quyết định có dán vào LLM hay không",
+      "modules": ["M10"],
+      "paths": ["S1", "S2", "S3"],
+      "competency": "Phân loại dữ liệu là được phép / cần ẩn danh / không được phép (E: M10, câu hỏi quan trọng)",
+      "usedBy": ["Data safety gate", "pytania krytyczne Q81-Q85"],
+      "data": {
+        "zgloszenie": "Khách hàng Jan Kowalski (jan.kowalski@przyklad.test, ID khách hàng KLI-000123, PESEL 00000000000 [tổng hợp, không hợp lệ]) báo cáo lỗi thanh toán trong SklepDemo.",
+        "pytanie": "Có được phép dán toàn bộ yêu cầu hỗ trợ vào một LLM công khai để phân tích lỗi không?",
+        "poprawnaDecyzja": "Ẩn danh dữ liệu định danh hoặc dùng công cụ đã được phê duyệt có các biện pháp kiểm soát; không dán dữ liệu thô."
+      }
+    },
+    {
+      "id": "SC-PII-02",
+      "title": "Nhật ký ứng dụng chứa các mảnh dữ liệu — cần ẩn danh những gì",
+      "modules": ["M10"],
+      "paths": ["S2", "S3"],
+      "competency": "Chỉ ra dữ liệu cần ẩn danh trong nhật ký (E: M10)",
+      "usedBy": ["Data safety gate", "pytania Q86-Q90"],
+      "data": {
+        "log": "2026-01-02 ERROR user=anna.nowak@przyklad.test ip=10.0.0.5 token=tok_test_ABC123 order=ORD-TEST-777 msg=payment_failed",
+        "doAnonimizacji": ["e-mail", "token", "có thể là order id trong bối cảnh khách hàng"]
+      }
+    },
+    {
+      "id": "SC-RAG-01",
+      "title": "Tập tài liệu nhỏ về tài liệu QA cho retrieval/RAG",
+      "modules": ["M4", "M5", "M6"],
+      "paths": ["S3"],
+      "competency": "Lựa chọn retrieval và chẩn đoán hiện tượng similar-but-useless; xây dựng pipeline RAG (E: M4/M5/M6)",
+      "usedBy": ["Mapa semantyczna", "Retrieval debugger", "Zbuduj pipeline RAG", "pytania Q33-Q50"],
+      "data": {
+        "korpus": [
+          { "id": "DOC1", "text": "Quy trình đăng nhập trong NotkaApp: token phiên hết hạn sau 30 phút không hoạt động." },
+          { "id": "DOC2", "text": "Chính sách mật khẩu của NotkaApp: tối thiểu 12 ký tự, khóa sau 3 lần sai." },
+          { "id": "DOC3", "text": "Đặt lại mật khẩu: liên kết e-mail có hiệu lực 30 phút, dùng một lần." },
+          { "id": "DOC4", "text": "FAQ tiếp thị của NotkaApp: ưu điểm sản phẩm và bảng giá." }
+        ],
+        "zapytanie": "Liên kết đặt lại mật khẩu hết hạn sau bao lâu?",
+        "pulapka": "DOC1 (token phiên 30 phút) tương tự về mặt ngữ nghĩa, nhưng nguồn đúng là DOC3 (liên kết đặt lại)."
+      }
+    },
+    {
+      "id": "SC-AGENT-01",
+      "title": "Cấp quyền cho agent QA",
+      "modules": ["M9"],
+      "paths": ["S3"],
+      "competency": "Thiết kế kiểm soát quyền tối thiểu, nhật ký, human-in-the-loop, rollback (E: M9)",
+      "usedBy": ["Agent permission board", "pytania Q76-Q78"],
+      "data": {
+        "agent": "Agent chạy các kiểm thử hồi quy trong môi trường TEST (CI hư cấu 'PipeDemo').",
+        "zadania": ["chạy kiểm thử", "đọc nhật ký", "tạo báo cáo", "báo cáo lỗi", "thay đổi cấu hình môi trường"],
+        "ryzyko": "Việc thay đổi cấu hình và ghi dữ liệu ngoài TEST đòi hỏi sự phê duyệt của con người và khả năng rollback; không có quyền truy cập production."
+      }
+    },
+    {
+      "id": "SC-VERIFY-01",
+      "title": "Câu trả lời của LLM trộn lẫn nội dung có căn cứ và ảo giác",
+      "modules": ["M11"],
+      "paths": ["S1", "S2", "S3"],
+      "competency": "Đánh dấu các câu là đúng / không có căn cứ / cần nguồn / rủi ro (E: M11)",
+      "usedBy": ["Output verifier", "pytania Q95-Q98"],
+      "data": {
+        "odpowiedzLLM": [
+          "Việc đặt lại mật khẩu trong NotkaApp dùng liên kết có hiệu lực 30 phút. [phù hợp với DOC3]",
+          "Liên kết có thể dùng nhiều lần cho đến khi thành công. [không có căn cứ — mâu thuẫn với DOC3]",
+          "Khóa tài khoản kéo dài 24 giờ. [cần nguồn — không khớp với yêu cầu 15 phút]",
+          "NotkaApp có chứng nhận ISO 27001. [rủi ro — không có nguồn]"
+        ]
+      }
+    },
+    {
+      "id": "SC-PROMPT-01",
+      "title": "Prompt lỗi cần cải thiện",
+      "modules": ["M7"],
+      "paths": ["S1", "S2", "S3"],
+      "competency": "Cải thiện prompt thiếu chính xác theo rubric (E: M7)",
+      "usedBy": ["Prompt clinic", "pytania Q57-Q60", "rubryka R1"],
+      "data": {
+        "wadliwyPrompt": "Viết các kiểm thử cho phần đăng nhập.",
+        "braki": ["thiếu vai trò/mục tiêu", "thiếu bối cảnh (ứng dụng nào, yêu cầu gì)", "thiếu ràng buộc và tiêu chí", "thiếu định dạng đầu ra"]
+      }
+    },
+    {
+      "id": "SC-EVAL-01",
+      "title": "Sự khác biệt giữa đánh giá của con người và LLM-as-a-judge",
+      "modules": ["M12"],
+      "paths": ["S3"],
+      "competency": "Phát hiện bias/position bias và hiệu chỉnh rubric (E: M12)",
+      "usedBy": ["Judge calibration lab", "pytania Q113-Q116", "rubryka R3"],
+      "data": {
+        "przyklady": [
+          { "id": "EX1", "ocenaCzlowiek": 4, "ocenaJudge": 5, "uwaga": "judge ưu ái câu trả lời dài hơn" },
+          { "id": "EX2", "ocenaCzlowiek": 2, "ocenaJudge": 4, "uwaga": "position bias — câu trả lời đầu tiên" }
+        ],
+        "zadanie": "Chỉ ra nguồn gốc của sự khác biệt và sửa lại rubric."
+      }
+    }
+  ]
+}

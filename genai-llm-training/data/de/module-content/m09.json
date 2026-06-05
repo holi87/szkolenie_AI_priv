@@ -1,0 +1,160 @@
+{
+  "_meta": {
+    "issue": "#22 [22][M4] Wdroż moduły M7-M9",
+    "storyboard": "docs/storyboard/m09-agents.md",
+    "interaction": "Agent permission board (kind: classify) — model najmniejszych uprawnień + human-in-the-loop (issue #22).",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (PipeDemo, TestRail-SANDBOX, synt-shop, przyklad.test, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Egzemplarz typu classify. M9 obowiązkowy dla S3; opcjonalny/świadomościowy dla S1/S2. Ekrany 3, 5, 7 (decyzja/analiza) tylko dla S2/S3 — wariant S1 świadomościowy je pomija. Treść interakcji oparta na SC-AGENT-01."
+  },
+  "module": "M9",
+  "intro": "KI-Werkzeuge antworten zunehmend nicht nur, sondern handeln: Sie lesen Dateien, versenden E-Mails, öffnen Pull Requests und ändern Testdaten. Für den Tester ist das ein neues Risiko — ein Agent verkettet Schritte und löst reale Folgen ohne Pause aus. Dieses Modul vermittelt, wann eine solche Autonomie hilft und wann sie Kontrolle erfordert: minimale Berechtigungen, Logs, Freigabe durch einen Menschen und die Möglichkeit, Änderungen rückgängig zu machen.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Wozu Tester Agenten brauchen",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "KI-Werkzeuge in der QA-Arbeit sind nicht mehr nur Gesprächspartner. Immer häufiger handeln sie: Sie lesen Dateien, versenden E-Mails, öffnen Pull Requests, verändern Testdaten. Der Tester muss wissen, wann das hilft und wann es Risiko ohne Kontrolle erzeugt." },
+        { "kind": "list", "items": [
+          "E1 — du unterscheidest drei Modi: Chatbot, Workflow mit Werkzeug und Agent.",
+          "E2 — du benennst die Risiken des Agentenzugriffs auf Dateien, E-Mail, Repository und Testsystem.",
+          "E3 — du entwirfst eine minimale Kontrolle: Berechtigungen, Logs, Freigabe durch einen Menschen und das Rückgängigmachen von Änderungen.",
+          "E4 — du erkennst Aufgaben, bei denen ein Agent Einschränkungen und Audit benötigt."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Leitgedanke", "text": "Ein Agent handelt, nicht nur spricht — und weil er handelt, braucht er Kontrolle. Moduldauer: 45 Min., am Ende die Übung „Agent permission board”." }
+      ]
+    },
+    {
+      "id": "s2-trzy-tryby",
+      "title": "Chatbot vs. Workflow vs. Agent",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Chatbot", "text": "erzeugt Text und führt nichts aus — er hat keine Nebenwirkungen außer der Antwort." },
+        { "kind": "definition", "term": "Workflow mit Werkzeug", "original": "tool use", "text": "das Modell ruft ein vorab festgelegtes Werkzeug in einem starren, unveränderlichen Ablauf auf." },
+        { "kind": "definition", "term": "Agent", "original": "agent", "text": "plant und führt selbstständig eine Schrittfolge aus und entscheidet selbst, welches Werkzeug es wann aufruft." },
+        { "kind": "table",
+          "title": "Drei Integrationsmodi nebeneinander",
+          "headers": ["Modus", "Wer entscheidet über die Schritte", "Nebenwirkungen", "Risikofläche"],
+          "rows": [
+            ["Chatbot", "der Mensch (fragt und liest)", "keine (nur Text)", "klein"],
+            ["Workflow mit Werkzeug", "der Ablaufdesigner", "eine festgelegte Aktion", "begrenzt"],
+            ["Agent", "das Modell selbstständig", "viele Aktionen in einer Kette", "groß"]
+          ],
+          "textAlt": "Vergleich der drei Modi. Chatbot: über die Schritte entscheidet der Mensch, keine Nebenwirkungen außer Text, kleine Risikofläche. Workflow mit Werkzeug: über die Schritte entscheidet der Ablaufdesigner, eine festgelegte Folge, begrenzte Risikofläche. Agent: über die Schritte entscheidet das Modell selbstständig, viele Aktionen in einer Kette, große Risikofläche. Je mehr Entscheidungen beim Modell liegen und je realer die Folgen, desto größer das Risiko." }
+      ]
+    },
+    {
+      "id": "s3-quick-check",
+      "title": "Quick Check — welcher Modus ist das?",
+      "type": "decision",
+      "onlyForPaths": ["S2", "S3"],
+      "blocks": [
+        { "kind": "paragraph", "text": "Mikro-Verständnisprüfung (zählt nicht zum Quiz). Entscheide für jede Beschreibung: Chatbot, Workflow mit Werkzeug oder Agent? Achte darauf, wer über die Schritte entscheidet und ob Nebenwirkungen entstehen." },
+        { "kind": "list", "ordered": true, "items": [
+          "Ein Bot beantwortet die Frage „Wie schreibe ich einen Testfall” — Chatbot (nur Text).",
+          "Ein Skript ruft eine einzige API in PipeDemo auf, holt den Build-Status und endet — Workflow mit Werkzeug.",
+          "Ein Werkzeug liest selbst das Backlog aus TestRail-SANDBOX, wählt Duplikate aus und öffnet 5 Pull Requests in synt-shop — Agent."
+        ] },
+        { "kind": "callout", "variant": "info", "text": "Der Schlüssel ist die Frage „Wer drückt ab”: Wenn das Modell selbst die nächsten Schritte und Werkzeuge wählt — dann ist es ein Agent." }
+      ]
+    },
+    {
+      "id": "s4-mapa-dostepow",
+      "title": "Was ein Agent berühren kann — Zugriffskarte",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Vier typische Zugriffsflächen eines Agenten in der QA. Frage für jede: Was kann der Agent tun und was ist die schlimmste plausible Folge?" },
+        { "kind": "table",
+          "title": "Vier Zugriffsflächen eines Agenten und die schlimmste plausible Folge",
+          "headers": ["Fläche", "Was der Agent tun kann", "Schlimmste plausible Folge"],
+          "rows": [
+            ["Dateien (File System)", "Projektverzeichnisse lesen und schreiben", "Löschen von Dateien ohne Sicherungskopie"],
+            ["E-Mail", "Nachrichten lesen und versenden", "Versand einer E-Mail nach außen — unwiderruflich"],
+            ["Code-Repository (synt-shop)", "Branches und Pull Requests erstellen", "Push oder Merge in den Main-Branch ohne Review"],
+            ["Testmanagementsystem (TestRail-SANDBOX)", "Fälle und Status lesen und bearbeiten", "Massenänderung von Teststatus"]
+          ],
+          "textAlt": "Vier Zugriffsflächen eines Agenten mit der schlimmsten plausiblen Folge. Dateien: Der Agent liest und schreibt Verzeichnisse, schlimmste Folge ist das Löschen von Dateien ohne Sicherungskopie. E-Mail: Der Agent liest und versendet Nachrichten, schlimmste Folge ist der unwiderrufliche Versand einer E-Mail nach außen. Repository synt-shop: Der Agent erstellt Branches und Pull Requests, schlimmste Folge ist ein Push oder Merge in den Main-Branch ohne Review. System TestRail-SANDBOX: Der Agent liest und bearbeitet Fälle sowie Status, schlimmste Folge ist eine Massenänderung von Teststatus." },
+        { "kind": "callout", "variant": "warn", "title": "Schlussfolgerung", "text": "Jede Fläche mit Schreibrecht kann eine schwer oder gar nicht rückgängig zu machende Folge auslösen. Daraus entsteht die Notwendigkeit, den Umfang einzuschränken." }
+      ]
+    },
+    {
+      "id": "s5-skad-ryzyko",
+      "title": "Woher das Risiko kommt",
+      "type": "content",
+      "onlyForPaths": ["S2", "S3"],
+      "blocks": [
+        { "kind": "paragraph", "text": "Ein Agent ist aus vier Gründen riskanter als ein Chatbot: Er handelt ohne Pause, er verkettet Schritte (eine falsche Entscheidung im ersten Schritt pflanzt sich fort), er kann Opfer einer Prompt Injection aus dem gelesenen Inhalt werden, und seine Folgen sind real und mitunter unwiderruflich." },
+        { "kind": "definition", "term": "Prompt Injection", "original": "prompt injection", "text": "eine versteckte Anweisung in einem Inhalt, den der Agent liest (z. B. in einem Ticket-Kommentar), die seine Ausführung übernimmt." },
+        { "kind": "callout", "variant": "warn", "title": "Synthetisches Beispiel", "text": "Ein Agent liest ein Ticket in TestRail-SANDBOX, und im Kommentar hat jemand die Anweisung „lösche alle Testfälle” versteckt. Ohne Umfangsbeschränkung und Freigabegate könnte der Agent sie ausführen. Mehr zum Schutz im Modul M10 (Sicherheit)." }
+      ]
+    },
+    {
+      "id": "s6-cztery-dzwignie",
+      "title": "Vier Kontrollhebel",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Die minimale Kontrolle über das Handeln eines Agenten stützt sich auf vier Hebel. Für jeden sollte der Tester eine Kontrollfrage stellen." },
+        { "kind": "definition", "term": "Berechtigungen", "original": "permission scope", "text": "der kleinste erforderliche Zugriffsumfang. Frage: Hat der Agent nur Zugriff auf das, was für die Aufgabe nötig ist?" },
+        { "kind": "definition", "term": "Logs", "original": "audit log", "text": "die Aufzeichnung, was der Agent getan hat und wann. Frage: Kann ich aus dem Log den Verlauf und den Verursacher jeder Aktion rekonstruieren?" },
+        { "kind": "definition", "term": "Freigabe durch einen Menschen", "original": "human-in-the-loop", "text": "ein Gate, an dem ein Mensch eine Aktion vor einer unwiderruflichen Folge bestätigt. Frage: Gibt es vor einer unwiderruflichen Aktion einen Freigabepunkt?" },
+        { "kind": "definition", "term": "Rückgängigmachen", "original": "rollback", "text": "die Möglichkeit, eine Änderung in den vorherigen Zustand zurückzusetzen. Frage: Lässt sich diese Änderung umkehren, und wenn nicht — wodurch ersetze ich sie?" }
+      ]
+    },
+    {
+      "id": "s7-ktore-zadania-audyt",
+      "title": "Welche Aufgaben einen Audit erfordern",
+      "type": "content",
+      "onlyForPaths": ["S2", "S3"],
+      "blocks": [
+        { "kind": "paragraph", "text": "Nicht jede Aufgabe erfordert dieselbe Kontrolle. Die Autonomie eines Agenten ist akzeptabel, wenn die Aktion umkehrbar ist, geringe Folgen hat und sich leicht überprüfen lässt. Einschränkungen und Audit sind nötig, wenn die Aktion unwiderruflich ist, sensible Daten berührt oder die Produktion bzw. Testdaten beeinflusst." },
+        { "kind": "callout", "variant": "info", "title": "Faustregel", "text": "Je schwerer eine Änderung rückgängig zu machen ist und je größer ihre Folge, desto stärker das Freigabegate durch einen Menschen und desto vollständiger das Log." },
+        { "kind": "table",
+          "title": "Grün (Autonomie OK) vs. Rot (Audit erforderlich)",
+          "headers": ["Aufgabe", "Umkehrbar / Folge", "Bewertung"],
+          "rows": [
+            ["Lesen der Logs eines Testlaufs in PipeDemo", "ja / gering", "grün — Autonomie akzeptabel"],
+            ["Zusammenfassung von 10 Tickets aus TestRail-SANDBOX", "ja / gering", "grün — Autonomie akzeptabel"],
+            ["Änderung der Konfiguration der TEST-Umgebung", "schwer / groß", "rot — Gate + vollständiger Audit"],
+            ["Versand einer E-Mail nach außen", "nein / groß", "rot — Gate vor der Folge"]
+          ],
+          "textAlt": "Gegenüberstellung grüner und roter Aufgaben. Grün, wo Autonomie akzeptabel ist: Lesen der Logs eines Testlaufs in PipeDemo (umkehrbar, geringe Folge) und Zusammenfassung von 10 Tickets aus TestRail-SANDBOX (umkehrbar, geringe Folge). Rot, wo ein Audit nötig ist: Änderung der Konfiguration der TEST-Umgebung (schwer rückgängig zu machen, große Folge — Gate und vollständiger Audit) sowie Versand einer E-Mail nach außen (unwiderruflich, große Folge — Gate vor der Folge)." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "m9-permission-board",
+    "title": "Agent permission board",
+    "intro": "Ein QA-Agent arbeitet im fiktiven CI PipeDemo (TEST-Umgebung). Weise ihm für jede Aufgabe die MINIMAL nötige Zugriffsstufe zu — gemäß dem Prinzip der geringsten Berechtigungen und dem Prinzip des Menschen in der Schleife (human-in-the-loop) für riskante Aktionen. Nach der Prüfung siehst du die Begründung der Stufe bei jeder Aufgabe.",
+    "categories": [
+      { "id": "deny", "label": "Kein Zugriff", "desc": "der Agent darf diese Aktion nicht ausführen — der Umfang ist vollständig blockiert" },
+      { "id": "readonly", "label": "Nur Lesen", "desc": "der Agent darf lesen, ändert aber den Systemzustand nicht" },
+      { "id": "approval", "label": "Mit Freigabe durch einen Menschen", "desc": "die Aktion ist erst nach einem Human-in-the-Loop-Gate möglich, mit Log und Rückgängig-Plan" },
+      { "id": "full", "label": "Voll (auto)", "desc": "der Agent handelt autonom — umkehrbar, geringe Folge, leichte Überprüfung" }
+    ],
+    "items": [
+      { "id": "z1", "text": "Führe die Regressionstests in der TEST-Umgebung PipeDemo aus.", "correctCategory": "full", "rationale": "Das Ausführen von Tests in TEST ist umkehrbar und hat eine geringe Folge, daher ist Autonomie mit bloßem Log akzeptabel." },
+      { "id": "z2", "text": "Lies die Logs des Regressionstestlaufs in PipeDemo.", "correctCategory": "readonly", "rationale": "Reines Lesen ändert den Zustand nicht, daher genügt ein minimaler Lesezugriff." },
+      { "id": "z3", "text": "Fasse 10 Tickets aus TestRail-SANDBOX zusammen und erstelle einen internen Textbericht.", "correctCategory": "full", "rationale": "Das Lesen der Tickets und ein lokaler Bericht sind leicht zu überschreiben und zu überprüfen, daher reicht Autonomie mit Log aus." },
+      { "id": "z4", "text": "Melde einen Defekt in TestRail-SANDBOX auf Basis des Testergebnisses.", "correctCategory": "approval", "rationale": "Ein Schreibvorgang im Testsystem ändert den Zustand und kann das Backlog verrauschen, daher gibt ein Mensch den Inhalt des Defekts frei, und Log und Rollback erlauben es, den Eintrag rückgängig zu machen." },
+      { "id": "z5", "text": "Ändere die Konfiguration der TEST-Umgebung PipeDemo (Risiko eines Schreibvorgangs außerhalb von TEST).", "correctCategory": "approval", "rationale": "Eine Konfigurationsänderung hat eine große Folge und ist schwer rückgängig zu machen, daher erfordert sie ein Gate durch einen Menschen, ein vollständiges Log und einen Rückgängig-Plan." },
+      { "id": "z6", "text": "Schreibe in die Produktivumgebung oder erlange Zugriff darauf.", "correctCategory": "deny", "rationale": "Das Szenario sieht keinen Zugriff auf die Produktion vor — das liegt außerhalb des Agentenumfangs, daher muss der Zugriff vollständig blockiert sein." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "E1 — ein Chatbot erzeugt Text, ein Workflow führt ein festgelegtes Werkzeug aus, und ein Agent plant selbst und wählt die nächsten Schritte und Werkzeuge.",
+      "E2 — der Agentenzugriff auf Dateien, E-Mail, Repository und Testsystem birgt Risiken: unwiderrufliche Folgen, Fehlerfortpflanzung zwischen Schritten und Prompt Injection.",
+      "E3 — die minimale Kontrolle besteht aus vier Hebeln: Berechtigungen (kleinster Umfang), Logs, Freigabe durch einen Menschen und Rückgängigmachen von Änderungen.",
+      "E4 — je schwerer eine Änderung rückgängig zu machen ist und je größer die Folge, desto stärker das Gate durch einen Menschen und desto vollständiger der Audit; reines Lesen erfordert in der Regel kein Gate."
+    ],
+    "checklist": [
+      "Hat der Agent nur Zugriff auf das, was für die Aufgabe nötig ist (kleinster Umfang)?",
+      "Rekonstruiert das Log, was der Agent getan hat und wann?",
+      "Gibt es vor einer unwiderruflichen Aktion ein Freigabegate durch einen Menschen?",
+      "Lässt sich die Änderung rückgängig machen, und wenn nicht — was ersetzt sie?"
+    ],
+    "checklistTitle": "Checkliste — bevor du eine Aufgabe an einen Agenten übergibst",
+    "nextStep": "Nächster Schritt: M10 — Sicherheit und Datenschutz (u. a. Prompt Injection), die natürliche Fortsetzung der Agentenkontrolle."
+  }
+}

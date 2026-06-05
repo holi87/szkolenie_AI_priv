@@ -1,0 +1,369 @@
+{
+  "_meta": {
+    "module": "M5",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M5. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q033",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Học viên mô tả vai trò của cơ sở dữ liệu vector trong tìm kiếm ngữ nghĩa cùng trình tự các bước từ truy vấn đến những đoạn văn bản được trả về.",
+      "prompt": "Một nhóm đang xây dựng công cụ tìm kiếm trên tài liệu kiểm thử NotkaApp dựa trên cơ sở dữ liệu vector (vector database). Vai trò chính của nó trong tìm kiếm ngữ nghĩa (semantic search) là gì?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Lưu trữ embedding của các đoạn văn bản và cho phép nhanh chóng tìm ra những vector tương đồng nhất với embedding của truy vấn, để trả về các đoạn văn bản liên quan."
+        },
+        {
+          "id": "B",
+          "text": "Khớp truy vấn với các đoạn văn bản chỉ bằng cách so khớp chính xác đúng các từ khóa, bỏ qua ý nghĩa."
+        },
+        {
+          "id": "C",
+          "text": "Tạo ra câu trả lời bằng ngôn ngữ tự nhiên dựa trên truy vấn, thay thế mô hình ngôn ngữ trong pipeline."
+        },
+        {
+          "id": "D",
+          "text": "Lưu trữ các tài liệu thô dưới dạng tệp và cung cấp chúng qua tìm kiếm toàn văn theo cụm từ."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Cơ sở dữ liệu vector lưu giữ các embedding và tìm những vector gần nhất so với embedding của truy vấn, nhờ đó việc tìm kiếm hoạt động theo ý nghĩa chứ không theo từ ngữ nguyên văn.",
+      "feedbackIncorrect": "Đây là sự nhầm lẫn với tìm kiếm theo từ khóa hoặc với vai trò của mô hình sinh nội dung. Hãy ôn lại semantic search là gì và vector database làm gì (màn hình M5.2).",
+      "references": [
+        "M5.2",
+        "M5.1"
+      ]
+    },
+    {
+      "id": "Q034",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Học viên lựa chọn tìm kiếm chính xác hoặc gần đúng (ANN) phù hợp với đặc điểm của tập dữ liệu và yêu cầu.",
+      "prompt": "Một tester có tập dữ liệu tổng hợp khoảng 12 đoạn tài liệu QA và cần chắc chắn rằng KHÔNG đoạn phù hợp nào bị bỏ sót khi kiểm tra độ bao phủ. Cách tiếp cận nào là phù hợp ở đây?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Tìm kiếm chính xác (exact / brute force) — với tập dữ liệu nhỏ, việc duyệt qua toàn bộ vector là rẻ và đảm bảo độ phù hợp đầy đủ."
+        },
+        {
+          "id": "B",
+          "text": "Approximate nearest neighbor (ANN) với chỉ mục mạnh tay — vì nó luôn nhanh hơn và không bỏ sót kết quả phù hợp."
+        },
+        {
+          "id": "C",
+          "text": "ANN với top-k rất thấp, để chỉ trả về một kết quả và tránh nhầm lẫn."
+        },
+        {
+          "id": "D",
+          "text": "Tìm kiếm theo từ khóa thay vì theo vector, vì nó có tính tất định."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Với tập dữ liệu nhỏ, chi phí duyệt qua toàn bộ vector là thấp, và exact search đảm bảo không đoạn phù hợp nào bị bỏ sót — điều này quan trọng khi cần độ phù hợp đầy đủ.",
+      "feedbackIncorrect": "ANN tăng tốc độ nhưng đánh đổi bằng rủi ro bỏ sót kết quả phù hợp, nên không đảm bảo tính đầy đủ; top-k thấp chỉ cắt bớt kết quả. Hãy ôn lại sự đánh đổi giữa exact và ANN (màn hình M5.3–M5.4).",
+      "references": [
+        "M5.4",
+        "M5.3"
+      ]
+    },
+    {
+      "id": "Q035",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Học viên phân tích cách các thiết lập ANN và top-k tác động đến cặp chỉ số recall và precision.",
+      "prompt": "Trong trình gỡ lỗi tìm kiếm, tester nâng top-k từ 3 lên 8 và đồng thời nới lỏng các tham số chỉ mục ANN theo hướng tốc độ. Tác động khả dĩ nhất lên recall và precision là gì?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Recall thường tăng (nhiều đoạn phù hợp hơn có thể lọt vào kết quả), nhưng precision giảm, vì có thêm nhiều đoạn liên quan lỏng lẻo lọt vào kết quả."
+        },
+        {
+          "id": "B",
+          "text": "Recall và precision tăng đồng thời, vì top-k lớn hơn luôn cải thiện cả hai chỉ số cùng lúc."
+        },
+        {
+          "id": "C",
+          "text": "Recall giảm còn precision tăng, vì top-k lớn hơn thu hẹp tập kết quả."
+        },
+        {
+          "id": "D",
+          "text": "Cả recall lẫn precision đều không thay đổi, vì top-k và chỉ mục không ảnh hưởng đến chất lượng kết quả."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Top-k lớn hơn mở rộng tập ứng viên, nên tăng cơ hội bắt được đoạn phù hợp (recall ↑), đồng thời cũng có thêm nhiễu lọt vào kết quả (precision ↓). Việc nới lỏng chỉ mục ANN theo hướng tốc độ tác động ngược lại lên recall (có thể bỏ sót đoạn phù hợp). Cả hai hiệu ứng kéo theo hai hướng ngược nhau và kết quả ròng phụ thuộc vào quy mô thay đổi — vì thế A mô tả hướng khả dĩ nhất (recall ↑, precision ↓), nhưng cán cân thực tế phải đo lường chứ không phải giả định.",
+      "feedbackIncorrect": "Recall và precision thường đi theo hướng ngược nhau khi mở rộng kết quả; top-k lớn hơn không thu hẹp tập kết quả. Hãy ôn lại định nghĩa recall/precision và tác động của chỉ mục (màn hình M5.4–M5.5).",
+      "references": [
+        "M5.5",
+        "M5.4"
+      ]
+    },
+    {
+      "id": "Q036",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Học viên chỉ ra những yếu tố của retrieval thực sự ảnh hưởng đến tập đoạn văn bản được trả về và chất lượng của nó.",
+      "prompt": "Những yếu tố nào dưới đây trực tiếp ảnh hưởng đến việc similarity search sẽ trả về NHỮNG đoạn nào và chất lượng kết quả ra sao? Hãy chọn tất cả phương án đúng.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Tham số chỉ mục (index) ANN — dịch chuyển điểm cân bằng giữa recall và tốc độ/precision."
+        },
+        {
+          "id": "B",
+          "text": "Lọc metadata (metadata filtering) — thu hẹp tập ứng viên (precision ↑), nhưng bộ lọc quá gắt sẽ làm mất đoạn phù hợp (recall ↓)."
+        },
+        {
+          "id": "C",
+          "text": "Chất lượng chunk (chunk quality) — ranh giới đoạn tồi tạo ra vector có ý nghĩa mờ nhạt và kết quả tương đồng nhưng vô dụng."
+        },
+        {
+          "id": "D",
+          "text": "Ngưỡng tương đồng (similarity threshold) — quá cao sẽ cắt bỏ các đoạn phù hợp (recall ↓)."
+        },
+        {
+          "id": "E",
+          "text": "Thứ tự thêm tài liệu vào cơ sở dữ liệu — các đoạn được chèn vào sớm hơn luôn được trả về ở vị trí cao hơn."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "feedbackCorrect": "Chỉ mục, bộ lọc metadata, chất lượng chunk và ngưỡng tương đồng là những đòn bẩy thực sự điều khiển tập kết quả và cặp recall/precision.",
+      "feedbackIncorrect": "Thứ tự thêm tài liệu không quyết định thứ hạng — điều quan trọng là độ tương đồng của vector và các thiết lập retrieval. Hãy ôn lại tác động của chỉ mục, metadata và chunk (màn hình M5.5–M5.7).",
+      "references": [
+        "M5.6",
+        "M5.5"
+      ]
+    },
+    {
+      "id": "Q037",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Học viên kết nối triệu chứng quan sát được của retrieval với nguyên nhân khả dĩ nhất trong số chỉ mục, metadata, chunk và ngưỡng.",
+      "prompt": "Tester chẩn đoán kết quả trên tập dữ liệu QA tổng hợp. Những phát biểu nào liên kết đúng triệu chứng với nguyên nhân? Hãy chọn tất cả phương án đúng.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Công cụ tìm kiếm trả về không có đoạn nào, dù tài liệu phù hợp tồn tại — thủ phạm có thể là bộ lọc metadata quá gắt hoặc ngưỡng tương đồng quá cao, chứ không phải bản thân dữ liệu."
+        },
+        {
+          "id": "B",
+          "text": "Đoạn được trả về có độ tương đồng cao, nhưng bị cắt giữa chừng một câu và không thể sử dụng được — đây là triệu chứng của ranh giới chunk tồi."
+        },
+        {
+          "id": "C",
+          "text": "Đoạn phù hợp tồn tại trong tập dữ liệu, nhưng không lọt vào kết quả ANN — có thể chỉ mục mạnh tay đã bỏ sót nó để đổi lấy tốc độ."
+        },
+        {
+          "id": "D",
+          "text": "Recall giảm luôn có nghĩa là các embedding bị tính sai và phải đổi mô hình embedding."
+        },
+        {
+          "id": "E",
+          "text": "Nếu kết quả phù hợp nhưng quá nhiều và lắm nhiễu, một trong những cách chữa là thu hẹp bằng bộ lọc metadata hoặc giảm top-k."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "E"
+      ],
+      "feedbackCorrect": "Mỗi phát biểu này đều liên kết đúng triệu chứng (không có kết quả, chunk bị cắt, bị ANN bỏ sót, dư thừa nhiễu) với đòn bẩy của retrieval (bộ lọc/ngưỡng, chunk, chỉ mục, top-k).",
+      "feedbackIncorrect": "Recall giảm thường bắt nguồn từ chỉ mục, bộ lọc hoặc ngưỡng, chứ không tự động do embedding sai — đó là cách diễn giải quá đà. Hãy ôn lại chẩn đoán từ màn hình M5.5–M5.8.",
+      "references": [
+        "M5.7",
+        "M5.6"
+      ]
+    },
+    {
+      "id": "Q038",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Học viên chẩn đoán trường hợp mà một đoạn có độ tương đồng cao lại không phù hợp, dù cơ sở dữ liệu hoạt động đúng.",
+      "prompt": "Trong cơ sở dữ liệu vector NotkaApp có các đoạn như: DOC1 „token phiên hết hạn sau 30 phút không hoạt động”, DOC3 „liên kết đặt lại mật khẩu có hiệu lực 30 phút, dùng một lần”. Với truy vấn „Liên kết đặt lại mật khẩu hết hạn sau bao lâu?”, retrieval trả về ở vị trí đầu tiên là DOC1 với độ tương đồng rất cao. Cách tốt nhất để chẩn đoán kết quả này là gì?",
+      "options": [
+        {
+          "id": "A",
+          "text": "DOC1 tương đồng về ngữ nghĩa (cả hai đều nói về „30 phút” và việc hết hạn), nhưng liên quan đến phiên chứ không phải đặt lại mật khẩu — độ tương đồng cao không đồng nghĩa với độ phù hợp; nguồn đúng là DOC3."
+        },
+        {
+          "id": "B",
+          "text": "Cơ sở dữ liệu vector hoạt động sai và cần xây dựng lại, vì đã trả về tài liệu không phù hợp."
+        },
+        {
+          "id": "C",
+          "text": "DOC1 là câu trả lời đúng, vì có độ tương đồng cao nhất, nên chủ đề khớp với truy vấn."
+        },
+        {
+          "id": "D",
+          "text": "Vấn đề biến mất chỉ cần tăng top-k lên 10, vì khi đó DOC1 sẽ không còn được trả về."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Đây là trường hợp kinh điển „tương đồng nhưng vô dụng”: các từ trùng lặp (30 phút, hết hạn) nâng độ tương đồng của DOC1, dù nguồn phù hợp là DOC3 — tương đồng không phải là phù hợp.",
+      "feedbackIncorrect": "Độ tương đồng cao không chứng minh độ phù hợp, và cơ sở dữ liệu không hoạt động sai — đơn giản là DOC1 trùng lặp về mặt từ ngữ với truy vấn. Hãy ôn lại chẩn đoán „tương đồng ≠ hữu ích” (màn hình M5.7–M5.8).",
+      "references": [
+        "M5.8",
+        "M5.7"
+      ]
+    },
+    {
+      "id": "Q039",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Học viên đánh giá lý do vì sao một đoạn phù hợp biến mất khỏi kết quả, và liên hệ điều đó với cấu hình bộ lọc metadata.",
+      "prompt": "Tester tìm câu trả lời cho „Liên kết đặt lại mật khẩu hết hạn sau bao lâu?” trong tập dữ liệu NotkaApp, nơi DOC3 (đặt lại mật khẩu) có metadata typ_dokumentu=\"przypadek_testowy\". Để giảm nhiễu, anh ta bật bộ lọc metadata typ_dokumentu=\"wymaganie\". Công cụ tìm kiếm giờ trả về 0 đoạn phù hợp. Chẩn đoán tốt nhất là gì?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Bộ lọc metadata đã cắt bỏ DOC3, vì nó có typ_dokumentu khác với giá trị mà bộ lọc cho phép — bộ lọc quá gắt đã nâng precision, nhưng làm mất kết quả phù hợp (recall ↓); cần nới rộng bộ lọc."
+        },
+        {
+          "id": "B",
+          "text": "DOC3 không còn tồn tại trong cơ sở dữ liệu và cần lập chỉ mục lại, vì nếu không nó sẽ không bao giờ xuất hiện."
+        },
+        {
+          "id": "C",
+          "text": "Ngưỡng tương đồng quá thấp nên đã trả về danh sách rỗng — cần hạ nó xuống thấp hơn nữa."
+        },
+        {
+          "id": "D",
+          "text": "Embedding của truy vấn bị sai, vì một bộ lọc metadata đúng không thể loại bỏ một đoạn phù hợp."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Bộ lọc metadata thu hẹp tập trước/sau bước tương đồng: khi chỉ cho phép loại „wymaganie”, nó đã cắt bỏ DOC3 (loại „przypadek_testowy”) — đây là sự đánh đổi điển hình precision ↑ / recall ↓, được giải quyết bằng cách nới rộng bộ lọc.",
+      "feedbackIncorrect": "Kết quả rỗng ở đây bắt nguồn từ cấu hình bộ lọc, chứ không phải do thiếu tài liệu hay do ngưỡng — bộ lọc quá gắt làm mất các đoạn phù hợp. Hãy ôn lại lọc metadata (màn hình M5.6).",
+      "references": [
+        "M5.6",
+        "M5.8"
+      ]
+    },
+    {
+      "id": "Q040",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L4",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Học viên chọn cách hiệu chỉnh tham số retrieval tốt nhất nhằm loại bỏ nguyên nhân gây ra sự không phù hợp mà không làm hỏng các kết quả còn lại.",
+      "prompt": "Với truy vấn về đặt lại mật khẩu trong NotkaApp, retrieval trả về DOC4 (FAQ tiếp thị: ưu điểm và bảng giá) với độ tương đồng cao và đoạn DOC2 (chính sách mật khẩu) bị cắt giữa chừng một câu, còn DOC3 phù hợp (đặt lại mật khẩu) thì mãi đến vị trí thứ 6 mới xuất hiện. Ngưỡng tương đồng bị tắt, top-k=3, không có bộ lọc. Cách hiệu chỉnh nào cải thiện độ phù hợp của kết quả tốt nhất?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Thêm bộ lọc metadata loại bỏ các tài liệu tiếp thị và cải thiện ranh giới chunk, đồng thời nâng top-k sao cho DOC3 lọt vào kết quả — tấn công vào các nguyên nhân (nhiễu metadata, chunk tồi, top-k quá thấp)."
+        },
+        {
+          "id": "B",
+          "text": "Chỉ nâng ngưỡng tương đồng lên một giá trị rất cao — điều này sẽ loại bỏ DOC4 và DOC2, nhưng cũng có nguy cơ cắt bỏ DOC3 (recall ↓)."
+        },
+        {
+          "id": "C",
+          "text": "Giữ nguyên thiết lập và tự tay nhập DOC3 làm câu trả lời, vì đã có trong tập dữ liệu thì retrieval không cần hiệu chỉnh."
+        },
+        {
+          "id": "D",
+          "text": "Hạ top-k xuống 1, để chỉ trả về đoạn tương đồng nhất và loại bỏ nhiễu."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Cách hiệu chỉnh tốt nhất loại bỏ các nguyên nhân cụ thể: bộ lọc metadata cắt DOC4 tiếp thị, cải thiện chunk cứu được DOC2 bị cắt, còn top-k cao hơn cho DOC3 phù hợp lọt vào — mà không có rủi ro mất kết quả đúng.",
+      "feedbackIncorrect": "Chỉ riêng ngưỡng cao hoặc top-k=1 có nguy cơ cắt bỏ DOC3 phù hợp (recall ↓), còn việc nhập tay câu trả lời không sửa được retrieval. Hãy ôn lại tác động của metadata, chunk và top-k (màn hình M5.6–M5.9).",
+      "references": [
+        "M5.9",
+        "M5.6"
+      ]
+    }
+  ]
+}

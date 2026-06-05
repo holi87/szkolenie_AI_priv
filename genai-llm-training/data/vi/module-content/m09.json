@@ -1,0 +1,160 @@
+{
+  "_meta": {
+    "issue": "#22 [22][M4] Wdroż moduły M7-M9",
+    "storyboard": "docs/storyboard/m09-agents.md",
+    "interaction": "Agent permission board (kind: classify) — model najmniejszych uprawnień + human-in-the-loop (issue #22).",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (PipeDemo, TestRail-SANDBOX, synt-shop, przyklad.test, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Egzemplarz typu classify. M9 obowiązkowy dla S3; opcjonalny/świadomościowy dla S1/S2. Ekrany 3, 5, 7 (decyzja/analiza) tylko dla S2/S3 — wariant S1 świadomościowy je pomija. Treść interakcji oparta na SC-AGENT-01."
+  },
+  "module": "M9",
+  "intro": "Các công cụ AI ngày càng không chỉ trả lời, mà còn hành động: chúng đọc tệp, gửi email, mở pull request và thay đổi dữ liệu kiểm thử. Với người kiểm thử, đây là một rủi ro mới — tác nhân nối các bước lại với nhau và gây ra hậu quả thật mà không dừng lại. Mô-đun này dạy bạn khi nào mức tự chủ ấy có ích, và khi nào nó cần được kiểm soát: quyền hạn tối thiểu, nhật ký, sự phê duyệt của con người và khả năng hoàn tác thay đổi.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Vì sao người kiểm thử cần đến tác nhân",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Các công cụ AI trong công việc QA không còn chỉ là người đối thoại. Chúng ngày càng hành động: đọc tệp, gửi email, mở pull request, sửa đổi dữ liệu kiểm thử. Người kiểm thử phải biết khi nào điều đó có ích, và khi nào nó tạo ra rủi ro mà không có kiểm soát." },
+        { "kind": "list", "items": [
+          "E1 — bạn phân biệt được ba chế độ: chatbot, workflow có công cụ và tác nhân.",
+          "E2 — bạn chỉ ra được rủi ro khi tác nhân truy cập tệp, email, kho mã và hệ thống kiểm thử.",
+          "E3 — bạn thiết kế được mức kiểm soát tối thiểu: quyền hạn, nhật ký, sự phê duyệt của con người và việc hoàn tác thay đổi.",
+          "E4 — bạn nhận diện được những tác vụ mà tác nhân cần có giới hạn và sự kiểm toán."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Ý tưởng chủ đạo", "text": "Tác nhân hành động, chứ không chỉ nói — và một khi đã hành động thì nó cần được kiểm soát. Thời lượng mô-đun: 45 phút, cuối cùng là phần luyện tập „Agent permission board”." }
+      ]
+    },
+    {
+      "id": "s2-trzy-tryby",
+      "title": "Chatbot vs workflow vs tác nhân",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Chatbot", "text": "sinh ra văn bản và không thực thi gì cả — không có hậu quả phụ nào ngoài câu trả lời." },
+        { "kind": "definition", "term": "Workflow có công cụ", "original": "tool use", "text": "mô hình gọi một công cụ đã định sẵn trong một luồng cứng nhắc, không thay đổi." },
+        { "kind": "definition", "term": "Tác nhân", "original": "agent", "text": "tự mình lập kế hoạch và thực hiện một chuỗi bước, đồng thời tự quyết định gọi công cụ nào và khi nào." },
+        { "kind": "table",
+          "title": "Ba chế độ tích hợp đặt cạnh nhau",
+          "headers": ["Chế độ", "Ai quyết định các bước", "Hậu quả phụ", "Bề mặt rủi ro"],
+          "rows": [
+            ["Chatbot", "con người (hỏi và đọc)", "không (chỉ văn bản)", "nhỏ"],
+            ["Workflow có công cụ", "người thiết kế luồng", "một hành động đã định sẵn", "hạn chế"],
+            ["Tác nhân", "tự mô hình", "nhiều hành động trong một chuỗi", "lớn"]
+          ],
+          "textAlt": "So sánh ba chế độ. Chatbot: con người quyết định các bước, không có hậu quả phụ nào ngoài văn bản, bề mặt rủi ro nhỏ. Workflow có công cụ: người thiết kế luồng quyết định các bước, một hậu quả đã định sẵn, bề mặt rủi ro hạn chế. Tác nhân: tự mô hình quyết định các bước, nhiều hành động trong một chuỗi, bề mặt rủi ro lớn. Càng nhiều quyết định nằm về phía mô hình và hậu quả càng thật, rủi ro càng lớn." }
+      ]
+    },
+    {
+      "id": "s3-quick-check",
+      "title": "Kiểm tra nhanh — đây là chế độ nào?",
+      "type": "decision",
+      "onlyForPaths": ["S2", "S3"],
+      "blocks": [
+        { "kind": "paragraph", "text": "Một bài kiểm tra hiểu biết nhỏ (không tính vào quiz). Với mỗi mô tả, hãy quyết định: chatbot, workflow có công cụ hay tác nhân? Hãy xem ai quyết định các bước và liệu có phát sinh hậu quả phụ hay không." },
+        { "kind": "list", "ordered": true, "items": [
+          "Bot trả lời câu hỏi „làm thế nào để viết một trường hợp kiểm thử” — chatbot (chỉ văn bản).",
+          "Script gọi một API trong PipeDemo, lấy trạng thái của bản build rồi kết thúc — workflow có công cụ.",
+          "Công cụ tự đọc backlog từ TestRail-SANDBOX, chọn ra các bản trùng lặp và mở 5 pull request trong synt-shop — tác nhân."
+        ] },
+        { "kind": "callout", "variant": "info", "text": "Mấu chốt là câu hỏi „ai bóp cò”: nếu mô hình tự chọn các bước và công cụ tiếp theo — thì đó là tác nhân." }
+      ]
+    },
+    {
+      "id": "s4-mapa-dostepow",
+      "title": "Tác nhân có thể chạm tới đâu — bản đồ truy cập",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Bốn bề mặt truy cập điển hình của tác nhân trong QA. Với mỗi bề mặt, hãy hỏi: tác nhân có thể làm gì và hậu quả đáng tin tệ nhất là gì." },
+        { "kind": "table",
+          "title": "Bốn bề mặt truy cập của tác nhân và hậu quả đáng tin tệ nhất",
+          "headers": ["Bề mặt", "Tác nhân có thể làm gì", "Hậu quả đáng tin tệ nhất"],
+          "rows": [
+            ["Tệp (file system)", "đọc và ghi các thư mục dự án", "xóa tệp mà không có bản sao lưu"],
+            ["Email", "đọc và gửi tin nhắn", "gửi email ra bên ngoài — không thể đảo ngược"],
+            ["Kho mã (synt-shop)", "tạo nhánh và pull request", "push hoặc merge vào nhánh main mà không qua review"],
+            ["Hệ thống quản lý kiểm thử (TestRail-SANDBOX)", "đọc và chỉnh sửa các trường hợp và trạng thái", "thay đổi hàng loạt trạng thái của các kiểm thử"]
+          ],
+          "textAlt": "Bốn bề mặt truy cập của tác nhân cùng hậu quả đáng tin tệ nhất. Tệp: tác nhân đọc và ghi các thư mục, hậu quả tệ nhất là xóa tệp mà không có bản sao lưu. Email: tác nhân đọc và gửi tin nhắn, hậu quả tệ nhất là gửi email ra bên ngoài không thể đảo ngược. Kho synt-shop: tác nhân tạo nhánh và pull request, hậu quả tệ nhất là push hoặc merge vào nhánh main mà không qua review. Hệ thống TestRail-SANDBOX: tác nhân đọc và chỉnh sửa các trường hợp cùng trạng thái, hậu quả tệ nhất là thay đổi hàng loạt trạng thái của các kiểm thử." },
+        { "kind": "callout", "variant": "warn", "title": "Kết luận", "text": "Mỗi bề mặt có quyền ghi đều có thể gây ra hậu quả khó hoặc không thể hoàn tác. Đó chính là nguồn gốc của nhu cầu giới hạn phạm vi." }
+      ]
+    },
+    {
+      "id": "s5-skad-ryzyko",
+      "title": "Rủi ro đến từ đâu",
+      "type": "content",
+      "onlyForPaths": ["S2", "S3"],
+      "blocks": [
+        { "kind": "paragraph", "text": "Tác nhân rủi ro hơn chatbot vì bốn lý do: nó hành động không dừng lại, nó nối các bước (một quyết định sai ở bước đầu lan truyền tiếp), nó có thể trở thành nạn nhân của việc tiêm lệnh từ nội dung mà nó đọc, và hậu quả của nó là thật và đôi khi không thể đảo ngược." },
+        { "kind": "definition", "term": "Tiêm lệnh", "original": "prompt injection", "text": "một chỉ thị ẩn trong nội dung mà tác nhân đọc (ví dụ trong bình luận của một báo cáo), chiếm quyền điều khiển hành động của nó." },
+        { "kind": "callout", "variant": "warn", "title": "Ví dụ tổng hợp", "text": "Tác nhân đọc một báo cáo trong TestRail-SANDBOX, và trong phần bình luận có người đã giấu một chỉ thị „xóa tất cả các trường hợp kiểm thử”. Nếu không giới hạn phạm vi và không có cổng kiểm soát, tác nhân có thể thực thi nó. Tìm hiểu thêm về cách bảo vệ trong mô-đun M10 (bảo mật)." }
+      ]
+    },
+    {
+      "id": "s6-cztery-dzwignie",
+      "title": "Bốn đòn bẩy kiểm soát",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Mức kiểm soát tối thiểu đối với hành động của tác nhân dựa trên bốn đòn bẩy. Với mỗi đòn bẩy, người kiểm thử nên đặt một câu hỏi kiểm soát." },
+        { "kind": "definition", "term": "Quyền hạn", "original": "permission scope", "text": "phạm vi truy cập tối thiểu cần thiết. Câu hỏi: tác nhân có chỉ truy cập đúng những gì cần thiết cho tác vụ hay không?" },
+        { "kind": "definition", "term": "Nhật ký", "original": "audit log", "text": "bản ghi tác nhân đã làm gì và khi nào. Câu hỏi: từ nhật ký, tôi có dựng lại được diễn biến và thủ phạm của mỗi hành động hay không?" },
+        { "kind": "definition", "term": "Sự phê duyệt của con người", "original": "human-in-the-loop", "text": "cổng kiểm soát nơi con người chấp thuận hành động trước một hậu quả không thể đảo ngược. Câu hỏi: trước hành động không thể đảo ngược có một điểm phê duyệt hay không?" },
+        { "kind": "definition", "term": "Hoàn tác", "original": "rollback", "text": "khả năng đưa thay đổi trở lại trạng thái trước đó. Câu hỏi: thay đổi này có thể đảo ngược được không, và nếu không — tôi thay thế nó bằng gì?" }
+      ]
+    },
+    {
+      "id": "s7-ktore-zadania-audyt",
+      "title": "Những tác vụ nào cần được kiểm toán",
+      "type": "content",
+      "onlyForPaths": ["S2", "S3"],
+      "blocks": [
+        { "kind": "paragraph", "text": "Không phải tác vụ nào cũng cần cùng một mức kiểm soát. Mức tự chủ của tác nhân là chấp nhận được khi hành động có thể đảo ngược, có hậu quả thấp và dễ kiểm chứng. Giới hạn và kiểm toán là cần thiết khi hành động không thể đảo ngược, chạm tới dữ liệu nhạy cảm hoặc ảnh hưởng đến môi trường sản xuất hay dữ liệu kiểm thử." },
+        { "kind": "callout", "variant": "info", "title": "Quy tắc ngón tay cái", "text": "Càng khó hoàn tác một thay đổi và hậu quả của nó càng lớn, thì cổng phê duyệt của con người càng phải mạnh và nhật ký càng phải đầy đủ." },
+        { "kind": "table",
+          "title": "Xanh (tự chủ OK) vs đỏ (bắt buộc kiểm toán)",
+          "headers": ["Tác vụ", "Đảo ngược được / hậu quả", "Đánh giá"],
+          "rows": [
+            ["Đọc nhật ký lần chạy các kiểm thử trong PipeDemo", "có / thấp", "xanh — tự chủ là chấp nhận được"],
+            ["Tóm tắt 10 báo cáo từ TestRail-SANDBOX", "có / thấp", "xanh — tự chủ là chấp nhận được"],
+            ["Thay đổi cấu hình môi trường TEST", "khó / lớn", "đỏ — cổng kiểm soát + kiểm toán đầy đủ"],
+            ["Gửi email ra bên ngoài", "không / lớn", "đỏ — cổng kiểm soát trước hậu quả"]
+          ],
+          "textAlt": "Bảng liệt kê các tác vụ xanh và đỏ. Xanh, nơi tự chủ là chấp nhận được: đọc nhật ký lần chạy các kiểm thử trong PipeDemo (đảo ngược được, hậu quả thấp) và tóm tắt 10 báo cáo từ TestRail-SANDBOX (đảo ngược được, hậu quả thấp). Đỏ, nơi cần kiểm toán: thay đổi cấu hình môi trường TEST (khó hoàn tác, hậu quả lớn — cổng kiểm soát và kiểm toán đầy đủ) cùng gửi email ra bên ngoài (không thể đảo ngược, hậu quả lớn — cổng kiểm soát trước hậu quả)." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "m9-permission-board",
+    "title": "Agent permission board",
+    "intro": "Một tác nhân QA làm việc trong CI hư cấu PipeDemo (môi trường TEST). Với mỗi tác vụ, hãy cấp cho nó mức truy cập TỐI THIỂU cần thiết theo nguyên tắc quyền hạn tối thiểu và nguyên tắc con người trong vòng lặp (human-in-the-loop) đối với các hành động rủi ro. Sau khi kiểm tra, bạn sẽ thấy lý giải về mức truy cập ở mỗi tác vụ.",
+    "categories": [
+      { "id": "deny", "label": "Không truy cập", "desc": "tác nhân không thể thực hiện hành động này — phạm vi bị chặn hoàn toàn" },
+      { "id": "readonly", "label": "Chỉ đọc", "desc": "tác nhân có thể đọc, nhưng không thay đổi trạng thái hệ thống" },
+      { "id": "approval", "label": "Có sự phê duyệt của con người", "desc": "hành động chỉ khả thi sau cổng human-in-the-loop, kèm nhật ký và kế hoạch hoàn tác" },
+      { "id": "full", "label": "Toàn quyền (tự động)", "desc": "tác nhân hành động tự chủ — đảo ngược được, hậu quả thấp, dễ kiểm chứng" }
+    ],
+    "items": [
+      { "id": "z1", "text": "Chạy các kiểm thử hồi quy trong môi trường TEST của PipeDemo.", "correctCategory": "full", "rationale": "Việc chạy các kiểm thử trong TEST là đảo ngược được và có hậu quả thấp, nên mức tự chủ chỉ kèm nhật ký là chấp nhận được." },
+      { "id": "z2", "text": "Đọc nhật ký lần chạy các kiểm thử hồi quy trong PipeDemo.", "correctCategory": "readonly", "rationale": "Chỉ riêng việc đọc không làm thay đổi trạng thái, nên một mức truy cập tối thiểu chỉ đọc là đủ." },
+      { "id": "z3", "text": "Tóm tắt 10 báo cáo từ TestRail-SANDBOX và tạo một báo cáo văn bản nội bộ.", "correctCategory": "full", "rationale": "Việc đọc các báo cáo và báo cáo cục bộ thì dễ ghi đè và kiểm chứng, nên mức tự chủ kèm nhật ký là đủ." },
+      { "id": "z4", "text": "Báo cáo một lỗi trong TestRail-SANDBOX dựa trên kết quả kiểm thử.", "correctCategory": "approval", "rationale": "Việc ghi vào hệ thống kiểm thử làm thay đổi trạng thái và có thể gây nhiễu backlog, do đó nội dung lỗi phải được con người phê duyệt, còn nhật ký và hoàn tác cho phép hủy bỏ mục đã ghi." },
+      { "id": "z5", "text": "Thay đổi cấu hình môi trường TEST của PipeDemo (có rủi ro ghi ra ngoài TEST).", "correctCategory": "approval", "rationale": "Thay đổi cấu hình có hậu quả lớn và khó hoàn tác, nên cần cổng phê duyệt của con người, nhật ký đầy đủ và kế hoạch hoàn tác." },
+      { "id": "z6", "text": "Ghi vào hoặc giành quyền truy cập môi trường sản xuất.", "correctCategory": "deny", "rationale": "Kịch bản giả định không có quyền truy cập môi trường sản xuất — điều này nằm ngoài phạm vi của tác nhân, nên quyền truy cập phải bị chặn hoàn toàn." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "E1 — chatbot sinh ra văn bản, workflow thực thi một công cụ đã định sẵn, còn tác nhân tự lập kế hoạch và chọn các bước cùng công cụ tiếp theo.",
+      "E2 — việc tác nhân truy cập tệp, email, kho mã và hệ thống kiểm thử mang lại rủi ro: hậu quả không thể đảo ngược, sự lan truyền lỗi giữa các bước và việc tiêm lệnh.",
+      "E3 — mức kiểm soát tối thiểu là bốn đòn bẩy: quyền hạn (phạm vi tối thiểu), nhật ký, sự phê duyệt của con người và việc hoàn tác thay đổi.",
+      "E4 — càng khó hoàn tác một thay đổi và hậu quả càng lớn, thì cổng kiểm soát của con người càng mạnh và sự kiểm toán càng đầy đủ; chỉ riêng việc đọc thường không cần cổng kiểm soát."
+    ],
+    "checklist": [
+      "Tác nhân có chỉ truy cập đúng những gì cần thiết cho tác vụ hay không (phạm vi tối thiểu)?",
+      "Nhật ký có dựng lại được tác nhân đã làm gì và khi nào hay không?",
+      "Trước một hành động không thể đảo ngược có cổng phê duyệt của con người hay không?",
+      "Thay đổi có thể hoàn tác được không, và nếu không — điều gì thay thế nó?"
+    ],
+    "checklistTitle": "Danh sách kiểm tra — trước khi giao tác vụ cho tác nhân",
+    "nextStep": "Bước tiếp theo: M10 — bảo mật và quyền riêng tư của dữ liệu (trong đó có việc tiêm lệnh), sự tiếp nối tự nhiên của việc kiểm soát tác nhân."
+  }
+}

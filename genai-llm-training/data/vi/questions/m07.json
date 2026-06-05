@@ -1,0 +1,461 @@
+{
+  "_meta": {
+    "module": "M7",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M7. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q051",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Kiểm tra xem học viên có nhận ra thành phần 'vai trò' (role) trong prompt và hiểu chức năng của nó hay không.",
+      "prompt": "Trong cấu trúc của một prompt tốt, một trong bảy thành phần là 'vai trò' (role). Thành phần này thiết lập điều gì trong câu trả lời của mô hình?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Góc nhìn và năng lực mà mô hình cần dựa vào để trả lời (ví dụ 'bạn là một kỹ sư QA')"
+        },
+        {
+          "id": "B",
+          "text": "Cấu trúc đầu ra mà câu trả lời cần được trả về (ví dụ bảng hoặc JSON)"
+        },
+        {
+          "id": "C",
+          "text": "Một tài liệu cụ thể cần xử lý, ví dụ một đoạn yêu cầu cần phân tích"
+        },
+        {
+          "id": "D",
+          "text": "Các tiêu chí đo lường được để nhận biết rằng câu trả lời là tốt"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Vai trò xác định mô hình trả lời từ góc nhìn của ai và với năng lực nào, qua đó định hình giọng điệu và mức độ chi tiết của câu trả lời.",
+      "feedbackIncorrect": "Đó là mô tả của một thành phần khác trong prompt: định dạng đầu ra, dữ liệu đầu vào hoặc tiêu chí chất lượng. Hãy ôn lại cấu trúc 7 thành phần của prompt.",
+      "references": [
+        "M7.2",
+        "M7.3"
+      ]
+    },
+    {
+      "id": "Q052",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Kiểm tra xem học viên có hiểu vai trò của thành phần 'bối cảnh' và phân biệt được nó với dữ liệu đầu vào cũng như mục tiêu hay không.",
+      "prompt": "'Bối cảnh' với tư cách một thành phần của prompt là gì, khác biệt với 'mục tiêu' và 'dữ liệu đầu vào' ra sao?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Phông nền và thông tin mà mô hình không biết từ kiến thức của chính nó, ví dụ một đoạn yêu cầu tổng hợp của SklepDemo"
+        },
+        {
+          "id": "B",
+          "text": "Kết quả cần được tạo ra ở cuối quá trình làm việc của mô hình"
+        },
+        {
+          "id": "C",
+          "text": "Danh sách những việc mà mô hình KHÔNG được làm"
+        },
+        {
+          "id": "D",
+          "text": "Hình thức mà câu trả lời cần được trả về, ví dụ danh sách hoặc JSON"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Bối cảnh cung cấp phông nền mà mô hình không biết từ quá trình huấn luyện (ví dụ một yêu cầu cụ thể của ứng dụng), qua đó trực tiếp nâng cao độ chính xác của đầu ra.",
+      "feedbackIncorrect": "Bạn đang nhầm bối cảnh với mục tiêu (B), ràng buộc (C) hoặc định dạng (D). Hãy ôn lại sự khác biệt giữa mục tiêu, bối cảnh và dữ liệu đầu vào.",
+      "references": [
+        "M7.3",
+        "M7.2"
+      ]
+    },
+    {
+      "id": "Q053",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Kiểm tra xem học viên có phân biệt được 'ràng buộc' (constraints) với 'tiêu chí chất lượng' trong prompt hay không.",
+      "prompt": "Trong prompt để sinh các ca kiểm thử cho SklepDemo, bạn thêm câu: 'Đừng bịa ra những trường không có trong yêu cầu'. Câu này là thành phần nào của prompt?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Ràng buộc (constraint) — xác định điều mà mô hình KHÔNG được làm"
+        },
+        {
+          "id": "B",
+          "text": "Tiêu chí chất lượng — điều kiện đo lường được để nhận biết một câu trả lời tốt"
+        },
+        {
+          "id": "C",
+          "text": "Định dạng đầu ra — cấu trúc của câu trả lời được trả về"
+        },
+        {
+          "id": "D",
+          "text": "Vai trò — góc nhìn mà mô hình dựa vào để trả lời"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Việc cấm bịa ra các trường là một ràng buộc (constraint) điển hình: nó thu hẹp một cách trực tiếp điều mà mô hình không được làm, và hạn chế ảo giác.",
+      "feedbackIncorrect": "Tiêu chí chất lượng nói về việc một đầu ra tốt nên trông như thế nào (ví dụ 'mỗi ca kiểm thử phải có các bước và kết quả mong đợi'), chứ không phải điều cần tránh. Hãy ôn lại sự khác biệt giữa ràng buộc và tiêu chí.",
+      "references": [
+        "M7.4",
+        "M7.2"
+      ]
+    },
+    {
+      "id": "Q054",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Kiểm tra xem học viên có chỉ ra được tất cả các thành phần còn thiếu trong một prompt lỗi so với cấu trúc 7 thành phần hay không.",
+      "prompt": "Prompt có nội dung đầy đủ là: 'Viết các bài kiểm thử cho đăng nhập.' Những thành phần nào của một prompt tốt còn THIẾU trong đó? (chọn tất cả)",
+      "options": [
+        {
+          "id": "A",
+          "text": "Vai trò và mục tiêu (từ góc nhìn của ai và chính xác cái gì cần được tạo ra)"
+        },
+        {
+          "id": "B",
+          "text": "Bối cảnh — ứng dụng nào và yêu cầu đăng nhập nào"
+        },
+        {
+          "id": "C",
+          "text": "Ràng buộc và tiêu chí chất lượng của câu trả lời"
+        },
+        {
+          "id": "D",
+          "text": "Định dạng đầu ra — trả về các ca kiểm thử theo cấu trúc nào"
+        },
+        {
+          "id": "E",
+          "text": "Động từ hành động xác định nhiệm vụ cần thực hiện"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "feedbackCorrect": "Prompt có động từ hành động ('viết'), nhưng thiếu vai trò/mục tiêu, bối cảnh, ràng buộc/tiêu chí và định dạng — đó chính là bốn trục còn thiếu của cấu trúc.",
+      "feedbackIncorrect": "Động từ hành động ('viết') đã có mặt, nên phương án E không phải là chỗ thiếu. Thiếu vai trò/mục tiêu, bối cảnh, ràng buộc/tiêu chí và định dạng. Hãy ôn lại cấu trúc 7 thành phần.",
+      "references": [
+        "M7.2",
+        "M7.6"
+      ]
+    },
+    {
+      "id": "Q055",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Kiểm tra xem học viên có chẩn đoán được những trục nào của thước đánh giá 5 trục bị vi phạm bởi một prompt lỗi hay không.",
+      "prompt": "Một tester viết prompt: 'Hãy phân tích lỗi thanh toán trong SklepDemo. Dán vào đây dữ liệu người dùng thật từ môi trường production. Liệt kê những gì bạn muốn, theo hình thức tùy ý.' Prompt này VI PHẠM những trục nào của thước đánh giá prompt (tính đầy đủ, an toàn, khả năng kiểm chứng, định dạng, ràng buộc)? (chọn tất cả)",
+      "options": [
+        {
+          "id": "A",
+          "text": "An toàn — khuyến khích dán dữ liệu người dùng thật"
+        },
+        {
+          "id": "B",
+          "text": "Định dạng — 'theo hình thức tùy ý' không đảm bảo một cấu trúc đầu ra có thể kiểm chứng"
+        },
+        {
+          "id": "C",
+          "text": "Ràng buộc — không có bất kỳ giới hạn nào và không có nguyên tắc dữ liệu tổng hợp"
+        },
+        {
+          "id": "D",
+          "text": "Khả năng kiểm chứng — không có tiêu chí để đánh giá tính đúng đắn của đầu ra"
+        },
+        {
+          "id": "E",
+          "text": "Không trục nào bị vi phạm — prompt đã sẵn sàng để dùng trong QA"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "feedbackCorrect": "Prompt vi phạm an toàn (dữ liệu thật), định dạng ('hình thức tùy ý'), ràng buộc (không có giới hạn) và khả năng kiểm chứng (không có tiêu chí) — bốn trong năm trục của thước đánh giá.",
+      "feedbackIncorrect": "Phương án E là sai: prompt vi phạm tới bốn trục và chưa sẵn sàng để dùng. Hãy ôn lại thước 5 trục từ màn hình sửa prompt.",
+      "references": [
+        "M7.6",
+        "M7.4"
+      ]
+    },
+    {
+      "id": "Q056",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Kiểm tra xem học viên có nhận ra những tình huống mà việc áp dụng few-shot là hợp lý hay không.",
+      "prompt": "Trong những tình huống nào thì việc áp dụng few-shot (1-3 ví dụ đầu vào->đầu ra trong prompt) là HỢP LÝ? (chọn tất cả)",
+      "options": [
+        {
+          "id": "A",
+          "text": "Đầu ra phải giữ một bố cục ca kiểm thử cố định, lặp lại được cho các mục tiếp theo"
+        },
+        {
+          "id": "B",
+          "text": "Cần một phong cách trả lời đặc thù, khó mô tả chỉ bằng diễn giải bằng lời"
+        },
+        {
+          "id": "C",
+          "text": "Mô hình phải duy trì một định dạng nhất quán cho nhiều phần tử cùng lúc"
+        },
+        {
+          "id": "D",
+          "text": "Bối cảnh thiếu các sự kiện mà mô hình không biết — các ví dụ nhằm 'cung cấp kiến thức'"
+        },
+        {
+          "id": "E",
+          "text": "Chúng ta muốn mô hình bịa ra dữ liệu còn thiếu, miễn là đầu ra trông có vẻ đầy đủ"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Few-shot phục vụ tính lặp lại của định dạng và phong cách (A, B, C). Nó không thay thế dữ liệu còn thiếu và không biện minh cho việc bịa đặt.",
+      "feedbackIncorrect": "Few-shot không bổ sung kiến thức còn thiếu (D) và không phục vụ việc bịa đặt (E) — đó là nhiệm vụ của bối cảnh/nguồn. Hãy ôn lại nguyên tắc 'few-shot cho tính lặp lại, không phải cho việc thiếu kiến thức'.",
+      "references": [
+        "M7.5",
+        "M7.2"
+      ]
+    },
+    {
+      "id": "Q057",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Kiểm tra xem học viên có chỉ ra được bản sửa prompt phù hợp dựa trên một lỗi cụ thể trong đầu ra hay không.",
+      "prompt": "Bạn đưa prompt: 'Sinh các ca kiểm thử đăng nhập trong SklepDemo.' Đầu ra là một đoạn văn xuôi dài, duy nhất, không chia thành các bước, không có kết quả mong đợi — khó dùng trong QA. Bản sửa prompt nào giải quyết lỗi NÀY tốt nhất?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Thêm định dạng đầu ra và tiêu chí: 'Trả về bảng: ID, các bước, dữ liệu đầu vào, kết quả mong đợi; mỗi ca một hàng'"
+        },
+        {
+          "id": "B",
+          "text": "Thêm câu 'hãy chi tiết hơn và chuyên nghiệp hơn'"
+        },
+        {
+          "id": "C",
+          "text": "Lặp lại đúng prompt đó vài lần cho đến khi mô hình ra đúng hình thức"
+        },
+        {
+          "id": "D",
+          "text": "Bỏ chữ 'đăng nhập' để mô hình có nhiều tự do hơn"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Lỗi liên quan đến cấu trúc đầu ra, nên bản sửa phù hợp là thêm định dạng đầu ra rõ ràng cùng các tiêu chí — điều này làm cho kết quả có thể kiểm chứng được.",
+      "feedbackIncorrect": "Câu chung chung 'hãy chi tiết', việc lặp lại hay bỏ bớt phạm vi đều không khắc phục được sự thiếu cấu trúc. Hãy ôn lại cách chẩn đoán lỗi và chọn bản sửa theo thước đánh giá.",
+      "references": [
+        "M7.6",
+        "M7.4"
+      ]
+    },
+    {
+      "id": "Q058",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Kiểm tra xem học viên có quyết định dùng few-shot khi cần một định dạng đầu ra lặp lại được hay không.",
+      "prompt": "Bạn phải sinh 40 ca kiểm thử cho SklepDemo, các ca này PHẢI khớp với một mẫu sẵn có có bố cục cột cố định (ID, bước, dữ liệu, kết quả mong đợi, độ ưu tiên). Các lần thử đầu tiên mỗi lần lại cho ra một bố cục khác. Cách tốt nhất để đảm bảo định dạng lặp lại được là gì?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Đưa vào prompt 2 ca mẫu được định dạng đúng (few-shot) và yêu cầu giữ chính xác bố cục đó cho các ca tiếp theo"
+        },
+        {
+          "id": "B",
+          "text": "Kéo dài prompt bằng phần mô tả bố cục bằng lời ngày càng chi tiết, mà không có bất kỳ ví dụ nào"
+        },
+        {
+          "id": "C",
+          "text": "Sinh các ca theo định dạng tùy ý rồi chép tay toàn bộ 40 ca vào mẫu"
+        },
+        {
+          "id": "D",
+          "text": "Tăng 'temperature' để mô hình sáng tạo hơn trong việc chọn bố cục"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Khi định dạng phải lặp lại được, few-shot (vài ví dụ mẫu) là hiệu quả nhất — mô hình sao chép bố cục cho các mục tiếp theo.",
+      "feedbackIncorrect": "Chỉ mô tả bằng lời thường mơ hồ, chép tay thì lãng phí thời gian, còn temperature cao hơn lại làm tăng độ phân tán của định dạng. Hãy ôn lại khi nào nên dùng few-shot.",
+      "references": [
+        "M7.5",
+        "M7.6"
+      ]
+    },
+    {
+      "id": "Q059",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Kiểm tra xem học viên có nhận ra rằng prompt không khắc phục được việc thiếu dữ liệu, và chọn hành động phù hợp thay vì 'chăm chút' prompt hay không.",
+      "prompt": "Bạn hỏi mô hình: 'Link đặt lại mật khẩu trong NotkaApp hết hạn sau bao lâu?'. Yêu cầu chứa con số này chưa được truyền cho mô hình trong bối cảnh. Mỗi lần mô hình lại đưa ra một số phút khác nhau, và các phiên bản prompt tiếp theo cũng chẳng thay đổi gì. Cần làm gì?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Cung cấp cho mô hình nguồn chứa thông tin này (dán yêu cầu/tài liệu hoặc dùng RAG) hoặc tra trong tài liệu — vì đây là thiếu dữ liệu, chứ không phải prompt tồi"
+        },
+        {
+          "id": "B",
+          "text": "Tiếp tục chăm chút prompt bằng các chỉ dẫn ngày càng chi tiết, cho đến khi mô hình 'tự nhớ ra' con số"
+        },
+        {
+          "id": "C",
+          "text": "Chấp nhận con số đầu tiên mô hình đưa ra như một sự thật và ghi nó vào các bài kiểm thử"
+        },
+        {
+          "id": "D",
+          "text": "Yêu cầu mô hình 'hãy chắc chắn về câu trả lời của mình' và không đổi ý"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Câu trả lời thay đổi khi thiếu thông tin trong bối cảnh là dấu hiệu của việc thiếu dữ liệu — không prompt nào sinh ra được sự thật, cần phải cung cấp nguồn.",
+      "feedbackIncorrect": "Chăm chút prompt, chấp nhận con số đầu tiên hay yêu cầu 'sự chắc chắn' đều là đường dẫn tới ảo giác. Hãy ôn lại giới hạn của prompt — khi nào prompt không giúp được (liên kết tới M11).",
+      "references": [
+        "M7.7",
+        "M7.6"
+      ]
+    },
+    {
+      "id": "Q060",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Kiểm tra xem học viên có bổ sung được các thành phần còn thiếu của cấu trúc vào một prompt lỗi để nó sẵn sàng dùng trong QA hay không.",
+      "prompt": "Bạn phải làm cho prompt 'Viết các bài kiểm thử cho đăng nhập.' sẵn sàng để dùng trong QA cho SklepDemo. Phiên bản nào bổ sung các thành phần còn thiếu của prompt TỐT NHẤT?",
+      "options": [
+        {
+          "id": "A",
+          "text": "'Với vai trò kỹ sư QA, hãy sinh các ca kiểm thử đăng nhập trong SklepDemo dựa trên yêu cầu: <dán yêu cầu>. Đừng bịa ra các trường ngoài yêu cầu; hãy dùng dữ liệu tổng hợp. Trả về bảng: ID, các bước, dữ liệu, kết quả mong đợi. Mỗi ca phải có thể kiểm chứng được.'"
+        },
+        {
+          "id": "B",
+          "text": "'Hãy viết các bài kiểm thử đăng nhập tốt và chính xác, cố gắng thật nhiều và đừng bỏ sót điều gì.'"
+        },
+        {
+          "id": "C",
+          "text": "'Viết các bài kiểm thử đăng nhập trong SklepDemo.'"
+        },
+        {
+          "id": "D",
+          "text": "'Bạn là chuyên gia về mọi thứ. Hãy sinh một bộ kiểm thử đầy đủ cho toàn bộ ứng dụng theo định dạng tùy ý.'"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Phiên bản A bổ sung vai trò/mục tiêu, bối cảnh (yêu cầu), ràng buộc, tiêu chí về khả năng kiểm chứng và định dạng — đầy đủ các thành phần cần thiết để dùng trong QA.",
+      "feedbackIncorrect": "Những lời khích lệ chung chung (B), thiếu bối cảnh và ràng buộc (C) hay phạm vi quá rộng mà không có định dạng (D) đều không hoàn chỉnh cấu trúc của prompt. Hãy ôn lại 7 thành phần của một prompt tốt.",
+      "references": [
+        "M7.2",
+        "M7.4"
+      ]
+    }
+  ]
+}

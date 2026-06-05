@@ -1,0 +1,102 @@
+{
+  "_meta": {
+    "issue": "#122 [M16] Rozdzielenie diagnozy Skali Holaka — wymiar ORGANIZACYJNY (v2.1e)",
+    "adr": "docs/adr/0008-modul-skali-holaka-msh.md",
+    "interaction": "Self-check dojrzałości organizacji (kind: maturity-check) — NON-gating, neutralny framing",
+    "source": "Model dojrzałości adopcji AI „Skala Holaka”: wymiar organizacyjny v2.1e (organizacja, 0–11). Atrybucja: quality-blog.eu/pl/blog/skala-holaka.",
+    "dataPolicy": "WSZYSTKIE zdania self-checku SYNTETYCZNE i ogólne (zero realnych danych/PII). Diagnoza orientacyjna — NIE da się jej „oblać”. Heurystyka punktacji uproszczona (liczba zaznaczeń → poziom 0–11) do weryfikacji przez eksperta dziedzinowego (SME)."
+  },
+  "module": "MSHO",
+  "intro": "La Escala de Holak en su dimensión organizativa (v2.1e) ayuda a poner nombre a la madurez de la adopción de la IA en tu equipo o empresa: dónde está la organización hoy y cuál es el siguiente paso realista. Es una autodiagnosis, no un examen: no hay un resultado de «aprobado/suspenso», sino un nivel orientativo de 0 a 11 y una pista de cómo subir. Puedes hacerla de forma independiente de la diagnosis personal (MSHP).",
+  "screens": [
+    {
+      "id": "msho-s1-czym-jest",
+      "title": "Qué es la Escala de Holak organizativa",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "La versión organizativa (v2.1e) describe la madurez de la adopción de la IA en un equipo o empresa en 12 niveles (0–11): desde los experimentos espontáneos hasta una adopción consciente, medida y mejorada de forma continua, integrada en la estrategia. Ayuda a evitar dos trampas: «tenemos IA, así que somos maduros» y «esto es solo un juguete»." },
+        { "kind": "list", "items": [
+          "Evalúas la adopción de la IA en la ORGANIZACIÓN, con independencia de la madurez de cada persona.",
+          "Una organización puede estar por encima o por debajo de su mejor profesional.",
+          "La diagnosis de tu propia práctica (Escala de Holak v2.1p) la realizas aparte, en el módulo MSHP."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "De dónde viene el nombre y quién está detrás del modelo", "text": "La Escala de Holak la ideó Grzegorz Holak con el apoyo de Konrad Gomulski, de ahí su nombre. Ambos son Senior Test Development Engineer en Sii Polska y miembros de la SJSI, además de cofundadores de quality-blog.eu; Grzegorz Holak es también Test Architect y AI Ambassador en SCIB. La usamos como herramienta de autorreflexión, no de certificación.",
+          "links": [
+            { "label": "Escala de Holak — dimensión organizativa (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka" },
+            { "label": "Escala de Holak — dimensión personal (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka-private" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "msho-s2-osie-i-granice",
+      "title": "Cómo reconocer el nivel: los ejes y dos fronteras",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "La madurez de una organización no se reconoce por el número de licencias, sino por si la IA está integrada en los procesos: una política de uso aceptable por escrito, usos permitidos, verificación humana obligatoria de los resultados en los procesos críticos, medición del impacto en la calidad y el tiempo, y decisiones reversibles con rastro de auditoría." },
+        { "kind": "list", "items": [
+          "Barrera: lo que le falta a la organización para subir de nivel.",
+          "Éxito: lo que funciona realmente cuando se ha alcanzado el nivel.",
+          "Trampa: tomar la madurez por un estado acabado en lugar de una mejora continua."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Dos fronteras críticas (organizativas)", "text": "Frontera 8→9: pasar de «buenas prácticas individuales» a integrar la IA en el proceso con un reparto claro asistente/decisor y un rastro de auditoría. Frontera 10→11: pasar de mejoras puntuales a la mejora continua y la calibración de la adopción como parte de la estrategia." }
+      ]
+    },
+    {
+      "id": "msho-s3-jak-czytac",
+      "title": "Cómo interpretar el resultado de la organización",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Dentro de un momento marcarás las afirmaciones que hoy son ciertas para tu organización. El número de afirmaciones marcadas da un nivel orientativo de 0 a 11 y una pista de «dónde estáis / cómo subir». Marca con honestidad solo lo que está realmente implantado, no lo que está planificado." },
+        { "kind": "callout", "variant": "safe", "title": "Es una diagnosis, no una evaluación", "text": "No hay respuestas correctas ni incorrectas, ni un umbral de aprobado. El resultado no influye en la finalización del itinerario ni en ningún examen: es un espejo, no una auditoría." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "maturity-check",
+    "id": "msho-selfcheck",
+    "title": "Escala de Holak v2.1e — autodiagnosis de la madurez de la organización",
+    "intro": "Marca las afirmaciones que hoy son ciertas para tu equipo o empresa. Tras la comprobación verás un nivel orientativo de 0 a 11 y el siguiente paso, sin valoraciones de aprobado/suspenso.",
+    "scales": [
+      {
+        "id": "org",
+        "label": "Organización (Escala de Holak v2.1e)",
+        "intro": "¿Cuál es el grado de madurez de la adopción de la IA en tu equipo o empresa? Marca lo que está realmente implantado.",
+        "max": 11,
+        "statements": [
+          { "id": "org-1", "text": "Hay personas que usan la IA para tareas puntuales." },
+          { "id": "org-2", "text": "Existe un intercambio informal de buenas prácticas de uso de la IA." },
+          { "id": "org-3", "text": "Se ha redactado una política de uso aceptable de la IA (datos, privacidad, propiedad intelectual)." },
+          { "id": "org-4", "text": "Determinados procesos tienen definidos usos permitidos de la IA." },
+          { "id": "org-5", "text": "Los resultados de la IA en los procesos críticos se verifican obligatoriamente por una persona." },
+          { "id": "org-6", "text": "Los equipos miden el impacto de la IA en la calidad y el tiempo, y no solo el hecho de usarla." },
+          { "id": "org-7", "text": "Hay una gestión consciente del contexto y del coste de tokens en las tareas repetitivas." },
+          { "id": "org-8", "text": "Las decisiones apoyadas en la IA son reversibles y dejan un rastro de auditoría." },
+          { "id": "org-9", "text": "La IA está integrada en los procesos con un reparto claro: asistente frente a decisor." },
+          { "id": "org-10", "text": "La organización calibra y audita con regularidad su propio uso de la IA." },
+          { "id": "org-11", "text": "La adopción de la IA forma parte de la estrategia y de la mejora continua, no es una iniciativa puntual." }
+        ],
+        "bands": [
+          { "min": 0, "max": 2, "label": "Nivel 0–2: Experimentos espontáneos", "advice": "Barrera: falta de reglas y de un objetivo comunes. Siguiente paso: redacta una política sencilla de uso aceptable de la IA (datos, privacidad) e identifica 1–2 procesos piloto." },
+          { "min": 3, "max": 5, "label": "Nivel 3–5: Primeros marcos", "advice": "Éxito: hay reglas y usos permitidos. Siguiente paso: introduce la verificación obligatoria de los resultados en los procesos críticos y empieza a medir el impacto." },
+          { "min": 6, "max": 8, "label": "Nivel 6–8: Procesos conscientes", "advice": "Éxito: mides el impacto y gestionas el contexto. Frontera 8→9: integra la IA en el proceso con un reparto claro asistente/decisor y un rastro de auditoría para las decisiones." },
+          { "min": 9, "max": 11, "label": "Nivel 9–11: Adopción madura", "advice": "Trampa: tomar la madurez por un estado acabado y no por una mejora continua. Frontera 10→11: convierte la calibración y la auditoría del uso de la IA en parte de la estrategia y de la rutina del equipo." }
+        ]
+      }
+    ]
+  },
+  "summary": {
+    "points": [
+      "La Escala de Holak v2.1e mide si la IA está integrada en los procesos (reglas, verificación, medición), no el número de licencias.",
+      "Evalúas la adopción en la organización; tu propia práctica la diagnosticas aparte (MSHP).",
+      "Es una diagnosis orientativa: sin aprobado/suspenso y sin influir en la finalización; sirve para señalar el siguiente paso."
+    ],
+    "checklist": [
+      "¿Habéis puesto nombre al nivel orientativo de la organización (0–11)?",
+      "¿Sabéis cuál es la barrera más próxima que hay que superar?",
+      "¿Conocéis un siguiente paso concreto para subir de nivel?"
+    ],
+    "checklistTitle": "Lista de comprobación — tras la autodiagnosis de la organización",
+    "nextStep": "Siguiente paso: elegid una barrera del nivel superior y planificad un pequeño paso de adopción reversible."
+  }
+}

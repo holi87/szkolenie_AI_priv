@@ -1,0 +1,378 @@
+{
+  "_meta": {
+    "module": "M2",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M2. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q009",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S1"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Die teilnehmende Person erkennt korrekt, was ein Token bei der Textverarbeitung durch ein LLM ist (E1).",
+      "prompt": "Im Modul „LLM-Architektur“ wurde gezeigt, dass das Modell nicht mit Wörtern, sondern mit Token arbeitet. Was ist ein Token (token)?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Ein Textfragment (Teil eines Wortes, ein Zeichen oder ein Leerzeichen), in das der Text vor der Verarbeitung zerlegt wird"
+        },
+        {
+          "id": "B",
+          "text": "Immer genau ein vollständiges, durch Leerzeichen getrenntes Wort"
+        },
+        {
+          "id": "C",
+          "text": "Eine einzelne in das Modell geladene Dokumentseite"
+        },
+        {
+          "id": "D",
+          "text": "Ein Modellparameter, der für die Qualität der Antwort verantwortlich ist"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Ein Token ist ein Textfragment — Teil eines Wortes, ein Zeichen oder ein Leerzeichen —, denn das Modell verarbeitet Text, nachdem er in Token zerlegt wurde (Tokenisierung), und nicht nach Wörtern oder Seiten.",
+      "feedbackIncorrect": "Ein Token ist weder ein ganzes Wort noch eine Seite. Kehre zum Bildschirm „Token und Tokenisierung“ zurück: 1 Token ≈ einige Zeichen, und Polnisch kann in Token „teurer“ sein als Englisch.",
+      "references": [
+        "M2.2"
+      ]
+    },
+    {
+      "id": "Q010",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Die teilnehmende Person erklärt, was ein Kontextfenster ist und warum ein langes Dokument möglicherweise nicht hineinpasst (E1).",
+      "prompt": "Was ist ein Kontextfenster (context window) und was passiert, wenn ein Dokument zusammen mit Frage und Antwort dieses überschreitet?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Es ist die maximale Anzahl an Token, die das Modell auf einmal sieht; bei Überschreitung muss ein Teil der Eingabe herausfallen"
+        },
+        {
+          "id": "B",
+          "text": "Es ist die Anzahl der Modellparameter; bei Überschreitung arbeitet das Modell langsamer, sieht aber das gesamte Dokument"
+        },
+        {
+          "id": "C",
+          "text": "Es ist die maximale Anzahl an Dateien, die man hochladen kann; der Text passt immer vollständig hinein"
+        },
+        {
+          "id": "D",
+          "text": "Es ist die Bildschirmgröße, auf der die Antwort des Modells angezeigt wird"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Das Kontextfenster ist die maximale Anzahl an Token (Eingabe + Antwort), die das Modell auf einmal „sieht“ — bei Überschreitung des Limits fällt ein Teil der Eingabe heraus, wie Blätter, die von einem Schreibtisch mit fester Fläche geschoben werden.",
+      "feedbackIncorrect": "Das Kontextfenster wird in Token gemessen, nicht in Dateien, Parametern oder Bildschirmpixeln. Wiederhole den Bildschirm „Kontextfenster“ und die Schreibtisch-Analogie.",
+      "references": [
+        "M2.3"
+      ]
+    },
+    {
+      "id": "Q011",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S1"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Die teilnehmende Person wendet das Wissen über das Kontextfenster an, um zu beurteilen, warum das Einfügen eines ganzen Dokuments nicht garantiert, dass das Modell es gelesen hat (E1).",
+      "prompt": "Eine Testerin hat die gesamte 80-seitige fiktive Spezifikation von SklepDemo in das Modell eingefügt und eine Frage zu einer einzelnen Anforderung gestellt. Das Modell hat geantwortet und dabei eine zentrale Vorgabe übergangen. Welche Erklärung ist am treffendsten?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Das Dokument hat das Kontextfenster überschritten, sodass ein Teil der Eingabe (darunter diese Anforderung) herausgefallen ist und das Modell sie nicht „gesehen“ hat"
+        },
+        {
+          "id": "B",
+          "text": "Das Modell hat zu wenige Parameter, deshalb kann es keine langen Dokumente lesen"
+        },
+        {
+          "id": "C",
+          "text": "Das Einfügen des ganzen Dokuments garantiert immer, dass das Modell jede Seite gelesen hat, also muss es sich um einen Zufallsfehler handeln"
+        },
+        {
+          "id": "D",
+          "text": "Die Tokenisierung hat die Leerzeichen entfernt, wodurch die Spezifikation für das Modell unlesbar wurde"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Richtig: „Ich habe das ganze Dokument eingefügt“ ≠ „das Modell hat es gelesen“ — wenn der Text das Kontextfenster überschreitet, fällt ein Teil der Eingabe heraus und kann genau die zentrale Anforderung übergehen.",
+      "feedbackIncorrect": "Die Ursache sind weder die Parameter noch die Tokenisierung der Leerzeichen — es geht um die Überschreitung des Kontextfensters. Kehre zum Bildschirm „Kontextfenster“ und zur Schlussfolgerung zurück, dass Einfügen ≠ Lesen ist.",
+      "references": [
+        "M2.3"
+      ]
+    },
+    {
+      "id": "Q012",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Die teilnehmende Person identifiziert die Folgen eines zu kleinen Kontexts, wenn ein wesentliches Fragment aus dem Fenster herausfällt (E2).",
+      "prompt": "Welche der folgenden sind unmittelbare Folgen eines zu kleinen Kontextfensters, wenn ein wesentliches Eingabefragment herausfällt? Wähle alle zutreffenden aus.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Auslassen von Informationen — das Modell antwortet, ohne eine zentrale Anforderung zu berücksichtigen"
+        },
+        {
+          "id": "B",
+          "text": "Inkonsistenz — das Modell „vergisst“ frühere Festlegungen in einem langen Gespräch"
+        },
+        {
+          "id": "C",
+          "text": "Halluzination/Raten — fehlende Daten werden durch Erfundenes ersetzt"
+        },
+        {
+          "id": "D",
+          "text": "Automatisches Nachladen des fehlenden Fragments aus dem Internet, um den Kontext zu ergänzen"
+        },
+        {
+          "id": "E",
+          "text": "Dauerhafte Erhöhung der Anzahl der Modellparameter, um das gesamte Dokument unterzubringen"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Das sind die drei Folgen eines zu kleinen Kontexts: Auslassen von Informationen, Inkonsistenz und Halluzination. Das Modell lädt fehlende Daten nicht selbst nach und ändert auch nicht seine Anzahl an Parametern.",
+      "feedbackIncorrect": "Das Modell gleicht Lücken weder durch Nachladen aus dem Netz noch durch Erhöhung der Parameter aus. Wiederhole den Bildschirm „Drei Folgen eines zu kleinen Kontexts“.",
+      "references": [
+        "M2.4"
+      ]
+    },
+    {
+      "id": "Q013",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Die teilnehmende Person erkennt QA-Situationen, in denen ein zu kleines Kontextfenster eine reale Risikoquelle für die Qualität von Entscheidungen ist (E2).",
+      "prompt": "In welchen Situationen aus der Arbeit einer Testerin ist ein zu kleines Kontextfenster eine reale Risikoquelle für die Qualität von Entscheidungen? Wähle alle zutreffenden aus.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Ein langes Gespräch über den Defekt ORD-TEST-777, in dem das Modell die Festlegungen vom Anfang des Threads nicht mehr berücksichtigt"
+        },
+        {
+          "id": "B",
+          "text": "Die Analyse einer umfangreichen Spezifikation, bei der das Akzeptanzkriterium in einem Abschnitt steht, der aus dem Fenster herausgefallen ist"
+        },
+        {
+          "id": "C",
+          "text": "Eine Frage zu einer Anforderung, die das Modell selbstsicher beantwortet, obwohl die Quelldaten nicht mehr im Kontext waren"
+        },
+        {
+          "id": "D",
+          "text": "Eine kurze Frage zu einer einzelnen Definition, deren vollständiger Inhalt in das Kontextfenster passt"
+        },
+        {
+          "id": "E",
+          "text": "Eine Farbänderung der Oberfläche des Werkzeugs, in dem das Modell ausgeführt wird"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Das Risiko entsteht dort, wo ein wesentliches Fragment aus dem Fenster herausfällt: Inkonsistenz in einem langen Gespräch, ein übergangenes Kriterium und eine selbstsichere, aber nicht durch Daten gestützte Antwort. Eine kurze Frage, die in das Fenster passt, und die UI-Farbe sind hier keine Gefahr.",
+      "feedbackIncorrect": "Wenn der Inhalt in das Fenster passt oder die Änderung nur die UI betrifft, tritt das Risiko eines zu kleinen Kontexts nicht auf. Wiederhole den Zusammenhang zwischen dem Kontextfenster und seinen drei Folgen (Bildschirm „Drei Folgen…“).",
+      "references": [
+        "M2.4",
+        "M2.3"
+      ]
+    },
+    {
+      "id": "Q014",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "kolejnosc_procesu",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Die teilnehmende Person ordnet die Schritte der Textverarbeitung durch ein LLM in die richtige Reihenfolge — vom Text bis zur Antwort (E3).",
+      "prompt": "Ordne die Schritte, die ein LLM vom Erhalt des Textes bis zur Erzeugung der Antwort durchführt, in die richtige Reihenfolge.",
+      "sequence": [
+        "Der Eingabetext wird in Token zerlegt (Tokenisierung)",
+        "Die Token werden im Kontextfenster des Modells abgelegt",
+        "Das Modell nutzt die Beziehungen zwischen den Token mithilfe der Aufmerksamkeit (attention)",
+        "Das Modell erzeugt nacheinander die Token der Antwort",
+        "Die Antwort-Token werden wieder zu lesbarem Text zusammengesetzt"
+      ],
+      "feedbackCorrect": "Richtig: Text → Token → Kontextfenster → Aufmerksamkeit (attention) auf den Beziehungen → Erzeugung der Token → Zusammensetzen zu Text. Das ist der intuitive Ablauf „vom Text bis zur Antwort“.",
+      "feedbackIncorrect": "Zuerst muss die Tokenisierung erfolgen, erst danach kommen Kontextfenster und Aufmerksamkeit und zum Schluss die Erzeugung und das Zusammensetzen der Antwort. Wiederhole den Bildschirm „Transformer und Aufmerksamkeit — Intuition“.",
+      "references": [
+        "M2.5",
+        "M2.2"
+      ]
+    },
+    {
+      "id": "Q015",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "kolejnosc_procesu",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Die teilnehmende Person ordnet die Verarbeitungsschritte, wenn die Eingabe länger als das Kontextfenster ist (E3, E1).",
+      "prompt": "Eine Testerin fügt ein langes Dokument ein, das das Kontextfenster des Modells überschreitet. Ordne die Schritte in der Reihenfolge, in der das Modell eine solche zu lange Eingabe verarbeitet.",
+      "sequence": [
+        "Das Modell nimmt das eingefügte Dokument und die Frage der Testerin entgegen",
+        "Der Text wird in Token zerlegt (Tokenisierung)",
+        "Die Anzahl der Token wird mit dem Limit des Kontextfensters verglichen",
+        "Fragmente, die das Limit überschreiten, fallen aus dem Fenster heraus",
+        "Das Modell verarbeitet nur die Token, die in das Fenster passen",
+        "Das Modell erzeugt eine Antwort auf Basis des verfügbaren Kontexts"
+      ],
+      "feedbackCorrect": "Richtig: Entgegennahme des Textes → Tokenisierung → Vergleich mit dem Fensterlimit → Abschneiden des Überschusses → Verarbeitung dessen, was übrig blieb → Antwort. Deshalb kann ein Teil der Eingabe herausfallen, bevor das Modell überhaupt mit der Aufmerksamkeit beginnt.",
+      "feedbackIncorrect": "Das Abschneiden des Überschusses erfolgt nach der Tokenisierung und dem Vergleich mit dem Fensterlimit, und die Verarbeitung umfasst nur das, was hineingepasst hat. Wiederhole die Bildschirme „Kontextfenster“ und „Transformer und Aufmerksamkeit“.",
+      "references": [
+        "M2.5",
+        "M2.3"
+      ]
+    },
+    {
+      "id": "Q016",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S1"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Die teilnehmende Person trifft eine sichere QA-Entscheidung, wenn ein Dokument länger als das Kontextfenster des Modells ist (E1, E2).",
+      "prompt": "Du sollst die fiktive Spezifikation PipeDemo (ca. 120 Seiten) analysieren, und eine erste Prüfung zeigt, dass ihr Text das Kontextfenster des Modells deutlich überschreitet. Es ist dir wichtig, eine korrekte Antwort zu konkreten Akzeptanzkriterien zu erhalten. Was ist die beste Entscheidung?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Das Dokument aufteilen und nur die für die Frage relevanten Abschnitte angeben (z. B. „Akzeptanzkriterien“), sodass sie in das Kontextfenster passen"
+        },
+        {
+          "id": "B",
+          "text": "Alles auf einmal einfügen — da das Werkzeug den Text angenommen hat, berücksichtigt das Modell sicher jede Seite"
+        },
+        {
+          "id": "C",
+          "text": "Alles einfügen und der Antwort vertrauen, denn eine längere Eingabe ergibt immer ein vollständigeres Bild"
+        },
+        {
+          "id": "D",
+          "text": "Das Modell bitten, die fehlenden Fragmente der Spezifikation, die nicht hineingepasst haben, selbstständig zu ergänzen"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Wenn ein Dokument das Fenster überschreitet, ist es sicher, nur die für die Frage relevanten Abschnitte anzugeben — dadurch landen die zentralen Kriterien tatsächlich im Kontext und fallen nicht heraus.",
+      "feedbackIncorrect": "Dass das Werkzeug den Text angenommen hat, bedeutet nicht, dass das Modell das Ganze gesehen hat; man darf es auch nicht bitten, fehlende Fragmente zu erfinden. Kehre zu den Bildschirmen „Kontextfenster“ und „Drei Folgen…“ zurück.",
+      "references": [
+        "M2.3",
+        "M2.4"
+      ]
+    },
+    {
+      "id": "Q017",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Die teilnehmende Person bewertet die Modellauswahl und erkennt, dass eine höhere Anzahl an Parametern allein keine Qualitätsgarantie ist (E4).",
+      "prompt": "Ein Team wählt ein Modell zur Analyse eines fiktiven Defekt-ID-Formats in SklepDemo aus. Modell X hat deutlich mehr Parameter, verwechselt aber im Test das ID-Format; Modell Y hat weniger Parameter, erkennt das Format jedoch mit gut gewähltem Kontext zutreffend. Ein Kollege schlägt vor: „Wir nehmen X, weil es mehr Milliarden Parameter hat.“ Wie lässt sich dieser Vorschlag am besten bewerten?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Als Antimuster verwerfen — über die Treffsicherheit entscheiden die Passung zur Aufgabe und der Kontext; da Y bei dieser Aufgabe besser funktioniert, Y wählen (oder beide Optionen an realen Fällen überprüfen)"
+        },
+        {
+          "id": "B",
+          "text": "Den Vorschlag annehmen — eine höhere Anzahl an Parametern bedeutet immer eine höhere Antwortqualität"
+        },
+        {
+          "id": "C",
+          "text": "X annehmen, aber das Kontextfenster verkürzen, um die Chancen der Modelle anzugleichen"
+        },
+        {
+          "id": "D",
+          "text": "Das Modell mit der höheren Anzahl an Parametern wählen und Tests weglassen, weil das Ergebnis vorbestimmt ist"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Die Anzahl der Parameter ist allein keine Qualitätsgarantie — entscheidend sind die Passung zur Aufgabe, die Datenqualität und der Kontext. Da Y bei dieser Aufgabe trifft, ist die Wahl „weil mehr Milliarden Parameter“ ein Antimuster.",
+      "feedbackIncorrect": "Mehr Parameter bedeuten nicht automatisch eine bessere Qualität, und das Verkürzen des Kontextfensters verschlechtert die Ergebnisse. Wiederhole den Bildschirm „Mehr Parameter ≠ bessere Qualität“.",
+      "references": [
+        "M2.6"
+      ]
+    }
+  ]
+}

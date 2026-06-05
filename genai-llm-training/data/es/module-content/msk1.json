@@ -1,0 +1,100 @@
+{
+  "_meta": {
+    "issue": "#112-#118 [M15] / #124 [M16] Ścieżka formatywna S4 — Skala Holaka (moduł szkoleniowy, rozbudowa)",
+    "adr": "docs/adr/0009-sciezka-formatywna-s4-skala-holaka.md",
+    "interaction": "Klasyfikacja praktyk (kind: classify) — ćwiczenie formatywne, NIE scorowane do zaliczenia",
+    "source": "Osie dojrzałości Skali Holaka: zarządzanie kontekstem, oszczędność tokenów, powtarzalne workflowy (skille). Atrybucja: quality-blog.eu/pl/blog/skala-holaka.",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE i ogólne (zero realnych danych/PII). Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MSK1",
+  "intro": "Los niveles más altos de madurez en IA no se reconocen por la cantidad de herramientas, sino por CÓMO le proporcionas el contexto al modelo, cuánto cuesta eso y si eres capaz de convertir una tarea repetitiva en un skill. Este módulo enseña la higiene del contexto, la conciencia del coste de los tokens y la construcción de flujos de trabajo repetibles. Es un ejercicio de desarrollo, no un examen.",
+  "screens": [
+    {
+      "id": "msk1-s1-po-co",
+      "title": "Para qué gestionar el contexto y el coste",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "El modelo solo ve lo que cabe en la ventana de contexto. Demasiado poco contexto → respuesta genérica o errónea; demasiado contenido irrelevante → el modelo pierde la señal y el coste de los tokens aumenta. La práctica madura consiste en aportar exactamente lo necesario: ni más, ni menos." },
+        { "kind": "list", "items": [
+          "Contexto = los datos, las instrucciones y los ejemplos que influyen realmente en la tarea.",
+          "El coste de los tokens crece con cada carácter pegado, incluido el innecesario.",
+          "Las tareas repetitivas son las que más ganan con las plantillas y la higiene del contexto."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Eje de la Escala de Holak", "text": "La gestión consciente del contexto y del coste es uno de los ejes que distinguen el nivel «uso la IA» del nivel «uso la IA con madurez».",
+          "links": [ { "label": "Escala de Holak — modelo de madurez (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka" } ]
+        }
+      ]
+    },
+    {
+      "id": "msk1-s2-praktyki",
+      "title": "Con mesura vs con derroche",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "La práctica mesurada selecciona el contexto y reutiliza una y otra vez plantillas probadas. La práctica derrochadora pega «todo por si acaso», mezcla temas y describe el contexto desde cero cada vez." },
+        { "kind": "table", "headers": ["Dimensión", "Con mesura", "Con derroche"], "rows": [
+          ["Selección del contexto", "Solo los fragmentos relevantes para la tarea", "Toda la base de conocimiento «por si acaso»"],
+          ["Repetibilidad", "Plantilla de prompt con huecos para los datos", "Cada vez una descripción desde cero, con otras palabras"],
+          ["Higiene", "Elimino los contenidos desactualizados y contradictorios", "Mantengo decenas de temas en un mismo chat"]
+        ], "textAlt": "Comparación de las prácticas mesuradas y derrochadoras en tres dimensiones: selección del contexto, repetibilidad e higiene." },
+        { "kind": "callout", "variant": "warn", "title": "La trampa del «por si acaso»", "text": "Pegar toda la base de conocimiento en cada prompt no aumenta la precisión: lo más habitual es que diluya la tarea y eleve el coste. Dosifica el contexto de forma consciente." }
+      ]
+    },
+    {
+      "id": "msk1-s3-skille",
+      "title": "Skills: un flujo de trabajo repetible en lugar de un prompt puntual",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Un skill es un flujo de trabajo repetible descrito una sola vez: una instrucción de «cuándo y cómo» realizar una tarea habitual, con un contexto fijado, un formato de salida y unos pasos de verificación. En lugar de idear un prompt cada vez, ejecutas una receta probada: más barato, más rápido y más coherente." },
+        { "kind": "list", "ordered": true, "items": [
+          "Nombra la tarea y la condición de activación (cuándo aplicar este skill).",
+          "Define el contexto fijo y el formato de salida (qué aportas y qué debe devolver).",
+          "Añade un paso de verificación del resultado antes de usarlo.",
+          "Guárdalo como plantilla/skill y mejóralo después de cada uso."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Por qué esto ahorra contexto", "text": "Un skill codifica una sola vez lo que de otro modo describes muchas veces: un contexto fijo y meditado sustituye el pegado improvisado y reduce el coste de los tokens manteniendo la calidad." }
+      ]
+    },
+    {
+      "id": "msk1-s4-jak-cwiczyc",
+      "title": "Cómo practicarlo",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "En un momento clasificarás prácticas como mesuradas o derrochadoras, incluidas las prácticas de construcción de skills. Aquí no hay umbral de aprobado; el orden de los elementos es aleatorio, así que lo que cuenta es el contenido, no el patrón. El objetivo es reconocer el patrón que luego trasladarás a tu propio trabajo." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "msk1-classify",
+    "title": "¿Práctica de contexto mesurada o derrochadora?",
+    "intro": "Asigna cada práctica. Es un ejercicio de desarrollo: el feedback explica por qué una práctica determinada es (poco) mesurada.",
+    "categories": [
+      { "id": "lean", "label": "Práctica mesurada", "desc": "Selecciona el contexto, controla el coste, usa plantillas/skills." },
+      { "id": "wasteful", "label": "Práctica derrochadora", "desc": "Añade excesos, mezcla temas, describe todo desde cero." }
+    ],
+    "items": [
+      { "id": "msk1-i1", "text": "Aporto solo los fragmentos del documento relevantes para la tarea.", "correctCategory": "lean", "rationale": "Seleccionar el contexto aumenta la precisión y reduce el coste." },
+      { "id": "msk1-i2", "text": "Pego toda la base de conocimiento en cada prompt «por si acaso».", "correctCategory": "wasteful", "rationale": "El exceso diluye la señal y eleva el coste de los tokens." },
+      { "id": "msk1-i3", "text": "Tengo la tarea repetitiva como plantilla de prompt con huecos para los datos.", "correctCategory": "lean", "rationale": "La plantilla aporta repetibilidad e higiene del contexto." },
+      { "id": "msk1-i4", "text": "Cada vez describo el contexto desde cero, con otras palabras.", "correctCategory": "wasteful", "rationale": "Sin plantilla = tiempo desperdiciado y resultados incoherentes." },
+      { "id": "msk1-i5", "text": "Tengo un skill (un flujo de trabajo descrito) para mi tarea de IA más frecuente.", "correctCategory": "lean", "rationale": "El skill codifica el contexto fijo y los pasos: más barato y más coherente." },
+      { "id": "msk1-i6", "text": "Mantengo decenas de temas sin relación en un mismo chat.", "correctCategory": "wasteful", "rationale": "Mezclar temas ensucia el contexto y confunde al modelo." },
+      { "id": "msk1-i7", "text": "Elimino del contexto la información desactualizada y contradictoria antes de preguntar.", "correctCategory": "lean", "rationale": "Un contexto limpio reduce el riesgo de error y de alucinación." },
+      { "id": "msk1-i8", "text": "Copio un historial largo de conversación a una tarea nueva sin seleccionar nada.", "correctCategory": "wasteful", "rationale": "El exceso arrastrado aumenta el coste e introduce contexto irrelevante." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Aporta exactamente el contexto que influye en la tarea, no más.",
+      "Convierte las tareas repetitivas en plantillas y skills con un contexto fijado y un paso de verificación.",
+      "Cada carácter pegado tiene un coste: dosifica el contexto de forma consciente."
+    ],
+    "checklist": [
+      "¿Sé señalar qué partes del contexto son realmente necesarias?",
+      "¿Tengo un skill/plantilla para mi tarea de IA más frecuente?",
+      "¿Limpio el contexto de contenidos desactualizados y contradictorios?"
+    ],
+    "checklistTitle": "Lista de comprobación — higiene del contexto y skills",
+    "nextStep": "Siguiente paso: toma una tarea repetitiva y conviértela en un skill: una plantilla con un contexto fijado, un formato de salida y un paso de verificación."
+  }
+}

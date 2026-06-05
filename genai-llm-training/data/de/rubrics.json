@@ -1,0 +1,95 @@
+{
+  "_meta": {
+    "issue": "#7 [07][M1] Zdefiniuj rubryki zadań praktycznych",
+    "version": "0.1",
+    "doc": "docs/rubryki-zadan.md",
+    "source": "wymagania/07 (skale 0-5 i 0-3, progi, feedback), wymagania/06 (moduły, efekty)",
+    "notes": "Kryteria binarne (1/0) sumują się do maxScore. Progi: S2 promptowe >=4/5; S3 RAG i ewaluacja >=70% (>=3.5/5) jako warunek konieczny w M6 i M12."
+  },
+  "rubrics": [
+    {
+      "id": "R1-prompt",
+      "task": "Prompt-Aufgabe (Prompt Clinic)",
+      "module": "M7",
+      "paths": ["S2", "S3"],
+      "scaleMax": 5,
+      "passThreshold": 4,
+      "passScope": "S2: zwingende Voraussetzung",
+      "criteria": [
+        { "id": "K1", "name": "Rolle und Ziel", "points": 1 },
+        { "id": "K2", "name": "Kontext und Eingabedaten (keine sensiblen Daten)", "points": 1 },
+        { "id": "K3", "name": "Einschränkungen und Qualitätskriterien", "points": 1 },
+        { "id": "K4", "name": "Ausgabeformat (überprüfbar)", "points": 1 },
+        { "id": "K5", "name": "Sicherheit und Überprüfbarkeit", "points": 1 }
+      ],
+      "belowThresholdFeedback": "Es fehlt: {failedCriteria}. Ergänze Rolle/Ziel, Kontext, Einschränkungen und Kriterien, Ausgabeformat sowie die Datenhygiene."
+    },
+    {
+      "id": "R2-rag",
+      "task": "Aufgabe zur RAG-Readiness",
+      "module": "M6",
+      "paths": ["S3"],
+      "scaleMax": 5,
+      "passThreshold": 3.5,
+      "passScope": "S3: zwingende Voraussetzung (>=70% in M6)",
+      "criteria": [
+        { "id": "K1", "name": "Quellen und Grounding", "points": 1 },
+        { "id": "K2", "name": "Chunking + Overlap", "points": 1 },
+        { "id": "K3", "name": "Retrieval (Top-k, Metadatenfilter)", "points": 1 },
+        { "id": "K4", "name": "Quellenangaben / Überprüfbarkeit", "points": 1 },
+        { "id": "K5", "name": "Fehlerdiagnose (Retrieval/Generation/Quelle)", "points": 1 }
+      ],
+      "belowThresholdFeedback": "Unterhalb der Schwelle in M6. Es fehlt: {failedCriteria}. Kehre zu den Bildschirmen zu Pipeline/Chunking/Fehlerdiagnose zurück."
+    },
+    {
+      "id": "R3-eval",
+      "task": "Evaluierungsaufgabe (Judge/Golden Set)",
+      "module": "M12",
+      "paths": ["S3"],
+      "scaleMax": 5,
+      "passThreshold": 3.5,
+      "passScope": "S3: zwingende Voraussetzung (>=70% in M12)",
+      "criteria": [
+        { "id": "K1", "name": "Golden Set passend zum Use Case", "points": 1 },
+        { "id": "K2", "name": "Metriken mit Begründung", "points": 1 },
+        { "id": "K3", "name": "LLM-as-a-judge-Rubrik (eindeutig)", "points": 1 },
+        { "id": "K4", "name": "Bias/Position-Bias + Kalibrierung mit einem Experten", "points": 1 },
+        { "id": "K5", "name": "Qualitäts-Akzeptanzschwelle", "points": 1 }
+      ],
+      "belowThresholdFeedback": "Unterhalb der Schwelle in M12. Es fehlt: {failedCriteria}. Kehre zu Golden Set / Metriken / Rubrik / Kalibrierung zurück."
+    },
+    {
+      "id": "R4-qa-workbench",
+      "task": "QA-Workbench (Bewertung des QA-Outputs)",
+      "module": "M8",
+      "paths": ["S2", "S3"],
+      "scaleMax": 5,
+      "passThreshold": null,
+      "passScope": "Übung (Feedback / Beitrag zum Quiz)",
+      "criteria": [
+        { "id": "K1", "name": "Testabdeckung", "points": 1 },
+        { "id": "K2", "name": "Abdeckungslücken", "points": 1 },
+        { "id": "K3", "name": "Scheintests / Duplikate", "points": 1 },
+        { "id": "K4", "name": "Risiken / fehlerhafte Annahmen", "points": 1 },
+        { "id": "K5", "name": "Entscheidungsgrenze (menschliche Überprüfung)", "points": 1 }
+      ],
+      "belowThresholdFeedback": "Es fehlt: {failedCriteria}."
+    },
+    {
+      "id": "R5-output-analysis",
+      "task": "Output-Analyse (Output Verifier)",
+      "module": "M11",
+      "paths": ["S1", "S2", "S3"],
+      "scaleMax": 3,
+      "passThreshold": null,
+      "passScope": "Übung",
+      "levels": [
+        { "points": 3, "descriptor": "Alle Schlüsselsätze korrekt klassifiziert; riskante und unbegründete Aussagen erkannt" },
+        { "points": 2, "descriptor": "Größtenteils korrekt; ein einzelner unkritischer Fehler" },
+        { "points": 1, "descriptor": "Teilweise; ein wesentliches Risiko übersehen oder ein Fehler bei einem kritischen Satz" },
+        { "points": 0, "descriptor": "Risiko nicht erkannt / unbegründete Inhalte akzeptiert" }
+      ],
+      "belowThresholdFeedback": "Übersehen: {kategorie}. Kehre zur Checkliste für die Output-Verifizierung zurück."
+    }
+  ]
+}

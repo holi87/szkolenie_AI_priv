@@ -1,0 +1,100 @@
+{
+  "_meta": {
+    "issue": "#112-#118 [M15] / #124 [M16] Parcours formatif S4 — Échelle de Holak (module de formation, extension)",
+    "adr": "docs/adr/0009-sciezka-formatywna-s4-skala-holaka.md",
+    "interaction": "Classification des pratiques (kind: classify) — exercice formatif, NON noté pour la validation",
+    "source": "Axes de maturité de l'Échelle de Holak : gestion du contexte, économie de tokens, workflows reproductibles (skills). Attribution : quality-blog.eu/pl/blog/skala-holaka.",
+    "dataPolicy": "TOUS les exemples sont SYNTHÉTIQUES et génériques (aucune donnée réelle ni PII). Module formatif — sans seuil de validation ni certificat."
+  },
+  "module": "MSK1",
+  "intro": "Les niveaux supérieurs de maturité en IA ne se reconnaissent pas au nombre d'outils, mais à la MANIÈRE dont vous fournissez le contexte au modèle, à son coût et à votre capacité à transformer une tâche répétitive en skill. Ce module enseigne l'hygiène du contexte, la conscience du coût des tokens et la construction de workflows reproductibles. C'est un exercice de développement, pas un test.",
+  "screens": [
+    {
+      "id": "msk1-s1-po-co",
+      "title": "Pourquoi gérer le contexte et le coût",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Le modèle ne voit que ce qui tient dans sa fenêtre de contexte. Trop peu de contexte → réponse générique ou erronée ; trop de contenu non pertinent → le modèle perd le signal et le coût des tokens augmente. Une pratique mature consiste à fournir exactement ce qui est nécessaire — ni plus, ni moins." },
+        { "kind": "list", "items": [
+          "Le contexte = les données, les instructions et les exemples qui influencent réellement la tâche.",
+          "Le coût des tokens augmente avec chaque caractère collé — y compris les inutiles.",
+          "Les tâches répétitives gagnent le plus avec des modèles et une hygiène du contexte."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Axe de l'Échelle de Holak", "text": "La gestion consciente du contexte et du coût est l'un des axes qui distinguent le niveau « j'utilise l'IA » du niveau « j'utilise l'IA avec maturité ».",
+          "links": [ { "label": "Échelle de Holak — modèle de maturité (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka" } ]
+        }
+      ]
+    },
+    {
+      "id": "msk1-s2-praktyki",
+      "title": "Économe vs dispendieux",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "La pratique économe sélectionne le contexte et réutilise des modèles éprouvés. La pratique dispendieuse colle « tout au cas où », mélange les sujets et décrit le contexte depuis zéro à chaque fois." },
+        { "kind": "table", "headers": ["Dimension", "Économe", "Dispendieux"], "rows": [
+          ["Choix du contexte", "Uniquement les fragments pertinents pour la tâche", "Toute la base de connaissances « au cas où »"],
+          ["Reproductibilité", "Modèle de prompt avec des emplacements pour les données", "Description depuis zéro à chaque fois, avec d'autres mots"],
+          ["Hygiène", "Je supprime les contenus obsolètes et contradictoires", "Je garde des dizaines de sujets dans un seul chat"]
+        ], "textAlt": "Comparaison des pratiques économes et dispendieuses selon trois dimensions : choix du contexte, reproductibilité, hygiène." },
+        { "kind": "callout", "variant": "warn", "title": "Le piège du « au cas où »", "text": "Coller toute la base de connaissances dans chaque prompt n'augmente pas la pertinence — le plus souvent, cela dilue la tâche et augmente le coût. Dosez le contexte de manière consciente." }
+      ]
+    },
+    {
+      "id": "msk1-s3-skille",
+      "title": "Skills : un workflow reproductible plutôt qu'un prompt ponctuel",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Un skill est un workflow reproductible décrit une seule fois : une instruction « quand et comment » exécuter une tâche courante, avec un contexte défini, un format de sortie et des étapes de vérification. Au lieu d'inventer un prompt à chaque fois, vous lancez une recette éprouvée — moins cher, plus rapide et plus cohérent." },
+        { "kind": "list", "ordered": true, "items": [
+          "Nommez la tâche et la condition de déclenchement (quand appliquer ce skill).",
+          "Définissez le contexte fixe et le format de sortie (ce que vous fournissez, ce qui doit revenir).",
+          "Ajoutez une étape de vérification du résultat avant de l'utiliser.",
+          "Enregistrez-le comme modèle/skill et améliorez-le après chaque utilisation."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Pourquoi c'est une économie de contexte", "text": "Un skill encode une seule fois ce que vous décrivez autrement à de multiples reprises — un contexte fixe et réfléchi remplace le collage aléatoire et réduit le coût des tokens à qualité constante." }
+      ]
+    },
+    {
+      "id": "msk1-s4-jak-cwiczyc",
+      "title": "Comment s'exercer",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Dans un instant, vous allez classer des pratiques comme économes ou dispendieuses — y compris les pratiques de construction de skills. Il n'y a pas de seuil de validation ici ; l'ordre des éléments est aléatoire, donc c'est le contenu qui compte, pas le schéma. L'objectif est de reconnaître un modèle que vous transposerez à votre propre travail." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "msk1-classify",
+    "title": "Pratique de contexte économe ou dispendieuse ?",
+    "intro": "Classez chaque pratique. C'est un exercice de développement — le feedback explique pourquoi une pratique donnée est (peu) économe.",
+    "categories": [
+      { "id": "lean", "label": "Pratique économe", "desc": "Sélectionne le contexte, contrôle le coût, utilise des modèles/skills." },
+      { "id": "wasteful", "label": "Pratique dispendieuse", "desc": "Ajoute du superflu, mélange les sujets, décrit tout depuis zéro." }
+    ],
+    "items": [
+      { "id": "msk1-i1", "text": "Je fournis uniquement les fragments du document pertinents pour la tâche.", "correctCategory": "lean", "rationale": "La sélection du contexte augmente la pertinence et réduit le coût." },
+      { "id": "msk1-i2", "text": "Je colle toute la base de connaissances dans chaque prompt « au cas où ».", "correctCategory": "wasteful", "rationale": "Le superflu dilue le signal et augmente le coût des tokens." },
+      { "id": "msk1-i3", "text": "J'ai ma tâche répétitive sous forme de modèle de prompt avec des emplacements pour les données.", "correctCategory": "lean", "rationale": "Un modèle, c'est de la reproductibilité et de l'hygiène du contexte." },
+      { "id": "msk1-i4", "text": "À chaque fois, je décris le contexte depuis zéro, avec d'autres mots.", "correctCategory": "wasteful", "rationale": "Absence de modèle = temps gaspillé et résultats incohérents." },
+      { "id": "msk1-i5", "text": "J'ai un skill (un workflow décrit) pour ma tâche IA la plus fréquente.", "correctCategory": "lean", "rationale": "Un skill encode le contexte fixe et les étapes — moins cher et plus cohérent." },
+      { "id": "msk1-i6", "text": "Je garde dans un seul chat des dizaines de sujets sans rapport.", "correctCategory": "wasteful", "rationale": "Mélanger les sujets encombre le contexte et embrouille le modèle." },
+      { "id": "msk1-i7", "text": "Je supprime du contexte les informations obsolètes et contradictoires avant de poser ma question.", "correctCategory": "lean", "rationale": "Un contexte propre réduit le risque d'erreur et d'hallucination." },
+      { "id": "msk1-i8", "text": "Je copie un long historique de conversation vers une nouvelle tâche sans sélection.", "correctCategory": "wasteful", "rationale": "Le superflu transféré augmente le coût et introduit un contexte non pertinent." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Fournissez exactement le contexte qui influence la tâche — pas davantage.",
+      "Transformez les tâches répétitives en modèles et en skills avec un contexte défini et une étape de vérification.",
+      "Chaque caractère collé a un coût — dosez le contexte de manière consciente."
+    ],
+    "checklist": [
+      "Suis-je capable d'indiquer quelles parties du contexte sont réellement nécessaires ?",
+      "Ai-je un skill/modèle pour ma tâche IA la plus fréquente ?",
+      "Est-ce que je nettoie le contexte des contenus obsolètes et contradictoires ?"
+    ],
+    "checklistTitle": "Check-list — hygiène du contexte et skills",
+    "nextStep": "Étape suivante : prenez une tâche répétitive et transformez-la en skill — un modèle avec un contexte défini, un format de sortie et une étape de vérification."
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "_meta": {
+    "issue": "#7 [07][M1] Zdefiniuj rubryki zadań praktycznych",
+    "version": "0.1",
+    "doc": "docs/rubryki-zadan.md",
+    "source": "wymagania/07 (skale 0-5 i 0-3, progi, feedback), wymagania/06 (moduły, efekty)",
+    "notes": "Kryteria binarne (1/0) sumują się do maxScore. Progi: S2 promptowe >=4/5; S3 RAG i ewaluacja >=70% (>=3.5/5) jako warunek konieczny w M6 i M12."
+  },
+  "rubrics": [
+    {
+      "id": "R1-prompt",
+      "task": "Bài tập viết prompt (Prompt clinic)",
+      "module": "M7",
+      "paths": ["S2", "S3"],
+      "scaleMax": 5,
+      "passThreshold": 4,
+      "passScope": "S2: bắt buộc",
+      "criteria": [
+        { "id": "K1", "name": "Vai trò và mục tiêu", "points": 1 },
+        { "id": "K2", "name": "Bối cảnh và dữ liệu đầu vào (không có dữ liệu nhạy cảm)", "points": 1 },
+        { "id": "K3", "name": "Ràng buộc và tiêu chí chất lượng", "points": 1 },
+        { "id": "K4", "name": "Định dạng đầu ra (có thể kiểm chứng)", "points": 1 },
+        { "id": "K5", "name": "An toàn và khả năng kiểm chứng", "points": 1 }
+      ],
+      "belowThresholdFeedback": "Còn thiếu: {failedCriteria}. Hãy bổ sung vai trò/mục tiêu, bối cảnh, ràng buộc và tiêu chí, định dạng đầu ra cùng với việc bảo vệ dữ liệu."
+    },
+    {
+      "id": "R2-rag",
+      "task": "Bài tập mức độ sẵn sàng cho RAG",
+      "module": "M6",
+      "paths": ["S3"],
+      "scaleMax": 5,
+      "passThreshold": 3.5,
+      "passScope": "S3: bắt buộc (>=70% trong M6)",
+      "criteria": [
+        { "id": "K1", "name": "Nguồn và grounding", "points": 1 },
+        { "id": "K2", "name": "Chunking + overlap", "points": 1 },
+        { "id": "K3", "name": "Retrieval (top-k, bộ lọc metadata)", "points": 1 },
+        { "id": "K4", "name": "Trích dẫn / khả năng kiểm chứng", "points": 1 },
+        { "id": "K5", "name": "Chẩn đoán lỗi (retrieval/generation/nguồn)", "points": 1 }
+      ],
+      "belowThresholdFeedback": "Dưới ngưỡng trong M6. Còn thiếu: {failedCriteria}. Hãy quay lại các màn hình pipeline/chunking/chẩn đoán lỗi."
+    },
+    {
+      "id": "R3-eval",
+      "task": "Bài tập đánh giá (Judge/golden set)",
+      "module": "M12",
+      "paths": ["S3"],
+      "scaleMax": 5,
+      "passThreshold": 3.5,
+      "passScope": "S3: bắt buộc (>=70% trong M12)",
+      "criteria": [
+        { "id": "K1", "name": "Golden set phù hợp với use case", "points": 1 },
+        { "id": "K2", "name": "Các chỉ số kèm lý giải", "points": 1 },
+        { "id": "K3", "name": "Rubric LLM-as-a-judge (rõ ràng, không mơ hồ)", "points": 1 },
+        { "id": "K4", "name": "Bias/position bias + hiệu chỉnh cùng chuyên gia", "points": 1 },
+        { "id": "K5", "name": "Ngưỡng chấp nhận chất lượng", "points": 1 }
+      ],
+      "belowThresholdFeedback": "Dưới ngưỡng trong M12. Còn thiếu: {failedCriteria}. Hãy quay lại golden set / chỉ số / rubric / hiệu chỉnh."
+    },
+    {
+      "id": "R4-qa-workbench",
+      "task": "QA workbench (đánh giá đầu ra QA)",
+      "module": "M8",
+      "paths": ["S2", "S3"],
+      "scaleMax": 5,
+      "passThreshold": null,
+      "passScope": "luyện tập (phản hồi / đóng góp vào quiz)",
+      "criteria": [
+        { "id": "K1", "name": "Độ bao phủ kiểm thử", "points": 1 },
+        { "id": "K2", "name": "Khoảng trống bao phủ", "points": 1 },
+        { "id": "K3", "name": "Kiểm thử hình thức / trùng lặp", "points": 1 },
+        { "id": "K4", "name": "Rủi ro / giả định sai", "points": 1 },
+        { "id": "K5", "name": "Ranh giới quyết định (kiểm chứng bởi con người)", "points": 1 }
+      ],
+      "belowThresholdFeedback": "Còn thiếu: {failedCriteria}."
+    },
+    {
+      "id": "R5-output-analysis",
+      "task": "Phân tích đầu ra (Output verifier)",
+      "module": "M11",
+      "paths": ["S1", "S2", "S3"],
+      "scaleMax": 3,
+      "passThreshold": null,
+      "passScope": "luyện tập",
+      "levels": [
+        { "points": 3, "descriptor": "Tất cả các câu then chốt được phân loại chính xác; những câu rủi ro và không có căn cứ đều được phát hiện" },
+        { "points": 2, "descriptor": "Phần lớn chính xác; chỉ một lỗi không nghiêm trọng" },
+        { "points": 1, "descriptor": "Một phần; bỏ sót rủi ro quan trọng hoặc mắc lỗi ở câu then chốt" },
+        { "points": 0, "descriptor": "Không nhận ra rủi ro / chấp nhận nội dung không có căn cứ" }
+      ],
+      "belowThresholdFeedback": "Đã bỏ sót: {kategorie}. Hãy quay lại checklist kiểm chứng đầu ra."
+    }
+  ]
+}

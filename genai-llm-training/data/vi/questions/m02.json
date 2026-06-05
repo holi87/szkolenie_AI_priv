@@ -1,0 +1,378 @@
+{
+  "_meta": {
+    "module": "M2",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M2. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q009",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S1"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Học viên nhận biết đúng token là gì trong quá trình LLM xử lý văn bản (E1).",
+      "prompt": "Trong module „Kiến trúc LLM” đã chỉ ra rằng mô hình không làm việc trên các từ, mà trên các token. Token (token) là gì?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Một đoạn văn bản (một phần của từ, một ký tự hoặc một dấu cách) mà văn bản được tách ra trước khi xử lý"
+        },
+        {
+          "id": "B",
+          "text": "Luôn luôn là một từ trọn vẹn được phân tách bằng dấu cách"
+        },
+        {
+          "id": "C",
+          "text": "Một trang đơn lẻ của tài liệu được nạp vào mô hình"
+        },
+        {
+          "id": "D",
+          "text": "Một tham số của mô hình chịu trách nhiệm về chất lượng câu trả lời"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Token là một đoạn văn bản — một phần của từ, một ký tự hoặc một dấu cách — vì mô hình xử lý văn bản sau khi tách thành các token (tokenization), chứ không phải theo từ hay theo trang.",
+      "feedbackIncorrect": "Token không phải là cả từ cũng không phải là một trang. Hãy quay lại màn hình „Token và tokenization”: 1 token ≈ vài ký tự, và tiếng Ba Lan thường „đắt” token hơn tiếng Anh.",
+      "references": [
+        "M2.2"
+      ]
+    },
+    {
+      "id": "Q010",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Học viên giải thích cửa sổ ngữ cảnh là gì và tại sao một tài liệu dài có thể không vừa trong đó (E1).",
+      "prompt": "Cửa sổ ngữ cảnh (context window) là gì và điều gì xảy ra khi tài liệu cùng với câu hỏi và câu trả lời vượt quá nó?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Đó là số token tối đa mà mô hình nhìn thấy cùng một lúc; sau khi vượt quá, một phần đầu vào phải bị loại ra"
+        },
+        {
+          "id": "B",
+          "text": "Đó là số tham số của mô hình; sau khi vượt quá, mô hình chạy chậm hơn nhưng vẫn nhìn thấy toàn bộ tài liệu"
+        },
+        {
+          "id": "C",
+          "text": "Đó là giới hạn số tệp có thể tải lên; văn bản luôn vừa trọn vẹn"
+        },
+        {
+          "id": "D",
+          "text": "Đó là kích thước màn hình hiển thị câu trả lời của mô hình"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Cửa sổ ngữ cảnh là số token tối đa (đầu vào + câu trả lời) mà mô hình „nhìn thấy” cùng một lúc — sau khi vượt giới hạn, một phần đầu vào bị loại ra, giống như những tờ giấy bị đẩy khỏi một chiếc bàn có diện tích cố định.",
+      "feedbackIncorrect": "Cửa sổ ngữ cảnh được tính bằng token, chứ không phải bằng tệp, tham số hay pixel màn hình. Hãy xem lại màn hình „Cửa sổ ngữ cảnh” và phép ẩn dụ về chiếc bàn.",
+      "references": [
+        "M2.3"
+      ]
+    },
+    {
+      "id": "Q011",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S1"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Học viên vận dụng kiến thức về cửa sổ ngữ cảnh để đánh giá vì sao việc dán cả tài liệu không bảo đảm rằng mô hình đã đọc nó (E1).",
+      "prompt": "Một tester đã dán vào mô hình toàn bộ bản đặc tả giả định SklepDemo dài 80 trang và đặt một câu hỏi về một yêu cầu. Mô hình trả lời mà bỏ sót điều khoản then chốt. Lời giải thích nào là chính xác nhất?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Tài liệu đã vượt quá cửa sổ ngữ cảnh, nên một phần đầu vào (bao gồm yêu cầu đó) đã bị loại ra và mô hình không „nhìn thấy” nó"
+        },
+        {
+          "id": "B",
+          "text": "Mô hình có quá ít tham số, nên không biết cách đọc các tài liệu dài"
+        },
+        {
+          "id": "C",
+          "text": "Việc dán cả tài liệu luôn bảo đảm rằng mô hình đã đọc từng trang, nên đây chắc chắn là lỗi ngẫu nhiên"
+        },
+        {
+          "id": "D",
+          "text": "Tokenization đã loại bỏ các dấu cách, khiến bản đặc tả trở nên không đọc được đối với mô hình"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Chính xác: „tôi đã dán cả tài liệu” ≠ „mô hình đã đọc nó” — khi văn bản vượt quá cửa sổ ngữ cảnh, một phần đầu vào bị loại ra và có thể bỏ qua đúng yêu cầu then chốt.",
+      "feedbackIncorrect": "Nguyên nhân không phải là tham số hay tokenization của dấu cách — vấn đề là vượt quá cửa sổ ngữ cảnh. Hãy quay lại màn hình „Cửa sổ ngữ cảnh” và kết luận rằng việc dán ≠ việc đọc.",
+      "references": [
+        "M2.3"
+      ]
+    },
+    {
+      "id": "Q012",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Học viên nhận diện các hậu quả của cửa sổ ngữ cảnh quá nhỏ khi một đoạn quan trọng bị rớt khỏi cửa sổ (E2).",
+      "prompt": "Những điều nào sau đây là hậu quả trực tiếp của cửa sổ ngữ cảnh quá nhỏ, khi một đoạn quan trọng của đầu vào bị rớt ra? Hãy chọn tất cả phương án đúng.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Bỏ sót thông tin — mô hình trả lời mà không tính đến yêu cầu then chốt"
+        },
+        {
+          "id": "B",
+          "text": "Thiếu nhất quán — mô hình „quên” những điều đã thống nhất trước đó trong một cuộc trò chuyện dài"
+        },
+        {
+          "id": "C",
+          "text": "Ảo giác/đoán mò — thiếu dữ liệu bị thay thế bằng nội dung bịa đặt"
+        },
+        {
+          "id": "D",
+          "text": "Tự động tải đoạn còn thiếu từ internet để bổ sung ngữ cảnh"
+        },
+        {
+          "id": "E",
+          "text": "Tăng vĩnh viễn số tham số của mô hình để chứa được toàn bộ tài liệu"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Đây là ba hậu quả của ngữ cảnh quá nhỏ: bỏ sót thông tin, thiếu nhất quán và ảo giác. Mô hình không tự kéo về dữ liệu còn thiếu cũng không thay đổi số tham số của nó.",
+      "feedbackIncorrect": "Mô hình không bù đắp phần thiếu bằng cách tải từ mạng hay tăng số tham số. Hãy xem lại màn hình „Ba hậu quả của cửa sổ ngữ cảnh quá nhỏ”.",
+      "references": [
+        "M2.4"
+      ]
+    },
+    {
+      "id": "Q013",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Học viên nhận biết các tình huống QA trong đó cửa sổ ngữ cảnh quá nhỏ là nguồn rủi ro thực sự cho chất lượng của quyết định (E2).",
+      "prompt": "Trong những tình huống nào của công việc tester thì cửa sổ ngữ cảnh quá nhỏ là nguồn rủi ro thực sự cho chất lượng của quyết định? Hãy chọn tất cả phương án đúng.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Một cuộc trò chuyện dài về lỗi ORD-TEST-777, trong đó mô hình không còn tính đến những điều đã thống nhất ở đầu luồng"
+        },
+        {
+          "id": "B",
+          "text": "Phân tích một bản đặc tả đồ sộ, nơi tiêu chí chấp nhận nằm trong phần đã rớt khỏi cửa sổ"
+        },
+        {
+          "id": "C",
+          "text": "Câu hỏi về một yêu cầu mà mô hình trả lời một cách chắc chắn, mặc dù dữ liệu nguồn không còn trong ngữ cảnh"
+        },
+        {
+          "id": "D",
+          "text": "Câu hỏi ngắn về một định nghĩa, mà toàn bộ nội dung vừa trong cửa sổ ngữ cảnh"
+        },
+        {
+          "id": "E",
+          "text": "Thay đổi màu giao diện của công cụ chạy mô hình"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Rủi ro xuất hiện ở nơi một đoạn quan trọng rớt khỏi cửa sổ: thiếu nhất quán trong cuộc trò chuyện dài, tiêu chí bị bỏ sót và câu trả lời chắc chắn nhưng không có dữ liệu hậu thuẫn. Câu hỏi ngắn vừa trong cửa sổ và màu UI không phải là mối đe dọa ở đây.",
+      "feedbackIncorrect": "Khi nội dung vừa trong cửa sổ hoặc thay đổi chỉ liên quan đến UI, rủi ro của ngữ cảnh quá nhỏ không xuất hiện. Hãy ôn lại mối liên hệ giữa cửa sổ ngữ cảnh và ba hậu quả của nó (màn hình „Ba hậu quả…”).",
+      "references": [
+        "M2.4",
+        "M2.3"
+      ]
+    },
+    {
+      "id": "Q014",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "kolejnosc_procesu",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Học viên sắp xếp đúng thứ tự các bước LLM xử lý văn bản — từ văn bản đến câu trả lời (E3).",
+      "prompt": "Hãy sắp xếp đúng thứ tự các bước mà LLM thực hiện từ khi nhận văn bản đến khi sinh ra câu trả lời.",
+      "sequence": [
+        "Văn bản đầu vào được tách thành các token (tokenization)",
+        "Các token được đặt vào cửa sổ ngữ cảnh của mô hình",
+        "Mô hình khai thác các quan hệ giữa các token bằng cơ chế chú ý (attention)",
+        "Mô hình sinh ra các token tiếp theo của câu trả lời",
+        "Các token của câu trả lời được ghép lại thành văn bản dễ đọc"
+      ],
+      "feedbackCorrect": "Chính xác: văn bản → token → cửa sổ ngữ cảnh → chú ý (attention) lên các quan hệ → sinh token → ghép thành văn bản. Đây là tiến trình trực quan „từ văn bản đến câu trả lời”.",
+      "feedbackIncorrect": "Trước hết phải có tokenization, rồi mới đến cửa sổ ngữ cảnh và chú ý, và cuối cùng là sinh và ghép câu trả lời. Hãy xem lại màn hình „Transformer và chú ý — trực giác”.",
+      "references": [
+        "M2.5",
+        "M2.2"
+      ]
+    },
+    {
+      "id": "Q015",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "kolejnosc_procesu",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Học viên sắp xếp các bước xử lý khi đầu vào dài hơn cửa sổ ngữ cảnh (E3, E1).",
+      "prompt": "Một tester dán một tài liệu dài vượt quá cửa sổ ngữ cảnh của mô hình. Hãy sắp xếp các bước theo thứ tự mà mô hình xử lý đầu vào quá dài như vậy.",
+      "sequence": [
+        "Mô hình tiếp nhận tài liệu đã dán và câu hỏi của tester",
+        "Văn bản được tách thành các token (tokenization)",
+        "Số token được so sánh với giới hạn của cửa sổ ngữ cảnh",
+        "Các đoạn vượt quá giới hạn bị rớt ra ngoài cửa sổ",
+        "Mô hình chỉ xử lý các token vừa trong cửa sổ",
+        "Mô hình sinh câu trả lời dựa trên ngữ cảnh sẵn có"
+      ],
+      "feedbackCorrect": "Chính xác: tiếp nhận văn bản → tokenization → so sánh với giới hạn cửa sổ → cắt bỏ phần dư → xử lý phần còn lại → câu trả lời. Vì vậy một phần đầu vào có thể bị rớt ra trước cả khi mô hình bắt đầu tính chú ý.",
+      "feedbackIncorrect": "Việc cắt bỏ phần dư diễn ra sau tokenization và so sánh với giới hạn cửa sổ, và quá trình xử lý chỉ bao gồm phần đã vừa. Hãy xem lại các màn hình „Cửa sổ ngữ cảnh” và „Transformer và chú ý”.",
+      "references": [
+        "M2.5",
+        "M2.3"
+      ]
+    },
+    {
+      "id": "Q016",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S1"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Học viên đưa ra quyết định QA an toàn khi tài liệu dài hơn cửa sổ ngữ cảnh của mô hình (E1, E2).",
+      "prompt": "Bạn phải phân tích bản đặc tả giả định PipeDemo (khoảng 120 trang), và kiểm tra sơ bộ cho thấy văn bản của nó vượt đáng kể cửa sổ ngữ cảnh của mô hình. Bạn cần một câu trả lời đúng về các tiêu chí chấp nhận cụ thể. Quyết định nào là tốt nhất?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Chia nhỏ tài liệu và chỉ đưa vào những phần liên quan đến câu hỏi (ví dụ „Tiêu chí chấp nhận”), sao cho chúng vừa trong cửa sổ ngữ cảnh"
+        },
+        {
+          "id": "B",
+          "text": "Dán toàn bộ cùng một lúc — vì công cụ đã nhận văn bản, nên mô hình chắc chắn sẽ tính đến từng trang"
+        },
+        {
+          "id": "C",
+          "text": "Dán toàn bộ và tin vào câu trả lời, vì đầu vào dài hơn luôn cho bức tranh đầy đủ hơn"
+        },
+        {
+          "id": "D",
+          "text": "Yêu cầu mô hình tự bổ sung các đoạn còn thiếu của bản đặc tả mà nó không chứa được"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Khi tài liệu vượt quá cửa sổ, an toàn là chỉ đưa vào những phần liên quan đến câu hỏi — nhờ đó các tiêu chí then chốt thực sự nằm trong ngữ cảnh và không bị rớt ra.",
+      "feedbackIncorrect": "Việc công cụ nhận văn bản không có nghĩa là mô hình đã nhìn thấy toàn bộ; cũng không được yêu cầu nó bịa ra các đoạn còn thiếu. Hãy quay lại các màn hình „Cửa sổ ngữ cảnh” và „Ba hậu quả…”.",
+      "references": [
+        "M2.3",
+        "M2.4"
+      ]
+    },
+    {
+      "id": "Q017",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Học viên đánh giá việc lựa chọn mô hình, nhận ra rằng số tham số lớn hơn không phải là sự bảo đảm độc lập về chất lượng (E4).",
+      "prompt": "Một nhóm chọn mô hình để phân tích định dạng ID lỗi giả định trong SklepDemo. Mô hình X có nhiều tham số hơn đáng kể, nhưng trong bài kiểm tra lại nhầm định dạng ID; mô hình Y có ít tham số hơn, nhưng với ngữ cảnh được chọn tốt thì nhận diện đúng định dạng. Một đồng nghiệp đề xuất: „Chọn X đi, vì nó có nhiều tỷ tham số hơn”. Đánh giá đề xuất này thế nào là tốt nhất?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Bác bỏ vì là phản mẫu — độ chính xác do mức phù hợp với tác vụ và ngữ cảnh quyết định; vì Y hoạt động tốt hơn trên tác vụ này, hãy chọn Y (hoặc kiểm chứng cả hai phương án trên các trường hợp thực tế)"
+        },
+        {
+          "id": "B",
+          "text": "Chấp nhận đề xuất — số tham số lớn hơn luôn đồng nghĩa với chất lượng câu trả lời cao hơn"
+        },
+        {
+          "id": "C",
+          "text": "Chọn X, nhưng rút ngắn cửa sổ ngữ cảnh để cân bằng cơ hội giữa các mô hình"
+        },
+        {
+          "id": "D",
+          "text": "Chọn mô hình có nhiều tham số hơn và bỏ qua kiểm thử, vì kết quả đã được định đoạt"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Số tham số không phải là sự bảo đảm độc lập về chất lượng — quyết định nằm ở mức phù hợp với tác vụ, chất lượng dữ liệu và ngữ cảnh. Vì Y trúng trên tác vụ này, lựa chọn „vì nhiều tỷ tham số hơn” là một phản mẫu.",
+      "feedbackIncorrect": "Nhiều tham số hơn không tự động đồng nghĩa với chất lượng tốt hơn, còn việc rút ngắn cửa sổ ngữ cảnh làm xấu kết quả. Hãy xem lại màn hình „Nhiều tham số hơn ≠ chất lượng tốt hơn”.",
+      "references": [
+        "M2.6"
+      ]
+    }
+  ]
+}

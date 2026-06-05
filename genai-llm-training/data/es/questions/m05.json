@@ -1,0 +1,369 @@
+{
+  "_meta": {
+    "module": "M5",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M5. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q033",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "El participante describe el papel de la base de datos vectorial en la búsqueda semántica y el orden de los pasos desde la consulta hasta los fragmentos devueltos.",
+      "prompt": "El equipo construye un buscador sobre la documentación de pruebas de NotkaApp basado en una base de datos vectorial (vector database). ¿Cuál es su papel principal en la búsqueda semántica (semantic search)?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Almacena los embeddings de los fragmentos y permite encontrar rápidamente los vectores más parecidos al embedding de la consulta, para devolver los fragmentos de texto relacionados."
+        },
+        {
+          "id": "B",
+          "text": "Empareja la consulta con los fragmentos únicamente mediante coincidencia exacta de las mismas palabras clave, ignorando el significado."
+        },
+        {
+          "id": "C",
+          "text": "Genera una respuesta en lenguaje natural a partir de la consulta, sustituyendo al modelo de lenguaje en el pipeline."
+        },
+        {
+          "id": "D",
+          "text": "Almacena los documentos en bruto como archivos y los expone mediante búsqueda de texto completo por frases."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "La base de datos vectorial guarda los embeddings y encuentra los vectores más cercanos al embedding de la consulta, de modo que la búsqueda funciona por significado y no por palabras literales.",
+      "feedbackIncorrect": "Es una confusión con la búsqueda por palabras clave o con el papel del modelo generativo. Repasa qué es la semantic search y qué hace una vector database (pantalla M5.2).",
+      "references": [
+        "M5.2",
+        "M5.1"
+      ]
+    },
+    {
+      "id": "Q034",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "El participante elige búsqueda exacta o aproximada (ANN) en función de las características del corpus y los requisitos.",
+      "prompt": "Un tester tiene un corpus sintético de ~12 fragmentos de documentación de QA y necesita asegurarse de que NINGÚN fragmento relevante se omita al verificar la cobertura. ¿Qué enfoque es el adecuado aquí?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Búsqueda exacta (exact / brute force): con un corpus pequeño, recorrer todos los vectores es barato y garantiza una relevancia completa."
+        },
+        {
+          "id": "B",
+          "text": "Approximate nearest neighbor (ANN) con un índice agresivo, porque siempre es más rápido y no omite resultados relevantes."
+        },
+        {
+          "id": "C",
+          "text": "ANN con un top-k muy bajo, para devolver un solo resultado y evitar confusiones."
+        },
+        {
+          "id": "D",
+          "text": "Búsqueda por palabras clave en lugar de vectorial, porque es determinista."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Con un corpus pequeño, el coste de recorrer todos los vectores es bajo y la búsqueda exacta garantiza que ningún fragmento relevante se omita; eso es lo que cuenta cuando se necesita una relevancia completa.",
+      "feedbackIncorrect": "ANN acelera a costa del riesgo de omitir resultados relevantes, por lo que no garantiza la exhaustividad; un top-k bajo solo recorta los resultados. Repasa el compromiso entre exact y ANN (pantallas M5.3–M5.4).",
+      "references": [
+        "M5.4",
+        "M5.3"
+      ]
+    },
+    {
+      "id": "Q035",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "El participante analiza cómo los ajustes de ANN y de top-k se traducen en el par de métricas recall y precision.",
+      "prompt": "En el depurador de búsqueda, el tester sube el top-k de 3 a 8 y, al mismo tiempo, relaja los parámetros del índice ANN hacia la velocidad. ¿Cuál es el efecto más probable sobre recall y precision?",
+      "options": [
+        {
+          "id": "A",
+          "text": "El recall suele subir (más resultados relevantes pueden entrar en los resultados), pero la precision baja, porque entran más fragmentos vagamente relacionados."
+        },
+        {
+          "id": "B",
+          "text": "El recall y la precision suben a la vez, porque un top-k mayor siempre mejora ambas métricas al mismo tiempo."
+        },
+        {
+          "id": "C",
+          "text": "El recall baja y la precision sube, porque un top-k mayor estrecha el conjunto de resultados."
+        },
+        {
+          "id": "D",
+          "text": "Ni el recall ni la precision cambiarán, porque el top-k y el índice no influyen en la calidad de los resultados."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Un top-k mayor amplía el conjunto de candidatos, por lo que crece la probabilidad de capturar los relevantes (recall ↑), y a los resultados entra también más ruido (precision ↓). Relajar el índice ANN hacia la velocidad actúa sobre el recall en sentido contrario (puede omitir relevantes). Ambos efectos tiran en direcciones opuestas y el resultado neto lo decide la magnitud de los cambios; por eso A describe la dirección más probable (recall ↑, precision ↓), pero el balance real hay que medirlo, no suponerlo.",
+      "feedbackIncorrect": "El recall y la precision suelen ir en direcciones opuestas al ampliar los resultados; un top-k mayor no estrecha el conjunto. Repasa las definiciones de recall/precision y la influencia del índice (pantallas M5.4–M5.5).",
+      "references": [
+        "M5.5",
+        "M5.4"
+      ]
+    },
+    {
+      "id": "Q036",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "El participante identifica los factores de retrieval que influyen realmente en el conjunto de fragmentos devueltos y en su calidad.",
+      "prompt": "¿Cuáles de los siguientes factores influyen directamente en QUÉ fragmentos devolverá la similarity search y en cuál será la calidad del resultado? Elige todos los correctos.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Los parámetros del índice (index) ANN: desplazan el punto entre recall y velocidad/precision."
+        },
+        {
+          "id": "B",
+          "text": "El filtrado de metadatos (metadata filtering): estrecha el conjunto de candidatos (precision ↑), pero un filtro demasiado estricto pierde resultados relevantes (recall ↓)."
+        },
+        {
+          "id": "C",
+          "text": "La calidad de los chunks (chunk quality): un mal límite de fragmento produce un vector de significado difuso y un resultado parecido, pero inútil."
+        },
+        {
+          "id": "D",
+          "text": "El umbral de similitud (similarity threshold): si es demasiado alto, descarta fragmentos relevantes (recall ↓)."
+        },
+        {
+          "id": "E",
+          "text": "El orden en que se añaden los documentos a la base: los fragmentos insertados antes siempre se devuelven más arriba."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "feedbackCorrect": "El índice, el filtro de metadatos, la calidad de los chunks y el umbral de similitud son las palancas reales que controlan el conjunto de resultados y el par recall/precision.",
+      "feedbackIncorrect": "El orden en que se añaden los documentos no determina el ranking: lo que cuenta es la similitud de los vectores y los ajustes del retrieval. Repasa la influencia del índice, los metadatos y los chunks (pantallas M5.5–M5.7).",
+      "references": [
+        "M5.6",
+        "M5.5"
+      ]
+    },
+    {
+      "id": "Q037",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "El participante relaciona un síntoma observado del retrieval con su causa más probable entre el índice, los metadatos, los chunks y el umbral.",
+      "prompt": "Un tester diagnostica los resultados en un corpus sintético de QA. ¿Qué afirmaciones relacionan correctamente el síntoma con la causa? Elige todas las correctas.",
+      "options": [
+        {
+          "id": "A",
+          "text": "El buscador devolvió cero fragmentos aunque existe un documento relevante: la causa puede ser un filtro de metadatos demasiado estricto o un umbral de similitud demasiado alto, no los datos en sí."
+        },
+        {
+          "id": "B",
+          "text": "El fragmento devuelto tiene alta similitud, pero se corta a mitad de frase y no se puede utilizar: es un síntoma de un mal límite de chunk."
+        },
+        {
+          "id": "C",
+          "text": "Un fragmento relevante existe en el corpus, pero no apareció en los resultados de ANN: es posible que un índice agresivo lo haya omitido en favor de la velocidad."
+        },
+        {
+          "id": "D",
+          "text": "Una caída del recall siempre significa que los embeddings están mal calculados y hay que cambiar el modelo de embeddings."
+        },
+        {
+          "id": "E",
+          "text": "Si los resultados son relevantes, pero hay demasiados y mucho ruido, uno de los remedios es estrechar mediante un filtro de metadatos o un top-k más bajo."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "E"
+      ],
+      "feedbackCorrect": "Cada una de estas afirmaciones relaciona correctamente el síntoma (cero resultados, chunk cortado, omisión por ANN, exceso de ruido) con la palanca del retrieval (filtro/umbral, chunk, índice, top-k).",
+      "feedbackIncorrect": "Una caída del recall suele venir del índice, el filtro o el umbral, y no automáticamente de embeddings erróneos: eso es una sobreinterpretación. Repasa el diagnóstico de las pantallas M5.5–M5.8.",
+      "references": [
+        "M5.7",
+        "M5.6"
+      ]
+    },
+    {
+      "id": "Q038",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "El participante diagnostica un caso en el que un fragmento de alta similitud no es relevante, a pesar de que la base funciona correctamente.",
+      "prompt": "En la base de datos vectorial de NotkaApp hay, entre otros, los fragmentos: DOC1 «el token de sesión caduca tras 30 min de inactividad», DOC3 «el enlace de restablecimiento de contraseña es válido 30 min, de un solo uso». Ante la consulta «¿Tras cuánto tiempo caduca el enlace de restablecimiento de contraseña?», el retrieval devolvió en primer lugar DOC1 con una similitud muy alta. ¿Cómo se diagnostica mejor este resultado?",
+      "options": [
+        {
+          "id": "A",
+          "text": "DOC1 es semánticamente parecido (ambos hablan de «30 min» y de caducidad), pero trata de la sesión, no del restablecimiento de contraseña: una alta similitud no equivale a relevancia; la fuente correcta es DOC3."
+        },
+        {
+          "id": "B",
+          "text": "La base de datos vectorial funciona mal y hay que reconstruirla, porque devolvió un documento no relevante."
+        },
+        {
+          "id": "C",
+          "text": "DOC1 es la respuesta correcta, porque tiene la similitud más alta, así que el tema coincide con la consulta."
+        },
+        {
+          "id": "D",
+          "text": "El problema desaparece con solo aumentar el top-k a 10, porque entonces DOC1 dejará de devolverse."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Es un caso de manual de «parecido, pero inútil»: las palabras solapadas (30 min, caducidad) elevan la similitud de DOC1, aunque la fuente relevante es DOC3; la similitud no es relevancia.",
+      "feedbackIncorrect": "Una alta similitud no demuestra relevancia, y la base no funciona mal: simplemente DOC1 se solapa léxicamente con la consulta. Repasa el diagnóstico de «parecido ≠ útil» (pantallas M5.7–M5.8).",
+      "references": [
+        "M5.8",
+        "M5.7"
+      ]
+    },
+    {
+      "id": "Q039",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "El participante evalúa por qué un fragmento relevante desapareció de los resultados y lo relaciona con la configuración del filtro de metadatos.",
+      "prompt": "Un tester busca la respuesta a «¿Tras cuánto tiempo caduca el enlace de restablecimiento de contraseña?» en el corpus de NotkaApp, donde DOC3 (restablecimiento de contraseña) tiene el metadato typ_dokumentu=\"przypadek_testowy\". Para reducir el ruido, activa el filtro de metadatos typ_dokumentu=\"wymaganie\". El buscador devuelve ahora 0 fragmentos relevantes. ¿Cuál es el mejor diagnóstico?",
+      "options": [
+        {
+          "id": "A",
+          "text": "El filtro de metadatos descartó DOC3, porque tiene un typ_dokumentu distinto del permitido por el filtro: un filtro demasiado estricto subió la precision, pero perdió el resultado relevante (recall ↓); hay que ampliar el filtro."
+        },
+        {
+          "id": "B",
+          "text": "DOC3 ya no existe en la base y hay que volver a indexarlo, porque si no nunca aparecerá."
+        },
+        {
+          "id": "C",
+          "text": "El umbral de similitud es demasiado bajo y por eso se devolvió una lista vacía; hay que bajarlo todavía más."
+        },
+        {
+          "id": "D",
+          "text": "El embedding de la consulta es erróneo, porque un filtro de metadatos correcto no puede eliminar un fragmento relevante."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "El filtro de metadatos estrecha el conjunto antes/después de la similitud: al permitir solo el tipo «wymaganie», recortó DOC3 (tipo «przypadek_testowy»); es el clásico compromiso precision ↑ / recall ↓ que se resuelve ampliando el filtro.",
+      "feedbackIncorrect": "El resultado vacío aquí viene de la configuración del filtro, no de un documento faltante ni del umbral: un filtro demasiado estricto pierde fragmentos relevantes. Repasa el filtrado de metadatos (pantalla M5.6).",
+      "references": [
+        "M5.6",
+        "M5.8"
+      ]
+    },
+    {
+      "id": "Q040",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L4",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "El participante elige la mejor corrección de los parámetros de retrieval que elimina la causa de la falta de relevancia sin estropear los demás resultados.",
+      "prompt": "Ante una consulta sobre el restablecimiento de contraseña en NotkaApp, el retrieval devuelve DOC4 (FAQ de marketing: ventajas y tarifas) con alta similitud y un fragmento de DOC2 (política de contraseñas) cortado a mitad de frase, mientras que el relevante DOC3 (restablecimiento de contraseña) aterriza apenas en la posición 6. El umbral de similitud está desactivado, top-k=3, sin filtro. ¿Qué corrección mejora mejor la relevancia de los resultados?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Añadir un filtro de metadatos que descarte los documentos de marketing y mejorar los límites de los chunks, y subir el top-k de modo que DOC3 quepa en los resultados: ataca las causas (ruido de metadatos, mal chunk, top-k demasiado bajo)."
+        },
+        {
+          "id": "B",
+          "text": "Solo subir el umbral de similitud a un valor muy alto: eso eliminará DOC4 y DOC2, pero también arriesga descartar DOC3 (recall ↓)."
+        },
+        {
+          "id": "C",
+          "text": "Dejar los ajustes sin cambios e introducir DOC3 a mano como respuesta, porque, ya que existe en el corpus, el retrieval no requiere corrección."
+        },
+        {
+          "id": "D",
+          "text": "Bajar el top-k a 1, para devolver solo el fragmento más parecido y eliminar el ruido."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "La mejor corrección elimina causas concretas: el filtro de metadatos corta el DOC4 de marketing, mejorar el chunk rescata el DOC2 cortado y un top-k más alto deja entrar el relevante DOC3, sin riesgo de perder el resultado correcto.",
+      "feedbackIncorrect": "Por sí solo, un umbral alto o un top-k=1 corre el riesgo de descartar el relevante DOC3 (recall ↓), y escribir la respuesta a mano no arregla el retrieval. Repasa la influencia de los metadatos, los chunks y el top-k (pantallas M5.6–M5.9).",
+      "references": [
+        "M5.9",
+        "M5.6"
+      ]
+    }
+  ]
+}

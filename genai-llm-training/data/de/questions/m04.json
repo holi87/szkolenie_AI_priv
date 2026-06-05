@@ -1,0 +1,371 @@
+{
+  "_meta": {
+    "module": "M4",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M4. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q025",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Der Teilnehmer erklärt, was ein Embedding als numerische Repräsentation der Textbedeutung ist.",
+      "prompt": "Ein Embedding-Modell wandelt eine Phrase aus der QA-Dokumentation in ein Embedding um. Was repräsentiert der entstandene Zahlenvektor eigentlich?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Die semantische Bedeutung des Textes in numerischer Form — Phrasen mit ähnlicher Bedeutung ergeben ähnliche Vektoren."
+        },
+        {
+          "id": "B",
+          "text": "Die Anzahl der Wörter in der Phrase sowie ihre Länge in Zeichen."
+        },
+        {
+          "id": "C",
+          "text": "Die exakte Abfolge der Buchstaben, kodiert als ASCII-Codes."
+        },
+        {
+          "id": "D",
+          "text": "Eine Bewertung der grammatikalischen und stilistischen Korrektheit des Textes auf einer numerischen Skala."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Ein Embedding kodiert die Bedeutung des Textes als Zahlenvektor, sodass bedeutungsnahe Phrasen (z. B. „Anmeldung“ und „Authentifizierung“) nahe beieinander liegen.",
+      "feedbackIncorrect": "Ein Embedding zählt keine Zeichen, Buchstaben oder Grammatik — es kodiert Bedeutung. Kehre zum Bildschirm „Wort als Vektor“ zurück.",
+      "references": [
+        "M4.1",
+        "M4.2"
+      ]
+    },
+    {
+      "id": "Q026",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Der Teilnehmer interpretiert die Cosine Similarity als Maß für die Richtung der Vektoren, unabhängig von der Textlänge.",
+      "prompt": "Im Korpus von NotkaApp hast du eine kurze Beschreibung „Passwort-Reset: E-Mail-Link 30 Min gültig“ sowie einen langen, ausführlichen Absatz, der dieselbe Reset-Prozedur beschreibt. Warum ist ihre Cosine Similarity hoch, trotz des großen Unterschieds in der Textlänge?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Die Cosine Similarity misst den Winkel (die Richtung) zwischen den Bedeutungsvektoren und nicht ihre Länge — beide Texte zeigen in dieselbe Richtung."
+        },
+        {
+          "id": "B",
+          "text": "Die Cosine Similarity steigt mit der Anzahl der Wörter, daher hat der längere Text immer eine höhere Ähnlichkeit."
+        },
+        {
+          "id": "C",
+          "text": "Die Cosine Similarity vergleicht die Anzahl gemeinsamer Wörter, und beide Texte enthalten das Wort „Reset“."
+        },
+        {
+          "id": "D",
+          "text": "Die Cosine Similarity gibt immer 1.0 zurück, wenn die Texte dasselbe Produkt betreffen."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Die Cosine Similarity berechnet den Winkel zwischen den Vektoren, also die Übereinstimmung der Bedeutungsrichtung — die Länge bzw. „Stärke“ des Textes beeinflusst das Ergebnis nicht, daher liegen eine kurze und eine lange Beschreibung derselben Sache nahe beieinander.",
+      "feedbackIncorrect": "Entscheidend ist nicht die Anzahl der Wörter oder gemeinsamer Tokens, sondern die Richtung des Bedeutungsvektors. Wiederhole „Cosine Similarity — Richtung, nicht Länge“.",
+      "references": [
+        "M4.3"
+      ]
+    },
+    {
+      "id": "Q027",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Der Teilnehmer interpretiert das Ranking der nächsten Nachbarn korrekt und versteht die Konventionalität des Ähnlichkeitsschwellenwerts.",
+      "prompt": "Eine semantische Suchmaschine hat eine Liste der Nearest Neighbors mit folgenden Werten zurückgegeben: Fragment A = 0.91, Fragment B = 0.74, Fragment C = 0.62. Wie sollte ein Tester das interpretieren?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Die Liste ist absteigend nach Ähnlichkeit sortiert, aber eine hohe Position garantiert keine fachliche Relevanz — der Inhalt muss überprüft werden."
+        },
+        {
+          "id": "B",
+          "text": "Fragment A mit dem Wert 0.91 ist mit Sicherheit die richtige Antwort, weil es den Schwellenwert von 0.9 überschreitet."
+        },
+        {
+          "id": "C",
+          "text": "Ergebnisse unter 0.75 sind immer falsch und können ohne Prüfung verworfen werden."
+        },
+        {
+          "id": "D",
+          "text": "Der Wert 0.62 bedeutet, dass Fragment C inhaltlich genau zu 62 % korrekt ist."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Das Ranking ordnet die Ergebnisse absteigend, aber der Schwellenwert ist konventionell und vom Korpus abhängig — eine hohe Position ist ein Signal, kein Beweis für Relevanz.",
+      "feedbackIncorrect": "Es gibt keinen festen, universellen Schwellenwert, und der numerische Wert ist kein „Prozentsatz der Korrektheit“. Kehre zu „Wie man ein Ähnlichkeits-Ranking liest“ zurück.",
+      "references": [
+        "M4.4"
+      ]
+    },
+    {
+      "id": "Q028",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Der Teilnehmer wählt die Merkmale einer guten Anfrage für die semantische Suche aus.",
+      "prompt": "Du möchtest in der Dokumentation von NotkaApp die Information über die Gültigkeitsdauer des Passwort-Reset-Links in der aktuellen Version finden. Welche Praktiken zur Formulierung einer semantischen Anfrage erhöhen die Relevanz der Ergebnisse? Markiere alle korrekten Antworten.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Eine vollständige Phrase verwenden, die die Absicht wiedergibt, z. B. „Gültigkeitsdauer des Passwort-Reset-Links“, statt eines einzelnen Wortes."
+        },
+        {
+          "id": "B",
+          "text": "Kontext und Version präzisieren, z. B. „Passwort-Reset in NotkaApp v2“, wenn uns die aktuelle Fassung wichtig ist."
+        },
+        {
+          "id": "C",
+          "text": "Die Anfrage als reine Negation formulieren, z. B. „nicht Session-Token“, um andere Ergebnisse herauszufiltern."
+        },
+        {
+          "id": "D",
+          "text": "Ein einzelnes allgemeines Wort „Passwort“ eingeben, in der Hoffnung, dass das Modell die Absicht selbst errät."
+        },
+        {
+          "id": "E",
+          "text": "Das zentrale Objekt der Anfrage (Reset-Link) einbeziehen, um sich von ähnlichen, aber anderen Begriffen (Session-Token) zu entfernen."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "E"
+      ],
+      "feedbackCorrect": "Eine vollständige Phrase, die die Absicht wiedergibt, die Präzisierung von Kontext/Version und die Angabe des zentralen Objekts lenken den Anfragevektor in Richtung der richtigen Bedeutung.",
+      "feedbackIncorrect": "Ein einzelnes Wort ist zu allgemein, und eine reine Negation wirkt in der semantischen Suche schwach (das Modell kodiert das Thema „Session-Token“ trotzdem). Wiederhole „Auswahl der Anfrage für die semantische Suche“.",
+      "references": [
+        "M4.7"
+      ]
+    },
+    {
+      "id": "Q029",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Der Teilnehmer erkennt Situationen, in denen eine hohe Ähnlichkeit keine korrekte Antwort bedeutet.",
+      "prompt": "In welchen der folgenden Situationen kann ein hoher Cosine-Similarity-Wert irreführend sein, indem er ein semantisch nahes, aber fachlich inkorrektes Fragment zurückgibt? Markiere alle korrekten Antworten.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Das Fragment „Anmeldung funktioniert nicht“ wird als nah für die Anfrage „Anmeldung funktioniert“ eingestuft (Negation/Antonym)."
+        },
+        {
+          "id": "B",
+          "text": "Die Beschreibung der Zahlungsfunktion wird als nah für eine Fehlermeldung derselben Funktion eingestuft (dasselbe Thema, andere Absicht)."
+        },
+        {
+          "id": "C",
+          "text": "Ein Fragment über ein Sicherheits-„Token“ wird für eine Anfrage zu „Token“ im Sinne einer LLM-Einheit zurückgegeben (Mehrdeutigkeit/Polysemie)."
+        },
+        {
+          "id": "D",
+          "text": "Eine alte Fassung einer Anforderung ist der neuen sehr ähnlich, obwohl nur die neue korrekt ist (veraltete Version)."
+        },
+        {
+          "id": "E",
+          "text": "Zwei Fragmente, die genau dieselbe, aktuelle Passwort-Reset-Prozedur beschreiben, ergeben eine hohe Ähnlichkeit."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "feedbackCorrect": "Das sind vier klassische Ähnlichkeitsfallen: Negation, dasselbe Thema bei anderer Absicht, Polysemie und veraltete Version — ein Embedding kodiert das Thema stärker als kleine, kritische Unterschiede.",
+      "feedbackIncorrect": "Option E ist der Fall, in dem die hohe Ähnlichkeit RELEVANT ist (zwei übereinstimmende, aktuelle Beschreibungen derselben Sache). Wiederhole „Falle: ähnlich ≠ korrekt — 4 Fälle“.",
+      "references": [
+        "M4.5",
+        "M4.6"
+      ]
+    },
+    {
+      "id": "Q030",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Der Teilnehmer bewertet, warum Embeddings kritische Unterschiede verwechseln, und zieht den richtigen Schluss für die QA-Arbeit.",
+      "prompt": "Warum verwechselt ein Embedding-Modell Paare wie „Anmeldung funktioniert“ / „Anmeldung funktioniert nicht“, und welchen Schluss sollte ein Tester daraus ziehen? Markiere alle zutreffenden Aussagen.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Ein Embedding kodiert Thema und Stil der Phrase stärker als kleine, aber kritische Unterschiede wie eine Negation oder eine Versionsnummer."
+        },
+        {
+          "id": "B",
+          "text": "Das Ähnlichkeits-Ranking ist ein unterstützendes Signal und kein Urteil — das Ergebnis erfordert eine Überprüfung des Fragmentinhalts."
+        },
+        {
+          "id": "C",
+          "text": "Es lohnt sich, die Suche durch Filterung nach Metadaten (z. B. Version, Dokumenttyp) zu unterstützen, um irreführende Treffer zu reduzieren."
+        },
+        {
+          "id": "D",
+          "text": "Da das Modell diese Paare verwechselt, sollte man in der QA vollständig auf die semantische Suche verzichten."
+        },
+        {
+          "id": "E",
+          "text": "Es genügt, den Ähnlichkeitsschwellenwert auf 0.95 anzuheben, um automatisch alle Fallen auszuschalten."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Ein Embedding kodiert das Thema stärker als eine Negation oder Version, deshalb behandeln wir das Ranking als Signal, das eine inhaltliche Überprüfung erfordert und durch Metadatenfilterung unterstützt wird.",
+      "feedbackIncorrect": "Der Verzicht auf die Suche (D) und ein starrer Schwellenwert (E) sind Scheinlösungen — ein Paar mit Negation kann so ähnlich sein, dass kein Schwellenwert es aussortiert. Wiederhole „Vertiefung: warum sich das Modell irrt“.",
+      "references": [
+        "M4.6",
+        "M4.5"
+      ]
+    },
+    {
+      "id": "Q031",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Der Teilnehmer diagnostiziert an einem konkreten Fall, warum eine hohe Ähnlichkeit ein fachlich inkorrektes Fragment zurückgegeben hat.",
+      "prompt": "Im Korpus von NotkaApp gibst du die Anfrage „Nach welcher Zeit läuft der Passwort-Reset-Link ab?“ ein. Die Suchmaschine gibt als nächstes DOC1 zurück: „Anmeldeprozedur: Session-Token läuft nach 30 Min Inaktivität ab“ (0.86), und erst weiter unten DOC3: „Passwort-Reset: E-Mail-Link 30 Min gültig, einmalig“ (0.71). Was erklärt dieses Ergebnis am besten?",
+      "options": [
+        {
+          "id": "A",
+          "text": "DOC1 ist semantisch nah, weil es mit der Anfrage das Motiv „etwas läuft nach 30 Min ab“ teilt, aber ein anderes Objekt betrifft (Session-Token), daher ist die korrekte Quelle DOC3 — das ist die Falle „ähnlich, aber anderer Begriff“ (dasselbe Motiv, anderes Objekt)."
+        },
+        {
+          "id": "B",
+          "text": "DOC1 ist die korrekte Antwort, weil es einen höheren Ähnlichkeitswert hat als DOC3."
+        },
+        {
+          "id": "C",
+          "text": "Das Ergebnis ist ein Fehler des Embedding-Modells, den man als Defekt der Bibliothek melden muss."
+        },
+        {
+          "id": "D",
+          "text": "DOC3 ist inkorrekt, weil sein Wert 0.71 unter dem universellen Relevanzschwellenwert von 0.75 liegt."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Das gemeinsame Motiv „läuft nach 30 Min ab“ bringt DOC1 nahe an die Anfrage heran, obwohl es den Session-Token betrifft und nicht den Reset-Link — die korrekte Quelle ist DOC3, trotz des niedrigeren Werts.",
+      "feedbackIncorrect": "Der höchste Wert entscheidet nicht über die Relevanz, und 0.75 ist kein universeller Schwellenwert — das ist die klassische Falle „ähnlich, aber anderer Begriff“. Wiederhole den Bildschirm „Falle: ähnlich ≠ korrekt“ und „Semantische Karte“.",
+      "references": [
+        "M4.5",
+        "M4.9"
+      ]
+    },
+    {
+      "id": "Q032",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Der Teilnehmer erkennt die Negationsfalle in den Suchergebnissen und wählt eine sichere QA-Entscheidung.",
+      "prompt": "Auf der „Semantischen Karte“ gibst du die Anfrage „Anmeldung funktioniert nach dem Update nicht“ ein. Das nächste Fragment (0.89) ist „Anmeldung funktioniert korrekt“, während das Fragment „bekannter Fehler: Anmeldung blockiert nach Update v2“ erst an dritter Stelle steht (0.77). Wie bewertest und reagierst du am besten auf diese Situation?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Das ist die Negationsfalle: Das Embedding kodiert das gemeinsame Thema „Anmeldung“, verliert aber „funktioniert nicht“ gegenüber „funktioniert“ — man muss den Inhalt überprüfen und das Fragment zum bekannten Fehler wählen, trotz des niedrigeren Werts."
+        },
+        {
+          "id": "B",
+          "text": "Das Fragment „Anmeldung funktioniert korrekt“ annehmen, weil es die höchste Ähnlichkeit 0.89 hat, und die Analyse abschließen."
+        },
+        {
+          "id": "C",
+          "text": "Beide Fragmente als gleichwertig betrachten, da beide die Anmeldung betreffen, und nicht weiter entscheiden."
+        },
+        {
+          "id": "D",
+          "text": "Den Schwellenwert auf 0.5 senken, damit das Ranking das richtige Fragment automatisch an die erste Position schiebt."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "„Funktioniert“ und „funktioniert nicht“ liegen semantisch nah beieinander, weil sie sich nur durch die Negation unterscheiden — der höchste Wert ist hier irreführend, daher überprüfen wir den Inhalt und wählen das Fragment zum bekannten Fehler.",
+      "feedbackIncorrect": "Der höchste Wert ist die Negationsfalle, und das Manipulieren des Schwellenwerts korrigiert die Richtung des Vektors nicht — man muss den Inhalt prüfen. Wiederhole „Falle: ähnlich ≠ korrekt“ und „Semantische Karte“.",
+      "references": [
+        "M4.5",
+        "M4.9"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "_meta": {
+    "issue": "#112-#118 [M15] / #124 [M16] Ścieżka formatywna S4 — Skala Holaka (moduł szkoleniowy, rozbudowa)",
+    "adr": "docs/adr/0009-sciezka-formatywna-s4-skala-holaka.md",
+    "interaction": "Klasyfikacja danych i zastosowań (kind: classify) — ćwiczenie formatywne, NIE scorowane do zaliczenia",
+    "source": "Oś dojrzałości Skali Holaka: bezpieczeństwo, prywatność danych i governance użycia AI (w tym integracje/MCP). Atrybucja: quality-blog.eu/pl/blog/skala-holaka.",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE i ogólne (zero realnych danych/PII). Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MSK3",
+  "intro": "Reife KI-Adoption bedeutet nicht nur Wirksamkeit, sondern auch Datenhygiene: Was darf dem Modell übergeben werden, was muss zuerst anonymisiert werden und was darf niemals verwendet werden — auch dann, wenn die KI über Integrationen und MCP auf Daten zugreift. Dieses Modul lehrt, Daten zu klassifizieren und minimale Governance-Regeln festzulegen. Es ist eine Entwicklungsübung, kein Test.",
+  "screens": [
+    {
+      "id": "msk3-s1-trzy-kosze",
+      "title": "Drei Datenkörbe: erlaubt, zu anonymisieren, unzulässig",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Bevor du irgendetwas in das Modell einfügst, ordne die Daten einem der drei Körbe zu. Erlaubt: öffentliche oder synthetische Daten. Zu anonymisieren: Daten, die eine Person oder ein System identifizieren könnten, nach dem Maskieren aber sicher sind. Unzulässig: Geheimnisse und sensible Daten, die nicht offengelegt werden dürfen." },
+        { "kind": "list", "items": [
+          "Erlaubt — öffentliche, synthetische, nicht identifizierende Daten.",
+          "Zu anonymisieren — entferne oder ersetze durch einen Platzhalter, was eine Person/ein System identifiziert.",
+          "Unzulässig — Passwörter, Schlüssel, Geheimnisse, sensible Daten ohne Verwendungsgrundlage."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Eine Achse der Holak-Skala", "text": "Eine schriftlich festgehaltene Richtlinie zur akzeptablen Nutzung von KI (Daten, Datenschutz, geistiges Eigentum) und eine minimale Prüfspur sind ein Zeichen reifer Governance.",
+          "links": [ { "label": "Holak-Skala — Reifegradmodell (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka" } ]
+        }
+      ]
+    },
+    {
+      "id": "msk3-s2-mcp-integracje",
+      "title": "Integrationen und MCP: Die Datengrenze verschiebt sich weiter",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Wenn du die KI über Integrationen oder MCP (Model Context Protocol) an Werkzeuge anbindest, sieht das Modell nicht mehr nur das, was du einfügst — es kann auf Dateien, Datenbanken oder E-Mails zugreifen. Das ist bequem und mächtig, doch die Datengrenze verschiebt sich: Du musst bewusst einschränken, worauf die Integration Zugriff hat." },
+        { "kind": "list", "items": [
+          "Prinzip des minimalen Zugriffs — die Integration sieht nur das, was für die Aufgabe notwendig ist.",
+          "Sensible Daten filtere oder maskiere VOR dem Eintritt in das Modell, nicht danach.",
+          "Behandle jede Integration wie einen neuen Dateneingang — unterstelle sie derselben Richtlinie."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Die Falle „nur ein Test“", "text": "„Ich binde die Integration nur einmal an die Produktion an, um es zu prüfen“ ist das häufigste Leck. Einmal freigegebene Daten könnten deiner Kontrolle entglitten sein — schränke den Zugriff ein und maskiere immer, auch im Experiment." }
+      ]
+    },
+    {
+      "id": "msk3-s3-jak-cwiczyc",
+      "title": "So übst du es",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Gleich ordnest du Daten den Körben zu: erlaubt, zu anonymisieren, unzulässig. Die Reihenfolge der Positionen ist zufällig, es zählt also der Inhalt, nicht das Muster. Ohne Bestehensgrenze — es geht um den Reflex, Daten zu klassifizieren, bevor sie in das Modell oder die Integration gelangen." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "msk3-classify",
+    "title": "Erlaubt, zu anonymisieren oder unzulässig?",
+    "intro": "Ordne jeden Datenfall dem richtigen Korb zu. Das Feedback erläutert die Datenschutz- und Governance-Regel.",
+    "categories": [
+      { "id": "allowed", "label": "Erlaubt", "desc": "Öffentliche oder synthetische, nicht identifizierende Daten." },
+      { "id": "anonymize", "label": "Zu anonymisieren", "desc": "Erst nach dem Maskieren der Identifikatoren sicher." },
+      { "id": "disallowed", "label": "Unzulässig", "desc": "Geheimnisse und sensible Daten ohne Verwendungsgrundlage." }
+    ],
+    "items": [
+      { "id": "msk3-i1", "text": "Öffentlicher Ausschnitt aus der Dokumentation eines Open-Source-Projekts.", "correctCategory": "allowed", "rationale": "Öffentliche, nicht identifizierende Daten — dürfen verwendet werden." },
+      { "id": "msk3-i2", "text": "Erfundene, synthetische Testdaten ohne Bezug zu einer realen Person.", "correctCategory": "allowed", "rationale": "Synthetische Daten sind per Definition sicher." },
+      { "id": "msk3-i3", "text": "Ein Fehlerbericht mit dem Login eines Nutzers, das du durch einen Platzhalter ersetzt.", "correctCategory": "anonymize", "rationale": "Den Identifikator entfernst/maskierst du — dann ist es sicher." },
+      { "id": "msk3-i4", "text": "Logs mit Kontaktdaten von Kunden, die vor der Verwendung maskiert werden müssen.", "correctCategory": "anonymize", "rationale": "Nach der Anonymisierung weisen die Daten nicht mehr auf eine Person hin." },
+      { "id": "msk3-i5", "text": "Passwörter und Zugangsschlüssel zu einem Produktivsystem.", "correctCategory": "disallowed", "rationale": "Geheimnisse gelangen niemals in den Prompt oder eine Integration." },
+      { "id": "msk3-i6", "text": "Eine MCP-Integration mit vollem Zugriff auf die Produktiv-Kundendatenbank „für die Bequemlichkeit“.", "correctCategory": "disallowed", "rationale": "Übermäßiger Zugriff der Integration auf sensible Daten — verletzt den minimalen Zugriff." },
+      { "id": "msk3-i7", "text": "Ein Export von Tickets mit maskierten personenbezogenen Daten, zur Analyse übergeben.", "correctCategory": "anonymize", "rationale": "Maskierung vor dem Eintritt in das Modell macht die Daten sicher." },
+      { "id": "msk3-i8", "text": "Vollständige personenbezogene Daten eines Kunden, direkt in ein öffentliches Modell eingefügt.", "correctCategory": "disallowed", "rationale": "Identifizierende, sensible Daten ohne Grundlage und Anonymisierung — unzulässig." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Ordne jede Datenmenge vor dem Senden einem Korb zu: erlaubt / zu anonymisieren / unzulässig.",
+      "Integrationen und MCP verschieben die Datengrenze — wende das Prinzip des minimalen Zugriffs an und maskiere vor dem Eintritt in das Modell.",
+      "Halte eine einfache Richtlinie schriftlich fest und hinterlasse eine minimale Spur der KI-Nutzung in kritischen Prozessen."
+    ],
+    "checklist": [
+      "Kann ich meine typischen Daten den drei Körben zuordnen?",
+      "Haben meine Integrationen/MCP nur den minimal notwendigen Zugriff?",
+      "Weiß ich, was niemals freigegeben werden darf (Geheimnisse, sensible Daten)?"
+    ],
+    "checklistTitle": "Checkliste — Datenhygiene für KI",
+    "nextStep": "Nächster Schritt: Halte für das Team eine einseitige Regelübersicht fest: erlaubte Anwendungen, Anonymisierung, minimaler Integrationszugriff, Verbot von Geheimnissen, einfache Prüfspur."
+  }
+}

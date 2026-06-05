@@ -1,0 +1,347 @@
+{
+  "M1": {
+    "name": "Nền tảng GenAI và LLM",
+    "level": "cơ bản",
+    "interactiveElement": "Bộ phân loại tác vụ",
+    "keyConcepts": [
+      "GenAI",
+      "LLM",
+      "ML cổ điển",
+      "đầu ra mang tính xác suất",
+      "training vs inference",
+      "ảo giác (hallucination)"
+    ],
+    "learningOutcomes": [
+      "Phân biệt GenAI, LLM và ML cổ điển qua các ví dụ",
+      "Nhận ra rằng LLM tạo ra câu trả lời có khả năng xảy ra cao nhất, không phải sự thật được bảo đảm",
+      "Phân loại tác vụ là tạo sinh, phân loại hay xác định (deterministic)"
+    ]
+  },
+  "M2": {
+    "name": "Kiến trúc LLM ở mức thực hành",
+    "level": "cơ bản/trung cấp",
+    "interactiveElement": "Bộ đếm ngữ cảnh",
+    "keyConcepts": [
+      "token",
+      "tokenization",
+      "context window",
+      "parameters",
+      "transformer",
+      "attention",
+      "inference cost"
+    ],
+    "learningOutcomes": [
+      "Giải thích token là gì và tại sao một tài liệu dài có thể vượt quá context window",
+      "Chỉ ra 3 hệ quả của việc ngữ cảnh quá nhỏ",
+      "Mô tả transformer như một cơ chế học mối quan hệ giữa các token (trực giác)",
+      "Nhận ra rằng số lượng tham số tự nó không phải là bảo đảm về chất lượng"
+    ]
+  },
+  "M3": {
+    "name": "Tham số sinh và kiểm soát đầu ra",
+    "level": "cơ bản/trung cấp",
+    "interactiveElement": "Thanh trượt sinh",
+    "keyConcepts": [
+      "temperature",
+      "top-p",
+      "max tokens",
+      "tính xác định bề ngoài",
+      "khả năng lặp lại",
+      "tính sáng tạo"
+    ],
+    "learningOutcomes": [
+      "Điều chỉnh temperature cho tác vụ sáng tạo và tác vụ trang trọng",
+      "Chỉ ra rủi ro của độ ngẫu nhiên quá cao trong các tác vụ QA",
+      "Nhận ra khi nào max tokens cắt cụt câu trả lời",
+      "So sánh các thiết lập sinh và chọn thiết lập an toàn hơn cho tài liệu kiểm thử"
+    ]
+  },
+  "M4": {
+    "name": "Embeddings và độ tương đồng ngữ nghĩa",
+    "level": "trung cấp",
+    "interactiveElement": "Bản đồ ngữ nghĩa",
+    "keyConcepts": [
+      "embeddings",
+      "vector",
+      "semantic similarity",
+      "cosine similarity",
+      "embedding model",
+      "nearest neighbors"
+    ],
+    "learningOutcomes": [
+      "Giải thích embeddings như một biểu diễn số của ý nghĩa văn bản",
+      "Diễn giải cosine similarity như thước đo độ gần nhau về hướng của các vector",
+      "Chỉ ra các trường hợp mà điểm tương đồng cao không có nghĩa là câu trả lời đúng",
+      "Soạn truy vấn cho tìm kiếm ngữ nghĩa"
+    ]
+  },
+  "M5": {
+    "name": "Vector databases và similarity search",
+    "level": "trung cấp/nâng cao",
+    "interactiveElement": "Retrieval debugger",
+    "keyConcepts": [
+      "vector database",
+      "ANN",
+      "index",
+      "similarity search",
+      "metadata filtering",
+      "recall",
+      "precision",
+      "top-k"
+    ],
+    "learningOutcomes": [
+      "Mô tả vai trò của vector database trong tìm kiếm ngữ nghĩa",
+      "Phân biệt tìm kiếm chính xác với approximate nearest neighbor",
+      "Chỉ ra ảnh hưởng của index, lọc metadata và chất lượng chunk lên kết quả",
+      "Chẩn đoán vì sao similarity search trả về một đoạn tương tự nhưng không hữu ích"
+    ]
+  },
+  "M6": {
+    "name": "RAG: Retrieval-Augmented Generation",
+    "level": "trung cấp/nâng cao",
+    "interactiveElement": "Xây dựng pipeline RAG",
+    "keyConcepts": [
+      "RAG",
+      "retrieval",
+      "generation",
+      "chunking",
+      "overlap",
+      "reranking",
+      "citations",
+      "grounding",
+      "fine-tuning"
+    ],
+    "learningOutcomes": [
+      "Sắp xếp các bước của pipeline RAG theo đúng thứ tự",
+      "Chọn chiến lược chunking cho tài liệu yêu cầu",
+      "Phân biệt trường hợp cần RAG với trường hợp cần fine-tuning",
+      "Nhận diện lỗi retrieval, lỗi generation và lỗi nguồn dựa trên câu trả lời của mô hình"
+    ]
+  },
+  "M7": {
+    "name": "Prompt engineering trong thực hành",
+    "level": "cơ bản/trung cấp",
+    "interactiveElement": "Prompt clinic",
+    "keyConcepts": [
+      "prompt",
+      "vai trò",
+      "ngữ cảnh",
+      "few-shot",
+      "constraints",
+      "output format",
+      "rubric chấm điểm prompt"
+    ],
+    "learningOutcomes": [
+      "Tạo prompt bao gồm vai trò, mục tiêu, ngữ cảnh, dữ liệu, ràng buộc, tiêu chí chất lượng và định dạng đầu ra",
+      "Cải thiện một prompt thiếu chính xác dựa trên đầu ra bị lỗi",
+      "Áp dụng few-shot khi định dạng hoặc phong cách câu trả lời phải có thể lặp lại",
+      "Chỉ ra khi nào một prompt không giải quyết được vấn đề thiếu dữ liệu"
+    ]
+  },
+  "M8": {
+    "name": "Ứng dụng GenAI trong QA và chất lượng",
+    "level": "trung cấp",
+    "interactiveElement": "QA workbench",
+    "keyConcepts": [
+      "test case generation",
+      "test data ideas",
+      "risk-based testing",
+      "traceability",
+      "acceptance criteria",
+      "review checklist"
+    ],
+    "learningOutcomes": [
+      "Tạo các ca kiểm thử từ một yêu cầu và chỉ ra khoảng trống bao phủ",
+      "Phát hiện trùng lặp và kiểm thử hình thức (giả)",
+      "Tạo checklist rủi ro cho một tính năng",
+      "Đánh giá liệu đầu ra của LLM có phù hợp cho tài liệu QA sau khi rà soát chuyên môn",
+      "Chỉ ra các tác vụ QA mà LLM đóng vai trò trợ lý, không phải người ra quyết định"
+    ]
+  },
+  "M9": {
+    "name": "Tích hợp công cụ và agent",
+    "level": "trung cấp",
+    "interactiveElement": "Agent permission board",
+    "keyConcepts": [
+      "tool use",
+      "agent",
+      "workflow",
+      "human-in-the-loop",
+      "phạm vi quyền",
+      "audit log",
+      "rollback"
+    ],
+    "learningOutcomes": [
+      "Phân biệt chatbot, workflow có công cụ và agent thực hiện các bước",
+      "Chỉ ra rủi ro khi cấp cho agent quyền truy cập tệp, email, kho mã hoặc hệ thống kiểm thử",
+      "Thiết kế nguyên tắc kiểm soát tối thiểu: quyền hạn, nhật ký, phê duyệt của con người, rollback",
+      "Nhận diện các tác vụ mà agent cần ràng buộc và kiểm toán"
+    ]
+  },
+  "M10": {
+    "name": "Bảo mật, vệ sinh dữ liệu và governance",
+    "level": "cơ bản/trung cấp",
+    "interactiveElement": "Data safety gate",
+    "keyConcepts": [
+      "prompt injection",
+      "jailbreak",
+      "data leakage",
+      "PII",
+      "IP",
+      "acceptable use",
+      "audit trail",
+      "OWASP LLM Top 10"
+    ],
+    "learningOutcomes": [
+      "Nhận diện prompt injection và jailbreak trong một kịch bản",
+      "Phân loại dữ liệu là được phép, cần ẩn danh hoặc không được phép",
+      "Chỉ ra rủi ro data leakage và PII",
+      "Áp dụng chính sách sử dụng chấp nhận được",
+      "Xác định dấu vết kiểm toán tối thiểu cho việc dùng GenAI trong quy trình QA"
+    ]
+  },
+  "M11": {
+    "name": "Ảo giác, giới hạn ứng dụng và kiểm chứng đầu ra",
+    "level": "cơ bản/trung cấp",
+    "interactiveElement": "Output verifier",
+    "keyConcepts": [
+      "hallucination",
+      "verification",
+      "source checking",
+      "confidence",
+      "critical decision",
+      "human review"
+    ],
+    "learningOutcomes": [
+      "Chỉ ra nguyên nhân của ảo giác: thiếu dữ liệu, dữ liệu xung đột, áp lực từ prompt, ngữ cảnh lỗi thời, nguồn thiếu chính xác",
+      "Áp dụng checklist kiểm chứng đầu ra",
+      "Từ chối dùng LLM khi không thể kiểm tra kết quả hoặc khi lỗi có tác động lớn",
+      "Đánh dấu các phần của câu trả lời cần nguồn hoặc chuyên gia"
+    ]
+  },
+  "M12": {
+    "name": "Đánh giá chất lượng LLM và RAG",
+    "level": "nâng cao",
+    "interactiveElement": "Judge calibration lab",
+    "keyConcepts": [
+      "LLM-as-a-judge",
+      "golden set",
+      "evaluation rubric",
+      "bias",
+      "position bias",
+      "inter-rater agreement",
+      "groundedness",
+      "faithfulness"
+    ],
+    "learningOutcomes": [
+      "Định nghĩa golden set cho một use case đã chọn",
+      "Chọn các chỉ số: accuracy, faithfulness, groundedness, relevance, completeness",
+      "Thiết kế rubric LLM-as-a-judge",
+      "Chỉ ra rủi ro bias, position bias và sự không khớp với đánh giá của con người",
+      "Hiệu chỉnh đánh giá tự động bằng cách so sánh với đánh giá của chuyên gia và đặt ngưỡng chấp nhận"
+    ]
+  },
+  "MSHP": {
+    "name": "Thang đo Holak — tự chẩn đoán mức độ trưởng thành cá nhân (v2.1p)",
+    "level": "mọi cấp độ",
+    "interactiveElement": "Tự kiểm tra mức độ trưởng thành cá nhân (Thang đo Holak v2.1p)",
+    "keyConcepts": [
+      "mức độ trưởng thành trong thực hành AI của chính bạn",
+      "Thang đo Holak v2.1p (cá nhân)",
+      "khả năng kiểm chứng đầu ra",
+      "khả năng đảo ngược quyết định",
+      "quản lý ngữ cảnh"
+    ],
+    "learningOutcomes": [
+      "Xác định mức độ trưởng thành định hướng trong thực hành AI của chính mình (0–11)",
+      "Chỉ ra rào cản và bước tiếp theo để lên cao hơn trong tay nghề của chính mình",
+      "Nhận ra cái bẫy của cảm giác sai lầm về sự trưởng thành cá nhân"
+    ]
+  },
+  "MSHO": {
+    "name": "Thang đo Holak — tự chẩn đoán mức độ trưởng thành của tổ chức (v2.1e)",
+    "level": "mọi cấp độ",
+    "interactiveElement": "Tự kiểm tra mức độ trưởng thành của tổ chức (Thang đo Holak v2.1e)",
+    "keyConcepts": [
+      "mức độ trưởng thành trong việc áp dụng AI ở tổ chức",
+      "Thang đo Holak v2.1e (tổ chức)",
+      "chính sách sử dụng chấp nhận được",
+      "dấu vết kiểm toán",
+      "đo lường tác động của AI"
+    ],
+    "learningOutcomes": [
+      "Xác định mức độ trưởng thành định hướng trong việc áp dụng AI ở tổ chức (0–11)",
+      "Chỉ ra rào cản và bước áp dụng tiếp theo ở cấp nhóm/công ty",
+      "Phân biệt việc áp dụng được đo lường và cải tiến liên tục với một sáng kiến đơn lẻ"
+    ]
+  },
+  "MSK1": {
+    "name": "Quản lý ngữ cảnh và chi phí token",
+    "level": "mọi cấp độ",
+    "interactiveElement": "Phân loại các thực hành quản lý ngữ cảnh",
+    "keyConcepts": [
+      "quản lý ngữ cảnh",
+      "context window",
+      "chi phí token",
+      "vệ sinh prompt",
+      "tác vụ lặp lại"
+    ],
+    "learningOutcomes": [
+      "Phân biệt các thực hành tiết kiệm và lãng phí trong quản lý ngữ cảnh",
+      "Chỉ ra cách giảm chi phí token mà không mất chất lượng",
+      "Lập kế hoạch một tác vụ AI lặp lại với việc kiểm soát ngữ cảnh và chi phí"
+    ]
+  },
+  "MSK2": {
+    "name": "Agent AI: tự chủ, quyền hạn và kiểm soát của con người",
+    "level": "mọi cấp độ",
+    "interactiveElement": "Tinh chỉnh mức tự chủ và kiểm soát của agent (tune)",
+    "keyConcepts": [
+      "agent",
+      "tool use",
+      "human-in-the-loop",
+      "phạm vi quyền",
+      "khả năng đảo ngược và dấu vết kiểm toán",
+      "khả năng kiểm chứng đầu ra"
+    ],
+    "learningOutcomes": [
+      "Phân biệt chatbot, workflow có công cụ và agent thực hiện các bước",
+      "Khớp mức tự chủ của agent với rủi ro và khả năng đảo ngược của tác vụ",
+      "Thiết kế ranh giới quyền hạn, phê duyệt của con người và dấu vết kiểm toán cho agent"
+    ]
+  },
+  "MSK3": {
+    "name": "Bảo mật, quyền riêng tư và governance cho AI",
+    "level": "mọi cấp độ",
+    "interactiveElement": "Phân loại dữ liệu và trường hợp sử dụng AI",
+    "keyConcepts": [
+      "quyền riêng tư dữ liệu",
+      "PII",
+      "chính sách sử dụng chấp nhận được",
+      "governance AI",
+      "dấu vết kiểm toán"
+    ],
+    "learningOutcomes": [
+      "Phân loại dữ liệu là được phép, cần ẩn danh hoặc không được phép",
+      "Chỉ ra các quy tắc governance tối thiểu cho việc dùng AI trong nhóm",
+      "Nhận diện rủi ro quyền riêng tư trong việc dùng AI lặp lại"
+    ]
+  },
+  "MSK4": {
+    "name": "Skill và đo lường tác động: đánh giá mức độ trưởng thành của workflow AI",
+    "level": "mọi cấp độ",
+    "interactiveElement": "Đánh giá mức độ trưởng thành của workflow AI theo rubric (rubric)",
+    "keyConcepts": [
+      "skill / workflow lặp lại",
+      "ngưỡng 8→9 và 10→11",
+      "đo lường tác động của AI",
+      "hiệu chỉnh và cải tiến liên tục",
+      "rubric mức độ trưởng thành"
+    ],
+    "learningOutcomes": [
+      "Đánh giá mức độ trưởng thành của một workflow AI lặp lại (một skill) theo các tiêu chí cụ thể",
+      "Nhận ra điều gì phân biệt mức 8 với mức 9 và mức 10 với mức 11",
+      "Phân biệt sự phát triển được đo lường, được hiệu chỉnh với cảm giác sai lầm về sự trưởng thành"
+    ]
+  }
+}

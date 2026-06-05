@@ -1,0 +1,476 @@
+{
+  "_meta": {
+    "module": "M11",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M11. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q095",
+      "module": "M11",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Le participant reconnaît, dans une sortie LLM prête, une hallucination prenant la forme d'une source inventée et inexistante.",
+      "prompt": "Un testeur demande au LLM comment configurer la journalisation dans la documentation `synt-API v2`. Le modèle répond sur un ton assuré : « La configuration complète est décrite dans la section 7.4 de la documentation `synt-API v2` ». Le testeur consulte la documentation et constate qu'elle se termine à la section 6 — la section 7.4 n'existe pas. Comment qualifier cette phrase le plus justement ?",
+      "options": [
+        {
+          "id": "A",
+          "text": "C'est une hallucination — le modèle a cité une source qui sonne crédible mais n'est pas fondée (la section n'existe pas)."
+        },
+        {
+          "id": "B",
+          "text": "C'est une réponse correcte que le testeur n'a simplement pas encore eu le temps de vérifier."
+        },
+        {
+          "id": "C",
+          "text": "C'est une erreur de l'utilisateur — le prompt était mal formulé, donc le modèle n'est pas en faute."
+        },
+        {
+          "id": "D",
+          "text": "C'est un signal d'incertitude — le modèle a explicitement indiqué qu'il n'était pas sûr de la section 7.4."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Une référence formulée avec assurance à une section inexistante est une hallucination classique — la sortie a l'air crédible, mais elle n'est pas fondée sur les données.",
+      "feedbackIncorrect": "Le modèle n'a signalé aucune incertitude et n'a cité aucune source réelle — il a inventé la section. Revois la définition de l'hallucination (sortie crédible, mais non fondée sur les données).",
+      "references": [
+        "M11.2",
+        "M11.8"
+      ]
+    },
+    {
+      "id": "Q096",
+      "module": "M11",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Le participant indique que forcer une réponse précise par le prompt (prompt pressure) est la cause de l'hallucination lorsque le modèle ne dispose pas de l'information.",
+      "prompt": "Un testeur écrit au LLM : « Donne le numéro exact de la version dans laquelle NotkaApp a ajouté la rotation des logs — réponds uniquement par le numéro. » Bien qu'il n'ait pas cette information dans le contexte, le modèle répond : « 2.5 ». Quelle cause d'hallucination explique ce résultat ?",
+      "options": [
+        {
+          "id": "A",
+          "text": "La pression du prompt (prompt pressure) — le prompt a forcé une réponse précise que le modèle n'avait pas, alors il l'a complétée d'office."
+        },
+        {
+          "id": "B",
+          "text": "Un conflit de données — le contexte contenait deux versions contradictoires du numéro."
+        },
+        {
+          "id": "C",
+          "text": "Des sources imprécises — le modèle a fait la moyenne de plusieurs documents similaires sur la rotation des logs."
+        },
+        {
+          "id": "D",
+          "text": "Un contexte obsolète — la question portait sur un état antérieur à la date d'entraînement du modèle."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "L'instruction « donne le numéro exact » force le modèle à fournir une réponse précise malgré l'absence de données — c'est la définition de la pression du prompt.",
+      "feedbackIncorrect": "Le scénario ne comporte pas de sources contradictoires ni moyennées ; le problème est l'exigence d'une donnée précise que le modèle n'a pas. Revois la cause « pression du prompt » dans le catalogue des cinq causes.",
+      "references": [
+        "M11.4"
+      ]
+    },
+    {
+      "id": "Q097",
+      "module": "M11",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Le participant attribue à une phrase de la sortie la bonne catégorie de marquage, en distinguant une phrase vérifiable sans citation d'une phrase manifestement contraire à la documentation.",
+      "prompt": "Dans une réponse du LLM sur NotkaApp apparaît la phrase : « Le niveau de logs par défaut est DEBUG. » L'affirmation est précise et vérifiable, mais le modèle ne cite aucune source, et le testeur n'a pas sous la main de document qui la confirmerait ou l'infirmerait. Quelle catégorie de marquage faut-il attribuer à cette phrase ?",
+      "options": [
+        {
+          "id": "A",
+          "text": "À sourcer — l'affirmation est vérifiable, mais sans citation, il faut donc la confirmer dans la documentation."
+        },
+        {
+          "id": "B",
+          "text": "Non fondée — la phrase contredit directement une exigence connue."
+        },
+        {
+          "id": "C",
+          "text": "À rejeter — la phrase invoque une source inexistante."
+        },
+        {
+          "id": "D",
+          "text": "Correcte — l'affirmation sonne factuelle, on peut donc l'accepter sans vérification supplémentaire."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Une affirmation précise et vérifiable sans citation n'est pas encore erronée — elle relève de la catégorie « à sourcer », tant qu'on ne l'a pas confirmée dans la documentation.",
+      "feedbackIncorrect": "Rien n'indique que la phrase est contradictoire ou inventée — il manque simplement une citation. Revois la différence entre « à sourcer » et « non fondée »/« à rejeter ».",
+      "references": [
+        "M11.7",
+        "M11.8"
+      ]
+    },
+    {
+      "id": "Q098",
+      "module": "M11",
+      "pillar": "security_governance",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Le participant prend une décision de gouvernance consistant à rejeter le LLM lorsque le résultat est à la fois invérifiable et à fort impact en cas d'erreur.",
+      "prompt": "Dans une réponse sur NotkaApp, le LLM conseille : « Tu peux désactiver en toute sécurité la journalisation des erreurs en production, cela n'affectera pas la conformité. » Le testeur n'a aucun moyen de vérifier cette affirmation, et désactiver les logs en production est une décision difficile à annuler et à fort impact. Quelle décision est la plus sûre ?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Ne pas se fier au LLM — le résultat est invérifiable et l'erreur a un fort impact ; marquer le passage comme risqué et confier la décision à un expert/une source."
+        },
+        {
+          "id": "B",
+          "text": "Appliquer la recommandation — le modèle s'est exprimé sur un ton assuré et a employé le mot « sécurité »."
+        },
+        {
+          "id": "C",
+          "text": "L'appliquer aussitôt en production et ne rétablir les logs que si des problèmes apparaissent."
+        },
+        {
+          "id": "D",
+          "text": "Demander au même modèle de confirmer sa propre réponse et agir selon la seconde réponse."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Règle empirique : absence de vérifiabilité OU fort impact de l'erreur = ne te fie pas au LLM. Ici, les deux conditions sont réunies, donc la décision revient à l'humain/à la source.",
+      "feedbackIncorrect": "Le ton assuré et l'auto-confirmation du modèle ne sont pas des preuves ; face à un résultat invérifiable et à fort impact, il ne faut pas se fier au LLM. Revois la règle « quand ne pas utiliser le LLM ».",
+      "references": [
+        "M11.6",
+        "M11.7"
+      ]
+    },
+    {
+      "id": "Q099",
+      "module": "M11",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Le participant distingue une hallucination d'une réponse dans laquelle le modèle signale explicitement son incertitude.",
+      "prompt": "Laquelle des propositions suivantes décrit le mieux une hallucination (hallucination) d'un LLM ?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Une sortie qui sonne crédible et est énoncée sur un ton assuré, mais qui n'est pas fondée sur les données (fait inventé, source inexistante, détail erroné)."
+        },
+        {
+          "id": "B",
+          "text": "Une réponse dans laquelle le modèle indique explicitement qu'il n'est pas sûr et demande des précisions."
+        },
+        {
+          "id": "C",
+          "text": "Toute réponse que l'utilisateur n'a pas encore eu le temps de vérifier dans la documentation."
+        },
+        {
+          "id": "D",
+          "text": "Un message d'erreur renvoyé par l'API du modèle lorsque le prompt est trop long."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Une hallucination est un contenu crédible dans la forme, mais non fondé sur les données — un ton assuré ne signifie pas l'exactitude.",
+      "feedbackIncorrect": "Une incertitude explicite, une absence de vérification ou une erreur d'API ne sont pas une hallucination. Revois la définition : ton crédible + absence de fondement dans les données.",
+      "references": [
+        "M11.2"
+      ]
+    },
+    {
+      "id": "Q100",
+      "module": "M11",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Le participant reconnaît le contexte obsolète (training cutoff) comme cause d'hallucination lorsque la question porte sur un état postérieur à la date d'entraînement.",
+      "prompt": "Un testeur interroge le LLM sur les détails d'une fonctionnalité publiée la semaine dernière, déjà après la date de coupure des données d'entraînement du modèle. Le modèle décrit malgré tout le fonctionnement présumé de cette fonctionnalité. Quelle est ici la cause principale de l'hallucination ?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Contexte obsolète (training cutoff) — la question porte sur un état postérieur à la date d'entraînement du modèle."
+        },
+        {
+          "id": "B",
+          "text": "Pression du prompt — le prompt a été formulé comme un ordre, pas comme une question."
+        },
+        {
+          "id": "C",
+          "text": "Conflit de données — l'entraînement contenait deux versions contradictoires de la fonctionnalité."
+        },
+        {
+          "id": "D",
+          "text": "Sources imprécises — le modèle a confondu deux documents similaires."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "La fonctionnalité est apparue après la date de coupure des données — le modèle ne pouvait pas la connaître et « complète d'office », ce qui relève de la cause de type contexte obsolète.",
+      "feedbackIncorrect": "Le problème n'est ni la forme du prompt ni le mélange de sources, mais l'absence de connaissance des événements postérieurs au training cutoff. Revois la cause « contexte obsolète ».",
+      "references": [
+        "M11.4"
+      ]
+    },
+    {
+      "id": "Q101",
+      "module": "M11",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Le participant formule le seuil de rejet du LLM en se fondant sur la vérifiabilité du résultat et l'impact de l'erreur.",
+      "prompt": "Selon la règle « quand NE PAS utiliser le LLM » — quand un testeur ne devrait-il pas se fier à la réponse du modèle ?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Lorsque le résultat ne peut pas être vérifié OU que l'erreur aurait un impact fort et difficile à annuler."
+        },
+        {
+          "id": "B",
+          "text": "Uniquement lorsque la réponse est longue et contient beaucoup de détails techniques."
+        },
+        {
+          "id": "C",
+          "text": "Uniquement lorsque, à la fois, le résultat ne peut pas être vérifié ET l'erreur a un impact fort."
+        },
+        {
+          "id": "D",
+          "text": "Jamais — on peut toujours accepter la réponse du LLM s'il a l'air sûr de lui."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "La règle est une alternative (OU) : il suffit d'une absence de vérifiabilité ou d'un fort impact de l'erreur pour ne pas se fier au LLM.",
+      "feedbackIncorrect": "Ce n'est pas une conjonction — une seule des conditions suffit. La longueur de la réponse et le ton assuré ne sont pas des critères. Revois la règle empirique de l'écran « Quand NE PAS utiliser le LLM ».",
+      "references": [
+        "M11.6"
+      ]
+    },
+    {
+      "id": "Q102",
+      "module": "M11",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Le participant indique toutes les étapes de la checklist de vérification d'une sortie LLM.",
+      "prompt": "Quels éléments font partie de la checklist de vérification d'une sortie LLM (que vérifier avant de te fier à la réponse) ? Coche toutes les bonnes réponses.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Si la sortie contient des affirmations précises et vérifiables (chiffres, noms, citations, étapes)."
+        },
+        {
+          "id": "B",
+          "text": "Si la source citée existe et dit effectivement ce que le modèle prétend."
+        },
+        {
+          "id": "C",
+          "text": "Si le contenu n'est pas périmé par rapport à l'état actuel."
+        },
+        {
+          "id": "D",
+          "text": "Si la réponse ne comporte pas de contradictions internes."
+        },
+        {
+          "id": "E",
+          "text": "Si la réponse est plus longue et plus détaillée que la version précédente."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "feedbackCorrect": "La checklist vérifie les affirmations vérifiables, l'existence et la conformité de la source, l'actualité ainsi que la cohérence interne — pas la longueur de la réponse.",
+      "feedbackIncorrect": "La longueur/le niveau de détail n'est pas un critère de qualité ; le reste constitue les étapes de la checklist (a–d). Revois l'écran « Checklist de vérification de la sortie ».",
+      "references": [
+        "M11.5"
+      ]
+    },
+    {
+      "id": "Q103",
+      "module": "M11",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Le participant reconnaît dans une sortie LLM les signaux d'alerte pouvant indiquer une hallucination.",
+      "prompt": "Lesquels des éléments suivants sont de réels signaux d'alerte indiquant qu'un passage de la réponse du LLM peut être une hallucination ? Coche toutes les bonnes réponses.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Une référence à une section ou à un document introuvable dans la source."
+        },
+        {
+          "id": "B",
+          "text": "Un chiffre précis ou un numéro de version donné sans aucune citation ni référence."
+        },
+        {
+          "id": "C",
+          "text": "Une affirmation contredisant un autre passage de la même réponse."
+        },
+        {
+          "id": "D",
+          "text": "La description d'un état de fait qui n'a pu apparaître qu'après la date de coupure des données du modèle."
+        },
+        {
+          "id": "E",
+          "text": "Une indication explicite du modèle : « je ne suis pas sûr, vérifie dans la documentation »."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "feedbackCorrect": "Une source inexistante, une donnée précise sans citation, une contradiction interne et un contenu postérieur au training cutoff sont des signaux d'alerte typiques ; une incertitude explicite n'est pas une hallucination.",
+      "feedbackIncorrect": "Une indication explicite d'incertitude est un signal honnête, pas une alerte d'hallucination. Revois les signaux d'alerte des causes d'hallucination.",
+      "references": [
+        "M11.4",
+        "M11.2"
+      ]
+    },
+    {
+      "id": "Q104",
+      "module": "M11",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Le participant indique les passages d'une réponse à marquer comme nécessitant une source ou un expert, plutôt que d'accepter ou de rejeter l'ensemble.",
+      "prompt": "Une réponse du LLM sur NotkaApp contient les phrases ci-dessous. Lesquelles faut-il marquer comme nécessitant une source ou un expert (pas à accepter immédiatement) ? Coche toutes les bonnes réponses.",
+      "options": [
+        {
+          "id": "A",
+          "text": "« Le blocage du compte dure 24 heures. » — chiffre vérifiable sans citation, à confirmer dans l'exigence."
+        },
+        {
+          "id": "B",
+          "text": "« NotkaApp possède la certification ISO 27001. » — affirmation à fort impact, donnée sans source."
+        },
+        {
+          "id": "C",
+          "text": "« Tu peux désactiver en toute sécurité la journalisation des erreurs en production. » — décision critique nécessitant un expert."
+        },
+        {
+          "id": "D",
+          "text": "« La réinitialisation du mot de passe utilise un lien valable 30 minutes. » — conforme au DOC3, confirmé dans la documentation."
+        },
+        {
+          "id": "E",
+          "text": "« NotkaApp est une application de prise de notes. » — description générale et incontestable du produit."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Les affirmations vérifiables sans citation (A, B) nécessitent une source, et la décision critique (C) nécessite un expert ; les phrases confirmées ou incontestables ne requièrent pas de marquage.",
+      "feedbackIncorrect": "Une phrase conforme au DOC3 et une description générale du produit ne nécessitent pas de marquage ; on marque les passages vérifiables sans citation et les décisions critiques. Revois la granularité des marquages (écran « Marquage des passages »).",
+      "references": [
+        "M11.7",
+        "M11.8"
+      ]
+    }
+  ]
+}

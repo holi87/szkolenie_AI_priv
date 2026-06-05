@@ -1,0 +1,180 @@
+{
+  "_meta": {
+    "issue": "#22 [22][M4] Implementa i moduli M7-M9",
+    "storyboard": "docs/storyboard/m08-qa-use-cases.md",
+    "interaction": "QA workbench (kind: rubric, ESERCITATIVO — rubrica R4-qa-workbench, senza soglia)",
+    "dataPolicy": "TUTTI i dati SINTETICI (NotkaApp, SklepDemo, przyklad.test, segnaposto PESEL 00000000000). ZERO dati reali del cliente/PII.",
+    "note": "Esemplare di tipo rubric ESERCITATIVO: passThreshold e recordsPractical omessi (feedback senza soglia). M8 obbligatorio per S2/S3, opzionale per S1 — senza variante ridotta, la stessa sequenza di schermate per tutti i percorsi. Il contenuto dell'interazione si basa su SC-QA-01 (reset della password NotkaApp)."
+  },
+  "module": "M8",
+  "intro": "La GenAI accelera il lavoro del QA: abbozza casi di test, checklist dei rischi e revisione della documentazione. Ma l'LLM genera il testo più probabile, non una verità verificata — per questo il tester resta il decisore, mentre il modello è l'assistente.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "A cosa serve la GenAI nel QA — e dove finisce il suo ruolo",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "L'LLM accelera la creazione e l'analisi degli artefatti QA: casi di test, checklist dei rischi, revisione della documentazione. Genera però il testo più probabile e non una verità verificata — sei tu a valutare cosa finirà nella documentazione." },
+        { "kind": "list", "items": [
+          "E1 — generi casi di test a partire dal requisito e individui le lacune nella copertura.",
+          "E2 — rilevi duplicati e test apparenti (privi di reale valore di verifica).",
+          "E3 — crei una checklist dei rischi (risk-based testing).",
+          "E4 — valuti se l'output è adatto alla documentazione QA dopo un controllo di merito.",
+          "E5 — indichi dove l'LLM è assistente e dove la decisione spetta all'uomo."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "In cosa differisce da M7", "text": "M7 insegnava a scrivere prompt. M8 si concentra sull'uso dell'LLM in compiti QA reali e sulla valutazione del suo output. Principio guida: l'LLM come assistente, il tester come decisore." }
+      ]
+    },
+    {
+      "id": "s2-generowanie",
+      "title": "Generare casi di test a partire da un requisito",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Da un requisito sintetico (ad es. «Campo password: min. 8 caratteri, min. 1 cifra») chiedi all'LLM dei casi di test: corretto, limite, negativo. Un buon prompt indica il ruolo, il requisito e il formato di output (tabella: ID | passi | dati | risultato atteso)." },
+        { "kind": "list", "items": [
+          "TC corretto — la password rispetta tutte le regole, la registrazione va a buon fine.",
+          "TC limite — password con esattamente la lunghezza minima (8 caratteri).",
+          "TC negativo — password senza cifra, messaggio di errore atteso."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Conclusione", "text": "L'LLM fornisce uno scheletro rapido collegato ai criteri di accettazione (acceptance criteria) e alla tracciabilità (traceability) requisito→test. È un punto di partenza, non un set pronto." }
+      ]
+    },
+    {
+      "id": "s3-braki-pokrycia",
+      "title": "Lacune nella copertura — ciò che l'LLM non ha pensato",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Leggi l'output cercando lacune nella copertura (coverage gaps): mancanza di casi limite, assenza di percorsi di errore, stati trascurati, mancanza di dati di test per i valori estremi. Tecnica: confronta l'insieme dei casi generati con un elenco di categorie di rischio e cerca le caselle vuote." },
+        { "kind": "callout", "variant": "warn", "title": "Esempio sintetico", "text": "Per il login l'LLM ha coperto l'«happy path», ma ha trascurato il lockout dopo 5 tentativi falliti. Più spesso mancano i limiti, i percorsi di errore e i dati estremi — è lì che vanno cercate le lacune." }
+      ]
+    },
+    {
+      "id": "s4-duplikaty-pozorne",
+      "title": "Duplicati e test apparenti",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Test apparente", "original": "test senza reale valore di verifica", "text": "caso la cui asserzione non verifica nulla — manca il risultato atteso, «il test passerà sempre»." },
+        { "kind": "definition", "term": "Duplicato", "text": "due casi che verificano le stesse condizioni con una descrizione diversa; gonfiano l'insieme senza nuova copertura." },
+        { "kind": "callout", "variant": "warn", "title": "Conclusione", "text": "Un numero maggiore di casi ≠ copertura migliore. Un duplicato aumenta il costo di manutenzione, mentre un test apparente dà un falso senso di sicurezza." }
+      ]
+    },
+    {
+      "id": "s5-checklista-ryzyk",
+      "title": "Checklist dei rischi per una funzionalità",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "L'LLM abbozza una checklist dei rischi (risk-based testing) per categorie: sicurezza, dati, prestazioni, accessibilità, conformità. Ogni voce: rischio + impatto + area da testare." },
+        { "kind": "table",
+          "title": "Checklist sintetica — funzione «reset della password» NotkaApp",
+          "headers": ["Categoria", "Rischio", "Area da testare"],
+          "rows": [
+            ["Sicurezza", "Il link di reset funziona dopo la scadenza o più volte", "Validità 30 min, uso singolo del link"],
+            ["Dati", "L'e-mail dell'utente esposta nel messaggio di errore", "Contenuto della risposta in caso di account sconosciuto"],
+            ["Accessibilità", "Modulo non utilizzabile con lo screen reader", "Conformità alle WCAG, focus ed etichette"]
+          ],
+          "textAlt": "Tabella della checklist dei rischi per il reset della password NotkaApp: categoria Sicurezza — rischio che il link funzioni dopo la scadenza o più volte, l'area è la validità di 30 min e l'uso singolo; categoria Dati — rischio di esposizione dell'e-mail nell'errore, l'area è il contenuto della risposta in caso di account sconosciuto; categoria Accessibilità — rischio di mancato supporto dello screen reader, l'area è la conformità alle WCAG, il focus e le etichette." },
+        { "kind": "callout", "variant": "info", "text": "L'LLM propone le categorie, il tester le prioritizza e scarta quelle non pertinenti." }
+      ]
+    },
+    {
+      "id": "s6-do-dokumentacji",
+      "title": "Questo output è adatto alla documentazione QA?",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Prima di incollare l'output nella documentazione esegui un controllo di merito (review checklist): coerenza con il requisito, completezza, assenza di fatti inventati (allucinazioni), verificabilità, assenza di dati sensibili." },
+        { "kind": "list", "ordered": true, "items": [
+          "Accetta — output coerente con il requisito, completo, verificabile, senza dati sensibili.",
+          "Correggi — piccole lacune o un singolo fatto inventato da correggere rispetto al requisito.",
+          "Rifiuta — fatti in contrasto con il requisito oppure dati sensibili; non usare senza rielaborazione."
+        ] },
+        { "kind": "callout", "variant": "info", "text": "Collegamento a M11 (verifica dell'output) e M10 (dati e privacy)." }
+      ]
+    },
+    {
+      "id": "s7-asystent-decydent",
+      "title": "Assistente o decisore — dove tracciare il confine",
+      "type": "decision",
+      "blocks": [
+        { "kind": "paragraph", "text": "L'LLM può supportare i compiti come assistente: bozza dei casi, draft della checklist, brainstorming. La decisione spetta all'uomo (human-in-the-loop): accettazione dei casi, valutazione del rischio critico, approvazione per il release." },
+        { "kind": "table",
+          "title": "Assistente vs decisore — 3 situazioni sintetiche",
+          "headers": ["Situazione", "Assistente (LLM)", "Decisore (uomo)"],
+          "rows": [
+            ["Bozza di casi di test a partire dal requisito", "Genera una proposta", "Approva l'ambito"],
+            ["Valutazione del rischio critico", "Propone le categorie", "Decide la priorità"],
+            ["Approvazione del rilascio per il release", "Non decide", "Prende la decisione"]
+          ],
+          "textAlt": "Tabella di tre situazioni QA con la suddivisione tra il ruolo di assistente (LLM) e di decisore (uomo): bozza di casi di test — l'LLM genera una proposta, l'uomo approva l'ambito; valutazione del rischio critico — l'LLM propone le categorie, l'uomo decide la priorità; approvazione del rilascio per il release — l'LLM non decide, l'uomo prende la decisione." },
+        { "kind": "callout", "variant": "safe", "title": "Confine", "text": "Più alta è la posta in gioco di una decisione (release, rischio critico, chiusura di un difetto), più nettamente il ruolo spetta all'uomo. L'LLM accelera, ma non approva." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "rubric",
+    "id": "m8-qa-workbench",
+    "title": "QA workbench",
+    "intro": "Requisito NotkaApp (fittizio): l'utente reimposta la password tramite un link e-mail valido 30 minuti; dopo 3 tentativi di login errati l'account viene bloccato per 15 minuti. L'LLM ha generato i casi: TC1 — reset corretto; TC2 — link scaduto dopo 30 min; TC3 — 3 password errate → blocco dell'account. Valuta questo output secondo i cinque assi della rubrica. È un esercizio in modalità apprendimento — ricevi feedback, senza soglia di superamento.",
+    "rubricId": "R4-qa-workbench",
+    "scaleMax": 5,
+    "criteria": [
+      { "id": "K1", "name": "Copertura dei test", "points": 1,
+        "prompt": "Quali comportamenti del requisito NotkaApp l'output dell'LLM COPRE effettivamente (TC1–TC3)?",
+        "hint": "L'output copre l'happy path del reset, la scadenza del link dopo 30 min e il blocco dell'account dopo 3 tentativi errati.",
+        "options": [
+          { "id": "a", "text": "Reset corretto (TC1), scadenza del link dopo 30 min (TC2) e blocco dell'account dopo 3 tentativi errati (TC3)." },
+          { "id": "b", "text": "Riutilizzo dello stesso link di reset e sessioni utente parallele." },
+          { "id": "c", "text": "Soltanto l'estetica: il colore del pulsante «Reimposta password» e il logo nella pagina di login." }
+        ], "correctOptionIds": ["a"] },
+      { "id": "K2", "name": "Lacune di copertura", "points": 1,
+        "prompt": "Quali casi MANCANO nell'output dell'LLM rispetto al requisito NotkaApp? Seleziona esattamente tutte le lacune.",
+        "hint": "Sono state trascurate tre lacune: e-mail vuota, link monouso utilizzato due volte e sessioni parallele. La scadenza del link (TC2) e il blocco dopo 3 tentativi (TC3) sono già coperti.",
+        "options": [
+          { "id": "a", "text": "Reset con il campo e-mail vuoto (validazione dei dati di input)." },
+          { "id": "b", "text": "Riutilizzo dello stesso link di reset (link monouso utilizzato due volte)." },
+          { "id": "c", "text": "Sessioni parallele di reset della password per lo stesso account." },
+          { "id": "d", "text": "Scadenza del link dopo 30 minuti — questo è già coperto da TC2." }
+        ], "correctOptionIds": ["a", "b", "c"] },
+      { "id": "K3", "name": "Test apparenti / duplicati", "points": 1,
+        "prompt": "All'insieme è stato aggiunto TC4: «Apri il modulo di reset e verifica che il modulo si apra; risultato atteso: nessuno». Come classificarlo?",
+        "hint": "Senza un risultato atteso definito, l'asserzione non verifica nulla — è un test apparente, non un caso limite di valore.",
+        "options": [
+          { "id": "a", "text": "Test apparente — manca il risultato atteso, l'asserzione di fatto non verifica nulla." },
+          { "id": "b", "text": "Caso limite corretto per la validità del link di 30 minuti." },
+          { "id": "c", "text": "Caso negativo di valore per lo scenario di blocco dell'account." }
+        ], "correctOptionIds": ["a"] },
+      { "id": "K4", "name": "Rischi / assunzioni errate", "points": 1,
+        "prompt": "Nella nota all'output l'LLM ha scritto: «il blocco dell'account dura 24 ore e il link di reset è valido a tempo indeterminato». Come valutarlo rispetto al requisito?",
+        "hint": "Il requisito dice: blocco di 15 minuti, link valido 30 minuti. I valori 24 h e «a tempo indeterminato» sono fatti inventati (allucinazioni) in contrasto con il requisito — assunzioni errate da rifiutare o correggere.",
+        "options": [
+          { "id": "a", "text": "Assunzioni errate in contrasto con il requisito (24 h e «a tempo indeterminato» inventati) — correggi o rifiuta prima dell'uso." },
+          { "id": "b", "text": "Accettabile — l'LLM di solito fornisce valori più vicini alla realtà rispetto al requisito." },
+          { "id": "c", "text": "Accetta con un'annotazione che i valori possono variare a seconda della versione dell'applicazione." }
+        ], "correctOptionIds": ["a"] },
+      { "id": "K5", "name": "Confine della decisione (verifica umana)", "points": 1,
+        "prompt": "Come suddividere i ruoli tra LLM e tester in questo insieme secondo il principio «assistente, non decisore»?",
+        "hint": "L'LLM abbozza i casi e la checklist dei rischi; l'accettazione dell'ambito, la valutazione del rischio critico e la decisione sul release spettano all'uomo (human-in-the-loop).",
+        "options": [
+          { "id": "a", "text": "L'LLM genera la bozza dei casi e la checklist dei rischi, mentre il tester approva l'ambito e decide l'ammissione al release." },
+          { "id": "b", "text": "L'LLM approva autonomamente il rilascio in produzione se i test generati passano." },
+          { "id": "c", "text": "L'LLM valuta in via definitiva il rischio critico e chiude i difetti senza il coinvolgimento del tester." }
+        ], "correctOptionIds": ["a"] }
+    ]
+  },
+  "summary": {
+    "points": [
+      "E1 — dal requisito generi una bozza di casi di test e leggi l'output cercando lacune nella copertura (limiti, percorsi di errore, dati estremi).",
+      "E2 — riconosci i duplicati (stesse condizioni con descrizione diversa) e i test apparenti (asserzione senza risultato atteso); più casi ≠ copertura migliore.",
+      "E3 — abbozzi una checklist dei rischi (sicurezza, dati, prestazioni, accessibilità, conformità) e ne curi tu stesso la prioritizzazione.",
+      "E4 — prima della documentazione applichi un controllo di merito: accetta / correggi / rifiuta (coerenza con il requisito, assenza di allucinazioni, assenza di dati sensibili).",
+      "E5 — l'LLM è un assistente; l'accettazione, il rischio critico e il release spettano all'uomo (human-in-the-loop)."
+    ],
+    "checklist": [
+      "L'output copre l'happy path, i limiti e i percorsi di errore del requisito?",
+      "Ho indicato le lacune nella copertura nonché i duplicati e i test apparenti?",
+      "Ho controllato l'output cercando fatti in contrasto con il requisito (allucinazioni)?",
+      "Le decisioni sul rischio critico e sul release sono rimaste in capo all'uomo?"
+    ],
+    "checklistTitle": "Checklist — valutazione dell'output dell'LLM nel QA",
+    "nextStep": "Prossimo passo: M9 — integrazioni e agenti (per S3 e facoltativamente S2); per S1 ritorno al percorso obbligatorio."
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "_meta": {
+    "issue": "#21 [21][M4] Wdroż moduły M3-M6",
+    "storyboard": "docs/storyboard/m03-parametry.md",
+    "interaction": "Suwaki generacji (kind: tune)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (SklepDemo/NotkaApp). Output interakcji jest prerenderowany (nie z żywego modelu). ZERO PII.",
+    "note": "Egzemplarz referencyjny typu tune: parametry → autorskie efekty (dane) + scorowany checkpoint."
+  },
+  "module": "M3",
+  "intro": "Cùng một dữ liệu đầu vào và cùng một mô hình có thể cho ra những câu trả lời khác nhau, bởi vì quá trình sinh được điều khiển bởi các tham số. Trong QA, khả năng tái lập kết quả là nền tảng của tài liệu đáng tin cậy và kiểm thử hồi quy — các tham số không được kiểm soát sẽ tạo ra output khó dự đoán.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Tại sao phải kiểm soát quá trình sinh?",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Ba bộ điều khiển quyết định hình dạng của câu trả lời: temperature và top-p (tính ngẫu nhiên) cùng max tokens (độ dài). Trước khi tin tưởng vào output trong tài liệu kiểm thử, bạn phải biết cách thiết lập chúng." },
+        { "kind": "callout", "variant": "info", "title": "Tính tất định chỉ là bề ngoài", "text": "Temperature thấp làm giảm tính ngẫu nhiên, nhưng không đảm bảo kết quả giống hệt nhau ở mỗi lần chạy — đây vẫn là một mô hình xác suất." }
+      ]
+    },
+    {
+      "id": "s2-temperature",
+      "title": "Temperature — từ trang trọng đến sáng tạo",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Temperature", "original": "nhiệt độ", "text": "bộ điều khiển tính ngẫu nhiên trong việc chọn token tiếp theo." },
+        { "kind": "list", "items": [
+          "Thấp (~0,0–0,3): câu trả lời dè dặt, có thể tái lập, trang trọng — dùng cho tài liệu và các bước kiểm thử.",
+          "Cao (~0,8–1,2): câu trả lời đa dạng, sáng tạo, ít dự đoán được hơn — dùng để động não ý tưởng cho dữ liệu kiểm thử."
+        ] }
+      ]
+    },
+    {
+      "id": "s3-wysoka-losowosc",
+      "title": "Tính ngẫu nhiên cao và công việc QA",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Temperature cao trong QA nghĩa là thiếu khả năng tái lập (hai lần chạy = hai bộ bước khác nhau), trôi dạt nội dung, khó rà soát và kiểm toán, cũng như nguy cơ những thay đổi âm thầm trong kiểm thử hồi quy." },
+        { "kind": "callout", "variant": "warn", "title": "Quy tắc", "text": "Khi khả năng tái lập và sự phù hợp với yêu cầu là quan trọng — hãy giảm tính ngẫu nhiên." }
+      ]
+    },
+    {
+      "id": "s4-top-p",
+      "title": "top-p — bộ điều khiển ngẫu nhiên thứ hai",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "top-p", "original": "nucleus sampling", "text": "ngưỡng xác suất tích lũy — thu hẹp tập ứng viên cho token tiếp theo về những token có xác suất cao nhất cộng dồn lại đến p." },
+        { "kind": "paragraph", "text": "Cả hai tham số đều điều khiển tính đa dạng; thông thường ta chỉ điều chỉnh một tham số mỗi lần. top-p thấp = lựa chọn hẹp hơn, an toàn hơn (từ vựng thuật ngữ QA ổn định); cao = các cách diễn đạt rộng hơn, rủi ro hơn." }
+      ]
+    },
+    {
+      "id": "s5-max-tokens",
+      "title": "max tokens — khi câu trả lời bị cắt ngang",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "max tokens", "original": "số token tối đa của câu trả lời", "text": "giới hạn cứng về độ dài của output." },
+        { "kind": "paragraph", "text": "Vượt quá giới hạn sẽ cắt cụt câu trả lời ngay giữa câu, bảng hoặc danh sách — thiếu các bước cuối cùng hoặc tiêu chí chấp nhận. Bạn nhận ra điều này qua câu bị cắt ngang và danh sách chưa đóng lại. Cách xử lý: tăng giới hạn hoặc yêu cầu một định dạng ngắn hơn." }
+      ]
+    },
+    {
+      "id": "s6-decyzja",
+      "title": "Thiết lập nào phù hợp cho tài liệu kiểm thử?",
+      "type": "decision",
+      "blocks": [
+        { "kind": "paragraph", "text": "So sánh hai preset cho cùng một tác vụ (ghi lại các bước của một ca kiểm thử). Phương án A: temp 0,2 / top-p 0,3 / giới hạn cao. Phương án B: temp 1,0 / top-p 0,95 / giới hạn thấp." },
+        { "kind": "paragraph", "text": "Đối với tài liệu, hãy chọn tính ngẫu nhiên thấp hơn và dư dả độ dài — điều đó mang lại khả năng tái lập và không bị cắt cụt. Lát nữa bạn sẽ kiểm chứng điều này bằng các thanh trượt." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "tune",
+    "id": "m3-suwaki",
+    "title": "Thanh trượt sinh nội dung",
+    "intro": "Đặt các tham số và xem output mô phỏng thay đổi như thế nào cho tác vụ „liệt kê các bước kiểm thử đăng nhập trong SklepDemo”. Sau đó hãy trả lời checkpoint.",
+    "outputLabel": "Output mô phỏng cho các thiết lập đã chọn:",
+    "controls": [
+      { "id": "temp", "label": "Temperature", "levels": [
+        { "value": "0.2", "label": "Thấp (0,2)", "effect": "Tính trang trọng: cao. Các bước kiểm thử có thể tái lập, cùng một bố cục ở mỗi lần chạy." },
+        { "value": "1.0", "label": "Cao (1,0)", "effect": "Tính trang trọng: thấp. Các bước khác nhau giữa các lần chạy — không thể tái lập, nguy cơ trôi dạt nội dung." }
+      ] },
+      { "id": "topp", "label": "top-p", "levels": [
+        { "value": "0.3", "label": "Thấp (0,3)", "effect": "Từ vựng thuật ngữ QA ổn định và dự đoán được." },
+        { "value": "0.95", "label": "Cao (0,95)", "effect": "Các cách diễn đạt rộng hơn, đôi khi rủi ro — khó rà soát hơn." }
+      ] },
+      { "id": "maxtok", "label": "max tokens", "levels": [
+        { "value": "512", "label": "Giới hạn cao (512)", "effect": "Tính đầy đủ: trọn vẹn. Tất cả các bước và tiêu chí chấp nhận đều vừa vặn." },
+        { "value": "64", "label": "Giới hạn thấp (64)", "effect": "⚠ Câu trả lời bị cắt cụt — danh sách các bước đứt ngang giữa chừng, không có phần tổng kết. Hãy tăng giới hạn." }
+      ] }
+    ],
+    "checkpoint": {
+      "prompt": "Để ghi lại các bước của một ca kiểm thử (khả năng tái lập và sự đầy đủ là quan trọng), thiết lập nào an toàn hơn?",
+      "type": "single_choice",
+      "options": [
+        { "id": "A", "text": "temp 0,2 / top-p 0,3 / giới hạn cao — tính ngẫu nhiên thấp và dư dả độ dài" },
+        { "id": "B", "text": "temp 1,0 / top-p 0,95 / giới hạn thấp — sáng tạo và ngắn gọn" }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Chính xác: tính ngẫu nhiên thấp mang lại khả năng tái lập, còn giới hạn cao bảo vệ khỏi việc cắt cụt danh sách các bước.",
+      "feedbackIncorrect": "Tính ngẫu nhiên cao phá hỏng khả năng tái lập, còn giới hạn thấp cắt cụt các bước — điều đó tệ cho tài liệu. Hãy chọn temperature thấp và dư dả độ dài."
+    }
+  },
+  "summary": {
+    "points": [
+      "Temperature và top-p điều khiển tính ngẫu nhiên; max tokens điều khiển độ dài câu trả lời.",
+      "Đối với QA, hãy ưu tiên tính ngẫu nhiên thấp và dư dả độ dài — khả năng tái lập và không bị cắt cụt.",
+      "Luôn xác minh khả năng tái lập và tính đầy đủ của output trước khi dùng trong tài liệu."
+    ],
+    "checklist": [
+      "Tôi đã giảm tính ngẫu nhiên ở những nơi cần khả năng tái lập chưa?",
+      "Giới hạn độ dài có chứa được toàn bộ câu trả lời không?",
+      "Output có giống nhau khi chạy lại không?"
+    ],
+    "checklistTitle": "Checklist — kiểm soát quá trình sinh",
+    "nextStep": "Bước tiếp theo: M4 — embeddings và độ tương đồng ngữ nghĩa (hoặc module bắt buộc tiếp theo của lộ trình)."
+  }
+}

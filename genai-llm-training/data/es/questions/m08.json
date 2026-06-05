@@ -1,0 +1,534 @@
+{
+  "_meta": {
+    "module": "M8",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M8. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q061",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "El participante analiza un conjunto de casos de prueba generado por un LLM e identifica una brecha de cobertura (coverage gap) respecto a un requisito.",
+      "prompt": "Requisito para la aplicación NotkaApp (ficticia): el usuario restablece su contraseña mediante un enlace de correo electrónico válido durante 30 minutos; tras 3 intentos de inicio de sesión fallidos, la cuenta se bloquea durante 15 minutos. El LLM generó los casos: TC1 — restablecimiento correcto; TC2 — enlace caducado tras 30 min; TC3 — 3 contraseñas incorrectas -> bloqueo de la cuenta. ¿Cuál es la brecha de cobertura más importante que hay que cubrir aquí?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Falta el caso de reutilización del mismo enlace de restablecimiento (un enlace de un solo uso utilizado dos veces)"
+        },
+        {
+          "id": "B",
+          "text": "Falta el caso que comprueba el color del botón Restablecer contraseña"
+        },
+        {
+          "id": "C",
+          "text": "Falta el caso con una duración de sesión del administrador de exactamente 30 minutos"
+        },
+        {
+          "id": "D",
+          "text": "Falta el caso que verifica el logotipo de la aplicación en la página de inicio de sesión"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Un enlace de restablecimiento es por naturaleza de un solo uso y temporal, por lo que la ausencia de una prueba de su reutilización constituye una brecha de seguridad real en la cobertura del requisito.",
+      "feedbackIncorrect": "La brecha de cobertura se refiere al comportamiento conforme con el requisito (la validez y el uso único del enlace), no a elementos cosméticos. Vuelve a la pantalla sobre las brechas de cobertura.",
+      "references": [
+        "M8.3",
+        "M8.2"
+      ]
+    },
+    {
+      "id": "Q062",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "El participante reconoce en el output del LLM un caso aparente (cuya aserción no verifica nada) y lo distingue de una prueba valiosa.",
+      "prompt": "En el conjunto de casos para NotkaApp encuentras: TC4 — 'Abre el formulario de restablecimiento de contraseña y comprueba que el formulario se abre; resultado esperado: ninguno'. ¿Cómo debe clasificarse TC4?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Prueba aparente: falta un resultado esperado definido, la aserción en realidad no comprueba nada"
+        },
+        {
+          "id": "B",
+          "text": "Caso negativo correcto para el escenario de bloqueo de la cuenta"
+        },
+        {
+          "id": "C",
+          "text": "Caso límite correcto para la validez de 30 minutos del enlace"
+        },
+        {
+          "id": "D",
+          "text": "Duplicado del caso TC1 de restablecimiento correcto, que puede fusionarse de inmediato"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Sin un resultado esperado definido, la prueba siempre 'pasa' y no verifica nada: esa es la definición de una prueba aparente.",
+      "feedbackIncorrect": "La clave es la ausencia de un resultado esperado, no el tipo de escenario ni la semejanza con otro TC. Repite la pantalla sobre duplicados y pruebas aparentes.",
+      "references": [
+        "M8.4"
+      ]
+    },
+    {
+      "id": "Q063",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "El participante evalúa si el output generado por el LLM es apto para la documentación de QA, identificando un hecho inventado que contradice el requisito.",
+      "prompt": "El LLM generó la descripción de un caso para NotkaApp con la nota: 'Tras 3 intentos fallidos la cuenta se bloquea durante 24 horas, y el enlace de restablecimiento es válido de forma indefinida'. El requisito dice: bloqueo de 15 minutos, enlace válido durante 30 minutos. ¿Qué decisión de control de contenido es la más adecuada antes de pegarlo en la documentación?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Rechaza el fragmento: contiene hechos contrarios al requisito (valores inventados de 24 h e indefinido), requiere corrección antes de usarse"
+        },
+        {
+          "id": "B",
+          "text": "Acéptalo sin cambios: el LLM suele aportar valores más cercanos a la realidad que el requisito"
+        },
+        {
+          "id": "C",
+          "text": "Acéptalo y añade una anotación de que los valores pueden variar según la versión de la aplicación"
+        },
+        {
+          "id": "D",
+          "text": "Rechaza todo el módulo de pruebas de restablecimiento de contraseña, porque el output contiene un error"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Un output contrario al requisito contiene hechos inventados (alucinaciones) y no puede llegar a la documentación sin corrección: el control de contenido termina con la decisión 'corrige/rechaza el fragmento'.",
+      "feedbackIncorrect": "El requisito es la fuente de verdad, no el output del LLM; tampoco se debe rechazar todo el trabajo por un solo fragmento. Vuelve a la rúbrica acepta/corrige/rechaza.",
+      "references": [
+        "M8.6"
+      ]
+    },
+    {
+      "id": "Q064",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "El participante define los límites del human-in-the-loop, señalando una tarea de QA en la que el LLM sigue siendo asistente y la decisión la toma una persona.",
+      "prompt": "El equipo de QA quiere usar un LLM en las pruebas de NotkaApp. ¿Cuál de las propuestas refleja mejor el principio 'asistente, no decisor'?",
+      "options": [
+        {
+          "id": "A",
+          "text": "El LLM genera un borrador de casos de prueba y una checklist de riesgos, y el tester aprueba el alcance de las pruebas y decide sobre la aprobación para el release"
+        },
+        {
+          "id": "B",
+          "text": "El LLM aprueba por sí solo el lanzamiento a producción si las pruebas generadas pasan"
+        },
+        {
+          "id": "C",
+          "text": "El LLM evalúa de forma definitiva el riesgo crítico y cierra los defectos sin participación del tester"
+        },
+        {
+          "id": "D",
+          "text": "El tester reescribe manualmente cada caso y el LLM no se usa en ninguna etapa"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "El LLM acelera la creación de borradores y propuestas, pero las decisiones sobre aceptación, riesgo crítico y release corresponden a la persona (human-in-the-loop).",
+      "feedbackIncorrect": "Las decisiones sobre el release y la evaluación del riesgo crítico no pueden delegarse al LLM, pero renunciar por completo al asistente desaprovecha su valor. Repite la pantalla asistente vs. decisor.",
+      "references": [
+        "M8.7",
+        "M8.1"
+      ]
+    },
+    {
+      "id": "Q065",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "El participante identifica las categorías de brechas de cobertura que el LLM a menudo no genera sin una indicación explícita.",
+      "prompt": "Generas casos de prueba para la función de restablecimiento de contraseña en NotkaApp. ¿Qué categorías omite con más frecuencia el LLM y requieren una incorporación consciente? Indica todas las correctas.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Casos límite (p. ej., el enlace usado exactamente en el minuto 30)"
+        },
+        {
+          "id": "B",
+          "text": "Rutas de error y estados de excepción (p. ej., el enlace usado por segunda vez, sesiones paralelas)"
+        },
+        {
+          "id": "C",
+          "text": "Happy path del restablecimiento de contraseña con datos correctos"
+        },
+        {
+          "id": "D",
+          "text": "Datos de prueba con valores extremos (p. ej., un correo electrónico de longitud máxima)"
+        },
+        {
+          "id": "E",
+          "text": "El título de la ventana del navegador en la página de confirmación"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "D"
+      ],
+      "feedbackCorrect": "El LLM suele cubrir bien el happy path, pero omite los casos límite, las rutas de error y los datos extremos: es justo ahí donde buscamos brechas de cobertura.",
+      "feedbackIncorrect": "El happy path suele estar cubierto, y el título de la ventana es un detalle cosmético; las brechas afectan a los límites, las rutas de error y los datos extremos. Vuelve a la pantalla sobre las brechas de cobertura.",
+      "references": [
+        "M8.3",
+        "M8.2"
+      ]
+    },
+    {
+      "id": "Q066",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "El participante reconoce las características de un duplicado y de una prueba aparente en el conjunto de casos generado.",
+      "prompt": "Revisas el conjunto de casos generado para NotkaApp en cuanto a calidad. ¿Qué afirmaciones sobre los duplicados y las pruebas aparentes son verdaderas? Indica todas las correctas.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Dos casos que comprueban las mismas condiciones con otra redacción son un duplicado, a pesar del contenido distinto"
+        },
+        {
+          "id": "B",
+          "text": "Un caso sin resultado esperado es aparente, porque su aserción no verifica nada"
+        },
+        {
+          "id": "C",
+          "text": "Un mayor número de casos generados siempre significa mejor cobertura"
+        },
+        {
+          "id": "D",
+          "text": "Una prueba con la aserción 'true == true', no relacionada con la función, es aparente"
+        },
+        {
+          "id": "E",
+          "text": "Un duplicado es inofensivo, porque dos pruebas idénticas aumentan la confianza en el resultado"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "D"
+      ],
+      "feedbackCorrect": "Un duplicado son las mismas condiciones descritas de otra forma, y una prueba aparente tiene una aserción que no verifica nada; el número de casos no es una medida de cobertura.",
+      "feedbackIncorrect": "Un mayor número de pruebas no equivale a una mejor cobertura, y un duplicado aumenta el coste de mantenimiento sin aportar valor. Repite la pantalla sobre duplicados y pruebas aparentes.",
+      "references": [
+        "M8.4"
+      ]
+    },
+    {
+      "id": "Q067",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "El participante aplica los criterios de control de contenido que el output del LLM debe cumplir para llegar a la documentación de QA.",
+      "prompt": "Antes de pegar el conjunto de casos generado por el LLM en la documentación oficial de QA de SklepDemo (ficticio), ¿qué criterios de control de contenido deben cumplirse? Indica todos los correctos.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Conformidad con el requisito (ausencia de valores que contradigan los criterios de aceptación)"
+        },
+        {
+          "id": "B",
+          "text": "Ausencia de hechos inventados (alucinaciones) y verificabilidad del contenido"
+        },
+        {
+          "id": "C",
+          "text": "Ausencia de datos sensibles y de PII real en los ejemplos"
+        },
+        {
+          "id": "D",
+          "text": "El output debe ser lo más largo posible, porque un mayor volumen denota calidad"
+        },
+        {
+          "id": "E",
+          "text": "El output debe aceptarse únicamente porque lo generó un modelo más reciente"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "La aceptación para la documentación requiere conformidad con el requisito, ausencia de alucinaciones, verificabilidad y ausencia de datos sensibles: el volumen y la versión del modelo no son criterios.",
+      "feedbackIncorrect": "La extensión del texto y la versión del modelo no son criterios de calidad; lo que cuenta es la conformidad, la verificabilidad y la ausencia de datos sensibles. Vuelve a la rúbrica de control de contenido.",
+      "references": [
+        "M8.6"
+      ]
+    },
+    {
+      "id": "Q068",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "El participante distingue las tareas de QA en las que el LLM es asistente de las decisiones reservadas a la persona.",
+      "prompt": "¿Qué tareas de QA se pueden confiar con seguridad al LLM como asistente (con un control posterior por parte de una persona)? Indica todas las correctas.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Borrador de casos de prueba a partir del requisito como punto de partida"
+        },
+        {
+          "id": "B",
+          "text": "Propuesta de categorías de riesgos para la checklist de risk-based testing"
+        },
+        {
+          "id": "C",
+          "text": "Reformulación y ordenación de descripciones de pruebas existentes"
+        },
+        {
+          "id": "D",
+          "text": "Decisión definitiva sobre la aprobación del lanzamiento a producción"
+        },
+        {
+          "id": "E",
+          "text": "Cierre autónomo de un defecto crítico sin la verificación del tester"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Los borradores, las propuestas de categorías de riesgos y la ordenación de contenido son trabajo de asistente; las decisiones sobre el release y los defectos críticos corresponden a la persona.",
+      "feedbackIncorrect": "La decisión sobre el release y el cierre de defectos críticos es el rol del decisor (la persona), no del LLM. Repite la pantalla asistente vs. decisor.",
+      "references": [
+        "M8.7",
+        "M8.1"
+      ]
+    },
+    {
+      "id": "Q069",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "El participante asigna una funcionalidad de NotkaApp a la categoría de riesgo adecuada en la checklist de risk-based testing.",
+      "prompt": "Asocia una funcionalidad o artefacto de NotkaApp con la categoría de riesgo más adecuada en la checklist de risk-based testing.",
+      "pairs": [
+        {
+          "left": "Bloqueo de la cuenta tras 3 intentos de inicio de sesión fallidos",
+          "right": "Seguridad (protección frente a ataques de fuerza bruta)"
+        },
+        {
+          "left": "Almacenamiento del correo electrónico del usuario en la base de datos",
+          "right": "Datos (protección de datos personales y confidencialidad)"
+        },
+        {
+          "left": "Tiempo de generación del enlace de restablecimiento con alta carga",
+          "right": "Rendimiento (tiempo de respuesta bajo carga)"
+        },
+        {
+          "left": "Manejo del formulario de restablecimiento mediante un lector de pantalla",
+          "right": "Accesibilidad (conformidad con WCAG)"
+        }
+      ],
+      "feedbackCorrect": "Cada funcionalidad se asigna a la categoría de riesgo que mejor describe la amenaza principal: ese es el núcleo de la checklist de risk-based testing.",
+      "feedbackIncorrect": "Las categorías se confunden cuando miras la tecnología en lugar de la amenaza principal de la función (seguridad, datos, rendimiento, accesibilidad). Repite la pantalla sobre la checklist de riesgos.",
+      "references": [
+        "M8.5"
+      ]
+    },
+    {
+      "id": "Q070",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "El participante asigna un defecto típico de los casos de prueba generados a su consecuencia en QA.",
+      "prompt": "Asocia un defecto típico de los casos de prueba generados por un LLM para el requisito de SklepDemo (ficticio) con su consecuencia principal en QA.",
+      "pairs": [
+        {
+          "left": "Caso generado sin resultado esperado",
+          "right": "Prueba aparente: pasa siempre, no detecta el defecto"
+        },
+        {
+          "left": "Dos casos con los mismos pasos y datos",
+          "right": "Duplicado: inflado del conjunto sin nueva cobertura"
+        },
+        {
+          "left": "Caso que comprueba un campo que no existe en el requisito",
+          "right": "Alucinación de alcance: prueba fuera del requisito"
+        },
+        {
+          "left": "Falta de un caso para una ruta de error descrita en el requisito",
+          "right": "Brecha de cobertura: escenario del requisito sin probar"
+        }
+      ],
+      "feedbackCorrect": "Cada defecto tiene una consecuencia distinta para la calidad del conjunto: la prueba aparente no detecta errores, el duplicado no añade cobertura, la alucinación de alcance prueba algo ajeno al requisito y la brecha de cobertura deja un riesgo sin probar.",
+      "feedbackIncorrect": "Distingue los defectos por su efecto: ausencia de resultado esperado = prueba aparente, los mismos pasos = duplicado, campo ajeno al requisito = alucinación de alcance, falta de ruta de error = brecha de cobertura. Repite la pantalla del QA workbench sobre brechas y pruebas aparentes.",
+      "references": [
+        "M8.6",
+        "M8.7"
+      ]
+    },
+    {
+      "id": "Q071",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "El participante asigna un riesgo concreto de la función de NotkaApp al caso de prueba que lo verifica.",
+      "prompt": "Asocia un riesgo relacionado con la función de restablecimiento de contraseña de NotkaApp con el caso de prueba que lo verifica.",
+      "pairs": [
+        {
+          "left": "Riesgo: el enlace de restablecimiento funciona tras caducar",
+          "right": "Prueba: intento de uso del enlace tras pasar 30 minutos"
+        },
+        {
+          "left": "Riesgo: un enlace de un solo uso funciona varias veces",
+          "right": "Prueba: uso doble del mismo enlace de restablecimiento"
+        },
+        {
+          "left": "Riesgo: la cuenta no se bloquea tras intentos fallidos",
+          "right": "Prueba: 3 intentos de inicio de sesión fallidos consecutivos y comprobación del bloqueo"
+        },
+        {
+          "left": "Riesgo: el restablecimiento funciona para una cuenta inexistente",
+          "right": "Prueba: solicitud de restablecimiento para un correo electrónico no registrado"
+        }
+      ],
+      "feedbackCorrect": "Cada riesgo se verifica mediante un caso que intenta directamente provocar el comportamiento no deseado: eso conecta el risk-based testing con la cobertura.",
+      "feedbackIncorrect": "La prueba debe apuntar exactamente a la amenaza descrita por el riesgo (p. ej., la reutilización del enlace, la ausencia de bloqueo). Repite la pantalla sobre la checklist de riesgos y las brechas de cobertura.",
+      "references": [
+        "M8.5",
+        "M8.3"
+      ]
+    },
+    {
+      "id": "Q072",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "El participante asigna un problema de calidad del output generado a la acción de control adecuada del tester.",
+      "prompt": "Asocia un problema detectado en un artefacto de QA generado por el LLM con la acción de control adecuada.",
+      "pairs": [
+        {
+          "left": "Dos casos comprueban las mismas condiciones con otra redacción",
+          "right": "Fusiona los duplicados y deja un solo caso"
+        },
+        {
+          "left": "Caso sin un resultado esperado definido",
+          "right": "Elimina o completa la aserción (prueba aparente)"
+        },
+        {
+          "left": "Falta de un caso para el bloqueo de la cuenta tras 3 intentos",
+          "right": "Añade un caso que cubra la brecha de cobertura"
+        },
+        {
+          "left": "El output indica un bloqueo de 24 h en lugar de 15 min",
+          "right": "Corrige el hecho contrario al requisito antes de usarlo"
+        }
+      ],
+      "feedbackCorrect": "Cada tipo de problema en el output tiene una acción adecuada: fusionar el duplicado, reparar la prueba aparente, cubrir la brecha o corregir el hecho inventado.",
+      "feedbackIncorrect": "La acción de control depende del tipo de problema: no confundas un duplicado con una brecha de cobertura ni una prueba aparente con una alucinación. Repite las pantallas sobre duplicados y control del output.",
+      "references": [
+        "M8.4",
+        "M8.6"
+      ]
+    }
+  ]
+}

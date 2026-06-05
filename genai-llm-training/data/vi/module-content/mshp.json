@@ -1,0 +1,102 @@
+{
+  "_meta": {
+    "issue": "#122 [M16] Rozdzielenie diagnozy Skali Holaka — wymiar OSOBISTY (v2.1p)",
+    "adr": "docs/adr/0008-modul-skali-holaka-msh.md",
+    "interaction": "Self-check dojrzałości osobistej (kind: maturity-check) — NON-gating, neutralny framing",
+    "source": "Model dojrzałości adopcji AI „Skala Holaka”: wymiar osobisty v2.1p (osoba, 0–11). Atrybucja: quality-blog.eu/pl/blog/skala-holaka-private.",
+    "dataPolicy": "WSZYSTKIE zdania self-checku SYNTETYCZNE i ogólne (zero realnych danych/PII). Diagnoza orientacyjna — NIE da się jej „oblać”. Heurystyka punktacji uproszczona (liczba zaznaczeń → poziom 0–11) do weryfikacji przez eksperta dziedzinowego (SME)."
+  },
+  "module": "MSHP",
+  "intro": "Thang đo Holak ở khía cạnh cá nhân (v2.1p) giúp bạn gọi tên mức độ trưởng thành trong cách làm việc với AI của chính mình — bạn đang ở đâu hôm nay và bước tiếp theo thực tế là gì. Đây là một bài tự chẩn đoán, không phải bài kiểm tra: không có kết quả „đạt/trượt”, mà chỉ có mức độ định hướng 0–11 và gợi ý làm sao để tiến lên cao hơn. Bạn có thể làm nó độc lập với phần chẩn đoán tổ chức (MSHO).",
+  "screens": [
+    {
+      "id": "mshp-s1-czym-jest",
+      "title": "Thang đo Holak cá nhân là gì",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Phiên bản cá nhân (v2.1p) mô tả mức độ trưởng thành trong kỹ năng làm việc với AI của bạn trên 12 cấp độ (0–11) — từ những lần sử dụng đầu tiên cho đến một thói quen làm việc có ý thức, được đo lường và không ngừng hoàn thiện. Nó giúp tránh hai cái bẫy: „tôi dùng AI nên tôi đã trưởng thành” và „đây chỉ là đồ chơi”." },
+        { "kind": "list", "items": [
+          "Bạn chỉ đánh giá thực hành CỦA RIÊNG MÌNH — bất kể tổ chức của bạn trưởng thành đến đâu.",
+          "Quan trọng là bạn dùng AI NHƯ THẾ NÀO (bối cảnh, kiểm chứng, khả năng đảo ngược), không phải số lượng công cụ.",
+          "Phần chẩn đoán tổ chức (Thang đo Holak v2.1e) bạn làm riêng trong mô-đun MSHO."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Tên gọi từ đâu và ai đứng sau mô hình", "text": "Thang đo Holak do Grzegorz Holak nghĩ ra với sự hỗ trợ của Konrad Gomulski — vì thế mà có tên này. Cả hai đều là Senior Test Development Engineer tại Sii Polska và là thành viên của SJSI cũng như đồng sáng lập quality-blog.eu; Grzegorz Holak còn là Test Architect và AI Ambassador tại SCIB. Chúng tôi dùng nó như một công cụ tự phản tỉnh, không phải để cấp chứng nhận.",
+          "links": [
+            { "label": "Thang đo Holak — khía cạnh cá nhân (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka-private" },
+            { "label": "Thang đo Holak — khía cạnh tổ chức (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mshp-s2-osie-i-granice",
+      "title": "Nhận biết cấp độ qua đâu: các trục và hai ranh giới",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Các cấp độ cao hơn không nhận ra qua số lượng công cụ, mà qua thói quen (từ cấp độ ~4 trở lên): hình thành prompt một cách có ý thức, quản lý bối cảnh và chi phí, kiểm chứng các câu trả lời quan trọng dựa trên nguồn, thiết kế công việc sao cho các quyết định có thể đảo ngược, và đo lường tác động thực sự của AI lên chất lượng và thời gian của bạn." },
+        { "kind": "list", "items": [
+          "Rào cản — thói quen mà nếu thiếu sẽ chặn việc tiến lên cao hơn.",
+          "Thành công — điều thực sự hiệu quả khi đạt được cấp độ đó.",
+          "Cái bẫy — cảm giác trưởng thành giả tạo khiến sự phát triển thụt lùi."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Hai ranh giới then chốt (cá nhân)", "text": "Ranh giới 8→9: từ „người dùng thành thạo” sang việc thiết kế công việc sao cho các quyết định được AI hỗ trợ có thể kiểm chứng và đảo ngược, cũng như chia sẻ các thực hành tốt. Ranh giới 10→11: từ thói quen máy móc sang việc đo lường tác động AI của chính mình và không ngừng hoàn thiện kỹ năng." }
+      ]
+    },
+    {
+      "id": "mshp-s3-jak-czytac",
+      "title": "Cách đọc kết quả của bạn",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Ngay sau đây bạn sẽ đánh dấu những câu đúng với thực hành của chính bạn hôm nay. Số câu được đánh dấu sẽ cho ra mức độ định hướng 0–11 cùng gợi ý „bạn đang ở đâu / làm sao tiến lên cao hơn”. Hãy đánh dấu trung thực, chỉ những gì bạn thực sự làm hằng ngày." },
+        { "kind": "callout", "variant": "safe", "title": "Đây là chẩn đoán, không phải đánh giá", "text": "Không có câu trả lời đúng hay sai, cũng không có ngưỡng để đạt. Kết quả không ảnh hưởng đến việc hoàn thành lộ trình hay bất kỳ bài kiểm tra nào — đây là một tấm gương, không phải kỳ thi." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "maturity-check",
+    "id": "mshp-selfcheck",
+    "title": "Thang đo Holak v2.1p — tự chẩn đoán mức độ trưởng thành cá nhân",
+    "intro": "Hãy đánh dấu những câu đúng với thực hành làm việc với AI của chính bạn hôm nay. Sau khi kiểm tra, bạn sẽ thấy mức độ định hướng 0–11 và bước tiếp theo — không có đánh giá đạt/trượt.",
+    "scales": [
+      {
+        "id": "person",
+        "label": "Cá nhân (Thang đo Holak v2.1p)",
+        "intro": "Thực hành làm việc với AI của chính bạn trưởng thành đến đâu? Hãy đánh dấu những gì bạn làm hằng ngày.",
+        "max": 11,
+        "statements": [
+          { "id": "per-1", "text": "Tôi dùng AI cho những tác vụ cụ thể, lặp đi lặp lại." },
+          { "id": "per-2", "text": "Tôi hình thành prompt một cách có ý thức: vai trò, mục tiêu, bối cảnh, định dạng đầu ra." },
+          { "id": "per-3", "text": "Tôi nhận ra rằng đầu ra có thể sai dù hình thức trông đáng tin." },
+          { "id": "per-4", "text": "Tôi kiểm chứng các câu trả lời quan trọng dựa trên nguồn trước khi sử dụng." },
+          { "id": "per-5", "text": "Tôi chọn công cụ/mô hình phù hợp với tác vụ, không dùng một thứ cho mọi việc." },
+          { "id": "per-6", "text": "Tôi quản lý bối cảnh: chỉ cung cấp những gì cần thiết, lưu tâm đến chi phí." },
+          { "id": "per-7", "text": "Tôi biết khi nào KHÔNG nên dùng AI: thiếu dữ liệu, rủi ro cao, không thể đảo ngược." },
+          { "id": "per-8", "text": "Tôi thiết kế công việc sao cho các quyết định được AI hỗ trợ có thể đảo ngược và kiểm chứng." },
+          { "id": "per-9", "text": "Tôi chia sẻ các thực hành tốt và cùng người khác hiệu chỉnh cách đánh giá đầu ra." },
+          { "id": "per-10", "text": "Tôi đo lường tác động thực sự của AI lên chất lượng và thời gian của mình, rồi điều chỉnh cách tiếp cận." },
+          { "id": "per-11", "text": "Tôi coi việc làm việc với AI là quá trình không ngừng hoàn thiện kỹ năng của bản thân." }
+        ],
+        "bands": [
+          { "min": 0, "max": 2, "label": "Cấp độ 0–2: Những lần sử dụng đầu tiên", "advice": "Rào cản: coi AI như một lời sấm truyền. Bước tiếp theo: bắt đầu hình thành prompt một cách có ý thức và kiểm chứng mọi câu trả lời mà bạn muốn dùng." },
+          { "min": 3, "max": 5, "label": "Cấp độ 3–5: Người dùng có ý thức", "advice": "Thành công: bạn kiểm chứng đầu ra và chọn công cụ phù hợp với tác vụ. Bước tiếp theo: học cách quản lý bối cảnh và chi phí, đồng thời nhận ra khi nào KHÔNG nên dùng AI." },
+          { "min": 6, "max": 8, "label": "Cấp độ 6–8: Người thực hành", "advice": "Thành công: bạn biết các giới hạn và quản lý được bối cảnh. Ranh giới 8→9: thiết kế công việc sao cho các quyết định có thể đảo ngược và kiểm chứng, và chia sẻ các thực hành tốt với nhóm." },
+          { "min": 9, "max": 11, "label": "Cấp độ 9–11: Làm chủ kỹ năng", "advice": "Cái bẫy: thói quen máy móc thiếu đo lường và phản tỉnh. Ranh giới 10→11: đo lường tác động thực sự của AI lên công việc của bạn và coi kỹ năng là quá trình không ngừng hoàn thiện." }
+        ]
+      }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Thang đo Holak v2.1p đo lường cách bạn dùng AI NHƯ THẾ NÀO (bối cảnh, khả năng kiểm chứng, khả năng đảo ngược), không phải số lượng công cụ.",
+      "Bạn chỉ đánh giá thực hành của chính mình — tổ chức thì bạn chẩn đoán riêng (MSHO).",
+      "Đây là chẩn đoán mang tính định hướng: không đạt/trượt, không ảnh hưởng đến việc hoàn thành — nó nhằm chỉ ra bước tiếp theo."
+    ],
+    "checklist": [
+      "Bạn đã gọi tên được mức độ cá nhân định hướng của mình (0–11) chưa?",
+      "Bạn có biết rào cản gần nhất cần vượt qua là gì không?",
+      "Bạn có biết một bước tiếp theo cụ thể để tiến lên cao hơn không?"
+    ],
+    "checklistTitle": "Danh sách kiểm tra — sau khi tự chẩn đoán cá nhân",
+    "nextStep": "Bước tiếp theo: chọn một rào cản ở cấp độ cao hơn và lên kế hoạch cho một thử nghiệm nhỏ, có thể đảo ngược trong chính công việc của bạn."
+  }
+}

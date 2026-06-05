@@ -1,0 +1,461 @@
+{
+  "_meta": {
+    "module": "M7",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M7. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q051",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Prüft, ob die teilnehmende Person das Element „Rolle“ (role) im Prompt erkennt und seine Funktion versteht.",
+      "prompt": "In der Anatomie eines guten Prompts ist eines der sieben Elemente die „Rolle“ (role). Was legt dieses Element in der Antwort des Modells fest?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Die Perspektive und die Kompetenzen, aus denen heraus das Modell antworten soll (z. B. „du bist QA-Ingenieur“)"
+        },
+        {
+          "id": "B",
+          "text": "Die Struktur der Ausgabe, in der die Antwort zurückgegeben werden soll (z. B. Tabelle oder JSON)"
+        },
+        {
+          "id": "C",
+          "text": "Das konkrete zu verarbeitende Material, z. B. ein Ausschnitt einer Anforderung zur Analyse"
+        },
+        {
+          "id": "D",
+          "text": "Messbare Kriterien, an denen wir erkennen, dass die Antwort gut ist"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Die Rolle legt fest, aus wessen Perspektive und mit welchen Kompetenzen das Modell antwortet, was den Ton und den Detailgrad der Antwort prägt.",
+      "feedbackIncorrect": "Das ist die Beschreibung eines anderen Prompt-Elements: Ausgabeformat, Eingabedaten oder Qualitätskriterien. Wiederhole die Anatomie der 7 Prompt-Elemente.",
+      "references": [
+        "M7.2",
+        "M7.3"
+      ]
+    },
+    {
+      "id": "Q052",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Prüft, ob die teilnehmende Person die Rolle des Elements „Kontext“ versteht und es von Eingabedaten und Ziel unterscheidet.",
+      "prompt": "Was ist der „Kontext“ als Prompt-Element, im Unterschied zum „Ziel“ und zu den „Eingabedaten“?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Hintergrund und Informationen, die das Modell nicht aus eigenem Wissen kennt, z. B. ein Ausschnitt einer synthetischen Anforderung von SklepDemo"
+        },
+        {
+          "id": "B",
+          "text": "Das Ergebnis, das am Ende der Arbeit des Modells entstehen soll"
+        },
+        {
+          "id": "C",
+          "text": "Eine Liste von Dingen, die das Modell NICHT tun soll"
+        },
+        {
+          "id": "D",
+          "text": "Die Form, in der die Antwort zurückgegeben werden soll, z. B. Liste oder JSON"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Der Kontext liefert den Hintergrund, den das Modell nicht aus dem Training kennt (z. B. eine konkrete Anforderung der Anwendung), was die Treffsicherheit der Ausgabe unmittelbar erhöht.",
+      "feedbackIncorrect": "Du verwechselst Kontext mit Ziel (B), Einschränkungen (C) oder Format (D). Wiederhole den Unterschied zwischen Ziel, Kontext und Eingabedaten.",
+      "references": [
+        "M7.3",
+        "M7.2"
+      ]
+    },
+    {
+      "id": "Q053",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Prüft, ob die teilnehmende Person „Einschränkungen“ (constraints) von „Qualitätskriterien“ im Prompt unterscheidet.",
+      "prompt": "In einem Prompt zur Generierung von Testfällen für SklepDemo fügst du den Satz hinzu: „Erfinde keine Felder, die es in der Anforderung nicht gibt.“ Welches Prompt-Element ist dieser Satz?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Eine Einschränkung (constraint) — legt fest, was das Modell NICHT tun soll"
+        },
+        {
+          "id": "B",
+          "text": "Ein Qualitätskriterium — eine messbare Bedingung, an der wir eine gute Antwort erkennen"
+        },
+        {
+          "id": "C",
+          "text": "Ein Ausgabeformat — die Struktur der zurückgegebenen Antwort"
+        },
+        {
+          "id": "D",
+          "text": "Eine Rolle — die Perspektive, aus der das Modell antwortet"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Das Verbot, Felder zu erfinden, ist eine typische Einschränkung (constraint): Sie grenzt direkt ein, was das Modell nicht tun soll, und reduziert Halluzinationen.",
+      "feedbackIncorrect": "Ein Qualitätskriterium sagt, wie eine gute Ausgabe aussehen soll (z. B. „jeder Fall hat Schritte und ein erwartetes Ergebnis“), und nicht, was zu vermeiden ist. Wiederhole den Unterschied zwischen Einschränkungen und Kriterien.",
+      "references": [
+        "M7.4",
+        "M7.2"
+      ]
+    },
+    {
+      "id": "Q054",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Prüft, ob die teilnehmende Person alle fehlenden Elemente in einem fehlerhaften Prompt im Verhältnis zur Anatomie der 7 Elemente benennen kann.",
+      "prompt": "Der Prompt lautet vollständig: „Schreibe Tests für die Anmeldung.“ Welche der folgenden Elemente eines guten Prompts FEHLEN darin? (alle zutreffenden markieren)",
+      "options": [
+        {
+          "id": "A",
+          "text": "Rolle und Ziel (aus wessen Perspektive und was genau entstehen soll)"
+        },
+        {
+          "id": "B",
+          "text": "Kontext — welche Anwendung und welche Anmeldeanforderung"
+        },
+        {
+          "id": "C",
+          "text": "Einschränkungen und Qualitätskriterien der Antwort"
+        },
+        {
+          "id": "D",
+          "text": "Ausgabeformat — in welcher Struktur die Fälle zurückgegeben werden"
+        },
+        {
+          "id": "E",
+          "text": "Ein Aktionsverb, das die auszuführende Aufgabe bestimmt"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "feedbackCorrect": "Der Prompt enthält ein Aktionsverb („schreibe“), aber es fehlen Rolle/Ziel, Kontext, Einschränkungen/Kriterien und Format — genau das sind die vier fehlenden Achsen der Anatomie.",
+      "feedbackIncorrect": "Das Aktionsverb („schreibe“) ist vorhanden, daher fehlt Option E nicht. Es fehlen Rolle/Ziel, Kontext, Einschränkungen/Kriterien und Format. Wiederhole die Anatomie der 7 Elemente.",
+      "references": [
+        "M7.2",
+        "M7.6"
+      ]
+    },
+    {
+      "id": "Q055",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Prüft, ob die teilnehmende Person diagnostizieren kann, welche Achsen der 5-Achsen-Rubrik ein fehlerhafter Prompt verletzt.",
+      "prompt": "Ein Tester schreibt einen Prompt: „Analysiere den Zahlungsfehler in SklepDemo. Füge hier echte Nutzerdaten aus der Produktion ein. Schreibe auf, was du willst, in beliebiger Form.“ Welche Achsen der Prompt-Bewertungsrubrik (Vollständigkeit, Sicherheit, Überprüfbarkeit, Format, Einschränkungen) VERLETZT dieser Prompt? (alle zutreffenden markieren)",
+      "options": [
+        {
+          "id": "A",
+          "text": "Sicherheit — er fordert dazu auf, echte Nutzerdaten einzufügen"
+        },
+        {
+          "id": "B",
+          "text": "Format — „in beliebiger Form“ sorgt nicht für eine überprüfbare Ausgabestruktur"
+        },
+        {
+          "id": "C",
+          "text": "Einschränkungen — keinerlei Grenzen und keine Regel zu synthetischen Daten"
+        },
+        {
+          "id": "D",
+          "text": "Überprüfbarkeit — keine Kriterien, an denen wir die Korrektheit der Ausgabe bewerten"
+        },
+        {
+          "id": "E",
+          "text": "Keine Achse ist verletzt — der Prompt ist einsatzbereit für die QA"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "feedbackCorrect": "Der Prompt verletzt Sicherheit (echte Daten), Format („beliebige Form“), Einschränkungen (keine Grenzen) und Überprüfbarkeit (keine Kriterien) — vier von fünf Achsen der Rubrik.",
+      "feedbackIncorrect": "Option E ist falsch: Der Prompt verletzt gleich vier Achsen und ist nicht einsatzbereit. Wiederhole die 5-Achsen-Rubrik vom Bildschirm zur Prompt-Korrektur.",
+      "references": [
+        "M7.6",
+        "M7.4"
+      ]
+    },
+    {
+      "id": "Q056",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Prüft, ob die teilnehmende Person Situationen erkennt, in denen der Einsatz von Few-shot gerechtfertigt ist.",
+      "prompt": "In welchen Situationen ist der Einsatz von Few-shot (1–3 Beispiele Eingabe->Ausgabe im Prompt) GERECHTFERTIGT? (alle zutreffenden markieren)",
+      "options": [
+        {
+          "id": "A",
+          "text": "Die Ausgabe soll für die folgenden Positionen ein festes, wiederholbares Layout des Testfalls beibehalten"
+        },
+        {
+          "id": "B",
+          "text": "Es wird ein spezifischer Antwortstil benötigt, der sich schwer allein mit einer verbalen Beschreibung erfassen lässt"
+        },
+        {
+          "id": "C",
+          "text": "Das Modell soll ein konsistentes Format für viele Elemente gleichzeitig beibehalten"
+        },
+        {
+          "id": "D",
+          "text": "Im Kontext fehlen Fakten, die das Modell nicht kennt — die Beispiele sollen „Wissen liefern“"
+        },
+        {
+          "id": "E",
+          "text": "Wir wollen, dass das Modell fehlende Daten erfindet, Hauptsache die Ausgabe sieht vollständig aus"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Few-shot dient der Wiederholbarkeit von Format und Stil (A, B, C). Es ersetzt keine fehlenden Daten und rechtfertigt kein Erfinden.",
+      "feedbackIncorrect": "Few-shot ergänzt kein fehlendes Wissen (D) und dient nicht dem Erfinden (E) — das ist Aufgabe von Kontext/Quellen. Wiederhole das Prinzip „Few-shot für Wiederholbarkeit, nicht für fehlendes Wissen“.",
+      "references": [
+        "M7.5",
+        "M7.2"
+      ]
+    },
+    {
+      "id": "Q057",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Prüft, ob die teilnehmende Person anhand eines konkreten Fehlers in der Ausgabe die richtige Prompt-Korrektur benennen kann.",
+      "prompt": "Du gibst den Prompt: „Generiere Testfälle für die Anmeldung in SklepDemo.“ Die Ausgabe ist ein einzelner, langer Fließtext-Absatz ohne Untergliederung in Schritte, ohne erwartete Ergebnisse — schwer in der QA zu nutzen. Welche Prompt-Korrektur adressiert DIESEN Fehler am besten?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Ausgabeformat und Kriterien hinzufügen: „Gib eine Tabelle zurück: ID, Schritte, Eingabedaten, erwartetes Ergebnis; eine Zeile pro Fall“"
+        },
+        {
+          "id": "B",
+          "text": "Den Satz „sei ausführlicher und professioneller“ hinzufügen"
+        },
+        {
+          "id": "C",
+          "text": "Denselben Prompt mehrmals wiederholen, bis das Modell die richtige Form trifft"
+        },
+        {
+          "id": "D",
+          "text": "Das Wort „Anmeldung“ entfernen, damit das Modell mehr Freiheit hat"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Der Fehler betrifft die Struktur der Ausgabe, daher ist die richtige Korrektur das Hinzufügen eines expliziten Ausgabeformats und von Kriterien — das macht das Ergebnis überprüfbar.",
+      "feedbackIncorrect": "Allgemeines „sei ausführlich“, Wiederholen oder das Entfernen des Umfangs beheben die fehlende Struktur nicht. Wiederhole, wie man einen Fehler diagnostiziert und die Korrektur nach der Rubrik auswählt.",
+      "references": [
+        "M7.6",
+        "M7.4"
+      ]
+    },
+    {
+      "id": "Q058",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Prüft, ob die teilnehmende Person sich für den Einsatz von Few-shot entscheidet, wenn ein wiederholbares Ausgabeformat erforderlich ist.",
+      "prompt": "Du sollst 40 Testfälle für SklepDemo generieren, die in eine bestehende Vorlage mit festem Spaltenlayout (ID, Schritt, Daten, erwartetes Ergebnis, Priorität) passen MÜSSEN. Die ersten Versuche liefern jedes Mal ein anderes Layout. Wie stellst du am besten ein wiederholbares Format sicher?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Im Prompt 2 musterhaft, korrekt formatierte Fälle (Few-shot) angeben und anweisen, für die folgenden genau dieses Layout beizubehalten"
+        },
+        {
+          "id": "B",
+          "text": "Den Prompt mit einer immer genaueren verbalen Beschreibung des Layouts verlängern, ohne jedes Beispiel"
+        },
+        {
+          "id": "C",
+          "text": "Die Fälle in beliebigem Format generieren und alle 40 manuell in die Vorlage übertragen"
+        },
+        {
+          "id": "D",
+          "text": "Die „Temperature“ erhöhen, damit das Modell bei der Wahl des Layouts kreativer ist"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Wenn das Format wiederholbar sein muss, ist Few-shot (einige musterhafte Beispiele) am wirksamsten — das Modell kopiert das Layout für die folgenden Positionen.",
+      "feedbackIncorrect": "Eine rein verbale Beschreibung ist oft mehrdeutig, manuelles Übertragen verschwendet Zeit, und eine höhere Temperature erhöht die Streuung des Formats. Wiederhole, wann man Few-shot einsetzt.",
+      "references": [
+        "M7.5",
+        "M7.6"
+      ]
+    },
+    {
+      "id": "Q059",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S1"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Prüft, ob die teilnehmende Person erkennt, dass ein Prompt fehlende Daten nicht behebt, und die richtige Handlung wählt, statt den Prompt „aufzuhübschen“.",
+      "prompt": "Du fragst das Modell: „Nach welcher Zeit läuft der Link zum Zurücksetzen des Passworts in NotkaApp ab?“. Die Anforderung mit dieser Zahl wurde dem Modell nicht im Kontext übergeben. Das Modell nennt jedes Mal eine andere Anzahl Minuten, und weitere Prompt-Versionen ändern nichts. Was tun?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Dem Modell eine Quelle mit dieser Information liefern (die Anforderung/das Dokument einfügen oder RAG nutzen) oder in der Dokumentation nachsehen — denn es sind fehlende Daten, kein schlechter Prompt"
+        },
+        {
+          "id": "B",
+          "text": "Den Prompt weiter mit immer genaueren Anweisungen aufhübschen, bis sich das Modell „von selbst an die Zahl erinnert“"
+        },
+        {
+          "id": "C",
+          "text": "Die erste vom Modell genannte Zahl als Fakt annehmen und in die Tests eintragen"
+        },
+        {
+          "id": "D",
+          "text": "Das Modell bitten, „seiner Antwort sicher zu sein“ und seine Meinung nicht zu ändern"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Wechselnde Antworten bei fehlender Information im Kontext sind ein Signal für fehlende Daten — kein Prompt erzeugt die Wahrheit, man muss die Quelle liefern.",
+      "feedbackIncorrect": "Den Prompt aufzuhübschen, die erste Zahl anzunehmen oder um „Sicherheit“ zu bitten, sind Wege zur Halluzination. Wiederhole die Grenzen des Prompts — wann ein Prompt nicht hilft (Link zu M11).",
+      "references": [
+        "M7.7",
+        "M7.6"
+      ]
+    },
+    {
+      "id": "Q060",
+      "module": "M7",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Prüft, ob die teilnehmende Person einen fehlerhaften Prompt um die fehlenden Anatomie-Elemente ergänzen kann, damit er in der QA einsatzbereit ist.",
+      "prompt": "Du sollst den Prompt „Schreibe Tests für die Anmeldung.“ für die QA bei SklepDemo einsatzbereit machen. Welche Version ergänzt die fehlenden Prompt-Elemente AM BESTEN?",
+      "options": [
+        {
+          "id": "A",
+          "text": "„Generiere als QA-Ingenieur Testfälle für die Anmeldung in SklepDemo auf Basis der Anforderung: <Anforderung einfügen>. Erfinde keine Felder außerhalb der Anforderung; verwende synthetische Daten. Gib eine Tabelle zurück: ID, Schritte, Daten, erwartetes Ergebnis. Jeder Fall muss überprüfbar sein.“"
+        },
+        {
+          "id": "B",
+          "text": "„Schreibe gute und genaue Tests für die Anmeldung, gib dir große Mühe und lass nichts aus.“"
+        },
+        {
+          "id": "C",
+          "text": "„Schreibe Tests für die Anmeldung in SklepDemo.“"
+        },
+        {
+          "id": "D",
+          "text": "„Du bist Experte für alles. Generiere einen vollständigen Testsatz für die gesamte Anwendung in beliebigem Format.“"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Version A ergänzt Rolle/Ziel, Kontext (Anforderung), Einschränkungen, ein Überprüfbarkeitskriterium und das Format — der komplette Satz an Elementen, der für den Einsatz in der QA nötig ist.",
+      "feedbackIncorrect": "Allgemeine Aufforderungen (B), fehlender Kontext und fehlende Einschränkungen (C) oder ein zu breiter Umfang ohne Format (D) schließen die Anatomie des Prompts nicht ab. Wiederhole die 7 Elemente eines guten Prompts.",
+      "references": [
+        "M7.2",
+        "M7.4"
+      ]
+    }
+  ]
+}

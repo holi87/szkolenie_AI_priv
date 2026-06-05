@@ -1,0 +1,179 @@
+{
+  "_meta": {
+    "issue": "#23 [23][M4] Wdroż moduł M11 — halucynacje, granice, weryfikacja outputu",
+    "storyboard": "docs/storyboard/m11-verification.md",
+    "interaction": "Output verifier (kind: classify)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (NotkaApp/SklepDemo/PipeDemo, domena przyklad.test, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "M11 obowiązkowy dla S1/S2/S3 — żaden ekran nie znika przez gating; tylko ekran 3 ma blok pogłębienia S2/S3. Wzmacnia zasadę KONTROLI outputu (#23). Scenariusz bazowy: SC-VERIFY-01."
+  },
+  "module": "M11",
+  "intro": "Il tester riceve dall'LLM un artefatto pronto — un report dei test, un caso di test, un riepilogo dei requisiti, un frammento di documentazione — e deve decidere se fidarsi. Come ricorderai dal M1, l'LLM restituisce il testo più probabile, non una verità garantita. Senza l'abitudine alla verifica è facile lasciar passare un contenuto inventato come se fosse un fatto. Questo modulo ti offre cinque cause di allucinazione, una checklist di verifica e una regola su quando semplicemente scartare l'LLM.",
+  "screens": [
+    {
+      "id": "s1-cel",
+      "title": "A cosa ti serve questo modulo",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "La risposta di un LLM può suonare credibile e sicura e, allo stesso tempo, contenere un fatto inventato o una fonte inesistente. Se un simile frammento finisce senza controllo nella documentazione di test o in una decisione di rilascio, l'errore diventa tuo, non del modello. Per questo il controllo dell'output è una competenza fondamentale del tester — la più importante proprio là dove il tester non è un esperto del dominio." },
+        { "kind": "list", "items": [
+          "Riconoscerai da dove nasce un'allucinazione — cinque cause tipiche.",
+          "Seguirai una checklist di verifica prima di fidarti di una risposta.",
+          "Scarterai l'LLM quando il risultato non è verificabile oppure l'errore ha un impatto elevato.",
+          "Contrassegnerai i frammenti che richiedono una fonte o un esperto, invece di accettare o rifiutare il tutto in blocco."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Cosa ti aspetta", "text": "Circa 60 minuti: brevi schermate di teoria, una decisione «usare o scartare», l'esercizio «Output verifier» (contrassegni le frasi della risposta dell'LLM) e un quiz con feedback immediato. Il modulo è obbligatorio su ogni percorso." }
+      ]
+    },
+    {
+      "id": "s2-czym-jest-halucynacja",
+      "title": "Cos'è un'allucinazione (e cosa non lo è)",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Allucinazione", "original": "hallucination", "text": "un output che suona credibile ma non è supportato dai dati — un fatto inventato, una fonte inesistente o un dettaglio errato esposto con tono sicuro." },
+        { "kind": "paragraph", "text": "Principio chiave: un tono sicuro non significa correttezza. Il modello formula le frasi con la stessa scorrevolezza sia quando ha un riscontro nei dati, sia quando non ce l'ha." },
+        { "kind": "list", "items": [
+          "NON è un'allucinazione: un errore dell'utente, cioè un prompt formulato male o in modo ambiguo.",
+          "NON è un'allucinazione: una risposta in cui il modello segnala esplicitamente l'incertezza («non ne sono sicuro, verifica nella documentazione»).",
+          "NON è un'allucinazione: una risposta corretta che semplicemente non è ancora stata verificata."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Esempio", "text": "Alla domanda su NotkaApp il modello risponde: «La configurazione è descritta nella sezione 9.2 della documentazione». Il tester verifica — il documento termina alla sezione 6. La sezione 9.2 non esiste: è un'allucinazione, nonostante la forma perfettamente credibile." }
+      ]
+    },
+    {
+      "id": "s3-mechanizm",
+      "title": "Da dove nascono le allucinazioni — il meccanismo",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Il modello non ha un segnale incorporato di «non lo so». Quando gli manca la conoscenza o uno schema per la tua domanda, invece di ammettere l'ignoranza «completa» con ciò che suona più probabile. L'allucinazione è quindi una conseguenza del meccanismo di funzionamento, non un guasto." },
+        { "kind": "paragraph", "onlyForPaths": ["S2", "S3"], "text": "Approfondimento tecnico: l'LLM prevede il token successivo sulla base della distribuzione di probabilità appresa in addestramento, non interroga una base di fatti. Una temperatura più alta aumenta la casualità nella scelta dei token, e l'assenza di accesso a una fonte reale al momento della generazione fa sì che il modello colmi le lacune con la sequenza più probabile — da qui i dettagli inventati ma dal tono sicuro." },
+        { "kind": "callout", "variant": "info", "title": "Conclusione per il tester", "text": "Poiché l'invenzione è insita nel meccanismo, la verifica non è un'opzione «per ogni evenienza» — è un passaggio costante del lavoro con l'output di un LLM." }
+      ]
+    },
+    {
+      "id": "s4-piec-przyczyn",
+      "title": "Cinque cause delle allucinazioni",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Queste stesse cause tornano in quasi ogni caso di invenzione. Riconoscere la causa aiuta a decidere cosa fare con il frammento." },
+        { "kind": "table",
+          "caption": "Cinque cause delle allucinazioni con un segnale di allarme sintetico",
+          "headers": ["Causa", "Meccanismo", "Segnale di allarme"],
+          "rows": [
+            ["Mancanza di dati", "domanda al di fuori della conoscenza del modello", "richiamo a una sezione o a un documento che non è possibile reperire"],
+            ["Conflitto di dati", "informazioni contraddittorie nel contesto o nell'addestramento", "due versioni dello stesso fatto in una sola risposta"],
+            ["Pressione del prompt", "il prompt forza una risposta che il modello non ha (es. «indica il numero di versione esatto»)", "un numero o un nome concreto fornito nonostante l'assenza di basi"],
+            ["Contesto non aggiornato", "domanda sullo stato successivo alla data di addestramento o su un documento obsoleto", "descrizione di una funzione che potrebbe essere nata dopo la data di cutoff dei dati"],
+            ["Fonti imprecise", "il modello mescola o media documenti simili", "un dettaglio che corrisponde a un altro prodotto simile"]
+          ],
+          "textAlt": "Cinque cause delle allucinazioni. 1) Mancanza di dati — domanda al di fuori della conoscenza del modello; segnale: richiamo a una fonte non reperibile. 2) Conflitto di dati — informazioni contraddittorie; segnale: due versioni di un fatto contemporaneamente. 3) Pressione del prompt — il prompt forza una risposta che il modello non ha; segnale: un dato concreto fornito senza basi. 4) Contesto non aggiornato — domanda sullo stato successivo alla data di addestramento; segnale: descrizione di una funzione nata dopo la data di cutoff dei dati. 5) Fonti imprecise — il modello mescola documenti simili; segnale: un dettaglio proveniente da un altro prodotto simile." }
+      ]
+    },
+    {
+      "id": "s5-checklista",
+      "title": "Checklist di verifica dell'output",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Prima di fidarti di una risposta, esaminala passo dopo passo. Ogni frammento si concluderà con l'assegnazione a una delle cinque categorie di contrassegni, che conoscerai nelle schermate successive." },
+        { "kind": "list", "ordered": true, "items": [
+          "Ci sono affermazioni concrete e verificabili — numeri, nomi, citazioni, passaggi?",
+          "La fonte citata esiste e dice davvero ciò che il modello afferma?",
+          "Il contenuto non è obsoleto rispetto allo stato attuale?",
+          "Nella risposta non ci sono contraddizioni interne?",
+          "Il frammento riguarda una decisione critica per la quale devo verificare con un esperto?"
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Quando l'output non è verificato", "text": "Se le affermazioni sono verificabili ma non le hai confermate alla fonte, l'output rimane NON VERIFICATO — non puoi riportarlo oltre come un fatto. La lunghezza e il livello di dettaglio di una risposta non sono prova di qualità." }
+      ]
+    },
+    {
+      "id": "s6-kiedy-nie-uzywac",
+      "title": "Quando NON usare l'LLM",
+      "type": "decision",
+      "blocks": [
+        { "kind": "paragraph", "text": "Prima di usare l'output, valuta due assi: se il risultato è verificabile (verificabilità) e quale sia l'impatto dell'errore (reversibile e basso vs irreversibile ed elevato)." },
+        { "kind": "callout", "variant": "warn", "title": "Regola del pollice", "text": "Non è verificabile OPPURE l'errore ha un impatto elevato e difficile da invertire → non affidarti all'LLM. Scarta il risultato oppure richiedi la verifica di una persona o di una fonte. È un'alternativa: basta una delle due condizioni." },
+        { "kind": "paragraph", "text": "Domanda guida: se questa risposta fosse inventata, quale sarebbe la peggiore conseguenza plausibile e riuscirei a coglierla?" },
+        { "kind": "table",
+          "caption": "Casi d'uso sintetici verdi e rossi",
+          "headers": ["Caso d'uso", "Verificabile?", "Impatto dell'errore", "Decisione"],
+          "rows": [
+            ["Bozza di casi di test per il login di NotkaApp, che comunque revisioni", "sì, tramite revisione", "basso, reversibile", "verde — si può usare"],
+            ["Riepilogo di una lunga nota di una riunione QA", "sì, rispetto alla nota", "basso", "verde — si può usare, dopo verifica"],
+            ["Decisione se disattivare il logging degli errori in produzione su SklepDemo", "difficile", "elevato, difficile da invertire", "rosso — esperto, non LLM"],
+            ["Conferma di conformità a una norma senza accesso alla fonte", "no", "elevato", "rosso — scarta o richiedi una fonte"]
+          ],
+          "textAlt": "Quattro casi d'uso. Verdi (si possono usare dopo verifica): bozza di casi di test revisionata dal tester e riepilogo di una nota — verificabili e a basso impatto. Rossi (non LLM): decisione di disattivare il logging in produzione (difficile da verificare, impatto elevato) e conferma di conformità a una norma senza fonte (non verificabile, impatto elevato)." }
+      ]
+    },
+    {
+      "id": "s7-oznaczanie-fragmentow",
+      "title": "Contrassegnare i frammenti: fonte ed esperto",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "La risposta di un LLM raramente è interamente buona o interamente sbagliata — più spesso mescola frammenti certi, incerti e rischiosi. Invece di accettare o rifiutare il tutto in blocco, contrassegni ogni frammento separatamente." },
+        { "kind": "list", "items": [
+          "Corretto — frammento confermato alla fonte o incontestabile.",
+          "Infondato — frammento in contrasto con un requisito o una fonte nota.",
+          "Richiede una fonte — affermazione verificabile, ma fornita senza citazione; va confermata.",
+          "Rischioso — affermazione ad alto impatto senza fonte oppure decisione critica per un esperto.",
+          "Da scartare — frammento che richiama una fonte inesistente o palesemente inventato."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Granularità invece del tutto-o-niente", "text": "Queste cinque categorie sono il linguaggio dell'esercizio «Output verifier» nella schermata successiva. «Richiede una fonte» è l'assenza di una citazione, non un errore; «infondato» e «da scartare» sono invece problemi reali di contenuto." }
+      ]
+    },
+    {
+      "id": "s10-karta",
+      "title": "Scheda di verifica per il lavoro",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Un promemoria condensato da tenere sulla scrivania — sintesi delle schermate 4–7, senza nuovi contenuti." },
+        { "kind": "list", "items": [
+          "Cinque cause: mancanza di dati, conflitto di dati, pressione del prompt, contesto non aggiornato, fonti imprecise.",
+          "Checklist: (a) affermazioni verificabili, (b) la fonte esiste e lo conferma, (c) attualità, (d) assenza di contraddizioni interne, (e) decisione critica → esperto.",
+          "Regola: non è verificabile OPPURE impatto elevato dell'errore → non affidarti all'LLM.",
+          "Cinque categorie di contrassegni: corretto, infondato, richiede una fonte, rischioso, da scartare."
+        ] }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "m11-output-verifier",
+    "title": "Output verifier",
+    "intro": "Analizzi una singola risposta sintetica di un LLM frase per frase — a una domanda del tester su NotkaApp e SklepDemo. Assegna a ciascuna frase una delle cinque categorie. Dopo la verifica vedrai la motivazione con la causa dell'allucinazione accanto a ogni frase e una valutazione di quanti frammenti critici hai colto.",
+    "categories": [
+      { "id": "poprawne", "label": "Corretto", "desc": "confermato alla fonte o incontestabile — si può accettare" },
+      { "id": "nieuzasadnione", "label": "Infondato", "desc": "in contrasto con un requisito o una fonte nota" },
+      { "id": "wymaga_zrodla", "label": "Richiede una fonte", "desc": "affermazione verificabile, ma senza citazione — da confermare" },
+      { "id": "ryzykowne", "label": "Rischioso", "desc": "impatto elevato senza fonte o decisione critica per un esperto" },
+      { "id": "do_odrzucenia", "label": "Da scartare", "desc": "richiama una fonte inesistente o è palesemente inventato" }
+    ],
+    "items": [
+      { "id": "z1", "text": "Il reset della password in NotkaApp usa un link valido per 30 minuti.", "correctCategory": "poprawne", "rationale": "Conforme alla documentazione (DOC3) — affermazione confermata, si può accettare." },
+      { "id": "z2", "text": "Il link di reset può essere usato più volte, finché non va a buon fine.", "correctCategory": "nieuzasadnione", "rationale": "In aperto contrasto con la fonte nota (DOC3: link monouso) — il frammento va scartato come errato, non solo confermato." },
+      { "id": "z3", "text": "Il blocco dell'account dopo tentativi errati dura 24 ore.", "correctCategory": "wymaga_zrodla", "rationale": "Numero verificabile fornito senza citazione — da confermare nel requisito (che indica 15 minuti) prima di accettarlo; causa: fonti imprecise." },
+      { "id": "z4", "text": "NotkaApp ha la certificazione ISO 27001.", "correctCategory": "ryzykowne", "rationale": "Affermazione ad alto impatto fornita senza fonte — causa: mancanza di dati; richiede un esperto o una prova, non la sola citazione." },
+      { "id": "z5", "text": "L'intera configurazione del logging è descritta nella sezione 9.2 della documentazione di NotkaApp.", "correctCategory": "do_odrzucenia", "rationale": "Il documento termina alla sezione 6 — fonte inventata e inesistente; causa: mancanza di dati." },
+      { "id": "z6", "text": "Puoi disattivare in sicurezza il logging degli errori in produzione su SklepDemo, non inciderà sulla conformità.", "correctCategory": "ryzykowne", "rationale": "Decisione ad alto impatto e difficile da invertire sotto la pressione del prompt — richiede un esperto, non l'output di un LLM." },
+      { "id": "z7", "text": "Nella versione 2.5 di NotkaApp è stata aggiunta la rotazione automatica dei log ogni 24 ore.", "correctCategory": "nieuzasadnione", "rationale": "Numero di versione e funzione concreti forniti nonostante l'assenza di basi — causa: pressione del prompt o contesto non aggiornato; in contrasto con lo stato disponibile." },
+      { "id": "z8", "text": "Il livello di log predefinito in NotkaApp è DEBUG.", "correctCategory": "wymaga_zrodla", "rationale": "Affermazione concreta e verificabile senza citazione — non è errata, ma richiede conferma nella documentazione." },
+      { "id": "z9", "text": "NotkaApp è un'applicazione per creare e organizzare note.", "correctCategory": "poprawne", "rationale": "Descrizione generale e incontestabile del prodotto — non richiede contrassegni né una fonte aggiuntiva." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "L'allucinazione è una conseguenza del meccanismo, non un guasto — il modello completa quando non sa; cinque cause: mancanza di dati, conflitto di dati, pressione del prompt, contesto non aggiornato, fonti imprecise.",
+      "La checklist di verifica protegge dal fidarsi di un contenuto inventato: affermazioni verificabili, esistenza e coerenza della fonte, attualità, assenza di contraddizioni, soglia della decisione critica.",
+      "Assenza di verificabilità OPPURE impatto elevato dell'errore = non affidarti all'LLM — scarta oppure richiedi una persona o una fonte.",
+      "L'output lo contrassegniamo per frammenti (corretto, infondato, richiede una fonte, rischioso, da scartare), non con un tutto-o-niente sull'intero blocco."
+    ],
+    "checklist": [
+      "Ci sono affermazioni concrete e verificabili (numeri, nomi, citazioni, passaggi)?",
+      "La fonte citata esiste e dice ciò che il modello afferma?",
+      "Il contenuto non è obsoleto rispetto allo stato attuale?",
+      "Nella risposta non ci sono contraddizioni interne?",
+      "Il frammento è una decisione critica che richiede un esperto?"
+    ],
+    "checklistTitle": "Scheda di verifica dell'output di un LLM",
+    "nextStep": "Prossimo passo: M12 — valutazione della qualità di LLM e RAG."
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "_meta": {
+    "issue": "#112-#118 [M15] / #124 [M16] Ścieżka formatywna S4 — Skala Holaka (moduł szkoleniowy, rozbudowa)",
+    "adr": "docs/adr/0009-sciezka-formatywna-s4-skala-holaka.md",
+    "interaction": "Klasyfikacja danych i zastosowań (kind: classify) — ćwiczenie formatywne, NIE scorowane do zaliczenia",
+    "source": "Oś dojrzałości Skali Holaka: bezpieczeństwo, prywatność danych i governance użycia AI (w tym integracje/MCP). Atrybucja: quality-blog.eu/pl/blog/skala-holaka.",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE i ogólne (zero realnych danych/PII). Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MSK3",
+  "intro": "Un'adozione matura dell'AI non significa solo efficacia, ma anche igiene dei dati: cosa si può fornire al modello, cosa va prima anonimizzato e cosa non va mai usato — anche quando l'AI accede ai dati tramite integrazioni e MCP. Questo modulo insegna a classificare i dati e a impostare regole minime di governance. È un esercizio di sviluppo, non un test.",
+  "screens": [
+    {
+      "id": "msk3-s1-trzy-kosze",
+      "title": "Tre cestini di dati: consentiti, da anonimizzare, vietati",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Prima di incollare qualsiasi cosa nel modello, assegna i dati a uno dei tre cestini. Consentiti: dati pubblici o sintetici. Da anonimizzare: dati che possono identificare una persona o un sistema, ma che dopo il mascheramento sono sicuri. Vietati: segreti e dati sensibili che non vanno esposti." },
+        { "kind": "list", "items": [
+          "Consentiti — dati pubblici, sintetici, non identificativi.",
+          "Da anonimizzare — rimuovi o sostituisci con un placeholder ciò che identifica una persona/un sistema.",
+          "Vietati — password, chiavi, segreti, dati sensibili senza una base che ne giustifichi l'uso."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Asse della Scala di Holak", "text": "Una politica scritta di uso accettabile dell'AI (dati, privacy, IP) e una traccia di audit minima sono il segno di una governance matura.",
+          "links": [ { "label": "Scala di Holak — modello di maturità (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka" } ]
+        }
+      ]
+    },
+    {
+      "id": "msk3-s2-mcp-integracje",
+      "title": "Integrazioni e MCP: il confine dei dati si sposta più in là",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Quando colleghi l'AI agli strumenti tramite integrazioni o MCP (Model Context Protocol), il modello non vede più solo ciò che incolli — può accedere a file, database o email. È comodo e potente, ma il confine dei dati si sposta: occorre limitare consapevolmente a cosa l'integrazione ha accesso." },
+        { "kind": "list", "items": [
+          "Principio dell'accesso minimo — l'integrazione vede solo ciò che è necessario al compito.",
+          "Filtra o maschera i dati sensibili PRIMA che entrino nel modello, non dopo.",
+          "Tratta ogni integrazione come un nuovo ingresso di dati — applicale la stessa politica."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "La trappola del «è solo un test»", "text": "«Collego l'integrazione alla produzione una sola volta, giusto per provare» è la fuga di dati più frequente. I dati una volta esposti potrebbero aver lasciato il tuo controllo — limita sempre l'accesso e maschera, anche in un esperimento." }
+      ]
+    },
+    {
+      "id": "msk3-s3-jak-cwiczyc",
+      "title": "Come esercitarsi",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Tra poco assegnerai i dati ai cestini: consentiti, da anonimizzare, vietati. L'ordine degli elementi è casuale, quindi conta il contenuto, non lo schema. Senza soglia di superamento — l'obiettivo è acquisire il riflesso di classificare i dati prima che finiscano nel modello o in un'integrazione." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "msk3-classify",
+    "title": "Consentiti, da anonimizzare o vietati?",
+    "intro": "Assegna ogni caso di dati al cestino corretto. Il feedback spiega la regola di privacy e governance.",
+    "categories": [
+      { "id": "allowed", "label": "Consentiti", "desc": "Dati pubblici o sintetici, non identificativi." },
+      { "id": "anonymize", "label": "Da anonimizzare", "desc": "Sicuri solo dopo aver mascherato gli identificatori." },
+      { "id": "disallowed", "label": "Vietati", "desc": "Segreti e dati sensibili senza una base che ne giustifichi l'uso." }
+    ],
+    "items": [
+      { "id": "msk3-i1", "text": "Un frammento pubblico della documentazione di un progetto open-source.", "correctCategory": "allowed", "rationale": "Dati pubblici, non identificativi — si possono usare." },
+      { "id": "msk3-i2", "text": "Dati di test sintetici e inventati, senza alcun legame con una persona reale.", "correctCategory": "allowed", "rationale": "I dati sintetici sono sicuri per definizione." },
+      { "id": "msk3-i3", "text": "Una segnalazione di errore con il login dell'utente, che sostituisci con un placeholder.", "correctCategory": "anonymize", "rationale": "Rimuovi/maschera l'identificatore — allora diventa sicuro." },
+      { "id": "msk3-i4", "text": "Log con i dati di contatto dei clienti, che vanno mascherati prima dell'uso.", "correctCategory": "anonymize", "rationale": "Dopo l'anonimizzazione i dati smettono di identificare la persona." },
+      { "id": "msk3-i5", "text": "Password e chiavi di accesso al sistema di produzione.", "correctCategory": "disallowed", "rationale": "I segreti non finiscono mai nel prompt né in un'integrazione." },
+      { "id": "msk3-i6", "text": "Un'integrazione MCP con pieno accesso al database dei clienti di produzione «per comodità».", "correctCategory": "disallowed", "rationale": "Accesso eccessivo dell'integrazione a dati sensibili — viola l'accesso minimo." },
+      { "id": "msk3-i7", "text": "Un export di segnalazioni con i dati personali mascherati, fornito per l'analisi.", "correctCategory": "anonymize", "rationale": "Il mascheramento prima dell'ingresso nel modello rende i dati sicuri." },
+      { "id": "msk3-i8", "text": "I dati personali completi di un cliente incollati direttamente in un modello pubblico.", "correctCategory": "disallowed", "rationale": "Dati sensibili identificativi senza una base e senza anonimizzazione — vietati." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Prima di inviare, assegna ogni dato a un cestino: consentiti / da anonimizzare / vietati.",
+      "Le integrazioni e MCP spostano il confine dei dati — applica il principio dell'accesso minimo e maschera prima dell'ingresso nel modello.",
+      "Metti per iscritto una politica semplice e lascia una traccia minima dell'uso dell'AI nei processi critici."
+    ],
+    "checklist": [
+      "So assegnare i miei dati tipici ai tre cestini?",
+      "Le mie integrazioni/MCP hanno solo l'accesso minimo necessario?",
+      "So cosa non va mai condiviso (segreti, dati sensibili)?"
+    ],
+    "checklistTitle": "Checklist — igiene dei dati per l'AI",
+    "nextStep": "Prossimo passo: metti per iscritto per il team una pagina di regole: usi consentiti, anonimizzazione, accesso minimo delle integrazioni, divieto di segreti, semplice traccia di audit."
+  }
+}

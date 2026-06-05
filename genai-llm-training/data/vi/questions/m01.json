@@ -1,0 +1,363 @@
+{
+  "_meta": {
+    "module": "M1",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M1. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q001",
+      "module": "M1",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Học viên phân biệt tác vụ tạo sinh (GenAI) với tác vụ phân loại (ML cổ điển) dựa trên những gì hệ thống tạo ra ở đầu ra.",
+      "prompt": "Một kiểm thử viên làm việc tại SklepDemo. Tác vụ nào dưới đây là ví dụ điển hình của GenAI (chứ không phải ML cổ điển)?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Gắn nhãn cho một yêu cầu hỗ trợ vừa đến là 'lỗi', 'câu hỏi' hoặc 'mong muốn'."
+        },
+        {
+          "id": "B",
+          "text": "Tạo ra bản nháp một test case dựa trên mô tả yêu cầu."
+        },
+        {
+          "id": "C",
+          "text": "Phát hiện bất thường trong các chỉ số hiệu năng so với mức chuẩn."
+        },
+        {
+          "id": "D",
+          "text": "Dự đoán xem một yêu cầu hỗ trợ mới thuộc nhóm 'khẩn cấp' hay 'thông thường'."
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "feedbackCorrect": "GenAI tạo ra nội dung mới (ở đây là văn bản bản nháp test case), trong khi các tác vụ còn lại chỉ gán một nhãn từ một tập có sẵn — đó là ML cổ điển.",
+      "feedbackIncorrect": "Các đáp án A, C và D đều gán một nhãn hoặc dự đoán một giá trị từ một tập có sẵn — đó là phân loại/dự đoán (ML cổ điển). GenAI thì tạo ra nội dung mới. Hãy ôn lại bản đồ khái niệm GenAI so với ML cổ điển.",
+      "references": [
+        "M1.2",
+        "M1.3"
+      ]
+    },
+    {
+      "id": "Q002",
+      "module": "M1",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Học viên giải thích mối quan hệ giữa LLM và GenAI — rằng LLM là một tập con của GenAI chuyên về ngôn ngữ.",
+      "prompt": "Cách nào mô tả chính xác nhất mối quan hệ giữa LLM và GenAI?",
+      "options": [
+        {
+          "id": "A",
+          "text": "LLM và GenAI là hai cách tiếp cận tách biệt — LLM không thuộc về GenAI."
+        },
+        {
+          "id": "B",
+          "text": "GenAI là một tập con của LLM, giới hạn ở việc tạo sinh văn bản."
+        },
+        {
+          "id": "C",
+          "text": "LLM là một tập con của GenAI chuyên về ngôn ngữ; GenAI còn bao gồm cả việc tạo sinh hình ảnh hay âm thanh."
+        },
+        {
+          "id": "D",
+          "text": "LLM và GenAI là hai tên gọi của cùng một tập hợp — mọi GenAI đều là LLM."
+        }
+      ],
+      "correct": [
+        "C"
+      ],
+      "feedbackCorrect": "LLM là một tập con của GenAI tập trung vào ngôn ngữ, còn GenAI bao gồm một họ tạo sinh nội dung rộng hơn (ví dụ hình ảnh), nên không phải mọi GenAI đều là LLM.",
+      "feedbackIncorrect": "Tạo một hình ảnh cho bài thuyết trình là GenAI nhưng không phải LLM — điều này chứng minh rằng GenAI rộng hơn. LLM là tập con của GenAI, không phải ngược lại. Hãy quay lại bản đồ khái niệm (sơ đồ tập hợp).",
+      "references": [
+        "M1.2",
+        "M1.3"
+      ]
+    },
+    {
+      "id": "Q003",
+      "module": "M1",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Học viên nhận ra rằng LLM trả về câu trả lời có xác suất cao nhất, chứ không phải một sự thật được bảo đảm.",
+      "prompt": "Phát biểu nào mô tả đúng nhất bản chất câu trả lời mà LLM trả về?",
+      "options": [
+        {
+          "id": "A",
+          "text": "LLM tra cứu và trả về một dữ kiện đã được kiểm chứng từ một cơ sở dữ liệu gồm các câu đúng."
+        },
+        {
+          "id": "B",
+          "text": "LLM dự đoán đoạn văn bản tiếp theo có xác suất cao nhất dựa trên các mẫu từ quá trình huấn luyện — điều này không bảo đảm tính đúng đắn."
+        },
+        {
+          "id": "C",
+          "text": "LLM luôn trả về cùng một câu trả lời đúng duy nhất cho một câu hỏi cho trước."
+        },
+        {
+          "id": "D",
+          "text": "LLM kiểm tra câu trả lời theo thời gian thực trên internet trước khi trả về."
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "feedbackCorrect": "LLM tạo ra phần tiếp nối văn bản có xác suất cao nhất theo các mẫu từ quá trình huấn luyện — đó là đầu ra mang tính xác suất, nên tính đúng đắn không được bảo đảm.",
+      "feedbackIncorrect": "LLM không phải là một công cụ tìm kiếm sự thật hay một cơ sở dữ liệu dữ kiện — nó dự đoán văn bản có khả năng cao, vì vậy có thể nghe rất đáng tin mà vẫn sai. Hãy ôn lại màn hình 'Câu trả lời của LLM đến từ đâu'.",
+      "references": [
+        "M1.4"
+      ]
+    },
+    {
+      "id": "Q004",
+      "module": "M1",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Học viên hiểu sự phân biệt giữa huấn luyện và suy luận — rằng mô hình không học thêm từ một prompt đơn lẻ và không biết các sự kiện sau ngày kết thúc huấn luyện.",
+      "prompt": "Một kiểm thử viên hỏi mô hình NotkaApp về một sự kiện xảy ra sau ngày kết thúc huấn luyện của mô hình, rồi sửa lại cho nó ngay trong một prompt. Điều gì đúng ở đây về huấn luyện và suy luận?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Mô hình sẽ ghi nhớ vĩnh viễn phần sửa từ prompt này và học thêm cho tương lai."
+        },
+        {
+          "id": "B",
+          "text": "Suy luận (inference) tạo ra câu trả lời cho đầu vào hiện tại, nhưng không thay đổi các mẫu đã được huấn luyện — mô hình không biết các sự kiện sau ngày huấn luyện."
+        },
+        {
+          "id": "C",
+          "text": "Mỗi lần sử dụng mô hình (suy luận) đều tự động cập nhật kiến thức của nó về các sự kiện mới."
+        },
+        {
+          "id": "D",
+          "text": "Huấn luyện và suy luận là cùng một quá trình, nên prompt luôn luôn dạy thêm cho mô hình."
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "feedbackCorrect": "Huấn luyện thiết lập các mẫu một lần, còn suy luận chỉ tạo ra câu trả lời cho đầu vào của bạn — một prompt đơn lẻ không dạy thêm cho mô hình và cũng không cung cấp cho nó kiến thức về các sự kiện sau ngày huấn luyện.",
+      "feedbackIncorrect": "Bạn đang nhầm lẫn huấn luyện với suy luận: phần sửa trong prompt chỉ có tác dụng trong cuộc trò chuyện hiện tại, mô hình không ghi nhớ nó vĩnh viễn. Hãy ôn lại màn hình 'Huấn luyện so với suy luận'.",
+      "references": [
+        "M1.5"
+      ]
+    },
+    {
+      "id": "Q005",
+      "module": "M1",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Học viên gán một tác vụ QA tổng hợp vào đúng một trong bốn nhóm giải pháp (LLM / ML cổ điển / hệ thống dựa trên luật / con người chuyên gia).",
+      "prompt": "Hãy ghép mỗi tác vụ QA tổng hợp với nhóm giải pháp phù hợp nhất.",
+      "pairs": [
+        {
+          "left": "Viết bản nháp 5 test case cho yêu cầu đăng nhập trong NotkaApp",
+          "right": "LLM"
+        },
+        {
+          "left": "Gắn nhãn cho một yêu cầu hỗ trợ vừa đến là 'lỗi', 'câu hỏi' hoặc 'mong muốn'",
+          "right": "ML cổ điển"
+        },
+        {
+          "left": "Kiểm tra xem mã bưu chính có đúng định dạng NN-NNN hay không",
+          "right": "Hệ thống dựa trên luật"
+        },
+        {
+          "left": "Quyết định có nên hoãn phát hành vì rủi ro pháp lý hay không",
+          "right": "Con người chuyên gia"
+        }
+      ],
+      "feedbackCorrect": "Mỗi tác vụ được đưa vào nhóm phù hợp với bản chất của kết quả: tạo sinh văn bản (LLM), nhãn từ một tập có sẵn (ML), luật xác định rõ ràng (dựa trên luật), phán đoán có trách nhiệm (con người).",
+      "feedbackIncorrect": "Hãy chú ý đến thứ mà tác vụ tạo ra: nội dung mới = LLM, nhãn từ một tập có sẵn = ML cổ điển, kết quả hoàn toàn dự đoán được theo luật = hệ thống dựa trên luật, quyết định kèm trách nhiệm = con người. Hãy ôn lại màn hình 'Bộ phân loại tác vụ'.",
+      "references": [
+        "M1.6",
+        "M1.7"
+      ]
+    },
+    {
+      "id": "Q006",
+      "module": "M1",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Học viên ghép một khái niệm từ nền tảng GenAI/LLM với định nghĩa đúng của nó.",
+      "prompt": "Hãy ghép mỗi khái niệm từ nền tảng GenAI/LLM với định nghĩa đúng.",
+      "pairs": [
+        {
+          "left": "GenAI",
+          "right": "Trí tuệ nhân tạo tạo ra nội dung mới (văn bản, hình ảnh, mã nguồn)"
+        },
+        {
+          "left": "LLM",
+          "right": "Mô hình ngôn ngữ dự đoán đoạn văn bản tiếp theo có xác suất cao nhất"
+        },
+        {
+          "left": "ML cổ điển",
+          "right": "Mô hình học một mẫu rồi gán một nhãn hoặc dự đoán một giá trị"
+        },
+        {
+          "left": "Ảo giác",
+          "right": "Kết quả nghe có vẻ đáng tin, nhưng không được dữ liệu chứng minh"
+        }
+      ],
+      "feedbackCorrect": "Các định nghĩa khớp với bản đồ khái niệm: GenAI tạo ra, ML cổ điển phân loại/dự đoán, LLM dự đoán văn bản có khả năng cao, còn ảo giác là kết quả nghe đáng tin nhưng không có căn cứ.",
+      "feedbackIncorrect": "Bạn đã nhầm ít nhất một khái niệm — điểm phân biệt then chốt là 'tạo ra' (GenAI) so với 'phân loại' (ML), còn ảo giác liên quan đến việc thiếu căn cứ, chứ không phải bản thân lỗi về hình thức. Hãy ôn lại bản đồ khái niệm và màn hình về đầu ra mang tính xác suất.",
+      "references": [
+        "M1.2",
+        "M1.4"
+      ]
+    },
+    {
+      "id": "Q007",
+      "module": "M1",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Học viên nhận ra một tác vụ xác định và chọn giải pháp dựa trên luật thay vì LLM, ở những nơi mà đầu ra mang tính xác suất là điều không mong muốn.",
+      "prompt": "Tại SklepDemo, cần kiểm tra hoàn toàn tự động xem một số đơn hàng có đúng định dạng hay không (ví dụ ORD-TEST-777) — kết quả phải giống hệt nhau và rõ ràng mỗi lần. Giải pháp nào là phù hợp nhất?",
+      "options": [
+        {
+          "id": "A",
+          "text": "LLM với prompt 'hãy đánh giá xem số đơn hàng có đúng không' — vì nó hiểu ngữ cảnh."
+        },
+        {
+          "id": "B",
+          "text": "Hệ thống dựa trên luật với một luật định dạng rõ ràng (ví dụ biểu thức chính quy) — kết quả xác định và có thể lặp lại."
+        },
+        {
+          "id": "C",
+          "text": "ML cổ điển được huấn luyện trên các ví dụ về số đơn hàng để dự đoán tính đúng đắn."
+        },
+        {
+          "id": "D",
+          "text": "LLM, nhưng kèm yêu cầu giải thích quyết định để tăng độ chắc chắn."
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "feedbackCorrect": "Kiểm tra định dạng là một tác vụ xác định — cùng một đầu vào luôn cho ra cùng một kết quả theo một luật rõ ràng, nên hệ thống dựa trên luật là chắc chắn và có thể lặp lại, còn đầu ra mang tính xác suất của LLM ở đây là một rủi ro thừa.",
+      "feedbackIncorrect": "LLM trả về đầu ra mang tính xác suất, nên có thể cho ra các câu trả lời khác nhau với cùng một số đơn hàng — điều này loại nó khỏi một tác vụ xác định. Hãy ôn lại các loại tác vụ: các tác vụ xác định thuộc về hệ thống dựa trên luật.",
+      "references": [
+        "M1.6",
+        "M1.7"
+      ]
+    },
+    {
+      "id": "Q008",
+      "module": "M1",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S1",
+        "S2",
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Học viên quyết định rằng đầu ra của LLM cần được kiểm chứng trước khi được dùng như một dữ kiện — vì nó mang tính xác suất và có thể là ảo giác.",
+      "prompt": "LLM đã tạo ra một bản tóm tắt các yêu cầu của NotkaApp và khẳng định: 'Việc khóa tài khoản kéo dài 24 giờ'. Kiểm thử viên chỉ biết rằng kiểu đầu ra này đôi khi bị bịa ra. Quyết định nào là an toàn nhất?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Chấp nhận khẳng định đó như một dữ kiện — mô hình nghe có vẻ chắc chắn và nhất quán."
+        },
+        {
+          "id": "B",
+          "text": "Kiểm chứng khẳng định đó so với yêu cầu nguồn trước khi sử dụng, vì đầu ra của LLM là có khả năng cao nhưng không được bảo đảm."
+        },
+        {
+          "id": "C",
+          "text": "Loại bỏ toàn bộ bản tóm tắt như một thứ vô dụng, chỉ vì một câu có thể sai."
+        },
+        {
+          "id": "D",
+          "text": "Hỏi chính mô hình đó xem nó có chắc chắn không — và tin vào lời xác nhận của nó."
+        }
+      ],
+      "correct": [
+        "B"
+      ],
+      "feedbackCorrect": "Đầu ra của LLM mang tính xác suất và có thể là ảo giác, nên một khẳng định bằng con số cần được kiểm chứng so với nguồn trước khi dùng như một dữ kiện — đó là quyết định QA đúng đắn và thận trọng.",
+      "feedbackIncorrect": "Tin vào giọng điệu chắc chắn của mô hình (A, D) là bỏ qua bản chất của đầu ra mang tính xác suất, còn loại bỏ toàn bộ (C) là thái quá — điều cần kiểm chứng là một khẳng định cụ thể, có thể kiểm tra được. Hãy ôn lại màn hình về đầu ra mang tính xác suất và ảo giác.",
+      "references": [
+        "M1.4",
+        "M1.6"
+      ]
+    }
+  ]
+}

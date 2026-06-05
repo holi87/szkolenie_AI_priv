@@ -1,0 +1,534 @@
+{
+  "_meta": {
+    "module": "M8",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M8. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q061",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Il partecipante analizza un insieme di casi di test generato da un LLM e individua una lacuna di copertura (coverage gap) rispetto al requisito.",
+      "prompt": "Requisito per l'applicazione NotkaApp (fittizia): l'utente reimposta la password tramite un link e-mail valido 30 minuti; dopo 3 tentativi di accesso errati l'account viene bloccato per 15 minuti. L'LLM ha generato i casi: TC1 — reset corretto; TC2 — link scaduto dopo 30 min; TC3 — 3 password errate -> blocco dell'account. Quale lacuna di copertura è qui la più importante da colmare?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Manca il caso del riutilizzo dello stesso link di reset (link monouso usato due volte)"
+        },
+        {
+          "id": "B",
+          "text": "Manca il caso che verifica il colore del pulsante Reimposta password"
+        },
+        {
+          "id": "C",
+          "text": "Manca il caso con una durata della sessione dell'amministratore di esattamente 30 minuti"
+        },
+        {
+          "id": "D",
+          "text": "Manca il caso che verifica il logo dell'applicazione nella pagina di accesso"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Il link di reset è per sua natura monouso e a tempo, quindi l'assenza di un test sul suo riutilizzo è una vera lacuna di sicurezza nella copertura del requisito.",
+      "feedbackIncorrect": "La lacuna di copertura riguarda il comportamento conforme al requisito (validità e natura monouso del link), non gli elementi cosmetici. Torna alla schermata sulle lacune di copertura.",
+      "references": [
+        "M8.3",
+        "M8.2"
+      ]
+    },
+    {
+      "id": "Q062",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Il partecipante riconosce nell'output dell'LLM un caso fittizio (l'asserzione non verifica nulla) e lo distingue da un test di valore.",
+      "prompt": "Nell'insieme di casi per NotkaApp trovi: TC4 — 'Apri il modulo di reset della password e verifica che il modulo si apra; risultato atteso: nessuno'. Come va classificato TC4?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Test fittizio — manca un risultato atteso definito, l'asserzione di fatto non verifica nulla"
+        },
+        {
+          "id": "B",
+          "text": "Caso negativo corretto per lo scenario di blocco dell'account"
+        },
+        {
+          "id": "C",
+          "text": "Caso limite corretto per la validità del link di 30 minuti"
+        },
+        {
+          "id": "D",
+          "text": "Duplicato del caso TC1 reset corretto, che si può unire subito"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Senza un risultato atteso definito il test 'passa' sempre e non verifica nulla — è la definizione stessa di test fittizio.",
+      "feedbackIncorrect": "La chiave è l'assenza di un risultato atteso, non il tipo di scenario né la somiglianza con un altro TC. Ripassa la schermata sui duplicati e sui test fittizi.",
+      "references": [
+        "M8.4"
+      ]
+    },
+    {
+      "id": "Q063",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Il partecipante valuta se l'output generato dall'LLM è adatto alla documentazione QA, identificando un fatto inventato in contrasto con il requisito.",
+      "prompt": "L'LLM ha generato la descrizione di un caso per NotkaApp con la nota: 'Dopo 3 tentativi errati l'account viene bloccato per 24 ore e il link di reset è valido a tempo indeterminato'. Il requisito dice: blocco 15 minuti, link valido 30 minuti. Quale decisione di controllo di merito è la più appropriata prima di incollare il testo nella documentazione?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Rifiuta il frammento — contiene fatti in contrasto con il requisito (valori inventati 24 h e a tempo indeterminato), richiede correzione prima dell'uso"
+        },
+        {
+          "id": "B",
+          "text": "Accetta senza modifiche — di solito l'LLM riporta valori più vicini alla realtà rispetto al requisito"
+        },
+        {
+          "id": "C",
+          "text": "Accetta e aggiungi una nota che i valori possono variare a seconda della versione dell'applicazione"
+        },
+        {
+          "id": "D",
+          "text": "Rifiuta l'intero modulo dei test di reset della password, perché l'output contiene un errore"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Un output in contrasto con il requisito contiene fatti inventati (allucinazioni) e non può finire nella documentazione senza correzione — il controllo di merito si conclude con la decisione 'correggi/rifiuta il frammento'.",
+      "feedbackIncorrect": "Il requisito è la fonte di verità, non l'output dell'LLM; non bisogna però rifiutare tutto il lavoro a causa di un singolo frammento. Torna alla rubrica accetta/correggi/rifiuta.",
+      "references": [
+        "M8.6"
+      ]
+    },
+    {
+      "id": "Q064",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Il partecipante definisce i limiti dell'human-in-the-loop, indicando un compito QA in cui l'LLM resta un assistente e la decisione spetta all'essere umano.",
+      "prompt": "Il team QA vuole usare un LLM nei test di NotkaApp. Quale proposta rappresenta meglio il principio 'assistente, non decisore'?",
+      "options": [
+        {
+          "id": "A",
+          "text": "L'LLM genera una bozza di casi di test e una checklist dei rischi, mentre il tester approva l'ambito dei test e decide sul rilascio in produzione"
+        },
+        {
+          "id": "B",
+          "text": "L'LLM approva autonomamente il rilascio in produzione se i test generati passano"
+        },
+        {
+          "id": "C",
+          "text": "L'LLM valuta in via definitiva il rischio critico e chiude i difetti senza il coinvolgimento del tester"
+        },
+        {
+          "id": "D",
+          "text": "Il tester riscrive manualmente ogni caso e l'LLM non viene usato in nessuna fase"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "L'LLM accelera la creazione di bozze e proposte, ma le decisioni sull'accettazione, sul rischio critico e sul rilascio spettano all'essere umano (human-in-the-loop).",
+      "feedbackIncorrect": "Le decisioni sul rilascio e sulla valutazione del rischio critico non possono essere affidate all'LLM, ma rinunciare del tutto all'assistente ne spreca il valore. Ripassa la schermata assistente vs decisore.",
+      "references": [
+        "M8.7",
+        "M8.1"
+      ]
+    },
+    {
+      "id": "Q065",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Il partecipante individua le categorie di lacune di copertura che l'LLM spesso non genera senza un'istruzione esplicita.",
+      "prompt": "Stai generando casi di test per la funzione di reset della password in NotkaApp. Quali categorie vengono più spesso omesse dall'LLM e richiedono un'integrazione consapevole? Indica tutte quelle corrette.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Casi limite (es. link usato esattamente al 30° minuto)"
+        },
+        {
+          "id": "B",
+          "text": "Percorsi di errore e stati eccezionali (es. link usato una seconda volta, sessioni parallele)"
+        },
+        {
+          "id": "C",
+          "text": "Happy path del reset della password con dati corretti"
+        },
+        {
+          "id": "D",
+          "text": "Dati di test per valori estremi (es. e-mail di lunghezza massima)"
+        },
+        {
+          "id": "E",
+          "text": "Titolo della finestra del browser nella pagina di conferma"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "D"
+      ],
+      "feedbackCorrect": "L'LLM di solito copre bene l'happy path, ma omette i casi limite, i percorsi di errore e i dati estremi — è proprio lì che cerchiamo le lacune di copertura.",
+      "feedbackIncorrect": "L'happy path è di solito coperto e il titolo della finestra è un dettaglio cosmetico; le lacune riguardano i limiti, i percorsi di errore e i dati estremi. Torna alla schermata sulle lacune di copertura.",
+      "references": [
+        "M8.3",
+        "M8.2"
+      ]
+    },
+    {
+      "id": "Q066",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Il partecipante riconosce le caratteristiche di un duplicato e di un test fittizio nell'insieme di casi generato.",
+      "prompt": "Stai esaminando un insieme di casi generato per NotkaApp sotto il profilo della qualità. Quali affermazioni sui duplicati e sui test fittizi sono vere? Indica tutte quelle corrette.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Due casi che verificano le stesse condizioni con una descrizione diversa sono un duplicato, nonostante il testo differente"
+        },
+        {
+          "id": "B",
+          "text": "Un caso senza risultato atteso è fittizio, perché la sua asserzione non verifica nulla"
+        },
+        {
+          "id": "C",
+          "text": "Un numero maggiore di casi generati significa sempre una copertura migliore"
+        },
+        {
+          "id": "D",
+          "text": "Un test con un'asserzione 'true == true' non legata alla funzione è fittizio"
+        },
+        {
+          "id": "E",
+          "text": "Un duplicato è innocuo, perché due test identici aumentano la fiducia nel risultato"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "D"
+      ],
+      "feedbackCorrect": "Un duplicato sono le stesse condizioni descritte in modo diverso, mentre un test fittizio ha un'asserzione che non verifica nulla; il numero di casi non è una misura della copertura.",
+      "feedbackIncorrect": "Un numero maggiore di test non equivale a una copertura migliore, e un duplicato aumenta il costo di manutenzione senza valore. Ripassa la schermata sui duplicati e sui test fittizi.",
+      "references": [
+        "M8.4"
+      ]
+    },
+    {
+      "id": "Q067",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Il partecipante applica i criteri di controllo di merito che l'output dell'LLM deve soddisfare per finire nella documentazione QA.",
+      "prompt": "Prima di incollare l'insieme di casi generato dall'LLM nella documentazione QA ufficiale di SklepDemo (fittizia), quali criteri di controllo di merito devono essere soddisfatti? Indica tutti quelli corretti.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Conformità al requisito (assenza di valori in contrasto con i criteri di accettazione)"
+        },
+        {
+          "id": "B",
+          "text": "Assenza di fatti inventati (allucinazioni) e verificabilità del contenuto"
+        },
+        {
+          "id": "C",
+          "text": "Assenza di dati sensibili e di PII reali negli esempi"
+        },
+        {
+          "id": "D",
+          "text": "L'output deve essere il più lungo possibile, perché una maggiore estensione attesta la qualità"
+        },
+        {
+          "id": "E",
+          "text": "L'output va accettato solo perché è stato generato da un modello più recente"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "L'ammissione alla documentazione richiede conformità al requisito, assenza di allucinazioni, verificabilità e assenza di dati sensibili — l'estensione e la versione del modello non sono criteri.",
+      "feedbackIncorrect": "La lunghezza del testo e la versione del modello non sono criteri di qualità; ciò che conta è la conformità, la verificabilità e l'assenza di dati sensibili. Torna alla rubrica del controllo di merito.",
+      "references": [
+        "M8.6"
+      ]
+    },
+    {
+      "id": "Q068",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Il partecipante distingue i compiti QA in cui l'LLM è un assistente dalle decisioni riservate all'essere umano.",
+      "prompt": "Quali compiti QA si possono affidare in sicurezza all'LLM come assistente (con un successivo controllo umano)? Indica tutti quelli corretti.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Bozza di casi di test a partire dal requisito come punto di partenza"
+        },
+        {
+          "id": "B",
+          "text": "Proposta di categorie di rischio per la checklist del risk-based testing"
+        },
+        {
+          "id": "C",
+          "text": "Riformulazione e riordino delle descrizioni dei test esistenti"
+        },
+        {
+          "id": "D",
+          "text": "Decisione finale sull'ammissione del rilascio in produzione"
+        },
+        {
+          "id": "E",
+          "text": "Chiusura autonoma di un difetto critico senza la verifica del tester"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Le bozze, le proposte di categorie di rischio e il riordino dei contenuti sono lavoro dell'assistente; le decisioni sul rilascio e sui difetti critici spettano all'essere umano.",
+      "feedbackIncorrect": "La decisione sul rilascio e la chiusura dei difetti critici sono il ruolo del decisore (l'essere umano), non dell'LLM. Ripassa la schermata assistente vs decisore.",
+      "references": [
+        "M8.7",
+        "M8.1"
+      ]
+    },
+    {
+      "id": "Q069",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Il partecipante assegna una funzionalità di NotkaApp alla categoria di rischio appropriata nella checklist del risk-based testing.",
+      "prompt": "Abbina la funzionalità o l'artefatto di NotkaApp alla categoria di rischio più appropriata nella checklist del risk-based testing.",
+      "pairs": [
+        {
+          "left": "Blocco dell'account dopo 3 tentativi di accesso errati",
+          "right": "Sicurezza (protezione da attacco brute-force)"
+        },
+        {
+          "left": "Memorizzazione dell'e-mail dell'utente nel database",
+          "right": "Dati (protezione dei dati personali e riservatezza)"
+        },
+        {
+          "left": "Tempo di generazione del link di reset sotto forte carico",
+          "right": "Prestazioni (tempo di risposta sotto carico)"
+        },
+        {
+          "left": "Gestione del modulo di reset tramite screen reader",
+          "right": "Accessibilità (conformità a WCAG)"
+        }
+      ],
+      "feedbackCorrect": "Ogni funzionalità finisce nella categoria di rischio che descrive meglio la minaccia principale — è il cuore della checklist del risk-based testing.",
+      "feedbackIncorrect": "Le categorie si confondono quando guardi alla tecnologia invece che alla minaccia principale della funzione (sicurezza, dati, prestazioni, accessibilità). Ripassa la schermata sulla checklist dei rischi.",
+      "references": [
+        "M8.5"
+      ]
+    },
+    {
+      "id": "Q070",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Il partecipante assegna un difetto tipico dei casi di test generati alla sua conseguenza in ambito QA.",
+      "prompt": "Abbina il difetto tipico dei casi di test generati dall'LLM per il requisito di SklepDemo (fittizio) alla sua principale conseguenza in ambito QA.",
+      "pairs": [
+        {
+          "left": "Caso generato senza risultato atteso",
+          "right": "Test fittizio — passa sempre, non rileva il difetto"
+        },
+        {
+          "left": "Due casi con gli stessi passi e dati",
+          "right": "Duplicato — gonfiore dell'insieme senza nuova copertura"
+        },
+        {
+          "left": "Caso che verifica un campo non presente nel requisito",
+          "right": "Allucinazione di ambito — test al di fuori del requisito"
+        },
+        {
+          "left": "Manca il caso per il percorso di errore descritto nel requisito",
+          "right": "Lacuna di copertura — scenario del requisito non testato"
+        }
+      ],
+      "feedbackCorrect": "Ogni difetto ha una conseguenza diversa per la qualità dell'insieme: il test fittizio non rileva gli errori, il duplicato non aggiunge copertura, l'allucinazione di ambito testa qualcosa al di fuori del requisito e la lacuna di copertura lascia un rischio non testato.",
+      "feedbackIncorrect": "Distingui i difetti in base all'effetto: assenza di risultato atteso = test fittizio, stessi passi = duplicato, campo al di fuori del requisito = allucinazione di ambito, mancanza del percorso di errore = lacuna di copertura. Ripassa la schermata QA workbench sulle lacune e sui test fittizi.",
+      "references": [
+        "M8.6",
+        "M8.7"
+      ]
+    },
+    {
+      "id": "Q071",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Il partecipante assegna un rischio concreto della funzione di NotkaApp allo scenario di test che lo verifica.",
+      "prompt": "Abbina il rischio legato alla funzione di reset della password di NotkaApp al caso di test che lo verifica.",
+      "pairs": [
+        {
+          "left": "Rischio: il link di reset funziona dopo la scadenza",
+          "right": "Test: tentativo di usare il link dopo 30 minuti"
+        },
+        {
+          "left": "Rischio: il link monouso funziona più volte",
+          "right": "Test: doppio utilizzo dello stesso link di reset"
+        },
+        {
+          "left": "Rischio: l'account non si blocca dopo i tentativi errati",
+          "right": "Test: 3 tentativi di accesso errati consecutivi e verifica del blocco"
+        },
+        {
+          "left": "Rischio: il reset funziona per un account inesistente",
+          "right": "Test: richiesta di reset per un'e-mail non registrata"
+        }
+      ],
+      "feedbackCorrect": "Ogni rischio è verificato da un caso che tenta direttamente di provocare il comportamento indesiderato — questo collega il risk-based testing alla copertura.",
+      "feedbackIncorrect": "Il test deve mirare esattamente alla minaccia descritta dal rischio (es. riutilizzo del link, mancanza di blocco). Ripassa la schermata sulla checklist dei rischi e sulle lacune di copertura.",
+      "references": [
+        "M8.5",
+        "M8.3"
+      ]
+    },
+    {
+      "id": "Q072",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Il partecipante assegna un problema di qualità dell'output generato all'azione di controllo appropriata del tester.",
+      "prompt": "Abbina il problema rilevato nell'artefatto QA generato dall'LLM all'azione di controllo appropriata.",
+      "pairs": [
+        {
+          "left": "Due casi verificano le stesse condizioni con una descrizione diversa",
+          "right": "Unisci i duplicati e lascia un solo caso"
+        },
+        {
+          "left": "Caso senza un risultato atteso definito",
+          "right": "Rimuovi o completa l'asserzione (test fittizio)"
+        },
+        {
+          "left": "Manca il caso per il blocco dell'account dopo 3 tentativi",
+          "right": "Aggiungi un caso che colma la lacuna di copertura"
+        },
+        {
+          "left": "L'output indica un blocco di 24 h invece di 15 min",
+          "right": "Correggi il fatto in contrasto con il requisito prima dell'uso"
+        }
+      ],
+      "feedbackCorrect": "Ogni tipo di problema nell'output ha un'azione adeguata: unione del duplicato, correzione del test fittizio, integrazione della lacuna o correzione del fatto inventato.",
+      "feedbackIncorrect": "L'azione di controllo dipende dal tipo di problema — non confondere un duplicato con una lacuna di copertura né un test fittizio con un'allucinazione. Ripassa le schermate sui duplicati e sul controllo dell'output.",
+      "references": [
+        "M8.4",
+        "M8.6"
+      ]
+    }
+  ]
+}

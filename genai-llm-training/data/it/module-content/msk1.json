@@ -1,0 +1,100 @@
+{
+  "_meta": {
+    "issue": "#112-#118 [M15] / #124 [M16] Ścieżka formatywna S4 — Skala Holaka (moduł szkoleniowy, rozbudowa)",
+    "adr": "docs/adr/0009-sciezka-formatywna-s4-skala-holaka.md",
+    "interaction": "Klasyfikacja praktyk (kind: classify) — ćwiczenie formatywne, NIE scorowane do zaliczenia",
+    "source": "Osie dojrzałości Skali Holaka: zarządzanie kontekstem, oszczędność tokenów, powtarzalne workflowy (skille). Atrybucja: quality-blog.eu/pl/blog/skala-holaka.",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE i ogólne (zero realnych danych/PII). Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MSK1",
+  "intro": "I livelli più alti di maturità nell'AI non li riconosci dal numero di strumenti, ma da COME fornisci il contesto al modello, da quanto costa e dal fatto di saper trasformare un compito ripetibile in uno skill. Questo modulo insegna l'igiene del contesto, la consapevolezza del costo dei token e la costruzione di workflow ripetibili. È un esercizio di crescita, non un test.",
+  "screens": [
+    {
+      "id": "msk1-s1-po-co",
+      "title": "Perché gestire il contesto e il costo",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Il modello vede solo ciò che entra nella finestra di contesto. Troppo poco contesto → risposta generica o errata; troppi contenuti irrilevanti → il modello perde il segnale e il costo dei token aumenta. La pratica matura consiste nel fornire esattamente ciò che serve — non di più, non di meno." },
+        { "kind": "list", "items": [
+          "Contesto = dati, istruzioni ed esempi che incidono realmente sul compito.",
+          "Il costo dei token cresce a ogni carattere incollato — anche quelli superflui.",
+          "I compiti ripetibili sono quelli che traggono più vantaggio da modelli/template e dall'igiene del contesto."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Asse della Skala Holaka", "text": "La gestione consapevole del contesto e del costo è uno degli assi che distinguono il livello «uso l'AI» dal livello «uso l'AI in modo maturo».",
+          "links": [ { "label": "Skala Holaka — modello di maturità (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka" } ]
+        }
+      ]
+    },
+    {
+      "id": "msk1-s2-praktyki",
+      "title": "Parsimonioso vs sprecone",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "La pratica parsimoniosa seleziona il contesto e riutilizza più volte i template collaudati. Quella sprecona incolla «tutto per ogni evenienza», mescola gli argomenti e descrive il contesto da zero ogni volta." },
+        { "kind": "table", "headers": ["Dimensione", "Parsimonioso", "Sprecone"], "rows": [
+          ["Selezione del contesto", "Solo i frammenti rilevanti per il compito", "L'intera base di conoscenza «per ogni evenienza»"],
+          ["Ripetibilità", "Template di prompt con spazi per i dati", "Ogni volta una descrizione da zero, con altre parole"],
+          ["Igiene", "Rimuovo i contenuti obsoleti e contraddittori", "Tengo decine di argomenti in un'unica chat"]
+        ], "textAlt": "Confronto tra pratiche parsimoniose e sprecone in tre dimensioni: selezione del contesto, ripetibilità, igiene." },
+        { "kind": "callout", "variant": "warn", "title": "La trappola del «per ogni evenienza»", "text": "Incollare l'intera base di conoscenza in ogni prompt non aumenta la pertinenza — più spesso sfuma il compito e fa salire il costo. Dosa il contesto in modo consapevole." }
+      ]
+    },
+    {
+      "id": "msk1-s3-skille",
+      "title": "Gli skill: un workflow ripetibile al posto di un prompt monouso",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Uno skill è un workflow ripetibile descritto una volta sola: l'istruzione su «quando e come» svolgere un compito tipico, con un contesto definito, un formato di output e dei passi di verifica. Invece di inventare un prompt ogni volta, lanci una ricetta collaudata — in modo più economico, più rapido e più coerente." },
+        { "kind": "list", "ordered": true, "items": [
+          "Dai un nome al compito e definisci la condizione di avvio (quando applicare questo skill).",
+          "Fissa il contesto stabile e il formato di output (cosa fornisci, cosa deve tornare).",
+          "Aggiungi un passo di verifica del risultato prima di usarlo.",
+          "Salvalo come template/skill e miglioralo dopo ogni utilizzo."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Perché questo fa risparmiare contesto", "text": "Lo skill codifica una volta sola ciò che altrimenti descriveresti più volte — un contesto stabile e ben ponderato sostituisce l'incollare casuale e abbassa il costo dei token a parità di qualità." }
+      ]
+    },
+    {
+      "id": "msk1-s4-jak-cwiczyc",
+      "title": "Come esercitarsi",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Tra poco classificherai le pratiche come parsimoniose o sprecone — comprese le pratiche di costruzione degli skill. Qui non c'è una soglia di superamento; l'ordine degli elementi è casuale, quindi conta il contenuto, non lo schema. L'obiettivo è riconoscere il pattern da trasferire poi al tuo lavoro." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "msk1-classify",
+    "title": "Pratica del contesto parsimoniosa o sprecona?",
+    "intro": "Assegna ogni pratica. È un esercizio di crescita — il feedback spiega perché una data pratica è (non) parsimoniosa.",
+    "categories": [
+      { "id": "lean", "label": "Pratica parsimoniosa", "desc": "Seleziona il contesto, controlla il costo, usa template/skill." },
+      { "id": "wasteful", "label": "Pratica sprecona", "desc": "Aggiunge eccessi, mescola gli argomenti, descrive tutto da zero." }
+    ],
+    "items": [
+      { "id": "msk1-i1", "text": "Fornisco solo i frammenti del documento rilevanti per il compito.", "correctCategory": "lean", "rationale": "La selezione del contesto aumenta la pertinenza e abbassa il costo." },
+      { "id": "msk1-i2", "text": "Incollo l'intera base di conoscenza in ogni prompt «per ogni evenienza».", "correctCategory": "wasteful", "rationale": "L'eccesso sfuma il segnale e fa salire il costo dei token." },
+      { "id": "msk1-i3", "text": "Per il compito ripetibile ho un template di prompt con spazi per i dati.", "correctCategory": "lean", "rationale": "Il template significa ripetibilità e igiene del contesto." },
+      { "id": "msk1-i4", "text": "Ogni volta descrivo il contesto da zero, con altre parole.", "correctCategory": "wasteful", "rationale": "Nessun template = tempo sprecato e risultati incoerenti." },
+      { "id": "msk1-i5", "text": "Ho uno skill (un workflow descritto) per il mio compito AI più frequente.", "correctCategory": "lean", "rationale": "Lo skill codifica il contesto stabile e i passi — più economico e più coerente." },
+      { "id": "msk1-i6", "text": "Tengo decine di argomenti non correlati in un'unica chat.", "correctCategory": "wasteful", "rationale": "Mescolare gli argomenti intasa il contesto e confonde il modello." },
+      { "id": "msk1-i7", "text": "Rimuovo dal contesto le informazioni obsolete e contraddittorie prima di chiedere.", "correctCategory": "lean", "rationale": "Un contesto pulito riduce il rischio di errore e di allucinazioni." },
+      { "id": "msk1-i8", "text": "Copio la lunga cronologia della conversazione in un nuovo compito senza selezione.", "correctCategory": "wasteful", "rationale": "L'eccesso trasferito aumenta il costo e introduce contesto irrilevante." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Fornisci esattamente il contesto che incide sul compito — non di più.",
+      "Trasforma i compiti ripetibili in template e skill con un contesto definito e un passo di verifica.",
+      "Ogni carattere incollato ha un costo — dosa il contesto in modo consapevole."
+    ],
+    "checklist": [
+      "So indicare quali parti del contesto sono davvero necessarie?",
+      "Ho uno skill/template per il mio compito AI più frequente?",
+      "Pulisco il contesto dai contenuti obsoleti e contraddittori?"
+    ],
+    "checklistTitle": "Checklist — igiene del contesto e skill",
+    "nextStep": "Passo successivo: prendi un compito ripetibile e trasformalo in uno skill — un template con un contesto definito, un formato di output e un passo di verifica."
+  }
+}

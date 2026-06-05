@@ -1,0 +1,86 @@
+{
+  "_meta": {
+    "issue": "#112-#118 [M15] / #124 [M16] Ścieżka formatywna S4 — Skala Holaka (moduł szkoleniowy, rozbudowa)",
+    "adr": "docs/adr/0009-sciezka-formatywna-s4-skala-holaka.md",
+    "interaction": "Klasyfikacja danych i zastosowań (kind: classify) — ćwiczenie formatywne, NIE scorowane do zaliczenia",
+    "source": "Oś dojrzałości Skali Holaka: bezpieczeństwo, prywatność danych i governance użycia AI (w tym integracje/MCP). Atrybucja: quality-blog.eu/pl/blog/skala-holaka.",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE i ogólne (zero realnych danych/PII). Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MSK3",
+  "intro": "La adopción madura de la IA no consiste solo en eficacia, sino también en higiene de datos: qué se puede facilitar al modelo, qué hay que anonimizar primero y qué nunca se debe usar — también cuando la IA accede a los datos mediante integraciones y MCP. Este módulo enseña a clasificar los datos y a establecer reglas mínimas de governance. Es un ejercicio de desarrollo, no un examen.",
+  "screens": [
+    {
+      "id": "msk3-s1-trzy-kosze",
+      "title": "Tres cubos de datos: permitidos, a anonimizar, no permitidos",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Antes de pegar nada en el modelo, asigna los datos a uno de los tres cubos. Permitidos: datos públicos o sintéticos. A anonimizar: datos que pueden identificar a una persona o un sistema, pero que son seguros una vez enmascarados. No permitidos: secretos y datos sensibles que no se deben exponer." },
+        { "kind": "list", "items": [
+          "Permitidos — datos públicos, sintéticos, no identificativos.",
+          "A anonimizar — elimina o sustituye por un marcador de posición todo lo que identifique a una persona/un sistema.",
+          "No permitidos — contraseñas, claves, secretos, datos sensibles sin base para su uso."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Eje de la Escala de Holak", "text": "Una política escrita de uso aceptable de la IA (datos, privacidad, propiedad intelectual) y una traza de auditoría mínima son señal de un governance maduro.",
+          "links": [ { "label": "Escala de Holak — modelo de madurez (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka" } ]
+        }
+      ]
+    },
+    {
+      "id": "msk3-s2-mcp-integracje",
+      "title": "Integraciones y MCP: la frontera de los datos se desplaza más allá",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Cuando conectas la IA a herramientas mediante integraciones o MCP (Model Context Protocol), el modelo ya no ve solo lo que pegas — puede acceder a archivos, bases de datos o correos. Es cómodo y potente, pero la frontera de los datos se desplaza: hay que limitar conscientemente a qué tiene acceso la integración." },
+        { "kind": "list", "items": [
+          "Principio de acceso mínimo — la integración solo ve lo necesario para la tarea.",
+          "Filtra o enmascara los datos sensibles ANTES de que entren al modelo, no después.",
+          "Trata cada integración como una nueva entrada de datos — sométela a la misma política."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "La trampa del «es solo una prueba»", "text": "«Conecto la integración a producción solo una vez, para comprobar» es la fuga más habitual. Los datos compartidos una vez pueden haber escapado a tu control — limita el acceso y enmascara siempre, también en un experimento." }
+      ]
+    },
+    {
+      "id": "msk3-s3-jak-cwiczyc",
+      "title": "Cómo practicarlo",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Dentro de un momento asignarás datos a los cubos: permitidos, a anonimizar, no permitidos. El orden de los elementos es aleatorio, así que lo que cuenta es el contenido, no el patrón. Sin umbral de aprobación — se trata del reflejo de clasificar los datos antes de que lleguen al modelo o a la integración." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "msk3-classify",
+    "title": "¿Permitido, a anonimizar o no permitido?",
+    "intro": "Asigna cada caso de datos al cubo correcto. El feedback explica la regla de privacidad y governance.",
+    "categories": [
+      { "id": "allowed", "label": "Permitidos", "desc": "Datos públicos o sintéticos, no identificativos." },
+      { "id": "anonymize", "label": "A anonimizar", "desc": "Seguros solo tras enmascarar los identificadores." },
+      { "id": "disallowed", "label": "No permitidos", "desc": "Secretos y datos sensibles sin base para su uso." }
+    ],
+    "items": [
+      { "id": "msk3-i1", "text": "Fragmento público de la documentación de un proyecto open-source.", "correctCategory": "allowed", "rationale": "Datos públicos, no identificativos — se pueden usar." },
+      { "id": "msk3-i2", "text": "Datos de prueba inventados y sintéticos, sin relación con una persona real.", "correctCategory": "allowed", "rationale": "Los datos sintéticos son seguros por definición." },
+      { "id": "msk3-i3", "text": "Reporte de error con el login del usuario, que sustituyes por un marcador de posición.", "correctCategory": "anonymize", "rationale": "Eliminas/enmascaras el identificador — entonces es seguro." },
+      { "id": "msk3-i4", "text": "Registros con datos de contacto de clientes, que hay que enmascarar antes de usarlos.", "correctCategory": "anonymize", "rationale": "Tras la anonimización, los datos dejan de señalar a una persona." },
+      { "id": "msk3-i5", "text": "Contraseñas y claves de acceso al sistema de producción.", "correctCategory": "disallowed", "rationale": "Los secretos nunca llegan al prompt ni a la integración." },
+      { "id": "msk3-i6", "text": "Integración MCP con acceso completo a la base de clientes de producción «por comodidad».", "correctCategory": "disallowed", "rationale": "Acceso excesivo de la integración a datos sensibles — viola el acceso mínimo." },
+      { "id": "msk3-i7", "text": "Exportación de reportes con datos personales enmascarados, facilitada para análisis.", "correctCategory": "anonymize", "rationale": "El enmascaramiento antes de la entrada al modelo hace que los datos sean seguros." },
+      { "id": "msk3-i8", "text": "Datos personales completos de un cliente pegados directamente en un modelo público.", "correctCategory": "disallowed", "rationale": "Datos sensibles identificativos sin base ni anonimización — no permitidos." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Antes de enviar, asigna cada dato a un cubo: permitidos / a anonimizar / no permitidos.",
+      "Las integraciones y el MCP desplazan la frontera de los datos — aplica el principio de acceso mínimo y enmascara antes de la entrada al modelo.",
+      "Redacta una política sencilla y deja una traza mínima del uso de la IA en los procesos críticos."
+    ],
+    "checklist": [
+      "¿Sé asignar mis datos habituales a los tres cubos?",
+      "¿Mis integraciones/MCP tienen solo el acceso mínimo necesario?",
+      "¿Sé qué no se debe compartir nunca (secretos, datos sensibles)?"
+    ],
+    "checklistTitle": "Checklist — higiene de datos para la IA",
+    "nextStep": "Siguiente paso: redacta para el equipo una página de reglas: usos permitidos, anonimización, acceso mínimo de las integraciones, prohibición de secretos, una traza de auditoría sencilla."
+  }
+}

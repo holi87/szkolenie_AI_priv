@@ -1,0 +1,130 @@
+{
+  "_meta": {
+    "issue": "#20 [20][M4] Wdroż moduły M1-M2",
+    "storyboard": "docs/storyboard/m01-fundamenty.md",
+    "interaction": "Klasyfikator zadań (kind: classify)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (NotkaApp/SklepDemo/PipeDemo, domena przyklad.test). ZERO realnych danych klienta/PII.",
+    "note": "Egzemplarz referencyjny typu classify dla pozostałych modułów."
+  },
+  "module": "M1",
+  "intro": "Tester erhalten von einem LLM immer häufiger fertigen Output — den Entwurf eines Testfalls, eine Zusammenfassung von Anforderungen, einen Bericht. Um beurteilen zu können, ob man ihm trauen kann, müssen Sie wissen, woher diese Antwort stammt und wie sich GenAI vom klassischen ML unterscheidet. Dieses Modul gibt Ihnen diese Begriffslandkarte und übt das Zuordnen der Technologie zur jeweiligen Aufgabe.",
+  "screens": [
+    {
+      "id": "s1-cel",
+      "title": "Wofür Sie dieses Modul brauchen",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Ohne die Unterscheidung von GenAI, LLM und klassischem ML ist es leicht, ein Werkzeug für die falsche Aufgabe einzusetzen oder eine erfundene Antwort für eine Tatsache zu halten. Das ist ein reales Risiko in der QA-Arbeit, wenn der Output eines Modells in die Testdokumentation gelangt." },
+        { "kind": "list", "items": [
+          "Sie unterscheiden drei Arten von Lösungen: generative, klassifizierende und regelbasierte.",
+          "Sie verstehen, woher die Antwort eines LLM kommt und warum sie keine garantierte Wahrheit ist.",
+          "Sie ordnen eine QA-Aufgabe der richtigen Technologie zu."
+        ] }
+      ]
+    },
+    {
+      "id": "s2-mapa-pojec",
+      "title": "GenAI, LLM und klassisches ML — eine Begriffslandkarte",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Klassisches ML", "original": "machine learning", "text": "das Modell lernt ein Muster und klassifiziert oder sagt in der Regel einen Wert voraus (z. B. „Spam / kein Spam“)." },
+        { "kind": "definition", "term": "GenAI", "original": "generative AI", "text": "künstliche Intelligenz, die neue Inhalte erzeugt: Text, Bild, Audio oder Code." },
+        { "kind": "definition", "term": "LLM", "original": "large language model", "text": "eine auf Sprache spezialisierte Teilmenge von GenAI — sagt den wahrscheinlichsten nächsten Textabschnitt voraus." },
+        { "kind": "diagram", "textAlt": "Drei Mengen: die größte ist GenAI (Erzeugen von Inhalten). Das LLM ist als sprachliche Teilmenge in GenAI enthalten. Klassisches ML ist eine eigene Menge neben GenAI — es klassifiziert und sagt voraus, es erzeugt nicht. Schlussfolgerung: jedes LLM ist GenAI, aber nicht jedes GenAI ist ein LLM; klassisches ML ist eine andere Familie.", "ascii": "[ GenAI ........ ]   [ Klassisches ML ]\n  [ LLM ]\n(erzeugt Inhalte)    (klassifiziert/sagt voraus)" }
+      ]
+    },
+    {
+      "id": "s3-piec-przykladow",
+      "title": "Fünf Beispiele nebeneinander",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Achten Sie auf Eingabe und Ausgabe der Aufgabe: wenn die Ausgabe ein neuer Inhalt ist — dann GenAI/LLM; wenn es ein Label aus einer festen Menge ist — dann klassisches ML." },
+        { "kind": "table",
+          "caption": "Fünf synthetische Beispiele und ihre Klassifizierung",
+          "headers": ["Beispiel", "Ausgabe", "Kategorie"],
+          "rows": [
+            ["Klassifizierung eines Tickets als Fehler/Frage/Wunsch", "Label aus einer festen Menge", "klassisches ML"],
+            ["Entwurf eines Testfalls aus einer Anforderungsbeschreibung", "neuer Text", "LLM / GenAI"],
+            ["Erkennung einer Anomalie in Performance-Metriken", "Markierung einer Abweichung von der Norm", "klassisches ML"],
+            ["Zusammenfassung einer langen Besprechungsnotiz", "neuer, kürzerer Text", "LLM"],
+            ["Erzeugen eines Bildes für eine Präsentation", "neues Bild", "GenAI (Nicht-LLM)"]
+          ],
+          "textAlt": "Drei Beispiele, die neuen Inhalt erzeugen (Testentwurf, Zusammenfassung, Bild), sind GenAI/LLM; zwei, die ein Label zuweisen (Ticket-Klassifizierung, Metrik-Anomalie), sind klassisches ML. Das Bild ist GenAI, aber kein LLM." }
+      ]
+    },
+    {
+      "id": "s4-skad-odpowiedz",
+      "title": "Woher die Antwort eines LLM kommt",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Ein LLM sagt den wahrscheinlichsten nächsten Textabschnitt anhand von Mustern aus dem Training voraus. Es ist keine Suchmaschine für Wahrheit und keine Faktendatenbank — eine wahrscheinliche Form kann sachlich falsch sein." },
+        { "kind": "definition", "term": "Halluzination", "original": "hallucination", "text": "ein Ergebnis, das glaubwürdig klingt, aber nicht durch Daten belegt ist." },
+        { "kind": "callout", "variant": "warn", "title": "Konsequenz für die QA", "text": "Jeder LLM-Output muss überprüft werden, bevor er als Tatsache dient. Die vollständige Prüf-Checkliste lernen Sie im Modul M11 kennen." }
+      ]
+    },
+    {
+      "id": "s5-trening-wnioskowanie",
+      "title": "Training vs. Inferenz",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Training", "original": "training", "text": "das einmalige Anlernen des Modells an einem großen Datensatz — legt die Muster fest." },
+        { "kind": "definition", "term": "Inferenz", "original": "inference", "text": "jede Nutzung des Modells auf Ihrer Eingabe — hier entsteht die Antwort." },
+        { "kind": "paragraph", "text": "Die Erkenntnis für den Tester: das Modell „lernt nicht dazu“ aus Ihrem einzelnen Prompt und kennt keine Ereignisse nach dem Trainingsdatum." },
+        { "kind": "paragraph", "onlyForPaths": ["S2", "S3"], "text": "Für die technischen Pfade: die Inferenzkosten (inference cost) steigen mit der Länge von Eingabe und Ausgabe, weshalb überschüssiger Kontext kostet und die Qualität nicht immer verbessert." }
+      ]
+    },
+    {
+      "id": "s6-trzy-typy",
+      "title": "Drei Aufgabentypen: generativ / klassifizierend / deterministisch",
+      "type": "decision",
+      "blocks": [
+        { "kind": "list", "items": [
+          "Generativ — erzeugt neuen Inhalt (LLM / GenAI).",
+          "Klassifizierend — weist ein Label aus einer festen Menge zu (klassisches ML).",
+          "Deterministisch — dieselbe Eingabe liefert nach einer expliziten Regel stets dasselbe Ergebnis (regelbasiertes System)."
+        ] },
+        { "kind": "paragraph", "text": "Stellen Sie sich die Frage: welcher Art ist die Aufgabe, die jetzt auf Ihrem Schreibtisch liegt? Gleich üben Sie das an 12 synthetischen Aufgaben." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "m1-klasyfikator",
+    "title": "Aufgabenklassifikator",
+    "intro": "Ordnen Sie jede synthetische QA-Aufgabe der am besten passenden Lösungskategorie zu. Nach der Überprüfung sehen Sie die Begründung bei jeder Aufgabe.",
+    "categories": [
+      { "id": "llm", "label": "LLM", "desc": "sprachlich-generative Aufgabe (erzeugt neuen Inhalt)" },
+      { "id": "ml", "label": "Klassisches ML", "desc": "Klassifizierung/Vorhersage aus festen Labels" },
+      { "id": "rule", "label": "Regelbasiertes System", "desc": "explizite, vollständig vorhersehbare Regel" },
+      { "id": "human", "label": "Mensch-Experte", "desc": "Entscheidung mit Verantwortung und Urteilsvermögen" }
+    ],
+    "items": [
+      { "id": "t1", "text": "Schreibe den Entwurf von 5 Testfällen für die Anmeldeanforderung in NotkaApp.", "correctCategory": "llm", "rationale": "Es entsteht neuer Textinhalt — eine generative Aufgabe, LLM." },
+      { "id": "t2", "text": "Fasse eine lange Notiz aus der Besprechung des QA-Teams in fünf Punkten zusammen.", "correctCategory": "llm", "rationale": "Das Erzeugen eines kürzeren Textes aus einem längeren ist eine sprachliche Aufgabe für ein LLM." },
+      { "id": "t3", "text": "Schlage den Text einer Fehlermeldung für das Zahlungsformular in SklepDemo vor.", "correctCategory": "llm", "rationale": "Das Erstellen einer neuen Meldung ist Textgenerierung — LLM." },
+      { "id": "t4", "text": "Markiere ein eingehendes Ticket als „Fehler“, „Frage“ oder „Wunsch“.", "correctCategory": "ml", "rationale": "Das Zuweisen eines Labels aus einer festen Menge ist Klassifizierung — klassisches ML." },
+      { "id": "t5", "text": "Erkenne eine Anomalie in den Performance-Metriken gegenüber der Norm.", "correctCategory": "ml", "rationale": "Das Erkennen von Abweichungen von einem Muster ist klassisches ML, keine Generierung." },
+      { "id": "t6", "text": "Sage voraus, ob ein neues Ticket in die Gruppe „dringend“ oder „normal“ fällt.", "correctCategory": "ml", "rationale": "Das Vorhersagen einer Kategorie aus Daten ist klassisches ML." },
+      { "id": "t7", "text": "Prüfe, ob eine Postleitzahl das Format NN-NNN hat.", "correctCategory": "rule", "rationale": "Eine explizite Formatregel liefert ein deterministisches Ergebnis — ein regelbasiertes System." },
+      { "id": "t8", "text": "Validiere, ob eine Bestellnummer dem Muster ORD-TEST-NNN entspricht.", "correctCategory": "rule", "rationale": "Die Musterprüfung ist vollständig vorhersehbar — eine Regel, kein LLM." },
+      { "id": "t9", "text": "Rechne einen Nettobetrag zum festen Satz von 23 % in Brutto um.", "correctCategory": "rule", "rationale": "Eine Berechnung nach einer festen Regel ist deterministisch — ein regelbasiertes System." },
+      { "id": "t10", "text": "Entscheide, ob ein Release wegen eines rechtlichen Risikos zurückgehalten wird.", "correctCategory": "human", "rationale": "Eine Entscheidung mit Verantwortung und rechtlichem Kontext gehört zum Mensch-Experten." },
+      { "id": "t11", "text": "Genehmige ein kritisches Sicherheitsrisiko vor einem Release.", "correctCategory": "human", "rationale": "Das Akzeptieren von Risiko ist ein verantwortliches menschliches Urteil, keine Aufgabe für ein Modell." },
+      { "id": "t12", "text": "Entscheide einen Streit zweier Teams über die Priorität eines Defekts.", "correctCategory": "human", "rationale": "Das Schlichten eines Konflikts erfordert Urteilsvermögen und Verantwortung — ein Mensch-Experte." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "GenAI erzeugt Inhalt, klassisches ML klassifiziert/sagt voraus, ein LLM sagt den wahrscheinlichsten Text voraus — nicht die Wahrheit.",
+      "Die Wahl der Technologie hängt vom Aufgabentyp ab: generativ, klassifizierend oder deterministisch.",
+      "Der Output eines LLM ist probabilistisch und muss daher überprüft werden, bevor er zur Tatsache wird."
+    ],
+    "checklist": [
+      "Erfordert die Aufgabe neuen Inhalt oder ein Label/Ergebnis aus einer Regel?",
+      "Kann ich die Antwort des Modells gegen eine Quelle prüfen?",
+      "Erfordert die Entscheidung keine menschliche Verantwortung?"
+    ],
+    "checklistTitle": "Checkliste — bevor Sie ein LLM einsetzen",
+    "nextStep": "Nächster Schritt: M2 — LLM-Architektur: Tokens und das Kontextfenster."
+  }
+}

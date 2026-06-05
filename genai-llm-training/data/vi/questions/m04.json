@@ -1,0 +1,371 @@
+{
+  "_meta": {
+    "module": "M4",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M4. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q025",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Học viên giải thích embedding là gì, với tư cách là biểu diễn bằng số của ý nghĩa văn bản.",
+      "prompt": "Mô hình embedding chuyển một cụm từ trong tài liệu QA thành embedding. Vậy vector số tạo ra thực sự biểu diễn điều gì?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Ý nghĩa ngữ nghĩa của văn bản dưới dạng số — những cụm từ có ý nghĩa gần nhau sẽ cho ra các vector gần nhau."
+        },
+        {
+          "id": "B",
+          "text": "Số lượng từ trong cụm từ cùng với độ dài của nó tính theo ký tự."
+        },
+        {
+          "id": "C",
+          "text": "Bản ghi chính xác của từng chữ cái được mã hóa thành mã ASCII."
+        },
+        {
+          "id": "D",
+          "text": "Đánh giá độ đúng về ngữ pháp và văn phong của văn bản theo thang số."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Embedding mã hóa ý nghĩa của văn bản dưới dạng vector số, nhờ đó các cụm từ gần nhau về nghĩa (ví dụ „đăng nhập” và „xác thực”) sẽ nằm gần nhau.",
+      "feedbackIncorrect": "Embedding không đếm ký tự, chữ cái hay ngữ pháp — nó mã hóa ý nghĩa. Hãy quay lại màn hình „Từ ngữ như một vector”.",
+      "references": [
+        "M4.1",
+        "M4.2"
+      ]
+    },
+    {
+      "id": "Q026",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Học viên diễn giải cosine similarity như một thước đo hướng của vector, độc lập với độ dài văn bản.",
+      "prompt": "Trong kho ngữ liệu NotkaApp bạn có một mô tả ngắn „Đặt lại mật khẩu: liên kết e-mail có hiệu lực 30 phút” và một đoạn văn dài, chi tiết mô tả cùng quy trình đặt lại đó. Vì sao cosine similarity của chúng lại cao dù độ dài văn bản chênh lệch lớn?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Cosine similarity đo góc (hướng) giữa các vector ý nghĩa, chứ không phải độ dài của chúng — cả hai văn bản đều chỉ về cùng một hướng."
+        },
+        {
+          "id": "B",
+          "text": "Cosine similarity tăng theo số lượng từ, nên văn bản dài hơn luôn có độ tương đồng cao hơn."
+        },
+        {
+          "id": "C",
+          "text": "Cosine similarity so sánh số lượng từ chung, mà cả hai văn bản đều chứa từ „đặt lại”."
+        },
+        {
+          "id": "D",
+          "text": "Cosine similarity luôn trả về 1.0 khi các văn bản nói về cùng một sản phẩm."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Cosine similarity tính góc giữa các vector, tức là sự đồng nhất về hướng của ý nghĩa — độ dài/„độ mạnh” của văn bản không ảnh hưởng đến kết quả, nên mô tả ngắn và mô tả dài về cùng một việc vẫn nằm gần nhau.",
+      "feedbackIncorrect": "Không phải số lượng từ hay số token chung mới quyết định, mà là hướng của vector ý nghĩa. Hãy ôn lại „Cosine similarity — hướng, không phải độ dài”.",
+      "references": [
+        "M4.3"
+      ]
+    },
+    {
+      "id": "Q027",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Học viên diễn giải đúng bảng xếp hạng các nearest neighbors và hiểu rằng ngưỡng tương đồng chỉ mang tính quy ước.",
+      "prompt": "Công cụ tìm kiếm ngữ nghĩa đã trả về danh sách nearest neighbors với các kết quả: đoạn A = 0.91, đoạn B = 0.74, đoạn C = 0.62. Tester nên diễn giải điều này như thế nào?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Danh sách được sắp xếp giảm dần theo độ tương đồng, nhưng vị trí cao không bảo đảm tính đúng đắn về mặt nghiệp vụ — vẫn phải kiểm chứng nội dung."
+        },
+        {
+          "id": "B",
+          "text": "Đoạn A với kết quả 0.91 chắc chắn là câu trả lời đúng, vì nó vượt ngưỡng 0.9."
+        },
+        {
+          "id": "C",
+          "text": "Các kết quả dưới 0.75 luôn sai và có thể loại bỏ mà không cần kiểm tra."
+        },
+        {
+          "id": "D",
+          "text": "Kết quả 0.62 nghĩa là đoạn C đúng về mặt nội dung chính xác 62%."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Bảng xếp hạng sắp xếp các kết quả giảm dần, nhưng ngưỡng chỉ là quy ước và phụ thuộc vào kho ngữ liệu — vị trí cao là một tín hiệu, không phải bằng chứng về tính đúng đắn.",
+      "feedbackIncorrect": "Không có một ngưỡng cố định, phổ quát nào, và kết quả số cũng không phải là „phần trăm độ đúng”. Hãy quay lại „Cách đọc bảng xếp hạng độ tương đồng”.",
+      "references": [
+        "M4.4"
+      ]
+    },
+    {
+      "id": "Q028",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Học viên lựa chọn các đặc điểm của một truy vấn tốt cho tìm kiếm ngữ nghĩa.",
+      "prompt": "Bạn muốn tìm trong tài liệu NotkaApp thông tin về thời gian hiệu lực của liên kết đặt lại mật khẩu ở phiên bản hiện tại. Những thực hành xây dựng truy vấn ngữ nghĩa nào sẽ làm tăng tính chính xác của kết quả? Hãy chọn tất cả đáp án đúng.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Dùng cụm từ đầy đủ phản ánh đúng ý định, ví dụ „thời gian hiệu lực của liên kết đặt lại mật khẩu”, thay vì một từ đơn lẻ."
+        },
+        {
+          "id": "B",
+          "text": "Làm rõ ngữ cảnh và phiên bản, ví dụ „đặt lại mật khẩu trong NotkaApp v2”, nếu ta quan tâm đến bản ghi hiện tại."
+        },
+        {
+          "id": "C",
+          "text": "Diễn đạt truy vấn chỉ bằng phủ định, ví dụ „không phải token phiên”, để lọc bỏ các kết quả khác."
+        },
+        {
+          "id": "D",
+          "text": "Nhập một từ chung chung „mật khẩu”, hy vọng mô hình tự đoán ra ý định."
+        },
+        {
+          "id": "E",
+          "text": "Đưa vào đối tượng then chốt của truy vấn (liên kết đặt lại), để tách xa khỏi những khái niệm tương tự nhưng khác (token phiên)."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "E"
+      ],
+      "feedbackCorrect": "Cụm từ đầy đủ phản ánh đúng ý định, việc làm rõ ngữ cảnh/phiên bản và chỉ ra đối tượng then chốt sẽ hướng vector truy vấn về phía ý nghĩa đúng.",
+      "feedbackIncorrect": "Một từ đơn lẻ thì quá chung chung, còn chỉ dùng phủ định lại hoạt động kém trong tìm kiếm ngữ nghĩa (dù sao mô hình vẫn mã hóa chủ đề „token phiên”). Hãy ôn lại „Lựa chọn truy vấn cho tìm kiếm ngữ nghĩa”.",
+      "references": [
+        "M4.7"
+      ]
+    },
+    {
+      "id": "Q029",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Học viên nhận diện các tình huống trong đó độ tương đồng cao không có nghĩa là câu trả lời đúng.",
+      "prompt": "Trong những tình huống nào dưới đây, kết quả cosine similarity cao có thể gây nhầm lẫn, khi trả về một đoạn gần về ngữ nghĩa nhưng lại sai về mặt nghiệp vụ? Hãy chọn tất cả đáp án đúng.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Đoạn „đăng nhập không hoạt động” được trả về như gần với truy vấn „đăng nhập hoạt động” (phủ định/trái nghĩa)."
+        },
+        {
+          "id": "B",
+          "text": "Mô tả tính năng thanh toán được trả về như gần với một báo cáo lỗi của chính tính năng đó (cùng chủ đề, khác ý định)."
+        },
+        {
+          "id": "C",
+          "text": "Đoạn nói về „token” bảo mật được trả về cho truy vấn về „token” theo nghĩa đơn vị của LLM (đa nghĩa/hiện tượng đồng âm dị nghĩa)."
+        },
+        {
+          "id": "D",
+          "text": "Bản ghi cũ của một yêu cầu rất giống bản mới, dù chỉ bản mới mới là bản đúng (phiên bản đã lỗi thời)."
+        },
+        {
+          "id": "E",
+          "text": "Hai đoạn mô tả chính xác cùng một quy trình đặt lại mật khẩu hiện hành cho độ tương đồng cao."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "feedbackCorrect": "Đây là bốn cái bẫy kinh điển của độ tương đồng: phủ định, cùng chủ đề nhưng khác ý định, đa nghĩa và phiên bản lỗi thời — embedding mã hóa chủ đề mạnh hơn những khác biệt nhỏ nhưng then chốt.",
+      "feedbackIncorrect": "Phương án E là trường hợp mà độ tương đồng cao là ĐÚNG (hai mô tả thống nhất, hiện hành về cùng một việc). Hãy ôn lại „Cái bẫy: giống ≠ đúng — 4 trường hợp”.",
+      "references": [
+        "M4.5",
+        "M4.6"
+      ]
+    },
+    {
+      "id": "Q030",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Học viên đánh giá vì sao embedding nhầm lẫn những khác biệt then chốt, và rút ra kết luận đúng đắn cho công việc QA.",
+      "prompt": "Vì sao mô hình embedding nhầm lẫn các cặp như „đăng nhập hoạt động” / „đăng nhập không hoạt động” và tester nên rút ra kết luận gì từ đó? Hãy chọn tất cả các nhận định đúng.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Embedding mã hóa chủ đề và văn phong của cụm từ mạnh hơn những khác biệt nhỏ nhưng then chốt, chẳng hạn như phủ định hay số phiên bản."
+        },
+        {
+          "id": "B",
+          "text": "Bảng xếp hạng độ tương đồng là một tín hiệu hỗ trợ, không phải phán quyết — kết quả cần được kiểm chứng nội dung của đoạn."
+        },
+        {
+          "id": "C",
+          "text": "Nên hỗ trợ tìm kiếm bằng cách lọc theo metadata (ví dụ phiên bản, loại tài liệu), để hạn chế những kết quả gây nhầm lẫn."
+        },
+        {
+          "id": "D",
+          "text": "Vì mô hình nhầm lẫn các cặp này, nên cần từ bỏ hoàn toàn việc tìm kiếm ngữ nghĩa trong QA."
+        },
+        {
+          "id": "E",
+          "text": "Chỉ cần nâng ngưỡng tương đồng lên 0.95 là có thể tự động loại bỏ mọi cái bẫy."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Embedding mã hóa chủ đề mạnh hơn phủ định hay phiên bản, nên ta coi bảng xếp hạng như một tín hiệu cần kiểm chứng nội dung, được hỗ trợ bằng việc lọc theo metadata.",
+      "feedbackIncorrect": "Từ bỏ tìm kiếm (D) và đặt ngưỡng cứng nhắc (E) là những giải pháp sai — cặp có phủ định đôi khi giống nhau đến mức không ngưỡng nào lọc nổi. Hãy ôn lại „Đào sâu: vì sao mô hình bị nhầm”.",
+      "references": [
+        "M4.6",
+        "M4.5"
+      ]
+    },
+    {
+      "id": "Q031",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Học viên chẩn đoán trên một trường hợp cụ thể vì sao độ tương đồng cao lại trả về một đoạn sai về mặt nghiệp vụ.",
+      "prompt": "Trong kho ngữ liệu NotkaApp bạn nhập truy vấn „Sau bao lâu thì liên kết đặt lại mật khẩu hết hạn?”. Công cụ tìm kiếm trả về kết quả gần nhất là DOC1: „Quy trình đăng nhập: token phiên hết hạn sau 30 phút không hoạt động” (0.86), và mãi phía dưới mới đến DOC3: „Đặt lại mật khẩu: liên kết e-mail có hiệu lực 30 phút, dùng một lần” (0.71). Điều gì giải thích tốt nhất kết quả này?",
+      "options": [
+        {
+          "id": "A",
+          "text": "DOC1 gần về ngữ nghĩa vì nó chia sẻ với truy vấn mô-típ „một thứ gì đó hết hạn sau 30 phút”, nhưng lại nói về một đối tượng khác (token phiên), nên nguồn đúng là DOC3 — đây là cái bẫy „giống nhưng là khái niệm khác” (cùng mô-típ, khác đối tượng)."
+        },
+        {
+          "id": "B",
+          "text": "DOC1 là câu trả lời đúng, vì nó có điểm tương đồng cao hơn DOC3."
+        },
+        {
+          "id": "C",
+          "text": "Kết quả là lỗi của mô hình embedding, cần báo cáo như một khiếm khuyết của thư viện."
+        },
+        {
+          "id": "D",
+          "text": "DOC3 không đúng, vì điểm 0.71 của nó nằm dưới ngưỡng chính xác phổ quát 0.75."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Mô-típ chung „hết hạn sau 30 phút” kéo DOC1 lại gần truy vấn, dù nó nói về token phiên chứ không phải liên kết đặt lại — nguồn đúng là DOC3, dù điểm thấp hơn.",
+      "feedbackIncorrect": "Điểm cao nhất không quyết định tính đúng đắn, và 0.75 chẳng phải ngưỡng phổ quát nào cả — đây là cái bẫy kinh điển „giống nhưng là khái niệm khác”. Hãy ôn lại màn hình „Cái bẫy: giống ≠ đúng” và „Bản đồ ngữ nghĩa”.",
+      "references": [
+        "M4.5",
+        "M4.9"
+      ]
+    },
+    {
+      "id": "Q032",
+      "module": "M4",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Học viên nhận diện cái bẫy phủ định trong kết quả tìm kiếm và lựa chọn quyết định QA an toàn.",
+      "prompt": "Trên „Bản đồ ngữ nghĩa” bạn nhập truy vấn „đăng nhập không hoạt động sau khi cập nhật”. Đoạn gần nhất (0.89) hóa ra là „đăng nhập hoạt động bình thường”, còn đoạn „lỗi đã biết: đăng nhập bị khóa sau update v2” thì mãi đứng thứ ba (0.77). Đánh giá và phản ứng thế nào là tốt nhất trong tình huống này?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Đây là cái bẫy phủ định: embedding mã hóa chủ đề chung „đăng nhập”, nhưng bỏ lỡ „không hoạt động” so với „hoạt động” — cần kiểm chứng nội dung và chọn đoạn về lỗi đã biết, dù điểm thấp hơn."
+        },
+        {
+          "id": "B",
+          "text": "Chấp nhận đoạn „đăng nhập hoạt động bình thường”, vì nó có độ tương đồng cao nhất 0.89, rồi đóng phần phân tích."
+        },
+        {
+          "id": "C",
+          "text": "Coi cả hai đoạn là tương đương, vì cả hai đều nói về đăng nhập, và không phân định thêm."
+        },
+        {
+          "id": "D",
+          "text": "Hạ ngưỡng xuống 0.5, để bảng xếp hạng tự động đẩy đoạn đúng lên vị trí đầu tiên."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "„Hoạt động” và „không hoạt động” gần nhau về ngữ nghĩa, vì chỉ khác nhau ở phủ định — điểm cao nhất ở đây gây nhầm lẫn, nên ta kiểm chứng nội dung và chọn đoạn về lỗi đã biết.",
+      "feedbackIncorrect": "Điểm cao nhất là cái bẫy phủ định, còn thao túng ngưỡng không sửa được hướng của vector — phải kiểm tra nội dung. Hãy ôn lại „Cái bẫy: giống ≠ đúng” và „Bản đồ ngữ nghĩa”.",
+      "references": [
+        "M4.5",
+        "M4.9"
+      ]
+    }
+  ]
+}

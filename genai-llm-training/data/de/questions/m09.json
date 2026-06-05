@@ -1,0 +1,370 @@
+{
+  "_meta": {
+    "module": "M9",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M9. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q073",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Der Teilnehmer unterscheidet einen Agenten von einem Chatbot und von einem Workflow mit Tool-Nutzung danach, wer über die nächsten Schritte entscheidet und ob Nebenwirkungen entstehen.",
+      "prompt": "Wodurch unterscheidet sich ein Agent von einem Chatbot und von einem Workflow mit einem einzelnen Tool (Tool Use)?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Der Agent plant und führt eine Abfolge von Schritten eigenständig aus und entscheidet selbst, welches Tool er wann aufruft."
+        },
+        {
+          "id": "B",
+          "text": "Ein Agent ist ein Chatbot mit hübscherer Oberfläche — er erzeugt nur Text und führt keinerlei Aktionen aus."
+        },
+        {
+          "id": "C",
+          "text": "Ein Agent ruft immer genau ein vorab festgelegtes Tool in einem starren, unveränderlichen Ablauf auf."
+        },
+        {
+          "id": "D",
+          "text": "Ein Agent unterscheidet sich von einem Chatbot ausschließlich dadurch, dass er schneller antwortet und einen längeren Kontext verarbeitet."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Ja — das definierende Merkmal eines Agenten ist das eigenständige Planen und Auswählen der nächsten Schritte sowie Tools, was weder ein Chatbot noch ein starrer Workflow tut.",
+      "feedbackIncorrect": "Das sind Beschreibungen eines Chatbots (nur Text) oder eines Workflows mit Tool Use (ein festgelegtes Tool). Wiederhole den Abschnitt über die drei Integrationsmodi und achte darauf, wer über die Schritte entscheidet.",
+      "references": [
+        "M9.2"
+      ]
+    },
+    {
+      "id": "Q074",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Der Teilnehmer erkennt korrekt die Bedeutung des Rollback-Hebels im Modell der minimalen Kontrolle über das Handeln eines Agenten.",
+      "prompt": "Was bedeutet im Modell der „4 Kontrollhebel“ für das Handeln eines Agenten der Rollback-Hebel?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Die Möglichkeit, eine vom Agenten vorgenommene Änderung in den Zustand vor ihrer Durchführung zurückzusetzen."
+        },
+        {
+          "id": "B",
+          "text": "Die Aufzeichnung aller Aktionen des Agenten samt dem Zeitpunkt ihrer Ausführung."
+        },
+        {
+          "id": "C",
+          "text": "Eine Schranke, an der ein Mensch die Aktion freigibt, bevor der Agent sie ausführt."
+        },
+        {
+          "id": "D",
+          "text": "Die Beschränkung des Agenten auf den kleinsten benötigten Zugriffsumfang."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Rollback ist die Fähigkeit, eine Änderung rückgängig zu machen — er unterscheidet umkehrbare von nicht umkehrbaren Aktionen und bestimmt die Wirksamkeit der übrigen Schutzmaßnahmen.",
+      "feedbackIncorrect": "Du verwechselst die Hebel: B ist das Audit Log, C ist Human-in-the-Loop, D ist der Permission Scope. Wiederhole den Abschnitt über die vier Kontrollhebel.",
+      "references": [
+        "M9.6"
+      ]
+    },
+    {
+      "id": "Q075",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Der Teilnehmer klassifiziert eine konkrete Beschreibung der Funktionsweise eines KI-Tools anhand der eigenständigen Schrittkette als Agent und nicht als Chatbot oder Workflow.",
+      "prompt": "Ein Tool in der TEST-Umgebung liest selbst das Backlog aus TestRail-SANDBOX, entscheidet, welche Tickets Duplikate sind, führt sie zusammen und öffnet 5 Pull Requests im Repository synt-shop — ohne dass ihm eine Liste von Schritten vorgegeben wird. Welcher Integrationsmodus ist das?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Agent — er plant und führt mehrere Schritte eigenständig aus und wählt Tools aus."
+        },
+        {
+          "id": "B",
+          "text": "Chatbot — er antwortet nur mit Text auf Fragen zum Backlog."
+        },
+        {
+          "id": "C",
+          "text": "Workflow mit Tool Use — ein festgelegtes Tool in einem starren Ablauf."
+        },
+        {
+          "id": "D",
+          "text": "Eine gewöhnliche Volltextsuche im Testmanagementsystem."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Ja — das Tool wählt selbst die Schritte (Analyse, Zusammenführen, Öffnen von 5 PRs) und verschiedene Tools ohne vorgegebenes Szenario aus, was ein Merkmal eines Agenten ist.",
+      "feedbackIncorrect": "Ein Chatbot erzeugt nur Text und ein Workflow führt ein festgelegtes Tool aus. Hier verknüpft das Tool selbst mehrere Schritte und agiert auf dem Repository — das ist ein Agent. Wiederhole die Unterscheidung der Modi.",
+      "references": [
+        "M9.2",
+        "M9.3"
+      ]
+    },
+    {
+      "id": "Q076",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Der Teilnehmer wählt den minimalen Zugriffsumfang und die passende Kontrollschranke für eine Aufgabe mit nicht umkehrbarer Wirkung (Versand einer E-Mail).",
+      "prompt": "Du delegierst an einen Agenten die Aufgabe Z3: „Sende den Wochenbericht an qa-team@przyklad.test“. Eine versendete E-Mail ist nicht umkehrbar (sie lässt sich nicht zurückrufen). Wie konfigurierst du Berechtigungen und Kontrolle für diese Aufgabe?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Zugriff zum Versenden von E-Mails + Human-in-the-Loop: ein Mensch gibt den Inhalt vor dem Versand frei."
+        },
+        {
+          "id": "B",
+          "text": "Voller Zugriff auf das Postfach (Lesen und Senden) ohne Freigabe, denn es ist nur ein interner Bericht."
+        },
+        {
+          "id": "C",
+          "text": "Zugriff zum Versenden ohne Schranke, dafür aber mit aktiviertem Rollback der E-Mail nach Erkennen eines Fehlers."
+        },
+        {
+          "id": "D",
+          "text": "Kein Zugriff auf E-Mail — der Agent speichert den Bericht im Repository synt-shop und versendet niemals etwas."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Eine nicht umkehrbare Aktion (versendete E-Mail) erfordert eine HITL-Schranke vor der Wirkung, bei einem minimalen, auf den Versand beschränkten Umfang — genau das braucht Z3.",
+      "feedbackIncorrect": "Eine E-Mail lässt sich nicht zurückrufen, also existiert kein Rollback (C), und das Fehlen einer Schranke bei überzogenem Zugriff ist ein hohes Risiko (B). D erfüllt die Aufgabe nicht. Wiederhole die Wahl der Schranke für nicht umkehrbare Aktionen.",
+      "references": [
+        "M9.8",
+        "M9.6"
+      ]
+    },
+    {
+      "id": "Q077",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Der Teilnehmer wählt den minimalen Zugriffsumfang auf das Repository und beschränkt den Agenten auf einen Arbeitsbranch mit Review-Schranke statt auf Schreibzugriff auf main.",
+      "prompt": "Aufgabe Z4: Der Agent soll „einen Pull Request mit einem Fix im Repository synt-shop öffnen“. Welcher Zugriffsumfang ist minimal und sicher?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Schreibzugriff beschränkt auf einen Arbeitsbranch mit dem Öffnen eines PR; kein Schreibrecht (Push/Merge) auf den Branch main."
+        },
+        {
+          "id": "B",
+          "text": "Schreibzugriff auf den Branch main, damit der Agent den Fix sofort zusammenführt, ohne auf ein Review zu warten."
+        },
+        {
+          "id": "C",
+          "text": "Voller Administratorzugriff auf das Repository, einschließlich des Löschens von Branches und des Änderns von Einstellungen."
+        },
+        {
+          "id": "D",
+          "text": "Nur Lesezugriff auf das Repository — der Agent beschreibt den Fix in einem Kommentar, öffnet aber keinen PR."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Schreibzugriff auf einen Arbeitsbranch + PR schafft eine natürliche Review-Schranke, und das fehlende Recht auf main hält den minimalen, für die Aufgabe nötigen Umfang ein.",
+      "feedbackIncorrect": "Schreibzugriff auf main oder Admin-Zugriff sind überzogene Berechtigungen mit großer Wirkung (B, C), und reiner Lesezugriff erfüllt die Aufgabe nicht (D). Wiederhole das Prinzip des kleinsten benötigten Umfangs und die Rolle des PR als Schranke.",
+      "references": [
+        "M9.8",
+        "M9.7"
+      ]
+    },
+    {
+      "id": "Q078",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Der Teilnehmer beurteilt, welche der delegierten Aufgaben das größte Restrisiko trägt und die stärkste Kontrolle erfordert, indem er Umkehrbarkeit und Wirkung abwägt.",
+      "prompt": "Ein Agent in der CI PipeDemo (TEST-Umgebung) hat vier Aufgaben zu erledigen. Welche erfordert die STÄRKSTE Kontrolle (HITL-Schranke + vollständiges Log + Beschränkung des Umfangs), weil sie die größte Wirkung mit der schwierigsten Umkehrbarkeit verbindet?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Ändere die Konfiguration der TEST-Umgebung PipeDemo (potenzieller Schreibzugriff außerhalb von TEST, schwer rückgängig zu machen)."
+        },
+        {
+          "id": "B",
+          "text": "Fasse 10 Tickets aus TestRail-SANDBOX zusammen (nur Lesen, keine Änderungen)."
+        },
+        {
+          "id": "C",
+          "text": "Lies die Logs des Durchlaufs der Regressionstests (nur Lesen)."
+        },
+        {
+          "id": "D",
+          "text": "Erstelle einen internen Textbericht aus den Ergebnissen (lokaler Schreibzugriff, leicht überschreibbar)."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Das Ändern der Umgebungskonfiguration hat eine große Wirkung und das Risiko eines Schreibzugriffs außerhalb von TEST und ist schwer rückgängig zu machen — die Faustregel „nicht umkehrbar + große Wirkung = Schranke + vollständiges Audit“ zeigt darauf.",
+      "feedbackIncorrect": "Reine Leseoperationen (B, C) ändern den Zustand nicht, und ein lokaler Bericht lässt sich leicht überschreiben (D). Die stärkste Kontrolle erfordert eine Aktion mit großer Wirkung und schwieriger Umkehrbarkeit. Wiederhole die Klassifikation der Aufgaben, die ein Audit erfordern.",
+      "references": [
+        "M9.7",
+        "M9.8"
+      ]
+    },
+    {
+      "id": "Q079",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Der Teilnehmer benennt mehrere reale Risiken, die daraus entstehen, dass einem Agenten Zugriff auf Dateien, E-Mail, Repository und Testsystem gewährt wird.",
+      "prompt": "Welche der folgenden sind reale Risiken, wenn man einem Agenten weitreichenden Zugriff auf Dateien, E-Mail, Repository und Testmanagementsystem gewährt? Wähle alle korrekten aus.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Der Agent kann Opfer einer Prompt Injection werden, die in einem gelesenen Inhalt versteckt ist (z. B. in einem Ticket-Kommentar), und eine unbeabsichtigte Aktion ausführen."
+        },
+        {
+          "id": "B",
+          "text": "Eine fehlerhafte Entscheidung im ersten Schritt pflanzt sich über die folgenden Schritte fort, weil der Agent ohne Pause handelt."
+        },
+        {
+          "id": "C",
+          "text": "Der Agent kann eine nicht umkehrbare Wirkung auslösen, z. B. eine E-Mail nach außen senden oder Dateien löschen, die sich nicht wiederherstellen lassen."
+        },
+        {
+          "id": "D",
+          "text": "Das bloße Gewähren von weitreichendem Zugriff ist sicher, solange der Agent ein Modell mit deaktiviertem Gesprächsgedächtnis nutzt."
+        },
+        {
+          "id": "E",
+          "text": "Eine Ende-zu-Ende-Verschlüsselung der Kommunikation beseitigt die Risiken, die aus den vom Agenten ausgeführten Aktionen entstehen."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Reale Risiken sind die Anfälligkeit für Prompt Injection, die Fortpflanzung eines Fehlers zwischen den Schritten und nicht umkehrbare Wirkungen. Die Kontrolle besteht in der Begrenzung des Umfangs und HITL — nicht im Gesprächsgedächtnis und nicht in der Verschlüsselung allein.",
+      "feedbackIncorrect": "D und E sind trügerische Versprechen: ein deaktiviertes Gesprächsgedächtnis begrenzt die Berechtigungen nicht, und eine Transportverschlüsselung hält die Aktion des Agenten selbst nicht auf. Wiederhole die Zugriffslandkarte und die Risikoquellen (M9.4–M9.5).",
+      "references": [
+        "M9.4",
+        "M9.5"
+      ]
+    },
+    {
+      "id": "Q080",
+      "module": "M9",
+      "pillar": "security_governance",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Der Teilnehmer benennt die Elemente der minimalen Kontrolle und des Audits über das Handeln eines Agenten und grenzt sie von Scheinsicherheiten ab.",
+      "prompt": "Welche Elemente bilden tatsächlich die minimale Kontrolle und das Audit über das Handeln eines QA-Agenten? Wähle alle korrekten aus.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Permission Scope — die Beschränkung des Agenten auf den kleinsten benötigten Zugriffsumfang."
+        },
+        {
+          "id": "B",
+          "text": "Audit Log — die Aufzeichnung, was der Agent getan hat und wann, die eine Rekonstruktion des Ablaufs ermöglicht."
+        },
+        {
+          "id": "C",
+          "text": "Human-in-the-Loop — eine Freigabeschranke durch einen Menschen vor einer nicht umkehrbaren Wirkung."
+        },
+        {
+          "id": "D",
+          "text": "Rollback — die Möglichkeit, eine vorgenommene Änderung in den vorherigen Zustand zurückzusetzen."
+        },
+        {
+          "id": "E",
+          "text": "Dem Agenten volle Administratorrechte zu geben, um ihn nicht durch fehlenden Zugriff zu blockieren."
+        },
+        {
+          "id": "F",
+          "text": "Das Deaktivieren der Logs, damit der Agent schneller arbeitet und keine Spuren hinterlässt."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "feedbackCorrect": "Die vier Kontrollhebel sind: Berechtigungsumfang, Audit Log, HITL-Schranke und Rollback. Zusammen ergeben sie minimale Kontrolle und Auditierbarkeit.",
+      "feedbackIncorrect": "E und F sind Antimuster: volle Administratorrechte erhöhen das Risiko, und das Deaktivieren der Logs zerstört das Audit. Wiederhole das Modell der „4 Kontrollhebel“ und die Rolle des Audit Logs (M9.6, M9.8).",
+      "references": [
+        "M9.6",
+        "M9.8"
+      ]
+    }
+  ]
+}

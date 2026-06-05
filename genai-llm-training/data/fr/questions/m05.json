@@ -1,0 +1,369 @@
+{
+  "_meta": {
+    "module": "M5",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M5. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q033",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Le participant décrit le rôle de la base de données vectorielle dans la recherche sémantique ainsi que l'ordre des étapes, de la requête jusqu'aux fragments renvoyés.",
+      "prompt": "Une équipe construit un moteur de recherche sur la documentation de test de NotkaApp basé sur une base de données vectorielle (vector database). Quel est son rôle principal dans la recherche sémantique (semantic search) ?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Elle stocke les embeddings des fragments et permet de trouver rapidement les vecteurs les plus proches de l'embedding de la requête, afin de renvoyer les fragments de texte associés."
+        },
+        {
+          "id": "B",
+          "text": "Elle associe la requête aux fragments uniquement par correspondance exacte des mêmes mots-clés, en ignorant le sens."
+        },
+        {
+          "id": "C",
+          "text": "Elle génère une réponse en langage naturel à partir de la requête, en remplaçant le modèle de langage dans le pipeline."
+        },
+        {
+          "id": "D",
+          "text": "Elle stocke les documents bruts sous forme de fichiers et les expose via une recherche plein texte par expressions."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "La base de données vectorielle conserve les embeddings et trouve les vecteurs les plus proches de l'embedding de la requête ; la recherche fonctionne ainsi par le sens, et non par les mots littéraux.",
+      "feedbackIncorrect": "C'est une confusion avec la recherche par mots-clés ou avec le rôle du modèle génératif. Revois ce qu'est la semantic search et ce que fait une vector database (écran M5.2).",
+      "references": [
+        "M5.2",
+        "M5.1"
+      ]
+    },
+    {
+      "id": "Q034",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Le participant choisit la recherche exacte ou approchée (ANN) en fonction des caractéristiques du corpus et des exigences.",
+      "prompt": "Un testeur dispose d'un corpus synthétique d'environ 12 fragments de documentation QA et doit s'assurer qu'AUCUN fragment pertinent ne sera omis lors de la vérification de la couverture. Quelle approche convient ici ?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Recherche exacte (exact / brute force) — sur un petit corpus, le parcours de tous les vecteurs est peu coûteux et garantit une pertinence complète."
+        },
+        {
+          "id": "B",
+          "text": "Approximate nearest neighbor (ANN) avec un index agressif — car elle est toujours plus rapide et n'omet aucune correspondance."
+        },
+        {
+          "id": "C",
+          "text": "ANN avec un top-k très bas, pour ne renvoyer qu'un seul résultat et éviter les erreurs."
+        },
+        {
+          "id": "D",
+          "text": "Recherche par mots-clés au lieu de la recherche vectorielle, car elle est déterministe."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Sur un petit corpus, le coût du parcours de tous les vecteurs est faible, et la recherche exacte garantit qu'aucun fragment pertinent ne sera omis — ce qui compte lorsqu'une pertinence complète est nécessaire.",
+      "feedbackIncorrect": "L'ANN accélère au prix du risque d'omettre des résultats pertinents : elle ne garantit donc pas l'exhaustivité ; un top-k bas ne fait que tronquer les résultats. Revois le compromis exact vs ANN (écrans M5.3–M5.4).",
+      "references": [
+        "M5.4",
+        "M5.3"
+      ]
+    },
+    {
+      "id": "Q035",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Le participant analyse comment les réglages de l'ANN et du top-k se répercutent sur le couple de mesures recall et precision.",
+      "prompt": "Dans le débogueur de recherche, un testeur fait passer le top-k de 3 à 8 et, en même temps, relâche les paramètres de l'index ANN dans le sens de la vitesse. Quel est l'effet le plus probable sur le recall et la precision ?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Le recall augmente généralement (davantage de fragments pertinents peuvent entrer dans les résultats), mais la precision baisse, car davantage de fragments faiblement liés entrent dans les résultats."
+        },
+        {
+          "id": "B",
+          "text": "Le recall et la precision augmentent simultanément, car un top-k plus grand améliore toujours les deux mesures à la fois."
+        },
+        {
+          "id": "C",
+          "text": "Le recall baisse et la precision augmente, parce qu'un top-k plus grand restreint l'ensemble des résultats."
+        },
+        {
+          "id": "D",
+          "text": "Ni le recall ni la precision ne changeront, car le top-k et l'index n'influent pas sur la qualité des résultats."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Un top-k plus grand élargit l'ensemble des candidats, donc la chance de capturer les fragments pertinents augmente (recall ↑), et davantage de bruit entre aussi dans les résultats (precision ↓). Relâcher l'index ANN vers la vitesse agit en sens inverse sur le recall (il peut omettre des fragments pertinents). Les deux effets tirent en sens opposés et c'est l'ampleur des changements qui décide du résultat net — c'est pourquoi A décrit la direction la plus probable (recall ↑, precision ↓), mais le bilan réel doit être mesuré, pas supposé.",
+      "feedbackIncorrect": "Le recall et la precision évoluent généralement en sens opposés lorsqu'on élargit les résultats ; un top-k plus grand ne restreint pas l'ensemble. Revois les définitions de recall/precision et l'influence de l'index (écrans M5.4–M5.5).",
+      "references": [
+        "M5.5",
+        "M5.4"
+      ]
+    },
+    {
+      "id": "Q036",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Le participant identifie les facteurs de retrieval qui influent réellement sur l'ensemble des fragments renvoyés et sur sa qualité.",
+      "prompt": "Lesquels des facteurs suivants influent directement sur les fragments QUE renverra la similarity search et sur la qualité du résultat ? Choisis toutes les bonnes réponses.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Les paramètres de l'index (index) ANN — ils déplacent le point d'équilibre entre recall et vitesse/precision."
+        },
+        {
+          "id": "B",
+          "text": "Le filtrage des métadonnées (metadata filtering) — il restreint l'ensemble des candidats (precision ↑), mais un filtre trop strict perd des fragments pertinents (recall ↓)."
+        },
+        {
+          "id": "C",
+          "text": "La qualité des chunks (chunk quality) — une mauvaise frontière de fragment donne un vecteur au sens flou et un résultat similaire mais inutilisable."
+        },
+        {
+          "id": "D",
+          "text": "Le seuil de similarité (similarity threshold) — trop élevé, il écarte les fragments pertinents (recall ↓)."
+        },
+        {
+          "id": "E",
+          "text": "L'ordre d'ajout des documents à la base — les fragments insérés plus tôt sont toujours renvoyés plus haut."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "feedbackCorrect": "L'index, le filtre de métadonnées, la qualité des chunks et le seuil de similarité sont les véritables leviers qui pilotent l'ensemble des résultats et le couple recall/precision.",
+      "feedbackIncorrect": "L'ordre d'ajout des documents ne détermine pas le classement — ce qui compte, c'est la similarité des vecteurs et les réglages du retrieval. Revois l'influence de l'index, des métadonnées et des chunks (écrans M5.5–M5.7).",
+      "references": [
+        "M5.6",
+        "M5.5"
+      ]
+    },
+    {
+      "id": "Q037",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Le participant relie un symptôme de retrieval observé à sa cause la plus probable parmi l'index, les métadonnées, les chunks et le seuil.",
+      "prompt": "Un testeur diagnostique les résultats sur un corpus QA synthétique. Quelles affirmations relient correctement le symptôme à la cause ? Choisis toutes les bonnes réponses.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Le moteur a renvoyé zéro fragment alors qu'un document pertinent existe — la cause peut être un filtre de métadonnées trop strict ou un seuil de similarité trop élevé, pas les données elles-mêmes."
+        },
+        {
+          "id": "B",
+          "text": "Le fragment renvoyé a une similarité élevée, mais il s'interrompt au milieu d'une phrase et reste inutilisable — c'est le symptôme d'une mauvaise frontière de chunk."
+        },
+        {
+          "id": "C",
+          "text": "Un fragment pertinent existe dans le corpus, mais il ne figure pas dans les résultats de l'ANN — il est possible qu'un index agressif l'ait omis au profit de la vitesse."
+        },
+        {
+          "id": "D",
+          "text": "Une baisse du recall signifie toujours que les embeddings sont mal calculés et qu'il faut changer de modèle d'embeddings."
+        },
+        {
+          "id": "E",
+          "text": "Si les résultats sont pertinents mais trop nombreux et bruités, l'un des remèdes consiste à restreindre par un filtre de métadonnées ou un top-k plus bas."
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C",
+        "E"
+      ],
+      "feedbackCorrect": "Chacune de ces affirmations relie correctement le symptôme (zéro résultat, chunk tronqué, omission par l'ANN, excès de bruit) au levier de retrieval correspondant (filtre/seuil, chunk, index, top-k).",
+      "feedbackIncorrect": "Une baisse du recall provient le plus souvent de l'index, du filtre ou du seuil, et non automatiquement d'embeddings erronés — c'est une surinterprétation. Revois le diagnostic des écrans M5.5–M5.8.",
+      "references": [
+        "M5.7",
+        "M5.6"
+      ]
+    },
+    {
+      "id": "Q038",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Le participant diagnostique un cas où un fragment à similarité élevée n'est pas pertinent, bien que la base fonctionne correctement.",
+      "prompt": "La base de données vectorielle de NotkaApp contient notamment les fragments : DOC1 « le jeton de session expire après 30 min d'inactivité », DOC3 « lien de réinitialisation du mot de passe valable 30 min, à usage unique ». Pour la requête « Au bout de combien de temps le lien de réinitialisation du mot de passe expire-t-il ? », le retrieval a renvoyé en première position DOC1 avec une très haute similarité. Comment diagnostiquer au mieux ce résultat ?",
+      "options": [
+        {
+          "id": "A",
+          "text": "DOC1 est sémantiquement similaire (les deux parlent de « 30 min » et d'expiration), mais il concerne la session, pas la réinitialisation du mot de passe — une similarité élevée n'équivaut pas à la pertinence ; la bonne source est DOC3."
+        },
+        {
+          "id": "B",
+          "text": "La base de données vectorielle fonctionne mal et doit être reconstruite, car elle a renvoyé un document non pertinent."
+        },
+        {
+          "id": "C",
+          "text": "DOC1 est la bonne réponse, car il a la plus haute similarité, donc le sujet correspond à la requête."
+        },
+        {
+          "id": "D",
+          "text": "Le problème disparaît rien qu'en augmentant le top-k à 10, car alors DOC1 cessera d'être renvoyé."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "C'est le cas d'école « similaire, mais inutilisable » : les mots qui se recoupent (30 min, expiration) augmentent la similarité de DOC1, alors que la source pertinente est DOC3 — la similarité n'est pas la pertinence.",
+      "feedbackIncorrect": "Une similarité élevée ne prouve pas la pertinence, et la base ne fonctionne pas mal — DOC1 recouvre simplement la requête sur le plan lexical. Revois le diagnostic « similaire ≠ utilisable » (écrans M5.7–M5.8).",
+      "references": [
+        "M5.8",
+        "M5.7"
+      ]
+    },
+    {
+      "id": "Q039",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Le participant évalue pourquoi un fragment pertinent a disparu des résultats, et relie cela à la configuration du filtre de métadonnées.",
+      "prompt": "Un testeur cherche la réponse à « Au bout de combien de temps le lien de réinitialisation du mot de passe expire-t-il ? » dans le corpus NotkaApp, où DOC3 (réinitialisation du mot de passe) porte la métadonnée typ_dokumentu=\"przypadek_testowy\". Pour limiter le bruit, il active le filtre de métadonnées typ_dokumentu=\"wymaganie\". Le moteur renvoie désormais 0 fragment pertinent. Quel est le meilleur diagnostic ?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Le filtre de métadonnées a écarté DOC3, car il a un typ_dokumentu différent de celui autorisé par le filtre — un filtre trop strict a augmenté la precision, mais perdu le résultat pertinent (recall ↓) ; il faut élargir le filtre."
+        },
+        {
+          "id": "B",
+          "text": "DOC3 n'existe plus dans la base et il faut le réindexer, sinon il n'apparaîtra jamais."
+        },
+        {
+          "id": "C",
+          "text": "Le seuil de similarité est trop bas et c'est pourquoi une liste vide a été renvoyée — il faut l'abaisser encore."
+        },
+        {
+          "id": "D",
+          "text": "L'embedding de la requête est erroné, car un filtre de métadonnées correct ne peut pas supprimer un fragment pertinent."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Le filtre de métadonnées restreint l'ensemble avant/après la similarité : en n'autorisant que le type « wymaganie », il a écarté DOC3 (type « przypadek_testowy ») — c'est le compromis classique precision ↑ / recall ↓, que l'on résout en élargissant le filtre.",
+      "feedbackIncorrect": "Le résultat vide vient ici de la configuration du filtre, pas d'un document manquant ni du seuil — un filtre trop strict perd les fragments pertinents. Revois le filtrage des métadonnées (écran M5.6).",
+      "references": [
+        "M5.6",
+        "M5.8"
+      ]
+    },
+    {
+      "id": "Q040",
+      "module": "M5",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L4",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Le participant choisit la meilleure correction des paramètres de retrieval, qui supprime la cause de la non-pertinence sans dégrader les autres résultats.",
+      "prompt": "Pour une requête sur la réinitialisation du mot de passe dans NotkaApp, le retrieval renvoie DOC4 (FAQ marketing : avantages et tarifs) avec une similarité élevée ainsi que le fragment DOC2 (politique des mots de passe) tronqué au milieu d'une phrase, tandis que le DOC3 pertinent (réinitialisation du mot de passe) n'arrive qu'en 6e position. Le seuil de similarité est désactivé, top-k=3, aucun filtre. Quelle correction améliorera le mieux la pertinence des résultats ?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Ajouter un filtre de métadonnées écartant les documents marketing et améliorer les frontières des chunks, puis relever le top-k de sorte que DOC3 entre dans les résultats — cela s'attaque aux causes (bruit des métadonnées, mauvais chunk, top-k trop bas)."
+        },
+        {
+          "id": "B",
+          "text": "Seulement relever le seuil de similarité à une valeur très élevée — cela supprimera DOC4 et DOC2, mais risque aussi d'écarter DOC3 (recall ↓)."
+        },
+        {
+          "id": "C",
+          "text": "Laisser les réglages inchangés et saisir manuellement DOC3 comme réponse, car puisqu'il existe dans le corpus, le retrieval ne nécessite aucune correction."
+        },
+        {
+          "id": "D",
+          "text": "Abaisser le top-k à 1, pour ne renvoyer que le fragment le plus similaire et éliminer le bruit."
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "La meilleure correction supprime des causes précises : le filtre de métadonnées élimine le DOC4 marketing, l'amélioration du chunk sauve le DOC2 tronqué, et un top-k plus élevé laisse entrer le DOC3 pertinent — sans risquer de perdre le bon résultat.",
+      "feedbackIncorrect": "Un seuil élevé seul ou un top-k=1 risque d'écarter le DOC3 pertinent (recall ↓), et la saisie manuelle de la réponse ne corrige pas le retrieval. Revois l'influence des métadonnées, des chunks et du top-k (écrans M5.6–M5.9).",
+      "references": [
+        "M5.9",
+        "M5.6"
+      ]
+    }
+  ]
+}

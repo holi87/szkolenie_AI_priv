@@ -23,12 +23,25 @@ function flagSvg(code) {
     r.setAttribute("x", x); r.setAttribute("y", y); r.setAttribute("width", w); r.setAttribute("height", h); r.setAttribute("fill", fill);
     svg.appendChild(r);
   };
+  // Wielokąt (gwiazda VN) — element NS jak diagonale EN; dom-stub createElementNS zwraca generyczny węzeł.
+  const poly = (points, fill) => {
+    const p = document.createElementNS(SVG_NS, "polygon");
+    p.setAttribute("points", points); p.setAttribute("fill", fill);
+    svg.appendChild(p);
+  };
   if (code === "pl") { rect(0, 0, 20, 7, "#ffffff"); rect(0, 7, 20, 7, "#dc143c"); }
   else if (code === "en") { // uproszczony GB: granat + biało-czerwony krzyż
     rect(0, 0, 20, 14, "#012169");
     rect(0, 5, 20, 4, "#ffffff"); rect(8, 0, 4, 14, "#ffffff");
     rect(0, 6, 20, 2, "#c8102e"); rect(9, 0, 2, 14, "#c8102e");
-  } else { rect(0, 0, 20, 14, "#5b6472"); } // nieznany locale — neutralny kafel
+  }
+  else if (code === "es") { rect(0, 0, 20, 3.5, "#aa151b"); rect(0, 3.5, 20, 7, "#f1bf00"); rect(0, 10.5, 20, 3.5, "#aa151b"); } // ES: poziomo czerwony / żółty (2×) / czerwony
+  else if (code === "fr") { rect(0, 0, 6.67, 14, "#0055a4"); rect(6.67, 0, 6.67, 14, "#ffffff"); rect(13.33, 0, 6.67, 14, "#ef4135"); } // FR: pionowo niebieski / biały / czerwony
+  else if (code === "de") { rect(0, 0, 20, 4.67, "#000000"); rect(0, 4.67, 20, 4.67, "#dd0000"); rect(0, 9.33, 20, 4.67, "#ffce00"); } // DE: poziomo czarny / czerwony / złoty
+  else if (code === "it") { rect(0, 0, 6.67, 14, "#008c45"); rect(6.67, 0, 6.67, 14, "#ffffff"); rect(13.33, 0, 6.67, 14, "#cd212a"); } // IT: pionowo zielony / biały / czerwony
+  else if (code === "uk") { rect(0, 0, 20, 7, "#0057b7"); rect(0, 7, 20, 7, "#ffd700"); } // UK: poziomo niebieski (góra) / żółty (dół)
+  else if (code === "vi") { rect(0, 0, 20, 14, "#da251d"); poly("10,2 11.18,5.38 14.76,5.45 11.9,7.62 12.94,11.05 10,9 7.06,11.05 8.1,7.62 5.24,5.45 8.82,5.38", "#ffff00"); } // VI: czerwone tło + żółta gwiazda 5-ramienna
+  else { rect(0, 0, 20, 14, "#5b6472"); } // nieznany locale — neutralny kafel
   svg.appendChild(document.createElementNS(SVG_NS, "title")); // bez tekstu (aria-hidden) — tylko poprawny węzeł
   return svg;
 }

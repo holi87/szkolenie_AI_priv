@@ -1,0 +1,116 @@
+{
+  "_meta": {
+    "issue": "#21 [21][M4] Wdroż moduły M3-M6",
+    "storyboard": "docs/storyboard/m03-parametry.md",
+    "interaction": "Suwaki generacji (kind: tune)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (SklepDemo/NotkaApp). Output interakcji jest prerenderowany (nie z żywego modelu). ZERO PII.",
+    "note": "Egzemplarz referencyjny typu tune: parametry → autorskie efekty (dane) + scorowany checkpoint."
+  },
+  "module": "M3",
+  "intro": "Gli stessi dati di input e lo stesso modello possono produrre risposte diverse, perché la generazione è governata da parametri. Nel QA la riproducibilità del risultato è il fondamento di una documentazione e di una regressione affidabili — parametri non controllati producono output imprevedibile.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Perché controllare la generazione?",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Tre comandi decidono la forma della risposta: temperature e top-p (casualità) e max tokens (lunghezza). Prima di fidarti dell'output nella documentazione di test, devi sapere come impostarli." },
+        { "kind": "callout", "variant": "info", "title": "Determinismo apparente", "text": "Una temperatura bassa riduce la casualità, ma non garantisce un risultato identico a ogni esecuzione — resta comunque un modello probabilistico." }
+      ]
+    },
+    {
+      "id": "s2-temperature",
+      "title": "Temperature — dal formale al creativo",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Temperature", "original": "temperatura", "text": "comando che regola la casualità nella scelta del token successivo." },
+        { "kind": "list", "items": [
+          "Bassa (~0,0–0,3): risposte conservative, riproducibili, formali — per la documentazione e i passi di test.",
+          "Alta (~0,8–1,2): risposte varie, creative, meno prevedibili — per il brainstorming di dati di test."
+        ] }
+      ]
+    },
+    {
+      "id": "s3-wysoka-losowosc",
+      "title": "Casualità elevata e lavoro di QA",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Una temperatura alta nel QA significa assenza di riproducibilità (due esecuzioni = due passi diversi), deriva dei contenuti, difficoltà di revisione e audit e rischio di modifiche silenziose nella regressione." },
+        { "kind": "callout", "variant": "warn", "title": "Regola", "text": "Quando contano la riproducibilità e la conformità al requisito — riduci la casualità." }
+      ]
+    },
+    {
+      "id": "s4-top-p",
+      "title": "top-p — il secondo comando della casualità",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "top-p", "original": "nucleus sampling", "text": "soglia di probabilità cumulata — restringe il pool dei candidati per il token successivo a quelli più probabili la cui somma raggiunge p." },
+        { "kind": "paragraph", "text": "Entrambi i parametri regolano la varietà; di solito se ne regola uno per volta. Un top-p basso = scelta più ristretta e più sicura (vocabolario stabile dei termini QA); alto = formulazioni più ampie e rischiose." }
+      ]
+    },
+    {
+      "id": "s5-max-tokens",
+      "title": "max tokens — quando la risposta si interrompe",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "max tokens", "original": "numero massimo di token della risposta", "text": "limite rigido sulla lunghezza dell'output." },
+        { "kind": "paragraph", "text": "Il superamento del limite tronca la risposta a metà frase, tabella o elenco — mancano gli ultimi passi o i criteri di accettazione. Lo riconosci da una frase interrotta e da un elenco non chiuso. Reazione: aumenta il limite o chiedi un formato più breve." }
+      ]
+    },
+    {
+      "id": "s6-decyzja",
+      "title": "Quale impostazione per la documentazione di test?",
+      "type": "decision",
+      "blocks": [
+        { "kind": "paragraph", "text": "Confronta due preset per lo stesso compito (descrivere i passi di un caso di test). Variante A: temp 0,2 / top-p 0,3 / limite alto. Variante B: temp 1,0 / top-p 0,95 / limite basso." },
+        { "kind": "paragraph", "text": "Per la documentazione scegli una casualità più bassa e un margine sulla lunghezza — questo garantisce riproducibilità e nessun troncamento. Tra poco lo verificherai con i cursori." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "tune",
+    "id": "m3-suwaki",
+    "title": "Cursori di generazione",
+    "intro": "Imposta i parametri e osserva come cambia l'output simulato per il compito «elenca i passi di test del login in SklepDemo». Poi rispondi al checkpoint.",
+    "outputLabel": "Output simulato per le impostazioni scelte:",
+    "controls": [
+      { "id": "temp", "label": "Temperature", "levels": [
+        { "value": "0.2", "label": "Bassa (0,2)", "effect": "Formalità: alta. Passi di test riproducibili, stesso assetto a ogni esecuzione." },
+        { "value": "1.0", "label": "Alta (1,0)", "effect": "Formalità: bassa. I passi variano tra le esecuzioni — assenza di riproducibilità, rischio di deriva dei contenuti." }
+      ] },
+      { "id": "topp", "label": "top-p", "levels": [
+        { "value": "0.3", "label": "Basso (0,3)", "effect": "Vocabolario dei termini QA stabile e prevedibile." },
+        { "value": "0.95", "label": "Alto (0,95)", "effect": "Formulazioni più ampie, a volte rischiose — più difficili da revisionare." }
+      ] },
+      { "id": "maxtok", "label": "max tokens", "levels": [
+        { "value": "512", "label": "Limite alto (512)", "effect": "Completezza: piena. Tutti i passi e i criteri di accettazione rientrano." },
+        { "value": "64", "label": "Limite basso (64)", "effect": "⚠ Risposta troncata — l'elenco dei passi si interrompe a metà, manca il riepilogo. Aumenta il limite." }
+      ] }
+    ],
+    "checkpoint": {
+      "prompt": "Per descrivere i passi di un caso di test (contano la riproducibilità e la completezza) quale impostazione è più sicura?",
+      "type": "single_choice",
+      "options": [
+        { "id": "A", "text": "temp 0,2 / top-p 0,3 / limite alto — bassa casualità e margine di lunghezza" },
+        { "id": "B", "text": "temp 1,0 / top-p 0,95 / limite basso — creativo e breve" }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Bene: una casualità bassa garantisce la riproducibilità e un limite alto protegge dal troncamento dell'elenco dei passi.",
+      "feedbackIncorrect": "Una casualità alta rovina la riproducibilità e un limite basso tronca i passi — pessimo per la documentazione. Scegli una temperatura bassa e un margine di lunghezza."
+    }
+  },
+  "summary": {
+    "points": [
+      "Temperature e top-p regolano la casualità; max tokens regola la lunghezza della risposta.",
+      "Per il QA preferisci una casualità bassa e un margine di lunghezza — riproducibilità e nessun troncamento.",
+      "Verifica sempre la riproducibilità e la completezza dell'output prima di usarlo nella documentazione."
+    ],
+    "checklist": [
+      "Ho ridotto la casualità dove conta la riproducibilità?",
+      "Il limite di lunghezza conterrà l'intera risposta?",
+      "L'output è uguale a una nuova esecuzione?"
+    ],
+    "checklistTitle": "Checklist — controllo della generazione",
+    "nextStep": "Passo successivo: M4 — embeddings e similarità semantica (o il modulo obbligatorio successivo del percorso)."
+  }
+}

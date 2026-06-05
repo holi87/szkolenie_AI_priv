@@ -1,0 +1,149 @@
+{
+  "_meta": {
+    "issue": "#21 [21][M4] Wdroż moduły M3-M6",
+    "storyboard": "docs/storyboard/m05-vector-db.md",
+    "interaction": "Retrieval debugger (kind: tune)",
+    "scenario": "SC-RAG-01 — mini-korpus dokumentacji QA (DOC1-DOC4, NotkaApp)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (NotkaApp/SklepDemo/PipeDemo). Output interakcji jest prerenderowany (autorski lookup po poziomach), nie z żywego retrievalu. ZERO PII, ZERO realnych domen.",
+    "note": "Egzemplarz typu tune wg m03: kontrolki retrievalu → autorskie efekty (recall/precision) + scorowany checkpoint diagnostyczny. Storyboard 1-8 → screens; ekran 9 → interaction; ekran 10 (quiz) zasilany z questions/m05.json; ekran 11 → summary."
+  },
+  "module": "M5",
+  "intro": "Cuando un equipo construye un buscador sobre la documentación de pruebas o un RAG, la calidad de la respuesta depende de QUÉ encontró el retrieval en primer lugar. El tester debe saber evaluar si los fragmentos devueltos son relevantes y diagnosticar por qué no lo son. Este módulo muestra el papel de la base de datos vectorial, el compromiso entre exact y ANN, así como el impacto del índice, los metadatos y los fragmentos sobre el resultado.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "¿Para qué necesita un tester una base de datos vectorial?",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Cada vez con más frecuencia, QA prueba funciones basadas en la búsqueda semántica: un buscador sobre la documentación de pruebas o un asistente RAG que responde preguntas sobre un producto. En ambos casos, la relevancia de la respuesta final empieza por el retrieval — por qué fragmentos se encontraron." },
+        { "kind": "paragraph", "text": "Tu tarea como tester: evaluar si los fragmentos devueltos son relevantes y diagnosticar por qué a veces no lo son. En este módulo conocerás el papel de la base de datos vectorial, la diferencia entre exact y ANN, el impacto del índice, los metadatos y los fragmentos y, al final, usarás un depurador de búsqueda sobre el corpus sintético de NotkaApp." },
+        { "kind": "callout", "variant": "info", "title": "Qué vamos a construir aquí", "text": "Trabajamos sobre un minicorpus ficticio de documentación de QA de la aplicación NotkaApp — todos los datos son sintéticos, sin clientes reales y sin PII." }
+      ]
+    },
+    {
+      "id": "s2-czym-jest",
+      "title": "Qué es una base de datos vectorial",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Base de datos vectorial", "original": "vector database", "text": "un almacén que guarda los embeddings de los fragmentos (de M4) y permite encontrar rápidamente los vectores más parecidos al embedding de la consulta." },
+        { "kind": "paragraph", "text": "La búsqueda semántica (semantic search) funciona por significado, no por palabras literales. El recorrido es fijo: consulta → embedding de la consulta → vectores más cercanos en la base de datos → fragmentos de texto asociados. A diferencia de la búsqueda por palabras clave, que empareja las mismas palabras — aquí cuenta la cercanía de significado." },
+        { "kind": "diagram", "title": "De la consulta a los fragmentos", "caption": "El flujo de la búsqueda semántica.", "textAlt": "Cuatro pasos en una sola secuencia: (1) una consulta de texto, por ejemplo «al cabo de cuánto tiempo caduca el enlace de restablecimiento de contraseña», (2) el modelo de embeddings la convierte en un vector, (3) la base de datos vectorial compara ese vector con los embeddings de los fragmentos y elige los más cercanos, (4) devuelve los fragmentos de texto asociados, por ejemplo DOC3 sobre el restablecimiento de contraseña." },
+        { "kind": "callout", "variant": "info", "title": "El minicorpus de NotkaApp", "text": "A lo largo de este módulo circula un corpus de 4 fragmentos: DOC1 — el token de sesión caduca tras 30 min de inactividad; DOC2 — política de contraseñas (mín. 12 caracteres, bloqueo tras 3 errores); DOC3 — restablecimiento de contraseña: el enlace por correo es válido 30 min, de un solo uso; DOC4 — FAQ de marketing (ventajas y precios)." }
+      ]
+    },
+    {
+      "id": "s3-dokladne-czy-przyblizone",
+      "title": "¿Exacto o aproximado?",
+      "type": "decision",
+      "blocks": [
+        { "kind": "paragraph", "text": "Una decisión antes de elegir el enfoque. Tienes dos escenarios sobre el corpus de NotkaApp. Escenario A: un corpus pequeño (una docena de fragmentos) y el requisito de que NINGÚN fragmento relevante se escape al verificar la cobertura. Escenario B: un corpus contado en millones de fragmentos, donde lo que cuenta por encima de todo es la velocidad de respuesta." },
+        { "kind": "paragraph", "text": "Reflexiona: ¿cuándo te puedes permitir revisar todos los vectores (de forma exacta, pero más lenta) y cuándo tienes que tomar un atajo a través del índice (más rápido, pero con riesgo de omisión)? Dentro de un momento descompondremos este compromiso en sus factores." }
+      ]
+    },
+    {
+      "id": "s4-exact-vs-ann",
+      "title": "Exact vs ANN — el compromiso",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Búsqueda exacta", "original": "exact / brute force", "text": "revisa todos los vectores de la base de datos y devuelve los verdaderamente más cercanos — exacta, pero lenta; rentable con un corpus pequeño." },
+        { "kind": "definition", "term": "ANN", "original": "approximate nearest neighbor", "text": "búsqueda del vecino más cercano aproximado; usa un índice para buscar más rápido a costa del riesgo de omitir parte de los resultados relevantes." },
+        { "kind": "paragraph", "text": "La calidad del retrieval la evaluamos con un par de medidas. El recall (completitud de los aciertos) indica cuántos del total de fragmentos relevantes regresaron realmente. La precision (pureza de los aciertos) indica qué parte de los fragmentos devueltos es de verdad relevante. Estas medidas suelen ir en direcciones opuestas: amplías los resultados — sube el recall, baja la precision." },
+        { "kind": "table", "title": "Exact vs ANN", "caption": "Comparación de los enfoques.", "headers": ["Característica", "Exact (brute force)", "ANN (con índice)"], "rows": [["Qué hace", "revisa todos los vectores", "explora un atajo a través del índice"], ["Exactitud", "completa — no omite nada", "aproximada — puede omitir relevantes"], ["Velocidad", "lenta, crece con el corpus", "rápida, escala a conjuntos grandes"], ["Cuándo usarla", "corpus pequeño, requisito de relevancia completa", "corpus grande, cuenta el tiempo de respuesta"]], "textAlt": "La tabla compara dos enfoques en cuatro dimensiones. Exact (brute force) revisa todos los vectores, da una exactitud completa (no omite nada), es lenta y crece con el tamaño del corpus; úsala con un corpus pequeño y un requisito de relevancia completa. ANN explora un atajo a través del índice, da un resultado aproximado (puede omitir relevantes), es rápida y escala a conjuntos grandes; úsala con un corpus grande, cuando cuenta el tiempo de respuesta." }
+      ]
+    },
+    {
+      "id": "s5-indeks",
+      "title": "El índice y su impacto",
+      "type": "content",
+      "hideForPaths": ["S1", "S2"],
+      "blocks": [
+        { "kind": "definition", "term": "Índice", "original": "index", "text": "estructura de datos que acelera el ANN; sus parámetros desplazan el punto entre recall y velocidad y precision." },
+        { "kind": "paragraph", "text": "Sin matemáticas: un índice agresivo (orientado a la velocidad) explora una porción más pequeña del espacio de vectores, por lo que a veces omite un fragmento relevante aunque este exista en la base de datos. Un índice más suave explora más — más lento, pero pierde algo con menos frecuencia." },
+        { "kind": "callout", "variant": "warn", "title": "Trampa de diagnóstico", "text": "«No se encontró nada» o «falta un documento relevante conocido» suele ser culpa de los ajustes del índice, no de los datos. Antes de dar por hecho que el fragmento no está en el corpus, comprueba si el ANN simplemente no lo omitió." }
+      ]
+    },
+    {
+      "id": "s6-metadane",
+      "title": "Filtrado de metadatos",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Filtrado de metadatos", "original": "metadata filtering", "text": "estrechamiento del conjunto de candidatos por atributos del fragmento (p. ej. tipo_documento, modulo, version) antes o después de calcular la similitud." },
+        { "kind": "paragraph", "text": "El filtro de metadatos es una palanca de precisión potente. Al admitir solo los fragmentos adecuados (p. ej. tipo_documento = requisito), cribas el ruido — sube la precision. Pero cuidado: un filtro demasiado estricto puede recortar un fragmento relevante de otro tipo, con lo que baja el recall." },
+        { "kind": "callout", "variant": "warn", "title": "Ejemplo sobre NotkaApp", "text": "El relevante DOC3 (restablecimiento de contraseña) tiene tipo_documento = caso_de_prueba. Si activas el filtro «solo requisito», DOC3 desaparece de los resultados — el filtro subió la precision, pero perdió el fragmento adecuado (bajó el recall)." }
+      ]
+    },
+    {
+      "id": "s7-chunki",
+      "title": "Calidad de los fragmentos",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Chunk", "original": "chunk", "text": "fragmento de un documento indexado como una sola unidad y convertido en un solo vector." },
+        { "kind": "paragraph", "text": "El límite del fragmento decide el significado del vector. Un mal límite — una frase cortada por la mitad o un amasijo de dos requisitos distintos — produce un vector de significado difuso y, como resultado, un resultado parecido pero inútil. Un fragmento demasiado grande mezcla muchos temas; uno demasiado pequeño pierde el contexto necesario para entender el fragmento." },
+        { "kind": "paragraph", "text": "Esto enlaza directamente con el diagnóstico «parecido, pero inútil»: un fragmento puede tener una similitud alta y, aun así, no servir como respuesta — porque está cortado o trata de un tema colindante. La similitud no es lo mismo que la relevancia." }
+      ]
+    },
+    {
+      "id": "s8-diagnoza",
+      "title": "Parecido, pero inútil — el diagnóstico",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Un miniejercicio de diagnóstico (sin puntuar, de calentamiento antes del depurador). La consulta al corpus de NotkaApp dice: «¿al cabo de cuánto tiempo caduca el enlace de restablecimiento de contraseña?». El retrieval devolvió tres fragmentos con similitud alta, pero solo uno es útil." },
+        { "kind": "list", "ordered": true, "items": [
+          "DOC1 (el token de sesión caduca tras 30 min de inactividad) — similitud muy alta: se solapan las palabras «30 min» y «caduca», pero es otro tema (sesión, no restablecimiento). Parecido, pero no relevante.",
+          "DOC3 (restablecimiento de contraseña: el enlace por correo es válido 30 min, de un solo uso) — esta es la fuente correcta de la respuesta.",
+          "DOC4 (FAQ de marketing: ventajas y precios) — cayó en los resultados como ruido temático; inútil."
+        ] },
+        { "kind": "paragraph", "text": "Antes de echar mano del primer mando, nombra la causa de la falta de relevancia: un mal límite de fragmento, la falta de un filtro de metadatos que cribe el marketing, la omisión de un fragmento mejor por el ANN, o simplemente confundir la similitud con la relevancia. En la pantalla de interacción comprobarás qué corrección ayuda de verdad." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "tune",
+    "id": "m5-retrieval-debugger",
+    "title": "Retrieval debugger",
+    "intro": "Ajusta los parámetros del retrieval para la consulta «¿al cabo de cuánto tiempo caduca el enlace de restablecimiento de contraseña?» sobre el corpus de NotkaApp (DOC1 sesión, DOC2 política de contraseñas, DOC3 restablecimiento de contraseña — relevante, DOC4 FAQ de marketing). Observa cómo cambia el conjunto de fragmentos devueltos y el par recall/precision, y luego responde al checkpoint.",
+    "outputLabel": "Resultado simulado del retrieval para los ajustes elegidos (fragmentos devueltos + recall/precision):",
+    "controls": [
+      { "id": "topk", "label": "top-k (número de fragmentos devueltos)", "levels": [
+        { "value": "2", "label": "Bajo (2)", "effect": "Solo regresan los 2 fragmentos más parecidos: DOC1 (sesión) y DOC3 (restablecimiento). La precision es decente, pero el recall es frágil — si el relevante DOC3 cayera en el ranking, saldría del dúo y el resultado quedaría vacío." },
+        { "value": "6", "label": "Alto (6)", "effect": "Regresan casi todos los fragmentos, incluido el relevante DOC3 — recall más alto. Pero a los resultados entra también el parecido-pero-inútil DOC1 (sesión) y el DOC4 de marketing — precision más baja, más ruido que cribar." }
+      ] },
+      { "id": "prog", "label": "Umbral de similitud (similarity threshold)", "levels": [
+        { "value": "low", "label": "Bajo (laxo)", "effect": "Deja pasar fragmentos incluso con poca similitud — recall alto, pero precision baja: el ruido entra en los resultados (p. ej. el DOC4 de marketing)." },
+        { "value": "high", "label": "Alto (estricto)", "effect": "Solo admite fragmentos de similitud alta. Atención: el parecido-pero-no-relevante DOC1 (sesión) tiene una puntuación alta, así que el umbral NO lo elimina — y, en cambio, arriesga cortar el relevante DOC3 si su puntuación es más baja (baja el recall)." }
+      ] },
+      { "id": "filtr", "label": "Filtro de metadatos (tipo_documento)", "levels": [
+        { "value": "off", "label": "Desactivado", "effect": "Sin filtro — en el conjunto quedan todos los tipos, incluidos el DOC4 de marketing y los fragmentos de tema colindante. Precision más baja." },
+        { "value": "topic", "label": "Activado: admite la documentación de producto, corta el marketing", "effect": "El filtro criba el DOC4 de marketing y estrecha el conjunto a la documentación de producto — apunta al tema «restablecimiento/cuenta». La precision sube y el relevante DOC3 se queda en los resultados. Es la palanca que elimina el ruido parecido-pero-no-relevante sin perder el fragmento adecuado — siempre que el filtro no sea demasiado estrecho (un filtro demasiado estricto recortaría DOC3)." }
+      ] }
+    ],
+    "checkpoint": {
+      "prompt": "El similarity search devolvió a la cabeza DOC1 (el token de sesión caduca tras 30 min) — un fragmento parecido a la consulta sobre el restablecimiento de contraseña, pero inútil porque trata de la sesión. DOC1 tiene similitud ALTA. ¿Qué cambias primero para mejorar la precisión del resultado?",
+      "type": "single_choice",
+      "options": [
+        { "id": "A", "text": "Activar un filtro de metadatos que apunte al tema (documentación de restablecimiento/cuenta, corte de los temas colindantes) — es una señal ortogonal a la similitud, así que criba el muy-parecido pero no-relevante DOC1 sin tocar el relevante DOC3." },
+        { "id": "B", "text": "Subir el umbral de similitud a un valor muy alto — dado que DOC1 es no relevante, basta con cortar los resultados más débiles." },
+        { "id": "C", "text": "Bajar el top-k a 1 — entonces regresa solo el fragmento más parecido y el ruido desaparece." },
+        { "id": "D", "text": "Aceptar DOC1 como respuesta correcta, porque tiene la similitud más alta con la consulta." }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Bien. DOC1 es no relevante a pesar de su similitud alta, así que las palancas basadas solo en la puntuación de similitud fallarán. El filtro de metadatos es una señal ortogonal — corta los temas colindantes (sesión, marketing) con independencia de lo «parecidos» que sean.",
+      "feedbackIncorrect": "La trampa: DOC1 tiene similitud ALTA, así que subir el umbral no lo eliminará (y arriesga cortar el relevante DOC3 → baja el recall), y top-k=1 dejaría precisamente ese fragmento no relevante en la cima. La similitud no es relevancia — criba el tema colindante con un filtro de metadatos (señal ortogonal). Repasa la pantalla sobre el filtrado de metadatos."
+    }
+  },
+  "summary": {
+    "points": [
+      "La base de datos vectorial decide QUÉ encontró el retrieval: guarda los embeddings y devuelve los vectores más cercanos respecto a la consulta (búsqueda semántica).",
+      "Exact vs ANN es un compromiso: exacto y lento (corpus pequeño, relevancia completa) frente a rápido con riesgo de omisión (corpus grande).",
+      "El índice, el filtro de metadatos, la calidad de los fragmentos y el umbral de similitud gobiernan el par recall/precision — son las palancas del diagnóstico del retrieval.",
+      "Parecido no significa útil: un fragmento de similitud alta puede ser no relevante — lo cribas con una señal ortogonal (filtro de metadatos), no solo con el umbral."
+    ],
+    "checklist": [
+      "¿Los fragmentos devueltos son de verdad relevantes o solo léxicamente parecidos?",
+      "¿Un resultado vacío o pobre es culpa del índice, del filtro o del umbral, y no de una falta de datos?",
+      "¿Mi filtro de metadatos no es demasiado estricto y no ha recortado un fragmento relevante (recall)?"
+    ],
+    "checklistTitle": "Lista de comprobación — diagnóstico del retrieval",
+    "nextStep": "Siguiente paso: M6 — RAG: cómo construir una respuesta con citas y fuentes a partir de un buen retrieval."
+  }
+}

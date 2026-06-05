@@ -1,0 +1,534 @@
+{
+  "_meta": {
+    "module": "M8",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M8. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q061",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Le participant analyse un jeu de cas de test généré par un LLM et identifie une lacune de couverture par rapport à une exigence.",
+      "prompt": "Exigence pour l'application NotkaApp (fictive) : l'utilisateur réinitialise son mot de passe via un lien e-mail valable 30 minutes ; après 3 tentatives de connexion infructueuses, le compte est bloqué pendant 15 minutes. Le LLM a généré les cas : TC1 — réinitialisation réussie ; TC2 — lien expiré après 30 min ; TC3 — 3 mots de passe erronés -> compte bloqué. Quelle lacune de couverture est ici la plus importante à combler ?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Absence d'un cas de réutilisation du même lien de réinitialisation (lien à usage unique utilisé deux fois)"
+        },
+        {
+          "id": "B",
+          "text": "Absence d'un cas vérifiant la couleur du bouton Réinitialiser le mot de passe"
+        },
+        {
+          "id": "C",
+          "text": "Absence d'un cas avec une durée de session administrateur d'exactement 30 minutes"
+        },
+        {
+          "id": "D",
+          "text": "Absence d'un cas vérifiant le logo de l'application sur la page de connexion"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Un lien de réinitialisation est par nature à usage unique et limité dans le temps ; l'absence d'un test de sa réutilisation constitue donc une véritable faille de sécurité dans la couverture de l'exigence.",
+      "feedbackIncorrect": "La lacune de couverture concerne un comportement conforme à l'exigence (la validité et le caractère à usage unique du lien), et non des éléments cosmétiques. Revenez à l'écran sur les lacunes de couverture.",
+      "references": [
+        "M8.3",
+        "M8.2"
+      ]
+    },
+    {
+      "id": "Q062",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Le participant reconnaît dans la sortie d'un LLM un cas factice (une assertion qui ne vérifie rien) et le distingue d'un test à valeur réelle.",
+      "prompt": "Dans le jeu de cas pour NotkaApp, vous trouvez : TC4 — « Ouvrir le formulaire de réinitialisation du mot de passe et vérifier que le formulaire s'ouvre ; résultat attendu : aucun ». Comment faut-il qualifier TC4 ?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Test factice — aucun résultat attendu défini, l'assertion ne vérifie en réalité rien"
+        },
+        {
+          "id": "B",
+          "text": "Cas négatif valide pour le scénario de blocage du compte"
+        },
+        {
+          "id": "C",
+          "text": "Cas limite valide pour la validité de 30 minutes du lien"
+        },
+        {
+          "id": "D",
+          "text": "Doublon du cas TC1 réinitialisation réussie, que l'on peut fusionner immédiatement"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Sans résultat attendu défini, le test « passera » toujours et ne vérifie rien — c'est la définition même d'un test factice.",
+      "feedbackIncorrect": "Ce qui compte, c'est l'absence de résultat attendu, et non le type de scénario ni la ressemblance avec un autre TC. Revoyez l'écran sur les doublons et les tests factices.",
+      "references": [
+        "M8.4"
+      ]
+    },
+    {
+      "id": "Q063",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Le participant évalue si une sortie générée par un LLM est utilisable dans la documentation QA, en identifiant un fait inventé contredisant l'exigence.",
+      "prompt": "Le LLM a généré une description de cas pour NotkaApp avec la note : « Après 3 tentatives infructueuses, le compte est bloqué pendant 24 heures, et le lien de réinitialisation est valable sans limite de durée ». L'exigence indique : blocage de 15 minutes, lien valable 30 minutes. Quelle décision de contrôle de fond est la plus appropriée avant de coller le texte dans la documentation ?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Rejeter le fragment — il contient des faits contredisant l'exigence (valeurs inventées 24 h et sans limite de durée) et nécessite une correction avant utilisation"
+        },
+        {
+          "id": "B",
+          "text": "Accepter sans modification — le LLM fournit généralement des valeurs plus proches de la réalité que l'exigence"
+        },
+        {
+          "id": "C",
+          "text": "Accepter et ajouter une annotation indiquant que les valeurs peuvent varier selon la version de l'application"
+        },
+        {
+          "id": "D",
+          "text": "Rejeter tout le module de tests de réinitialisation du mot de passe, car la sortie contient une erreur"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Une sortie contredisant l'exigence contient des faits inventés (hallucinations) et ne peut pas être intégrée à la documentation sans correction — le contrôle de fond se conclut par la décision « corriger/rejeter le fragment ».",
+      "feedbackIncorrect": "L'exigence est la source de vérité, pas la sortie du LLM ; il ne faut pas non plus rejeter tout le travail à cause d'un seul fragment. Revenez à la grille accepter/corriger/rejeter.",
+      "references": [
+        "M8.6"
+      ]
+    },
+    {
+      "id": "Q064",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Le participant définit les limites du human-in-the-loop en désignant une tâche QA où le LLM reste un assistant et où la décision revient à l'humain.",
+      "prompt": "Une équipe QA souhaite utiliser un LLM pour les tests de NotkaApp. Laquelle des propositions traduit le mieux le principe « assistant, pas décideur » ?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Le LLM génère un brouillon de cas de test et une liste de contrôle des risques, et le testeur valide le périmètre des tests et décide de l'autorisation de mise en production"
+        },
+        {
+          "id": "B",
+          "text": "Le LLM autorise lui-même la mise en production si les tests générés passent"
+        },
+        {
+          "id": "C",
+          "text": "Le LLM évalue de manière définitive le risque critique et clôt les défauts sans intervention du testeur"
+        },
+        {
+          "id": "D",
+          "text": "Le testeur réécrit manuellement chaque cas et le LLM n'est utilisé à aucune étape"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Le LLM accélère la création de brouillons et de propositions, mais les décisions d'acceptation, de risque critique et de mise en production reviennent à l'humain (human-in-the-loop).",
+      "feedbackIncorrect": "Les décisions de mise en production et l'évaluation du risque critique ne peuvent pas être confiées au LLM, mais renoncer totalement à l'assistant gaspille sa valeur. Revoyez l'écran assistant vs décideur.",
+      "references": [
+        "M8.7",
+        "M8.1"
+      ]
+    },
+    {
+      "id": "Q065",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Le participant identifie les catégories de lacunes de couverture que le LLM ne génère souvent pas sans instruction explicite.",
+      "prompt": "Vous générez des cas de test pour la fonction de réinitialisation du mot de passe dans NotkaApp. Quelles catégories sont les plus souvent omises par le LLM et nécessitent un complément conscient ? Sélectionnez toutes les bonnes réponses.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Cas limites (p. ex. lien utilisé exactement à la 30e minute)"
+        },
+        {
+          "id": "B",
+          "text": "Chemins d'erreur et états exceptionnels (p. ex. lien utilisé une deuxième fois, sessions parallèles)"
+        },
+        {
+          "id": "C",
+          "text": "Happy path de la réinitialisation du mot de passe avec des données correctes"
+        },
+        {
+          "id": "D",
+          "text": "Données de test pour valeurs extrêmes (p. ex. e-mail de longueur maximale)"
+        },
+        {
+          "id": "E",
+          "text": "Titre de la fenêtre du navigateur sur la page de confirmation"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "D"
+      ],
+      "feedbackCorrect": "Le LLM couvre généralement bien le happy path, mais omet les cas limites, les chemins d'erreur et les données extrêmes — c'est précisément là que l'on recherche les lacunes de couverture.",
+      "feedbackIncorrect": "Le happy path est généralement couvert, et le titre de la fenêtre est un détail cosmétique ; les lacunes concernent les limites, les chemins d'erreur et les données extrêmes. Revenez à l'écran sur les lacunes de couverture.",
+      "references": [
+        "M8.3",
+        "M8.2"
+      ]
+    },
+    {
+      "id": "Q066",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Le participant reconnaît les caractéristiques d'un doublon et d'un test factice dans un jeu de cas généré.",
+      "prompt": "Vous examinez un jeu de cas généré pour NotkaApp sous l'angle de la qualité. Quelles affirmations sur les doublons et les tests factices sont vraies ? Sélectionnez toutes les bonnes réponses.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Deux cas vérifiant les mêmes conditions avec une formulation différente constituent un doublon, malgré un contenu distinct"
+        },
+        {
+          "id": "B",
+          "text": "Un cas sans résultat attendu est factice, car son assertion ne vérifie rien"
+        },
+        {
+          "id": "C",
+          "text": "Un plus grand nombre de cas générés signifie toujours une meilleure couverture"
+        },
+        {
+          "id": "D",
+          "text": "Un test avec une assertion « true == true » sans rapport avec la fonction est factice"
+        },
+        {
+          "id": "E",
+          "text": "Un doublon est inoffensif, car deux tests identiques renforcent la confiance dans le résultat"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "D"
+      ],
+      "feedbackCorrect": "Un doublon, ce sont les mêmes conditions décrites différemment, et un test factice comporte une assertion qui ne vérifie rien ; le nombre de cas n'est pas une mesure de la couverture.",
+      "feedbackIncorrect": "Un plus grand nombre de tests n'équivaut pas à une meilleure couverture, et un doublon augmente le coût de maintenance sans apporter de valeur. Revoyez l'écran sur les doublons et les tests factices.",
+      "references": [
+        "M8.4"
+      ]
+    },
+    {
+      "id": "Q067",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Le participant applique les critères de contrôle de fond qu'une sortie LLM doit satisfaire pour être intégrée à la documentation QA.",
+      "prompt": "Avant de coller un jeu de cas généré par un LLM dans la documentation QA officielle de SklepDemo (fictif), quels critères de contrôle de fond doivent être satisfaits ? Sélectionnez toutes les bonnes réponses.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Conformité à l'exigence (aucune valeur contredisant les critères d'acceptation)"
+        },
+        {
+          "id": "B",
+          "text": "Absence de faits inventés (hallucinations) et caractère vérifiable du contenu"
+        },
+        {
+          "id": "C",
+          "text": "Absence de données sensibles et de PII réelles dans les exemples"
+        },
+        {
+          "id": "D",
+          "text": "La sortie doit être la plus longue possible, car un plus grand volume témoigne de la qualité"
+        },
+        {
+          "id": "E",
+          "text": "La sortie doit être acceptée uniquement parce qu'elle a été générée par un modèle plus récent"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "L'intégration à la documentation exige la conformité à l'exigence, l'absence d'hallucinations, le caractère vérifiable et l'absence de données sensibles — le volume et la version du modèle ne sont pas des critères.",
+      "feedbackIncorrect": "La longueur du texte et la version du modèle ne sont pas des critères de qualité ; ce qui compte, c'est la conformité, le caractère vérifiable et l'absence de données sensibles. Revenez à la grille de contrôle de fond.",
+      "references": [
+        "M8.6"
+      ]
+    },
+    {
+      "id": "Q068",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Le participant distingue les tâches QA où le LLM est un assistant des décisions réservées à l'humain.",
+      "prompt": "Quelles tâches QA peut-on confier en toute sécurité au LLM en tant qu'assistant (avec un contrôle humain ultérieur) ? Sélectionnez toutes les bonnes réponses.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Brouillon de cas de test à partir d'une exigence comme point de départ"
+        },
+        {
+          "id": "B",
+          "text": "Proposition de catégories de risques pour une liste de contrôle de risk-based testing"
+        },
+        {
+          "id": "C",
+          "text": "Reformulation et mise en ordre de descriptions de tests existantes"
+        },
+        {
+          "id": "D",
+          "text": "Décision finale d'autorisation de mise en production"
+        },
+        {
+          "id": "E",
+          "text": "Clôture autonome d'un défaut critique sans vérification du testeur"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Les brouillons, les propositions de catégories de risques et la mise en ordre du contenu relèvent du travail d'assistant ; les décisions de mise en production et de défauts critiques reviennent à l'humain.",
+      "feedbackIncorrect": "La décision de mise en production et la clôture des défauts critiques relèvent du décideur (l'humain), et non du LLM. Revoyez l'écran assistant vs décideur.",
+      "references": [
+        "M8.7",
+        "M8.1"
+      ]
+    },
+    {
+      "id": "Q069",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Le participant associe une fonctionnalité de NotkaApp à la bonne catégorie de risque dans une liste de contrôle de risk-based testing.",
+      "prompt": "Associez une fonctionnalité ou un artefact de NotkaApp à la catégorie de risque la plus appropriée dans une liste de contrôle de risk-based testing.",
+      "pairs": [
+        {
+          "left": "Blocage du compte après 3 tentatives de connexion infructueuses",
+          "right": "Sécurité (protection contre les attaques par force brute)"
+        },
+        {
+          "left": "Stockage de l'e-mail de l'utilisateur dans la base de données",
+          "right": "Données (protection des données personnelles et confidentialité)"
+        },
+        {
+          "left": "Temps de génération du lien de réinitialisation en cas de forte charge",
+          "right": "Performance (temps de réponse sous charge)"
+        },
+        {
+          "left": "Prise en charge du formulaire de réinitialisation par un lecteur d'écran",
+          "right": "Accessibilité (conformité aux WCAG)"
+        }
+      ],
+      "feedbackCorrect": "Chaque fonctionnalité est rattachée à la catégorie de risque qui décrit le mieux la menace principale — c'est le cœur d'une liste de contrôle de risk-based testing.",
+      "feedbackIncorrect": "Les catégories se confondent lorsque l'on regarde la technologie plutôt que la menace principale de la fonction (sécurité, données, performance, accessibilité). Revoyez l'écran sur la liste de contrôle des risques.",
+      "references": [
+        "M8.5"
+      ]
+    },
+    {
+      "id": "Q070",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Le participant associe un défaut typique des cas de test générés à sa conséquence en QA.",
+      "prompt": "Associez un défaut typique des cas de test générés par un LLM pour une exigence de SklepDemo (fictive) à sa conséquence principale en QA.",
+      "pairs": [
+        {
+          "left": "Cas généré sans résultat attendu",
+          "right": "Test factice — passe toujours, ne détecte aucun défaut"
+        },
+        {
+          "left": "Deux cas avec les mêmes étapes et données",
+          "right": "Doublon — gonflement du jeu sans nouvelle couverture"
+        },
+        {
+          "left": "Cas vérifiant un champ qui n'existe pas dans l'exigence",
+          "right": "Hallucination de périmètre — test hors exigence"
+        },
+        {
+          "left": "Absence de cas pour un chemin d'erreur décrit dans l'exigence",
+          "right": "Lacune de couverture — scénario de l'exigence non testé"
+        }
+      ],
+      "feedbackCorrect": "Chaque défaut a une conséquence différente pour la qualité du jeu : un test factice ne détecte pas d'erreurs, un doublon n'ajoute pas de couverture, une hallucination de périmètre teste quelque chose hors de l'exigence, et une lacune de couverture laisse un risque non testé.",
+      "feedbackIncorrect": "Distinguez les défauts par leur effet : absence de résultat attendu = test factice, mêmes étapes = doublon, champ hors exigence = hallucination de périmètre, absence de chemin d'erreur = lacune de couverture. Revoyez l'écran QA workbench sur les lacunes et les tests factices.",
+      "references": [
+        "M8.6",
+        "M8.7"
+      ]
+    },
+    {
+      "id": "Q071",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Le participant associe un risque concret d'une fonction de NotkaApp au scénario de test qui le vérifie.",
+      "prompt": "Associez un risque lié à la fonction de réinitialisation du mot de passe de NotkaApp au cas de test qui le vérifie.",
+      "pairs": [
+        {
+          "left": "Risque : le lien de réinitialisation fonctionne après expiration",
+          "right": "Test : tentative d'utilisation du lien après l'écoulement de 30 minutes"
+        },
+        {
+          "left": "Risque : un lien à usage unique fonctionne plusieurs fois",
+          "right": "Test : double utilisation du même lien de réinitialisation"
+        },
+        {
+          "left": "Risque : le compte ne se bloque pas après des tentatives infructueuses",
+          "right": "Test : 3 tentatives de connexion infructueuses consécutives et vérification du blocage"
+        },
+        {
+          "left": "Risque : la réinitialisation fonctionne pour un compte inexistant",
+          "right": "Test : demande de réinitialisation pour un e-mail non enregistré"
+        }
+      ],
+      "feedbackCorrect": "Chaque risque est vérifié par un cas qui tente directement de provoquer le comportement indésirable — c'est ce qui relie le risk-based testing à la couverture.",
+      "feedbackIncorrect": "Le test doit cibler exactement la menace décrite par le risque (p. ex. réutilisation du lien, absence de blocage). Revoyez l'écran sur la liste de contrôle des risques et les lacunes de couverture.",
+      "references": [
+        "M8.5",
+        "M8.3"
+      ]
+    },
+    {
+      "id": "Q072",
+      "module": "M8",
+      "pillar": "qa_practice",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "dopasowanie",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Le participant associe un problème de qualité d'une sortie générée à l'action de contrôle appropriée du testeur.",
+      "prompt": "Associez un problème détecté dans un artefact QA généré par un LLM à l'action de contrôle appropriée.",
+      "pairs": [
+        {
+          "left": "Deux cas vérifient les mêmes conditions avec une formulation différente",
+          "right": "Fusionner les doublons et conserver un seul cas"
+        },
+        {
+          "left": "Cas sans résultat attendu défini",
+          "right": "Supprimer ou compléter l'assertion (test factice)"
+        },
+        {
+          "left": "Absence de cas pour le blocage du compte après 3 tentatives",
+          "right": "Ajouter un cas couvrant la lacune de couverture"
+        },
+        {
+          "left": "La sortie indique un blocage de 24 h au lieu de 15 min",
+          "right": "Corriger le fait contredisant l'exigence avant utilisation"
+        }
+      ],
+      "feedbackCorrect": "Chaque type de problème dans la sortie appelle une action adéquate : fusion du doublon, correction du test factice, comblement de la lacune ou rectification du fait inventé.",
+      "feedbackIncorrect": "L'action de contrôle dépend du type de problème — ne confondez pas un doublon avec une lacune de couverture, ni un test factice avec une hallucination. Revoyez les écrans sur les doublons et le contrôle de la sortie.",
+      "references": [
+        "M8.4",
+        "M8.6"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "_meta": {
+    "issue": "#112-#118 [M15] / #124 [M16] Lộ trình hình thành S4 — Thang đo Holak (mô-đun đào tạo, mở rộng)",
+    "adr": "docs/adr/0009-sciezka-formatywna-s4-skala-holaka.md",
+    "interaction": "Phân loại dữ liệu và trường hợp sử dụng (kind: classify) — bài tập hình thành, KHÔNG tính điểm để vượt qua",
+    "source": "Trục trưởng thành của Thang đo Holak: bảo mật, quyền riêng tư dữ liệu và quản trị việc sử dụng AI (bao gồm tích hợp/MCP). Ghi nguồn: quality-blog.eu/pl/blog/skala-holaka.",
+    "dataPolicy": "TẤT CẢ ví dụ đều là DỮ LIỆU TỔNG HỢP và mang tính tổng quát (không có dữ liệu thật/PII nào). Mô-đun hình thành — không có ngưỡng vượt qua và không có chứng chỉ."
+  },
+  "module": "MSK3",
+  "intro": "Việc áp dụng AI một cách trưởng thành không chỉ là hiệu quả, mà còn là vệ sinh dữ liệu: cái gì được phép đưa cho mô hình, cái gì phải ẩn danh trước, và cái gì không bao giờ được dùng — kể cả khi AI truy cập dữ liệu qua tích hợp và MCP. Mô-đun này dạy bạn phân loại dữ liệu và thiết lập các quy tắc quản trị tối thiểu. Đây là bài tập phát triển, không phải bài kiểm tra.",
+  "screens": [
+    {
+      "id": "msk3-s1-trzy-kosze",
+      "title": "Ba giỏ dữ liệu: được phép, cần ẩn danh, không được phép",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Trước khi dán bất cứ thứ gì vào mô hình, hãy gán dữ liệu vào một trong ba giỏ. Được phép: dữ liệu công khai hoặc tổng hợp. Cần ẩn danh: dữ liệu có thể chỉ ra một cá nhân hoặc hệ thống, nhưng sau khi che đi thì an toàn. Không được phép: bí mật và dữ liệu nhạy cảm không được phép phơi bày." },
+        { "kind": "list", "items": [
+          "Được phép — dữ liệu công khai, tổng hợp, không định danh.",
+          "Cần ẩn danh — xóa hoặc thay bằng trình giữ chỗ những gì định danh cá nhân/hệ thống.",
+          "Không được phép — mật khẩu, khóa, bí mật, dữ liệu nhạy cảm không có cơ sở để sử dụng."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Trục của Thang đo Holak", "text": "Một chính sách thành văn về việc sử dụng AI có thể chấp nhận được (dữ liệu, quyền riêng tư, sở hữu trí tuệ) cùng một dấu vết kiểm toán tối thiểu là dấu hiệu của quản trị trưởng thành.",
+          "links": [ { "label": "Thang đo Holak — mô hình trưởng thành (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka" } ]
+        }
+      ]
+    },
+    {
+      "id": "msk3-s2-mcp-integracje",
+      "title": "Tích hợp và MCP: ranh giới dữ liệu dịch chuyển xa hơn",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Khi bạn kết nối AI với các công cụ qua tích hợp hoặc MCP (Model Context Protocol), mô hình không còn chỉ thấy thứ bạn dán vào — nó có thể truy cập tệp, cơ sở dữ liệu hay email. Điều này tiện lợi và mạnh mẽ, nhưng ranh giới dữ liệu dịch chuyển: bạn phải chủ động giới hạn những gì tích hợp được phép truy cập." },
+        { "kind": "list", "items": [
+          "Nguyên tắc quyền truy cập tối thiểu — tích hợp chỉ thấy những gì cần thiết cho tác vụ.",
+          "Lọc hoặc che dữ liệu nhạy cảm TRƯỚC khi đưa vào mô hình, không phải sau.",
+          "Hãy coi mỗi tích hợp như một đầu vào dữ liệu mới — áp dụng chính sách giống nhau cho nó."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Cái bẫy „chỉ là thử nghiệm thôi mà”", "text": "„Mình chỉ kết nối tích hợp vào môi trường sản xuất một lần để kiểm tra” là rò rỉ thường gặp nhất. Dữ liệu đã từng được chia sẻ có thể đã vượt khỏi tầm kiểm soát của bạn — luôn giới hạn quyền truy cập và che dữ liệu, kể cả khi thử nghiệm." }
+      ]
+    },
+    {
+      "id": "msk3-s3-jak-cwiczyc",
+      "title": "Cách luyện tập điều này",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Ngay sau đây bạn sẽ gán dữ liệu vào các giỏ: được phép, cần ẩn danh, không được phép. Thứ tự các mục là ngẫu nhiên, nên điều quan trọng là nội dung, không phải khuôn mẫu. Không có ngưỡng vượt qua — mục tiêu là tạo phản xạ phân loại dữ liệu trước khi nó đến mô hình hoặc tích hợp." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "msk3-classify",
+    "title": "Được phép, cần ẩn danh hay không được phép?",
+    "intro": "Hãy gán mỗi trường hợp dữ liệu vào đúng giỏ. Phản hồi sẽ giải thích quy tắc về quyền riêng tư và quản trị.",
+    "categories": [
+      { "id": "allowed", "label": "Được phép", "desc": "Dữ liệu công khai hoặc tổng hợp, không định danh." },
+      { "id": "anonymize", "label": "Cần ẩn danh", "desc": "Chỉ an toàn sau khi che các định danh." },
+      { "id": "disallowed", "label": "Không được phép", "desc": "Bí mật và dữ liệu nhạy cảm không có cơ sở để sử dụng." }
+    ],
+    "items": [
+      { "id": "msk3-i1", "text": "Một đoạn công khai trong tài liệu của dự án mã nguồn mở.", "correctCategory": "allowed", "rationale": "Dữ liệu công khai, không định danh — có thể dùng." },
+      { "id": "msk3-i2", "text": "Dữ liệu kiểm thử tổng hợp được bịa ra, không liên quan đến người thật.", "correctCategory": "allowed", "rationale": "Dữ liệu tổng hợp vốn an toàn theo định nghĩa." },
+      { "id": "msk3-i3", "text": "Báo cáo lỗi có tên đăng nhập của người dùng mà bạn thay bằng trình giữ chỗ.", "correctCategory": "anonymize", "rationale": "Bạn xóa/che định danh — khi đó thì an toàn." },
+      { "id": "msk3-i4", "text": "Nhật ký chứa thông tin liên hệ của khách hàng, cần che trước khi sử dụng.", "correctCategory": "anonymize", "rationale": "Sau khi ẩn danh, dữ liệu không còn chỉ ra cá nhân." },
+      { "id": "msk3-i5", "text": "Mật khẩu và khóa truy cập vào hệ thống sản xuất.", "correctCategory": "disallowed", "rationale": "Bí mật không bao giờ được đưa vào prompt hay tích hợp." },
+      { "id": "msk3-i6", "text": "Tích hợp MCP với toàn quyền truy cập vào cơ sở dữ liệu khách hàng sản xuất „cho tiện”.", "correctCategory": "disallowed", "rationale": "Tích hợp truy cập dư thừa vào dữ liệu nhạy cảm — vi phạm quyền truy cập tối thiểu." },
+      { "id": "msk3-i7", "text": "Bản xuất các báo cáo với dữ liệu cá nhân đã được che, đưa vào để phân tích.", "correctCategory": "anonymize", "rationale": "Việc che trước khi đưa vào mô hình làm cho dữ liệu trở nên an toàn." },
+      { "id": "msk3-i8", "text": "Toàn bộ dữ liệu cá nhân của khách hàng được dán thẳng vào một mô hình công khai.", "correctCategory": "disallowed", "rationale": "Dữ liệu nhạy cảm định danh, không có cơ sở và không ẩn danh — không được phép." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Trước khi gửi, hãy gán mỗi dữ liệu vào một giỏ: được phép / cần ẩn danh / không được phép.",
+      "Tích hợp và MCP dịch chuyển ranh giới dữ liệu — hãy áp dụng nguyên tắc quyền truy cập tối thiểu và che dữ liệu trước khi đưa vào mô hình.",
+      "Hãy viết ra một chính sách đơn giản và để lại dấu vết tối thiểu về việc sử dụng AI trong các quy trình quan trọng."
+    ],
+    "checklist": [
+      "Tôi có biết gán những dữ liệu thường gặp của mình vào ba giỏ không?",
+      "Các tích hợp/MCP của tôi có chỉ có quyền truy cập tối thiểu cần thiết không?",
+      "Tôi có biết những gì không bao giờ được phép chia sẻ không (bí mật, dữ liệu nhạy cảm)?"
+    ],
+    "checklistTitle": "Danh sách kiểm tra — vệ sinh dữ liệu cho AI",
+    "nextStep": "Bước tiếp theo: viết cho cả nhóm một trang quy tắc: các trường hợp sử dụng được phép, việc ẩn danh, quyền truy cập tối thiểu của tích hợp, cấm bí mật, dấu vết kiểm toán đơn giản."
+  }
+}

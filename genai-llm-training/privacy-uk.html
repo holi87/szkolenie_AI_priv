@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Конфіденційність — Навчання GenAI та LLM</title>
+  <meta name="description" content="Інформація про конфіденційність: що і де зберігає статичне навчання GenAI/LLM. Жодних cookies, жодної передачі даних.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230f1117'/%3E%3Cpath d='M8 3 13 8 8 13 3 8Z' fill='%236ea8fe'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#tresc">Перейти до вмісту</a>
+  <header class="app-header">
+    <div class="app-header__bar">
+      <div class="brand"><span class="brand__logo" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" focusable="false"><path d="M8 1.5 14.5 8 8 14.5 1.5 8Z" fill="currentColor"/></svg></span><span class="brand__name">Конфіденційність</span></div>
+      <div class="app-header__meta"><a class="btn btn--ghost" href="index.html">← Повернутися до навчання</a></div>
+    </div>
+  </header>
+
+  <main id="tresc" class="view" tabindex="-1">
+    <div class="view__content">
+      <h1>Конфіденційність</h1>
+      <p>Це навчання є <strong>повністю статичним</strong> і <strong>не надсилає жодних Ваших даних на сервер</strong> —
+        немає бекенду, аналітики, <strong>cookies</strong> чи зовнішніх інструментів. Усе працює у Вашому браузері.</p>
+
+      <h2>Що ми зберігаємо локально у Вашому браузері</h2>
+      <p>У пам’яті <code>localStorage</code> (на Вашому пристрої) ми зберігаємо лише те, що потрібно, щоб навчання
+        працювало й пам’ятало Ваш прогрес:</p>
+      <ul>
+        <li>обрану траєкторію, статус і час модулів, останнє місце,</li>
+        <li>результати квізів і підсумкового тесту, а також дані сертифіката про проходження,</li>
+        <li>обрану колірну тему (світлу/темну) та обрану мову інтерфейсу,</li>
+        <li>ключі: <code>genai-training:progress:&lt;траєкторія&gt;</code>, <code>genai-training:cursor</code>, <code>genai-training:theme</code> і <code>genai-training:lang</code>.</li>
+      </ul>
+      <p><strong>Псевдонім для сертифіката НЕ зберігається.</strong> Ми тримаємо його виключно в пам’яті цієї сесії —
+        він зникає після оновлення або закриття вкладки. Просимо також, щоб Ви вказували псевдонім, а не справжні ім’я та прізвище.</p>
+
+      <h2>Дані не залишають Вашого пристрою</h2>
+      <p>Ми нічого не передаємо. Файли, які Ви можете завантажити (JSON/CSV з результатами) і за потреби надіслати координаторові,
+        <strong>не містять Вашого псевдоніма</strong> — вони містять лише анонімні ідентифікатори (ID проходження без
+        ніку), результати й час; дата проходження скорочена до дня, щоб не створювати ідентифікатора.</p>
+
+      <h2>Як видалити свої дані</h2>
+      <p>У будь-який момент скористайтеся кнопкою <strong>«Почати спочатку»</strong> у застосунку (очищає весь збережений прогрес цього
+        браузера) або очистіть дані сайту в налаштуваннях браузера.</p>
+
+      <h2>Cookies та правова підстава</h2>
+      <p>Ми не використовуємо <strong>жодних cookies</strong> чи відстеження, тому <strong>немає й не потрібно банера згоди
+        на cookies</strong>. Локальне збереження прогресу є необхідним для роботи послуги, про яку Ви самі просите (проходження
+        навчання та видача сертифіката) — це виняток «суворо необхідне» зі ст. 5(3) директиви ePrivacy (2002/58/ЄС),
+        тому ми не запитуємо згоди. Цю сторінку розглядайте як інформацію в розумінні ст. 13 GDPR.</p>
+
+      <p class="muted"><a href="index.html">← Повернутися до навчання</a></p>
+    </div>
+  </main>
+</body>
+</html>

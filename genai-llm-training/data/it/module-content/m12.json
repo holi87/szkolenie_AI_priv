@@ -1,0 +1,428 @@
+{
+  "_meta": {
+    "issue": "#23 [23][M4] Wdroż moduły M10-M12",
+    "storyboard": "docs/storyboard/m12-evaluation.md",
+    "interaction": "Judge calibration lab (kind: rubric, zadanie praktyczne R3-eval)",
+    "scenario": "SC-EVAL-01 (rozjazd oceny człowiek vs LLM-as-a-judge; EX1 length bias, EX2 position bias)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (SklepDemo, golden set GS-SklepDemo, odpowiedzi A1-A6, QA-ekspert anon.). ZERO realnych danych klienta/PII.",
+    "note": "Element interaktywny typu rubric = warunek konieczny S3, próg 70% (score >= 3,5 / 5). Wszystkie 9 ekranów wspólne dla S1/S2/S3; charakter ROZSZERZONY/pełny realizuje warstwa pogłębiona na ekranie 8 (onlyForPaths blokiem)."
+  },
+  "module": "M12",
+  "intro": "\"Funziona a occhio\" non basta: senza misurazione non sai se una modifica del prompt o della pipeline RAG ha migliorato o peggiorato la qualità. Questo modulo insegna a misurare la qualità di LLM e RAG con gli strumenti del tester: golden set, metriche, rubrica del valutatore, calibrazione con l'esperto e soglia decisionale.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Perché al tester serve la valutazione di LLM e RAG",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Senza misurare la qualità ogni modifica del prompt o della pipeline RAG è un salto nel buio — non si sa se ha migliorato o peggiorato le risposte. Il tester porta qui ciò che sa fare meglio: criteri di accettazione, ripetibilità e protezione contro le regressioni."
+        },
+        {
+          "kind": "list",
+          "items": [
+            "Golden set — il set di riferimento, ossia i \"test di regressione per le risposte del modello\".",
+            "Metriche di qualità — con cosa misurare una buona risposta.",
+            "Rubrica di valutazione per il modello valutatore (ingl. LLM-as-a-judge).",
+            "Calibrazione con l'esperto e concordanza tra valutatori (ingl. inter-rater agreement).",
+            "Soglia di accettazione e decisione \"avanti / sospendi\" (ingl. go / no-go)."
+          ]
+        },
+        {
+          "kind": "callout",
+          "variant": "info",
+          "text": "Durata del modulo circa 90 minuti. Alla fine c'è l'elemento interattivo \"Judge calibration lab\", che unisce rubrica, bias e calibrazione in un unico flusso."
+        }
+      ]
+    },
+    {
+      "id": "s2-golden-set",
+      "title": "Golden set per il caso d'uso",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "definition",
+          "term": "Golden set (set di riferimento)",
+          "original": "elenco di casi sintetici input → risposta attesa",
+          "text": "insieme documentato: domanda, aspettativa corretta e fonte di verità (ingl. ground truth). Svolge il ruolo di test di regressione per le risposte del modello."
+        },
+        {
+          "kind": "paragraph",
+          "text": "Un buon golden set contiene domande rappresentative del caso d'uso, casi limite e trappole note. Esempio sintetico \"GS-SklepDemo\": domande sul limite di articoli nel carrello, sulla politica dei resi e sul criterio di accettazione WYM-koszyk."
+        },
+        {
+          "kind": "callout",
+          "variant": "warn",
+          "title": "Cosa NON è un golden set",
+          "text": "Non è un insieme di log casuali né di dati di produzione. Le voci senza un'aspettativa decidibile e senza fonte di verità non si inseriscono nel golden set."
+        }
+      ]
+    },
+    {
+      "id": "s3-ocen-projekt",
+      "title": "Valuta il progetto del golden set",
+      "type": "decision",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Guarda i candidati al golden set \"GS-SklepDemo\" e stabilisci quali sono adatti al set e quali sono difettosi. Il difetto può essere: mancanza della fonte di verità, aspettativa ambigua, duplicato oppure domanda non testabile."
+        },
+        {
+          "kind": "list",
+          "items": [
+            "Buono: \"Qual è il limite di articoli nel carrello?\" — l'aspettativa deriva da WYM-koszyk, fonte documentata.",
+            "Difettoso: \"L'applicazione è bella?\" — aspettativa ambigua, non testabile.",
+            "Difettoso: domanda senza una fonte di verità indicata — non si sa rispetto a cosa valutare.",
+            "Difettoso: copia di una voce esistente — un duplicato non aumenta la copertura."
+          ]
+        },
+        {
+          "kind": "callout",
+          "variant": "safe",
+          "text": "Regola: ogni voce del golden set ha un'aspettativa univoca e una fonte di verità documentata. La mancanza di uno dei due = la voce viene scartata."
+        }
+      ]
+    },
+    {
+      "id": "s4-piec-metryk",
+      "title": "Cinque metriche di qualità",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Per valutare le risposte di LLM e RAG usiamo cinque metriche. Ciascuna misura una diversa dimensione della qualità e ha un sintomo tipico della carenza."
+        },
+        {
+          "kind": "table",
+          "headers": [
+            "Metrica",
+            "Cosa misura",
+            "Sintomo tipico della carenza"
+          ],
+          "rows": [
+            [
+              "accuratezza (accuracy)",
+              "se la risposta è corretta nel merito",
+              "affermazione falsa presentata come fatto"
+            ],
+            [
+              "fedeltà alle fonti (faithfulness)",
+              "se la risposta è coerente con la fonte",
+              "frase contraddittoria rispetto al documento sorgente"
+            ],
+            [
+              "ancoraggio (groundedness)",
+              "se il contenuto si può basare sul contesto fornito",
+              "affermazione priva di appoggio nel frammento recuperato"
+            ],
+            [
+              "pertinenza (relevance)",
+              "se la risposta riguarda la domanda posta",
+              "risposta a una domanda diversa da quella posta"
+            ],
+            [
+              "completezza (completeness)",
+              "se sono state coperte tutte le condizioni richieste",
+              "mancanza di una parte delle condizioni del criterio di accettazione"
+            ]
+          ],
+          "textAlt": "Cinque metriche di qualità. Accuratezza (accuracy): se la risposta è corretta nel merito; il sintomo della carenza è un'affermazione falsa presentata come fatto. Fedeltà alle fonti (faithfulness): se la risposta è coerente con la fonte; il sintomo della carenza è una frase contraddittoria rispetto al documento sorgente. Ancoraggio (groundedness): se il contenuto si può basare sul contesto fornito; il sintomo della carenza è un'affermazione priva di appoggio nel frammento recuperato. Pertinenza (relevance): se la risposta riguarda la domanda posta; il sintomo della carenza è una risposta a una domanda diversa da quella posta. Completezza (completeness): se sono state coperte tutte le condizioni richieste; il sintomo della carenza è la mancanza di una parte delle condizioni del criterio di accettazione."
+        },
+        {
+          "kind": "callout",
+          "variant": "info",
+          "text": "Collegamento con M6: una bassa faithfulness o groundedness indica spesso lo strato di generazione del RAG, mentre le lacune nelle fonti recuperate indicano lo strato di retrieval."
+        },
+        {
+          "kind": "callout",
+          "variant": "info",
+          "title": "Nota: faithfulness vs groundedness",
+          "text": "In molte fonti \"fedeltà alle fonti\" e \"ancoraggio\" vengono trattate insieme — come un'unica misura di \"se la risposta si attiene al contesto fornito\". Le distinguiamo qui per fini didattici: la faithfulness chiede se la risposta non contraddice la fonte, mentre la groundedness chiede se ogni affermazione ha un appoggio nel frammento recuperato. Nella pratica di solito si verificano entrambe insieme."
+        }
+      ]
+    },
+    {
+      "id": "s5-dobierz-metryke",
+      "title": "Abbina la metrica alla domanda",
+      "type": "decision",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Per una data domanda di qualità scegli la metrica che la risolve. La trappola più frequente è confondere la pertinenza (relevance) con l'accuratezza (accuracy)."
+        },
+        {
+          "kind": "list",
+          "items": [
+            "\"La risposta è coerente con il contenuto della fonte?\" → faithfulness (e ancoraggio / groundedness).",
+            "\"La risposta copre tutte le condizioni del criterio di accettazione?\" → completeness.",
+            "\"La risposta riguarda davvero la domanda posta?\" → relevance.",
+            "\"Il valore fornito è corretto nel merito?\" → accuracy."
+          ]
+        },
+        {
+          "kind": "callout",
+          "variant": "warn",
+          "text": "Trappola: una risposta può essere pertinente (in tema) e ciononostante contraddittoria rispetto alla fonte. La relevance non sostituisce la faithfulness."
+        }
+      ]
+    },
+    {
+      "id": "s6-rubryka",
+      "title": "Rubrica per LLM-as-a-judge",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "definition",
+          "term": "LLM-as-a-judge",
+          "original": "modello linguistico nel ruolo di valutatore",
+          "text": "modello che valuta le risposte di un altro modello secondo una rubrica. Senza rubrica risponde al generico \"è buona?\" e la valutazione non è ripetibile."
+        },
+        {
+          "kind": "paragraph",
+          "text": "Una buona rubrica di valutazione (ingl. evaluation rubric) ha: un criterio chiaro, una scala (ad es. 0–2 oppure 1–5), la definizione di ogni livello, esempi di ancoraggio (ingl. anchor examples) e l'istruzione \"valuta esclusivamente rispetto alla fonte\"."
+        },
+        {
+          "kind": "callout",
+          "variant": "warn",
+          "title": "Anti-mito",
+          "text": "\"Chiedi al modello se la risposta è buona\" senza rubrica dà una valutazione che dipende dal capriccio dell'esecuzione. Le definizioni dei livelli e le ancore rendono la valutazione ripetibile."
+        }
+      ]
+    },
+    {
+      "id": "s7-bias-position",
+      "title": "Parzialità del valutatore e position bias",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Un LLM valutatore ha parzialità (ingl. bias). Senza controllo la valutazione automatica può dare un falso \"verde\", cioè promuovere una risposta che dovrebbe essere scartata."
+        },
+        {
+          "kind": "definition",
+          "term": "Position bias (parzialità posizionale)",
+          "original": "preferenza per la posizione nel confronto a coppie",
+          "text": "nel confronto tra due risposte il valutatore sceglie più spesso quella mostrata per prima, indipendentemente dalla sua effettiva qualità."
+        },
+        {
+          "kind": "list",
+          "items": [
+            "Length bias: sopravvalutazione della risposta più lunga solo per la sua lunghezza.",
+            "Valutazione \"di cortesia\": voto gonfiato indipendentemente dal contenuto.",
+            "Divergenza dalla valutazione umana: il judge dà un voto diverso da quello dell'esperto."
+          ]
+        },
+        {
+          "kind": "callout",
+          "variant": "info",
+          "text": "Mitigazioni (approfondite più avanti): scambio dell'ordine nei confronti a coppie, rubrica univoca e calibrazione con l'esperto."
+        }
+      ]
+    },
+    {
+      "id": "s8-kalibracja",
+      "title": "Calibrazione con l'esperto e concordanza tra valutatori",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "Per fidarti della valutazione automatica, confrontala con la valutazione dell'esperto sullo stesso golden set e calcola la concordanza tra valutatori (ingl. inter-rater agreement). I punti in cui le valutazioni divergono sono un segnale per migliorare la rubrica, non per ignorarli."
+        },
+        {
+          "kind": "list",
+          "ordered": true,
+          "items": [
+            "Valuta le risposte con l'LLM valutatore secondo la rubrica.",
+            "Confronta con la valutazione dell'esperto sullo stesso golden set.",
+            "Trova la divergenza e diagnostica la causa (bias o lacuna nella rubrica).",
+            "Correggi la rubrica e valuta di nuovo."
+          ]
+        },
+        {
+          "kind": "callout",
+          "variant": "warn",
+          "onlyForPaths": [
+            "S2",
+            "S3"
+          ],
+          "title": "Approfondimento: perché la sola \"% di concordanza\" inganna",
+          "text": "Con una distribuzione delle valutazioni fortemente sbilanciata (ad es. quasi tutto \"pass\") un'alta percentuale di concordanza si può ottenere quasi a caso. L'aspetto cruciale è se il valutatore individua i casi rari e rischiosi di \"fail\", e non soltanto se concorda \"sul pass\"."
+        }
+      ]
+    },
+    {
+      "id": "s9-prog-go-nogo",
+      "title": "Soglia di accettazione e decisione go/no-go",
+      "type": "content",
+      "blocks": [
+        {
+          "kind": "paragraph",
+          "text": "La soglia di accettazione della qualità (ingl. acceptance threshold) stabilisce quando la qualità è \"abbastanza buona\". Esempio: \"faithfulness ≥ 0,9 sul golden set E zero voci contraddittorie rispetto alla fonte\". La soglia si sceglie in base al rischio del caso d'uso, al costo dell'errore e al risultato della versione precedente (baseline)."
+        },
+        {
+          "kind": "definition",
+          "term": "Decisione go / no-go (\"avanti / sospendi\")",
+          "original": "go / no-go decision",
+          "text": "decisione se la versione può essere rilasciata. La soglia funziona anche nella regressione: confronta la nuova versione con la precedente."
+        },
+        {
+          "kind": "callout",
+          "variant": "safe",
+          "title": "Default conservativo",
+          "text": "Mancanza di dati per la valutazione o condizione vincolante non soddisfatta (ad es. una voce contraddittoria rispetto alla fonte) = no-go. Una buona media non aggira la condizione vincolante."
+        }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "rubric",
+    "id": "m12-judge-calibration",
+    "title": "Judge calibration lab",
+    "intro": "Set sintetico: risposte A1–A6 a domande del golden set \"GS-SklepDemo\", valutate da un QA-esperto (anon.) e da un LLM valutatore. Contiene un position bias iniettato deliberatamente (coppia A3/A4), una sopravvalutazione (A2) e una lacuna della rubrica (A5). Per ogni criterio della rubrica R3-eval segna la decisione progettuale di valutazione che lo soddisfa. La valutazione conta come compito pratico R3-eval sul percorso S3 ed è una condizione necessaria — la soglia di superamento è il 70% (score ≥ 3,5 / 5).",
+    "rubricId": "R3-eval",
+    "recordsPractical": true,
+    "scaleMax": 5,
+    "passThreshold": 3.5,
+    "criteria": [
+      {
+        "id": "K1",
+        "name": "Golden set adeguato al caso d'uso",
+        "points": 1,
+        "hint": "Il golden set ha domande rappresentative, casi limite e una fonte di verità documentata — non log casuali.",
+        "prompt": "Come costruire il golden set \"GS-SklepDemo\" per valutare le risposte su carrello e resi?",
+        "options": [
+          {
+            "id": "a",
+            "text": "Domande rappresentative su WYM-koszyk e politica dei resi, casi limite (domanda fuori dall'ambito della fonte), ogni voce con una fonte di verità documentata."
+          },
+          {
+            "id": "b",
+            "text": "Log di produzione raccolti a caso con dati grezzi dei clienti — saranno i più \"reali\"."
+          },
+          {
+            "id": "c",
+            "text": "Solo domande generiche del tipo \"l'applicazione è buona?\", senza un'aspettativa né una fonte indicate."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K2",
+        "name": "Metriche con motivazione",
+        "points": 1,
+        "hint": "Abbina le metriche a ciò che la domanda verifica davvero: copertura delle condizioni = completeness, coerenza e appoggio nella fonte = faithfulness/groundedness.",
+        "prompt": "Domanda di qualità: \"La risposta elenca tutte le condizioni di pagamento della fonte e non aggiunge condizioni esterne alla fonte?\". Quali metriche scegliere?",
+        "options": [
+          {
+            "id": "a",
+            "text": "completeness (copertura di tutte le condizioni) e faithfulness e groundedness (assenza di contenuti esterni alla fonte e appoggio nel contesto) — ciascuna motivata dalla dimensione della domanda."
+          },
+          {
+            "id": "b",
+            "text": "Solo relevance, perché la domanda riguarda i pagamenti — basta a valutare il contenuto."
+          },
+          {
+            "id": "c",
+            "text": "Il position bias come metrica di qualità del contenuto, perché suona tecnico."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K3",
+        "name": "Rubrica LLM-as-a-judge (univoca)",
+        "points": 1,
+        "hint": "Una rubrica univoca ha un criterio chiaro, una scala con la definizione di ogni livello, ancore e l'istruzione \"valuta rispetto alla fonte\".",
+        "prompt": "La voce A5 (completezza delle condizioni di pagamento) diverge, perché la rubrica non precisa quando la \"mancanza di 1 condizione\" è già un livello inferiore. Come correggerla?",
+        "options": [
+          {
+            "id": "a",
+            "text": "Aggiungere le definizioni dei livelli della scala (ad es. 2 = tutte le condizioni; 1 = manca una condizione; 0 = manca la maggior parte) con esempi di ancoraggio e l'istruzione \"valuta esclusivamente rispetto alla fonte\"."
+          },
+          {
+            "id": "b",
+            "text": "Lasciare la rubrica come \"valuta se la risposta è buona\" e affidarsi all'intuito del valutatore."
+          },
+          {
+            "id": "c",
+            "text": "Rimuovere la scala e raccogliere solo un commento libero del valutatore per ogni voce."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K4",
+        "name": "Bias/position bias + calibrazione con l'esperto",
+        "points": 1,
+        "hint": "Il position bias si conferma e si neutralizza con lo scambio dell'ordine (A3/A4); il length bias è la sopravvalutazione per la lunghezza; il verdetto va sempre validato con la valutazione dell'esperto sul golden set.",
+        "prompt": "Coppia A3/A4 (stessa variante WYM-koszyk) e la voce in cui il judge sopravvaluta la risposta più lunga — come rilevare e limitare in modo affidabile il bias prima di stabilire la soglia?",
+        "options": [
+          {
+            "id": "a",
+            "text": "Ripetere la valutazione A3/A4 con l'ordine scambiato (e mediare le due disposizioni): l'inversione del verdetto conferma il position bias, quindi inserire lo scambio dell'ordine nella rubrica; non premiare una risposta per la sola lunghezza; calibrare ogni voto rispetto alla valutazione dell'esperto sul golden set."
+          },
+          {
+            "id": "b",
+            "text": "Premiare la risposta più lunga come per definizione più completa e fidarsi del primo verdetto del judge, perché la valutazione automatica è più veloce e oggettiva."
+          },
+          {
+            "id": "c",
+            "text": "Rimuovere la coppia problematica A3/A4 dal golden set per far salire la percentuale di concordanza, e saltare il confronto con l'esperto."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      },
+      {
+        "id": "K5",
+        "name": "Soglia di accettazione della qualità",
+        "points": 1,
+        "hint": "La soglia può essere una congiunzione: media E condizione vincolante \"zero contraddizioni\". Mancanza di dati o condizione vincolante non soddisfatta = no-go (default conservativo).",
+        "prompt": "Soglia: \"faithfulness ≥ 0,9 sul golden set E zero voci contraddittorie rispetto alla fonte\". La nuova versione ha una media di 0,93, ma la voce A2 è contraddittoria rispetto alla fonte. Quale decisione?",
+        "options": [
+          {
+            "id": "a",
+            "text": "No-go: la condizione vincolante \"zero contraddizioni\" non è soddisfatta nonostante la buona media — prima elimina la contraddizione di A2, poi valuta di nuovo; ammetti la valutazione automatica dopo la calibrazione e con una ricalibrazione periodica con l'esperto."
+          },
+          {
+            "id": "b",
+            "text": "Go: la media 0,93 supera 0,9, quindi la soglia è soddisfatta indipendentemente dalla singola voce contraddittoria."
+          },
+          {
+            "id": "c",
+            "text": "Go con abbassamento della soglia a 0,85, dato che fallisce una sola voce — oppure rilasciare \"in prova\" e monitorare."
+          }
+        ],
+        "correctOptionIds": [
+          "a"
+        ]
+      }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Il golden set (set di riferimento) sono i test di regressione per le risposte del modello: domande rappresentative, casi limite, fonte di verità documentata.",
+      "Cinque metriche: accuratezza, fedeltà alle fonti, ancoraggio, pertinenza, completezza — abbina ciascuna alla dimensione della domanda.",
+      "La rubrica per LLM-as-a-judge deve essere univoca: criterio, scala con la definizione dei livelli, ancore, valutazione rispetto alla fonte.",
+      "Il valutatore ha bias (tra cui position bias e length bias) — rilevalo con lo scambio dell'ordine e la calibrazione con l'esperto (concordanza tra valutatori).",
+      "La soglia di accettazione può essere una congiunzione di condizioni; una condizione vincolante non soddisfatta o la mancanza di dati = no-go."
+    ],
+    "checklist": [
+      "Il golden set ha un'aspettativa univoca e una fonte di verità per ogni voce?",
+      "Le metriche sono abbinate a ciò che la domanda verifica davvero?",
+      "La rubrica del valutatore ha le definizioni dei livelli, le ancore e la valutazione rispetto alla fonte?",
+      "Ho verificato il position bias con lo scambio dell'ordine e calibrato la valutazione con l'esperto?",
+      "La soglia di accettazione ha una condizione vincolante, e la mancanza di dati dà no-go?"
+    ],
+    "checklistTitle": "Checklist — valutazione di LLM e RAG pronta",
+    "nextStep": "Prossimo passo: per S3 di solito il test finale e gli approfondimenti. Ripeti il ciclo: golden set → metriche → rubrica → calibrazione → soglia → decisione."
+  }
+}

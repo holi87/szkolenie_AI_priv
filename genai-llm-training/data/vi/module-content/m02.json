@@ -1,0 +1,138 @@
+{
+  "_meta": {
+    "module": "M2",
+    "issue": "#20 [M2] Architektura LLM na poziomie praktycznym (z wariantem S1 skróconym)",
+    "storyboard": "docs/storyboard/m02-architektura.md",
+    "interaction": "Licznik kontekstu (kind: tune)",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (PipeDemo/SklepDemo/NotkaApp, identyfikatory testowe). Output interakcji jest prerenderowany (lookup po poziomie), nie z żywego modelu. ZERO PII, ZERO realnych domen.",
+    "note": "6 ekranów treści + interakcja tune + podsumowanie. Wariant S1 SKRÓCONY realizowany przez onlyForPaths na blokach (token: przykład liczbowy S2/S3; transformer/attention: rdzeń S1 vs diagram S2/S3; inference cost S3). Quiz inline = pula questions/m02.json (Q14–Q15 mają paths S2/S3 — pominięcie kolejności dla S1 jest już tam wyegzekwowane)."
+  },
+  "module": "M2",
+  "intro": "Mô hình không „đọc” tài liệu như con người — nó làm việc trên các token và có cửa sổ ngữ cảnh hữu hạn. Với người kiểm thử, đây không phải chuyện vặt: một yêu cầu bị cắt cụt, một mục đặc tả bị bỏ sót hay sự ảo giác khi đầu vào quá dài đều trực tiếp làm hỏng chất lượng quyết định. Mô-đun này mang lại trực giác (không cần toán học): token, cửa sổ ngữ cảnh, transformer và cơ chế chú ý, cùng lý do vì sao nhiều tham số hơn không có nghĩa là tốt hơn.",
+  "screens": [
+    {
+      "id": "s1-po-co",
+      "title": "Vì sao người kiểm thử cần hiểu kiến trúc LLM",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Trước khi tin vào câu trả lời của mô hình cho một câu hỏi về đặc tả hay lỗi, bạn nên biết mô hình rốt cuộc „nhìn” văn bản như thế nào. Nó không đọc như con người — nó tách văn bản thành các token và chỉ chứa được vừa đủ trong cửa sổ ngữ cảnh." },
+        { "kind": "list", "items": [
+          "Yêu cầu bị cắt cụt — mô hình trả lời mà thiếu đoạn đã rơi khỏi cửa sổ.",
+          "Mục đặc tả bị bỏ sót — tiêu chí then chốt chưa bao giờ lọt vào ngữ cảnh.",
+          "Ảo giác khi đầu vào quá dài — thiếu dữ liệu nên được thay bằng nội dung bịa ra."
+        ] },
+        { "kind": "paragraph", "text": "Bạn sẽ nắm bốn điều: token và cửa sổ ngữ cảnh là gì, ba hệ quả khi ngữ cảnh quá nhỏ, trực giác về transformer và cơ chế chú ý, và rằng số lượng tham số không phải là bảo chứng cho chất lượng. Cuối cùng, chính bạn sẽ tự thu nhỏ cửa sổ ngữ cảnh trong phần tương tác „Bộ đếm ngữ cảnh”." },
+        { "kind": "callout", "variant": "info", "onlyForPaths": ["S1"], "title": "Lối tắt cho lộ trình của bạn", "text": "Câu hỏi nghiệp vụ quan trọng nhất là: „liệu tài liệu này có vừa cửa sổ của mô hình hay không?”. Nếu không — mô hình vẫn sẽ trả lời, nhưng có thể bỏ sót điều thiết yếu." }
+      ]
+    },
+    {
+      "id": "s2-token",
+      "title": "Token và quá trình tách token",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Token", "original": "token", "text": "đơn vị nhỏ nhất của văn bản mà mô hình làm việc trên đó — không phải cả một từ, mà là một phần của từ, một ký tự đơn lẻ hoặc một dấu cách." },
+        { "kind": "definition", "term": "Tách token", "original": "tokenization", "text": "việc tách văn bản thành các token mà mô hình thực hiện trước khi xử lý bất cứ thứ gì." },
+        { "kind": "paragraph", "text": "Kết luận thường nhật: chi phí và giới hạn được tính theo token, chứ không theo từ hay theo trang. Một đoạn văn „ngắn” bằng tiếng Việt có thể chiếm nhiều token hơn ta tưởng." },
+        { "kind": "callout", "variant": "info", "onlyForPaths": ["S2", "S3"], "title": "Ví dụ tham khảo", "text": "Câu trong một báo cáo hư cấu „Đơn hàng ZX-204 không vượt qua kiểm định” ước chừng cỡ chục token — bởi „ZX-204” bị tách thành vài mảnh, còn các thành phần của tiếng Việt lại thêm vào những token khác. Quy tắc ngón tay cái: 1 token ≈ vài ký tự, và một số ngôn ngữ „đắt” token hơn tiếng Anh." }
+      ]
+    },
+    {
+      "id": "s3-okno-kontekstu",
+      "title": "Cửa sổ ngữ cảnh — vì sao tài liệu dài không vào trọn vẹn",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Cửa sổ ngữ cảnh", "original": "context window", "text": "số token tối đa mà mô hình „nhìn thấy” cùng lúc — bao gồm cả đầu vào (tài liệu, câu hỏi) lẫn câu trả lời được sinh ra." },
+        { "kind": "paragraph", "text": "Khi tài liệu cộng câu hỏi cộng câu trả lời vượt quá giới hạn này, một phần đầu vào buộc phải rơi ra — mô hình đơn giản là không nhìn thấy nó." },
+        { "kind": "paragraph", "text": "Cơ chế này khác nhau tùy công cụ: có công cụ trả về lỗi „vượt quá giới hạn”, có công cụ âm thầm cắt bỏ nội dung cũ nhất, lại có công cụ dùng cửa sổ trượt. Ngay cả khi mọi thứ đều vừa, ngữ cảnh rất dài đôi khi bị khai thác kém hơn ở phần giữa (hiệu ứng „lost in the middle”). Tuy vậy, kết luận cho người kiểm thử vẫn như nhau: đừng cho rằng mô hình đã nhìn thấy và sử dụng toàn bộ — hãy kiểm chứng." },
+        { "kind": "callout", "variant": "info", "title": "Phép loại suy về chiếc bàn làm việc", "text": "Cửa sổ ngữ cảnh giống như một chiếc bàn có diện tích cố định. Mỗi tờ giấy mới đẩy những tờ cũ nhất ra khỏi mép — chúng biến mất không phải vì „không quan trọng”, mà chỉ vì hết chỗ." },
+        { "kind": "callout", "variant": "warn", "title": "Nguyên tắc ra quyết định", "text": "„Tôi đã dán cả tài liệu” không có nghĩa là „mô hình đã đọc nó”. Trước hết hãy kiểm tra xem nội dung có vừa cửa sổ ngữ cảnh hay không." }
+      ]
+    },
+    {
+      "id": "s4-trzy-skutki",
+      "title": "Ba hệ quả khi ngữ cảnh quá nhỏ",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Khi một đoạn quan trọng rơi khỏi cửa sổ, ba hệ quả điển hình sẽ xuất hiện — tất cả đều nguy hiểm cho chất lượng quyết định kiểm thử." },
+        { "kind": "list", "ordered": true, "items": [
+          "Bỏ sót thông tin — mô hình trả lời mà thiếu một yêu cầu then chốt, vì nó không nhìn thấy.",
+          "Thiếu nhất quán — trong một cuộc trò chuyện dài, mô hình „quên” những thống nhất trước đó đã rơi khỏi cửa sổ.",
+          "Ảo giác và đoán mò — thiếu dữ liệu được thay bằng nội dung bịa ra nhưng nghe có vẻ chắc chắn."
+        ] },
+        { "kind": "paragraph", "onlyForPaths": ["S2", "S3"], "text": "Ví dụ nhỏ về QA: mô hình tóm tắt đặc tả PipeDemo nhưng bỏ qua một tiêu chí thuộc mục đã rơi ra (bỏ sót); trong một luồng dài về lỗi ORD-TEST-777, nó bắt đầu phớt lờ những thống nhất từ đầu (thiếu nhất quán); khi được hỏi về một yêu cầu không còn trong ngữ cảnh, nó đưa ra câu trả lời „từ trí nhớ” (ảo giác)." },
+        { "kind": "callout", "variant": "warn", "onlyForPaths": ["S1"], "title": "Vì sao đây là rủi ro cho chất lượng", "text": "Mỗi hệ quả trong số này đều trông như một câu trả lời bình thường — mô hình không cảnh báo rằng nó đã không nhìn thấy điều gì đó. Vì vậy, một quyết định dựa trên câu trả lời như thế có thể sai một cách thầm lặng." }
+      ]
+    },
+    {
+      "id": "s5-transformer-uwaga",
+      "title": "Transformer và cơ chế chú ý — trực giác",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "onlyForPaths": ["S1"], "text": "Nói đơn giản: mô hình học các mối liên hệ giữa những đoạn văn bản, nhờ đó hiểu được rằng những từ ở xa nhau vẫn có thể quy chiếu đến nhau. Đó là tất cả những gì bạn cần ghi nhớ ở đây." },
+        { "kind": "definition", "onlyForPaths": ["S2", "S3"], "term": "Transformer", "original": "transformer", "text": "kiến trúc học cách nhận biết những token nào liên hệ với nhau — bất kể chúng nằm cách xa nhau đến đâu trong văn bản." },
+        { "kind": "definition", "onlyForPaths": ["S2", "S3"], "term": "Cơ chế chú ý", "original": "attention", "text": "cơ chế „mô hình nhìn vào đâu” — cho phép nối, ví dụ, một đại từ với danh từ ở cách đó nhiều câu, bằng cách cân nhắc trọng số các mối liên hệ giữa các token." },
+        { "kind": "diagram", "onlyForPaths": ["S2", "S3"], "textAlt": "Luồng đi từ văn bản đến câu trả lời qua năm bước: 1) văn bản đầu vào được tách thành các token (tách token); 2) các token đi vào cửa sổ ngữ cảnh; 3) mô hình dùng cơ chế chú ý để cân nhắc trọng số các mối liên hệ giữa các token; 4) mô hình sinh ra lần lượt các token của câu trả lời; 5) các token câu trả lời được ghép lại thành văn bản dễ đọc.", "ascii": "tekst -> [tokenizacja] -> tokeny -> [okno kontekstu] -> [uwaga: powiazania] -> [generacja] -> tokeny odpowiedzi -> tekst" },
+        { "kind": "paragraph", "onlyForPaths": ["S3"], "text": "Đào sâu: cơ chế chú ý so sánh mỗi token với những token khác, nên chi phí của nó tăng theo độ dài đầu vào. Cửa sổ ngữ cảnh rất dài đồng nghĩa với nhiều phép tính hơn, tức là chi phí suy luận (inference cost) cao hơn và thời gian trả lời lâu hơn — đây là thêm một lập luận để chỉ cung cấp những mục thiết yếu cho câu hỏi." }
+      ]
+    },
+    {
+      "id": "s6-parametry",
+      "title": "Nhiều tham số hơn ≠ chất lượng tốt hơn",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Tham số", "original": "parameters", "text": "các trọng số nội tại của mô hình — có thể xem chúng như „dung lượng” của mô hình, nhưng riêng số lượng của chúng không quyết định độ chính xác trên một tác vụ QA cụ thể." },
+        { "kind": "paragraph", "text": "Kết quả thực sự được quyết định bởi: mức độ phù hợp của mô hình với tác vụ, chất lượng dữ liệu, độ dài cửa sổ ngữ cảnh và cách viết prompt — chứ không phải riêng con số hàng tỷ tham số." },
+        { "kind": "table", "onlyForPaths": ["S2", "S3"], "caption": "Điều gì thực sự ảnh hưởng đến độ chính xác của câu trả lời", "headers": ["Yếu tố", "Ảnh hưởng đến chất lượng"], "rows": [
+          ["Số lượng tham số", "Có ích, nhưng không bảo đảm độ chính xác trên một tác vụ cụ thể"],
+          ["Mức độ phù hợp với tác vụ", "Thường quan trọng hơn kích thước mô hình"],
+          ["Cửa sổ ngữ cảnh và việc chọn lọc đoạn", "Quyết định mô hình có nhìn thấy dữ liệu cần thiết hay không"],
+          ["Cách viết prompt", "Ảnh hưởng đến độ chính xác và tính lặp lại của câu trả lời"]
+        ], "textAlt": "Bảng bốn yếu tố và ảnh hưởng của chúng đến chất lượng: số lượng tham số có ích nhưng không bảo đảm độ chính xác; mức độ phù hợp với tác vụ thường quan trọng hơn kích thước; cửa sổ ngữ cảnh và việc chọn lọc đoạn quyết định mô hình có nhìn thấy dữ liệu cần thiết hay không; cách viết prompt ảnh hưởng đến độ chính xác và tính lặp lại." },
+        { "kind": "callout", "variant": "warn", "title": "Mẫu phản diện", "text": "Chọn mô hình „vì nó có nhiều tỷ tham số hơn”. Ví dụ tổng hợp: mô hình lớn hơn nhầm định dạng ID lỗi hư cấu trong SklepDemo, còn mô hình nhỏ hơn với ngữ cảnh tốt hơn lại trả lời đúng. Đừng mua theo số lượng tham số — hãy kiểm chứng trên tác vụ của chính bạn." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "tune",
+    "id": "m2-licznik-kontekstu",
+    "title": "Bộ đếm ngữ cảnh",
+    "intro": "Bạn đang làm việc với một đặc tả PipeDemo tổng hợp gồm sáu mục được sắp xếp theo thứ tự: (1) Phạm vi ZX-204, (2) Tiêu chí chấp nhận, (3) Dữ liệu kiểm thử, (4) Môi trường, (5) Rủi ro, (6) Bảng thuật ngữ. Hãy thu nhỏ cửa sổ ngữ cảnh và quan sát những mục nào rơi ra và những câu hỏi kiểm tra nào không còn trả lời được nữa. Quy tắc: cửa sổ càng nhỏ, các mục về sau càng rơi ra sớm hơn (đầu tiên là Bảng thuật ngữ, cuối cùng là Phạm vi). Sau đó hãy giải checkpoint.",
+    "outputLabel": "Trạng thái tài liệu trong cửa sổ ứng với giới hạn đã chọn:",
+    "controls": [
+      { "id": "limit", "label": "Giới hạn ngữ cảnh", "levels": [
+        { "value": "duzy", "label": "Lớn", "effect": "Cửa sổ chứa được cả sáu mục (Phạm vi ZX-204, Tiêu chí chấp nhận, Dữ liệu kiểm thử, Môi trường, Rủi ro, Bảng thuật ngữ). Mỗi câu hỏi kiểm tra đều có căn cứ trong mục sẵn có — cả bốn câu hỏi đều có thể trả lời đúng." },
+        { "value": "sredni", "label": "Trung bình", "effect": "Cửa sổ chỉ còn các mục 1–3 (Phạm vi ZX-204, Tiêu chí chấp nhận, Dữ liệu kiểm thử). Nằm ngoài ngữ cảnh là: Môi trường, Rủi ro và Bảng thuật ngữ. Mất căn cứ là câu hỏi về môi trường vận hành và câu hỏi về định nghĩa trong bảng thuật ngữ; câu hỏi về phạm vi và về tiêu chí chấp nhận vẫn có thể trả lời." },
+        { "value": "maly", "label": "Nhỏ", "effect": "Cửa sổ chỉ còn mục 1 (Phạm vi ZX-204). Nằm ngoài ngữ cảnh là: Tiêu chí chấp nhận, Dữ liệu kiểm thử, Môi trường, Rủi ro và Bảng thuật ngữ. Chỉ có thể trả lời câu hỏi về phạm vi của đơn hàng; câu hỏi về tiêu chí chấp nhận, về dữ liệu kiểm thử, về môi trường và về bảng thuật ngữ đều mất căn cứ — mô hình sẽ trả lời mà không có nguồn." }
+      ] }
+    ],
+    "checkpoint": {
+      "prompt": "Bạn đặt giới hạn ngữ cảnh ở mức „Nhỏ” (cửa sổ chỉ còn mục Phạm vi ZX-204). Trong các câu hỏi kiểm tra dưới đây, câu nào mô hình SẼ KHÔNG trả lời đúng được, vì mục của nó đã rơi khỏi cửa sổ?",
+      "type": "single_choice",
+      "options": [
+        { "id": "A", "text": "Tiêu chí chấp nhận của đơn hàng ZX-204 là gì?" },
+        { "id": "B", "text": "Phạm vi của đơn hàng ZX-204 liên quan đến điều gì?" },
+        { "id": "C", "text": "Số đơn hàng được mô tả trong đặc tả là gì?" },
+        { "id": "D", "text": "Đặc tả đang được phân tích có tên là gì?" }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Chính xác: với giới hạn nhỏ, cửa sổ chỉ còn mục „Phạm vi ZX-204”. Mục „Tiêu chí chấp nhận” đã rơi ra, nên mô hình không có căn cứ để trả lời về các tiêu chí — đây là một ví dụ điển hình của việc bỏ sót thông tin.",
+      "feedbackIncorrect": "Các câu hỏi còn lại đều có thể trả lời từ mục „Phạm vi ZX-204” vẫn còn trong cửa sổ. Vấn đề là câu hỏi về tiêu chí chấp nhận — mục này đã rơi khỏi cửa sổ ở giới hạn nhỏ, nên mô hình sẽ trả lời mà không có nguồn."
+    }
+  },
+  "summary": {
+    "points": [
+      "Mô hình làm việc trên token, không phải trên từ — chi phí và giới hạn được tính theo token.",
+      "Cửa sổ ngữ cảnh là hữu hạn; khi tài liệu vượt quá nó, một phần đầu vào rơi ra và mô hình không nhìn thấy phần đó.",
+      "Cửa sổ quá nhỏ gây ra ba hệ quả: bỏ sót thông tin, thiếu nhất quán và ảo giác.",
+      "Transformer học các mối liên hệ giữa các token (cơ chế chú ý); riêng số lượng tham số tự nó không phải là bảo chứng cho chất lượng."
+    ],
+    "checklist": [
+      "Tôi đã kiểm tra rằng tài liệu vừa cửa sổ ngữ cảnh của mô hình chưa?",
+      "Tôi đã chỉ cung cấp cho mô hình những mục thiết yếu cho câu hỏi khi toàn bộ tài liệu quá dài chưa?",
+      "Tôi có đang không tin câu trả lời chỉ vì công cụ đã nhận toàn bộ văn bản không?",
+      "Tôi có đánh giá mô hình theo mức độ phù hợp với tác vụ, chứ không theo riêng số lượng tham số không?"
+    ],
+    "checklistTitle": "Danh sách kiểm tra — cửa sổ ngữ cảnh trong thực hành QA",
+    "nextStep": "Bước tiếp theo: M3 — các tham số sinh văn bản (temperature, top-p, max tokens)."
+  }
+}

@@ -1,0 +1,378 @@
+{
+  "_meta": {
+    "module": "M2",
+    "issue": "#10 [10][M2] Utwórz bank 116 pytań z metadanymi",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo/PipeDemo, identyfikatory testowe, PESEL placeholder 00000000000). ZERO realnych danych klienta/PII.",
+    "note": "Pytania modułu M2. Metadane z master allocation (rozkład globalny). Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q009",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S1"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": true,
+      "points": 1,
+      "learningOutcome": "Le participant reconnaît correctement ce qu'est un token dans le traitement du texte par un LLM (E1).",
+      "prompt": "Dans le module « Architecture des LLM », on a montré que le modèle ne travaille pas sur les mots, mais sur les tokens. Qu'est-ce qu'un token ?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Un fragment de texte (partie d'un mot, caractère ou espace) en lequel le texte est découpé avant le traitement"
+        },
+        {
+          "id": "B",
+          "text": "Toujours un mot entier séparé par des espaces"
+        },
+        {
+          "id": "C",
+          "text": "Une seule page d'un document chargée dans le modèle"
+        },
+        {
+          "id": "D",
+          "text": "Un paramètre du modèle responsable de la qualité de la réponse"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Un token est un fragment de texte — partie d'un mot, caractère ou espace — car le modèle traite le texte après l'avoir découpé en tokens (tokenisation), et non mot par mot ou page par page.",
+      "feedbackIncorrect": "Un token n'est ni un mot entier ni une page. Revenez à l'écran « Token et tokenisation » : 1 token ≈ quelques caractères, et le polonais peut être « plus coûteux » en tokens que l'anglais.",
+      "references": [
+        "M2.2"
+      ]
+    },
+    {
+      "id": "Q010",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Le participant explique ce qu'est la fenêtre de contexte et pourquoi un long document peut ne pas y tenir (E1).",
+      "prompt": "Qu'est-ce que la fenêtre de contexte (context window) et que se passe-t-il lorsque le document, avec la question et la réponse, la dépasse ?",
+      "options": [
+        {
+          "id": "A",
+          "text": "C'est le nombre maximal de tokens que le modèle voit à la fois ; une fois ce seuil dépassé, une partie de l'entrée doit être écartée"
+        },
+        {
+          "id": "B",
+          "text": "C'est le nombre de paramètres du modèle ; une fois ce seuil dépassé, le modèle fonctionne plus lentement, mais voit tout le document"
+        },
+        {
+          "id": "C",
+          "text": "C'est la limite du nombre de fichiers que l'on peut téléverser ; le texte tient toujours dans son intégralité"
+        },
+        {
+          "id": "D",
+          "text": "C'est la taille de l'écran sur lequel s'affiche la réponse du modèle"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "La fenêtre de contexte est le nombre maximal de tokens (entrée + réponse) que le modèle « voit » à la fois — une fois la limite dépassée, une partie de l'entrée est écartée, comme des feuilles repoussées d'un bureau de surface fixe.",
+      "feedbackIncorrect": "La fenêtre de contexte se compte en tokens, et non en fichiers, paramètres ou pixels d'écran. Revoyez l'écran « Fenêtre de contexte » et l'analogie du bureau.",
+      "references": [
+        "M2.3"
+      ]
+    },
+    {
+      "id": "Q011",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S1"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Le participant applique sa connaissance de la fenêtre de contexte pour évaluer pourquoi coller un document entier ne garantit pas que le modèle l'a lu (E1).",
+      "prompt": "Un testeur a collé dans le modèle l'intégralité d'une spécification fictive de SklepDemo de 80 pages et a posé une question sur une exigence précise. Le modèle a répondu en omettant une disposition clé. Quelle explication est la plus juste ?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Le document a dépassé la fenêtre de contexte, donc une partie de l'entrée (dont cette exigence) a été écartée et le modèle ne l'a pas « vue »"
+        },
+        {
+          "id": "B",
+          "text": "Le modèle a trop peu de paramètres, c'est pourquoi il ne sait pas lire de longs documents"
+        },
+        {
+          "id": "C",
+          "text": "Coller le document entier garantit toujours que le modèle a lu chaque page, il doit donc s'agir d'une erreur aléatoire"
+        },
+        {
+          "id": "D",
+          "text": "La tokenisation a supprimé les espaces, ce qui a rendu la spécification illisible pour le modèle"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Correct : « j'ai collé tout le document » ≠ « le modèle l'a lu » — lorsque le texte dépasse la fenêtre de contexte, une partie de l'entrée est écartée et peut justement omettre l'exigence clé.",
+      "feedbackIncorrect": "La cause n'est ni les paramètres ni la tokenisation des espaces — il s'agit du dépassement de la fenêtre de contexte. Revenez à l'écran « Fenêtre de contexte » et à la conclusion selon laquelle coller ≠ lire.",
+      "references": [
+        "M2.3"
+      ]
+    },
+    {
+      "id": "Q012",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Le participant identifie les conséquences d'un contexte trop petit, lorsqu'un fragment important sort de la fenêtre (E2).",
+      "prompt": "Lesquels des éléments suivants sont des conséquences directes d'une fenêtre de contexte trop petite, lorsqu'un fragment important de l'entrée est écarté ? Indiquez toutes les bonnes réponses.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Omission d'information — le modèle répond sans tenir compte d'une exigence clé"
+        },
+        {
+          "id": "B",
+          "text": "Incohérence — le modèle « oublie » les éléments établis plus tôt dans une longue conversation"
+        },
+        {
+          "id": "C",
+          "text": "Hallucination/devinette — l'absence de données est remplacée par une invention"
+        },
+        {
+          "id": "D",
+          "text": "Récupération automatique du fragment manquant sur Internet, afin de compléter le contexte"
+        },
+        {
+          "id": "E",
+          "text": "Augmentation permanente du nombre de paramètres du modèle, pour faire tenir tout le document"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Ce sont les trois conséquences d'un contexte trop petit : omission d'information, incohérence et hallucination. Le modèle ne va pas chercher de lui-même les données manquantes et ne modifie pas son nombre de paramètres.",
+      "feedbackIncorrect": "Le modèle ne comble pas les manques en récupérant des données sur le réseau ni en augmentant ses paramètres. Revoyez l'écran « Les trois conséquences d'un contexte trop petit ».",
+      "references": [
+        "M2.4"
+      ]
+    },
+    {
+      "id": "Q013",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Le participant reconnaît les situations QA dans lesquelles une fenêtre de contexte trop petite est une source réelle de risque pour la qualité des décisions (E2).",
+      "prompt": "Dans quelles situations du travail d'un testeur une fenêtre de contexte trop petite est-elle une source réelle de risque pour la qualité des décisions ? Indiquez toutes les bonnes réponses.",
+      "options": [
+        {
+          "id": "A",
+          "text": "Une longue conversation sur le défaut ORD-TEST-777, dans laquelle le modèle cesse de tenir compte des éléments établis au début du fil"
+        },
+        {
+          "id": "B",
+          "text": "L'analyse d'une spécification volumineuse, où le critère d'acceptation se trouve dans une section qui est sortie de la fenêtre"
+        },
+        {
+          "id": "C",
+          "text": "Une question sur une exigence à laquelle le modèle répond avec assurance, bien que les données sources ne soient plus dans le contexte"
+        },
+        {
+          "id": "D",
+          "text": "Une courte question sur une seule définition, dont le contenu complet tient dans la fenêtre de contexte"
+        },
+        {
+          "id": "E",
+          "text": "Le changement de couleur de l'interface de l'outil dans lequel le modèle est exécuté"
+        }
+      ],
+      "correct": [
+        "A",
+        "B",
+        "C"
+      ],
+      "feedbackCorrect": "Le risque apparaît là où un fragment important sort de la fenêtre : incohérence dans une longue conversation, critère omis et réponse assurée mais non étayée par les données. Une courte question qui tient dans la fenêtre et la couleur de l'interface ne constituent pas une menace ici.",
+      "feedbackIncorrect": "Lorsque le contenu tient dans la fenêtre ou que le changement ne concerne que l'interface, le risque lié à un contexte trop petit n'existe pas. Revoyez le lien entre la fenêtre de contexte et ses trois conséquences (écran « Les trois conséquences… »).",
+      "references": [
+        "M2.4",
+        "M2.3"
+      ]
+    },
+    {
+      "id": "Q014",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "kolejnosc_procesu",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Le participant ordonne correctement les étapes du traitement du texte par un LLM — du texte à la réponse (E3).",
+      "prompt": "Mettez dans le bon ordre les étapes qu'un LLM exécute, depuis la réception du texte jusqu'à la génération de la réponse.",
+      "sequence": [
+        "Le texte d'entrée est découpé en tokens (tokenisation)",
+        "Les tokens sont placés dans la fenêtre de contexte du modèle",
+        "Le modèle exploite les relations entre les tokens à l'aide de l'attention (attention)",
+        "Le modèle génère les tokens successifs de la réponse",
+        "Les tokens de la réponse sont réassemblés en un texte lisible"
+      ],
+      "feedbackCorrect": "Correct : texte → tokens → fenêtre de contexte → attention sur les relations → génération des tokens → réassemblage en texte. C'est le déroulement intuitif « du texte à la réponse ».",
+      "feedbackIncorrect": "La tokenisation doit avoir lieu d'abord, puis seulement la fenêtre de contexte et l'attention, et à la fin la génération et le réassemblage de la réponse. Revoyez l'écran « Transformer et attention — l'intuition ».",
+      "references": [
+        "M2.5",
+        "M2.2"
+      ]
+    },
+    {
+      "id": "Q015",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S3"
+      ],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "kolejnosc_procesu",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Le participant ordonne les étapes du traitement lorsque l'entrée est plus longue que la fenêtre de contexte (E3, E1).",
+      "prompt": "Un testeur colle un long document qui dépasse la fenêtre de contexte du modèle. Mettez les étapes dans l'ordre dans lequel le modèle traite une telle entrée trop longue.",
+      "sequence": [
+        "Le modèle reçoit le document collé et la question du testeur",
+        "Le texte est découpé en tokens (tokenisation)",
+        "Le nombre de tokens est comparé à la limite de la fenêtre de contexte",
+        "Les fragments dépassant la limite sortent de la fenêtre",
+        "Le modèle ne traite que les tokens qui tiennent dans la fenêtre",
+        "Le modèle génère une réponse à partir du contexte disponible"
+      ],
+      "feedbackCorrect": "Correct : réception du texte → tokenisation → comparaison avec la limite de la fenêtre → suppression de l'excédent → traitement de ce qui reste → réponse. C'est pourquoi une partie de l'entrée peut être écartée avant même que le modèle ne commence à calculer l'attention.",
+      "feedbackIncorrect": "La suppression de l'excédent intervient après la tokenisation et la comparaison avec la limite de la fenêtre, et le traitement ne porte que sur ce qui a tenu. Revoyez les écrans « Fenêtre de contexte » et « Transformer et attention ».",
+      "references": [
+        "M2.5",
+        "M2.3"
+      ]
+    },
+    {
+      "id": "Q016",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S1"
+      ],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": true,
+      "points": 2,
+      "learningOutcome": "Le participant prend une décision QA sûre lorsqu'un document est plus long que la fenêtre de contexte du modèle (E1, E2).",
+      "prompt": "Vous devez analyser une spécification fictive PipeDemo (environ 120 pages), et une vérification préalable montre que son texte dépasse nettement la fenêtre de contexte du modèle. Vous tenez à obtenir une réponse correcte sur des critères d'acceptation précis. Quelle est la meilleure décision ?",
+      "options": [
+        {
+          "id": "A",
+          "text": "Découper le document et ne fournir que les sections pertinentes pour la question (par ex. « Critères d'acceptation »), de sorte qu'elles tiennent dans la fenêtre de contexte"
+        },
+        {
+          "id": "B",
+          "text": "Coller le tout d'un coup — puisque l'outil a accepté le texte, le modèle prendra sûrement en compte chaque page"
+        },
+        {
+          "id": "C",
+          "text": "Coller le tout et faire confiance à la réponse, car une entrée plus longue donne toujours une vue plus complète"
+        },
+        {
+          "id": "D",
+          "text": "Demander au modèle de rédiger lui-même les fragments manquants de la spécification, qu'il n'a pas pu faire tenir"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Lorsqu'un document dépasse la fenêtre, il est sûr de ne fournir que les sections pertinentes pour la question — ainsi les critères clés se retrouvent réellement dans le contexte et ne sont pas écartés.",
+      "feedbackIncorrect": "Le fait que l'outil ait accepté le texte ne signifie pas que le modèle a vu l'ensemble ; il ne faut pas non plus lui demander d'inventer les fragments manquants. Revenez aux écrans « Fenêtre de contexte » et « Les trois conséquences… ».",
+      "references": [
+        "M2.3",
+        "M2.4"
+      ]
+    },
+    {
+      "id": "Q017",
+      "module": "M2",
+      "pillar": "foundations_technical",
+      "paths": [
+        "S2"
+      ],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Le participant évalue le choix d'un modèle en reconnaissant qu'un plus grand nombre de paramètres n'est pas à lui seul une garantie de qualité (E4).",
+      "prompt": "Une équipe choisit un modèle pour analyser le format fictif d'un identifiant de défaut dans SklepDemo. Le modèle X a nettement plus de paramètres, mais lors d'un test il se trompe sur le format de l'ID ; le modèle Y a moins de paramètres, mais avec un contexte bien choisi il reconnaît correctement le format. Un collègue propose : « On prend X, parce qu'il a plus de milliards de paramètres ». Comment évaluer au mieux cette proposition ?",
+      "options": [
+        {
+          "id": "A",
+          "text": "La rejeter comme un anti-modèle — la justesse dépend de l'adéquation à la tâche et du contexte ; puisque Y fonctionne mieux sur cette tâche, choisir Y (ou vérifier les deux options sur des cas réels)"
+        },
+        {
+          "id": "B",
+          "text": "Accepter la proposition — un plus grand nombre de paramètres signifie toujours une meilleure qualité de réponse"
+        },
+        {
+          "id": "C",
+          "text": "Accepter X, mais réduire la fenêtre de contexte pour égaliser les chances des modèles"
+        },
+        {
+          "id": "D",
+          "text": "Choisir le modèle ayant le plus de paramètres et passer les tests, car le résultat est joué d'avance"
+        }
+      ],
+      "correct": [
+        "A"
+      ],
+      "feedbackCorrect": "Le nombre de paramètres n'est pas à lui seul une garantie de qualité — ce qui compte, c'est l'adéquation à la tâche, la qualité des données et le contexte. Puisque Y fait mouche sur cette tâche, le choix « parce qu'il a plus de milliards de paramètres » est un anti-modèle.",
+      "feedbackIncorrect": "Plus de paramètres ne signifie pas automatiquement une meilleure qualité, et réduire la fenêtre de contexte dégrade les résultats. Revoyez l'écran « Plus de paramètres ≠ meilleure qualité ».",
+      "references": [
+        "M2.6"
+      ]
+    }
+  ]
+}

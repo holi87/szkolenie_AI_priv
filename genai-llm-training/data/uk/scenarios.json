@@ -1,0 +1,122 @@
+{
+  "_meta": {
+    "issue": "#8 [08][M1] Przygotuj syntetyczne scenariusze szkoleniowe",
+    "version": "0.1",
+    "doc": "docs/scenariusze.md",
+    "dataPolicy": "WSZYSTKIE dane są SYNTETYCZNE i fikcyjne. Domena e-mail: przyklad.test (zarezerwowana). Produkty/firmy fikcyjne. Identyfikatory w formatach jawnie testowych. PESEL/numery to placeholdery nieprawidłowe. ZERO realnych danych klienta/PII.",
+    "source": "wymagania/06 (moduły, interakcje), wymagania/07 (typy pytań), docs/storyboard/"
+  },
+  "scenarios": [
+    {
+      "id": "SC-QA-01",
+      "title": "Генерування тестових випадків з вимоги",
+      "modules": ["M8"],
+      "paths": ["S2", "S3"],
+      "competency": "Генерує тестові випадки та виявляє прогалини в покритті (E: M8)",
+      "usedBy": ["QA workbench", "pytania Q61-Q64"],
+      "data": {
+        "wymaganie": "Застосунок NotkaApp (вигаданий): користувач скидає пароль через посилання в e-mail, дійсне 30 хвилин; після 3 невдалих спроб обліковий запис блокується на 15 хвилин.",
+        "outputLLM": "Згенеровані випадки: TC1 успішне скидання; TC2 прострочене посилання; TC3 хибний пароль 3x → блокування. (бракує: порожній e-mail, посилання використане двічі, паралельні сесії)"
+      }
+    },
+    {
+      "id": "SC-PII-01",
+      "title": "Звернення з персональними даними — рішення про вставлення до LLM",
+      "modules": ["M10"],
+      "paths": ["S1", "S2", "S3"],
+      "competency": "Класифікує дані як дозволені / такі, що потребують анонімізації / недозволені (E: M10, критичні питання)",
+      "usedBy": ["Data safety gate", "pytania krytyczne Q81-Q85"],
+      "data": {
+        "zgloszenie": "Клієнт Jan Kowalski (jan.kowalski@przyklad.test, ID клієнта KLI-000123, PESEL 00000000000 [синтетичний, недійсний]) повідомляє про помилку оплати в SklepDemo.",
+        "pytanie": "Чи можна вставити все звернення до публічного LLM, щоб проаналізувати помилку?",
+        "poprawnaDecyzja": "Анонімізувати ідентифікаційні дані або скористатися затвердженим інструментом з контролями; не вставляти необроблені дані."
+      }
+    },
+    {
+      "id": "SC-PII-02",
+      "title": "Лог застосунку з фрагментами даних — що анонімізувати",
+      "modules": ["M10"],
+      "paths": ["S2", "S3"],
+      "competency": "Вказує дані, що потребують анонімізації в лозі (E: M10)",
+      "usedBy": ["Data safety gate", "pytania Q86-Q90"],
+      "data": {
+        "log": "2026-01-02 ERROR user=anna.nowak@przyklad.test ip=10.0.0.5 token=tok_test_ABC123 order=ORD-TEST-777 msg=payment_failed",
+        "doAnonimizacji": ["e-mail", "token", "потенційно order id у контексті клієнта"]
+      }
+    },
+    {
+      "id": "SC-RAG-01",
+      "title": "Міні-корпус документації QA для retrieval/RAG",
+      "modules": ["M4", "M5", "M6"],
+      "paths": ["S3"],
+      "competency": "Добирає retrieval і діагностує similar-but-useless; вибудовує пайплайн RAG (E: M4/M5/M6)",
+      "usedBy": ["Mapa semantyczna", "Retrieval debugger", "Zbuduj pipeline RAG", "pytania Q33-Q50"],
+      "data": {
+        "korpus": [
+          { "id": "DOC1", "text": "Процедура входу в NotkaApp: токен сесії спливає після 30 хв бездіяльності." },
+          { "id": "DOC2", "text": "Політика паролів NotkaApp: мін. 12 символів, блокування після 3 помилок." },
+          { "id": "DOC3", "text": "Скидання пароля: посилання в e-mail, дійсне 30 хв, одноразове." },
+          { "id": "DOC4", "text": "Маркетинговий FAQ NotkaApp: переваги продукту та прайс." }
+        ],
+        "zapytanie": "Через скільки часу спливає посилання для скидання пароля?",
+        "pulapka": "DOC1 (токен сесії 30 хв) семантично схожий, але правильне джерело — це DOC3 (посилання для скидання)."
+      }
+    },
+    {
+      "id": "SC-AGENT-01",
+      "title": "Надання прав агентові QA",
+      "modules": ["M9"],
+      "paths": ["S3"],
+      "competency": "Проєктує мінімальний контроль прав, логи, human-in-the-loop, rollback (E: M9)",
+      "usedBy": ["Agent permission board", "pytania Q76-Q78"],
+      "data": {
+        "agent": "Агент, що запускає регресійні тести в середовищі TEST (вигаданий CI 'PipeDemo').",
+        "zadania": ["запусти тести", "прочитай логи", "створи звіт", "заповідай дефект", "зміни конфігурацію середовища"],
+        "ryzyko": "Зміна конфігурації та запис поза TEST потребують затвердження людиною та rollback; немає доступу до продакшену."
+      }
+    },
+    {
+      "id": "SC-VERIFY-01",
+      "title": "Відповідь LLM із сумішшю обґрунтованого контенту та галюцинацій",
+      "modules": ["M11"],
+      "paths": ["S1", "S2", "S3"],
+      "competency": "Позначає речення як правильні / необґрунтовані / такі, що потребують джерела / ризиковані (E: M11)",
+      "usedBy": ["Output verifier", "pytania Q95-Q98"],
+      "data": {
+        "odpowiedzLLM": [
+          "Скидання пароля в NotkaApp використовує посилання, дійсне 30 хвилин. [відповідає DOC3]",
+          "Посилання можна використовувати багаторазово до успіху. [необґрунтовано — суперечить DOC3]",
+          "Блокування облікового запису триває 24 години. [потребує джерела — не відповідає вимозі 15 хв]",
+          "NotkaApp має сертифікат ISO 27001. [ризиковано — немає джерела]"
+        ]
+      }
+    },
+    {
+      "id": "SC-PROMPT-01",
+      "title": "Дефектний промпт для виправлення",
+      "modules": ["M7"],
+      "paths": ["S1", "S2", "S3"],
+      "competency": "Виправляє неточний промпт за рубрикою (E: M7)",
+      "usedBy": ["Prompt clinic", "pytania Q57-Q60", "rubryka R1"],
+      "data": {
+        "wadliwyPrompt": "Напиши тести для входу.",
+        "braki": ["немає ролі/мети", "немає контексту (який застосунок, вимога)", "немає обмежень і критеріїв", "немає формату виводу"]
+      }
+    },
+    {
+      "id": "SC-EVAL-01",
+      "title": "Розбіжність оцінки людини та LLM-as-a-judge",
+      "modules": ["M12"],
+      "paths": ["S3"],
+      "competency": "Виявляє bias/position bias і калібрує рубрику (E: M12)",
+      "usedBy": ["Judge calibration lab", "pytania Q113-Q116", "rubryka R3"],
+      "data": {
+        "przyklady": [
+          { "id": "EX1", "ocenaCzlowiek": 4, "ocenaJudge": 5, "uwaga": "judge надає перевагу довшій відповіді" },
+          { "id": "EX2", "ocenaCzlowiek": 2, "ocenaJudge": 4, "uwaga": "position bias — перша відповідь" }
+        ],
+        "zadanie": "Вкажи джерело розбіжності та виправ рубрику."
+      }
+    }
+  ]
+}

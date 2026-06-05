@@ -1,0 +1,113 @@
+{
+  "_meta": {
+    "issue": "#124 [M16] Lộ trình hình thành S4 — các tác tử AI (mô-đun đào tạo, tương tác tune)",
+    "adr": "docs/adr/0009-sciezka-formatywna-s4-skala-holaka.md",
+    "interaction": "Tinh chỉnh tham số của tác tử (kind: tune) — bài tập hình thành, KHÔNG tính điểm để hoàn thành",
+    "source": "Các trục trưởng thành của Thang đo Holak: khả năng kiểm chứng đầu ra, khả năng hoàn tác quyết định, kiểm soát tác tử. Ghi nguồn: quality-blog.eu/pl/blog/skala-holaka.",
+    "dataPolicy": "TẤT CẢ ví dụ đều TỔNG HỢP và chung chung (không có dữ liệu thật/PII). Mô-đun hình thành — không có ngưỡng đạt và không có chứng chỉ."
+  },
+  "module": "MSK2",
+  "intro": "Tác tử không phải là chatbot: nó thực hiện các bước và dùng công cụ, nên nó có thể thực sự thay đổi thế giới — tệp, email, dữ liệu, kho mã. Làm việc trưởng thành với tác tử là khớp mức độ tự chủ với rủi ro: hậu quả càng khó hoàn tác và đầu ra càng khó kiểm chứng, thì quyền hạn càng hẹp và càng cần nhiều sự kiểm soát của con người. Mô-đun này dạy bạn tinh chỉnh các đòn bẩy đó. Đây là bài tập phát triển, không phải bài kiểm tra.",
+  "screens": [
+    {
+      "id": "msk2-s1-od-chatbota-do-agenta",
+      "title": "Từ chatbot đến tác tử",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Chatbot trả lời bằng văn bản. Workflow có công cụ thực hiện một bước đã được xác định. Tác tử lập kế hoạch và thực hiện nhiều bước, tự mình với tay đến các công cụ — và chính vì thế nó cần ranh giới. Câu hỏi không phải là „tác tử có làm được không”, mà là „điều gì sẽ xảy ra nếu nó sai, và liệu ta có kịp hoàn tác hay không”." },
+        { "kind": "list", "items": [
+          "Chatbot — đề xuất, không thực thi gì cả.",
+          "Workflow có công cụ — thực hiện một bước đã được xác định.",
+          "Tác tử — lập kế hoạch và thực hiện nhiều bước với quyền truy cập công cụ."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Trục của Thang đo Holak", "text": "Thiết kế công việc sao cho các quyết định được AI hỗ trợ (kể cả hành động của tác tử) đều có thể kiểm chứng và hoàn tác chính là dấu hiệu bước lên cấp độ cao hơn.",
+          "links": [ { "label": "Thang đo Holak — mô hình trưởng thành (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka" } ]
+        }
+      ]
+    },
+    {
+      "id": "msk2-s2-trzy-dzwignie",
+      "title": "Ba đòn bẩy kiểm soát tác tử",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "An toàn của tác tử không dựa vào sự tin tưởng, mà dựa vào việc thiết lập ba đòn bẩy: phạm vi quyền hạn (tác tử nói chung có thể làm gì), điểm phê duyệt của con người (khi nào nó phải hỏi) và dấu vết kiểm toán cùng khả năng hoàn tác (liệu có thể kiểm tra và hoàn tác những gì nó đã làm hay không)." },
+        { "kind": "list", "items": [
+          "Phạm vi quyền hạn — từ chỉ-đọc đến ghi toàn quyền vào môi trường vận hành.",
+          "Human-in-the-loop — phê duyệt luôn luôn, chỉ với hành động không thể hoàn tác, hoặc không bao giờ.",
+          "Dấu vết và khả năng hoàn tác — nhật ký đầy đủ kèm rollback, nhật ký cơ bản, hoặc không có gì."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Cái bẫy „tác tử sẽ tự xoay xở”", "text": "Quyền truy cập càng rộng và càng ít kiểm soát thì càng rẻ… cho đến lỗi không thể hoàn tác đầu tiên. Theo mặc định hãy thu hẹp quyền hạn và yêu cầu phê duyệt ở những nơi mà hậu quả khó hoàn tác." }
+      ]
+    },
+    {
+      "id": "msk2-s3-jak-cwiczyc",
+      "title": "Cách luyện tập điều này",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Bên dưới bạn sẽ thiết lập ba tham số của tác tử và xem hồ sơ rủi ro thay đổi trực tiếp như thế nào. Sau đó tại checkpoint bạn sẽ chọn một bộ cấu hình an toàn cho nhiệm vụ có hậu quả không thể hoàn tác. Không có ngưỡng đạt — điều quan trọng là phản xạ khớp mức độ tự chủ với rủi ro." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "tune",
+    "id": "msk2-tune",
+    "title": "Tinh chỉnh mức độ tự chủ và kiểm soát của tác tử",
+    "intro": "Thiết lập ba đòn bẩy và quan sát hồ sơ rủi ro. Sau đó trả lời checkpoint — đây là bài tập phát triển, không phải bài kiểm tra.",
+    "outputLabel": "Hồ sơ rủi ro của tác tử (trực tiếp):",
+    "controls": [
+      {
+        "id": "scope",
+        "label": "Phạm vi quyền hạn",
+        "levels": [
+          { "value": "read", "label": "Chỉ đọc", "effect": "Tác tử không thay đổi gì cả — rủi ro thấp nhất, tốt cho phân tích và đề xuất." },
+          { "value": "sandbox", "label": "Ghi trong hộp cát", "effect": "Thay đổi chỉ trong môi trường được cô lập — dễ dàng loại bỏ." },
+          { "value": "prod", "label": "Ghi toàn quyền vào môi trường vận hành", "effect": "Tác tử có thể thay đổi vĩnh viễn dữ liệu vận hành — rủi ro cao nhất, cần kiểm soát." }
+        ]
+      },
+      {
+        "id": "approval",
+        "label": "Phê duyệt của con người",
+        "levels": [
+          { "value": "always", "label": "Luôn luôn trước khi hành động", "effect": "Con người phê duyệt từng bước — chậm hơn, nhưng được kiểm soát hoàn toàn." },
+          { "value": "irreversible", "label": "Đối với các quyết định không thể hoàn tác", "effect": "Cần có sự đồng ý khi không thể hoàn tác hậu quả — một thỏa hiệp mặc định hợp lý." },
+          { "value": "never", "label": "Không bao giờ (tự chủ hoàn toàn)", "effect": "Tác tử hành động mà không hỏi — nhanh, nhưng lỗi có thể trôi qua mà không bị phát hiện." }
+        ]
+      },
+      {
+        "id": "audit",
+        "label": "Dấu vết kiểm toán và khả năng hoàn tác",
+        "levels": [
+          { "value": "full", "label": "Nhật ký đầy đủ + rollback", "effect": "Mọi hành động đều được ghi lại và có thể hoàn tác — khả năng kiểm chứng đầy đủ." },
+          { "value": "basic", "label": "Nhật ký cơ bản", "effect": "Biết được điều gì đã xảy ra, nhưng việc hoàn tác đôi khi phải làm thủ công và khó khăn." },
+          { "value": "none", "label": "Không có dấu vết", "effect": "Không biết tác tử đã làm gì và tại sao — không có khả năng kiểm chứng." }
+        ]
+      }
+    ],
+    "checkpoint": {
+      "prompt": "Tác tử cần hỗ trợ một nhiệm vụ có thể thay đổi VĨNH VIỄN dữ liệu vận hành (hậu quả khó hoàn tác). Bộ cấu hình nào là an toàn nhất để khởi đầu?",
+      "type": "single_choice",
+      "options": [
+        { "id": "a", "text": "Ghi toàn quyền vào môi trường vận hành, không bao giờ phê duyệt, không có dấu vết — „tác tử sẽ tự xoay xở”." },
+        { "id": "b", "text": "Chỉ đọc hoặc hộp cát, con người phê duyệt đối với hành động không thể hoàn tác, nhật ký đầy đủ kèm rollback." },
+        { "id": "c", "text": "Ghi toàn quyền vào môi trường vận hành, nhật ký cơ bản, không phê duyệt — „cứ tăng tốc, kiểm tra sau”." }
+      ],
+      "correct": ["b"],
+      "feedbackCorrect": "Đúng. Với hậu quả không thể hoàn tác, bạn thu hẹp quyền hạn, yêu cầu sự đồng ý của con người và bảo đảm dấu vết đầy đủ kèm khả năng hoàn tác.",
+      "feedbackIncorrect": "Với hậu quả không thể hoàn tác, sự tự chủ mà không có kiểm soát và dấu vết chính là tự chuốc lấy một lỗi không thể hoàn tác. Hãy thu hẹp quyền hạn, thêm phê duyệt của con người và nhật ký đầy đủ kèm rollback."
+    }
+  },
+  "summary": {
+    "points": [
+      "Tác tử có thể thực sự thay đổi thế giới — hãy khớp mức độ tự chủ với rủi ro và khả năng hoàn tác của nhiệm vụ.",
+      "Ba đòn bẩy kiểm soát: phạm vi quyền hạn, phê duyệt của con người, dấu vết kiểm toán kèm rollback.",
+      "Theo mặc định hãy thu hẹp quyền hạn; hậu quả càng khó hoàn tác thì càng cần nhiều sự kiểm soát của con người."
+    ],
+    "checklist": [
+      "Tôi có biết điều tồi tệ nhất mà tác tử có thể làm với quyền hạn hiện tại không?",
+      "Các hành động không thể hoàn tác có cần được con người phê duyệt không?",
+      "Có còn lại dấu vết kiểm toán và có thể hoàn tác hành động của tác tử không?"
+    ],
+    "checklistTitle": "Danh mục kiểm tra — trước khi cho tác tử vào",
+    "nextStep": "Bước tiếp theo: đối với một nhiệm vụ thực tế của tác tử, hãy viết ra hậu quả tồi tệ nhất có thể xảy ra và khớp với nó phạm vi quyền hạn, điểm phê duyệt và dấu vết kiểm toán."
+  }
+}
