@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pl" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Makieta 05 — Wynik · GenAI i LLM (QualityCat)</title>
+<style>
+:root{
+  --color-bg:#0F1219; --color-surface:#161A22; --color-surface-2:#1E232E; --color-surface-3:#262C39;
+  --color-fg:#EAEDF3; --color-muted:#A7B0C0;
+  --color-border:#2A3140; --color-border-strong:#6B7588;
+  --color-accent:#6EA8FE; --color-accent-fg:#07101F; --color-accent-quiet:#18233A; --color-accent-2:#9C8CFA;
+  --color-ok:#4ADE80; --color-warn:#FBBF24; --color-bad:#F87171; --color-locked:#6B7280;
+  --font-base:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --font-reading:Georgia,"Iowan Old Style","Palatino Linotype","Times New Roman",serif;
+  --font-mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --fs-300:.8rem; --fs-400:.9rem; --fs-500:1rem; --fs-600:1.2rem; --fs-700:1.6rem; --fs-800:2.2rem;
+  --fw-medium:600; --fw-bold:700; --lh-tight:1.2; --fs-base:var(--fs-500); --lh:1.65;
+  --sp-1:.25rem; --sp-2:.5rem; --sp-3:.75rem; --sp-4:1rem; --sp-5:1.5rem; --sp-6:2rem;
+  --radius:10px; --radius-sm:7px; --radius-lg:16px; --radius-pill:999px; --gap:var(--sp-4);
+  --maxw-content:70ch;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.32); --shadow-md:0 8px 24px rgba(0,0,0,.34);
+  --dur-fast:120ms; --dur-base:240ms; --ease:cubic-bezier(.4,0,.2,1); --focus:3px solid var(--color-accent);
+}
+:root[data-theme="light"]{
+  --color-bg:#F5F7FA; --color-surface:#FFFFFF; --color-surface-2:#EDF0F5; --color-surface-3:#E3E8F0;
+  --color-fg:#161922; --color-muted:#4F5765;
+  --color-border:#DCE1EA; --color-border-strong:#707A8B;
+  --color-accent:#1D4ED8; --color-accent-fg:#FFFFFF; --color-accent-quiet:#E7EDFD; --color-accent-2:#6D3FE0;
+  --color-ok:#127334; --color-warn:#B45309; --color-bad:#B91C1C; --color-locked:#5C6473;
+  --shadow-sm:0 1px 2px rgba(15,23,42,.10); --shadow-md:0 8px 24px rgba(15,23,42,.10);
+}
+*{box-sizing:border-box;}
+body{margin:0;background:#06080c;font-family:var(--font-base);}
+.mk-bar{position:sticky;top:0;z-index:200;display:flex;flex-wrap:wrap;align-items:center;gap:1rem;justify-content:space-between;padding:.6rem 1rem;background:#0b0e14;border-bottom:1px solid #232a36;color:#cfd6e4;}
+.mk-bar__title{display:flex;align-items:center;gap:.6rem;font-size:.82rem;} .mk-bar__title b{color:#fff;font-weight:600;}
+.mk-bar__tag{font-size:.66rem;text-transform:uppercase;letter-spacing:.12em;color:#8b94a6;border:1px solid #2c3442;border-radius:999px;padding:.15rem .55rem;}
+.mk-groups{display:flex;flex-wrap:wrap;gap:.5rem;}
+.mk-seg{display:inline-flex;background:#11151d;border:1px solid #2c3442;border-radius:999px;padding:2px;}
+.mk-seg button{font:inherit;font-size:.76rem;color:#aab3c4;background:none;border:0;padding:.32rem .8rem;border-radius:999px;cursor:pointer;}
+.mk-seg button[aria-pressed="true"]{background:#2a6fdb;color:#fff;}
+.mk-seg button:focus-visible{outline:2px solid #6ea8fe;outline-offset:2px;}
+.mk-stage{padding:clamp(.5rem,3vw,2rem);display:flex;justify-content:center;}
+.frame{width:100%;max-width:1180px;background:var(--color-bg);color:var(--color-fg);border-radius:14px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.5);container-type:inline-size;border:1px solid rgba(255,255,255,.05);}
+.frame.is-mobile{max-width:380px;border-radius:30px;border:8px solid #05070b;}
+.app{background:var(--color-bg);color:var(--color-fg);font-size:var(--fs-base);line-height:var(--lh);min-height:60vh;}
+.app h1,.app h2,.app h3{line-height:var(--lh-tight);}
+.app p{margin:0 0 1rem;}
+.app a{color:var(--color-accent);}
+.app :focus-visible{outline:var(--focus);outline-offset:2px;border-radius:4px;}
+.skip-link{position:absolute;left:.5rem;top:-3rem;background:var(--color-accent);color:var(--color-accent-fg);padding:.5rem .9rem;border-radius:var(--radius);z-index:100;transition:top .15s ease;text-decoration:none;}
+.skip-link:focus{top:.5rem;}
+.app-header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--color-surface) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--color-border);}
+.app-header__bar{display:flex;align-items:center;justify-content:space-between;gap:var(--gap);padding:.7rem clamp(1rem,3vw,1.6rem);flex-wrap:wrap;}
+.brand{display:flex;align-items:center;gap:.6rem;}
+.brand__logo{display:inline-flex;width:34px;height:34px;align-items:center;justify-content:center;border-radius:9px;background:var(--color-accent-quiet);color:var(--color-accent);border:1px solid var(--color-border-strong);}
+.brand__logo svg{width:18px;height:18px;display:block;}
+.brand__text{display:flex;flex-direction:column;line-height:1.15;}
+.brand__name{font-weight:700;font-size:.98rem;letter-spacing:-.01em;}
+.brand__sub{font-size:.7rem;color:var(--color-muted);letter-spacing:.04em;text-transform:uppercase;}
+.app-header__meta{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;}
+.path-badge{font-size:var(--fs-300);padding:.25rem .7rem;border:1px solid var(--color-border-strong);border-radius:var(--radius-pill);color:var(--color-fg);background:var(--color-surface-2);font-weight:600;}
+.path-badge--eyebrow{border-color:transparent;background:var(--color-accent-quiet);color:var(--color-accent);}
+.lang-switch__trigger,.theme-toggle{gap:.4rem;padding:.42rem .7rem;}
+.lang-switch__flag-wrap{display:inline-flex;border-radius:2px;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(120,130,150,.7);width:18px;height:13px;}
+.lang-switch__flag-wrap span{display:block;width:100%;height:50%;}
+.lang-switch__flag-wrap .w{background:#fff;} .lang-switch__flag-wrap .r{background:#dc143c;}
+.lang-switch__label{font-weight:600;font-size:var(--fs-400);} .lang-switch__caret{font-size:.7em;opacity:.8;}
+.theme-toggle__icon{display:block;width:16px;height:16px;} .theme-toggle__icon--light{display:none;}
+:root[data-theme="light"] .theme-toggle__icon--dark{display:none;} :root[data-theme="light"] .theme-toggle__icon--light{display:block;}
+.theme-toggle__label{font-size:var(--fs-400);font-weight:600;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;font:inherit;font-weight:600;cursor:pointer;padding:.6rem 1.05rem;min-height:44px;border-radius:9px;border:1px solid var(--color-accent);background:var(--color-accent);color:var(--color-accent-fg);transition:filter var(--dur-fast) var(--ease);text-decoration:none;}
+.btn:hover{filter:brightness(1.08);}
+.btn--ghost{background:transparent;color:var(--color-fg);border-color:var(--color-border-strong);}
+.btn--ghost:hover{background:var(--color-surface-2);}
+.btn--sm{min-height:38px;padding:.4rem .8rem;font-size:var(--fs-400);}
+.btn svg{width:1.05em;height:1.05em;}
+.icon{flex:none;vertical-align:-.125em;}
+.eyebrow{display:inline-block;font-size:var(--fs-300);font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent);margin:0 0 .5rem;}
+.muted{color:var(--color-muted);}
+/* Result layout */
+.layout{max-width:820px;margin:0 auto;padding:clamp(1rem,3vw,1.8rem);}
+.view{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:clamp(1.4rem,3.5vw,2.6rem);box-shadow:var(--shadow-sm);}
+.result-section[hidden]{display:none;}
+.result-hero{display:flex;gap:1.8rem;align-items:center;flex-wrap:wrap;}
+.score-ring{position:relative;width:148px;height:148px;flex:none;}
+.score-ring svg{width:100%;height:100%;transform:rotate(-90deg);}
+.score-ring__track{fill:none;stroke:var(--color-surface-2);stroke-width:11;}
+.score-ring__bar{fill:none;stroke-width:11;stroke-linecap:round;}
+.score-ring--pass .score-ring__bar{stroke:var(--color-ok);}
+.score-ring--fail .score-ring__bar{stroke:var(--color-warn);}
+.score-ring__center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.score-ring__value{font-family:var(--font-reading);font-size:2.4rem;font-weight:700;line-height:1;}
+.score-ring__cap{font-size:.66rem;color:var(--color-muted);text-transform:uppercase;letter-spacing:.08em;margin-top:.3rem;}
+.result-hero__main{min-width:200px;flex:1;}
+.result-hero__main h1{font-family:var(--font-reading);font-size:var(--fs-800);margin:0 0 .6rem;letter-spacing:-.01em;}
+.result-status{display:inline-flex;align-items:center;gap:.45rem;padding:.35rem .85rem;border-radius:999px;font-weight:700;border:1px solid;font-size:var(--fs-400);}
+.result-status svg{width:1.15em;height:1.15em;}
+.result-status--pass{color:var(--color-ok);border-color:var(--color-ok);background:color-mix(in srgb,var(--color-ok) 12%,transparent);}
+.result-status--fail{color:var(--color-warn);border-color:var(--color-warn);background:color-mix(in srgb,var(--color-warn) 12%,transparent);}
+.result-notice{margin:1.2rem 0 0;padding:.9rem 1.1rem;border:1px solid var(--color-border);border-left:4px solid var(--color-warn);border-radius:var(--radius);background:var(--color-surface-2);}
+.result-notice b{font-size:var(--fs-700);font-family:var(--font-reading);}
+.section-h{font-family:var(--font-reading);font-size:var(--fs-700);margin:1.8rem 0 .6rem;letter-spacing:-.01em;}
+.gates{list-style:none;margin:.4rem 0;padding:0;display:grid;gap:.5rem;}
+.gate{display:flex;gap:.55rem;align-items:flex-start;padding:.65rem .9rem;border:1px solid var(--color-border);border-left-width:4px;border-radius:var(--radius-sm);background:var(--color-surface-2);}
+.gate__icon{flex:none;margin-top:.05rem;}.gate__icon svg{width:1.2em;height:1.2em;}
+.gate--ok{border-left-color:var(--color-ok);} .gate--ok .gate__icon{color:var(--color-ok);}
+.gate--fail{border-left-color:var(--color-bad);background:color-mix(in srgb,var(--color-bad) 9%,transparent);} .gate--fail .gate__icon{color:var(--color-bad);}
+.gate b{font-weight:700;}
+.weak-list{padding-left:1.2rem;color:var(--color-muted);max-width:var(--maxw-content);}
+.weak-list li{margin:.3rem 0;}
+.btn-row{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.2rem;}
+.btn-row--export{margin-top:1.6rem;padding-top:1.2rem;border-top:1px solid var(--color-border);}
+.attempt-note{font-size:var(--fs-300);color:var(--color-muted);margin-top:1rem;}
+.app-footer{color:var(--color-muted);font-size:var(--fs-400);text-align:center;padding:1.6rem 1rem;border-top:1px solid var(--color-border);}
+.app-footer a{color:var(--color-accent);}
+@container (max-width:560px){
+  .result-hero{justify-content:center;text-align:center;}
+  .result-hero__main{text-align:center;}
+  .result-hero__main h1{font-size:1.85rem;}
+  .theme-toggle__label,.brand__sub{display:none;}
+  .btn-row .btn{width:100%;}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important;}}
+</style>
+</head>
+<body>
+<div class="mk-bar">
+  <div class="mk-bar__title"><span class="mk-bar__tag">Makieta 05</span> <b>Wynik ścieżki</b> — bez certyfikatu (M12-2)</div>
+  <div class="mk-groups">
+    <div class="mk-seg" role="group" aria-label="Wynik"><button data-res-btn="pass" aria-pressed="true">Zaliczony</button><button data-res-btn="fail" aria-pressed="false">Niezaliczony</button></div>
+    <div class="mk-seg" role="group" aria-label="Motyw"><button data-theme-btn="dark" aria-pressed="true">Ciemny</button><button data-theme-btn="light" aria-pressed="false">Jasny</button></div>
+    <div class="mk-seg" role="group" aria-label="Widok"><button data-vp-btn="desktop" aria-pressed="true">Desktop</button><button data-vp-btn="mobile" aria-pressed="false">Mobile 360</button></div>
+  </div>
+</div>
+<div class="mk-stage">
+<div class="frame" id="frame">
+<div class="app">
+  <a class="skip-link" href="#view">Przejdź do treści</a>
+  <header class="app-header"><div class="app-header__bar">
+    <div class="brand">
+      <span class="brand__logo" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M8 1.5 14.5 8 8 14.5 1.5 8Z" fill="currentColor"/></svg></span>
+      <span class="brand__text"><span class="brand__name">Szkolenie GenAI i LLM</span><span class="brand__sub">QualityCat</span></span>
+    </div>
+    <div class="app-header__meta">
+      <button class="btn btn--ghost lang-switch__trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Język: polski"><span class="lang-switch__flag-wrap" aria-hidden="true"><span class="w"></span><span class="r"></span></span><span class="lang-switch__label">PL</span><span class="lang-switch__caret" aria-hidden="true">▾</span></button>
+      <button id="theme-toggle" class="btn btn--ghost theme-toggle" type="button" aria-pressed="false" aria-label="Przełącz motyw jasny/ciemny"><svg class="theme-toggle__icon theme-toggle__icon--dark" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M6 1.5A6.5 6.5 0 1 0 14.5 10 5 5 0 0 1 6 1.5Z"/></svg><svg class="theme-toggle__icon theme-toggle__icon--light" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="3.2" fill="currentColor"/><g stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3 3l1.4 1.4M11.6 11.6 13 13M13 3l-1.4 1.4M4.4 11.6 3 13"/></g></svg><span class="theme-toggle__label">Motyw</span></button>
+      <span class="path-badge path-badge--eyebrow">Ścieżka S2</span>
+      <button class="btn btn--ghost btn--sm" type="button">Moduły</button>
+    </div>
+  </div></header>
+
+  <div class="layout"><main id="view" class="view" tabindex="-1">
+
+    <section class="result-section" id="result-pass">
+      <p class="eyebrow">Wynik ścieżki · Tester / QA</p>
+      <div class="result-hero">
+        <div class="score-ring score-ring--pass" role="img" aria-label="Wynik ścieżki: 86 procent">
+          <svg viewBox="0 0 120 120"><circle class="score-ring__track" cx="60" cy="60" r="52"></circle><circle class="score-ring__bar" cx="60" cy="60" r="52" stroke-dasharray="326.7" stroke-dashoffset="45.7"></circle></svg>
+          <div class="score-ring__center"><span class="score-ring__value">86%</span><span class="score-ring__cap">wynik ścieżki</span></div>
+        </div>
+        <div class="result-hero__main">
+          <h1>Ścieżka zaliczona</h1>
+          <p class="result-status result-status--pass"><svg viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Zaliczone</p>
+          <p class="muted" style="margin:.9rem 0 0;max-width:var(--maxw-content)">Wynik łączy quizy modułowe, test końcowy i zadania praktyczne. Wszystkie bramki zaliczenia są spełnione.</p>
+        </div>
+      </div>
+
+      <h2 class="section-h">Status bramek zaliczenia</h2>
+      <ul class="gates">
+        <li class="gate gate--ok"><span class="gate__icon" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><b>spełniona</b> — Próg ogólny: 86% ≥ 75%</span></li>
+        <li class="gate gate--ok"><span class="gate__icon" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><b>spełniona</b> — Pytania krytyczne (M11): wszystkie poprawne</span></li>
+        <li class="gate gate--ok"><span class="gate__icon" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><b>spełniona</b> — Zadanie praktyczne (Prompt clinic): 8/10</span></li>
+      </ul>
+
+      <h2 class="section-h">Do powtórzenia</h2>
+      <ul class="weak-list"><li>M8 — LLM w pracy QA (72%)</li><li>M5 — Bazy wektorowe i retrieval (74%)</li></ul>
+
+      <div class="btn-row btn-row--export">
+        <button class="btn btn--ghost" type="button"><svg viewBox="0 0 16 16" fill="none"><path d="M8 2v8M8 10 5 7M8 10l3-3M3 13h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Pobierz wynik (JSON)</button>
+        <button class="btn btn--ghost" type="button"><svg viewBox="0 0 16 16" fill="none"><path d="M8 2v8M8 10 5 7M8 10l3-3M3 13h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Pobierz wynik (CSV)</button>
+        <button class="btn btn--ghost" type="button"><svg viewBox="0 0 16 16" fill="none"><path d="M8 2v8M8 10 5 7M8 10l3-3M3 13h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Pobierz odpowiedzi pytań (CSV)</button>
+      </div>
+      <div class="btn-row"><button class="btn btn--ghost" type="button">Wróć do modułów</button></div>
+    </section>
+
+    <section class="result-section" id="result-fail" hidden>
+      <p class="eyebrow">Wynik ścieżki · Tester / QA</p>
+      <div class="result-hero">
+        <div class="score-ring score-ring--fail" role="img" aria-label="Wynik ścieżki: 62 procent">
+          <svg viewBox="0 0 120 120"><circle class="score-ring__track" cx="60" cy="60" r="52"></circle><circle class="score-ring__bar" cx="60" cy="60" r="52" stroke-dasharray="326.7" stroke-dashoffset="124.2"></circle></svg>
+          <div class="score-ring__center"><span class="score-ring__value">62%</span><span class="score-ring__cap">wynik ścieżki</span></div>
+        </div>
+        <div class="result-hero__main">
+          <h1>Ścieżka jeszcze niezaliczona</h1>
+          <p class="result-status result-status--fail"><svg viewBox="0 0 16 16" fill="none"><path d="M8 2.6 14.4 13H1.6Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 6.4v3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="11.3" r=".85" fill="currentColor"/></svg>Niezaliczone</p>
+          <div class="result-notice" role="alert"><b>62%</b> — wynik ścieżki. Aby zaliczyć, spełnij wszystkie bramki poniżej.</div>
+        </div>
+      </div>
+
+      <h2 class="section-h">Status bramek zaliczenia</h2>
+      <ul class="gates">
+        <li class="gate gate--fail"><span class="gate__icon" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M4.5 4.5l7 7M11.5 4.5l-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><span><b>niespełniona</b> — Próg ogólny: 62% &lt; 75%</span></li>
+        <li class="gate gate--fail"><span class="gate__icon" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M4.5 4.5l7 7M11.5 4.5l-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><span><b>niespełniona</b> — Pytania krytyczne (M11): 1 błędne</span></li>
+        <li class="gate gate--ok"><span class="gate__icon" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><b>spełniona</b> — Zadanie praktyczne (Prompt clinic): 8/10</span></li>
+      </ul>
+
+      <h2 class="section-h">Do powtórzenia</h2>
+      <ul class="weak-list"><li>M10 — Higiena danych i prywatność (54%)</li><li>M11 — Weryfikacja outputu i ryzyka (60%)</li><li>M8 — LLM w pracy QA (66%)</li></ul>
+
+      <p class="attempt-note">Podejście 2 z 3.</p>
+      <div class="btn-row"><button class="btn" type="button">Podejdź ponownie</button><button class="btn btn--ghost" type="button">Wróć do modułów</button></div>
+      <div class="btn-row btn-row--export">
+        <button class="btn btn--ghost" type="button"><svg viewBox="0 0 16 16" fill="none"><path d="M8 2v8M8 10 5 7M8 10l3-3M3 13h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Pobierz wynik (JSON)</button>
+        <button class="btn btn--ghost" type="button"><svg viewBox="0 0 16 16" fill="none"><path d="M8 2v8M8 10 5 7M8 10l3-3M3 13h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Pobierz wynik (CSV)</button>
+      </div>
+    </section>
+
+  </main></div>
+
+  <footer class="app-footer"><p><span>Szkolenie statyczne (GitHub Pages). Postęp zapisujemy lokalnie w tej przeglądarce; nic nie wysyłamy na serwer, brak cookies.</span> <a href="#">Prywatność</a></p></footer>
+</div>
+</div>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, frame=document.getElementById('frame');
+  function setTheme(t){root.setAttribute('data-theme',t);document.querySelectorAll('[data-theme-btn]').forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-theme-btn')===t));});var tt=document.getElementById('theme-toggle');if(tt)tt.setAttribute('aria-pressed',String(t==='light'));}
+  function setVp(v){frame.classList.toggle('is-mobile',v==='mobile');document.querySelectorAll('[data-vp-btn]').forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-vp-btn')===v));});}
+  function setRes(r){document.getElementById('result-pass').hidden=(r!=='pass');document.getElementById('result-fail').hidden=(r!=='fail');document.querySelectorAll('[data-res-btn]').forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-res-btn')===r));});}
+  document.querySelectorAll('[data-theme-btn]').forEach(function(b){b.addEventListener('click',function(){setTheme(b.getAttribute('data-theme-btn'));});});
+  document.querySelectorAll('[data-vp-btn]').forEach(function(b){b.addEventListener('click',function(){setVp(b.getAttribute('data-vp-btn'));});});
+  document.querySelectorAll('[data-res-btn]').forEach(function(b){b.addEventListener('click',function(){setRes(b.getAttribute('data-res-btn'));});});
+  var tt=document.getElementById('theme-toggle');if(tt)tt.addEventListener('click',function(){setTheme(root.getAttribute('data-theme')==='light'?'dark':'light');});
+})();
+</script>
+</body>
+</html>
