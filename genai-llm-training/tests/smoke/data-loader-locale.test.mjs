@@ -22,8 +22,8 @@ function diskFetch(url) {
 test("loader czyta układ per-locale (pl) bez 404 — ścieżki loadera == układ na dysku", async () => {
   const data = await loadTrainingData({ basePath: `${DATA}/`, locale: "pl", fetchImpl: diskFetch });
   assert.equal(data.questions.length, 116, "kompletny bank z data/pl/questions/");
-  assert.equal(Object.keys(data.moduleContent).length, 17, "12 modułów kursu + MSH (diagnostyczny) + MSK1-4 (S4 formatywna) z data/pl/module-content/");
-  assert.equal(data.modules.modules.length, 17);
+  assert.equal(Object.keys(data.moduleContent).length, 18, "12 modułów kursu + MSHP + MSHO (diagnostyczne, M16/#122) + MSK1-4 (S4 formatywna) z data/pl/module-content/");
+  assert.equal(data.modules.modules.length, 18);
   assert.ok(data.scenarios && data.scenarios.scenarios, "scenariusze z data/pl/");
   assert.ok(data.rubrics && data.rubrics.rubrics, "rubryki z data/pl/");
 });

@@ -225,11 +225,11 @@ test("locale-aware prefiks: krytyczne en z PL-prefiksem (zamiast EN) → walidat
   assert.match(r.output, /prefiks|krytyczne|security error/, "raport powinien wskazać niezgodność prefiksu");
 });
 
-// ---------------- M14 (#102-#106): moduł diagnostyczny MSH (Skala Holaka) ----------------
+// ---------------- M14 (#102-#106) / M16 (#122): moduły diagnostyczne MSHP/MSHO (Skala Holaka) ----------------
 
-test("MSH (#103): luka w bandach maturity-check (poziom bez bandy) → walidator FAILUJE (feedback nierozwiązywalny)", () => {
+test("MSHO (#103/#122): luka w bandach maturity-check (poziom bez bandy) → walidator FAILUJE (feedback nierozwiązywalny)", () => {
   const dataDir = copyData();
-  const f = join(dataDir, "pl", "module-content", "msh.json");
+  const f = join(dataDir, "pl", "module-content", "msho.json"); // skala org po rozdzieleniu (M16/#122)
   const doc = JSON.parse(readFileSync(f, "utf8"));
   const org = doc.interaction.scales.find((s) => s.id === "org");
   org.bands = org.bands.filter((b) => b.min < 9); // usuń bandę 9–11 → poziomy 9..11 bez bandy
@@ -239,26 +239,26 @@ test("MSH (#103): luka w bandach maturity-check (poziom bez bandy) → walidator
   assert.match(r.output, /bez bandy|skala org/, "raport powinien wskazać poziom bez bandy");
 });
 
-test("MSH (#103): scope diagnostic→core (moduł bez puli pytań) → walidator FAILUJE (wymaga questionRange)", () => {
+test("MSHP (#103/#122): scope diagnostic→core (moduł bez puli pytań) → walidator FAILUJE (wymaga questionRange)", () => {
   const dataDir = copyData();
   const f = join(dataDir, "modules.json"); // wspólny (top-level), nie per-locale
   const doc = JSON.parse(readFileSync(f, "utf8"));
-  doc.modules.find((m) => m.id === "MSH").scope = "core"; // udaje rdzeń, choć nie ma puli pytań
+  doc.modules.find((m) => m.id === "MSHP").scope = "core"; // udaje rdzeń, choć nie ma puli pytań
   writeFileSync(f, JSON.stringify(doc, null, 2));
   const r = runValidator(dataDir);
   assert.notEqual(r.code, 0, "moduł bez pytań ze scope core/dedicated MUSI failować (wyłączenie diagnostic jest load-bearing)");
-  assert.match(r.output, /questionRange|MSH/, "raport powinien wskazać brak questionRange dla MSH");
+  assert.match(r.output, /questionRange|MSHP/, "raport powinien wskazać brak questionRange dla MSHP");
 });
 
-test("MSH (#104): maturity-check bez pola scales → walidator FAILUJE (schemat kind)", () => {
+test("MSHP (#104/#122): maturity-check bez pola scales → walidator FAILUJE (schemat kind)", () => {
   const dataDir = copyData();
-  const f = join(dataDir, "pl", "module-content", "msh.json");
+  const f = join(dataDir, "pl", "module-content", "mshp.json");
   const doc = JSON.parse(readFileSync(f, "utf8"));
   delete doc.interaction.scales;
   writeFileSync(f, JSON.stringify(doc, null, 2));
   const r = runValidator(dataDir);
   assert.notEqual(r.code, 0, "maturity-check bez scales MUSI failować (schema allOf: kind→required scales)");
-  assert.match(r.output, /scales|msh\.json/, "raport powinien wskazać brak scales");
+  assert.match(r.output, /scales|mshp\.json/, "raport powinien wskazać brak scales");
 });
 
 // ---------------- M15 (#113): ścieżka formatywna S4 — conditional-required (formative vs test) ----------------

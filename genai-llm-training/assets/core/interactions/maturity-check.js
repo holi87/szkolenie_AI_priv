@@ -1,8 +1,8 @@
-// maturity-check.js — ocena autodiagnozy „Skala Holaka" (moduł MSH / M14, ADR-0008). Pure logic, zero DOM.
+// maturity-check.js — ocena autodiagnozy „Skala Holaka" (moduły MSHP/MSHO / M14, ADR-0008; rozdzielone M16/#122).
 // KONSERWATYWNIE non-gating i NEUTRALNA: passed ZAWSZE null — nie da się jej „oblać" ani „zaliczyć",
-// a UI renderuje wynik bez koloru pass/fail (app.js: passed===null → gałąź neutralna). Diagnozuje DWIE
-// skale 0–11 (organizacja v2.1e + osoba v2.1p): poziom = liczba zaznaczonych zdań (clamp do max skali).
-// Treść skal/zdań/band jest per-locale w data/<lang>/module-content/msh.json; tu liczymy tylko poziom + bandę.
+// a UI renderuje wynik bez koloru pass/fail (app.js: passed===null → gałąź neutralna). Liczy poziom 0–11 dla
+// KAŻDEJ skali w config (MSHP: osoba v2.1p; MSHO: organizacja v2.1e): poziom = liczba zaznaczonych zdań (clamp do max).
+// Treść skal/zdań/band jest per-locale w data/<lang>/module-content/mshp.json i msho.json; tu liczymy tylko poziom + bandę.
 
 /** Banda dla poziomu = pierwsza, której zakres [min,max] obejmuje level (lub null, gdy brak). */
 function bandFor(scale, level) {

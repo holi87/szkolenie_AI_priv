@@ -354,14 +354,15 @@
     "S4": {
       "formative": true,
       "modules": {
-        "MSH": { "required": false, "variant": "diagnostyczny" },
+        "MSHP": { "required": false, "variant": "diagnostyczny" },
+        "MSHO": { "required": false, "variant": "diagnostyczny" },
         "MSK1": { "required": true, "variant": "formatywny" },
         "MSK2": { "required": true, "variant": "formatywny" },
         "MSK3": { "required": true, "variant": "formatywny" },
         "MSK4": { "required": true, "variant": "formatywny" }
       },
-      "estContentTimeMin": 140,
-      "estContentTimeNote": "MSH ~20 min + 4 moduły szkoleniowe ~30 min (bez quizów; treść + interakcje). Ścieżka FORMATYWNA (M15/ADR-0009) — brak testu końcowego, progu, scoringu i certyfikatu."
+      "estContentTimeMin": 150,
+      "estContentTimeNote": "2 autodiagnozy Skali Holaka (MSHP osoba + MSHO organizacja, po ~15 min) + 4 moduły szkoleniowe ~30 min (bez quizów; treść + interakcje). M16/#122: diagnoza rozdzielona na osobę (v2.1p) i organizację (v2.1e) — wybieralne niezależnie. Ścieżka FORMATYWNA (M15/ADR-0009) — brak testu końcowego, progu, scoringu i certyfikatu."
     }
   }
 }

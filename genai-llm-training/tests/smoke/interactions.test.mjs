@@ -97,23 +97,27 @@ test("maturity-check: zaznaczenie ponad max klamruje poziom do max; brak odpowie
   assert.equal(empty.passed, null);
 });
 
-test("integralność MSH (maturity-check): obie skale dają poziom + bandę z własnego klucza, passed null", () => {
-  const msh = content("msh").interaction;
-  assert.equal(msh.kind, "maturity-check");
-  const empty = evaluateInteraction(msh, {});
-  assert.equal(empty.passed, null, "MSH: diagnoza neutralna (nigdy pass/fail)");
-  assert.equal(empty.scales.length, 2, "MSH: skala organizacja + osoba");
-  for (const s of empty.scales) {
-    assert.equal(s.level, 0, "brak zaznaczeń → poziom 0");
-    assert.ok(s.band && s.band.label && s.band.advice, `skala ${s.id}: poziom 0 ma bandę z label+advice`);
-  }
-  const org = msh.scales.find((s) => s.id === "org");
-  const allOrg = Object.fromEntries(org.statements.map((st) => [st.id, true]));
-  const full = evaluateInteraction(msh, { org: allOrg });
-  const orgRes = full.scales.find((s) => s.id === "org");
-  assert.equal(orgRes.level, orgRes.max, "komplet zaznaczeń org → poziom = max skali");
-  assert.equal(full.passed, null, "nawet komplet nie daje 'zaliczone'");
-});
+// M16/#122: diagnoza rozdzielona na MSHP (osoba v2.1p, skala "person") i MSHO (organizacja v2.1e, skala "org").
+// Każda diagnoza ma DOKŁADNIE 1 skalę, jest neutralna (passed null), a poziom + banda liczą się z własnego klucza.
+for (const [mod, scaleId] of [["mshp", "person"], ["msho", "org"]]) {
+  test(`integralność ${mod.toUpperCase()} (maturity-check): 1 skala (${scaleId}) daje poziom + bandę, passed null`, () => {
+    const ix = content(mod).interaction;
+    assert.equal(ix.kind, "maturity-check");
+    const empty = evaluateInteraction(ix, {});
+    assert.equal(empty.passed, null, `${mod}: diagnoza neutralna (nigdy pass/fail)`);
+    assert.equal(empty.scales.length, 1, `${mod}: dokładnie 1 skala (${scaleId})`);
+    const s0 = empty.scales[0];
+    assert.equal(s0.id, scaleId, `${mod}: skala ma id "${scaleId}"`);
+    assert.equal(s0.level, 0, "brak zaznaczeń → poziom 0");
+    assert.ok(s0.band && s0.band.label && s0.band.advice, `skala ${s0.id}: poziom 0 ma bandę z label+advice`);
+    const sc = ix.scales.find((s) => s.id === scaleId);
+    const allChecked = Object.fromEntries(sc.statements.map((st) => [st.id, true]));
+    const full = evaluateInteraction(ix, { [scaleId]: allChecked });
+    const res = full.scales.find((s) => s.id === scaleId);
+    assert.equal(res.level, res.max, "komplet zaznaczeń → poziom = max skali");
+    assert.equal(full.passed, null, "nawet komplet nie daje 'zaliczone'");
+  });
+}
 
 test("integralność egzemplarzy: M1 (classify), M3 (tune), M7 (rubric) oceniają się z własnego klucza", () => {
   const m1 = content("m01").interaction;

@@ -1,35 +1,42 @@
 {
   "_meta": {
-    "issue": "#112-#118 [M15] Formative path S4 — Holak Scale (training module)",
+    "issue": "#124 [M16] Formative path S4 — AI agents (training module, tune interaction)",
     "adr": "docs/adr/0009-sciezka-formatywna-s4-skala-holaka.md",
-    "interaction": "Decision classification (kind: classify) — formative exercise, NOT scored toward completion",
-    "source": "Holak Scale maturity axes: output verifiability, decision reversibility. Attribution: quality-blog.eu/pl/blog/skala-holaka.",
+    "interaction": "Agent parameter tuning (kind: tune) — formative exercise, NOT scored toward completion",
+    "source": "Holak Scale maturity axes: output verifiability, decision reversibility, control of agents. Attribution: quality-blog.eu/pl/blog/skala-holaka.",
     "dataPolicy": "ALL examples SYNTHETIC and generic (no real data/PII). Formative module — no pass threshold, no certificate."
   },
   "module": "MSK2",
-  "intro": "Mature AI work asks not only „can the model do it”, but „can the output be checked” and „can the decision be undone”. This module trains you to judge verifiability and reversibility before you trust an answer. It is a growth exercise, not a test.",
+  "intro": "An agent is not a chatbot: it executes steps and uses tools, so it can change the real world — files, emails, data, a repository. Mature work with an agent means matching autonomy to risk: the harder the effect is to undo and the output to verify, the narrower the permissions and the more human control. This module teaches you to tune those levers. It is a growth exercise, not a test.",
   "screens": [
     {
-      "id": "msk2-s1-dwie-osie",
-      "title": "Two axes of trust: verifiability and reversibility",
+      "id": "msk2-s1-od-chatbota-do-agenta",
+      "title": "From chatbot to agent",
       "type": "content",
       "blocks": [
-        { "kind": "paragraph", "text": "An output can be convincing in form yet wrong in substance. Before you use it, ask two questions: can I verify it against a source, and can a decision based on it be undone. The harder the verification and the lower the reversibility, the more human control is needed." },
+        { "kind": "paragraph", "text": "A chatbot answers with text. A workflow with a tool runs one defined step. An agent plans and executes many steps, reaching for tools on its own — which is exactly why it needs boundaries. The question is not „can the agent do it”, but „what happens if it gets it wrong, and can we undo it in time”." },
         { "kind": "list", "items": [
-          "Verifiability — whether I have a way to confirm the answer is true.",
-          "Reversibility — whether the effects of the decision can be undone without major harm.",
-          "Audit trail — whether a record remains of what the decision was based on."
+          "Chatbot — proposes, executes nothing.",
+          "Workflow with a tool — executes one defined step.",
+          "Agent — plans and executes many steps with access to tools."
         ] },
-        { "kind": "callout", "variant": "info", "title": "A Holak Scale axis", "text": "Designing work so AI-supported decisions stay checkable and reversible is a mark of reaching a higher level. More: quality-blog.eu/pl/blog/skala-holaka." }
+        { "kind": "callout", "variant": "info", "title": "A Holak Scale axis", "text": "Designing work so AI-supported decisions (including agent actions) stay checkable and reversible is a mark of reaching a higher level.",
+          "links": [ { "label": "Holak Scale — maturity model (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka" } ]
+        }
       ]
     },
     {
-      "id": "msk2-s2-granica",
-      "title": "When verification is enough, and when you need a human",
+      "id": "msk2-s2-trzy-dzwignie",
+      "title": "Three levers of agent control",
       "type": "content",
       "blocks": [
-        { "kind": "paragraph", "text": "Low risk: the output is easy to check and the decision easy to undo (e.g. a draft, a proposal for review). High risk: the effect is hard to reverse or hard to verify (e.g. sending a message to a customer, a permanent data change) — there a human approves." },
-        { "kind": "callout", "variant": "warn", "title": "The smooth-answer trap", "text": "The model's confident tone is not proof of correctness. No way to verify is a signal NOT to rely on the answer in a critical decision." }
+        { "kind": "paragraph", "text": "Agent safety is not about trust but about setting three levers: the permission scope (what the agent can do at all), the human approval point (when it must ask), and the audit trail and reversibility (whether you can check and undo what it did)." },
+        { "kind": "list", "items": [
+          "Permission scope — from read-only to full production write.",
+          "Human-in-the-loop — approval always, only for irreversible actions, or never.",
+          "Trail and reversibility — full log with rollback, basic log, or none."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "The „the agent will manage” trap", "text": "The wider the access and the less control, the cheaper… until the first irreversible error. By default narrow the permissions and require approval where the effect is hard to undo." }
       ]
     },
     {
@@ -37,40 +44,70 @@
       "title": "How to practise",
       "type": "content",
       "blocks": [
-        { "kind": "paragraph", "text": "Next you will classify situations as low risk (verifiable output and reversible decision) or requiring human control. No pass threshold — the point is to build the reflex of asking about verification and reversibility." }
+        { "kind": "paragraph", "text": "Below you'll set three agent parameters and see the risk profile change live. Then in the checkpoint you'll pick a safe set for a task with irreversible effects. No pass threshold — the point is the reflex of matching autonomy to risk." }
       ]
     }
   ],
   "interaction": {
-    "kind": "classify",
-    "id": "msk2-classify",
-    "title": "Low risk or human control?",
-    "intro": "Judge each situation. Feedback explains how verifiability and reversibility drive the need for control.",
-    "categories": [
-      { "id": "safe", "label": "Low risk (after verification)", "desc": "Output easy to check, decision reversible." },
-      { "id": "control", "label": "Requires human control", "desc": "Hard verification or irreversible effect." }
+    "kind": "tune",
+    "id": "msk2-tune",
+    "title": "Tune agent autonomy and control",
+    "intro": "Set the three levers and watch the risk profile. Then answer the checkpoint — this is a growth exercise, not a test.",
+    "outputLabel": "Agent risk profile (live):",
+    "controls": [
+      {
+        "id": "scope",
+        "label": "Permission scope",
+        "levels": [
+          { "value": "read", "label": "Read-only", "effect": "The agent changes nothing — lowest risk, good for analysis and proposals." },
+          { "value": "sandbox", "label": "Sandbox write", "effect": "Changes only in an isolated environment — easy to discard." },
+          { "value": "prod", "label": "Full production write", "effect": "The agent can permanently change production data — highest risk, needs control." }
+        ]
+      },
+      {
+        "id": "approval",
+        "label": "Human approval",
+        "levels": [
+          { "value": "always", "label": "Always before acting", "effect": "A human approves every step — slower, but fully controlled." },
+          { "value": "irreversible", "label": "For irreversible decisions", "effect": "Approval required when the effect cannot be undone — a sensible default compromise." },
+          { "value": "never", "label": "Never (full autonomy)", "effect": "The agent acts without asking — fast, but an error may go unnoticed." }
+        ]
+      },
+      {
+        "id": "audit",
+        "label": "Audit trail and reversibility",
+        "levels": [
+          { "value": "full", "label": "Full log + rollback", "effect": "Every action recorded and reversible — full checkability." },
+          { "value": "basic", "label": "Basic log", "effect": "You know what happened, but undoing is often manual and hard." },
+          { "value": "none", "label": "No trail", "effect": "You can't tell what the agent did or why — no checkability." }
+        ]
+      }
     ],
-    "items": [
-      { "id": "msk2-i1", "text": "AI proposes a draft note that you will review and edit anyway.", "correctCategory": "safe", "rationale": "Easy verification and full reversibility — low risk." },
-      { "id": "msk2-i2", "text": "AI generates content sent automatically to a customer without review.", "correctCategory": "control", "rationale": "Effect hard to undo — requires human approval." },
-      { "id": "msk2-i3", "text": "AI suggests test cases that you compare against the requirement.", "correctCategory": "safe", "rationale": "You can verify against the source before using." },
-      { "id": "msk2-i4", "text": "AI decides to permanently delete records in a production database.", "correctCategory": "control", "rationale": "Irreversible and hard to verify — full human control." },
-      { "id": "msk2-i5", "text": "AI summarizes a document while you have access to the original.", "correctCategory": "safe", "rationale": "Source available → easy verification; the summary is reversible." },
-      { "id": "msk2-i6", "text": "AI sets a candidate's score that nobody checks afterwards.", "correctCategory": "control", "rationale": "No verification + high impact → needs a human and an audit trail." }
-    ]
+    "checkpoint": {
+      "prompt": "The agent is to help with a task that may PERMANENTLY change production data (an effect hard to undo). Which set of settings is the safest to start with?",
+      "type": "single_choice",
+      "options": [
+        { "id": "a", "text": "Full production write, never approve, no trail — „the agent will manage”." },
+        { "id": "b", "text": "Read-only or sandbox, human approval for irreversible actions, full log with rollback." },
+        { "id": "c", "text": "Full production write, basic log, no approval — „let's go fast, check later”." }
+      ],
+      "correct": ["b"],
+      "feedbackCorrect": "Right. For irreversible effects you narrow permissions, require human approval, and ensure a full trail you can roll back.",
+      "feedbackIncorrect": "For irreversible effects, autonomy without control and a trail is asking for an irreversible error. Narrow the permissions, add human approval, and a full log with rollback."
+    }
   },
   "summary": {
     "points": [
-      "Before using an output, ask: can I verify this, and can the decision be undone.",
-      "The harder the verification and the lower the reversibility, the more human control.",
-      "The model's confident tone is not proof — keep a record of what the decision rested on."
+      "An agent can change the real world — match autonomy to the task's risk and reversibility.",
+      "Three control levers: permission scope, human approval, audit trail with rollback.",
+      "By default narrow permissions; the harder the effect is to undo, the more human control."
     ],
     "checklist": [
-      "Do I know how to check this answer against a source?",
-      "Can the effects of this decision be reversed?",
-      "Is an audit trail kept for the critical decision?"
+      "Do I know the worst the agent could do with its current permissions?",
+      "Do irreversible actions require human approval?",
+      "Is an audit trail kept, and can the agent's action be undone?"
     ],
-    "checklistTitle": "Checklist — before you trust an output",
-    "nextStep": "Next step: in one of your processes, add a verification step and the rule „irreversible decision = a human approves”."
+    "checklistTitle": "Checklist — before you let an agent in",
+    "nextStep": "Next step: for one real agent task, write down the worst possible effect and match the permission scope, approval point, and audit trail to it."
   }
 }

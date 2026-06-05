@@ -1,13 +1,13 @@
 {
   "_meta": {
-    "issue": "#112-#118 [M15] Formative path S4 — Holak Scale (training module)",
+    "issue": "#112-#118 [M15] / #124 [M16] Formative path S4 — Holak Scale (training module, expansion)",
     "adr": "docs/adr/0009-sciezka-formatywna-s4-skala-holaka.md",
     "interaction": "Practice classification (kind: classify) — formative exercise, NOT scored toward completion",
-    "source": "Holak Scale maturity axes: context management, token thrift. Attribution: quality-blog.eu/pl/blog/skala-holaka.",
+    "source": "Holak Scale maturity axes: context management, token economy, repeatable workflows (skills). Attribution: quality-blog.eu/pl/blog/skala-holaka.",
     "dataPolicy": "ALL examples SYNTHETIC and generic (no real data/PII). Formative module — no pass threshold, no certificate."
   },
   "module": "MSK1",
-  "intro": "You spot higher AI maturity not by the number of tools, but by HOW you feed the model context — and what it costs. This module trains context hygiene and token-cost awareness. It is a growth exercise, not a test.",
+  "intro": "You spot higher AI maturity not by the number of tools, but by HOW you feed the model context, what it costs, and whether you can turn a repeatable task into a skill. This module trains context hygiene, token-cost awareness, and building repeatable workflows. It is a growth exercise, not a test.",
   "screens": [
     {
       "id": "msk1-s1-po-co",
@@ -20,7 +20,9 @@
           "Token cost grows with every character pasted — including the useless ones.",
           "Repeatable tasks gain the most from templates and context hygiene."
         ] },
-        { "kind": "callout", "variant": "info", "title": "A Holak Scale axis", "text": "Deliberate management of context and cost is one of the axes that separate „I use AI” from „I use AI maturely”. More: quality-blog.eu/pl/blog/skala-holaka." }
+        { "kind": "callout", "variant": "info", "title": "A Holak Scale axis", "text": "Deliberate management of context and cost is one of the axes that separate „I use AI” from „I use AI maturely”.",
+          "links": [ { "label": "Holak Scale — maturity model (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka" } ]
+        }
       ]
     },
     {
@@ -29,15 +31,35 @@
       "type": "content",
       "blocks": [
         { "kind": "paragraph", "text": "Lean practice selects context and reuses proven templates. Wasteful practice pastes „everything just in case”, mixes topics, and describes the context from scratch every time." },
+        { "kind": "table", "headers": ["Dimension", "Lean", "Wasteful"], "rows": [
+          ["Context selection", "Only fragments relevant to the task", "The whole knowledge base „just in case”"],
+          ["Repeatability", "A prompt template with slots for data", "From scratch each time, in different words"],
+          ["Hygiene", "Remove stale and contradictory content", "Keep dozens of topics in one chat"]
+        ], "textAlt": "Comparison of lean and wasteful practices across three dimensions: context selection, repeatability, hygiene." },
         { "kind": "callout", "variant": "warn", "title": "The „just in case” trap", "text": "Pasting your whole knowledge base into every prompt does not raise accuracy — more often it blurs the task and raises cost. Dose context deliberately." }
       ]
     },
     {
-      "id": "msk1-s3-jak-cwiczyc",
+      "id": "msk1-s3-skille",
+      "title": "Skills: a repeatable workflow instead of a one-off prompt",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "A skill is a workflow described once: an instruction for „when and how” to do a typical task, with fixed context, output format, and verification steps. Instead of inventing a prompt every time, you run a proven recipe — cheaper, faster and more consistent." },
+        { "kind": "list", "ordered": true, "items": [
+          "Name the task and the trigger (when to use this skill).",
+          "Fix the context and output format (what you provide, what should come back).",
+          "Add a step to verify the result before you use it.",
+          "Save it as a template/skill and improve it after each use."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Why this saves context", "text": "A skill encodes once what you would otherwise describe repeatedly — fixed, deliberate context replaces ad-hoc pasting and lowers token cost at steady quality." }
+      ]
+    },
+    {
+      "id": "msk1-s4-jak-cwiczyc",
       "title": "How to practise",
       "type": "content",
       "blocks": [
-        { "kind": "paragraph", "text": "Next you will classify practices as lean or wasteful. There is no pass threshold here — the goal is to recognize a pattern you can carry over into your own work." }
+        { "kind": "paragraph", "text": "Next you will classify practices as lean or wasteful — including practices for building skills. There is no pass threshold; the order of items is random, so content matters, not a pattern. The goal is to recognize a pattern you can carry over into your own work." }
       ]
     }
   ],
@@ -47,7 +69,7 @@
     "title": "Lean or wasteful context practice?",
     "intro": "Sort each practice. This is a growth exercise — feedback explains why a practice is (not) lean.",
     "categories": [
-      { "id": "lean", "label": "Lean practice", "desc": "Selects context, controls cost, reuses templates." },
+      { "id": "lean", "label": "Lean practice", "desc": "Selects context, controls cost, reuses templates/skills." },
       { "id": "wasteful", "label": "Wasteful practice", "desc": "Adds excess, mixes topics, describes everything from scratch." }
     ],
     "items": [
@@ -55,22 +77,24 @@
       { "id": "msk1-i2", "text": "I paste my whole knowledge base into every prompt „just in case”.", "correctCategory": "wasteful", "rationale": "Excess blurs the signal and raises token cost." },
       { "id": "msk1-i3", "text": "I keep a repeatable task as a prompt template with slots for data.", "correctCategory": "lean", "rationale": "A template means repeatability and context hygiene." },
       { "id": "msk1-i4", "text": "I describe the context from scratch every time, in different words.", "correctCategory": "wasteful", "rationale": "No template = wasted time and inconsistent results." },
-      { "id": "msk1-i5", "text": "I remove stale and contradictory information from the context.", "correctCategory": "lean", "rationale": "Clean context lowers the risk of error and hallucination." },
-      { "id": "msk1-i6", "text": "I keep dozens of unrelated topics in a single chat.", "correctCategory": "wasteful", "rationale": "Mixing topics clutters the context and confuses the model." }
+      { "id": "msk1-i5", "text": "I have a skill (a described workflow) for my most frequent AI task.", "correctCategory": "lean", "rationale": "A skill encodes fixed context and steps — cheaper and more consistent." },
+      { "id": "msk1-i6", "text": "I keep dozens of unrelated topics in a single chat.", "correctCategory": "wasteful", "rationale": "Mixing topics clutters the context and confuses the model." },
+      { "id": "msk1-i7", "text": "I remove stale and contradictory information from the context before asking.", "correctCategory": "lean", "rationale": "Clean context lowers the risk of error and hallucination." },
+      { "id": "msk1-i8", "text": "I copy a long conversation history into a new task without selection.", "correctCategory": "wasteful", "rationale": "Carried-over excess raises cost and injects irrelevant context." }
     ]
   },
   "summary": {
     "points": [
       "Give exactly the context that affects the task — no more.",
-      "Turn repeatable tasks into prompt templates.",
+      "Turn repeatable tasks into templates and skills with fixed context and a verification step.",
       "Every pasted character has a cost — dose context deliberately."
     ],
     "checklist": [
       "Can I tell which parts of the context are truly needed?",
-      "Do I have a template for my most frequent AI task?",
+      "Do I have a skill/template for my most frequent AI task?",
       "Do I clear stale and contradictory content from the context?"
     ],
-    "checklistTitle": "Checklist — context hygiene",
-    "nextStep": "Next step: take one repeatable task and turn it into a prompt template with controlled context."
+    "checklistTitle": "Checklist — context hygiene and skills",
+    "nextStep": "Next step: take one repeatable task and turn it into a skill — a template with fixed context, output format, and a verification step."
   }
 }

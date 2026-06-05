@@ -158,36 +158,43 @@
       }
     },
     {
-      "id": "MSH",
+      "id": "MSHP",
       "order": 13,
-      "timeFullMin": 20,
+      "timeFullMin": 15,
+      "pillar": "qa_practice",
+      "scope": "diagnostic"
+    },
+    {
+      "id": "MSHO",
+      "order": 14,
+      "timeFullMin": 15,
       "pillar": "security_governance",
       "scope": "diagnostic"
     },
     {
       "id": "MSK1",
-      "order": 14,
+      "order": 15,
       "timeFullMin": 30,
       "pillar": "foundations_technical",
       "scope": "diagnostic"
     },
     {
       "id": "MSK2",
-      "order": 15,
+      "order": 16,
       "timeFullMin": 30,
       "pillar": "qa_practice",
       "scope": "diagnostic"
     },
     {
       "id": "MSK3",
-      "order": 16,
+      "order": 17,
       "timeFullMin": 30,
       "pillar": "security_governance",
       "scope": "diagnostic"
     },
     {
       "id": "MSK4",
-      "order": 17,
+      "order": 18,
       "timeFullMin": 30,
       "pillar": "qa_practice",
       "scope": "diagnostic"

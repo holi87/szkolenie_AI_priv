@@ -536,16 +536,18 @@ if (paths && rubrics) {
 // Integralność: klucze interakcji wskazują na istniejące kategorie/opcje; zadanie praktyczne → istniejąca rubryka.
 function loadModuleContent(locale) {
   const CDIR = join(DATA, locale, "module-content");
-  if (!existsSync(CDIR)) { fail(`brak treści modułów (data/${locale}/module-content/) — wymaga 12 plików mNN.json + msh.json + msk1..msk4.json`); return null; }
+  if (!existsSync(CDIR)) { fail(`brak treści modułów (data/${locale}/module-content/) — wymaga 12 plików mNN.json + mshp.json + msho.json + msk1..msk4.json`); return null; }
   const schema = load(join(SCHEMAS, "module-content.schema.json"));
   const rubricIds = new Set((rubrics ? rubrics.rubrics : []).map((r) => r.id));
   const rubricById = new Map((rubrics ? rubrics.rubrics : []).map((r) => [r.id, r]));
   const present = [];
-  // 12 modułów kursu (m01..m12 → M1..M12) + 1 moduł diagnostyczny (msh.json → MSH; M14/ADR-0008) +
-  // 4 moduły szkoleniowe ścieżki formatywnej S4 (msk1..msk4.json → MSK1..MSK4; M15/ADR-0009). MSH+MSK bez puli pytań.
+  // 12 modułów kursu (m01..m12 → M1..M12) + 2 moduły diagnostyczne Skali Holaka (mshp.json → MSHP osoba v2.1p,
+  // msho.json → MSHO organizacja v2.1e; M16/#122 rozdzielone z dawnego MSH; ADR-0008) + 4 moduły szkoleniowe
+  // ścieżki formatywnej S4 (msk1..msk4.json → MSK1..MSK4; M15/ADR-0009). MSHP+MSHO+MSK bez puli pytań.
   const contentFiles = [
     ...Array.from({ length: 12 }, (_, i) => ({ f: `m${String(i + 1).padStart(2, "0")}.json`, expectMod: "M" + (i + 1) })),
-    { f: "msh.json", expectMod: "MSH" },
+    { f: "mshp.json", expectMod: "MSHP" },
+    { f: "msho.json", expectMod: "MSHO" },
     ...Array.from({ length: 4 }, (_, i) => ({ f: `msk${i + 1}.json`, expectMod: "MSK" + (i + 1) })),
   ];
   for (const { f, expectMod } of contentFiles) {
@@ -598,7 +600,7 @@ function loadModuleContent(locale) {
   return present;
 }
 const contentMods = CANON ? loadModuleContent(CANON) : null;
-if (contentMods) report.push(`Treść modułów: ${contentMods.length}/17 (${contentMods.join(",")})`);
+if (contentMods) report.push(`Treść modułów: ${contentMods.length}/18 (${contentMods.join(",")})`);
 
 // ---------------- Próbka wyników pilotażu (kalibracja #28) — schemat + integralność + lint syntetyczny ----------------
 // W repo trzymamy WYŁĄCZNIE syntetyczny przykład (realne wyniki pilotażu powstają poza repo).

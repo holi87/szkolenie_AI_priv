@@ -5,8 +5,27 @@ import { el } from "../dom.js";
 import { icon } from "../icon.js";
 import { t } from "../../i18n/i18n.js";
 
-export function renderClassify(config) {
-  const items = config.items || [];
+// Fisher–Yates z wstrzykiwanym rng (czysty — nie mutuje wejścia), wzorzec quiz-view.js (RND-1 #66).
+// Anti-gaming kolejności pozycji (#123): tasujemy items przed map(), więc sekwencja poprawnych kategorii
+// (A-B-A-B / klastry w danych) NIE jest widoczna dla uczącego się. Scoring jest po itemId (classify.js:
+// response[it.id]), więc niezależny od kolejności wyświetlania. getResponse/showFeedback mapują po id.
+function shuffle(arr, rng) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(rng() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+/**
+ * Renderuje interakcję classify. opts: { rng } — wstrzykiwalny generator do tasowania kolejności pozycji
+ * (#123; domyślnie Math.random — losowo przy każdym renderze). Jedno losowanie na instancję (renderClassify
+ * wołane raz; feedback re-renderuje tylko fbNode, więc kolejność stabilna w obrębie instancji).
+ */
+export function renderClassify(config, opts = {}) {
+  const rng = typeof opts.rng === "function" ? opts.rng : Math.random;
+  const items = shuffle(config.items || [], rng);
   const categories = config.categories || [];
   const groups = []; // { itemId, inputs:[], fbNode }
   const firstInputs = [];

@@ -241,22 +241,38 @@
       "Calibrates automated scoring by comparing it with expert judgment and sets an acceptance threshold"
     ]
   },
-  "MSH": {
-    "name": "Holak Scale — AI maturity self-check",
+  "MSHP": {
+    "name": "Holak Scale — personal maturity self-check (v2.1p)",
     "level": "all levels",
-    "interactiveElement": "Maturity self-check (Holak Scale)",
+    "interactiveElement": "Personal maturity self-check (Holak Scale v2.1p)",
     "keyConcepts": [
-      "AI adoption maturity",
-      "Holak Scale v2.1e (organization)",
+      "maturity of your own AI practice",
       "Holak Scale v2.1p (individual)",
-      "context management",
       "output verifiability",
-      "decision reversibility"
+      "decision reversibility",
+      "context management"
+    ],
+    "learningOutcomes": [
+      "Estimates an indicative maturity level of their own AI practice (0–11)",
+      "Identifies the barrier and the next step to grow their own craft",
+      "Recognizes the trap of a false sense of personal maturity"
+    ]
+  },
+  "MSHO": {
+    "name": "Holak Scale — organizational maturity self-check (v2.1e)",
+    "level": "all levels",
+    "interactiveElement": "Organizational maturity self-check (Holak Scale v2.1e)",
+    "keyConcepts": [
+      "AI adoption maturity in an organization",
+      "Holak Scale v2.1e (organization)",
+      "acceptable-use policy",
+      "audit trail",
+      "measuring AI impact"
     ],
     "learningOutcomes": [
       "Estimates an indicative AI adoption maturity level for an organization (0–11)",
-      "Estimates an indicative maturity level of their own AI practice (0–11)",
-      "Identifies the barrier and the next step to reach a higher level"
+      "Identifies the barrier and the next adoption step at team/company level",
+      "Tells measured, continuously improved adoption from a one-off initiative"
     ]
   },
   "MSK1": {
@@ -277,20 +293,21 @@
     ]
   },
   "MSK2": {
-    "name": "Output verifiability and decision reversibility",
+    "name": "AI agents: autonomy, permissions and human control",
     "level": "all levels",
-    "interactiveElement": "Classify decisions by risk and reversibility",
+    "interactiveElement": "Tune agent autonomy and control (tune)",
     "keyConcepts": [
-      "verifiability",
-      "reversibility",
-      "audit trail",
-      "critical decision",
-      "human-in-the-loop"
+      "agent",
+      "tool use",
+      "human-in-the-loop",
+      "permission scope",
+      "reversibility and audit trail",
+      "output verifiability"
     ],
     "learningOutcomes": [
-      "Assesses whether an AI output can be verified before use",
-      "Recognizes irreversible decisions that require human control",
-      "Designs work so AI-supported decisions stay checkable and reversible"
+      "Distinguishes a chatbot, a workflow with a tool, and an agent that executes steps",
+      "Matches agent autonomy to the task's risk and reversibility",
+      "Designs permission boundaries, human approval, and an audit trail for an agent"
     ]
   },
   "MSK3": {
@@ -311,20 +328,20 @@
     ]
   },
   "MSK4": {
-    "name": "Climbing higher: maturity thresholds 8→9 and 10→11",
+    "name": "Skills and measuring impact: scoring AI workflow maturity",
     "level": "all levels",
-    "interactiveElement": "Classify maturity growth steps",
+    "interactiveElement": "Score AI workflow maturity with a rubric (rubric)",
     "keyConcepts": [
-      "threshold 8→9",
-      "threshold 10→11",
-      "assistant vs decision-maker",
-      "AI-use calibration",
-      "continuous improvement"
+      "skills / repeatable workflows",
+      "thresholds 8→9 and 10→11",
+      "measuring AI impact",
+      "calibration and continuous improvement",
+      "maturity rubric"
     ],
     "learningOutcomes": [
+      "Scores the maturity of a repeatable AI workflow (a skill) against concrete criteria",
       "Recognizes what separates level 8 from 9 and 10 from 11",
-      "Identifies a concrete, reversible step to reach a higher level",
-      "Tells real growth from a false sense of maturity"
+      "Tells measured, calibrated growth from a false sense of maturity"
     ]
   }
 }

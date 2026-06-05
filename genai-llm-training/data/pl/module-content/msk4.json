@@ -1,34 +1,36 @@
 {
   "_meta": {
-    "issue": "#112-#118 [M15] Ścieżka formatywna S4 — Skala Holaka (moduł szkoleniowy)",
+    "issue": "#124 [M16] Ścieżka formatywna S4 — skille i mierzenie wpływu (moduł szkoleniowy, interakcja rubric)",
     "adr": "docs/adr/0009-sciezka-formatywna-s4-skala-holaka.md",
-    "interaction": "Klasyfikacja kroków rozwoju (kind: classify) — ćwiczenie formatywne, NIE scorowane do zaliczenia",
-    "source": "Skala Holaka — dwie krytyczne granice dojrzałości: 8→9 i 10→11. Atrybucja: quality-blog.eu/pl/blog/skala-holaka.",
+    "interaction": "Ocena dojrzałości workflow wg rubryki (kind: rubric) — ćwiczenie formatywne, NIE scorowane do zaliczenia (bez rubricId/progu)",
+    "source": "Skala Holaka — dwie krytyczne granice dojrzałości: 8→9 i 10→11; skille i mierzenie wpływu. Atrybucja: quality-blog.eu/pl/blog/skala-holaka.",
     "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE i ogólne (zero realnych danych/PII). Moduł formatywny — bez progu zaliczenia i certyfikatu."
   },
   "module": "MSK4",
-  "intro": "Najtrudniejsze nie są pierwsze poziomy, lecz dwie granice: 8→9 (od indywidualnej dobrej praktyki do wpięcia AI w proces) oraz 10→11 (od pojedynczych usprawnień do ciągłego doskonalenia). Ten moduł pokazuje, co realnie odróżnia te poziomy i jak zaplanować przejście. To ćwiczenie rozwojowe, nie test.",
+  "intro": "Najtrudniejsze nie są pierwsze poziomy, lecz dwie granice: 8→9 (od indywidualnej dobrej praktyki do wpięcia AI w proces) oraz 10→11 (od pojedynczych usprawnień do ciągłego doskonalenia). Sprawdzianem dojrzałości jest konkretny, powtarzalny workflow (skill): czy ma stały kontekst, weryfikację, odwracalność i mierzony wpływ. Ten moduł uczy oceniać dojrzałość skilla wg rubryki. To ćwiczenie rozwojowe, nie test.",
   "screens": [
     {
       "id": "msk4-s1-dwie-granice",
       "title": "Dwie granice, na których utyka rozwój",
       "type": "content",
       "blocks": [
-        { "kind": "paragraph", "text": "Wiele osób i zespołów zatrzymuje się tuż przed poziomem 9 albo 11. Granica 8→9 to moment, gdy dobra praktyka jednej osoby staje się elementem procesu: jasny podział asystent/decydent, odwracalność i ślad audytowy. Granica 10→11 to moment, gdy usprawnienia zamieniają się w rutynę ciągłego doskonalenia i kalibracji." },
+        { "kind": "paragraph", "text": "Wiele osób i zespołów zatrzymuje się tuż przed poziomem 9 albo 11. Granica 8→9 to moment, gdy dobra praktyka jednej osoby staje się elementem procesu: jasny podział asystent/decydent, odwracalność i ślad audytowy. Granica 10→11 to moment, gdy usprawnienia zamieniają się w rutynę pomiaru, kalibracji i ciągłego doskonalenia." },
         { "kind": "list", "items": [
           "8→9: indywidualna praktyka → proces z kontrolą i śladem.",
           "10→11: pojedyncze usprawnienia → mierzony, ciągle kalibrowany system.",
           "Na obu granicach klucz to nie nowe narzędzie, lecz nowy nawyk pracy."
         ] },
-        { "kind": "callout", "variant": "info", "title": "Skala Holaka", "text": "Granice 8→9 i 10→11 to najczęstsze miejsca utknięcia adopcji AI. Więcej: quality-blog.eu/pl/blog/skala-holaka." }
+        { "kind": "callout", "variant": "info", "title": "Skala Holaka", "text": "Granice 8→9 i 10→11 to najczęstsze miejsca utknięcia adopcji AI.",
+          "links": [ { "label": "Skala Holaka — model dojrzałości (quality-blog.eu)", "href": "https://quality-blog.eu/pl/blog/skala-holaka" } ]
+        }
       ]
     },
     {
-      "id": "msk4-s2-pulapka",
-      "title": "Pułapka fałszywej dojrzałości",
+      "id": "msk4-s2-skill-jako-probka",
+      "title": "Skill jako próbka dojrzałości",
       "type": "content",
       "blocks": [
-        { "kind": "paragraph", "text": "Najgroźniejsza jest pułapka „jesteśmy już dojrzali”. Uznanie dojrzałości za stan gotowy zatrzymuje rozwój tuż przed 11. Realny poziom 11 to nie cel osiągnięty, lecz rutyna pomiaru, kalibracji i poprawiania własnego użycia AI." },
+        { "kind": "paragraph", "text": "Dojrzałość najlepiej widać na konkretnym, powtarzalnym workflow (skillu). Niedojrzały skill to „prompt na szybko”: zmienny kontekst, brak weryfikacji, brak śladu, sukces mierzony wrażeniem. Dojrzały skill ma stały kontekst i format, jawny krok weryfikacji, odwracalność ze śladem oraz mierzony wpływ na jakość i czas." },
         { "kind": "callout", "variant": "warn", "title": "Sygnał utknięcia", "text": "Jeśli używasz AI sprawnie, ale nie mierzysz jego wpływu i nie kalibrujesz oceny outputu — prawdopodobnie stoisz na 10, nie na 11." }
       ]
     },
@@ -37,40 +39,76 @@
       "title": "Jak to ćwiczyć",
       "type": "content",
       "blocks": [
-        { "kind": "paragraph", "text": "Za chwilę przypiszesz konkretne kroki do właściwej granicy: 8→9 albo 10→11. Bez progu zaliczenia — celem jest rozpoznanie, który krok jest dziś Twoim najbliższym przejściem." }
+        { "kind": "paragraph", "text": "Poniżej ocenisz dojrzałość przykładowego skilla wg czterech kryteriów. Zaznacz w każdym kryterium te cechy, które świadczą o dojrzałości — zaznaczenie wszystkiego (także dystraktorów) nie zalicza kryterium. Bez progu zaliczenia: feedback pokazuje, czego brakuje do wyższego poziomu." }
       ]
     }
   ],
   "interaction": {
-    "kind": "classify",
-    "id": "msk4-classify",
-    "title": "Krok 8→9 czy 10→11?",
-    "intro": "Przypisz każdy krok do granicy, której dotyczy. Feedback wyjaśnia, dlaczego należy do tego przejścia.",
-    "categories": [
-      { "id": "t89", "label": "Krok 8→9", "desc": "Od indywidualnej dobrej praktyki do procesu z kontrolą i śladem." },
-      { "id": "t1011", "label": "Krok 10→11", "desc": "Od pojedynczych usprawnień do mierzonego, ciągłego doskonalenia." }
-    ],
-    "items": [
-      { "id": "msk4-i1", "text": "Wpinasz AI w proces z jasnym podziałem: asystent proponuje, człowiek decyduje.", "correctCategory": "t89", "rationale": "Podział ról i wpięcie w proces to istota przejścia 8→9." },
-      { "id": "msk4-i2", "text": "Dla decyzji wspartych AI zapewniasz odwracalność i ślad audytowy.", "correctCategory": "t89", "rationale": "Kontrola i ślad to warunek wejścia na poziom 9." },
-      { "id": "msk4-i3", "text": "Zaczynasz dzielić się praktykami i wspólnie kalibrować ocenę outputu w zespole.", "correctCategory": "t89", "rationale": "Wyjście z praktyki indywidualnej do zespołowej to ruch 8→9." },
-      { "id": "msk4-i4", "text": "Czynisz audyt i kalibrację użycia AI stałym elementem rutyny zespołu.", "correctCategory": "t1011", "rationale": "Stała kalibracja to istota poziomu 11." },
-      { "id": "msk4-i5", "text": "Mierzysz realny wpływ AI na jakość i czas, i na tej podstawie korygujesz podejście.", "correctCategory": "t1011", "rationale": "Pomiar i korekta to warunek przejścia 10→11." },
-      { "id": "msk4-i6", "text": "Traktujesz adopcję AI jako ciągłe doskonalenie wpisane w strategię.", "correctCategory": "t1011", "rationale": "Ciągłe doskonalenie zamiast jednorazowej inicjatywy to poziom 11." }
+    "kind": "rubric",
+    "id": "msk4-rubric",
+    "title": "Oceń dojrzałość workflow AI (skilla)",
+    "intro": "Dla każdego kryterium zaznacz cechy świadczące o dojrzałości skilla. To ćwiczenie rozwojowe — bez progu zaliczenia; feedback wskazuje, czego brakuje.",
+    "criteria": [
+      {
+        "id": "K1",
+        "name": "Kontekst i powtarzalność",
+        "prompt": "Co świadczy o dojrzałym zarządzaniu kontekstem w tym skillu?",
+        "hint": "Dojrzałość to stały, selekcjonowany kontekst — nie opis od zera za każdym razem.",
+        "options": [
+          { "id": "a", "text": "Stały, przemyślany kontekst i format wyjścia." },
+          { "id": "b", "text": "Kontekst opisywany od zera, innymi słowami, za każdym razem." },
+          { "id": "c", "text": "Selekcja tylko danych istotnych dla zadania." }
+        ],
+        "correctOptionIds": ["a", "c"]
+      },
+      {
+        "id": "K2",
+        "name": "Weryfikowalność",
+        "prompt": "Co czyni skill weryfikowalnym przed użyciem wyniku?",
+        "hint": "Pewny ton modelu nie jest dowodem — potrzebny jawny krok sprawdzenia.",
+        "options": [
+          { "id": "a", "text": "Jawny krok sprawdzenia outputu wobec źródła." },
+          { "id": "b", "text": "Zaufanie do pewnego tonu odpowiedzi modelu." }
+        ],
+        "correctOptionIds": ["a"]
+      },
+      {
+        "id": "K3",
+        "name": "Odwracalność i ślad",
+        "prompt": "Co czyni decyzje wsparte skillem bezpiecznymi?",
+        "hint": "Granica 8→9: kontrola i ślad zamiast nieodwracalnych działań bez zatwierdzenia.",
+        "options": [
+          { "id": "a", "text": "Działania zostawiają ślad i da się je cofnąć." },
+          { "id": "b", "text": "Decyzje nieodwracalne wykonywane bez zatwierdzenia człowieka." }
+        ],
+        "correctOptionIds": ["a"]
+      },
+      {
+        "id": "K4",
+        "name": "Mierzenie wpływu",
+        "prompt": "Co odróżnia poziom 11 (ciągłe doskonalenie) od samego używania AI?",
+        "hint": "Granica 10→11: mierzony wpływ i kalibracja, nie sam fakt użycia.",
+        "options": [
+          { "id": "a", "text": "Mierzony wpływ na jakość i czas oraz korekta podejścia." },
+          { "id": "b", "text": "Liczy się sam fakt, że używamy AI." },
+          { "id": "c", "text": "Regularna kalibracja oceny outputu." }
+        ],
+        "correctOptionIds": ["a", "c"]
+      }
     ]
   },
   "summary": {
     "points": [
-      "Granica 8→9: zamień indywidualną praktykę w proces z podziałem ról, odwracalnością i śladem.",
-      "Granica 10→11: zamień usprawnienia w rutynę pomiaru, kalibracji i ciągłego doskonalenia.",
-      "Na obu granicach kluczem jest nowy nawyk pracy, nie nowe narzędzie."
+      "Dojrzałość widać na konkretnym skillu: stały kontekst, weryfikacja, odwracalność ze śladem, mierzony wpływ.",
+      "Granica 8→9: zamień indywidualną praktykę w proces z kontrolą i śladem.",
+      "Granica 10→11: zamień usprawnienia w rutynę pomiaru, kalibracji i ciągłego doskonalenia."
     ],
     "checklist": [
-      "Czy wiem, na której granicy stoję dziś?",
-      "Czy mój najbliższy krok jest konkretny i odwracalny?",
-      "Czy mierzę wpływ AI, czy tylko go używam?"
+      "Czy mój najczęstszy skill ma stały kontekst i format wyjścia?",
+      "Czy ma jawny krok weryfikacji i zostawia ślad?",
+      "Czy mierzę jego wpływ na jakość i czas, czy tylko go używam?"
     ],
-    "checklistTitle": "Checklista — następna granica",
-    "nextStep": "Następny krok: wybierz jedną granicę (8→9 lub 10→11) i zaplanuj jeden mały, odwracalny eksperyment wejścia wyżej."
+    "checklistTitle": "Checklista — dojrzałość skilla",
+    "nextStep": "Następny krok: weź jeden swój skill i dopisz brakujące kryterium z najniższą oceną — najczęściej jest to krok weryfikacji lub pomiar wpływu."
   }
 }
