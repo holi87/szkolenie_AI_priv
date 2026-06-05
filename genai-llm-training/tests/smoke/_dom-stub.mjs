@@ -118,6 +118,7 @@ export function makeDocument() {
     querySelectorAll: () => [],
   };
   doc.body = new El("body");
+  doc.documentElement = new El("html"); // <html> — cel atrybutu lang (i18n a11y WCAG 3.1.2; #133 regression-guard)
   return doc;
 }
 

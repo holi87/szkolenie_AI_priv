@@ -5,9 +5,10 @@
 // Pure Node (fs), zero zależności — ADR-0002.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync, existsSync } from "node:fs";
+import { readFileSync, existsSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+import { PRIVACY_PAGES } from "../../assets/i18n/i18n.js"; // źródło prawdy locale→plik (privacyHref używa tej mapy)
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const APP = join(HERE, "..", "..");        // genai-llm-training/
@@ -45,16 +46,31 @@ test("app index.html: aplety (CSS/JS) ładowane WZGLĘDNIE, bez korzenia „/”
   assert.doesNotMatch(appHtml, /(?:href|src)=["']\/[^/]/, "app index.html zawiera absolutną ścieżkę z korzeniem /");
 });
 
-test("strona Prywatność (#62): istnieje, noindex, względne zasoby, brak zewnętrznych hostów, link powrotny", () => {
-  const priv = read(join(APP, "prywatnosc.html"));
-  assert.match(priv, /<html[^>]*\blang="pl"/, "prywatnosc.html bez lang=pl");
-  assert.match(priv, /name="robots"[^>]*noindex/, "prywatnosc.html bez noindex");
-  assert.match(priv, /href=["']assets\/styles\.css["']/, "styl ładowany względnie");
-  assert.match(priv, /href=["']index\.html["']/, "brak linku powrotnego do aplikacji");
-  assert.doesNotMatch(priv, /(?:href|src)=["']\/[^/]/, "prywatnosc.html zawiera absolutną ścieżkę z korzeniem /");
-  assert.doesNotMatch(priv, /https?:\/\/(?!www\.w3\.org)/i, "prywatnosc.html nie może ładować zasobów z zewnętrznych hostów");
-  // Aplikacja i strona główna linkują do Prywatności (transparentność dostępna z UI).
-  assert.match(appHtml, /href=["']prywatnosc\.html["']/, "stopka aplikacji bez linku do Prywatności");
+// Strony Prywatność (#62 + M17 #126–#131): KAŻDA wersja językowa musi spełniać te same inwarianty hostingu/SEO.
+// Źródło prawdy = mapa PRIVACY_PAGES z i18n.js (privacyHref() jej używa) — test derywuje listę, nie duplikuje.
+test("strony Prywatność (wszystkie locale): lang, noindex, względne zasoby, brak zewnętrznych hostów, link powrotny", () => {
+  for (const [code, file] of Object.entries(PRIVACY_PAGES)) {
+    const priv = read(join(APP, file));
+    assert.match(priv, new RegExp(`<html[^>]*\\blang="${code}"`), `${file}: brak lang="${code}"`);
+    assert.match(priv, /name="robots"[^>]*noindex/, `${file}: brak noindex`);
+    assert.match(priv, /href=["']assets\/styles\.css["']/, `${file}: styl nie jest ładowany względnie`);
+    // Link powrotny tolerujący query string (EN używa index.html?lang=en).
+    assert.match(priv, /href=["']index\.html(\?[^"']*)?["']/, `${file}: brak linku powrotnego do index.html`);
+    assert.doesNotMatch(priv, /(?:href|src)=["']\/[^/]/, `${file}: absolutna ścieżka z korzeniem /`);
+    assert.doesNotMatch(priv, /https?:\/\/(?!www\.w3\.org)/i, `${file}: ładuje zasób z zewnętrznego hosta (poza w3.org)`);
+  }
+});
+
+test("stopka aplikacji linkuje do domyślnej (PL) strony Prywatności", () => {
+  // index.html jest statyczny i niesie link PL; lokalne warianty podmienia runtime przez privacyHref().
+  assert.match(appHtml, /href=["']prywatnosc\.html["']/, "stopka aplikacji bez linku do Prywatności (PL)");
+});
+
+test("brak osieroconej strony Prywatności (każdy privacy*.html / prywatnosc.html ujęty w PRIVACY_PAGES)", () => {
+  // Strażnik: żadna przyszła strona prywatności nie może trafić na dysk bez wpięcia w mapę (czyli bez testu wyżej).
+  const mapped = new Set(Object.values(PRIVACY_PAGES));
+  const onDisk = readdirSync(APP).filter((f) => /^(privacy.*|prywatnosc)\.html$/.test(f));
+  for (const f of onDisk) assert.ok(mapped.has(f), `${f} istnieje na dysku, ale nie ma go w PRIVACY_PAGES (strona poza bramką testu)`);
 });
 
 test("konfiguracja GitHub Pages: CNAME (domena) i .nojekyll obecne w korzeniu", () => {

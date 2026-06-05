@@ -179,6 +179,15 @@ const rubrics = CANON ? checkSchema(`${CANON}/rubrics.json`, "rubrics.schema.jso
 for (const lang of LOCALES) {
   checkSchema(`${lang}/modules.labels.json`, "modules-labels.schema.json");
   checkSchema(`${lang}/paths.labels.json`, "paths-labels.schema.json");
+  // M17 follow-up (#133): treść scenariuszy/rubryk non-CANON też bramkowana schematem + lintem syntetycznym
+  // (dotąd tylko parytet ID — parityIdSet; ta sama rodzina luk co GAP module-content domknięty w M17). CANON
+  // walidowany osobno wyżej (linie 176-177) wraz z kontrolami strukturalnymi/progowymi.
+  if (lang !== CANON) {
+    const sc = checkSchema(`${lang}/scenarios.json`, "scenarios.schema.json");
+    if (sc) lintSynthetic(JSON.stringify(sc), `${lang}/scenarios.json`);
+    const ru = checkSchema(`${lang}/rubrics.json`, "rubrics.schema.json");
+    if (ru) lintSynthetic(JSON.stringify(ru), `${lang}/rubrics.json`);
+  }
 }
 
 // Parsowalność WSZYSTKICH schematów objętych CI (kontrakt = data/schemas/**, także podkatalogi
@@ -615,6 +624,42 @@ for (const lang of LOCALES) {
   if (mods && mods.length !== 18) fail(`treść modułów ${lang}: ${mods.length}/18 plików`);
   else if (mods) report.push(`Treść modułów ${lang}: ${mods.length}/18 — schemat + integralność + lint OK`);
 }
+
+// ---------------- Leak-gate: brak resztek języka źródłowego (PL) w przetłumaczonych locale (#133) ----------------
+// Wyciek prozy PL do danych locale wystąpił realnie w M17 (łapany dotąd tylko ręcznie). Bramka skanuje pola pod
+// kątem znaków SPECYFICZNYCH dla polskiego — świadomie BEZ ó/ć (legalne w ES i in.; dałyby fałszywe alarmy).
+// Pomijamy poddrzewo "_meta" (notki autorskie PL celowo zachowane we wszystkich locale). Skan obejmuje
+// data/<lang>/**.json oraz katalog UI assets/i18n/<lang>.json. Tylko non-CANON (CANON = język źródłowy).
+(function checkResidualSourceLang() {
+  const PL_ONLY = /[łąęńśżźĄĘŁŃŚŻŹ]/;
+  // Positive control (kultura „testu negatywnego", por. #25): czysty skan jest nieodróżnialny od zepsutego regexu/
+  // ścieżki/zbyt szerokiego wykluczenia _meta. Udowadniamy, że detektor w ogóle wykrywa polski.
+  if (!PL_ONLY.test("zażółć gęślą jaźń")) { fail("leak-gate: positive control nie wykrył polskiego — detektor zepsuty"); return; }
+  const walk = (node, path, label) => {
+    if (typeof node === "string") { if (PL_ONLY.test(node)) fail(`${label}: resztka języka źródłowego (PL) w ${path} → ${JSON.stringify(node.slice(0, 80))}`); return; }
+    if (Array.isArray(node)) { node.forEach((v, i) => walk(v, `${path}[${i}]`, label)); return; }
+    if (node && typeof node === "object") for (const k of Object.keys(node)) { if (k === "_meta") continue; walk(node[k], `${path}.${k}`, label); }
+  };
+  const collectJson = (dir) => {
+    const out = [];
+    if (!existsSync(dir)) return out;
+    for (const ent of readdirSync(dir, { withFileTypes: true })) {
+      const p = join(dir, ent.name);
+      if (ent.isDirectory()) out.push(...collectJson(p));
+      else if (ent.name.endsWith(".json")) out.push(p);
+    }
+    return out;
+  };
+  let scanned = 0;
+  for (const lang of LOCALES) {
+    if (lang === CANON) continue;
+    const files = collectJson(join(DATA, lang));
+    const cat = join(I18N_DIR, `${lang}.json`);
+    if (existsSync(cat)) files.push(cat);
+    for (const f of files) { walk(load(f), "", relative(DATA, f)); scanned += 1; }
+  }
+  report.push(`Leak-gate języka źródłowego (PL): ${scanned} plików non-CANON przeskanowanych — brak resztek poza _meta`);
+})();
 
 // ---------------- Próbka wyników pilotażu (kalibracja #28) — schemat + integralność + lint syntetyczny ----------------
 // W repo trzymamy WYŁĄCZNIE syntetyczny przykład (realne wyniki pilotażu powstają poza repo).
