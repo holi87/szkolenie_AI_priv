@@ -83,7 +83,7 @@ export function getLocale() {
 
 // Strona prywatności jest statyczna i per-locale (#81). Wspólne źródło prawdy dla WSZYSTKICH linków
 // (path-select, footer) — żeby aktywny locale i plik nie rozjechały się między miejscami.
-const PRIVACY_PAGES = {
+export const PRIVACY_PAGES = {
   pl: "prywatnosc.html", en: "privacy.html", es: "privacy-es.html", fr: "privacy-fr.html",
   de: "privacy-de.html", it: "privacy-it.html", uk: "privacy-uk.html", vi: "privacy-vi.html",
 };

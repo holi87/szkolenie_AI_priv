@@ -30,10 +30,18 @@ function flagSvg(code) {
     svg.appendChild(p);
   };
   if (code === "pl") { rect(0, 0, 20, 7, "#ffffff"); rect(0, 7, 20, 7, "#dc143c"); }
-  else if (code === "en") { // uproszczony GB: granat + biało-czerwony krzyż
-    rect(0, 0, 20, 14, "#012169");
-    rect(0, 5, 20, 4, "#ffffff"); rect(8, 0, 4, 14, "#ffffff");
-    rect(0, 6, 20, 2, "#c8102e"); rect(9, 0, 2, 14, "#c8102e");
+  else if (code === "en") { // Union Jack (uproszczony): granat + biało-czerwone saltire (przekątne) + krzyż św. Jerzego
+    const line = (x1, y1, x2, y2, w, stroke) => {
+      const l = document.createElementNS(SVG_NS, "line");
+      l.setAttribute("x1", x1); l.setAttribute("y1", y1); l.setAttribute("x2", x2); l.setAttribute("y2", y2);
+      l.setAttribute("stroke", stroke); l.setAttribute("stroke-width", w);
+      svg.appendChild(l);
+    };
+    rect(0, 0, 20, 14, "#012169");                                          // granatowe tło
+    line(0, 0, 20, 14, 3, "#ffffff"); line(20, 0, 0, 14, 3, "#ffffff");     // białe przekątne (saltire św. Andrzeja/Patryka)
+    line(0, 0, 20, 14, 1.2, "#c8102e"); line(20, 0, 0, 14, 1.2, "#c8102e"); // czerwone przekątne (cieńsze, na białych)
+    rect(8, 0, 4, 14, "#ffffff"); rect(0, 5, 20, 4, "#ffffff");             // biały krzyż św. Jerzego (tło)
+    rect(9, 0, 2, 14, "#c8102e"); rect(0, 6, 20, 2, "#c8102e");             // czerwony krzyż na wierzchu
   }
   else if (code === "es") { rect(0, 0, 20, 3.5, "#aa151b"); rect(0, 3.5, 20, 7, "#f1bf00"); rect(0, 10.5, 20, 3.5, "#aa151b"); } // ES: poziomo czerwony / żółty (2×) / czerwony
   else if (code === "fr") { rect(0, 0, 6.67, 14, "#0055a4"); rect(6.67, 0, 6.67, 14, "#ffffff"); rect(13.33, 0, 6.67, 14, "#ef4135"); } // FR: pionowo niebieski / biały / czerwony

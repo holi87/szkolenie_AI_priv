@@ -4,7 +4,7 @@
 // musimy udowodnić, że bramka realnie WYKRYWA regresję danych. Pure Node (fs + child_process).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { cpSync, writeFileSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { cpSync, writeFileSync, mkdtempSync, readFileSync, rmSync, readdirSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
@@ -43,15 +43,36 @@ function copyI18n() {
   return join(dir, "i18n");
 }
 
+// Transliteracja znaków SPECYFICZNYCH dla polskiego → ASCII (te same znaki co leak-gate validate.mjs #133,
+// czyli BEZ ó/ć). Fabrykowany „en" to KOPIA prozy PL; bez deplonizacji leak-gate (słusznie) odrzuciłby PL-w-EN.
+// Transliteracja czyni fikstur strukturalnie poprawnym i leak-clean, nie ruszając pól scoringowych (parytet).
+const PL_TO_ASCII = { "ł": "l", "ą": "a", "ę": "e", "ń": "n", "ś": "s", "ż": "z", "ź": "z", "Ł": "L", "Ą": "A", "Ę": "E", "Ń": "N", "Ś": "S", "Ż": "Z", "Ź": "Z" };
+const deplonize = (s) => s.replace(/[łąęńśżźŁĄĘŃŚŻŹ]/g, (c) => PL_TO_ASCII[c]);
+function deplonizeTree(node) {
+  if (typeof node === "string") return deplonize(node);
+  if (Array.isArray(node)) return node.map(deplonizeTree);
+  if (node && typeof node === "object") { const o = {}; for (const [k, v] of Object.entries(node)) o[k] = deplonizeTree(v); return o; }
+  return node;
+}
+function deplonizeJsonDir(dir) {
+  for (const ent of readdirSync(dir, { withFileTypes: true })) {
+    const p = join(dir, ent.name);
+    if (ent.isDirectory()) deplonizeJsonDir(p);
+    else if (ent.name.endsWith(".json")) writeFileSync(p, JSON.stringify(deplonizeTree(JSON.parse(readFileSync(p, "utf8"))), null, 2));
+  }
+}
+
 // Fabrykuje drugi locale data/en/ z kanonu pl (parytet). fixPrefix: dopasuj prefiks krytyczny do EN.
 function fabricateEn(dataDir, { fixPrefix = true, mutate } = {}) {
   cpSync(join(dataDir, "pl"), join(dataDir, "en"), { recursive: true });
+  deplonizeJsonDir(join(dataDir, "en")); // leak-clean (#133): bez znaków PL — inaczej leak-gate odrzuca PL-w-EN
   if (fixPrefix) {
     const m10 = join(dataDir, "en", "questions", "m10.json");
     const doc = JSON.parse(readFileSync(m10, "utf8"));
     for (const q of doc.questions || []) {
       if (q.isCritical && typeof q.feedbackIncorrect === "string") {
-        q.feedbackIncorrect = q.feedbackIncorrect.replace(/^To jest błąd bezpieczeństwa\./, "This is a security error.");
+        // Po deplonizacji prefiks PL to „To jest blad bezpieczenstwa." — podmieniamy na właściwy EN.
+        q.feedbackIncorrect = q.feedbackIncorrect.replace(/^To jest blad bezpieczenstwa\./, "This is a security error.");
       }
     }
     writeFileSync(m10, JSON.stringify(doc, null, 2));
