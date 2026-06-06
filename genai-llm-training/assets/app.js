@@ -254,8 +254,10 @@ function start(initialData, ctx = {}) {
     const alreadyDone = store.getProgress().modules[moduleId]?.status === "completed";
 
     const root = el("div", { class: "view__content" });
-    root.appendChild(el("h1", { text: t("module.title", { moduleId: mod.id, moduleName: mod.name }) }));
-    root.appendChild(el("p", { class: "muted", text: t("module.meta", { pillar: pillarLabel(mod.pillar), level: mod.level, time: mod.timeFullMin, interaction: mod.interactiveElement }) }));
+    // Eyebrow: id modułu + filar (kontekst nawigacyjny przed tytułem).
+    root.appendChild(el("p", { class: "eyebrow", text: t("module.eyebrow", { moduleId: mod.id, pillar: pillarLabel(mod.pillar) }) }));
+    root.appendChild(el("h1", { class: "module-title", text: mod.name }));
+    root.appendChild(el("p", { class: "module-meta", text: t("module.meta", { pillar: pillarLabel(mod.pillar), level: mod.level, time: mod.timeFullMin, interaction: mod.interactiveElement }) }));
 
     // ----- Treść (ekrany z danych, filtr po ścieżce — wariant S1 skrócony obsłużony przez onlyForPaths) -----
     if (content) {
@@ -289,11 +291,19 @@ function start(initialData, ctx = {}) {
     const updateCompleteState = () => { completeBtn.disabled = !alreadyDone && !quizComplete(); refreshHint(); };
 
     // ----- Interakcja modułowa -----
+    // block chrome (#144, M18 STAGE B): separator + eyebrow uppercase + lead. Kolor eyebrow = token accent
+    // (nie inline style — test #138 blokuje inline color na .eyebrow; tu .block__eyebrow to odrębna klasa).
     if (ixConfig) {
-      root.appendChild(el("h2", { text: ixConfig.title || mod.interactiveElement }));
+      const ixKind = ixConfig.kind;
+      const ixTitle = ixConfig.title || mod.interactiveElement;
+      const blockNode = el("div", { class: "block" });
+      blockNode.appendChild(el("h2", { class: "block__eyebrow" }, [
+        el("span", { attrs: { "aria-hidden": "true" } }, [icon("info")]),
+        ixTitle,
+      ]));
       const ix = renderInteraction(ixConfig);
       const ixFb = el("div");
-      const ixBtn = el("button", { class: "btn", type: "button", text: ixConfig.kind === "rubric" ? t("action.evaluate") : ixConfig.kind === "maturity-check" ? t("maturity.action") : t("action.check") });
+      const ixBtn = el("button", { class: "btn", type: "button", text: ixKind === "rubric" ? t("action.evaluate") : ixKind === "maturity-check" ? t("maturity.action") : t("action.check") });
       ixBtn.addEventListener("click", () => {
         const result = evaluateInteraction(ixConfig, ix.getResponse());
         ix.showFeedback(result);
@@ -306,9 +316,10 @@ function start(initialData, ctx = {}) {
           refreshHeaderAndNav(); // zapisana praktyka może odblokować test końcowy (gating)
         }
       });
-      root.appendChild(ix.node);
-      root.appendChild(el("div", { class: "btn-row" }, [ixBtn]));
-      root.appendChild(ixFb);
+      blockNode.appendChild(ix.node);
+      blockNode.appendChild(el("div", { class: "btn-row" }, [ixBtn]));
+      blockNode.appendChild(ixFb);
+      root.appendChild(blockNode);
     }
 
     // ----- Quiz inline (zachowane wiring scoringu — setInlineQuizScore zasila 30% wyniku ścieżki) -----
@@ -347,10 +358,14 @@ function start(initialData, ctx = {}) {
     updateCompleteState();
 
     // ----- Podsumowanie + następny krok -----
+    // next-step-link (#144, M18 STAGE B): karta nawigacji do następnego modułu/testu (border-strong — element interaktywny).
     if (content && content.summary) root.appendChild(renderSummary(content.summary));
     refreshHint(); // hint zależny od stanu quizu (gdy completeBtn zablokowany → instrukcja, inaczej → następny krok)
-    root.appendChild(el("div", { class: "next-step" }, [
-      stepHint,
+    root.appendChild(el("div", { class: "next-step-link" }, [
+      el("div", { class: "next-step-link__body" }, [
+        el("span", { class: "next-step-link__label", text: t("module.nextStep.label") }),
+        stepHint,
+      ]),
       el("div", { class: "btn-row" }, [completeBtn, el("button", { class: "btn btn--ghost", type: "button", text: t("action.backToModules"), on: { click: () => { showMenu(); focusView(); } } })]),
     ]));
     mount(refs.view, root);

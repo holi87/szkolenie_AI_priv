@@ -19,6 +19,7 @@
 
   /* Kontrast CI-gated (contrast.test.mjs): border/bg >=3:1, border/surface >=3:1 */
   --color-border:         #6B7588;   /* /bg 4.04:1 ✓  /surface 3.76:1 ✓ — INTERAKCYJNY (kontrolki, stany) */
+  --color-border-strong:  #6B7588;   /* alias zgodności dla makiet (= --color-border); interakcyjny */
   --color-border-subtle:  #2A3140;   /* dekoracyjny separator kart (nie niesie stanu kontrolki) */
 
   --color-accent:         #6EA8FE;   /* /bg 7.76:1 ✓  /surface 7.22:1 ✓  /surface-2 6.51:1 ✓ — link + btn fill */
@@ -28,6 +29,7 @@
 
   --color-ok:             #4ADE80;   /* /surface 10.75:1 ✓  /surface-2 9.03:1 ✓ */
   --color-warn:           #FBBF24;   /* /bg 11.22:1 ✓ */
+  --color-warn-text:      #FBBF24;   /* dark: identyczny z warn (kompozyt 8.5+:1 ✓); light override w sekcji light */
   --color-bad:            #F87171;   /* /bg 6.77:1 ✓ */
   --color-locked:         #6B7280;   /* stosowany WYŁĄCZNIE na wyłączonych komponentach (exempt z 1.4.3) */
 
@@ -84,6 +86,7 @@
   --maxw-reading:  66ch;   /* nowy: optymalna miara prozy serif */
   --radius:        10px;
   --radius-sm:     7px;    /* nowy */
+  --radius-md:     9px;    /* nowy: dla komponentów inline (btn, option, feedback, callout, interakcje) */
   --radius-lg:     16px;   /* nowy */
   --radius-pill:   999px;  /* nowy */
   --gap:           var(--sp-4);
@@ -102,6 +105,7 @@
   --color-muted:          #4F5765;   /* muted/bg 6.79:1 ✓  muted/surface 7.26:1 ✓ */
 
   --color-border:         #707A8B;   /* /bg 4.04:1 ✓  /surface(white) 4.33:1 ✓ — INTERAKCYJNY */
+  --color-border-strong:  #707A8B;   /* alias zgodności dla makiet (= --color-border); interakcyjny */
   --color-border-subtle:  #DCE1EA;   /* dekoracyjny separator kart */
 
   --color-accent:         #1D4ED8;   /* /bg 6.24:1 ✓  /surface 6.70:1 ✓  /surface-2 5.87:1 ✓ */
@@ -111,6 +115,9 @@
 
   --color-ok:             #127334;   /* /surface 5.55:1 ✓  /surface-2 4.93:1 ✓ */
   --color-warn:           #B45309;   /* /bg 4.68:1 ✓ */
+  --color-warn-text:      #92400E;   /* tekst warn na jasnym tle — ciemniejszy wariant (amber-800).
+                                        Kompozyt: 6.21:1 na surface-2 ✓ (4.5 req); 7.09 na surface ✓.
+                                        Używany w .quiz-chip--crit i .result-status--fail (light only). */
   --color-bad:            #B91C1C;   /* /bg 6.03:1 ✓ */
   --color-locked:         #5C6473;
 

@@ -6,6 +6,16 @@
 
 /* @import musi być PIERWSZĄ regułą (spec CSS). Ścieżka WZGLĘDNA — GitHub Pages, ADR-0002. */
 @import "tokens.css";
+/* Prymitywy wizualne (STAGE A, issue #139, M18): eyebrow, stats-strip, section-head. */
+@import "styles/primitives.css";
+/* Quiz + test końcowy (STAGE B, issue #143, M18): quiz-chip--crit, test-title, test-meta, path-badge--eyebrow. */
+@import "styles/quiz-test.css";
+/* Blok chrome interakcji + next-step-link (STAGE B, issue #144, M18): block, block__eyebrow, next-step-link, tune-output__label. */
+@import "styles/interactions.css";
+/* Ekran wyniku + certyfikat (STAGE B, issue #145, M18): result-hero, result-status--fail, attempt-note. */
+@import "styles/result-cert.css";
+/* Mikro-motion, :active, spójność radius (STAGE D, issue #151, M18): polish.css */
+@import "styles/polish.css";
 
 /* ============================================================
    RESET + BASE
@@ -69,7 +79,7 @@ select   { max-width: 100%; }
 .brand { display: flex; align-items: center; gap: 0.6rem; }
 .brand__logo {
   display: inline-flex; width: 34px; height: 34px; align-items: center; justify-content: center;
-  border-radius: 9px; background: var(--color-accent-quiet); color: var(--color-accent);
+  border-radius: var(--radius-md); background: var(--color-accent-quiet); color: var(--color-accent);
   border: 1px solid var(--color-border); flex: none;
 }
 .brand__logo svg { display: block; width: 1em; height: 1em; }
@@ -131,7 +141,7 @@ select   { max-width: 100%; }
   display: inline-flex; align-items: center; gap: 0.45rem;
   font: inherit; cursor: pointer; font-weight: var(--fw-bold);
   padding: 0.6rem 1.05rem; min-height: 44px;
-  border-radius: 9px; border: 1px solid var(--color-accent);
+  border-radius: var(--radius-md); border: 1px solid var(--color-accent);
   background: var(--color-accent); color: var(--color-accent-fg);
   transition: filter var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease);
   text-decoration: none; text-wrap: balance;
@@ -175,7 +185,7 @@ select   { max-width: 100%; }
 .nav-item { display: block; width: 100%; }
 .nav-item__btn {
   display: flex; align-items: center; gap: 0.5rem; width: 100%; text-align: left;
-  background: none; border: 1px solid transparent; border-radius: 9px;
+  background: none; border: 1px solid transparent; border-radius: var(--radius-md);
   color: var(--color-fg); padding: 0.5rem 0.55rem; font: inherit; cursor: pointer;
   transition: background var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
 }
@@ -278,14 +288,15 @@ select   { max-width: 100%; }
   font-family: var(--font-reading); font-size: var(--fs-900); line-height: 1.05;
   margin: 0 0 var(--sp-3); letter-spacing: -0.02em;
 }
-/* Akcent: solid color jako fallback + gradient jeśli obsługiwany (nie niesie info — WCAG 1.4.1). */
+/* Akcent: SOLIDNY kolor — domyślnie (M18 flat-accent, DESIGN-PROPOSAL p.3 + a11y: gradient nie jest nośnikiem informacji,
+   background-clip:text niewidoczne w forced-colors). Gradient (--grad-accent) dostępny jako klasa dekoracyjna
+   .hero__accent--grad dla kontekstów czysto ozdobnych (nie stosowany tu domyślnie). */
 .hero__accent { color: var(--color-accent); }
-@supports ((-webkit-background-clip: text) or (background-clip: text)) {
-  .hero__accent {
-    background: var(--grad-accent);
-    -webkit-background-clip: text; background-clip: text;
-    -webkit-text-fill-color: transparent; color: transparent;
-  }
+/* Klasa dekoracyjna (opcjonalna): gradient na słowie akcentu. Nie stosuj tam, gdzie kolor niesie znaczenie. */
+.hero__accent--grad {
+  background: var(--grad-accent);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
 }
 .hero__lead { font-size: var(--fs-600); color: var(--color-muted); max-width: var(--maxw-reading); margin: 0; }
 .path-select__heading { margin-top: var(--sp-3); }
@@ -316,7 +327,7 @@ select   { max-width: 100%; }
 .path-card__head   { display: flex; align-items: center; gap: 0.65rem; margin-bottom: 0.2rem; }
 .path-card__sigil  {
   display: inline-flex; width: 40px; height: 40px; align-items: center; justify-content: center;
-  border-radius: 10px; background: var(--color-surface-2); border: 1px solid var(--color-border);
+  border-radius: var(--radius); background: var(--color-surface-2); border: 1px solid var(--color-border);
   font-weight: var(--fw-bold); font-size: 0.95rem; letter-spacing: -0.02em; flex: none; color: var(--color-fg);
 }
 .path-card__name   { margin: 0; font-size: var(--fs-600); font-weight: var(--fw-bold); letter-spacing: -0.01em; }
@@ -361,7 +372,7 @@ select   { max-width: 100%; }
 .options { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
 .option {
   display: flex; align-items: flex-start; gap: 0.65rem; padding: 0.65rem 0.8rem; min-height: 44px;
-  border: 1px solid var(--color-border); border-radius: 9px; background: var(--color-surface-2);
+  border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface-2);
   transition: border-color var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease),
               background var(--dur-fast) var(--ease);
 }
@@ -387,7 +398,7 @@ select   { max-width: 100%; }
    FEEDBACK
    ============================================================ */
 .feedback {
-  margin-top: var(--sp-3); padding: 0.75rem 0.95rem; border-radius: 9px;
+  margin-top: var(--sp-3); padding: 0.75rem 0.95rem; border-radius: var(--radius-md);
   border: 1px solid var(--color-border-subtle); border-left-width: 4px;
   animation: feedback-in var(--dur-base) var(--ease);
 }
@@ -404,7 +415,7 @@ select   { max-width: 100%; }
 }
 .locked-note {
   display: flex; gap: 0.5rem; align-items: baseline; color: var(--color-muted);
-  border: 1px dashed var(--color-border); border-radius: 9px; padding: 0.7rem 0.9rem;
+  border: 1px dashed var(--color-border); border-radius: var(--radius-md); padding: 0.7rem 0.9rem;
 }
 
 /* ============================================================
@@ -436,7 +447,7 @@ select   { max-width: 100%; }
    CALLOUTY — ikona + słowo (nie sam kolor, WCAG 1.4.1)
    ============================================================ */
 .callout {
-  margin: 0.9rem 0; padding: 0.75rem 0.95rem; border-radius: 9px;
+  margin: 0.9rem 0; padding: 0.75rem 0.95rem; border-radius: var(--radius-md);
   border: 1px solid var(--color-border-subtle); background: var(--color-surface-2);
 }
 .callout__title {
@@ -473,14 +484,14 @@ select   { max-width: 100%; }
 .classify-legend { margin-bottom: 0.8rem; }
 .classify-legend ul { padding-left: 1.1rem; margin: 0.3rem 0; font-size: var(--fs-400); }
 .classify-item {
-  margin: 0.9rem 0; border: 1px solid var(--color-border-subtle); border-radius: 9px;
+  margin: 0.9rem 0; border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md);
   padding: 0.7rem 0.9rem; min-width: 0;
 }
 .classify-item__text { font-weight: var(--fw-medium); }
 .classify-item__opts { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.4rem; }
 .classify-item__fb:empty { display: none; }
 .rubric-crit {
-  margin: 0.9rem 0; border: 1px solid var(--color-border-subtle); border-radius: 9px;
+  margin: 0.9rem 0; border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md);
   padding: 0.7rem 0.9rem; min-width: 0;
 }
 .rubric-crit__name   { margin-bottom: 0.2rem; }
@@ -501,10 +512,10 @@ select   { max-width: 100%; }
 .tune-output__row   { margin: 0.4rem 0; }
 .tune-output__row p { margin: 0.15rem 0 0; color: var(--color-muted); font-size: var(--fs-400); max-width: var(--maxw-reading); }
 .tune-output__row b { font-family: var(--font-mono); font-size: 0.9rem; }
-.tune-checkpoint    { margin: 1rem 0 0; border: 1px solid var(--color-border-subtle); border-radius: 9px; padding: 0.7rem 0.9rem; min-width: 0; }
+.tune-checkpoint    { margin: 1rem 0 0; border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); padding: 0.7rem 0.9rem; min-width: 0; }
 .tune-checkpoint__fb:empty { display: none; }
 /* Skala Holaka (maturity-check) */
-.maturity-scale       { margin: 1rem 0; border: 1px solid var(--color-border-subtle); border-radius: 9px; padding: 0.8rem 1rem; min-width: 0; }
+.maturity-scale       { margin: 1rem 0; border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); padding: 0.8rem 1rem; min-width: 0; }
 .maturity-scale__label { font-weight: var(--fw-medium); }
 .maturity-scale__items { list-style: none; margin: 0.5rem 0; padding: 0; display: grid; gap: 0.4rem; }
 .maturity-scale__fb:empty { display: none; }
@@ -559,6 +570,62 @@ select   { max-width: 100%; }
 .cert-gate--fail .cert-gate__icon { color: var(--color-bad); }
 .weak-list { padding-left: 1.1rem; color: var(--color-muted); max-width: var(--maxw-reading); }
 
+/* ============================================================
+   HUB MODUŁÓW — EYEBROW + NAGŁÓWEK + PASEK POSTĘPU (#141, M18 STAGE B)
+   ============================================================ */
+/* Duży nagłówek h1 w hubie (hub-h1): większy niż domyślny h1 (2.2rem). */
+.hub-h1 {
+  font-family: var(--font-reading); font-size: var(--fs-800);
+  margin: 0 0 0.4rem; letter-spacing: -0.01em;
+}
+/* Intro tekst hubu (hub-intro): subtelniejszy od domyślnego p. */
+.hub-intro {
+  color: var(--color-muted); max-width: var(--maxw-reading); margin: 0 0 var(--sp-3);
+}
+/* Pasek postępu wymaganych modułów (path-progress).
+   Separator kart: --color-border-subtle (dekoracyjny). Track: --color-surface-2.
+   Fill: --color-accent. aria-label na span.path-progress__bar (WCAG 1.1.1). */
+.path-progress {
+  display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap;
+  margin: var(--sp-3) 0 0; font-size: var(--fs-400); color: var(--color-muted);
+}
+.path-progress__bar {
+  flex: 1; min-width: 160px; max-width: 300px; height: 8px;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border-subtle); overflow: hidden;
+}
+.path-progress__fill {
+  display: block; height: 100%;
+  background: var(--color-accent); border-radius: var(--radius-pill);
+  transition: width var(--dur-base) var(--ease);
+}
+.path-progress b { color: var(--color-fg); }
+
+/* ============================================================
+   PATH-CARD — ROLE (#140, M18 STAGE B)
+   ============================================================ */
+/* Role: podtytuł karty ścieżki pod nazwą (np. „Główna ścieżka praktyczna"). */
+.path-card__role {
+  font-size: var(--fs-300); color: var(--color-muted); display: block; margin-top: 0.1rem;
+}
+
+/* ============================================================
+   MODULE VIEW — TYTUŁ, META, BLOKI INTERAKCJI, NASTĘPNY KROK (#142, M18 STAGE B)
+   ============================================================ */
+/* Tytuł modułu: serif, wyraźna hierarchia. */
+.module-title {
+  font-family: var(--font-reading); font-size: var(--fs-800);
+  margin: 0 0 0.5rem; letter-spacing: -0.01em;
+}
+/* Meta-pasek modułu: monospaced, tło surface-2 z dekoracyjnym obramowaniem. */
+.module-meta {
+  font-family: var(--font-mono); font-size: var(--fs-300);
+  color: var(--color-muted); background: var(--color-surface-2);
+  border: 1px solid var(--color-border-subtle); border-radius: var(--radius-sm);
+  padding: 0.45rem 0.7rem; display: inline-flex; flex-wrap: wrap;
+  gap: 0.2rem 0.9rem; margin: 0 0 1.4rem; max-width: 100%; /* reflow 320px */
+}
 /* ============================================================
    IKONY inline SVG (UX-6 #75)
    ============================================================ */

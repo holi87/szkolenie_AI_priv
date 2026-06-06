@@ -20,7 +20,7 @@ export function renderTune(config) {
       ]);
     });
     outPanel.replaceChildren(
-      el("p", { class: "muted", text: config.outputLabel || t("interaction.tune.outputLabel") }),
+      el("p", { class: "tune-output__label", text: config.outputLabel || t("interaction.tune.outputLabel") }),
       ...lines,
     );
   };

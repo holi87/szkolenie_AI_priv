@@ -88,6 +88,29 @@ function finalTestCard(finalTest, onSelectFinalTest) {
   return el("article", { class: `hub-card hub-card--final status--${status}` }, children);
 }
 
+/** Pasek postępu wymaganych modułów (HTML progressbar). Derywuje completed/total z tablicy modułów.
+    Ścieżka FORMATYWNA (S4) nie ma pojęcia "wymagany" — pasek pomijany gdy brak modułów required. */
+function progressBar(modules) {
+  const required = modules.filter((m) => m.required);
+  if (required.length === 0) return null;
+  const completed = required.filter((m) => m.status === "completed").length;
+  const total = required.length;
+  const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
+  const ariaLabel = t("module.hub.progress.aria", { completed, total });
+  return el("div", { class: "path-progress" }, [
+    el("span", {
+      class: "path-progress__bar",
+      attrs: { role: "img", "aria-label": ariaLabel },
+    }, [
+      el("span", { class: "path-progress__fill", attrs: { style: `width:${pct}%` } }),
+    ]),
+    el("span", {}, [
+      el("b", { text: `${completed} / ${total}` }),
+      ` ${t("module.hub.progress.suffix")}`,
+    ]),
+  ]);
+}
+
 /**
  * Renderuje hub modułów do wstawienia w głównym widoku.
  * @param {object} cfg { pathId, pathName, nextStep, modules[], finalTest, onSelectModule, onSelectFinalTest }
@@ -100,11 +123,14 @@ export function renderModuleHub(cfg) {
   // Bez tego guardu finalTestStatus dałby fałszywe „dostępny" i klik prowadziłby do nieistniejącego testu.
   if (finalTest) grid.appendChild(finalTestCard(finalTest, onSelectFinalTest));
   // hub-view zdejmuje limit szerokości .view__content (70ch) — siatka kart ma wykorzystać pełną kolumnę.
+  const bar = progressBar(modules);
   return el("div", { class: "view__content hub-view" }, [
-    el("h1", { text: pathName
+    el("p", { class: "eyebrow", text: pathName
       ? t("module.menu.heading", { pathId, pathName })
       : t("nav.header.pathIndicator", { pathId }) }),
-    el("p", { class: "muted", text: intro || t("module.menu.intro") }),
+    el("h1", { class: "hub-h1", text: t("module.hub.title") }),
+    el("p", { class: "hub-intro", text: intro || t("module.menu.intro") }),
+    bar,
     nextStep
       ? el("div", { class: "next-step", attrs: { role: "status" } }, [
           el("span", { class: "next-step__icon", attrs: { "aria-hidden": "true" } }, [icon("info")]),

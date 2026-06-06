@@ -1,0 +1,60 @@
+/* result-cert.css — ekran wyniku i certyfikat (M18 STAGE B, issue #145).
+   Nowe klasy wg mockup-05-result-certificate.html. Emitowane przez certificate-view.js.
+   Nie przenosi istniejących reguł z styles.css (result__score*, result-status--pass, cert-gate*,
+   result-notice*, print, weak-list zostają tam — CI-asserted i print-safe).
+   ADR-0002: brak buildu. Tokeny z tokens.css. */
+
+/* ============================================================
+   RESULT HERO — układ pierścień-score + główna treść w jednym rzędzie
+   ============================================================ */
+/* Wrapper: flex-row na desktopie, kolumna na mobile. */
+.result-hero {
+  display: flex;
+  gap: 1.8rem;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: var(--sp-4) 0 var(--sp-3);
+}
+
+/* Główna treść hero (tytuł, badge zaliczenia). */
+.result-hero__main {
+  min-width: 200px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* ============================================================
+   RESULT STATUS FAIL — badge niezaliczenia (ikona + SŁOWO)
+   Dopełnienie istniejącego result-status--pass (styles.css).
+   Kolor warn — wzmocnienie (WCAG 1.4.1: ikona+słowo są nośnikiem, nie sam kolor).
+   Kolor TEKSTU: --color-warn-text (ciemniejszy amber-800 w jasnym motywie = 6.2:1 ✓ na kompozycie;
+   identyczny z warn w ciemnym motywie, gdzie 8.1:1 ✓). Tło/border: --color-warn (dekoracja).
+   ============================================================ */
+.result-status--fail {
+  color: var(--color-warn-text);
+  border-color: var(--color-warn);
+  background: color-mix(in srgb, var(--color-warn) 12%, transparent);
+}
+
+/* ============================================================
+   ATTEMPT NOTE — notka o wykorzystanych podejściach
+   ============================================================ */
+.attempt-note {
+  font-size: var(--fs-300);
+  color: var(--color-muted);
+  margin-top: 1rem;
+}
+
+/* ============================================================
+   REFLOW — 560 px i 320 px
+   ============================================================ */
+@media (max-width: 560px) {
+  .result-hero {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .result-hero__main { min-width: 0; align-items: center; }
+}

@@ -67,6 +67,34 @@ test("realne pl.json/en.json mają identyczny zbiór kluczy (parytet katalogów)
   assert.deepEqual(Object.keys(pl).sort(), Object.keys(en).sort());
 });
 
+// ----- RESKIN KEYS PARITY — klucze M18 STAGE B/C we wszystkich 8 locale (#147) -----
+// Guard: nowe klucze reskinu muszą istnieć i być NIEPUSTE w każdym z 8 katalogów.
+// Pusty string → t() fallbackuje do PL, ale CI musi to łapać przed merge (nie po).
+const RESKIN_KEYS = [
+  "path.hero.eyebrow", "path.hero.title.template", "path.hero.title.accent", "path.hero.lead",
+  "path.hero.stat.modules", "path.hero.stat.paths", "path.hero.stat.time",
+  "path.card.role.S1", "path.card.role.S2", "path.card.role.S3", "path.card.role.S4",
+  "module.eyebrow", "module.hub.title", "module.hub.progress.suffix", "module.hub.progress.aria",
+  "module.hub.card.required", "module.hub.card.optional", "module.hub.card.meta", "module.hub.card.quiz",
+  "module.hub.cta.start", "module.hub.cta.continue", "module.hub.cta.review", "module.hub.cta.aria",
+  "module.hub.finalTest.cta",
+  "module.nextStep.label", "module.nextStep.passed", "module.nextStep.startModule",
+  "module.nextStep.goToTest", "module.nextStep.completeRequired", "module.nextStep.formative",
+  "quiz.chip.critical", "quiz.chip.points",
+  "result.passed.badge", "result.failed.badge",
+];
+const ALL_LOCALES = ["pl", "en", "es", "fr", "de", "it", "uk", "vi"];
+
+test("RESKIN KEYS (#147): klucze reskinu M18 istnieją i są niepuste we wszystkich 8 locale", () => {
+  for (const lang of ALL_LOCALES) {
+    const cat = readJson(`assets/i18n/${lang}.json`);
+    for (const key of RESKIN_KEYS) {
+      assert.ok(key in cat, `${lang}.json: brak klucza reskinu "${key}" (#147)`);
+      assert.ok(cat[key] !== "", `${lang}.json: pusty klucz reskinu "${key}" (#147) — t() fallbackuje do PL`);
+    }
+  }
+});
+
 // --- Czystość core (zero-i18n): teksty user-facing przez kody, nie prozę w core ---
 
 test("core nie importuje i18n i nie zawiera dawnej prozy user-facing", () => {

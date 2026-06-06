@@ -79,6 +79,14 @@ function passBadge() {
   ]);
 }
 
+/** Status niezaliczenia jako badge (#145, M18 STAGE B): ikona warn + SŁOWO. Kolor = wzmocnienie, nie jedyny nośnik. */
+function failBadge() {
+  return el("p", { class: "result-status result-status--fail" }, [
+    el("span", { class: "result-status__icon", attrs: { "aria-hidden": "true" } }, [icon("warn")]),
+    el("span", { class: "result-status__label", text: t("result.failed.badge") }),
+  ]);
+}
+
 /** Duży wynik % jako pierścień CSS (centerpiece ekranu Wynik). --pct steruje łukiem conic-gradient w CSS. */
 function scoreBlock(scorePct, passed) {
   const ringColor = passed ? "var(--color-ok)" : "var(--color-warn)";
@@ -114,17 +122,28 @@ export function renderResult(result, opts = {}) {
   const { progress, pathName } = opts;
 
   if (result.passed) {
-    root.appendChild(el("h1", { text: t("result.passed.heading") }));
-    root.appendChild(passBadge());
-    root.appendChild(scoreBlock(result.scorePct, true));
+    // result-hero (#145, M18 STAGE B): pierścień score + główna treść w jednym rzędzie (flex).
+    const hero = el("div", { class: "result-hero" });
+    hero.appendChild(scoreBlock(result.scorePct, true));
+    const heroMain = el("div", { class: "result-hero__main" });
+    heroMain.appendChild(el("h1", { text: t("result.passed.heading") }));
+    heroMain.appendChild(passBadge());
+    hero.appendChild(heroMain);
+    root.appendChild(hero);
     const gIssued = gatesBlock(opts.gates);
     if (gIssued) root.appendChild(gIssued);
     if (progress) root.appendChild(exportButtons(progress, pathName));
     const wa = weakAreasBlock(result.weakAreas);
     if (wa) root.appendChild(wa);
   } else {
-    root.appendChild(el("h1", { text: t("result.failed.heading") }));
-    root.appendChild(scoreBlock(result.scorePct, false));
+    // result-hero dla niezaliczenia: pierścień (warn kolor) + tytuł + badge niezaliczenia.
+    const hero = el("div", { class: "result-hero" });
+    hero.appendChild(scoreBlock(result.scorePct, false));
+    const heroMain = el("div", { class: "result-hero__main" });
+    heroMain.appendChild(el("h1", { text: t("result.failed.heading") }));
+    heroMain.appendChild(failBadge());
+    hero.appendChild(heroMain);
+    root.appendChild(hero);
     // result.scorePct to WAŻONY wynik ścieżki (quiz inline + test + praktyka), nie sam wynik testu.
     // "spełnij bramki poniżej" tylko gdy lista bramek faktycznie jest renderowana (gates dostępne).
     const gFail = gatesBlock(opts.gates);
@@ -133,7 +152,7 @@ export function renderResult(result, opts = {}) {
     const wa = weakAreasBlock(result.weakAreas);
     if (wa) root.appendChild(wa);
     if (progress) root.appendChild(exportButtons(progress, pathName));
-    if (opts.attemptInfo) root.appendChild(el("p", { class: "quiz-meta", text: opts.attemptInfo }));
+    if (opts.attemptInfo) root.appendChild(el("p", { class: "attempt-note", text: opts.attemptInfo }));
     if (opts.canRetry && typeof opts.onRetry === "function") {
       root.appendChild(el("div", { class: "btn-row" }, [
         el("button", { class: "btn", type: "button", text: t("action.retry"), on: { click: opts.onRetry } }),
