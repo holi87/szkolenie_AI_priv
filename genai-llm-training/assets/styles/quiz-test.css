@@ -1,0 +1,55 @@
+/* quiz-test.css — style quizu i testu końcowego (M18 STAGE B, issue #143).
+   Nowe klasy wg mockup-04-final-test.html. Emitowane przez quiz-view.js i test-view.js.
+   Nie przenosi istniejących reguł z styles.css (feedback, keyframes zostają tam — CI-asserted).
+   ADR-0002: brak buildu. Tokeny z tokens.css (zawsze ładowany wcześniej). */
+
+/* ============================================================
+   TYTUŁ I META TESTU KOŃCOWEGO
+   ============================================================ */
+/* Tytuł testu: serif, większy od domyślnego h1 (fs-800). */
+.test-title {
+  font-family: var(--font-reading);
+  font-size: var(--fs-800);
+  margin: 0 0 0.4rem;
+  letter-spacing: -0.01em;
+}
+
+/* Meta testu: liczba pytań + próg zaliczenia. */
+.test-meta {
+  color: var(--color-muted);
+  font-size: var(--fs-400);
+  margin: 0 0 1rem;
+}
+
+/* ============================================================
+   CHIP KRYTYCZNY — pytanie bezpieczeństwa M10 (quiz-chip--crit)
+   ============================================================ */
+/* Dodatkowy chip dla pytań krytycznych: kolor warn + obramowanie (WCAG 1.4.1: ikona + kolor).
+   Emitowany przez quiz-view.js renderQuestion gdy question.isCritical. */
+.quiz-chip--crit {
+  color: var(--color-warn);
+  border-color: var(--color-warn);
+  background: color-mix(in srgb, var(--color-warn) 10%, transparent);
+  font-weight: var(--fw-bold);
+}
+
+/* ============================================================
+   PATH-BADGE EYEBROW — badge ścieżki w stylu eyebrow
+   ============================================================ */
+/* Wariant path-badge bez wypełnienia: transparent border, accent-quiet tło, accent tekst.
+   Emitowany przez test-view.js nad nagłówkiem testu. */
+.path-badge--eyebrow {
+  background: var(--color-accent-quiet);
+  border-color: transparent;
+  color: var(--color-accent);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   REFLOW — 360 px i 320 px
+   ============================================================ */
+@media (max-width: 480px) {
+  .test-title { font-size: var(--fs-700); }
+}

@@ -16,8 +16,13 @@ export function renderTest(selection, opts = {}) {
   const controls = [];
   const form = el("form", { class: "view__content", attrs: { novalidate: "" } });
 
-  form.appendChild(el("h1", { text: t("test.heading", { pathName: opts.pathName || selection.pathId }) }));
-  form.appendChild(el("p", { class: "muted", text: t("test.meta", { count: selection.count, threshold: opts.passThresholdPct ?? "?" }) }));
+  // test-title/test-meta (#143, M18 STAGE B): klasy reskinu wg mockup-04-final-test.html.
+  // opts.path = pathId przekazywany z app.js (nie opts.pathId — klucz jest `path` wg wywołania w app.js l.416).
+  if (opts.path) {
+    form.appendChild(el("span", { class: `path-badge path-badge--eyebrow`, text: t("nav.header.pathIndicator", { pathId: opts.path }) }));
+  }
+  form.appendChild(el("h1", { class: "test-title", text: t("test.heading", { pathName: opts.pathName || selection.pathId }) }));
+  form.appendChild(el("p", { class: "test-meta", text: t("test.meta", { count: selection.count, threshold: opts.passThresholdPct ?? "?" }) }));
   form.appendChild(el("p", { class: "locked-note", attrs: { role: "note" } }, [
     el("span", { class: "locked-note__icon", attrs: { "aria-hidden": "true" } }, [icon("info")]),
     t("test.modeNote"),

@@ -1,0 +1,102 @@
+/* interactions.css — blok chrome interakcji modułowych + następny krok (M18 STAGE B, issue #144).
+   Nowe klasy wg mockup-03-module-view.html. Emitowane przez app.js (block chrome) i tune-view.js.
+   Nie przenosi istniejących reguł z styles.css (interaction-*, tune-*, maturity-* zostają tam).
+   ADR-0002: brak buildu. Tokeny z tokens.css. */
+
+/* ============================================================
+   BLOCK — kontener interakcji modułowej z chrome (eyebrow)
+   Separator: border-top (dekoracyjny → --color-border).
+   ============================================================ */
+.block {
+  margin-top: 1.8rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--color-border);
+}
+
+/* Eyebrow bloku interakcji: uppercase label z ikoną (kontrast: nie tylko kolor). */
+.block__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: var(--fs-300);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin: 0 0 0.5rem;
+}
+
+.block__eyebrow svg {
+  width: 1em;
+  height: 1em;
+  flex: none;
+  vertical-align: -0.05em;
+}
+
+/* ============================================================
+   NEXT-STEP-LINK — karta nawigacji do następnego modułu/testu
+   Używana na dole widoku modułu (app.js) jako wezwanie do akcji.
+   border: --color-border-strong (element interaktywny — border rule).
+   ============================================================ */
+.next-step-link {
+  margin-top: 1.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 1rem 1.2rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius);
+  background: var(--color-surface-2);
+  text-decoration: none;
+  color: var(--color-fg);
+}
+
+.next-step-link:hover {
+  border-color: var(--color-accent);
+  background: var(--color-accent-quiet);
+}
+
+/* Lewa część: label + tytuł */
+.next-step-link__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+/* Etykieta eyebrow (np. „Następny krok") */
+.next-step-link__label {
+  font-size: var(--fs-300);
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: var(--fw-medium);
+}
+
+/* Przyciski wewnątrz karty (btn-row w next-step-link) */
+.next-step-link .btn-row { margin-top: 0.8rem; }
+
+/* ============================================================
+   TUNE OUTPUT LABEL — nagłówek panelu output w interakcji tune
+   Emitowany przez tune-view.js outPanel (zastępuje .muted inline).
+   ============================================================ */
+.tune-output__label {
+  font-size: var(--fs-300);
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: var(--fw-medium);
+  margin: 0 0 0.4rem;
+}
+
+/* ============================================================
+   REFLOW — 360 px i 320 px
+   ============================================================ */
+@media (max-width: 480px) {
+  .next-step-link {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

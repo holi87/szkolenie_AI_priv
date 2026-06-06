@@ -8,6 +8,12 @@
 @import "tokens.css";
 /* Prymitywy wizualne (STAGE A, issue #139, M18): eyebrow, stats-strip, section-head. */
 @import "styles/primitives.css";
+/* Quiz + test końcowy (STAGE B, issue #143, M18): quiz-chip--crit, test-title, test-meta, path-badge--eyebrow. */
+@import "styles/quiz-test.css";
+/* Blok chrome interakcji + next-step-link (STAGE B, issue #144, M18): block, block__eyebrow, next-step-link, tune-output__label. */
+@import "styles/interactions.css";
+/* Ekran wyniku + certyfikat (STAGE B, issue #145, M18): result-hero, result-status--fail, attempt-note. */
+@import "styles/result-cert.css";
 
 /* ============================================================
    RESET + BASE

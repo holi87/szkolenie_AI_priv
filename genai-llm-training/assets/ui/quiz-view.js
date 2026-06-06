@@ -139,11 +139,16 @@ export function renderQuestion(question, opts = {}) {
   }
   if (opts.showMeta) {
     // Meta jako wizualne chipy (typ / trudność / punkty) — ta sama treść co dawne 'typ · trudność · pkt'.
-    header.push(el("p", { class: "quiz-chips" }, [
+    // Chip krytyczny (quiz-chip--crit) gdy pytanie z puli bezpieczeństwa M10 (WCAG 1.4.1: kolor + słowo).
+    const chips = [
       el("span", { class: "quiz-chip", text: typeLabel(question.type) }),
       el("span", { class: "quiz-chip quiz-chip--difficulty", text: String(question.difficulty) }),
       el("span", { class: "quiz-chip", text: t("quiz.chip.points", { points: question.points }) }),
-    ]));
+    ];
+    if (question.isCritical) {
+      chips.push(el("span", { class: "quiz-chip quiz-chip--crit", text: t("quiz.chip.critical") }));
+    }
+    header.push(el("p", { class: "quiz-chips" }, chips));
   }
 
   const fieldset = el("fieldset", { class: "quiz-question" }, [
