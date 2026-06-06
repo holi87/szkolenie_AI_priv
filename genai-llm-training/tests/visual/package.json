@@ -1,0 +1,13 @@
+{
+  "name": "qualitycat-visual-harness",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "DEV-ONLY, OPT-IN. Harness porownawczy live-vs-mockup (#137). NIE jest bramka CI, NIE jest czescia produkcji (genai-llm-training/). ADR-0002: zaden runtime-dep nie idzie do produkcji; ten manifest istnieje TYLKO po to, by `npm i` w TYM katalogu sciagnal Playwrighta dla lokalnego audytu wizualnego. node_modules + lockfile sa gitignore'owane.",
+  "scripts": {
+    "capture": "node capture.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.49.0"
+  }
+}

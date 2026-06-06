@@ -1,0 +1,14 @@
+# Harness wizualny (#137) — narzędzie DEV-ONLY, opt-in. NIE jest bramką CI.
+# Wszystko poniżej jest GENEROWANE LOKALNIE i NIE może trafić do repo:
+#  - PNG-i: binaria, puchną w historii, a repo jest na iCloud (churn dataless 0 B).
+#    Baseline „przed" odtwarzasz jedną komendą: `node capture.mjs` (patrz README.md).
+#  - node_modules / lockfile Playwrighta: ADR-0002 zakazuje committed runtime-deps.
+#    Instalujesz lokalnie: `npm i` + `npx playwright install chromium` (patrz README.md).
+
+# Zrzuty i raport (regenerowalne)
+output/
+*.png
+
+# Zależności dev (Playwright) — instalowane lokalnie, nigdy commitowane
+node_modules/
+package-lock.json

@@ -29,9 +29,26 @@
   <header class="app-header">
     <div class="app-header__bar">
       <div class="brand">
-        <!-- Logo-slot: podmienialny (P14) — zastąp SVG logiem QualityCat bez zmiany klas. -->
+        <!-- Logo-slot: podmienialny (P14) — QualityCat: głowa kota z checkmarkiem jakości.
+             Dekoracyjne (aria-hidden na span); znaczenie niesie brand__name / brand__sub.
+             fill="currentColor" → dziedziczy color:var(--color-accent) z .brand__logo — oba motywy. -->
         <span class="brand__logo" aria-hidden="true">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" focusable="false"><path d="M8 1.5 14.5 8 8 14.5 1.5 8Z" fill="currentColor"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" focusable="false" aria-hidden="true">
+            <!-- Sylwetka głowy kota (spłaszczone uszy + okrągła czaszka) -->
+            <path fill="currentColor" d="
+              M2.5 10.5
+              C2.5 14 4.5 15.5 8 15.5
+              C11.5 15.5 13.5 14 13.5 10.5
+              C13.5 7.5 11.8 5.8 10.5 5
+              L12 1 9.5 3.5
+              C9.1 3.2 8.6 3 8 3
+              C7.4 3 6.9 3.2 6.5 3.5
+              L4 1 5.5 5
+              C4.2 5.8 2.5 7.5 2.5 10.5Z
+            "/>
+            <!-- Checkmark jakości (biały/surface, centrowany w dolnej części głowy) -->
+            <polyline points="5.5,10.5 7.2,12.2 10.5,9" fill="none" stroke="var(--color-surface)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </span>
         <!-- brand__text: lockup nazwy + sub-labelu marki. brand__name lokalizowane przez setChrome/t(). -->
         <span class="brand__text">
