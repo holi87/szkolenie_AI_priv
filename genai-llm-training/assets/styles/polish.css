@@ -1,0 +1,197 @@
+/* polish.css — mikro-motion, spójność stanów, premium detale (STAGE D, issue #151, M18).
+   Tylko CSS/styling — zero logiki JS, zero haków DOM, zero nowych klas blokowanych testami.
+   Każda transition/animation MA fallback w bloku @media (prefers-reduced-motion: reduce)
+   w styles.css (*, *::before, *::after { transition: none !important; animation: none !important }).
+   Motion NIE jest nośnikiem informacji (a11y C6).
+   ADR-0002: brak buildu, czyste Custom Properties. */
+
+/* ============================================================
+   PRZYCISKI — :active + wzmocniony shadow na hover
+   ============================================================ */
+/* Subtelna informacja zwrotna click: delikatny kompres + przyciemnienie. */
+.btn:active {
+  filter: brightness(0.92);
+  transform: translateY(1px);
+}
+
+.btn--ghost:active {
+  background: var(--color-surface-2);
+  filter: brightness(0.96);
+}
+
+/* Hover: wzmocniony ring (był: filter brightness). Dodajemy ring dla wyraźniejszej informacji. */
+.btn:not(.btn--ghost):hover {
+  box-shadow: var(--ring-accent);
+}
+
+/* ============================================================
+   NAV ITEM — płynny focus/active
+   ============================================================ */
+/* Dodaj box-shadow do transition (było: tylko bg + border-color). */
+.nav-item__btn {
+  transition: background var(--dur-fast) var(--ease),
+              border-color var(--dur-fast) var(--ease),
+              box-shadow var(--dur-fast) var(--ease);
+}
+
+.nav-item__btn:active {
+  background: var(--color-surface-2);
+  transform: translateY(1px);
+}
+
+/* ============================================================
+   LANG SWITCH — płynne przejście opcji
+   ============================================================ */
+.lang-switch__option {
+  transition: background var(--dur-fast) var(--ease),
+              color var(--dur-fast) var(--ease);
+}
+
+/* ============================================================
+   NEXT-STEP-LINK — deklaracja transition (była: hover bez transition)
+   ============================================================ */
+.next-step-link {
+  transition: border-color var(--dur-fast) var(--ease),
+              background var(--dur-fast) var(--ease),
+              box-shadow var(--dur-fast) var(--ease);
+}
+
+.next-step-link:hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* ============================================================
+   INTERAKCJE MODUŁOWE — hover/focus dla classify, rubric, maturity
+   Blok borderów: --color-border (interactive) przy focus, --color-border-subtle dekoracyjny.
+   ============================================================ */
+.classify-item,
+.rubric-crit,
+.tune-checkpoint,
+.maturity-scale {
+  transition: border-color var(--dur-fast) var(--ease),
+              box-shadow var(--dur-fast) var(--ease);
+}
+
+.classify-item:focus-within,
+.rubric-crit:focus-within,
+.tune-checkpoint:focus-within,
+.maturity-scale:focus-within {
+  border-color: var(--color-border);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ============================================================
+   OPCJE QUIZ — wzmocniony active state
+   ============================================================ */
+.option:active {
+  transform: scale(0.995);
+}
+
+.option:has(input:checked) {
+  box-shadow: inset 0 0 0 1px var(--color-accent), var(--ring-accent);
+}
+
+/* ============================================================
+   HUB-CARD — wzmocniony hover (spójny z path-card)
+   Dodajemy box-shadow do transition (było: transform + box-shadow + border-color).
+   Aktywny stan (in_progress) zachowuje strong border.
+   ============================================================ */
+.hub-card {
+  transition: transform var(--dur-fast) var(--ease),
+              box-shadow var(--dur-base) var(--ease),
+              border-color var(--dur-base) var(--ease),
+              background var(--dur-fast) var(--ease);
+}
+
+.hub-card:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ============================================================
+   PATH-CARD — wzmocniony focus-within ring
+   ============================================================ */
+.path-card:focus-within {
+  box-shadow: var(--shadow-md), var(--ring-accent);
+}
+
+/* ============================================================
+   NEXT-STEP (inline strip) — subtelny hover
+   ============================================================ */
+.next-step {
+  transition: background var(--dur-fast) var(--ease),
+              border-color var(--dur-fast) var(--ease);
+}
+
+/* ============================================================
+   PROGRESS FILL — płynne wejście (width transition już w styles.css)
+   ============================================================ */
+/* Hint: path-progress__fill ma transition w styles.css, tu tylko wzmacniamy opacity na pojawieniu. */
+.path-progress__fill {
+  animation: progress-fill-in var(--dur-slow) var(--ease) both;
+}
+
+@keyframes progress-fill-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ============================================================
+   BRAND LOGO — subtelny pulse focus
+   ============================================================ */
+.brand__logo {
+  transition: background var(--dur-fast) var(--ease),
+              border-color var(--dur-fast) var(--ease);
+}
+
+/* ============================================================
+   RESULT SCORE RING — subtelna animacja wejścia
+   Pierścień pojawia się od 0% do docelowego --pct.
+   Reduced-motion: fallback w styles.css gasi animation:none.
+   ============================================================ */
+.result__score {
+  animation: score-ring-in var(--dur-slow) var(--ease) both;
+}
+
+@keyframes score-ring-in {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* ============================================================
+   CERTYFIKAT — bramki cert-gate płynne wejście
+   Każda bramka przesuwa się od dołu (stagger przez CSS animacji nie jest możliwy bez JS;
+   minimal: wszystkie wchodzą razem subtelnym slid-in).
+   ============================================================ */
+.cert-gates__list {
+  animation: enter-up var(--dur-base) var(--ease) both;
+}
+
+@keyframes enter-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   CALLOUT — spójność padding z definition (wyrównanie rytmu)
+   Dekoracyjny shadow dla głębi.
+   ============================================================ */
+.callout {
+  transition: box-shadow var(--dur-fast) var(--ease);
+}
+
+/* ============================================================
+   FEEDBACK — wzmocnienie animation-fill (już ma keyframe feedback-in w styles.css)
+   ============================================================ */
+.feedback {
+  animation-fill-mode: both;
+  animation-duration: var(--dur-base);
+}
+
+/* ============================================================
+   MODULE NAV STATUS ICONS — płynna zmiana koloru na status
+   ============================================================ */
+.nav-item__status {
+  transition: color var(--dur-fast) var(--ease),
+              border-color var(--dur-fast) var(--ease);
+}

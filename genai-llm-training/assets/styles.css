@@ -14,6 +14,8 @@
 @import "styles/interactions.css";
 /* Ekran wyniku + certyfikat (STAGE B, issue #145, M18): result-hero, result-status--fail, attempt-note. */
 @import "styles/result-cert.css";
+/* Mikro-motion, :active, spójność radius (STAGE D, issue #151, M18): polish.css */
+@import "styles/polish.css";
 
 /* ============================================================
    RESET + BASE
@@ -77,7 +79,7 @@ select   { max-width: 100%; }
 .brand { display: flex; align-items: center; gap: 0.6rem; }
 .brand__logo {
   display: inline-flex; width: 34px; height: 34px; align-items: center; justify-content: center;
-  border-radius: 9px; background: var(--color-accent-quiet); color: var(--color-accent);
+  border-radius: var(--radius-md); background: var(--color-accent-quiet); color: var(--color-accent);
   border: 1px solid var(--color-border); flex: none;
 }
 .brand__logo svg { display: block; width: 1em; height: 1em; }
@@ -139,7 +141,7 @@ select   { max-width: 100%; }
   display: inline-flex; align-items: center; gap: 0.45rem;
   font: inherit; cursor: pointer; font-weight: var(--fw-bold);
   padding: 0.6rem 1.05rem; min-height: 44px;
-  border-radius: 9px; border: 1px solid var(--color-accent);
+  border-radius: var(--radius-md); border: 1px solid var(--color-accent);
   background: var(--color-accent); color: var(--color-accent-fg);
   transition: filter var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease);
   text-decoration: none; text-wrap: balance;
@@ -183,7 +185,7 @@ select   { max-width: 100%; }
 .nav-item { display: block; width: 100%; }
 .nav-item__btn {
   display: flex; align-items: center; gap: 0.5rem; width: 100%; text-align: left;
-  background: none; border: 1px solid transparent; border-radius: 9px;
+  background: none; border: 1px solid transparent; border-radius: var(--radius-md);
   color: var(--color-fg); padding: 0.5rem 0.55rem; font: inherit; cursor: pointer;
   transition: background var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
 }
@@ -325,7 +327,7 @@ select   { max-width: 100%; }
 .path-card__head   { display: flex; align-items: center; gap: 0.65rem; margin-bottom: 0.2rem; }
 .path-card__sigil  {
   display: inline-flex; width: 40px; height: 40px; align-items: center; justify-content: center;
-  border-radius: 10px; background: var(--color-surface-2); border: 1px solid var(--color-border);
+  border-radius: var(--radius); background: var(--color-surface-2); border: 1px solid var(--color-border);
   font-weight: var(--fw-bold); font-size: 0.95rem; letter-spacing: -0.02em; flex: none; color: var(--color-fg);
 }
 .path-card__name   { margin: 0; font-size: var(--fs-600); font-weight: var(--fw-bold); letter-spacing: -0.01em; }
@@ -370,7 +372,7 @@ select   { max-width: 100%; }
 .options { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
 .option {
   display: flex; align-items: flex-start; gap: 0.65rem; padding: 0.65rem 0.8rem; min-height: 44px;
-  border: 1px solid var(--color-border); border-radius: 9px; background: var(--color-surface-2);
+  border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface-2);
   transition: border-color var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease),
               background var(--dur-fast) var(--ease);
 }
@@ -396,7 +398,7 @@ select   { max-width: 100%; }
    FEEDBACK
    ============================================================ */
 .feedback {
-  margin-top: var(--sp-3); padding: 0.75rem 0.95rem; border-radius: 9px;
+  margin-top: var(--sp-3); padding: 0.75rem 0.95rem; border-radius: var(--radius-md);
   border: 1px solid var(--color-border-subtle); border-left-width: 4px;
   animation: feedback-in var(--dur-base) var(--ease);
 }
@@ -413,7 +415,7 @@ select   { max-width: 100%; }
 }
 .locked-note {
   display: flex; gap: 0.5rem; align-items: baseline; color: var(--color-muted);
-  border: 1px dashed var(--color-border); border-radius: 9px; padding: 0.7rem 0.9rem;
+  border: 1px dashed var(--color-border); border-radius: var(--radius-md); padding: 0.7rem 0.9rem;
 }
 
 /* ============================================================
@@ -445,7 +447,7 @@ select   { max-width: 100%; }
    CALLOUTY — ikona + słowo (nie sam kolor, WCAG 1.4.1)
    ============================================================ */
 .callout {
-  margin: 0.9rem 0; padding: 0.75rem 0.95rem; border-radius: 9px;
+  margin: 0.9rem 0; padding: 0.75rem 0.95rem; border-radius: var(--radius-md);
   border: 1px solid var(--color-border-subtle); background: var(--color-surface-2);
 }
 .callout__title {
@@ -482,14 +484,14 @@ select   { max-width: 100%; }
 .classify-legend { margin-bottom: 0.8rem; }
 .classify-legend ul { padding-left: 1.1rem; margin: 0.3rem 0; font-size: var(--fs-400); }
 .classify-item {
-  margin: 0.9rem 0; border: 1px solid var(--color-border-subtle); border-radius: 9px;
+  margin: 0.9rem 0; border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md);
   padding: 0.7rem 0.9rem; min-width: 0;
 }
 .classify-item__text { font-weight: var(--fw-medium); }
 .classify-item__opts { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.4rem; }
 .classify-item__fb:empty { display: none; }
 .rubric-crit {
-  margin: 0.9rem 0; border: 1px solid var(--color-border-subtle); border-radius: 9px;
+  margin: 0.9rem 0; border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md);
   padding: 0.7rem 0.9rem; min-width: 0;
 }
 .rubric-crit__name   { margin-bottom: 0.2rem; }
@@ -510,10 +512,10 @@ select   { max-width: 100%; }
 .tune-output__row   { margin: 0.4rem 0; }
 .tune-output__row p { margin: 0.15rem 0 0; color: var(--color-muted); font-size: var(--fs-400); max-width: var(--maxw-reading); }
 .tune-output__row b { font-family: var(--font-mono); font-size: 0.9rem; }
-.tune-checkpoint    { margin: 1rem 0 0; border: 1px solid var(--color-border-subtle); border-radius: 9px; padding: 0.7rem 0.9rem; min-width: 0; }
+.tune-checkpoint    { margin: 1rem 0 0; border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); padding: 0.7rem 0.9rem; min-width: 0; }
 .tune-checkpoint__fb:empty { display: none; }
 /* Skala Holaka (maturity-check) */
-.maturity-scale       { margin: 1rem 0; border: 1px solid var(--color-border-subtle); border-radius: 9px; padding: 0.8rem 1rem; min-width: 0; }
+.maturity-scale       { margin: 1rem 0; border: 1px solid var(--color-border-subtle); border-radius: var(--radius-md); padding: 0.8rem 1rem; min-width: 0; }
 .maturity-scale__label { font-weight: var(--fw-medium); }
 .maturity-scale__items { list-style: none; margin: 0.5rem 0; padding: 0; display: grid; gap: 0.4rem; }
 .maturity-scale__fb:empty { display: none; }
