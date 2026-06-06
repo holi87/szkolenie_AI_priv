@@ -23,7 +23,7 @@
   </script>
   <!-- Ścieżki WZGLĘDNE (wymóg GitHub Pages, ADR-0002). Query ?v=<wersja> = cache-busting (bez buildu):
        bump przy KAŻDYM PR razem z #app-version (AGENTS.md „Wersjonowanie strony") wymusza re-fetch CSS. -->
-  <link rel="stylesheet" href="assets/styles.css?v=1.1">
+  <link rel="stylesheet" href="assets/styles.css?v=1.2">
 </head>
 <body>
   <!-- Skip-link: pierwszy fokusowalny element (WCAG 2.4.1), przed headerem. -->
@@ -107,7 +107,7 @@
     <p><span id="footer-note">Szkolenie statyczne (GitHub Pages). Postęp zapisujemy lokalnie w tej przeglądarce; nic nie wysyłamy na serwer, brak cookies.</span> <a id="footer-privacy-link" href="prywatnosc.html">Prywatność</a></p>
     <!-- Wersja aplikacji (prawy dolny róg). Metadane techniczne (locale-neutralne) — NIE i18n.
          ADR-0002 (bez buildu): bumpowane RĘCZNIE przed każdym PR — patrz AGENTS.md „Wersjonowanie strony". -->
-    <span class="app-version" id="app-version">v1.1 · d21f178</span>
+    <span class="app-version" id="app-version">v1.2 · f0ed9bf</span>
   </footer>
 
   <!-- Dane (data/*.json) ładowane przez fetch() po http(s) — uruchom przez serwer statyczny, nie file://. -->
