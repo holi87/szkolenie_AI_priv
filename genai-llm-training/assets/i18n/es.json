@@ -106,7 +106,7 @@
   "path.select.intro": "La ruta determina qué módulos son obligatorios, cuántas preguntas tiene el examen final y cuál es el umbral de aprobado. Puedes cambiarla más adelante — el progreso de cada ruta se guarda por separado.",
   "path.select.currentPath": "Ruta actual: {pathId}",
   "path.badge.recommended": "Recomendada",
-  "path.card.name": "{pathId} — {pathName}",
+  "path.card.name": "{pathName}",
   "path.card.meta.timeTestThreshold": "Tiempo: {time} · Examen: {questions} preguntas · Umbral: {threshold}%",
   "path.card.meta.modules": "Módulos obligatorios: {required}/12 · opcionales: {optional}",
   "path.card.meta.practicalTasks": "Tareas prácticas: {tasks}",

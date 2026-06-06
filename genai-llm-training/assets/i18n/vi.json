@@ -106,7 +106,7 @@
   "path.select.intro": "Lộ trình quyết định những mô-đun nào bắt buộc, bài kiểm tra cuối có bao nhiêu câu hỏi và ngưỡng đạt là bao nhiêu. Bạn có thể đổi sau — tiến độ của mỗi lộ trình được lưu riêng.",
   "path.select.currentPath": "Lộ trình hiện tại: {pathId}",
   "path.badge.recommended": "Được khuyến nghị",
-  "path.card.name": "{pathId} — {pathName}",
+  "path.card.name": "{pathName}",
   "path.card.meta.timeTestThreshold": "Thời gian: {time} · Bài kiểm tra: {questions} câu hỏi · Ngưỡng: {threshold}%",
   "path.card.meta.modules": "Mô-đun bắt buộc: {required}/12 · tùy chọn: {optional}",
   "path.card.meta.practicalTasks": "Bài tập thực hành: {tasks}",
