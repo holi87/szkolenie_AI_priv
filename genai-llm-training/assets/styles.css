@@ -160,11 +160,14 @@ select   { max-width: 100%; }
    LAYOUT
    ============================================================ */
 .layout {
-  display: grid; grid-template-columns: minmax(220px, 270px) 1fr;
+  /* DOMYŚLNIE 1 kolumna — bezpieczne dla KAŻDEJ przeglądarki/cache (path-select bez nav nie wypycha
+     treści w prawo). Sidebar to progresywne ulepszenie dodawane TYLKO gdy nav jest widoczny ORAZ
+     przeglądarka wspiera :has(). Brak :has() → nav stackuje nad treścią (graceful), bez pustej kolumny. */
+  display: grid; grid-template-columns: 1fr;
   gap: var(--gap); max-width: 1200px; margin: 0 auto; padding: var(--gap);
 }
 .module-nav, .view { min-width: 0; }
-.layout:has(> .module-nav[hidden]) { grid-template-columns: 1fr; }
+.layout:has(> .module-nav:not([hidden])) { grid-template-columns: minmax(220px, 270px) 1fr; }
 @media (max-width: 720px) {
   .layout { grid-template-columns: 1fr; }
   .module-nav { display: none; }

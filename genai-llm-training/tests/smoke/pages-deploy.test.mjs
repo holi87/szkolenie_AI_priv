@@ -40,7 +40,8 @@ test("root index.html: BRAK absolutnych korzeni „/” w przekierowaniu i zasob
 });
 
 test("app index.html: aplety (CSS/JS) ładowane WZGLĘDNIE, bez korzenia „/” (#33)", () => {
-  assert.match(appHtml, /href=["']assets\/styles\.css["']/, "styles.css musi być ładowany względnie (assets/…)");
+  // ?v=<wersja> dozwolone (cache-busting bez buildu) — ścieżka wciąż względna (assets/…), bez korzenia „/”.
+  assert.match(appHtml, /href=["']assets\/styles\.css(?:\?[^"']*)?["']/, "styles.css musi być ładowany względnie (assets/…)");
   assert.match(appHtml, /src=["']assets\/app\.js["']/, "app.js musi być ładowany względnie (assets/…)");
   // Brak absolutnych korzeni w href/src.
   assert.doesNotMatch(appHtml, /(?:href|src)=["']\/[^/]/, "app index.html zawiera absolutną ścieżkę z korzeniem /");
