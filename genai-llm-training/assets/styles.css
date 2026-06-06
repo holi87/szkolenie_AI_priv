@@ -232,6 +232,9 @@ select   { max-width: 100%; }
 }
 .view:focus { outline: none; }
 .view__content { max-width: var(--maxw-content); }
+/* Pełna szerokość treści (M19 #159): path-select i inne ekrany „dashboardowe", gdzie hero + siatki kart
+   mają wypełnić widok zamiast wciskać się w słup 70ch (makieta 01 robi to przez max-width:none). */
+.view__content--full { max-width: none; }
 .loading { color: var(--color-muted); font-style: italic; }
 .muted   { color: var(--color-muted); }
 

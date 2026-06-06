@@ -99,7 +99,9 @@ function hero(modulesData) {
  * @param {object} opts - { onSelect(pathId), currentPath }
  */
 export function renderPathSelect(pathsData, modulesData, opts = {}) {
-  const root = el("div", { class: "view__content" });
+  // view__content--full: zdejmuje cap 70ch (max-width:none), żeby hero + siatka kart wypełniły szerokość
+  // widoku (jak makieta 01). Bez tego treść wciska się w lewy ~620px słup, prawy bok pusty (M19 #159).
+  const root = el("div", { class: "view__content view__content--full" });
   root.appendChild(hero(modulesData));
 
   // Section-head: eyebrow (krok) + h2 w jednym wierszu (wzorzec makiety 01 .section-head).
