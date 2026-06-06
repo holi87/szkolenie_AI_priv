@@ -8,13 +8,15 @@
   <meta name="description" content="Interaktywne szkolenie z GenAI i LLM: ścieżki S1/S2/S3, quizy, test końcowy, wynik.">
   <!-- Favicon inline (SVG data-URI) — bez dodatkowego żądania, brak 404 /favicon.ico. -->
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230f1117'/%3E%3Cpath d='M8 3 13 8 8 13 3 8Z' fill='%236ea8fe'/%3E%3C/svg%3E">
-  <!-- Anty-flash motywu (UX-3 #72): ustaw [data-theme] PRZED CSS, żeby nie mrugnąć złym motywem.
-       Inline + synchronicznie, zero zależności; klucz spójny z assets/ui/theme.js (THEME_KEY). -->
+  <!-- Anty-flash motywu (UX-3 #72, M19 #158): ustaw [data-theme] PRZED CSS, żeby nie mrugnąć złym motywem.
+       Inline + synchronicznie, zero zależności; klucz spójny z assets/ui/theme.js (THEME_KEY).
+       Domyślny motyw = CIEMNY dla każdego (decyzja właściciela M19): mockup jest dark, redesign Deep Slate
+       żyje w trybie ciemnym. Świadomy wybór (storage) ma priorytet; brak wpisu → dark (NIE prefers-color-scheme). -->
   <script>
     (function () {
       try {
         var t = localStorage.getItem("genai-training:theme");
-        if (t !== "light" && t !== "dark") t = (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
+        if (t !== "light" && t !== "dark") t = "dark";
         document.documentElement.setAttribute("data-theme", t);
       } catch (e) { document.documentElement.setAttribute("data-theme", "dark"); }
     })();

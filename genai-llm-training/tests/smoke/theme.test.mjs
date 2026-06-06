@@ -9,13 +9,14 @@ const makeStorage = (init = {}) => ({ _v: { ...init }, getItem(k) { return k in 
 const throwingStorage = { getItem() { throw new Error("tryb prywatny"); }, setItem() { throw new Error("tryb prywatny"); } };
 const mm = (matches) => () => ({ matches });
 
-test("init bez zapisu: prefers-color-scheme decyduje (dark => dark, light => light)", () => {
+test("init bez zapisu: DOMYŚLNIE CIEMNY (M19 #158 — ignoruje prefers-color-scheme)", () => {
+  // Decyzja właściciela: dark dla każdego. matchMedia nie wpływa na domyślny motyw.
   const r1 = makeRoot();
   assert.equal(initTheme({ storage: makeStorage(), matchMedia: mm(true), root: r1 }), "dark");
   assert.equal(r1.getAttribute("data-theme"), "dark");
   const r2 = makeRoot();
-  assert.equal(initTheme({ storage: makeStorage(), matchMedia: mm(false), root: r2 }), "light");
-  assert.equal(r2.getAttribute("data-theme"), "light");
+  assert.equal(initTheme({ storage: makeStorage(), matchMedia: mm(false), root: r2 }), "dark", "prefers light NIE zmienia domyślnego — dark dla każdego");
+  assert.equal(r2.getAttribute("data-theme"), "dark");
 });
 
 test("storage MA PRIORYTET nad prefers-color-scheme", () => {
@@ -40,11 +41,11 @@ test("toggle przełącza i ZAPISUJE wybór pod ustalonym kluczem; ponowny init o
   assert.equal(initTheme({ storage, matchMedia: mm(true), root: makeRoot() }), "light");
 });
 
-test("konserwatywnie: storage rzucający wyjątek (tryb prywatny) => brak crasha, fallback do prefers-color-scheme", () => {
+test("konserwatywnie: storage rzucający wyjątek (tryb prywatny) => brak crasha, fallback do ciemnego", () => {
   const r = makeRoot();
   let theme;
   assert.doesNotThrow(() => { theme = initTheme({ storage: throwingStorage, matchMedia: mm(true), root: r }); });
-  assert.equal(theme, "dark", "fallback do prefers-color-scheme przy niedostępnym storage");
+  assert.equal(theme, "dark", "fallback do domyślnego ciemnego przy niedostępnym storage");
   // toggle też nie może wywalić aplikacji, gdy zapis rzuca
   let toggled;
   assert.doesNotThrow(() => { toggled = toggleTheme({ storage: throwingStorage, root: r }); });
