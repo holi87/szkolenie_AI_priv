@@ -4,18 +4,20 @@
    widoczny focus, reflow do 320 px (WCAG 1.4.10), reduced-motion.
    Separator kart używa --color-border-subtle (dekoracyjny); kontrolki używają --color-border (CI ≥3:1). */
 
-/* @import musi być PIERWSZĄ regułą (spec CSS). Ścieżka WZGLĘDNA — GitHub Pages, ADR-0002. */
-@import "tokens.css";
+/* @import musi być PIERWSZĄ regułą (spec CSS). Ścieżka WZGLĘDNA — GitHub Pages, ADR-0002.
+   ?v=<wersja> NA KAŻDYM imporcie — wrapper bez wersji na importach nie wymusza re-fetchu
+   zmienionych tokens/primitives (user dostałby nowy wrapper, starą paletę). Bump z #app-version. */
+@import "tokens.css?v=1.1";
 /* Prymitywy wizualne (STAGE A, issue #139, M18): eyebrow, stats-strip, section-head. */
-@import "styles/primitives.css";
+@import "styles/primitives.css?v=1.1";
 /* Quiz + test końcowy (STAGE B, issue #143, M18): quiz-chip--crit, test-title, test-meta, path-badge--eyebrow. */
-@import "styles/quiz-test.css";
+@import "styles/quiz-test.css?v=1.1";
 /* Blok chrome interakcji + next-step-link (STAGE B, issue #144, M18): block, block__eyebrow, next-step-link, tune-output__label. */
-@import "styles/interactions.css";
+@import "styles/interactions.css?v=1.1";
 /* Ekran wyniku + certyfikat (STAGE B, issue #145, M18): result-hero, result-status--fail, attempt-note. */
-@import "styles/result-cert.css";
+@import "styles/result-cert.css?v=1.1";
 /* Mikro-motion, :active, spójność radius (STAGE D, issue #151, M18): polish.css */
-@import "styles/polish.css";
+@import "styles/polish.css?v=1.1";
 
 /* ============================================================
    RESET + BASE
@@ -69,7 +71,7 @@ select   { max-width: 100%; }
   background: color-mix(in srgb, var(--color-surface) 90%, transparent);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--color-border-subtle);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-md);  /* B: głębsza elewacja dark-tech */
 }
 .app-header__bar {
   display: flex; align-items: center; justify-content: space-between; gap: var(--gap);
@@ -160,11 +162,19 @@ select   { max-width: 100%; }
    LAYOUT
    ============================================================ */
 .layout {
-  display: grid; grid-template-columns: minmax(220px, 270px) 1fr;
+  /* DOMYŚLNIE 1 kolumna — bezpieczne dla KAŻDEJ przeglądarki/cache (path-select bez nav nie wypycha
+     treści w prawo). Sidebar to progresywne ulepszenie dodawane TYLKO gdy nav jest widoczny ORAZ
+     przeglądarka wspiera :has(). Brak :has() → nav stackuje nad treścią (graceful), bez pustej kolumny. */
+  display: grid; grid-template-columns: 1fr;
   gap: var(--gap); max-width: 1200px; margin: 0 auto; padding: var(--gap);
 }
 .module-nav, .view { min-width: 0; }
-.layout:has(> .module-nav[hidden]) { grid-template-columns: 1fr; }
+/* Sidebar TYLKO desktop (>=721px) ORAZ gdy szyna widoczna. Scope do desktopu jest KONIECZNY:
+   :has() ma wyzsza specyficznosc niz mobilne `.layout { 1fr }`, wiec bez tego @media wygralby
+   ponizej 720px i sciskal tresc w pusty 220-270px track (na mobile nav jest tylko display:none). */
+@media (min-width: 721px) {
+  .layout:has(> .module-nav:not([hidden])) { grid-template-columns: minmax(220px, 270px) 1fr; }
+}
 @media (max-width: 720px) {
   .layout { grid-template-columns: 1fr; }
   .module-nav { display: none; }
@@ -176,7 +186,7 @@ select   { max-width: 100%; }
 .module-nav {
   background: var(--color-surface); border: 1px solid var(--color-border-subtle);
   border-radius: var(--radius-lg); padding: 0.5rem; align-self: start;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-md);  /* B: głębsza elewacja, separacja od bg */
 }
 .module-nav__heading {
   font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em;
@@ -218,7 +228,7 @@ select   { max-width: 100%; }
 .view {
   background: var(--color-surface); border: 1px solid var(--color-border-subtle);
   border-radius: var(--radius-lg); padding: clamp(1rem, 3vw, 2rem); min-height: 60vh;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-md);  /* B: głębsza elewacja, separacja od głębokiego bg */
 }
 .view:focus { outline: none; }
 .view__content { max-width: var(--maxw-content); }
@@ -246,6 +256,7 @@ select   { max-width: 100%; }
 }
 .hub-card:hover {
   transform: translateY(-2px); box-shadow: var(--shadow-md);
+  border-color: var(--color-border);
 }
 .hub-card__top     { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
 .hub-card__id      { font-weight: var(--fw-bold); font-size: var(--fs-300); color: var(--color-muted); letter-spacing: 0.05em; }
@@ -285,7 +296,7 @@ select   { max-width: 100%; }
 }
 .hero__title {
   font-family: var(--font-reading); font-size: var(--fs-900); line-height: 1.05;
-  margin: 0 0 var(--sp-5); letter-spacing: -0.02em;
+  margin: 0 0 var(--sp-3); letter-spacing: -0.02em;
 }
 /* Akcent: SOLIDNY kolor — domyślnie (M18 flat-accent, DESIGN-PROPOSAL p.3 + a11y: gradient nie jest nośnikiem informacji,
    background-clip:text niewidoczne w forced-colors). Gradient (--grad-accent) dostępny jako klasa dekoracyjna
@@ -320,6 +331,7 @@ select   { max-width: 100%; }
 }
 .path-card:hover, .path-card:focus-within {
   transform: translateY(-2px); box-shadow: var(--shadow-md);
+  border-color: var(--color-border);
 }
 /* Sigil: ID ścieżki jako wizualna kotwica (S1/S2/S3/S4). Nowy element; CSS obrysuje go obramowaniem. */
 .path-card__head   { display: flex; align-items: center; gap: 0.65rem; margin-bottom: 0.2rem; }
@@ -435,7 +447,7 @@ select   { max-width: 100%; }
   font-family: var(--font-reading); font-size: 1.05rem; line-height: 1.65;
   background: var(--color-surface-2); border: 1px solid var(--color-border-subtle);
   border-left: 3px solid var(--color-accent); border-radius: var(--radius-sm);
-  padding: var(--sp-5); max-width: var(--maxw-reading);
+  padding: 0.7rem 0.95rem; max-width: var(--maxw-reading);
 }
 .definition em { color: var(--color-muted); font-style: italic; }
 .block-group { display: flex; flex-direction: column; gap: 0.5rem; max-width: var(--maxw-reading); }
@@ -445,9 +457,8 @@ select   { max-width: 100%; }
    CALLOUTY — ikona + słowo (nie sam kolor, WCAG 1.4.1)
    ============================================================ */
 .callout {
-  margin: 0.9rem 0; padding: var(--sp-5); border-radius: var(--radius-md);
-  border: 1px solid var(--color-border-subtle); border-left-width: 3px;
-  background: var(--color-surface-2);
+  margin: 0.9rem 0; padding: 0.75rem 0.95rem; border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-subtle); background: var(--color-surface-2);
 }
 .callout__title {
   font-weight: var(--fw-bold); margin-bottom: 0.3rem;
@@ -541,7 +552,7 @@ select   { max-width: 100%; }
   display: flex; flex-direction: column; align-items: center; gap: 0.1rem;
 }
 .result__score-value {
-  font-family: var(--font-reading); font-size: var(--fs-800); line-height: 1; font-weight: var(--fw-bold);
+  font-family: var(--font-reading); font-size: 2.4rem; line-height: 1; font-weight: var(--fw-bold);
 }
 .result__score-label { color: var(--color-muted); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; }
 /* Badge zaliczenia: ikona + SŁOWO (nie sam kolor, WCAG 1.4.1). */

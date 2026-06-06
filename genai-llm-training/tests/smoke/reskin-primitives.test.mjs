@@ -111,8 +111,9 @@ test("#138 primitives.css: .hero__stat zdefiniowany (stats-strip #139)", () => {
 
 test("#138 styles.css: importuje primitives.css po tokens.css (łańcuch importów STAGE A)", () => {
   // @import "tokens.css" musi być pierwsze (asercja a11y-static), potem primitives.css.
-  const tokensIdx = stylesCss.indexOf('@import "tokens.css"');
-  const primitivesIdx = stylesCss.indexOf('@import "styles/primitives.css"');
+  // Bez zamykającego cudzysłowu — toleruje cache-busting ?v=<wersja> (@import "tokens.css?v=1.1").
+  const tokensIdx = stylesCss.indexOf('@import "tokens.css');
+  const primitivesIdx = stylesCss.indexOf('@import "styles/primitives.css');
   assert.ok(tokensIdx > -1, 'styles.css nie importuje tokens.css');
   assert.ok(primitivesIdx > -1, 'styles.css nie importuje styles/primitives.css (STAGE A split)');
   assert.ok(tokensIdx < primitivesIdx, 'tokens.css musi być importowany przed styles/primitives.css');

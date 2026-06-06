@@ -59,7 +59,8 @@ test("styles.css: klasa visually-hidden (tekst tylko dla czytników) i reduced-m
 // ----- Design system M9 (#68): tokeny w tokens.css, @import, utwardzony reduced-motion -----
 test("styles.css: @import \"tokens.css\" jest PIERWSZĄ regułą (ścieżka względna, bez http/CDN)", () => {
   const cssNoComments = css.replace(/\/\*[\s\S]*?\*\//g, "").trim();
-  assert.match(cssNoComments, /^@import\s+["']tokens\.css["']\s*;/, "pierwszą regułą styles.css musi być @import \"tokens.css\";");
+  // ?v=<wersja> dozwolone (cache-busting bez buildu) — wciąż względna, bez http/CDN.
+  assert.match(cssNoComments, /^@import\s+["']tokens\.css(?:\?[^"']*)?["']\s*;/, "pierwszą regułą styles.css musi być @import \"tokens.css\";");
   assert.doesNotMatch(cssNoComments.slice(0, 80), /https?:|\/\//, "@import nie może wskazywać na http/CDN (ADR-0002, ścieżka względna)");
 });
 
@@ -83,7 +84,8 @@ test("toggle motywu: button#theme-toggle z aria-pressed + aria-label (fokusowaln
 test("anty-flash motywu: inline script ustawia [data-theme] zanim namaluje CSS (#72)", () => {
   // Skrypt musi być PRZED <link rel=stylesheet> (kolejność = brak mrugnięcia złym motywem).
   const scriptIdx = appHtml.indexOf('setAttribute("data-theme"');
-  const cssIdx = appHtml.indexOf('href="assets/styles.css"');
+  // bez zamykającego cudzysłowu — toleruje cache-busting ?v=<wersja> (href="assets/styles.css?v=1.0")
+  const cssIdx = appHtml.indexOf('href="assets/styles.css');
   assert.ok(scriptIdx > -1, "brak anty-flash skryptu ustawiającego data-theme");
   assert.ok(scriptIdx < cssIdx, "anty-flash skrypt musi być przed arkuszem stylów (inaczej flash)");
   assert.match(appHtml, /prefers-color-scheme/, "anty-flash nie respektuje prefers-color-scheme");
