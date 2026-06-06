@@ -19,8 +19,9 @@
       } catch (e) { document.documentElement.setAttribute("data-theme", "dark"); }
     })();
   </script>
-  <!-- Ścieżki WZGLĘDNE (wymóg GitHub Pages, ADR-0002). -->
-  <link rel="stylesheet" href="assets/styles.css">
+  <!-- Ścieżki WZGLĘDNE (wymóg GitHub Pages, ADR-0002). Query ?v=<wersja> = cache-busting (bez buildu):
+       bump przy KAŻDYM PR razem z #app-version (AGENTS.md „Wersjonowanie strony") wymusza re-fetch CSS. -->
+  <link rel="stylesheet" href="assets/styles.css?v=1.0">
 </head>
 <body>
   <!-- Skip-link: pierwszy fokusowalny element (WCAG 2.4.1), przed headerem. -->

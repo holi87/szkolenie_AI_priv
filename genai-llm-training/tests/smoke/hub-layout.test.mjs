@@ -12,9 +12,14 @@ const APP = join(HERE, "..", "..");
 const css = readFileSync(join(APP, "assets", "styles.css"), "utf8");
 const html = readFileSync(join(APP, "index.html"), "utf8");
 
-test("layout kolapsuje do jednej kolumny gdy szyna ukryta (koniec ściskania treści w wąski track)", () => {
-  assert.match(css, /\.layout:has\(>\s*\.module-nav\[hidden\]\)\s*\{[^}]*grid-template-columns:\s*1fr/,
-    "brak reguły kolapsu .layout:has(> .module-nav[hidden]) → grid-template-columns:1fr");
+test("layout: DOMYŚLNIE 1 kolumna; sidebar tylko gdy szyna widoczna (koniec ściskania treści; path-select nie zależy od :has)", () => {
+  // Inwersja po regresji „treść wypchnięta w prawo" w starszych przeglądarkach/cache bez :has():
+  // bazowy .layout MUSI domyślnie być 1-kolumnowy, więc ukryta/nieobecna szyna NIGDY nie rezerwuje pustej kolumny.
+  assert.match(css, /\.layout\s*\{[^}]*grid-template-columns:\s*1fr/,
+    "brak domyślnej pojedynczej kolumny .layout { … grid-template-columns:1fr } (path-select nie może rezerwować pustej kolumny nav)");
+  // Sidebar = progresywne ulepszenie: druga kolumna dodawana TYLKO gdy szyna widoczna (brak :has → nav stackuje nad treścią, bez pustej kolumny).
+  assert.match(css, /\.layout:has\(>\s*\.module-nav:not\(\[hidden\]\)\)\s*\{[^}]*grid-template-columns:\s*minmax/,
+    "brak reguły sidebara .layout:has(> .module-nav:not([hidden])) → kolumna nav (minmax)");
 });
 
 test("mobile: boczna szyna ukryta (nawigacja przez hub + przycisk Moduly)", () => {

@@ -83,7 +83,8 @@ test("toggle motywu: button#theme-toggle z aria-pressed + aria-label (fokusowaln
 test("anty-flash motywu: inline script ustawia [data-theme] zanim namaluje CSS (#72)", () => {
   // Skrypt musi być PRZED <link rel=stylesheet> (kolejność = brak mrugnięcia złym motywem).
   const scriptIdx = appHtml.indexOf('setAttribute("data-theme"');
-  const cssIdx = appHtml.indexOf('href="assets/styles.css"');
+  // bez zamykającego cudzysłowu — toleruje cache-busting ?v=<wersja> (href="assets/styles.css?v=1.0")
+  const cssIdx = appHtml.indexOf('href="assets/styles.css');
   assert.ok(scriptIdx > -1, "brak anty-flash skryptu ustawiającego data-theme");
   assert.ok(scriptIdx < cssIdx, "anty-flash skrypt musi być przed arkuszem stylów (inaczej flash)");
   assert.match(appHtml, /prefers-color-scheme/, "anty-flash nie respektuje prefers-color-scheme");
