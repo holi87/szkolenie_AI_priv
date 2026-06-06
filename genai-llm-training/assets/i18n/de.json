@@ -151,5 +151,9 @@
   "chrome.nav.aria": "Schulungsmodule",
   "chrome.metaDescription": "Interaktive Schulung zu GenAI und LLM: Pfade S1/S2/S3, Quizze, Abschlusstest, Ergebnis.",
   "chrome.footer.note": "Statische Schulung (GitHub Pages). Den Fortschritt speichern wir lokal in diesem Browser; wir senden nichts an den Server, keine Cookies.",
-  "chrome.footer.privacy": "Datenschutz"
+  "chrome.footer.privacy": "Datenschutz",
+  "path.hero.eyebrow": "Interaktive Schulung",
+  "path.hero.stat.modules": "Module",
+  "path.hero.stat.paths": "Pfade",
+  "path.hero.stat.time": "vollständiger Kurs"
 }

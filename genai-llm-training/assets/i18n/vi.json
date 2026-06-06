@@ -151,5 +151,9 @@
   "chrome.nav.aria": "Các mô-đun đào tạo",
   "chrome.metaDescription": "Khóa đào tạo GenAI và LLM tương tác: các lộ trình S1/S2/S3, quiz, bài kiểm tra cuối, kết quả.",
   "chrome.footer.note": "Khóa đào tạo tĩnh (GitHub Pages). Tiến độ được lưu cục bộ trong trình duyệt này; chúng tôi không gửi gì lên máy chủ, không dùng cookie.",
-  "chrome.footer.privacy": "Quyền riêng tư"
+  "chrome.footer.privacy": "Quyền riêng tư",
+  "path.hero.eyebrow": "Đào tạo tương tác",
+  "path.hero.stat.modules": "mô-đun",
+  "path.hero.stat.paths": "lộ trình",
+  "path.hero.stat.time": "khóa học đầy đủ"
 }

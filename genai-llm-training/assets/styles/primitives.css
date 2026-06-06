@@ -1,0 +1,70 @@
+/* primitives.css — wspólne prymitywy wizualne (STAGE A, issue #139, M18).
+   Zawiera: eyebrow, stats-strip (hero__row/hero__stat), section-head.
+   Importowany przez styles.css. Tokeny z tokens.css (zawsze ładowany wcześniej).
+   ADR-0002: brak buildu, czyste CSS Custom Properties. */
+
+/* ============================================================
+   EYEBROW — etykieta nad nagłówkiem sekcji (nie niesie info samym kolorem).
+   Używana: path-select (ponad hero), section-head (ponad h2).
+   Klasa: .eyebrow (zgodna z makietami #140-#145).
+   ============================================================ */
+.eyebrow {
+  display: inline-block;
+  font-size: var(--fs-300);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin: 0 0 0.6rem;
+}
+
+/* ============================================================
+   STATS-STRIP — pasek liczbowy w hero (modułów / ścieżki / czas).
+   hero__row = kontener, hero__stat = jeden statystyk.
+   Zgodny z makietą 01 (mockup-01-path-select.html .hero__row/.hero__stat).
+   ============================================================ */
+.hero__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.4rem;
+  margin-top: var(--sp-5);
+}
+
+.hero__stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.hero__stat b {
+  font-size: var(--fs-700);
+  font-family: var(--font-reading);
+  line-height: 1.1;
+}
+
+.hero__stat span {
+  font-size: var(--fs-300);
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* ============================================================
+   SECTION-HEAD — nagłówek sekcji z eyebrow + h2 obok siebie.
+   Używany w path-select ponad kartami ścieżek.
+   ============================================================ */
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin: var(--sp-6) 0 var(--sp-2);
+}
+
+.section-head h2 {
+  font-size: var(--fs-700);
+  margin: 0;
+  font-family: var(--font-reading);
+  letter-spacing: -0.01em;
+}

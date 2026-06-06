@@ -53,17 +53,39 @@ function pathCard(pathsData, modulesData, pathId, onSelect) {
   ]);
 }
 
+/** Pasek statystyk (stats-strip) — hero__row z trzema liczbami (moduły / ścieżki / czas).
+    Liczby derywowane z danych (PATH_IDS.length, MODULE_COUNT), nie hardkodowane.
+    Etykiety przez t() dla i18n. Klasy: hero__row / hero__stat (makieta 01 floor). */
+function heroStats(modulesData) {
+  const moduleCount = modulesData && modulesData.modules ? modulesData.modules.length : 12;
+  const pathCount = PATH_IDS.length;
+  const stats = [
+    { value: String(moduleCount), label: t("path.hero.stat.modules") },
+    { value: String(pathCount),   label: t("path.hero.stat.paths") },
+    { value: "~6 h",              label: t("path.hero.stat.time") },
+  ];
+  return el("div", { class: "hero__row" },
+    stats.map((s) => el("span", { class: "hero__stat" }, [
+      el("b", { text: s.value }),
+      el("span", { text: s.label }),
+    ])),
+  );
+}
+
 /** Sekcja hero — pierwsze wrażenie. Tytuł z gradientowym akcentem na słowie kluczowym (fallback solid color w CSS).
-    Szablon z placeholderem {accent} rozbity tak, by akcent został w <span> (styl), a kolejność słów była tłumaczalna. */
-function hero() {
+    Szablon z placeholderem {accent} rozbity tak, by akcent został w <span> (styl), a kolejność słów była tłumaczalna.
+    Eyebrow (klasa .eyebrow) nad tytułem — prymityw wizualny (STAGE A, #139). */
+function hero(modulesData) {
   const [before, after = ""] = t("path.hero.title.template").split("{accent}");
   return el("section", { class: "hero" }, [
+    el("p", { class: "eyebrow", text: t("path.hero.eyebrow") }),
     el("h1", { class: "hero__title" }, [
       before || null,
       el("span", { class: "hero__accent", text: t("path.hero.title.accent") }),
       after || null,
     ]),
     el("p", { class: "hero__lead", text: t("path.hero.lead") }),
+    heroStats(modulesData),
   ]);
 }
 
@@ -72,7 +94,7 @@ function hero() {
  */
 export function renderPathSelect(pathsData, modulesData, opts = {}) {
   const root = el("div", { class: "view__content" });
-  root.appendChild(hero());
+  root.appendChild(hero(modulesData));
 
   root.appendChild(el("h2", { class: "path-select__heading", text: t("path.select.heading") }));
   root.appendChild(el("p", { text: t("path.select.intro") }));

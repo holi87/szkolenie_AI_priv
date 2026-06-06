@@ -151,5 +151,9 @@
   "chrome.nav.aria": "Модулі навчання",
   "chrome.metaDescription": "Інтерактивне навчання з GenAI та LLM: шляхи S1/S2/S3, квізи, підсумковий тест, результат.",
   "chrome.footer.note": "Статичне навчання (GitHub Pages). Прогрес зберігаємо локально в цьому браузері; нічого не надсилаємо на сервер, без cookies.",
-  "chrome.footer.privacy": "Конфіденційність"
+  "chrome.footer.privacy": "Конфіденційність",
+  "path.hero.eyebrow": "Інтерактивне навчання",
+  "path.hero.stat.modules": "модулів",
+  "path.hero.stat.paths": "шляхи",
+  "path.hero.stat.time": "повний курс"
 }

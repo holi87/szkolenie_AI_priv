@@ -19,6 +19,7 @@
 
   /* Kontrast CI-gated (contrast.test.mjs): border/bg >=3:1, border/surface >=3:1 */
   --color-border:         #6B7588;   /* /bg 4.04:1 ✓  /surface 3.76:1 ✓ — INTERAKCYJNY (kontrolki, stany) */
+  --color-border-strong:  #6B7588;   /* alias zgodności dla makiet (= --color-border); interakcyjny */
   --color-border-subtle:  #2A3140;   /* dekoracyjny separator kart (nie niesie stanu kontrolki) */
 
   --color-accent:         #6EA8FE;   /* /bg 7.76:1 ✓  /surface 7.22:1 ✓  /surface-2 6.51:1 ✓ — link + btn fill */
@@ -102,6 +103,7 @@
   --color-muted:          #4F5765;   /* muted/bg 6.79:1 ✓  muted/surface 7.26:1 ✓ */
 
   --color-border:         #707A8B;   /* /bg 4.04:1 ✓  /surface(white) 4.33:1 ✓ — INTERAKCYJNY */
+  --color-border-strong:  #707A8B;   /* alias zgodności dla makiet (= --color-border); interakcyjny */
   --color-border-subtle:  #DCE1EA;   /* dekoracyjny separator kart */
 
   --color-accent:         #1D4ED8;   /* /bg 6.24:1 ✓  /surface 6.70:1 ✓  /surface-2 5.87:1 ✓ */

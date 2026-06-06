@@ -6,6 +6,8 @@
 
 /* @import musi być PIERWSZĄ regułą (spec CSS). Ścieżka WZGLĘDNA — GitHub Pages, ADR-0002. */
 @import "tokens.css";
+/* Prymitywy wizualne (STAGE A, issue #139, M18): eyebrow, stats-strip, section-head. */
+@import "styles/primitives.css";
 
 /* ============================================================
    RESET + BASE
@@ -278,14 +280,15 @@ select   { max-width: 100%; }
   font-family: var(--font-reading); font-size: var(--fs-900); line-height: 1.05;
   margin: 0 0 var(--sp-3); letter-spacing: -0.02em;
 }
-/* Akcent: solid color jako fallback + gradient jeśli obsługiwany (nie niesie info — WCAG 1.4.1). */
+/* Akcent: SOLIDNY kolor — domyślnie (M18 flat-accent, DESIGN-PROPOSAL p.3 + a11y: gradient nie jest nośnikiem informacji,
+   background-clip:text niewidoczne w forced-colors). Gradient (--grad-accent) dostępny jako klasa dekoracyjna
+   .hero__accent--grad dla kontekstów czysto ozdobnych (nie stosowany tu domyślnie). */
 .hero__accent { color: var(--color-accent); }
-@supports ((-webkit-background-clip: text) or (background-clip: text)) {
-  .hero__accent {
-    background: var(--grad-accent);
-    -webkit-background-clip: text; background-clip: text;
-    -webkit-text-fill-color: transparent; color: transparent;
-  }
+/* Klasa dekoracyjna (opcjonalna): gradient na słowie akcentu. Nie stosuj tam, gdzie kolor niesie znaczenie. */
+.hero__accent--grad {
+  background: var(--grad-accent);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
 }
 .hero__lead { font-size: var(--fs-600); color: var(--color-muted); max-width: var(--maxw-reading); margin: 0; }
 .path-select__heading { margin-top: var(--sp-3); }

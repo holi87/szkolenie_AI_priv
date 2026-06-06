@@ -151,5 +151,9 @@
   "chrome.nav.aria": "Training modules",
   "chrome.metaDescription": "Interactive GenAI & LLM training: S1/S2/S3 paths, quizzes, final test, result.",
   "chrome.footer.note": "Static training (GitHub Pages). Progress is saved locally in your browser; nothing is sent to a server, no cookies.",
-  "chrome.footer.privacy": "Privacy"
+  "chrome.footer.privacy": "Privacy",
+  "path.hero.eyebrow": "Interactive training",
+  "path.hero.stat.modules": "modules",
+  "path.hero.stat.paths": "paths",
+  "path.hero.stat.time": "full course"
 }

@@ -151,5 +151,9 @@
   "chrome.nav.aria": "Modules de la formation",
   "chrome.metaDescription": "Formation interactive sur le GenAI et les LLM : parcours S1/S2/S3, quiz, test final, résultat.",
   "chrome.footer.note": "Formation statique (GitHub Pages). La progression est enregistrée localement dans ce navigateur ; rien n'est envoyé au serveur, pas de cookies.",
-  "chrome.footer.privacy": "Confidentialité"
+  "chrome.footer.privacy": "Confidentialité",
+  "path.hero.eyebrow": "Formation interactive",
+  "path.hero.stat.modules": "modules",
+  "path.hero.stat.paths": "parcours",
+  "path.hero.stat.time": "cours complet"
 }

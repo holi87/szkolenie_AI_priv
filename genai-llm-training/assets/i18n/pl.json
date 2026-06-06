@@ -152,5 +152,9 @@
   "chrome.nav.aria": "Moduły szkolenia",
   "chrome.metaDescription": "Interaktywne szkolenie z GenAI i LLM: ścieżki S1/S2/S3, quizy, test końcowy, wynik.",
   "chrome.footer.note": "Szkolenie statyczne (GitHub Pages). Postęp zapisujemy lokalnie w tej przeglądarce; nic nie wysyłamy na serwer, brak cookies.",
-  "chrome.footer.privacy": "Prywatność"
+  "chrome.footer.privacy": "Prywatność",
+  "path.hero.eyebrow": "Interaktywne szkolenie",
+  "path.hero.stat.modules": "modułów",
+  "path.hero.stat.paths": "ścieżki",
+  "path.hero.stat.time": "pełny kurs"
 }

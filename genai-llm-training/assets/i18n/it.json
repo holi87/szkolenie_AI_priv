@@ -151,5 +151,9 @@
   "chrome.nav.aria": "Moduli del corso",
   "chrome.metaDescription": "Corso interattivo su GenAI e LLM: percorsi S1/S2/S3, quiz, test finale, risultato.",
   "chrome.footer.note": "Corso statico (GitHub Pages). I progressi vengono salvati localmente in questo browser; non inviamo nulla al server, nessun cookie.",
-  "chrome.footer.privacy": "Privacy"
+  "chrome.footer.privacy": "Privacy",
+  "path.hero.eyebrow": "Corso interattivo",
+  "path.hero.stat.modules": "moduli",
+  "path.hero.stat.paths": "percorsi",
+  "path.hero.stat.time": "corso completo"
 }
