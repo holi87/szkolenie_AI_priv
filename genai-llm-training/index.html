@@ -102,6 +102,9 @@
   <!-- Footer lokalizowany przez setChrome() (#81): tekst i link prywatności (href locale-aware). Treść PL = fallback przed/bez JS. -->
   <footer class="app-footer">
     <p><span id="footer-note">Szkolenie statyczne (GitHub Pages). Postęp zapisujemy lokalnie w tej przeglądarce; nic nie wysyłamy na serwer, brak cookies.</span> <a id="footer-privacy-link" href="prywatnosc.html">Prywatność</a></p>
+    <!-- Wersja aplikacji (prawy dolny róg). Metadane techniczne (locale-neutralne) — NIE i18n.
+         ADR-0002 (bez buildu): bumpowane RĘCZNIE przed każdym PR — patrz AGENTS.md „Wersjonowanie strony". -->
+    <span class="app-version" id="app-version">v1.0 · 30b5e2f</span>
   </footer>
 
   <!-- Dane (data/*.json) ładowane przez fetch() po http(s) — uruchom przez serwer statyczny, nie file://. -->

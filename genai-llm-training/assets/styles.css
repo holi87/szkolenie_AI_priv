@@ -642,6 +642,12 @@ select   { max-width: 100%; }
   color: var(--color-muted); font-size: var(--fs-400); text-align: center;
   padding: 1.4rem 1rem; border-top: 1px solid var(--color-border-subtle);
 }
+/* Wersja aplikacji — prawy dolny róg. Subtelna, tabularna numeracja; locale-neutralna. */
+.app-version {
+  display: block; text-align: right; margin: 0.6rem 0.2rem 0 0;
+  color: var(--color-muted); font-size: var(--fs-300);
+  font-variant-numeric: tabular-nums; letter-spacing: 0.02em;
+}
 
 /* ============================================================
    UTILITIES

@@ -55,9 +55,18 @@ Lokalne zasady pracy dla repo `szkolenie_AI_priv`.
 - Przed PR uruchom realne testy dostepne w repo; jesli testow jeszcze nie ma, wykonaj jawna checkliste manualna i opisz ja w PR.
 - Po zmianie shared engine albo danych testuj wszystkie sciezki S1/S2/S3, nie tylko przypadek dotkniety przez issue.
 
+## Wersjonowanie strony
+
+- Strona pokazuje wersje w prawym dolnym rogu stopki: element `#app-version` w `genai-llm-training/index.html`, format `v<major>.<minor> · <short-sha>` (np. `v1.0 · 30b5e2f`).
+- **Przed KAZDYM PR podbij wersje o +1 na drugiej pozycji** (minor): `1.0 -> 1.1 -> 1.2 -> ...`. Major (`1.x`) zostaje, dopoki nie zdecydujemy inaczej.
+- Zaktualizuj `<short-sha>` na skrot ostatniego commita tresci tego PR (`git rev-parse --short HEAD`).
+- ADR-0002 (brak buildu): wersja i skrot commita sa wpisywane RECZNIE — nie ma auto-injekcji przez build. To metadane techniczne (locale-neutralne) — NIE przechodza przez i18n.
+- Punkt startowy: `v1.0`.
+
 ## PR checklist
 
 - Issue jest podlinkowane.
+- Wersja w stopce (`#app-version`) podbita o +1 (minor) i skrot commita zaktualizowany.
 - Zakres PR odpowiada tylko jednemu issue.
 - Kryteria akceptacji z issue sa spelnione albo jasno oznaczone jako blokowane.
 - Zmiany sa podzielone na sensowne pliki, bez przekroczenia limitow LOC.
