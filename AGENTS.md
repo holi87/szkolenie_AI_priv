@@ -60,7 +60,7 @@ Lokalne zasady pracy dla repo `szkolenie_AI_priv`.
 - Strona pokazuje wersje w prawym dolnym rogu stopki: element `#app-version` w `genai-llm-training/index.html`, format `v<major>.<minor> · <short-sha>` (np. `v1.0 · 30b5e2f`).
 - **Przed KAZDYM PR podbij wersje o +1 na drugiej pozycji** (minor): `1.0 -> 1.1 -> 1.2 -> ...`. Major (`1.x`) zostaje, dopoki nie zdecydujemy inaczej.
 - Zaktualizuj `<short-sha>` na skrot ostatniego commita MERYTORYCZNEGO (tresci) PR. W statycznym site bez buildu stopka nie moze wskazac wlasnego commita (chicken-egg), wiec wskazuje ostatni commit zmian tresci — NIE commit samej aktualizacji wersji. Bump wersji + SHA mozesz zlozyc w tym samym commicie tresci.
-- ADR-0002 (brak buildu): wersja, skrot commita ORAZ `?v=<wersja>` przy `assets/styles.css` w `index.html` sa wpisywane RECZNIE — nie ma auto-injekcji przez build. Podbijaj `?v=` razem z `#app-version` (cache-busting: wymusza re-fetch CSS, koniec wiszacego starego arkusza). To metadane techniczne (locale-neutralne) — NIE przechodza przez i18n.
+- ADR-0002 (brak buildu): wersja, skrot commita ORAZ `?v=<wersja>` na WSZYSTKICH URL-ach CSS sa wpisywane RECZNIE — nie ma auto-injekcji przez build. Cache-busting wymaga `?v=` na KAZDYM linku/imporcie CSS, NIE tylko na wrapperze: `<link href="assets/styles.css?v=X">` w `index.html` ORAZ kazdy `@import "...css?v=X"` w `styles.css` (wrapper bez wersji na importach nie wymusza re-fetchu zmienionych tokens/primitives — user dostalby nowy wrapper, stary import). Podbijaj wszystkie `?v=` razem z `#app-version`. To metadane techniczne (locale-neutralne) — NIE przechodza przez i18n.
 - Punkt startowy: `v1.0`.
 
 ## PR checklist

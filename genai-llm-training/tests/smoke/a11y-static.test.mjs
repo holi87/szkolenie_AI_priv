@@ -59,7 +59,8 @@ test("styles.css: klasa visually-hidden (tekst tylko dla czytników) i reduced-m
 // ----- Design system M9 (#68): tokeny w tokens.css, @import, utwardzony reduced-motion -----
 test("styles.css: @import \"tokens.css\" jest PIERWSZĄ regułą (ścieżka względna, bez http/CDN)", () => {
   const cssNoComments = css.replace(/\/\*[\s\S]*?\*\//g, "").trim();
-  assert.match(cssNoComments, /^@import\s+["']tokens\.css["']\s*;/, "pierwszą regułą styles.css musi być @import \"tokens.css\";");
+  // ?v=<wersja> dozwolone (cache-busting bez buildu) — wciąż względna, bez http/CDN.
+  assert.match(cssNoComments, /^@import\s+["']tokens\.css(?:\?[^"']*)?["']\s*;/, "pierwszą regułą styles.css musi być @import \"tokens.css\";");
   assert.doesNotMatch(cssNoComments.slice(0, 80), /https?:|\/\//, "@import nie może wskazywać na http/CDN (ADR-0002, ścieżka względna)");
 });
 
