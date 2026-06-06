@@ -29,9 +29,11 @@
    RESULT STATUS FAIL — badge niezaliczenia (ikona + SŁOWO)
    Dopełnienie istniejącego result-status--pass (styles.css).
    Kolor warn — wzmocnienie (WCAG 1.4.1: ikona+słowo są nośnikiem, nie sam kolor).
+   Kolor TEKSTU: --color-warn-text (ciemniejszy amber-800 w jasnym motywie = 6.2:1 ✓ na kompozycie;
+   identyczny z warn w ciemnym motywie, gdzie 8.1:1 ✓). Tło/border: --color-warn (dekoracja).
    ============================================================ */
 .result-status--fail {
-  color: var(--color-warn);
+  color: var(--color-warn-text);
   border-color: var(--color-warn);
   background: color-mix(in srgb, var(--color-warn) 12%, transparent);
 }

@@ -25,9 +25,11 @@
    CHIP KRYTYCZNY — pytanie bezpieczeństwa M10 (quiz-chip--crit)
    ============================================================ */
 /* Dodatkowy chip dla pytań krytycznych: kolor warn + obramowanie (WCAG 1.4.1: ikona + kolor).
-   Emitowany przez quiz-view.js renderQuestion gdy question.isCritical. */
+   Emitowany przez quiz-view.js renderQuestion gdy question.isCritical.
+   Kolor TEKSTU: --color-warn-text (ciemniejszy amber-800 w jasnym motywie = 6.2:1 ✓ WCAG AA na kompozycie;
+   identyczny z warn w ciemnym motywie, gdzie 8.5:1 ✓). Tło/border: --color-warn (dekoracja). */
 .quiz-chip--crit {
-  color: var(--color-warn);
+  color: var(--color-warn-text);
   border-color: var(--color-warn);
   background: color-mix(in srgb, var(--color-warn) 10%, transparent);
   font-weight: var(--fw-bold);

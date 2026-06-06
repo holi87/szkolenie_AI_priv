@@ -96,3 +96,21 @@ export function contrastRatio(hexA, hexB) {
   const [hi, lo] = la >= lb ? [la, lb] : [lb, la];
   return (hi + 0.05) / (lo + 0.05);
 }
+
+/**
+ * Kompostuje kolor foreground (hexA) z ratio (0..1) na solid tło (hexB).
+ * Modeluje `color-mix(in srgb, hexA ratio*100%, transparent)` nad hexB.
+ * Zwraca solid hex wyniku (do dalszego pomiaru kontrastu).
+ * @param {string} hexA kolor naniesiony
+ * @param {string} hexB kolor podłoża (solid, nieprzezroczysty)
+ * @param {number} ratio udział hexA (np. 0.10 dla 10%)
+ * @returns {string} solid hex kompozytu
+ */
+export function mixHex(hexA, hexB, ratio) {
+  const a = hexToRgb(hexA);
+  const b = hexToRgb(hexB);
+  const r = Math.round(ratio * a.r + (1 - ratio) * b.r);
+  const g = Math.round(ratio * a.g + (1 - ratio) * b.g);
+  const bl = Math.round(ratio * a.b + (1 - ratio) * b.b);
+  return "#" + [r, g, bl].map((x) => x.toString(16).padStart(2, "0")).join("");
+}

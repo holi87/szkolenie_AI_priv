@@ -29,6 +29,7 @@
 
   --color-ok:             #4ADE80;   /* /surface 10.75:1 ✓  /surface-2 9.03:1 ✓ */
   --color-warn:           #FBBF24;   /* /bg 11.22:1 ✓ */
+  --color-warn-text:      #FBBF24;   /* dark: identyczny z warn (kompozyt 8.5+:1 ✓); light override w sekcji light */
   --color-bad:            #F87171;   /* /bg 6.77:1 ✓ */
   --color-locked:         #6B7280;   /* stosowany WYŁĄCZNIE na wyłączonych komponentach (exempt z 1.4.3) */
 
@@ -113,6 +114,9 @@
 
   --color-ok:             #127334;   /* /surface 5.55:1 ✓  /surface-2 4.93:1 ✓ */
   --color-warn:           #B45309;   /* /bg 4.68:1 ✓ */
+  --color-warn-text:      #92400E;   /* tekst warn na jasnym tle — ciemniejszy wariant (amber-800).
+                                        Kompozyt: 6.21:1 na surface-2 ✓ (4.5 req); 7.09 na surface ✓.
+                                        Używany w .quiz-chip--crit i .result-status--fail (light only). */
   --color-bad:            #B91C1C;   /* /bg 6.03:1 ✓ */
   --color-locked:         #5C6473;
 
