@@ -20,7 +20,7 @@
   "action.checkAnswer": "Sprawdź odpowiedź",
   "action.markCompleted": "Oznacz moduł jako ukończony",
   "action.backToModules": "Wróć do modułów",
-  "action.resetConfirm": "Zresetować cały postęp tej przeglądarki? Tej operacji nie można cofnąć.",
+  "action.resetConfirm": "Zresetować postęp tego modułu? Postęp pozostałych modułów zostanie zachowany.",
   "action.exportJson": "Pobierz wynik (JSON)",
   "action.exportCsv": "Pobierz wynik (CSV)",
   "action.exportQuestionStatsCsv": "Pobierz odpowiedzi pytań (CSV)",
@@ -151,7 +151,7 @@
   "chrome.title": "Szkolenie GenAI i LLM — QualityCat",
   "chrome.theme.label": "Motyw",
   "chrome.theme.toggle": "Przełącz motyw jasny/ciemny",
-  "chrome.reset": "Zacznij od nowa",
+  "chrome.backToStart": "Wróć na start",
   "chrome.nav.aria": "Moduły szkolenia",
   "chrome.metaDescription": "Interaktywne szkolenie z GenAI i LLM: ścieżki S1/S2/S3, quizy, test końcowy, wynik.",
   "chrome.footer.note": "Szkolenie statyczne (GitHub Pages). Postęp zapisujemy lokalnie w tej przeglądarce; nic nie wysyłamy na serwer, brak cookies.",
@@ -167,5 +167,6 @@
   "module.eyebrow": "Moduł {moduleId} · {pillar}",
   "module.hub.title": "Twoje moduły",
   "module.hub.progress.suffix": "modułów wymaganych ukończonych",
-  "module.hub.progress.aria": "Ukończono {completed} z {total} modułów wymaganych"
+  "module.hub.progress.aria": "Ukończono {completed} z {total} modułów wymaganych",
+  "module.reset": "Resetuj postęp modułu"
 }

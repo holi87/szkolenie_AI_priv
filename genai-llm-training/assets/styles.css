@@ -639,6 +639,11 @@ select   { max-width: 100%; }
   padding: 0.45rem 0.7rem; display: inline-flex; flex-wrap: wrap;
   gap: 0.2rem 0.9rem; margin: 0 0 1.4rem; max-width: 100%; /* reflow 320px */
 }
+/* Reset postępu MODUŁU (M20 #166): subtelna akcja destrukcyjna, oddzielona separatorem od „Ukończ"/„Moduły".
+   Domyślnie wyciszona (muted), na hover sygnał ostrzegawczy (--color-bad). Zachowuje 44px touch target z .btn. */
+.module-reset { margin-top: var(--sp-5); padding-top: var(--sp-4); border-top: 1px solid var(--color-border-subtle); display: flex; justify-content: flex-end; }
+.module-reset__btn { color: var(--color-muted); border-color: var(--color-border-subtle); font-weight: var(--fw-medium); }
+.module-reset__btn:hover { color: var(--color-bad); border-color: var(--color-bad); background: color-mix(in srgb, var(--color-bad) 8%, transparent); }
 /* ============================================================
    IKONY inline SVG (UX-6 #75)
    ============================================================ */

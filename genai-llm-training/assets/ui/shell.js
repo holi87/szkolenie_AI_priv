@@ -36,8 +36,8 @@ export function updateHeader(refs, { pathId, pathName }) {
       ? t("nav.header.pathIndicatorNamed", { pathId, pathName })
       : t("nav.header.pathIndicator", { pathId });
     // Widoczność „Moduły" (navToggle) ustawiają ekrany (app.js): ukryty na hubie, widoczny w module/teście/wyniku
-    // jako powrót do hubu (#88). Tu sterujemy tylko trwałymi elementami headera.
-    refs.resetBtn.hidden = false;
+    // jako powrót do hubu (#88). „Wróć na start" (backBtn) widoczny wszędzie poza path-select (M20 #166).
+    refs.backBtn.hidden = false;
   }
 }
 
