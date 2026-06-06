@@ -155,5 +155,13 @@
   "path.hero.eyebrow": "Інтерактивне навчання",
   "path.hero.stat.modules": "модулів",
   "path.hero.stat.paths": "шляхи",
-  "path.hero.stat.time": "повний курс"
+  "path.hero.stat.time": "повний курс",
+  "path.card.role.S1": "Вступ без коду",
+  "path.card.role.S2": "Основний практичний шлях",
+  "path.card.role.S3": "Повний технічний шлях",
+  "path.card.role.S4": "Самодіагностика зрілості ШІ",
+  "module.eyebrow": "Модуль {moduleId} · {pillar}",
+  "module.hub.title": "Ваші модулі",
+  "module.hub.progress.suffix": "обов'язкових модулів завершено",
+  "module.hub.progress.aria": "Завершено {completed} з {total} обов'язкових модулів"
 }

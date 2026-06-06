@@ -254,8 +254,10 @@ function start(initialData, ctx = {}) {
     const alreadyDone = store.getProgress().modules[moduleId]?.status === "completed";
 
     const root = el("div", { class: "view__content" });
-    root.appendChild(el("h1", { text: t("module.title", { moduleId: mod.id, moduleName: mod.name }) }));
-    root.appendChild(el("p", { class: "muted", text: t("module.meta", { pillar: pillarLabel(mod.pillar), level: mod.level, time: mod.timeFullMin, interaction: mod.interactiveElement }) }));
+    // Eyebrow: id modułu + filar (kontekst nawigacyjny przed tytułem).
+    root.appendChild(el("p", { class: "eyebrow", text: t("module.eyebrow", { moduleId: mod.id, pillar: pillarLabel(mod.pillar) }) }));
+    root.appendChild(el("h1", { class: "module-title", text: mod.name }));
+    root.appendChild(el("p", { class: "module-meta", text: t("module.meta", { pillar: pillarLabel(mod.pillar), level: mod.level, time: mod.timeFullMin, interaction: mod.interactiveElement }) }));
 
     // ----- Treść (ekrany z danych, filtr po ścieżce — wariant S1 skrócony obsłużony przez onlyForPaths) -----
     if (content) {

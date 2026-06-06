@@ -20,7 +20,10 @@ function pathCard(pathsData, modulesData, pathId, onSelect) {
     return el("article", { class: "path-card path-card--formative" }, [
       el("div", { class: "path-card__head" }, [
         el("span", { class: "path-card__sigil", attrs: { "aria-hidden": "true" }, text: pathId }),
-        el("h3", { class: "path-card__name", text: t("path.card.name", { pathId, pathName: p.name }) }),
+        el("div", {}, [
+          el("h3", { class: "path-card__name", text: t("path.card.name", { pathId, pathName: p.name }) }),
+          el("span", { class: "path-card__role", text: t(`path.card.role.${pathId}`) }),
+        ]),
       ]),
       el("p", { class: "path-card__meta", text: t("path.card.meta.formative", { time: p.assumedPathTime || "—" }) }),
       el("p", { class: "path-card__meta", text: t("path.card.meta.modulesFormative", { count: moduleNames.length }) }),
@@ -40,7 +43,10 @@ function pathCard(pathsData, modulesData, pathId, onSelect) {
     recommended ? el("p", { class: "path-card__badge", text: t("path.badge.recommended") }) : null,
     el("div", { class: "path-card__head" }, [
       el("span", { class: "path-card__sigil", attrs: { "aria-hidden": "true" }, text: pathId }),
-      el("h3", { class: "path-card__name", text: t("path.card.name", { pathId, pathName: p.name }) }),
+      el("div", {}, [
+        el("h3", { class: "path-card__name", text: t("path.card.name", { pathId, pathName: p.name }) }),
+        el("span", { class: "path-card__role", text: t(`path.card.role.${pathId}`) }),
+      ]),
     ]),
     el("p", { class: "path-card__meta", text: t("path.card.meta.timeTestThreshold", { time: p.assumedPathTime || "—", questions: p.finalTestQuestions, threshold: p.passThresholdPct }) }),
     el("p", { class: "path-card__meta", text: t("path.card.meta.modules", { required: (p.requiredModules || []).length, optional: optionalCount }) }),
@@ -96,7 +102,13 @@ export function renderPathSelect(pathsData, modulesData, opts = {}) {
   const root = el("div", { class: "view__content" });
   root.appendChild(hero(modulesData));
 
-  root.appendChild(el("h2", { class: "path-select__heading", text: t("path.select.heading") }));
+  // Section-head: eyebrow (krok) + h2 w jednym wierszu (wzorzec makiety 01 .section-head).
+  // Eyebrow „Wybierz ścieżkę" zamiast „Krok 1 z 5" — nie hardkodujemy numeracji kroków (sekwencja nieokreślona w danych).
+  root.appendChild(el("div", { class: "section-head" }, [
+    el("div", {}, [
+      el("h2", { class: "path-select__heading", text: t("path.select.heading") }),
+    ]),
+  ]));
   root.appendChild(el("p", { text: t("path.select.intro") }));
 
   if (opts.currentPath) {

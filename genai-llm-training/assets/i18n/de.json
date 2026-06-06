@@ -155,5 +155,13 @@
   "path.hero.eyebrow": "Interaktive Schulung",
   "path.hero.stat.modules": "Module",
   "path.hero.stat.paths": "Pfade",
-  "path.hero.stat.time": "vollständiger Kurs"
+  "path.hero.stat.time": "vollständiger Kurs",
+  "path.card.role.S1": "Einführung ohne Code",
+  "path.card.role.S2": "Hauptpraktischer Pfad",
+  "path.card.role.S3": "Vollständiger technischer Pfad",
+  "path.card.role.S4": "KI-Reifegraddiagnose",
+  "module.eyebrow": "Modul {moduleId} · {pillar}",
+  "module.hub.title": "Ihre Module",
+  "module.hub.progress.suffix": "Pflichtmodule abgeschlossen",
+  "module.hub.progress.aria": "{completed} von {total} Pflichtmodulen abgeschlossen"
 }

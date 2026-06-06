@@ -155,5 +155,13 @@
   "path.hero.eyebrow": "Formation interactive",
   "path.hero.stat.modules": "modules",
   "path.hero.stat.paths": "parcours",
-  "path.hero.stat.time": "cours complet"
+  "path.hero.stat.time": "cours complet",
+  "path.card.role.S1": "Introduction sans code",
+  "path.card.role.S2": "Parcours pratique principal",
+  "path.card.role.S3": "Parcours technique complet",
+  "path.card.role.S4": "Auto-diagnostic maturité IA",
+  "module.eyebrow": "Module {moduleId} · {pillar}",
+  "module.hub.title": "Vos modules",
+  "module.hub.progress.suffix": "modules requis terminés",
+  "module.hub.progress.aria": "Terminé {completed} sur {total} modules requis"
 }

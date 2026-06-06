@@ -563,6 +563,62 @@ select   { max-width: 100%; }
 .weak-list { padding-left: 1.1rem; color: var(--color-muted); max-width: var(--maxw-reading); }
 
 /* ============================================================
+   HUB MODUŁÓW — EYEBROW + NAGŁÓWEK + PASEK POSTĘPU (#141, M18 STAGE B)
+   ============================================================ */
+/* Duży nagłówek h1 w hubie (hub-h1): większy niż domyślny h1 (2.2rem). */
+.hub-h1 {
+  font-family: var(--font-reading); font-size: var(--fs-800);
+  margin: 0 0 0.4rem; letter-spacing: -0.01em;
+}
+/* Intro tekst hubu (hub-intro): subtelniejszy od domyślnego p. */
+.hub-intro {
+  color: var(--color-muted); max-width: var(--maxw-reading); margin: 0 0 var(--sp-3);
+}
+/* Pasek postępu wymaganych modułów (path-progress).
+   Separator kart: --color-border-subtle (dekoracyjny). Track: --color-surface-2.
+   Fill: --color-accent. aria-label na span.path-progress__bar (WCAG 1.1.1). */
+.path-progress {
+  display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap;
+  margin: var(--sp-3) 0 0; font-size: var(--fs-400); color: var(--color-muted);
+}
+.path-progress__bar {
+  flex: 1; min-width: 160px; max-width: 300px; height: 8px;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border-subtle); overflow: hidden;
+}
+.path-progress__fill {
+  display: block; height: 100%;
+  background: var(--color-accent); border-radius: var(--radius-pill);
+  transition: width var(--dur-base) var(--ease);
+}
+.path-progress b { color: var(--color-fg); }
+
+/* ============================================================
+   PATH-CARD — ROLE (#140, M18 STAGE B)
+   ============================================================ */
+/* Role: podtytuł karty ścieżki pod nazwą (np. „Główna ścieżka praktyczna"). */
+.path-card__role {
+  font-size: var(--fs-300); color: var(--color-muted); display: block; margin-top: 0.1rem;
+}
+
+/* ============================================================
+   MODULE VIEW — TYTUŁ, META, BLOKI INTERAKCJI, NASTĘPNY KROK (#142, M18 STAGE B)
+   ============================================================ */
+/* Tytuł modułu: serif, wyraźna hierarchia. */
+.module-title {
+  font-family: var(--font-reading); font-size: var(--fs-800);
+  margin: 0 0 0.5rem; letter-spacing: -0.01em;
+}
+/* Meta-pasek modułu: monospaced, tło surface-2 z dekoracyjnym obramowaniem. */
+.module-meta {
+  font-family: var(--font-mono); font-size: var(--fs-300);
+  color: var(--color-muted); background: var(--color-surface-2);
+  border: 1px solid var(--color-border-subtle); border-radius: var(--radius-sm);
+  padding: 0.45rem 0.7rem; display: inline-flex; flex-wrap: wrap;
+  gap: 0.2rem 0.9rem; margin: 0 0 1.4rem;
+}
+/* ============================================================
    IKONY inline SVG (UX-6 #75)
    ============================================================ */
 .icon { flex: none; vertical-align: -0.125em; }

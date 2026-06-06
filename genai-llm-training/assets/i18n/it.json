@@ -155,5 +155,13 @@
   "path.hero.eyebrow": "Corso interattivo",
   "path.hero.stat.modules": "moduli",
   "path.hero.stat.paths": "percorsi",
-  "path.hero.stat.time": "corso completo"
+  "path.hero.stat.time": "corso completo",
+  "path.card.role.S1": "Introduzione senza codice",
+  "path.card.role.S2": "Percorso pratico principale",
+  "path.card.role.S3": "Percorso tecnico completo",
+  "path.card.role.S4": "Autodiagnosi maturità AI",
+  "module.eyebrow": "Modulo {moduleId} · {pillar}",
+  "module.hub.title": "I tuoi moduli",
+  "module.hub.progress.suffix": "moduli obbligatori completati",
+  "module.hub.progress.aria": "Completati {completed} di {total} moduli obbligatori"
 }

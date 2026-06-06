@@ -155,5 +155,13 @@
   "path.hero.eyebrow": "Interactive training",
   "path.hero.stat.modules": "modules",
   "path.hero.stat.paths": "paths",
-  "path.hero.stat.time": "full course"
+  "path.hero.stat.time": "full course",
+  "path.card.role.S1": "Introduction without code",
+  "path.card.role.S2": "Main practical path",
+  "path.card.role.S3": "Full technical path",
+  "path.card.role.S4": "AI maturity self-assessment",
+  "module.eyebrow": "Module {moduleId} · {pillar}",
+  "module.hub.title": "Your modules",
+  "module.hub.progress.suffix": "required modules completed",
+  "module.hub.progress.aria": "Completed {completed} of {total} required modules"
 }

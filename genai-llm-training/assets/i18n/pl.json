@@ -156,5 +156,13 @@
   "path.hero.eyebrow": "Interaktywne szkolenie",
   "path.hero.stat.modules": "modułów",
   "path.hero.stat.paths": "ścieżki",
-  "path.hero.stat.time": "pełny kurs"
+  "path.hero.stat.time": "pełny kurs",
+  "path.card.role.S1": "Wprowadzenie bez kodu",
+  "path.card.role.S2": "Główna ścieżka praktyczna",
+  "path.card.role.S3": "Pełna ścieżka techniczna",
+  "path.card.role.S4": "Autodiagnoza dojrzałości AI",
+  "module.eyebrow": "Moduł {moduleId} · {pillar}",
+  "module.hub.title": "Twoje moduły",
+  "module.hub.progress.suffix": "modułów wymaganych ukończonych",
+  "module.hub.progress.aria": "Ukończono {completed} z {total} modułów wymaganych"
 }
