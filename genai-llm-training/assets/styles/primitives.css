@@ -12,10 +12,10 @@
   display: inline-block;
   font-size: var(--fs-300);
   font-weight: var(--fw-bold);
-  letter-spacing: 0.14em;
+  letter-spacing: var(--ls-eyebrow);
   text-transform: uppercase;
   color: var(--color-accent);
-  margin: 0 0 0.6rem;
+  margin: 0 0 var(--sp-3);
 }
 
 /* ============================================================
@@ -26,7 +26,7 @@
 .hero__row {
   display: flex;
   flex-wrap: wrap;
-  gap: 1.4rem;
+  gap: var(--sp-6);
   margin-top: var(--sp-5);
 }
 
