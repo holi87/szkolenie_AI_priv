@@ -106,7 +106,7 @@
   "path.select.intro": "The path determines which modules are required, how many questions the final test has, and what the pass threshold is. You can change it later — each path's progress is saved separately.",
   "path.select.currentPath": "Current path: {pathId}",
   "path.badge.recommended": "Recommended",
-  "path.card.name": "{pathId} — {pathName}",
+  "path.card.name": "{pathName}",
   "path.card.meta.timeTestThreshold": "Time: {time} · Test: {questions} questions · Threshold: {threshold}%",
   "path.card.meta.modules": "Required modules: {required}/12 · optional: {optional}",
   "path.card.meta.practicalTasks": "Practical tasks: {tasks}",

@@ -1,8 +1,9 @@
-// theme.js — logika przełącznika motywu jasny/ciemny (issue #72, UX-3). Zero zależności (ADR-0002).
-// Kontrakt: [data-theme] na <html>; zapis wyboru w localStorage; przy pierwszym wejściu respekt dla
-// prefers-color-scheme. STORAGE MA PIERWSZEŃSTWO nad media (świadomy wybór > preferencja systemu).
-// Konserwatywnie: storage rzucający wyjątek (tryb prywatny) => brak crasha, fallback do prefers-color-scheme.
-// Domyślny motyw to ciemny (:root); dla spójności z anty-flash skryptem ustawiamy data-theme JAWNIE ("dark"/"light").
+// theme.js — logika przełącznika motywu jasny/ciemny (issue #72, UX-3; default dark M19 #158). Zero zależności (ADR-0002).
+// Kontrakt: [data-theme] na <html>; zapis wyboru w localStorage; przy pierwszym wejściu DOMYŚLNIE CIEMNY.
+// STORAGE MA PIERWSZEŃSTWO (świadomy wybór > domyślny). Decyzja właściciela M19: dark dla każdego (mockup jest
+// ciemny, redesign Deep Slate żyje w trybie ciemnym) — NIE czytamy prefers-color-scheme do ustalenia domyślnego.
+// Konserwatywnie: storage rzucający wyjątek (tryb prywatny) => brak crasha, fallback do ciemnego.
+// Spójne z anty-flash skryptem w index.html; ustawiamy data-theme JAWNIE ("dark"/"light").
 
 export const THEME_KEY = "genai-training:theme";
 const VALID = new Set(["dark", "light"]);
@@ -19,12 +20,6 @@ function safeSet(storage, key, value) {
 // zablokowany jako throwing getter) — dlatego czytamy go w try, nie tylko getItem/setItem (Codex P2).
 function safeStorage() {
   try { return globalThis.localStorage || null; } catch { return null; }
-}
-function prefersDark(matchMedia) {
-  try {
-    if (typeof matchMedia !== "function") return true; // brak matchMedia => zostań przy domyślnym ciemnym
-    return Boolean(matchMedia("(prefers-color-scheme: dark)").matches);
-  } catch { return true; }
 }
 function resolveRoot(root) {
   return root || (globalThis.document && globalThis.document.documentElement) || null;
@@ -45,15 +40,15 @@ export function currentTheme(root) {
 }
 
 /**
- * Inicjalizuje motyw: zapis (storage) ma priorytet; w jego braku prefers-color-scheme.
- * @param {object} [deps] { storage, matchMedia, root } — wstrzykiwalne do testów
+ * Inicjalizuje motyw: zapis (storage) ma priorytet; w jego braku DOMYŚLNIE CIEMNY (decyzja właściciela M19).
+ * Nie czytamy prefers-color-scheme — dark jest domyślny dla każdego; użytkownik zmienia toggle (zapis w storage).
+ * @param {object} [deps] { storage, root } — wstrzykiwalne do testów
  * @returns {"dark"|"light"} ustalony motyw
  */
 export function initTheme(deps = {}) {
   const storage = "storage" in deps ? deps.storage : safeStorage();
-  const mm = "matchMedia" in deps ? deps.matchMedia : globalThis.matchMedia;
   const saved = safeGet(storage, THEME_KEY);
-  const theme = VALID.has(saved) ? saved : (prefersDark(mm) ? "dark" : "light");
+  const theme = VALID.has(saved) ? saved : "dark";
   applyTheme(deps.root, theme);
   return theme;
 }

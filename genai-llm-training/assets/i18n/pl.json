@@ -107,7 +107,7 @@
   "path.select.intro": "Ścieżka określa, które moduły są obowiązkowe, ile pytań ma test końcowy i jaki jest próg zaliczenia. Możesz ją później zmienić — postęp każdej ścieżki zapisuje się osobno.",
   "path.select.currentPath": "Aktualna ścieżka: {pathId}",
   "path.badge.recommended": "Rekomendowana",
-  "path.card.name": "{pathId} — {pathName}",
+  "path.card.name": "{pathName}",
   "path.card.meta.timeTestThreshold": "Czas: {time} · Test: {questions} pytań · Próg: {threshold}%",
   "path.card.meta.modules": "Moduły wymagane: {required}/12 · opcjonalne: {optional}",
   "path.card.meta.practicalTasks": "Zadania praktyczne: {tasks}",

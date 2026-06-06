@@ -106,7 +106,7 @@
   "path.select.intro": "Der Pfad legt fest, welche Module verpflichtend sind, wie viele Fragen der Abschlusstest hat und wie hoch die Bestehensgrenze ist. Du kannst ihn später ändern — der Fortschritt jedes Pfads wird separat gespeichert.",
   "path.select.currentPath": "Aktueller Pfad: {pathId}",
   "path.badge.recommended": "Empfohlen",
-  "path.card.name": "{pathId} — {pathName}",
+  "path.card.name": "{pathName}",
   "path.card.meta.timeTestThreshold": "Dauer: {time} · Test: {questions} Fragen · Grenze: {threshold}%",
   "path.card.meta.modules": "Erforderliche Module: {required}/12 · optional: {optional}",
   "path.card.meta.practicalTasks": "Praktische Aufgaben: {tasks}",

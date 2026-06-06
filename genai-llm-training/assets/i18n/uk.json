@@ -106,7 +106,7 @@
   "path.select.intro": "Шлях визначає, які модулі є обов'язковими, скільки запитань має підсумковий тест і який поріг проходження. Ви можете змінити його пізніше — прогрес кожного шляху зберігається окремо.",
   "path.select.currentPath": "Поточний шлях: {pathId}",
   "path.badge.recommended": "Рекомендований",
-  "path.card.name": "{pathId} — {pathName}",
+  "path.card.name": "{pathName}",
   "path.card.meta.timeTestThreshold": "Час: {time} · Тест: {questions} запитань · Поріг: {threshold}%",
   "path.card.meta.modules": "Обов'язкові модулі: {required}/12 · додаткові: {optional}",
   "path.card.meta.practicalTasks": "Практичні завдання: {tasks}",

@@ -106,7 +106,7 @@
   "path.select.intro": "Le parcours détermine quels modules sont obligatoires, combien de questions comporte le test final et quel est le seuil de réussite. Vous pourrez le changer plus tard — la progression de chaque parcours est enregistrée séparément.",
   "path.select.currentPath": "Parcours actuel : {pathId}",
   "path.badge.recommended": "Recommandé",
-  "path.card.name": "{pathId} — {pathName}",
+  "path.card.name": "{pathName}",
   "path.card.meta.timeTestThreshold": "Durée : {time} · Test : {questions} questions · Seuil : {threshold}%",
   "path.card.meta.modules": "Modules obligatoires : {required}/12 · facultatifs : {optional}",
   "path.card.meta.practicalTasks": "Tâches pratiques : {tasks}",
