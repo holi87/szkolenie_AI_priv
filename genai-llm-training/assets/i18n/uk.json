@@ -19,7 +19,7 @@
   "action.checkAnswer": "Перевірити відповідь",
   "action.markCompleted": "Позначити модуль як завершений",
   "action.backToModules": "Повернутися до модулів",
-  "action.resetConfirm": "Скинути весь прогрес цього браузера? Цю дію не можна скасувати.",
+  "action.resetConfirm": "Скинути прогрес цього модуля? Прогрес інших модулів буде збережено.",
   "action.exportJson": "Завантажити результат (JSON)",
   "action.exportCsv": "Завантажити результат (CSV)",
   "action.exportQuestionStatsCsv": "Завантажити відповіді на запитання (CSV)",
@@ -150,7 +150,7 @@
   "chrome.title": "Навчання GenAI та LLM — QualityCat",
   "chrome.theme.label": "Тема",
   "chrome.theme.toggle": "Перемкнути світлу/темну тему",
-  "chrome.reset": "Почати спочатку",
+  "chrome.backToStart": "На початок",
   "chrome.nav.aria": "Модулі навчання",
   "chrome.metaDescription": "Інтерактивне навчання з GenAI та LLM: шляхи S1/S2/S3, квізи, підсумковий тест, результат.",
   "chrome.footer.note": "Статичне навчання (GitHub Pages). Прогрес зберігаємо локально в цьому браузері; нічого не надсилаємо на сервер, без cookies.",
@@ -166,5 +166,6 @@
   "module.eyebrow": "Модуль {moduleId} · {pillar}",
   "module.hub.title": "Ваші модулі",
   "module.hub.progress.suffix": "обов'язкових модулів завершено",
-  "module.hub.progress.aria": "Завершено {completed} з {total} обов'язкових модулів"
+  "module.hub.progress.aria": "Завершено {completed} з {total} обов'язкових модулів",
+  "module.reset": "Скинути прогрес модуля"
 }

@@ -227,13 +227,21 @@ export function createProgressStore(adapter, opts = {}) {
     },
     getLastLocation: () => ({ ...cursor }),
 
-    /** Reset progresu: aktywnej ścieżki lub (all=true) wszystkich ścieżek + kursora. */
-    reset({ all = false } = {}) {
+    /** Reset progresu: pojedynczego modułu (module=id) aktywnej ścieżki, całej aktywnej ścieżki,
+        lub (all=true) wszystkich ścieżek + kursora. Reset modułu (M20 #166) kasuje WYŁĄCZNIE wpis
+        modułu (status/quiz/% inline/czas/interakcje) — nie rusza practicalTasks/finalTest/innych
+        modułów, więc z modułu 1 można iść w 2 bez resetu całości. */
+    reset({ all = false, module = null } = {}) {
       if (all) {
         for (const k of adapter.keys().filter((x) => x.startsWith(`${PREFIX}:`))) adapter.remove(k);
         cursor = { pathId: null, moduleId: null, screen: null };
         activePath = null;
         progress = null;
+        return;
+      }
+      if (module) {
+        ensureActive();
+        if (progress.modules[module]) { delete progress.modules[module]; persist(); }
         return;
       }
       ensureActive();

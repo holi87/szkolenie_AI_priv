@@ -19,7 +19,7 @@
   "action.checkAnswer": "Kiểm tra câu trả lời",
   "action.markCompleted": "Đánh dấu mô-đun đã hoàn thành",
   "action.backToModules": "Quay lại danh sách mô-đun",
-  "action.resetConfirm": "Đặt lại toàn bộ tiến độ trong trình duyệt này? Không thể hoàn tác thao tác này.",
+  "action.resetConfirm": "Đặt lại tiến độ của mô-đun này? Tiến độ của các mô-đun khác sẽ được giữ lại.",
   "action.exportJson": "Tải kết quả (JSON)",
   "action.exportCsv": "Tải kết quả (CSV)",
   "action.exportQuestionStatsCsv": "Tải câu trả lời các câu hỏi (CSV)",
@@ -150,7 +150,7 @@
   "chrome.title": "Khóa đào tạo GenAI và LLM — QualityCat",
   "chrome.theme.label": "Giao diện",
   "chrome.theme.toggle": "Chuyển giao diện sáng/tối",
-  "chrome.reset": "Bắt đầu lại",
+  "chrome.backToStart": "Về đầu",
   "chrome.nav.aria": "Các mô-đun đào tạo",
   "chrome.metaDescription": "Khóa đào tạo GenAI và LLM tương tác: các lộ trình S1/S2/S3, quiz, bài kiểm tra cuối, kết quả.",
   "chrome.footer.note": "Khóa đào tạo tĩnh (GitHub Pages). Tiến độ được lưu cục bộ trong trình duyệt này; chúng tôi không gửi gì lên máy chủ, không dùng cookie.",
@@ -166,5 +166,6 @@
   "module.eyebrow": "Mô-đun {moduleId} · {pillar}",
   "module.hub.title": "Các mô-đun của bạn",
   "module.hub.progress.suffix": "mô-đun bắt buộc đã hoàn thành",
-  "module.hub.progress.aria": "Đã hoàn thành {completed} trong {total} mô-đun bắt buộc"
+  "module.hub.progress.aria": "Đã hoàn thành {completed} trong {total} mô-đun bắt buộc",
+  "module.reset": "Đặt lại tiến độ mô-đun"
 }

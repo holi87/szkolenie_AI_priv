@@ -62,7 +62,7 @@ function makeRefs() {
   const d = globalThis.document;
   const e = () => d.createElement("div");
   return {
-    pathIndicator: e(), navToggle: e(), resetBtn: e(),
+    pathIndicator: e(), navToggle: e(), backBtn: e(),
   };
 }
 

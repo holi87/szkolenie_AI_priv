@@ -59,16 +59,31 @@ function pathCard(pathsData, modulesData, pathId, onSelect) {
   ]);
 }
 
+/** Czas „pełnego kursu" = górna granica NAJDŁUŻSZEJ ścieżki, derywowana z assumedPathTime (np. „9-10 h (A4)" → 10).
+    Wcześniej zahardkodowane „~6 h" zaniżało (najdłuższa ścieżka S3 ≈ 9-10 h, nie 6 h) — niespójność zgłoszona przez
+    właściciela (M20 #167). Strip nawiasów „(A4)" przed parsowaniem; fallback „~6 h" gdy brak danych. */
+function fullCourseTime(pathsData) {
+  let maxH = 0;
+  for (const id of PATH_IDS) {
+    try {
+      const s = String(getPath(pathsData, id).assumedPathTime || "").replace(/\([^)]*\)/g, "");
+      const nums = s.match(/\d+(?:[.,]\d+)?/g);
+      if (nums) for (const n of nums) maxH = Math.max(maxH, parseFloat(n.replace(",", ".")));
+    } catch { /* ścieżka bez czasu — pomiń */ }
+  }
+  return maxH > 0 ? `~${Number.isInteger(maxH) ? maxH : maxH.toFixed(1)} h` : "~6 h";
+}
+
 /** Pasek statystyk (stats-strip) — hero__row z trzema liczbami (moduły / ścieżki / czas).
-    Liczby derywowane z danych (PATH_IDS.length, MODULE_COUNT), nie hardkodowane.
+    Liczby derywowane z danych (PATH_IDS.length, MODULE_COUNT, max assumedPathTime), nie hardkodowane.
     Etykiety przez t() dla i18n. Klasy: hero__row / hero__stat (makieta 01 floor). */
-function heroStats(modulesData) {
+function heroStats(pathsData, modulesData) {
   const moduleCount = modulesData && modulesData.modules ? modulesData.modules.length : 12;
   const pathCount = PATH_IDS.length;
   const stats = [
-    { value: String(moduleCount), label: t("path.hero.stat.modules") },
-    { value: String(pathCount),   label: t("path.hero.stat.paths") },
-    { value: "~6 h",              label: t("path.hero.stat.time") },
+    { value: String(moduleCount),     label: t("path.hero.stat.modules") },
+    { value: String(pathCount),       label: t("path.hero.stat.paths") },
+    { value: fullCourseTime(pathsData), label: t("path.hero.stat.time") },
   ];
   return el("div", { class: "hero__row" },
     stats.map((s) => el("span", { class: "hero__stat" }, [
@@ -81,7 +96,7 @@ function heroStats(modulesData) {
 /** Sekcja hero — pierwsze wrażenie. Tytuł z gradientowym akcentem na słowie kluczowym (fallback solid color w CSS).
     Szablon z placeholderem {accent} rozbity tak, by akcent został w <span> (styl), a kolejność słów była tłumaczalna.
     Eyebrow (klasa .eyebrow) nad tytułem — prymityw wizualny (STAGE A, #139). */
-function hero(modulesData) {
+function hero(pathsData, modulesData) {
   const [before, after = ""] = t("path.hero.title.template").split("{accent}");
   return el("section", { class: "hero" }, [
     el("p", { class: "eyebrow", text: t("path.hero.eyebrow") }),
@@ -91,7 +106,7 @@ function hero(modulesData) {
       after || null,
     ]),
     el("p", { class: "hero__lead", text: t("path.hero.lead") }),
-    heroStats(modulesData),
+    heroStats(pathsData, modulesData),
   ]);
 }
 
@@ -102,7 +117,7 @@ export function renderPathSelect(pathsData, modulesData, opts = {}) {
   // view__content--full: zdejmuje cap 70ch (max-width:none), żeby hero + siatka kart wypełniły szerokość
   // widoku (jak makieta 01). Bez tego treść wciska się w lewy ~620px słup, prawy bok pusty (M19 #159).
   const root = el("div", { class: "view__content view__content--full" });
-  root.appendChild(hero(modulesData));
+  root.appendChild(hero(pathsData, modulesData));
 
   // Section-head: eyebrow (krok) + h2 w jednym wierszu (wzorzec makiety 01 .section-head).
   // Eyebrow „Wybierz ścieżkę" zamiast „Krok 1 z 5" — nie hardkodujemy numeracji kroków (sekwencja nieokreślona w danych).

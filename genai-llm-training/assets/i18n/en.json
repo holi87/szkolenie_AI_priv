@@ -19,7 +19,7 @@
   "action.checkAnswer": "Check answer",
   "action.markCompleted": "Mark module as completed",
   "action.backToModules": "Back to modules",
-  "action.resetConfirm": "Reset all progress in this browser? This action cannot be undone.",
+  "action.resetConfirm": "Reset this module's progress? Progress in other modules will be kept.",
   "action.exportJson": "Download result (JSON)",
   "action.exportCsv": "Download result (CSV)",
   "action.exportQuestionStatsCsv": "Download question answers (CSV)",
@@ -150,7 +150,7 @@
   "chrome.title": "GenAI & LLM Training — QualityCat",
   "chrome.theme.label": "Theme",
   "chrome.theme.toggle": "Toggle light/dark theme",
-  "chrome.reset": "Start over",
+  "chrome.backToStart": "Back to start",
   "chrome.nav.aria": "Training modules",
   "chrome.metaDescription": "Interactive GenAI & LLM training: S1/S2/S3 paths, quizzes, final test, result.",
   "chrome.footer.note": "Static training (GitHub Pages). Progress is saved locally in your browser; nothing is sent to a server, no cookies.",
@@ -166,5 +166,6 @@
   "module.eyebrow": "Module {moduleId} · {pillar}",
   "module.hub.title": "Your modules",
   "module.hub.progress.suffix": "required modules completed",
-  "module.hub.progress.aria": "Completed {completed} of {total} required modules"
+  "module.hub.progress.aria": "Completed {completed} of {total} required modules",
+  "module.reset": "Reset module progress"
 }

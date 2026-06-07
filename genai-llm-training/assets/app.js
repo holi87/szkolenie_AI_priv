@@ -50,7 +50,7 @@ function start(initialData, ctx = {}) {
   let dataLocale = ctx.dataLocale || "pl";
   const store = makeStore();
   const refs = {
-    view: $("view"), nav: $("module-nav"), navToggle: $("nav-toggle"), resetBtn: $("reset-btn"),
+    view: $("view"), nav: $("module-nav"), navToggle: $("nav-toggle"), backBtn: $("back-btn"),
     pathIndicator: $("path-indicator"),
     themeToggle: $("theme-toggle"),
     langWrap: $("lang-switch"), langBtn: $("lang-switch-btn"), langLabel: $("lang-switch-label"), langFlag: $("lang-switch-flag"),
@@ -68,7 +68,7 @@ function start(initialData, ctx = {}) {
     set(refs.brandName, t("chrome.brand"));
     set(refs.themeLabel, t("chrome.theme.label"));
     set(refs.navToggle, t("nav.heading.modules"));
-    set(refs.resetBtn, t("chrome.reset"));
+    set(refs.backBtn, t("chrome.backToStart"));
     if (globalThis.document) globalThis.document.title = t("chrome.title");
     if (refs.themeToggle) { refs.themeToggle.setAttribute("aria-label", t("chrome.theme.toggle")); refs.themeToggle.setAttribute("title", t("chrome.theme.toggle")); }
     if (refs.nav) refs.nav.setAttribute("aria-label", t("chrome.nav.aria"));
@@ -177,7 +177,7 @@ function start(initialData, ctx = {}) {
   function showPathSelect() {
     flushModuleTime();
     refs.pathIndicator.hidden = true; refs.nav.hidden = true;
-    refs.navToggle.hidden = true; refs.resetBtn.hidden = true;
+    refs.navToggle.hidden = true; refs.backBtn.hidden = true;
     mount(refs.view, renderPathSelect(data.paths, data.modules, {
       currentPath: store.getActivePath(),
       onSelect: (pathId) => {
@@ -368,6 +368,19 @@ function start(initialData, ctx = {}) {
       ]),
       el("div", { class: "btn-row" }, [completeBtn, el("button", { class: "btn btn--ghost", type: "button", text: t("action.backToModules"), on: { click: () => { showMenu(); focusView(); } } })]),
     ]));
+
+    // Reset postępu TEGO modułu (M20 #166): kasuje status/quiz/% inline/czas tylko tego modułu, zachowuje resztę
+    // ścieżki. Subtelny, oddzielony separatorem od głównych akcji (destrukcyjny → confirm, daleko od „Ukończ").
+    root.appendChild(el("div", { class: "module-reset" }, [
+      el("button", { class: "btn btn--ghost module-reset__btn", type: "button", text: t("module.reset"),
+        on: { click: () => {
+          if (globalThis.confirm(t("action.resetConfirm"))) {
+            timer.moduleId = null; timer.enterMs = 0; // porzuć licznik bieżącego modułu — reset czyści jego czas
+            store.reset({ module: moduleId });
+            showModule(moduleId); refreshHeaderAndNav(); focusView(); // przerysuj moduł w stanie wyczyszczonym
+          }
+        } } }),
+    ]));
     mount(refs.view, root);
     focusView();
   }
@@ -464,14 +477,10 @@ function start(initialData, ctx = {}) {
   }
 
   // ----- Globalne kontrolki -----
-  refs.resetBtn.addEventListener("click", () => {
-    if (globalThis.confirm(t("action.resetConfirm"))) {
-      timer.moduleId = null; timer.enterMs = 0; // porzuć licznik — reset i tak czyści progres
-      store.reset({ all: true });
-      state.screen = "menu"; state.moduleId = null; state.result = null; state.test = null;
-      render();
-    }
-  });
+  // „Wróć na start" (M20 #166): NAWIGACJA na ekran wyboru ścieżki — BEZ resetu, BEZ confirm. Postęp zachowany
+  // (per-ścieżka w store). Reset postępu przeniesiony na poziom modułu (przycisk w widoku modułu) — z modułu 1
+  // można iść w 2 bez kasowania całości. „Moduły" (navToggle) dalej wraca do hubu aktywnej ścieżki.
+  refs.backBtn.addEventListener("click", () => { showPathSelect(); focusView(); });
   // „Moduły" w headerze = POWRÓT DO HUBU. Wybór modułów to dedykowany ekran (#88), nie przełączanie szyny.
   refs.navToggle.addEventListener("click", () => { showMenu(); focusView(); });
 
