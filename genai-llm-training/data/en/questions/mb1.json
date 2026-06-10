@@ -1,0 +1,155 @@
+{
+  "_meta": {
+    "module": "MB1",
+    "issue": "#171 Rebuild ścieżek — bank pytań P2 „Bezpieczne używanie AI”, moduł MB1 (mapa ryzyk AI)",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo, Jan Syntetyczny, identyfikatory testowe). ZERO realnych danych/PII.",
+    "note": "Pytania modułu MB1 (Q117-Q122), pula dedykowana ścieżki P2. Bez pytań krytycznych. Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q117",
+      "module": "MB1",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "The participant explains what an AI hallucination is and why it sounds credible.",
+      "prompt": "What is a “hallucination” in the answers of AI tools?",
+      "options": [
+        { "id": "A", "text": "A technical error after which the tool stops responding and has to be restarted." },
+        { "id": "B", "text": "A confident-sounding answer containing made-up facts, sources, or numbers that do not exist." },
+        { "id": "C", "text": "A situation in which the AI refuses to answer the user’s question." },
+        { "id": "D", "text": "A deliberate lie programmed by the tool’s vendor." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Yes. A hallucination is a made-up answer delivered in a confident tone and correct language. It is exactly that credible form that makes it easy to mistake for the truth.",
+      "feedbackIncorrect": "A hallucination is not a malfunction, a refusal, or a deliberate lie by the vendor. It is fabricated content (facts, sources, numbers) that the model presents just as confidently as real content. Go back to the section on hallucinations in MB1.",
+      "references": ["MB1.1"]
+    },
+    {
+      "id": "Q118",
+      "module": "MB1",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "The participant identifies the main risks of everyday use of public AI tools.",
+      "prompt": "Which of the following are real risks of everyday use of a public AI chat at work? Select all that apply.",
+      "options": [
+        { "id": "A", "text": "Pasted company data can leave the company and end up beyond its control." },
+        { "id": "B", "text": "The AI tool can break into the company network on its own after being asked a question." },
+        { "id": "C", "text": "The answer may contain made-up information that we pass on uncritically." },
+        { "id": "D", "text": "Every use of AI automatically breaks the law, regardless of the content of the question." }
+      ],
+      "correct": ["A", "C"],
+      "feedbackCorrect": "Exactly: two everyday risks are pasted data leaking outside the company and hallucinations that we uncritically repeat. Both depend on what and how we paste, and whether we check the answer.",
+      "feedbackIncorrect": "The real risks are a leak of pasted data (A) and repeating fabricated content (C). An AI chat does not break into the network just because you ask it a question, and using AI by itself does not break the law. Review the risk map in MB1.",
+      "references": ["MB1.1", "MB1.2"]
+    },
+    {
+      "id": "Q119",
+      "module": "MB1",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "The participant recognizes symptoms of excessive trust in AI tools in everyday work.",
+      "prompt": "Which behavior is a symptom of excessive trust in AI?",
+      "options": [
+        { "id": "A", "text": "Comparing the AI answer with company documentation before using it." },
+        { "id": "B", "text": "Asking the AI to justify its answer and checking the sources it provides." },
+        { "id": "C", "text": "Treating AI as a helper for a draft that we then improve ourselves." },
+        { "id": "D", "text": "Passing AI answers on without checking, because “AI doesn’t make mistakes anyway”." }
+      ],
+      "correct": ["D"],
+      "feedbackCorrect": "Yes. Excessive trust means giving up your own verification. The assumption that AI never makes mistakes is false: the model can be confident and wrong at the same time.",
+      "feedbackIncorrect": "Comparing with documentation, checking sources, and improving a draft yourself are healthy habits. The symptom of excessive trust is passing an answer on without any verification. Review the section on excessive trust.",
+      "references": ["MB1.4"]
+    },
+    {
+      "id": "Q120",
+      "module": "MB1",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant applies the rule of verifying AI content before sending it to a customer.",
+      "prompt": "John Synthetic from the SklepDemo sales team generated a customer reply in an AI chat describing product parameters and wants to send it right away because it “sounds professional”. You know the AI had no access to the current offer. What do you advise him?",
+      "options": [
+        { "id": "A", "text": "Before sending, he should compare every parameter with the current product sheet, because the AI may have made up details it did not know." },
+        { "id": "B", "text": "He should send it. The professional tone of the answer proves the content is correct." },
+        { "id": "C", "text": "He should ask the AI in the same chat whether it is sure of its answer, and send it if it confirms." },
+        { "id": "D", "text": "He should generate the answer again. If the second version is similar, that means it is true." }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Yes. Since the AI did not know the current offer, the parameters may be made up. The only reliable verification is comparing against the company’s source of truth, that is the product sheet.",
+      "feedbackIncorrect": "A professional tone does not prove correctness, and asking the AI “are you sure” or regenerating the answer is still the same unreliable machine. Compare customer-facing content with the company source (the product sheet) before sending.",
+      "references": ["MB1.1", "MB1.4"]
+    },
+    {
+      "id": "Q121",
+      "module": "MB1",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant reacts correctly when AI provides a made-up source or legal provision.",
+      "prompt": "You are preparing an internal note in NotkaApp. An AI chat gave you the text of a “legal provision” with an article number and a confident justification, but you cannot find such an article in the official legal database. What do you do?",
+      "options": [
+        { "id": "A", "text": "I quote the provision from the AI answer. The article number and confident tone are enough as confirmation." },
+        { "id": "B", "text": "I quote the provision but add “source: AI” to the note, to shift the responsibility onto the tool." },
+        { "id": "C", "text": "I assume the provision may be a hallucination, I do not quote it, and I base the note on content found in an official source or confirmed by a competent person." },
+        { "id": "D", "text": "I ask the AI for a link to the provision and quote it if any link appears." }
+      ],
+      "correct": ["C"],
+      "feedbackCorrect": "Yes. Since the official source does not confirm the provision exists, it is most likely a hallucination. Only content confirmed in a reliable source or by a competent person goes into the note.",
+      "feedbackIncorrect": "An article number, a confident tone, a “source: AI” note, or a generated link confirm nothing. AI can make up links too. If the official source does not know the provision, do not quote it. Review the section on hallucinations and verification.",
+      "references": ["MB1.1", "MB1.4"]
+    },
+    {
+      "id": "Q122",
+      "module": "MB1",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant evaluates a situation where different AI risks combine, and chooses a response that mitigates all of them.",
+      "prompt": "Anna Sample from HR brags that a new public AI assistant “knows the company better than the intranet”: she pasted the internal policy handbook and the employee list into it, and now asks it about HR matters every day and applies the answers without checking. Which summary of the situation is the most accurate?",
+      "options": [
+        { "id": "A", "text": "The situation is safe, because the assistant answers accurately and everyone in the company knows the HR data anyway." },
+        { "id": "B", "text": "The only problem is answer quality. It is enough for Anna to check the content, and she can keep pasting documents." },
+        { "id": "C", "text": "The only problem is the pasted documents. The answers of an assistant that “knows the company” can now be trusted without checking." },
+        { "id": "D", "text": "Two risks overlap here: employee data and internal documents have leaked into a public tool, and answers applied without verification may contain hallucinations. This practice must be stopped and the leak reported according to the company procedure." }
+      ],
+      "correct": ["D"],
+      "feedbackCorrect": "Yes. These are two independent risks at once: a leak of personal data and internal documents, and excessive trust in unchecked answers. The response must cover both: stopping the practice and reporting the leak.",
+      "feedbackIncorrect": "Incomplete assessment. The problem is both the leak (employee list and policy handbook in a public tool) and excessive trust (applying answers without checking). Fixing only one of them is not enough. Review the risk map in MB1.",
+      "references": ["MB1.2", "MB1.3", "MB1.4"]
+    }
+  ]
+}

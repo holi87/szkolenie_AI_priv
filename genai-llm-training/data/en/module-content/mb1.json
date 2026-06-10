@@ -1,0 +1,102 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P2 Bezpieczne używanie AI",
+    "interaction": "Klasyfikacja sytuacji (kind: classify) — odróżnianie ryzyk AI od bezpiecznych praktyk w codziennej pracy",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp, SklepDemo, Jan Syntetyczny, domeny @przyklad.test). Zero realnych danych, PII, numerów i sekretów."
+  },
+  "module": "MB1",
+  "intro": "AI can genuinely speed up your work — but it has its traps too: it makes things up in a confident tone, it is easy to trust it too much, and you can accidentally paste data into a chat that should never leave the company. This module is a map of the most important risks: you will meet them one by one, so that in the following modules you know exactly what to watch out for.",
+  "screens": [
+    {
+      "id": "mb1-s1-halucynacje",
+      "title": "Hallucinations: a confident tone is not proof of truth",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "A language model does not check facts — it predicts which words best fit your question. That is why it can give you a made-up date, a nonexistent regulation, or an invented product name, and it will do so in the same confident tone it uses for true things. We call this phenomenon a hallucination." },
+        { "kind": "definition", "term": "Hallucination", "text": "An AI answer that sounds credible and is delivered with full conviction, but is partly or completely untrue. The model does not “lie” on purpose — it simply does not distinguish what it knows from what sounds good." },
+        { "kind": "callout", "variant": "warn", "title": "The most important rule of this course", "text": "The confident tone of an answer says nothing about its truthfulness. The more important the decision based on an AI answer, the more thoroughly you must verify it — module MB6 is entirely about how to do that." }
+      ]
+    },
+    {
+      "id": "mb1-s2-nadmierne-zaufanie",
+      "title": "Manipulation and excessive trust",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "AI is polite, fast, and always has an answer — which makes it easy to start treating it like an infallible expert. On top of that, the model tends to agree with you: if you suggest the answer in your question, it will often confirm it instead of correcting it. And on the other side there are people who use AI to create convincing, false content." },
+        { "kind": "list", "items": [
+          "The authority effect — a fluent, eloquent answer looks expert, even when it is wrong.",
+          "Agreeableness — the model readily agrees with an assumption hidden in your question (“isn’t it true that X?”).",
+          "Manipulation at scale — AI makes it possible to create fake e-mails, reviews, and articles cheaply and en masse.",
+          "Lulled vigilance — after ten good answers you stop checking the eleventh."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "A healthy mindset", "text": "Treat AI like a bright but inexperienced intern: it will prepare a great draft and suggest ideas, but the final responsibility for the result is yours. Module MB5 develops this rule further." }
+      ]
+    },
+    {
+      "id": "mb1-s3-wycieki-danych",
+      "title": "Data leaks through chats",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Everything you type into a public AI chat leaves your computer and lands on the provider’s servers. Depending on the terms of service, it may be stored, reviewed by humans, or used to train future models. Pasting customer data or a confidential document there is a potential leak — even if nothing bad happens right away." },
+        { "kind": "table", "headers": ["What you paste", "What can happen"], "rows": [
+          ["A customer’s personal data (e.g., “John Synthetic, jan@przyklad.test”)", "A privacy and GDPR violation — the data has left the company"],
+          ["A confidential company document (price list, strategy, contract)", "A breach of company secrets or an NDA with a client"],
+          ["A password, key, or token from a system", "Anyone who gains access to this data can enter the system"],
+          ["A general question without company data", "Nothing — this is safe use of a public chat"]
+        ], "textAlt": "The table shows the consequences of pasting different content into a public chat: personal data risks a GDPR violation, confidential documents risk breaching company secrets, passwords risk a system takeover, and general questions without company data are safe." },
+        { "kind": "callout", "variant": "safe", "title": "A simple filter before pasting", "text": "Before you paste anything, ask yourself: “Could I pin this same thing to a notice board in a shopping mall?”. If not — do not paste it, or remove the sensitive parts first. You will learn the details in module MB2." }
+      ]
+    },
+    {
+      "id": "mb1-s4-mapa",
+      "title": "Where AI helps and where it harms",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "The risk depends on the task. AI shines where you can easily judge the result with your own eyes: drafts, summaries, brainstorming, polishing style. It becomes dangerous where an error is costly and you have no way to catch it: facts, numbers, law, health, decisions about people." },
+        { "kind": "table", "headers": ["Task", "Risk", "Why"], "rows": [
+          ["An e-mail draft, a note summary, ideas", "Low", "You can see for yourself whether the result makes sense — easy verification"],
+          ["Translating or polishing your own text", "Low–medium", "You know the content, but nuances can get lost"],
+          ["Facts, dates, numbers, regulations, health advice", "High", "Hallucinations sound identical to the truth"],
+          ["Decisions about people (reviews, recruitment, complaints)", "High", "A model error or bias affects a real person"]
+        ], "textAlt": "AI task risk table: drafts and summaries are low risk because they are easy to verify; translations low to medium; facts, numbers, and health advice high because hallucinations sound like the truth; decisions about people high because an error affects a real person." },
+        { "kind": "paragraph", "text": "We will expand this map in the following modules: sensitive data (MB2), attacks through content (MB3), deepfakes and scams (MB4), company rules (MB5), and verifying answers (MB6). For now, check whether you recognize a risk when you see one." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "mb1-classify",
+    "title": "Risk or safe practice?",
+    "intro": "Read each situation and decide: is it an AI risk or a safe practice? The feedback will explain why.",
+    "categories": [
+      { "id": "risk", "label": "AI risk", "desc": "A situation that can end in an error, a leak, or harm." },
+      { "id": "safe", "label": "Safe practice", "desc": "Sensible use of AI while keeping control and caution." }
+    ],
+    "items": [
+      { "id": "mb1-i1", "text": "You copy an AI answer with dates and numbers straight into a report for the board, because it sounded very confident.", "correctCategory": "risk", "rationale": "A confident tone is not proof of truth — facts and numbers from AI require verification before use." },
+      { "id": "mb1-i2", "text": "You ask AI for three suggestions for a presentation title, then choose and improve the best one yourself.", "correctCategory": "safe", "rationale": "Brainstorming is low risk — you judge the result with your own eyes and keep control." },
+      { "id": "mb1-i3", "text": "You paste a customer’s full complaint into a public chat, including their first name, last name, and e-mail address.", "correctCategory": "risk", "rationale": "The customer’s personal data has left the company — a potential leak and a GDPR violation." },
+      { "id": "mb1-i4", "text": "Before pasting a fragment of a ticket, you remove the customer’s name and address, leaving only the problem description.", "correctCategory": "safe", "rationale": "Anonymization before pasting is basic hygiene when working with AI chats." },
+      { "id": "mb1-i5", "text": "You ask AI: “Isn’t it true that our competitor SklepDemo went bankrupt?” and take the confirmation as fact.", "correctCategory": "risk", "rationale": "The model tends to agree with the assumption in your question — confirmation is not verification." },
+      { "id": "mb1-i6", "text": "AI summarized a long document for you — before passing the summary on, you compare the key points with the original.", "correctCategory": "safe", "rationale": "A summary plus a quick check against the original is exemplary, safe use of AI." },
+      { "id": "mb1-i7", "text": "After a month of accurate answers you stop checking anything — “this model hasn’t been wrong yet”.", "correctCategory": "risk", "rationale": "Lulled vigilance is the classic trap of excessive trust — a hallucination will arrive without warning." },
+      { "id": "mb1-i8", "text": "You do not take advice about a client contract from a chat; you consult the legal team instead.", "correctCategory": "safe", "rationale": "Law is a high-risk area — the decision is made by a person with the right competence." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "AI predicts words, it does not check facts — a confident tone does not mean the answer is true.",
+      "Excessive trust grows quietly: the longer AI performs well, the easier it is to miss its error.",
+      "Everything you paste into a public chat leaves the company — keep personal data and confidential content out of the chat.",
+      "Risk depends on the task: drafts and ideas are safe; facts, law, health, and decisions about people require a human."
+    ],
+    "checklist": [
+      "Do I know that a hallucination sounds just as confident as the truth?",
+      "Do I verify AI answers more thoroughly the more important the decision?",
+      "Before pasting anything into a chat, do I check it for personal or confidential data?",
+      "Can I point out the tasks where AI helps me and the ones where it can harm me?"
+    ],
+    "checklistTitle": "Checklist — the AI risk map",
+    "nextStep": "Next step: module MB2 — you will learn to precisely recognize sensitive data and prepare content so it can safely be pasted into a chat."
+  }
+}

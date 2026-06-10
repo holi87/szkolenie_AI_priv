@@ -1,0 +1,155 @@
+{
+  "_meta": {
+    "module": "MB4",
+    "issue": "#171 Rebuild ścieżek — bank pytań P2 (VI), moduł MB4 (deepfake, scam i dezinformacja)",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE. ZERO realnych danych/PII.",
+    "note": "Tłumaczenie VI kanonu PL. Pola scoringowe identyczne z PL."
+  },
+  "questions": [
+    {
+      "id": "Q135",
+      "module": "MB4",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Người học hiểu deepfake là gì và vì sao bản ghi không còn tự nó là bằng chứng.",
+      "prompt": "Deepfake là gì?",
+      "options": [
+        { "id": "A", "text": "Bất kỳ video nào được đăng ẩn danh trên mạng." },
+        { "id": "B", "text": "Bộ lọc làm đẹp trong các ứng dụng mạng xã hội." },
+        { "id": "C", "text": "Bản ghi hình hoặc giọng nói do AI tạo ra hoặc chỉnh sửa, giả mạo một người thật một cách chân thực." },
+        { "id": "D", "text": "Tin đồn được gửi qua email mà không có bất kỳ tư liệu âm thanh hay video nào." }
+      ],
+      "correct": ["C"],
+      "feedbackCorrect": "Deepfake là hình ảnh, video hoặc giọng nói tổng hợp bắt chước người thật. Khi giọng nói và khuôn mặt có thể bị làm giả, bản ghi không còn là bằng chứng — quan trọng là xác minh kênh liên lạc và bối cảnh.",
+      "feedbackIncorrect": "Deepfake là nội dung do AI tạo ra, giả mạo người thật một cách chân thực (giọng nói, khuôn mặt, video). Video ẩn danh, bộ lọc hay tin đồn không phải là hiện tượng này. Hãy xem lại phần về deepfake.",
+      "references": ["MB4.1"]
+    },
+    {
+      "id": "Q136",
+      "module": "MB4",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Người học liệt kê các dấu hiệu cảnh báo điển hình của lừa đảo có hỗ trợ AI.",
+      "prompt": "Những yếu tố nào trong một tin nhắn là dấu hiệu cảnh báo lừa đảo điển hình? Chọn tất cả đáp án đúng.",
+      "options": [
+        { "id": "A", "text": "Áp lực thời gian gay gắt: “bạn phải làm việc này trong vòng 10 phút”." },
+        { "id": "B", "text": "Yêu cầu đến trong giờ làm việc từ người bạn thường xuyên trao đổi." },
+        { "id": "C", "text": "Kênh liên lạc bất thường: “giám đốc” nhắn từ số riêng, yêu cầu chuyển tiền." },
+        { "id": "D", "text": "Tin nhắn chứa đầy đủ thông tin người gửi khớp với danh bạ công ty." }
+      ],
+      "correct": ["A", "C"],
+      "feedbackCorrect": "Áp lực thời gian và kênh bất thường là hai dấu hiệu kinh điển của thao túng tâm lý. Kẻ lừa đảo cô lập nạn nhân khỏi quy trình bình thường và ép vội vàng để vô hiệu hóa việc xác minh.",
+      "feedbackIncorrect": "Dấu hiệu cảnh báo là áp lực thời gian (A) và kênh liên lạc bất thường (C). Trao đổi bình thường trong giờ làm việc hay thông tin người gửi chính xác tự nó không đáng ngờ — dù chúng cũng không bảo đảm tính xác thực.",
+      "references": ["MB4.2"]
+    },
+    {
+      "id": "Q137",
+      "module": "MB4",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Người học áp dụng nguyên tắc kênh thứ hai khi nhận yêu cầu bất thường qua giọng nói.",
+      "prompt": "“Kế toán” của công ty SklepDemo gọi cho bạn. Giọng nghe giống cô ấy, nhưng cô ấy yêu cầu cung cấp gấp thông tin đăng nhập hệ thống hóa đơn vì “đang kiểm toán và hệ thống sắp bị khóa”. Bạn làm gì?",
+      "options": [
+        { "id": "A", "text": "Cung cấp thông tin — giọng nói khớp, và kiểm toán nghe có vẻ nghiêm trọng." },
+        { "id": "B", "text": "Ngắt máy và gọi lại cho kế toán theo số công ty quen thuộc của cô ấy để xác nhận yêu cầu; không bao giờ đọc thông tin đăng nhập qua điện thoại cho bất kỳ ai." },
+        { "id": "C", "text": "Chỉ cung cấp tên đăng nhập, còn mật khẩu gửi qua SMS — chia hai kênh sẽ an toàn hơn." },
+        { "id": "D", "text": "Đề nghị cô ấy gọi lại sau một giờ — nếu là kẻ lừa đảo, chắc chắn sẽ nản lòng." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Nguyên tắc kênh thứ hai: bạn cắt liên lạc do người kia khởi xướng và xác minh yêu cầu qua kênh do chính bạn chọn (số quen thuộc). Không đọc thông tin đăng nhập qua điện thoại cho bất kỳ ai — giọng nói có thể bị làm giả.",
+      "feedbackIncorrect": "Giọng nói không phải là bằng chứng danh tính — deepfake âm thanh nghe rất thuyết phục. Phản ứng an toàn duy nhất: ngắt máy và tự xác minh qua kênh quen thuộc do bạn chọn (B). Chia bí mật ra hai kênh hay hoãn cuộc gọi không bảo vệ được gì.",
+      "references": ["MB4.2", "MB4.3"]
+    },
+    {
+      "id": "Q138",
+      "module": "MB4",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Người học phản ứng đúng với video có thể là deepfake trước khi chuyển tiếp.",
+      "prompt": "Một người quen gửi cho bạn video trong đó một chính trị gia nổi tiếng tuyên bố rút toàn bộ tiền tiết kiệm khỏi ngân hàng, kèm lời nhắn: “chuyển tiếp đi, mọi người cần biết”. Video trông đáng tin. Bạn làm gì?",
+      "options": [
+        { "id": "A", "text": "Chuyển tiếp — thà cảnh báo trước còn hơn, nếu là giả thì cũng chẳng sao." },
+        { "id": "B", "text": "Chỉ chuyển cho gia đình, kèm ghi chú “không rõ thật hay không”." },
+        { "id": "C", "text": "Trả lời người quen rằng video trông đáng ngờ và hỏi nguồn, chờ anh ấy tự xác nhận." },
+        { "id": "D", "text": "Không chuyển tiếp; kiểm tra xem thông tin có được các nguồn độc lập, đáng tin xác nhận không (thông cáo chính thức, báo chí), và báo cáo video giả trên nền tảng." }
+      ],
+      "correct": ["D"],
+      "feedbackCorrect": "Nội dung giật gân khơi gợi cảm xúc mạnh kèm lời kêu gọi “chuyển tiếp đi” là khuôn mẫu của tin giả. Trước khi chia sẻ bất cứ gì: xác minh ở nguồn độc lập, còn nội dung giả thì báo cáo — không phát tán kể cả “kèm cảnh báo”.",
+      "feedbackIncorrect": "Chuyển tiếp — dù “kèm ghi chú” hay chỉ trong gia đình — vẫn tiếp sức cho tin giả, còn hỏi người quen về nguồn chẳng xác minh được gì (anh ấy cũng nhận từ chuỗi tin nhắn). Đúng: không chuyển tiếp, xác minh ở nguồn độc lập, báo cáo (D).",
+      "references": ["MB4.3", "MB4.4"]
+    },
+    {
+      "id": "Q139",
+      "module": "MB4",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Người học biết bước đầu tiên của quy trình sau khi nhận diện âm mưu lừa đảo tại nơi làm việc.",
+      "prompt": "Bạn nhận ra email yêu cầu chuyển khoản gấp có lẽ là trò lừa “giả danh giám đốc”. Bước đầu tiên đúng đắn là gì?",
+      "options": [
+        { "id": "A", "text": "Báo cáo tin nhắn cho bộ phận IT/an ninh theo quy trình công ty và không trả lời người gửi." },
+        { "id": "B", "text": "Trả lời kẻ lừa đảo để dạy cho hắn một bài học và xem hắn có thú nhận không." },
+        { "id": "C", "text": "Xóa email và không nói với ai — vấn đề biến mất cùng tin nhắn." },
+        { "id": "D", "text": "Chuyển tiếp email cho đồng nghiệp kèm cảnh báo trước khi báo cáo cho bất kỳ ai." }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Báo cáo theo quy trình giúp công ty chặn cuộc tấn công cả ở những người nhận khác. Bạn không trả lời người gửi (sẽ xác nhận địa chỉ còn hoạt động) và không xóa bằng chứng.",
+      "feedbackIncorrect": "Bước đầu tiên đúng là báo cáo cho IT/an ninh (A). Trả lời kẻ lừa đảo xác nhận địa chỉ còn hoạt động, xóa email là hủy bằng chứng và bỏ mặc người khác, còn tự gửi cảnh báo thường thiếu chính xác — đã có quy trình lo việc đó.",
+      "references": ["MB4.4"]
+    },
+    {
+      "id": "Q140",
+      "module": "MB4",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Người học phân tích cuộc tấn công đa kênh kết hợp deepfake với email và chọn cách phản ứng đầy đủ, đúng đắn.",
+      "prompt": "Tình huống: trước tiên bạn nhận email từ “giám đốc tài chính” về thương vụ thâu tóm bí mật công ty NotkaApp, một giờ sau “giọng nói” của ông ấy gọi đến yêu cầu thanh toán ngay hóa đơn cho nhà cung cấp mới. Email đã báo trước sẽ có cuộc gọi. Phân tích nào về tình huống là đúng?",
+      "options": [
+        { "id": "A", "text": "Email và cuộc gọi xác nhận lẫn nhau, vậy mệnh lệnh đáng tin — hai kênh là đủ để xác minh." },
+        { "id": "B", "text": "Đây là khuôn mẫu tấn công nhiều giai đoạn: cả hai kênh đều do kẻ tấn công khởi xướng, nên chúng chỉ “xác nhận” lẫn nhau. Tôi xác minh qua kênh do chính mình khởi xướng (số quen thuộc của giám đốc) và báo cáo sự cố." },
+        { "id": "C", "text": "Chỉ cần kiểm tra địa chỉ email có vẻ là của công ty không — nếu tên miền khớp, có thể thanh toán." },
+        { "id": "D", "text": "Vì việc này bí mật, tôi không được xác minh với ai — thực hiện mệnh lệnh và chờ thông báo chính thức." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Phân tích chính xác: việc email báo trước cuộc gọi là cách xây dựng lòng tin có chủ đích — hai kênh do kẻ tấn công kiểm soát không hề độc lập. Xác minh độc lập = kênh do BẠN khởi xướng; “tính bí mật” ép bạn bỏ xác minh chính là một phần của cuộc tấn công.",
+      "feedbackIncorrect": "Hai kênh do kẻ tấn công khởi xướng chỉ xác nhận lẫn nhau — đây là tấn công nhiều giai đoạn kinh điển, còn điều khoản “bí mật” nhằm cắt bạn khỏi việc xác minh. Tên miền khớp cũng có thể bị làm giả. Phân tích đúng: B.",
+      "references": ["MB4.2", "MB4.4"]
+    }
+  ]
+}

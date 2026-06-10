@@ -343,5 +343,137 @@
       "Erkennt, was Niveau 8 von 9 sowie 10 von 11 unterscheidet",
       "Unterscheidet eine gemessene, kalibrierte Entwicklung von einem falschen Gefühl der Reife"
     ]
+  },
+  "MB1": {
+    "name": "Risikokarte der KI",
+    "level": "Grundlagen",
+    "interactiveElement": "Klassifikation: Risiko oder sichere Praxis",
+    "keyConcepts": ["Halluzinationen", "übermäßiges Vertrauen", "Datenlecks", "Manipulation", "bewusste KI-Nutzung"],
+    "learningOutcomes": [
+      "Nennt die wichtigsten Risiken der alltäglichen KI-Nutzung",
+      "Erkennt, dass ein selbstsicherer Ton der Antwort keine Wahrheit bedeutet",
+      "Benennt Situationen, in denen KI hilft, und solche, in denen sie schadet"
+    ]
+  },
+  "MB2": {
+    "name": "Sensible Daten und Privatsphäre",
+    "level": "Grundlagen",
+    "interactiveElement": "Klassifikation: Was darf in den Chat eingefügt werden",
+    "keyConcepts": ["personenbezogene Daten (DSGVO)", "Datenminimierung", "Geheimnisse und Passwörter", "freigegebene Tools", "App-Berechtigungen"],
+    "learningOutcomes": [
+      "Erkennt personenbezogene und vertrauliche Daten in alltäglichen Inhalten",
+      "Anonymisiert Inhalte, bevor sie in ein KI-Tool eingefügt werden",
+      "Gibt keine Geheimnisse (Passwörter, Schlüssel, Tokens) in KI-Chats weiter"
+    ]
+  },
+  "MB3": {
+    "name": "Prompt Injection und Social Engineering",
+    "level": "Grundlagen/Mittel",
+    "interactiveElement": "Klassifikation: Angriff oder normale Anfrage",
+    "keyConcepts": ["prompt injection", "in Daten versteckte Anweisungen", "Identitätsvortäuschung", "Social Engineering", "Melden von Vorfällen"],
+    "learningOutcomes": [
+      "Erkennt Anweisungen, die in Inhalte eingeschleust wurden, die die KI liest",
+      "Wendet die Regel an: Inhalt aus Daten ist kein Befehl",
+      "Weiß, wie zu reagieren ist und wem ein Manipulationsversuch zu melden ist"
+    ]
+  },
+  "MB4": {
+    "name": "Deepfake, Scam und Desinformation",
+    "level": "Grundlagen",
+    "interactiveElement": "Klassifikation: Warnsignal oder normale Situation",
+    "keyConcepts": ["Stimm- und Video-Deepfake", "CEO-Fraud", "Zeitdruck", "Verifikation über einen zweiten Kanal", "Melden von Betrug"],
+    "learningOutcomes": [
+      "Erkennt typische Anzeichen von Deepfakes und KI-gestütztem Betrug",
+      "Wendet die Regel des zweiten Kanals an, bevor unter Druck gehandelt wird",
+      "Kennt das Verfahren zum Melden einer verdächtigen Situation"
+    ]
+  },
+  "MB5": {
+    "name": "KI bei der Arbeit: Richtlinien und Schatten-KI",
+    "level": "Grundlagen",
+    "interactiveElement": "Klassifikation: richtlinienkonform oder Schatten-KI",
+    "keyConcepts": ["Schatten-KI", "Unternehmensrichtlinie", "freigegebene Tools", "Lizenzen und Urheberrecht", "Verantwortung für das Ergebnis"],
+    "learningOutcomes": [
+      "Erkennt Schatten-KI und ihre Folgen für das Unternehmen",
+      "Wählt ein richtlinienkonformes Tool passend zum Datentyp",
+      "Weiß, dass der Mensch für mit KI-Hilfe erstellte Inhalte verantwortlich ist"
+    ]
+  },
+  "MB6": {
+    "name": "Verifikation von KI-Inhalten",
+    "level": "Grundlagen/Mittel",
+    "interactiveElement": "Rubrik zur Verifikation von KI-Antworten",
+    "keyConcepts": ["Fact-Checking", "Quellen und Daten", "zweite unabhängige Spur", "Kompetenzgrenzen des Modells", "verifizieren, bevor du weitergibst"],
+    "learningOutcomes": [
+      "Prüft eine KI-Antwort anhand einfacher Verifikationskriterien",
+      "Benennt Themen mit erhöhtem Risiko (Zahlen, Recht, Gesundheit, Neuigkeiten)",
+      "Baut die Gewohnheit auf, Inhalte vor der Weitergabe zu verifizieren"
+    ]
+  },
+  "MD1": {
+    "name": "Was KI heute kann",
+    "level": "Grundlagen",
+    "interactiveElement": "Klassifikation: Was KI gut macht und wo sie sich irrt",
+    "keyConcepts": ["KI-Assistenten", "Chats", "Multimodalität", "Grenzen der Fähigkeiten", "gesunde Skepsis"],
+    "learningOutcomes": [
+      "Nennt alltägliche Anwendungen von KI zu Hause",
+      "Erkennt Aufgaben, bei denen KI unzuverlässig sein kann",
+      "Beginnt die KI-Nutzung mit sicheren, einfachen Aufgaben"
+    ]
+  },
+  "MD2": {
+    "name": "Prompts im Alltag",
+    "level": "Grundlagen",
+    "interactiveElement": "Feinabstimmung eines Alltags-Prompts",
+    "keyConcepts": ["Kontext", "Ziel und Format", "Iterieren", "Präzisieren", "Alltagsbeispiele"],
+    "learningOutcomes": [
+      "Formuliert Anfragen mit Kontext, Ziel und Antwortformat",
+      "Verbessert die KI-Antwort durch schrittweises Präzisieren, statt den perfekten Prompt zu suchen",
+      "Nutzt KI für alltägliche Aufgaben: E-Mails, Pläne, Rezepte, Lernen"
+    ]
+  },
+  "MD3": {
+    "name": "KI im Smartphone und zu Hause",
+    "level": "Grundlagen",
+    "interactiveElement": "Klassifikation: Aufgabe für den Assistenten oder nicht",
+    "keyConcepts": ["Sprachassistent", "KI in der Kamera", "Live-Übersetzung", "Smart Home", "echter Nutzen vs Gadget"],
+    "learningOutcomes": [
+      "Benennt KI-Funktionen im Smartphone, die das Leben wirklich erleichtern",
+      "Wählt sinnvolle Aufgaben für den Sprachassistenten",
+      "Unterscheidet nützliche Funktionen von Marketing-Gadgets"
+    ]
+  },
+  "MD4": {
+    "name": "Erstellen: Bild, Ton, Video",
+    "level": "Grundlagen",
+    "interactiveElement": "Klassifikation: in Ordnung oder riskant",
+    "keyConcepts": ["Bildgeneratoren", "KI-Musik und -Video", "Kennzeichnung von KI-Inhalten", "Rechte an Werken", "Abbild anderer Personen"],
+    "learningOutcomes": [
+      "Erstellt einfache Materialien für zu Hause mit Hilfe von Generatoren",
+      "Kennzeichnet KI-generierte Inhalte dort, wo es nötig ist",
+      "Respektiert das Abbild und die Rechte anderer Personen beim Erstellen mit KI"
+    ]
+  },
+  "MD5": {
+    "name": "KI, Kinder und Familie",
+    "level": "Grundlagen",
+    "interactiveElement": "Klassifikation: gesunde oder riskante Familienpraxis",
+    "keyConcepts": ["Gespräch über KI mit dem Kind", "gemeinsame Nutzung", "Hilfe vs Abnehmen der Arbeit", "digitale Hygiene", "Kindersicherung"],
+    "learningOutcomes": [
+      "Spricht mit dem Kind über Möglichkeiten und Grenzen der KI",
+      "Legt gesunde Regeln für die KI-Nutzung in der Familie fest",
+      "Unterscheidet KI als Lernhilfe vom Abnehmen des Denkens"
+    ]
+  },
+  "MD6": {
+    "name": "Privatsphäre zu Hause",
+    "level": "Grundlagen",
+    "interactiveElement": "Feinabstimmung der Privatsphäre-Einstellungen",
+    "keyConcepts": ["Chatverlauf", "Training auf Daten", "Opt-out", "was nicht eingefügt werden darf", "Geräte zu Hause"],
+    "learningOutcomes": [
+      "Prüft und konfiguriert die Privatsphäre-Optionen in KI-Tools",
+      "Weiß, welche Inhalte nicht in Chats eingefügt werden dürfen (Dokumente, Kinderfotos, Gesundheitsdaten)",
+      "Räumt die Berechtigungen der Geräte zu Hause auf"
+    ]
   }
 }

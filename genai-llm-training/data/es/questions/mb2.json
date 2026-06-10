@@ -1,0 +1,155 @@
+{
+  "_meta": {
+    "module": "MB2",
+    "issue": "#171 Rebuild ścieżek — bank pytań P2 „Bezpieczne używanie AI”, moduł MB2 (dane wrażliwe i prywatność)",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo, Jan Syntetyczny, identyfikatory testowe). ZERO realnych danych/PII.",
+    "note": "Pytania modułu MB2 (Q123-Q128), pula dedykowana ścieżki P2. 4 pytania KRYTYCZNE (Q123-Q126) — bramka 100% w teście końcowym P2. Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q123",
+      "module": "MB2",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": true,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "El participante reconoce datos personales en un contenido de trabajo y no los pega en una herramienta pública de IA sin anonimizarlos.",
+      "prompt": "Un compañero de atención al cliente de SklepDemo te pide ayuda: quiere pegar en un chat público de IA el texto completo de la reclamación de una clienta — con nombre, apellidos, dirección y número de pedido — para que la IA proponga una respuesta amable. ¿Qué haces?",
+      "options": [
+        { "id": "A", "text": "Le ayudo a pegarlo todo — la herramienta de todos modos no guarda las conversaciones, y la respuesta será mejor con el contexto completo." },
+        { "id": "B", "text": "Propongo eliminar primero los datos personales (nombre, apellidos, dirección, número de pedido) y pegar solo la descripción del problema — la IA no necesita la identidad de la clienta para proponer una respuesta." },
+        { "id": "C", "text": "Aconsejo cambiar solo el apellido por una inicial — el resto de los datos puede quedarse, porque son datos de la empresa, no personales." },
+        { "id": "D", "text": "Sugiero pegar los datos, pero añadir al final una petición para que la IA los olvide después de responder." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Exactamente: el principio de minimización (RGPD) — el modelo recibe solo lo necesario para la tarea. La descripción del problema basta; la identidad de la clienta no aporta nada a la calidad de la respuesta y crea un riesgo de fuga.",
+      "feedbackIncorrect": "Esto es un error de seguridad. Los datos personales de la clienta (nombre, apellidos, dirección, número de pedido) no pueden llegar a una herramienta pública de IA — ni completos ni «con inicial», y la petición «olvídalo después de responder» no garantiza nada. Pega únicamente una descripción anonimizada del problema.",
+      "references": ["MB2.1", "MB2.2"]
+    },
+    {
+      "id": "Q124",
+      "module": "MB2",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": true,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "El participante no entrega secretos (contraseñas, claves, tokens) a las herramientas de IA, independientemente del objetivo.",
+      "prompt": "Configuras una integración en NotkaApp y tienes un archivo de configuración con una clave API (tok_test_abc123) y contraseñas del entorno. Un asistente de IA podría encontrar rápidamente el error en la configuración. ¿Qué haces?",
+      "options": [
+        { "id": "A", "text": "Pego el archivo entero — la clave es «de prueba», así que no hay riesgo." },
+        { "id": "B", "text": "Pego el archivo, pero pido a la IA que no use la clave para nada." },
+        { "id": "C", "text": "Sustituyo los valores de los secretos por placeholders (p. ej. CLAVE_API, CONTRASENA) y pego el archivo así limpiado — la estructura se puede depurar sin los valores reales." },
+        { "id": "D", "text": "Pego solo la mitad de la clave — con un valor incompleto nadie reconstruirá nada." }
+      ],
+      "correct": ["C"],
+      "feedbackCorrect": "Sí — los secretos nunca llegan al chat, ni siquiera los «de prueba»: el error de configuración se ve en la estructura, no en los valores. Los placeholders mantienen toda la capacidad de depuración sin riesgo.",
+      "feedbackIncorrect": "Esto es un error de seguridad. Las contraseñas, claves y tokens NUNCA llegan a las herramientas de IA — ni completos, ni por la mitad, ni con la petición «no lo uses». Sustituye los valores por placeholders; la estructura del archivo basta para encontrar el error.",
+      "references": ["MB2.2", "MB2.3"]
+    },
+    {
+      "id": "Q125",
+      "module": "MB2",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": true,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "El participante distingue las herramientas de IA aprobadas de las no aprobadas para trabajar con documentos confidenciales.",
+      "prompt": "Recibes para traducir un contrato sujeto a un NDA entre tu empresa y el contratista SklepDemo. El traductor de IA de la empresa es lento, y una herramienta pública gratuita traduce mejor y más rápido. ¿Qué haces?",
+      "options": [
+        { "id": "A", "text": "Traduzco el contrato en la herramienta aprobada de la empresa — es más lenta, pero un documento sujeto a NDA no puede salir del entorno aprobado." },
+        { "id": "B", "text": "Traduzco en la herramienta gratuita — lo que cuenta es la calidad de la traducción, y el NDA aplica a las personas, no a los programas." },
+        { "id": "C", "text": "Traduzco en la herramienta gratuita, pero elimino la portada con los nombres de las empresas — el resto del contrato es «anónimo»." },
+        { "id": "D", "text": "Divido el contrato en fragmentos pequeños y los traduzco en la herramienta gratuita — en trozos nadie lo recompondrá." }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Sí: un documento confidencial se procesa exclusivamente en el entorno aprobado por la empresa. La comodidad y la calidad de la herramienta gratuita no cambian las obligaciones del NDA.",
+      "feedbackIncorrect": "Esto es un error de seguridad. El contenido de un contrato sujeto a NDA pegado en una herramienta no aprobada es una violación de la confidencialidad — también en fragmentos y sin portada (el propio contenido identifica a las partes y las condiciones). Usa exclusivamente herramientas aprobadas por la empresa.",
+      "references": ["MB2.3", "MB2.4"]
+    },
+    {
+      "id": "Q126",
+      "module": "MB2",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": true,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "El participante evalúa de forma consciente los permisos que solicita una aplicación de IA, en lugar de aceptarlos por defecto.",
+      "prompt": "Instalas en el teléfono de empresa una aplicación de asistente de IA. En el primer arranque pide acceso permanente a los contactos, las fotos, el micrófono y el historial de ubicaciones, «para personalizar mejor las respuestas». Solo necesitas resumir notas de texto. ¿Qué haces?",
+      "options": [
+        { "id": "A", "text": "Acepto todo — sin permisos completos el asistente funcionará peor." },
+        { "id": "B", "text": "Acepto todo, pero planeo desactivar los permisos dentro de un mes, cuando haya probado la aplicación." },
+        { "id": "C", "text": "Acepto solo el micrófono — la voz es la base de un asistente, el resto es un detalle." },
+        { "id": "D", "text": "Rechazo todos los accesos innecesarios para resumir notas; si la aplicación exige permisos completos, la reporto al departamento de TI en lugar de instalarla." }
+      ],
+      "correct": ["D"],
+      "feedbackCorrect": "Sí: el principio de mínimos privilegios. Resumir notas no requiere contactos, fotos ni ubicación — en un equipo de empresa los accesos excesivos son un riesgo para los datos corporativos y privados.",
+      "feedbackIncorrect": "Esto es un error de seguridad. El acceso permanente a los contactos, las fotos y la ubicación en un teléfono de empresa excede la necesidad (resumir notas) — la «personalización» no justifica recopilar datos corporativos. Concede permisos mínimos y reporta a TI los accesos excesivos impuestos.",
+      "references": ["MB2.4", "MB2.5"]
+    },
+    {
+      "id": "Q127",
+      "module": "MB2",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "El participante reconoce qué es un dato personal según el RGPD en los contenidos cotidianos.",
+      "prompt": "¿Cuál de los siguientes es un dato personal según el RGPD?",
+      "options": [
+        { "id": "A", "text": "El nombre del modelo de IA usado en la empresa." },
+        { "id": "B", "text": "La dirección de correo de un empleado, jan.syntetyczny@przyklad.test, que permite identificarlo." },
+        { "id": "C", "text": "El número de incidencias atendidas por todo el equipo en un mes." },
+        { "id": "D", "text": "La lista pública de precios de los servicios de la empresa." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Un dato personal es cualquier información que permite identificar a una persona concreta — una dirección de correo de empresa con nombre y apellido identifica al empleado directamente.",
+      "feedbackIncorrect": "Un dato personal se refiere a una PERSONA identificable. El nombre del modelo, la estadística agregada del equipo y la lista pública de precios no señalan a nadie concreto — la dirección de correo con nombre y apellido, sí.",
+      "references": ["MB2.1"]
+    },
+    {
+      "id": "Q128",
+      "module": "MB2",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "El participante señala los contenidos que se pueden pegar con seguridad en una herramienta pública de IA.",
+      "prompt": "¿Qué contenidos se pueden pegar con seguridad en un chat público de IA? Marca todas las opciones correctas.",
+      "options": [
+        { "id": "A", "text": "Una descripción anonimizada del problema, de la que se han eliminado los datos personales y los identificadores." },
+        { "id": "B", "text": "El escaneo de un documento de identidad — al fin y al cabo solo preguntas por la corrección del formato del documento." },
+        { "id": "C", "text": "Una pregunta general sobre la sintaxis de una fórmula en una hoja de cálculo, sin datos de la hoja." },
+        { "id": "D", "text": "Un informe financiero interno de la empresa marcado como confidencial." }
+      ],
+      "correct": ["A", "C"],
+      "feedbackCorrect": "Sí: son seguros los contenidos sin datos personales, secretos ni información confidencial — una descripción anonimizada del problema y una pregunta general de sintaxis no revelan nada.",
+      "feedbackIncorrect": "Solo son seguros los contenidos sin datos personales ni información confidencial (A y C). El escaneo de un documento de identidad son datos personales directamente, y un informe financiero confidencial no puede salir del entorno aprobado — independientemente de la intención de la pregunta.",
+      "references": ["MB2.1", "MB2.3"]
+    }
+  ]
+}

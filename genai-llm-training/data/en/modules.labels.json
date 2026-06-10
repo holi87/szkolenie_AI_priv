@@ -343,5 +343,209 @@
       "Recognizes what separates level 8 from 9 and 10 from 11",
       "Tells measured, calibrated growth from a false sense of maturity"
     ]
+  },
+  "MB1": {
+    "name": "AI risk map",
+    "level": "basic",
+    "interactiveElement": "Classify: risk or safe practice",
+    "keyConcepts": [
+      "hallucinations",
+      "overtrust",
+      "data leaks",
+      "manipulation",
+      "mindful AI use"
+    ],
+    "learningOutcomes": [
+      "Lists the main risks of everyday AI use",
+      "Recognizes that a confident tone does not mean truth",
+      "Identifies situations where AI helps and where it harms"
+    ]
+  },
+  "MB2": {
+    "name": "Sensitive data and privacy",
+    "level": "basic",
+    "interactiveElement": "Classify: what may be pasted into a chat",
+    "keyConcepts": [
+      "personal data (GDPR)",
+      "data minimization",
+      "secrets and passwords",
+      "approved tools",
+      "app permissions"
+    ],
+    "learningOutcomes": [
+      "Recognizes personal and confidential data in everyday content",
+      "Anonymizes content before pasting it into an AI tool",
+      "Never shares secrets (passwords, keys, tokens) with AI chats"
+    ]
+  },
+  "MB3": {
+    "name": "Prompt injection and social engineering",
+    "level": "basic/intermediate",
+    "interactiveElement": "Classify: attack or ordinary request",
+    "keyConcepts": [
+      "prompt injection",
+      "instructions hidden in data",
+      "impersonation",
+      "social engineering",
+      "incident reporting"
+    ],
+    "learningOutcomes": [
+      "Recognizes instructions injected into content that AI reads",
+      "Applies the rule: content from data is not a command",
+      "Knows how to react and whom to report a manipulation attempt to"
+    ]
+  },
+  "MB4": {
+    "name": "Deepfakes, scams, and disinformation",
+    "level": "basic",
+    "interactiveElement": "Classify: warning sign or normal situation",
+    "keyConcepts": [
+      "voice and video deepfakes",
+      "CEO fraud",
+      "time pressure",
+      "second-channel verification",
+      "reporting scams"
+    ],
+    "learningOutcomes": [
+      "Recognizes typical signs of AI-assisted deepfakes and scams",
+      "Applies the second-channel rule before acting under pressure",
+      "Knows the procedure for reporting a suspicious situation"
+    ]
+  },
+  "MB5": {
+    "name": "AI at work: policies and shadow AI",
+    "level": "basic",
+    "interactiveElement": "Classify: policy-compliant or shadow AI",
+    "keyConcepts": [
+      "shadow AI",
+      "company policy",
+      "approved tools",
+      "licenses and copyright",
+      "accountability for output"
+    ],
+    "learningOutcomes": [
+      "Recognizes shadow AI and its consequences for the company",
+      "Matches the tool allowed by policy to the data type",
+      "Knows that a human is accountable for AI-assisted content"
+    ]
+  },
+  "MB6": {
+    "name": "Verifying AI content",
+    "level": "basic/intermediate",
+    "interactiveElement": "Rubric for verifying an AI answer",
+    "keyConcepts": [
+      "fact-checking",
+      "sources and dates",
+      "second independent trace",
+      "model competence limits",
+      "verify before you forward"
+    ],
+    "learningOutcomes": [
+      "Checks an AI answer against simple verification criteria",
+      "Identifies elevated-risk topics (numbers, law, health, news)",
+      "Builds the habit of verifying before passing content on"
+    ]
+  },
+  "MD1": {
+    "name": "What AI can do today",
+    "level": "basic",
+    "interactiveElement": "Classify: what AI does well and where it fails",
+    "keyConcepts": [
+      "AI assistants",
+      "chats",
+      "multimodality",
+      "capability limits",
+      "healthy skepticism"
+    ],
+    "learningOutcomes": [
+      "Lists everyday uses of AI at home",
+      "Recognizes tasks where AI tends to be unreliable",
+      "Starts using AI with safe, simple tasks"
+    ]
+  },
+  "MD2": {
+    "name": "Everyday prompts",
+    "level": "basic",
+    "interactiveElement": "Tuning a household prompt",
+    "keyConcepts": [
+      "context",
+      "goal and format",
+      "iterating",
+      "refining",
+      "household examples"
+    ],
+    "learningOutcomes": [
+      "Phrases requests with context, goal, and answer format",
+      "Improves AI answers through follow-ups instead of hunting for the perfect prompt",
+      "Uses AI for everyday tasks: emails, plans, recipes, learning"
+    ]
+  },
+  "MD3": {
+    "name": "AI on your phone and at home",
+    "level": "basic",
+    "interactiveElement": "Classify: a task for the assistant or not",
+    "keyConcepts": [
+      "voice assistant",
+      "camera AI",
+      "live translation",
+      "smart home",
+      "real value vs gadget"
+    ],
+    "learningOutcomes": [
+      "Identifies phone AI features that genuinely make life easier",
+      "Picks tasks that make sense for a voice assistant",
+      "Tells useful features apart from marketing gadgets"
+    ]
+  },
+  "MD4": {
+    "name": "Creating: images, audio, video",
+    "level": "basic",
+    "interactiveElement": "Classify: fine or risky",
+    "keyConcepts": [
+      "image generators",
+      "AI music and video",
+      "labeling AI content",
+      "rights to works",
+      "other people's likeness"
+    ],
+    "learningOutcomes": [
+      "Creates simple household materials with generators",
+      "Labels AI-generated content where needed",
+      "Respects other people's likeness and rights when creating with AI"
+    ]
+  },
+  "MD5": {
+    "name": "AI, kids, and family",
+    "level": "basic",
+    "interactiveElement": "Classify: healthy or risky family practice",
+    "keyConcepts": [
+      "talking about AI with a child",
+      "using AI together",
+      "help vs doing it for them",
+      "digital hygiene",
+      "parental controls"
+    ],
+    "learningOutcomes": [
+      "Talks with a child about AI's abilities and limits",
+      "Sets healthy AI rules for the family",
+      "Tells AI that aids learning apart from AI that replaces thinking"
+    ]
+  },
+  "MD6": {
+    "name": "Privacy at home",
+    "level": "basic",
+    "interactiveElement": "Tuning privacy settings",
+    "keyConcepts": [
+      "chat history",
+      "training on your data",
+      "opt-out",
+      "what never to paste",
+      "home devices"
+    ],
+    "learningOutcomes": [
+      "Reviews and sets privacy options in AI tools",
+      "Knows which content never to paste into chats (documents, kids' photos, health data)",
+      "Cleans up permissions on home devices"
+    ]
   }
 }

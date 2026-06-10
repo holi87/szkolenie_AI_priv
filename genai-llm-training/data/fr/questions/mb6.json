@@ -1,0 +1,155 @@
+{
+  "_meta": {
+    "module": "MB6",
+    "issue": "#171 Rebuild ścieżek — bank pytań P2 „Bezpieczne używanie AI”, moduł MB6 (weryfikacja treści AI)",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo, Jan Syntetyczny, identyfikatory testowe). ZERO realnych danych/PII.",
+    "note": "Pytania modułu MB6 (Q147-Q152), pula dedykowana ścieżki P2. Bez pytań krytycznych. Plik <800 LOC (AGENTS). Tłumaczenie FR."
+  },
+  "questions": [
+    {
+      "id": "Q147",
+      "module": "MB6",
+      "pillar": "qa_practice",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Le participant comprend pourquoi le ton assuré d'une réponse de l'IA ne prouve pas sa véracité.",
+      "prompt": "Pourquoi une réponse de l'IA peut-elle sembler très assurée et pourtant être fausse ?",
+      "options": [
+        { "id": "A", "text": "Le modèle génère la réponse la plus probable linguistiquement — la fluidité et le ton assuré ne sont pas une mesure de véracité." },
+        { "id": "B", "text": "Les modèles mentent volontairement pour que l'utilisateur revienne et pose plus de questions." },
+        { "id": "C", "text": "Le ton assuré n'apparaît que lorsque le modèle est connecté à Internet." },
+        { "id": "D", "text": "C'est impossible — si la réponse semble assurée, le modèle dispose de sources pour elle." }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Le modèle prédit les mots suivants, il ne vérifie pas les faits — c'est pourquoi il sait livrer avec la même aisance la vérité et une invention (hallucination). Le ton d'une réponse est un style, pas une preuve.",
+      "feedbackIncorrect": "Le modèle ne ment pas volontairement et ne signale pas son assurance par des sources — il génère la réponse la plus probable linguistiquement, donc l'erreur sonne aussi assurée que la vérité (A). Revoyez la section sur la nature des hallucinations.",
+      "references": ["MB6.1"]
+    },
+    {
+      "id": "Q148",
+      "module": "MB6",
+      "pillar": "qa_practice",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Le participant vérifie la source fournie par l'IA au lieu de se fier au simple fait qu'elle soit citée.",
+      "prompt": "L'IA vous a préparé un paragraphe pour le bulletin interne de NotkaApp, avec une statistique précise et un lien vers un rapport. Cela sonne professionnel. Que faites-vous avant la publication ?",
+      "options": [
+        { "id": "A", "text": "Je publie — puisque l'IA a fourni un lien, la statistique est confirmée." },
+        { "id": "B", "text": "J'ouvre le lien et je vérifie si le rapport existe et s'il contient réellement cette statistique ; je cherche aussi une deuxième confirmation indépendante." },
+        { "id": "C", "text": "Je supprime le lien et je garde la statistique seule — sans lien, personne ne vérifiera et il n'y aura pas de problème." },
+        { "id": "D", "text": "Je demande à la même IA de confirmer que la statistique est vraie — si elle confirme, je publie." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Oui : les modèles savent inventer aussi bien le chiffre qu'un lien d'apparence crédible. Vérification = ouvrir la source, vérifier le contenu et trouver une confirmation indépendante — seulement ensuite, publication.",
+      "feedbackIncorrect": "Le lien seul ne prouve rien (il est parfois inventé), cacher le lien ne corrige pas un chiffre erroné, et la « confirmation » par le même modèle, c'est la même machine non fiable. Correct : ouvrir et vérifier la source + une deuxième trace indépendante (B).",
+      "references": ["MB6.2"]
+    },
+    {
+      "id": "Q149",
+      "module": "MB6",
+      "pillar": "qa_practice",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Le participant reconnaît les sujets à risque élevé pour lesquels une réponse de l'IA exige la vérification d'un spécialiste.",
+      "prompt": "Un collègue veut envoyer à sa mère des recommandations de dosage d'un médicament générées par l'IA, « parce qu'elles semblent sensées et sont joliment présentées ». Que lui conseillez-vous ?",
+      "options": [
+        { "id": "A", "text": "Qu'il les envoie — l'IA a appris sur des textes médicaux, elle s'y connaît donc mieux que bien des médecins." },
+        { "id": "B", "text": "Qu'il les envoie, mais avec la mention que cela vient de l'IA — sa mère décidera elle-même de faire confiance ou non." },
+        { "id": "C", "text": "Le dosage des médicaments est un sujet à risque élevé : les recommandations doivent être confirmées par un médecin ou un pharmacien, et le texte généré peut être un point de départ pour la discussion avec eux, pas une prescription." },
+        { "id": "D", "text": "Qu'il interroge un deuxième modèle d'IA et compare — si les réponses concordent, on peut envoyer." }
+      ],
+      "correct": ["C"],
+      "feedbackCorrect": "Oui : la santé, le droit et l'argent sont les sujets où l'erreur de l'IA coûte le plus cher — ici, le vérificateur est un spécialiste, pas un deuxième modèle. L'IA peut aider à préparer les questions pour le médecin, pas remplacer sa décision.",
+      "feedbackIncorrect": "Dans les sujets à haut risque (santé, droit, finances), la concordance de deux modèles ou la mention « issu de l'IA » ne suffisent pas — les deux modèles peuvent répéter la même erreur, et on ne transfère pas la responsabilité à la mère. Les recommandations sont confirmées par un médecin ou un pharmacien (C).",
+      "references": ["MB6.3"]
+    },
+    {
+      "id": "Q150",
+      "module": "MB6",
+      "pillar": "qa_practice",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Le participant reconnaît les limites de connaissance du modèle (actualité des données) comme source d'erreurs.",
+      "prompt": "Scénario : vous interrogez l'IA sur les dispositions actuelles relatives aux avantages fiscaux. Le modèle répond de manière détaillée et factuelle, mais sans dates ni sources. Quel risque est ici LE PLUS IMPORTANT ?",
+      "options": [
+        { "id": "A", "text": "La réponse peut décrire un état du droit vieux de plusieurs mois ou années — la connaissance du modèle a une date limite, et les dispositions changent." },
+        { "id": "B", "text": "La réponse est trop détaillée — les réponses plus courtes sont toujours plus fiables." },
+        { "id": "C", "text": "Le modèle a pu répondre dans un mauvais dialecte de la langue." },
+        { "id": "D", "text": "Aucun risque — les dispositions fiscales sont suffisamment stables pour que la date de connaissance du modèle n'ait pas d'importance." }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Le risque le plus grave est l'obsolescence : le modèle s'est « arrêté » à la date de fin de ses données d'entraînement, et le droit change souvent. Les sujets « dispositions/taux/délais actuels » se vérifient toujours dans une source officielle et datée.",
+      "feedbackIncorrect": "La longueur de la réponse et le style ne sont pas des mesures de risque — l'essentiel est la date limite de connaissance du modèle : l'état du droit décrit peut être obsolète (A). Vérifiez les dispositions dans une source officielle et datée.",
+      "references": ["MB6.3", "MB6.2"]
+    },
+    {
+      "id": "Q151",
+      "module": "MB6",
+      "pillar": "qa_practice",
+      "paths": ["P2"],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Le participant construit l'habitude d'une vérification proportionnelle à l'importance de la décision avant de transmettre un contenu.",
+      "prompt": "Vous avez 10 minutes avant la réunion du conseil d'administration de SklepDemo. L'IA vous a résumé un rapport de 40 pages, et vous devez recommander une décision budgétaire sur la base de ce résumé. Que faites-vous ?",
+      "options": [
+        { "id": "A", "text": "Je présente le résumé tel quel — avec si peu de temps, il n'y a pas d'autre solution, et l'IA se trompe rarement." },
+        { "id": "B", "text": "Je vérifie dans l'original du rapport les chiffres et conclusions clés sur lesquels repose la recommandation ; je marque le reste du résumé comme non vérifié et je le dis explicitement." },
+        { "id": "C", "text": "J'annule ma partie de la réunion — sans avoir lu les 40 pages entières, on ne doit rien recommander." },
+        { "id": "D", "text": "Je demande à l'IA un deuxième résumé plus court et je compare les deux — la concordance des résumés confirme leur exactitude." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Oui : une vérification proportionnelle à l'enjeu — ce qui porte la décision (chiffres, conclusions) se vérifie dans la source ; le reste est marqué explicitement. La transparence envers le conseil fait partie de la rigueur, et deux résumés du même modèle ne sont pas indépendants.",
+      "feedbackIncorrect": "Présenter un résumé non vérifié pour une décision budgétaire, c'est transférer l'hallucination au conseil ; deux résumés de la même machine ne sont pas une vérification indépendante ; annuler la réunion est une fuite, pas une gestion du risque. Correct : vérifier dans l'original ce qui est clé et marquer explicitement le reste (B).",
+      "references": ["MB6.4", "MB6.2"]
+    },
+    {
+      "id": "Q152",
+      "module": "MB6",
+      "pillar": "qa_practice",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Le participant connaît les étapes de base d'une vérification rapide d'un contenu généré par l'IA.",
+      "prompt": "Quelles étapes font partie d'une vérification rapide d'une réponse de l'IA avant de la réutiliser ? Indiquez toutes les réponses correctes.",
+      "options": [
+        { "id": "A", "text": "Vérifier que la source citée existe et contient réellement l'information mentionnée." },
+        { "id": "B", "text": "Évaluer si la réponse semble assurée et professionnelle." },
+        { "id": "C", "text": "Chercher une deuxième confirmation indépendante des faits et chiffres clés." },
+        { "id": "D", "text": "Vérifier si la réponse est suffisamment longue et joliment mise en forme." }
+      ],
+      "correct": ["A", "C"],
+      "feedbackCorrect": "Exactement : la vérification repose sur les sources (existent-elles et confirment-elles le contenu ?) et sur une trace indépendante pour les faits clés. Le ton, la longueur et la mise en forme sont cosmétiques — ils ne disent rien de la véracité.",
+      "feedbackIncorrect": "Le ton assuré, la longueur et le joli format sont des traits de style que le modèle génère aussi volontiers pour la vérité que pour l'invention. Ce qui vérifie : les sources (A) et la confirmation indépendante (C).",
+      "references": ["MB6.2", "MB6.4"]
+    }
+  ]
+}

@@ -1,0 +1,155 @@
+{
+  "_meta": {
+    "module": "MB6",
+    "issue": "#171 Rebuild ścieżek — bank pytań P2 (VI), moduł MB6 (weryfikacja treści AI)",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE. ZERO realnych danych/PII.",
+    "note": "Tłumaczenie VI kanonu PL. Pola scoringowe identyczne z PL."
+  },
+  "questions": [
+    {
+      "id": "Q147",
+      "module": "MB6",
+      "pillar": "qa_practice",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Người học hiểu vì sao giọng điệu tự tin của câu trả lời AI không chứng minh tính đúng đắn của nó.",
+      "prompt": "Vì sao câu trả lời của AI có thể nghe rất tự tin mà vẫn sai?",
+      "options": [
+        { "id": "A", "text": "Mô hình tạo ra câu trả lời có xác suất ngôn ngữ cao nhất — sự trôi chảy và giọng tự tin không phải thước đo sự thật." },
+        { "id": "B", "text": "Các mô hình cố tình nói dối để người dùng quay lại hỏi thêm." },
+        { "id": "C", "text": "Giọng tự tin chỉ xuất hiện khi mô hình được kết nối internet." },
+        { "id": "D", "text": "Điều đó không thể xảy ra — nếu câu trả lời nghe tự tin, mô hình ắt có nguồn cho nó." }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Mô hình dự đoán từ tiếp theo chứ không kiểm tra dữ kiện — vì vậy nó có thể nói sự thật lẫn điều bịa đặt (ảo giác) với cùng một sự lưu loát. Giọng điệu là phong cách, không phải bằng chứng.",
+      "feedbackIncorrect": "Mô hình không cố tình nói dối, cũng không báo hiệu độ tin cậy bằng nguồn — nó tạo câu trả lời có xác suất ngôn ngữ cao nhất, nên cái sai nghe tự tin y như sự thật (A). Hãy xem lại phần về bản chất của ảo giác.",
+      "references": ["MB6.1"]
+    },
+    {
+      "id": "Q148",
+      "module": "MB6",
+      "pillar": "qa_practice",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Người học kiểm chứng nguồn do AI đưa ra thay vì tin vào việc nó được trích dẫn.",
+      "prompt": "AI đã soạn cho bạn một đoạn cho bản tin nội bộ của NotkaApp với một số liệu cụ thể và đường dẫn đến báo cáo. Nghe rất chuyên nghiệp. Bạn làm gì trước khi đăng?",
+      "options": [
+        { "id": "A", "text": "Đăng — AI đã đưa đường dẫn nghĩa là số liệu được xác nhận." },
+        { "id": "B", "text": "Mở đường dẫn và kiểm tra báo cáo có tồn tại không, có thật sự chứa số liệu đó không; đồng thời tìm xác nhận độc lập thứ hai." },
+        { "id": "C", "text": "Xóa đường dẫn và giữ lại số liệu — không có link thì chẳng ai kiểm tra và sẽ không có vấn đề." },
+        { "id": "D", "text": "Nhờ chính AI đó xác nhận số liệu là thật — nếu nó xác nhận thì đăng." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Đúng: mô hình có thể bịa cả con số lẫn đường dẫn trông đáng tin. Kiểm chứng = mở nguồn, kiểm tra nội dung và tìm xác nhận độc lập — sau đó mới đăng.",
+      "feedbackIncorrect": "Bản thân đường dẫn không chứng minh gì (có thể bị bịa), giấu link không sửa được con số sai, còn “xác nhận” từ chính mô hình đó vẫn là cùng một cỗ máy không đáng tin. Đúng: mở và kiểm tra nguồn + dấu vết độc lập thứ hai (B).",
+      "references": ["MB6.2"]
+    },
+    {
+      "id": "Q149",
+      "module": "MB6",
+      "pillar": "qa_practice",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Người học nhận diện các chủ đề rủi ro cao mà câu trả lời AI cần được chuyên gia xác nhận.",
+      "prompt": "Đồng nghiệp muốn gửi cho mẹ liều dùng thuốc do AI tạo ra, “vì nghe hợp lý và trình bày đẹp”. Bạn khuyên gì?",
+      "options": [
+        { "id": "A", "text": "Cứ gửi — AI được huấn luyện trên văn bản y khoa nên rành hơn khối bác sĩ." },
+        { "id": "B", "text": "Cứ gửi, nhưng kèm ghi chú rằng nội dung từ AI — mẹ sẽ tự quyết có tin hay không." },
+        { "id": "C", "text": "Liều dùng thuốc là chủ đề rủi ro cao: khuyến nghị phải được bác sĩ hoặc dược sĩ xác nhận, còn văn bản AI tạo ra có thể là điểm khởi đầu cho cuộc trao đổi với họ, không phải khuyến nghị." },
+        { "id": "D", "text": "Hỏi thêm một mô hình AI khác và so sánh — nếu các câu trả lời khớp nhau thì có thể gửi." }
+      ],
+      "correct": ["C"],
+      "feedbackCorrect": "Đúng: sức khỏe, pháp luật và tiền bạc là những chủ đề mà sai sót của AI trả giá đắt nhất — người kiểm chứng ở đây là chuyên gia, không phải mô hình thứ hai. AI có thể giúp chuẩn bị câu hỏi cho bác sĩ, không thay thế quyết định của bác sĩ.",
+      "feedbackIncorrect": "Ở chủ đề rủi ro cao (sức khỏe, pháp luật, tài chính), sự trùng khớp của hai mô hình hay ghi chú “từ AI” đều không đủ — cả hai mô hình có thể lặp cùng một lỗi, và trách nhiệm không thể đẩy sang mẹ. Khuyến nghị do bác sĩ hoặc dược sĩ xác nhận (C).",
+      "references": ["MB6.3"]
+    },
+    {
+      "id": "Q150",
+      "module": "MB6",
+      "pillar": "qa_practice",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Người học nhận ra giới hạn tri thức của mô hình (tính cập nhật của dữ liệu) là nguồn gây lỗi.",
+      "prompt": "Tình huống: bạn hỏi AI về các quy định hiện hành liên quan đến ưu đãi thuế. Mô hình trả lời chi tiết, mạch lạc nhưng không có ngày tháng và nguồn. Rủi ro nào ở đây là QUAN TRỌNG NHẤT?",
+      "options": [
+        { "id": "A", "text": "Câu trả lời có thể mô tả tình trạng pháp lý của nhiều tháng hay nhiều năm trước — tri thức của mô hình có ngày giới hạn, còn quy định thì thay đổi." },
+        { "id": "B", "text": "Câu trả lời quá chi tiết — câu trả lời ngắn hơn luôn đáng tin hơn." },
+        { "id": "C", "text": "Mô hình có thể trả lời sai phương ngữ tiếng Việt." },
+        { "id": "D", "text": "Không có rủi ro — quy định thuế đủ ổn định nên ngày tri thức của mô hình không quan trọng." }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Rủi ro nghiêm trọng nhất là sự lỗi thời: mô hình “dừng lại” ở thời điểm kết thúc dữ liệu huấn luyện, còn pháp luật thay đổi thường xuyên. Chủ đề “quy định/mức/thời hạn hiện hành” luôn kiểm chứng ở nguồn chính thức có ghi ngày.",
+      "feedbackIncorrect": "Độ dài và văn phong không phải thước đo rủi ro — mấu chốt là ngày giới hạn tri thức của mô hình: tình trạng pháp lý được mô tả có thể đã lỗi thời (A). Hãy kiểm tra quy định ở nguồn chính thức có ghi ngày.",
+      "references": ["MB6.3", "MB6.2"]
+    },
+    {
+      "id": "Q151",
+      "module": "MB6",
+      "pillar": "qa_practice",
+      "paths": ["P2"],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Người học xây dựng thói quen kiểm chứng tương xứng với tầm quan trọng của quyết định trước khi chuyển nội dung đi tiếp.",
+      "prompt": "Bạn còn 10 phút trước cuộc họp ban lãnh đạo SklepDemo. AI đã tóm tắt cho bạn báo cáo 40 trang, và dựa trên bản tóm tắt bạn phải đề xuất một quyết định ngân sách. Bạn làm gì?",
+      "options": [
+        { "id": "A", "text": "Trình bày toàn bộ bản tóm tắt — thời gian ngắn thế thì không còn cách khác, mà AI hiếm khi sai." },
+        { "id": "B", "text": "Kiểm chứng trong báo cáo gốc các con số và kết luận then chốt mà đề xuất dựa vào; phần còn lại của bản tóm tắt đánh dấu là chưa kiểm chứng và nói thẳng điều đó." },
+        { "id": "C", "text": "Hủy phần họp của mình — chưa đọc đủ 40 trang thì không được đề xuất gì." },
+        { "id": "D", "text": "Nhờ AI làm bản tóm tắt thứ hai ngắn hơn và so sánh cả hai — sự trùng khớp xác nhận tính chính xác." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Đúng: kiểm chứng tương xứng với tầm quan trọng — phần quyết định dựa vào (con số, kết luận) kiểm tra ở nguồn; phần còn lại đánh dấu công khai. Minh bạch với ban lãnh đạo là một phần của sự chính trực, còn hai bản tóm tắt từ cùng một mô hình không hề độc lập.",
+      "feedbackIncorrect": "Trình bày bản tóm tắt chưa kiểm chứng cho quyết định ngân sách là chuyển ảo giác sang ban lãnh đạo; hai bản tóm tắt từ cùng một cỗ máy không phải kiểm chứng độc lập; hủy họp là né tránh chứ không phải quản trị rủi ro. Đúng: kiểm chứng phần then chốt ở bản gốc và đánh dấu công khai phần còn lại (B).",
+      "references": ["MB6.4", "MB6.2"]
+    },
+    {
+      "id": "Q152",
+      "module": "MB6",
+      "pillar": "qa_practice",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Người học biết các bước cơ bản để kiểm chứng nhanh nội dung do AI tạo ra.",
+      "prompt": "Những bước nào thuộc về việc kiểm chứng nhanh câu trả lời AI trước khi dùng tiếp? Chọn tất cả đáp án đúng.",
+      "options": [
+        { "id": "A", "text": "Kiểm tra nguồn được nêu có tồn tại và thật sự chứa thông tin được trích dẫn." },
+        { "id": "B", "text": "Đánh giá xem câu trả lời nghe có tự tin và chuyên nghiệp không." },
+        { "id": "C", "text": "Tìm xác nhận độc lập thứ hai cho các dữ kiện và con số then chốt." },
+        { "id": "D", "text": "Kiểm tra xem câu trả lời có đủ dài và được định dạng đẹp không." }
+      ],
+      "correct": ["A", "C"],
+      "feedbackCorrect": "Chính xác: kiểm chứng dựa trên nguồn (có tồn tại và xác nhận nội dung không) và dấu vết độc lập cho dữ kiện then chốt. Giọng điệu, độ dài và định dạng là lớp trang điểm — không nói gì về sự thật.",
+      "feedbackIncorrect": "Giọng tự tin, độ dài và định dạng đẹp là đặc điểm phong cách mà mô hình tạo ra như nhau cho sự thật lẫn điều bịa đặt. Kiểm chứng bằng nguồn (A) và xác nhận độc lập (C).",
+      "references": ["MB6.2", "MB6.4"]
+    }
+  ]
+}

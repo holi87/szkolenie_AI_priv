@@ -1,0 +1,155 @@
+{
+  "_meta": {
+    "module": "MB2",
+    "issue": "#171 Rebuild ścieżek — bank pytań P2 „Bezpieczne używanie AI”, moduł MB2 (dane wrażliwe i prywatność)",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo, Jan Syntetyczny, identyfikatory testowe). ZERO realnych danych/PII.",
+    "note": "Pytania modułu MB2 (Q123-Q128), pula dedykowana ścieżki P2. 4 pytania KRYTYCZNE (Q123-Q126) — bramka 100% w teście końcowym P2. Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q123",
+      "module": "MB2",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": true,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant recognizes personal data in working content and does not paste it into a public AI tool without anonymization.",
+      "prompt": "A colleague from customer service at SklepDemo asks you for help: he wants to paste the full text of a customer’s complaint — with her first name, last name, address, and order number — into a public AI chat so the AI can suggest a polite reply. What do you do?",
+      "options": [
+        { "id": "A", "text": "I help him paste the whole thing — the tool doesn’t store conversations anyway, and the answer will be better with full context." },
+        { "id": "B", "text": "I suggest first removing the personal data (first name, last name, address, order number) and pasting only the description of the problem — the AI does not need the customer’s identity to suggest a reply." },
+        { "id": "C", "text": "I advise changing only the last name to an initial — the rest of the data can stay, because it is company data, not personal data." },
+        { "id": "D", "text": "I suggest pasting the data but adding a request at the end that the AI forget it after giving the answer." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Exactly: the minimization principle (GDPR) — the model gets only what is needed for the task. The description of the problem is enough; the customer’s identity adds nothing to the quality of the reply and creates a leak risk.",
+      "feedbackIncorrect": "This is a security error. The customer’s personal data (first name, last name, address, order number) must not go into a public AI tool — not in full, not “with an initial”, and asking it to “forget after answering” guarantees nothing. Paste only an anonymized description of the problem.",
+      "references": ["MB2.1", "MB2.2"]
+    },
+    {
+      "id": "Q124",
+      "module": "MB2",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": true,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant does not pass secrets (passwords, keys, tokens) to AI tools regardless of the purpose.",
+      "prompt": "You are setting up an integration in NotkaApp and you have a configuration file with an API key (tok_test_abc123) and environment passwords. An AI assistant could quickly find the error in the configuration. What do you do?",
+      "options": [
+        { "id": "A", "text": "I paste the whole file — the key is a “test” one, so there is no risk." },
+        { "id": "B", "text": "I paste the file but ask the AI not to use the key for anything." },
+        { "id": "C", "text": "I replace the secret values with placeholders (e.g., API_KEY, PASSWORD) and paste the file cleaned up this way — the structure can be debugged without the real values." },
+        { "id": "D", "text": "I paste only half of the key — nobody can reconstruct anything from an incomplete value." }
+      ],
+      "correct": ["C"],
+      "feedbackCorrect": "Yes — secrets never go into a chat, even “test” ones: a configuration error shows up in the structure, not in the values. Placeholders keep the file fully debuggable without the risk.",
+      "feedbackIncorrect": "This is a security error. Passwords, keys, and tokens NEVER go into AI tools — not in full, not in half, and not with a “don’t use it” request. Replace the values with placeholders; the file structure is enough to find the error.",
+      "references": ["MB2.2", "MB2.3"]
+    },
+    {
+      "id": "Q125",
+      "module": "MB2",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": true,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant distinguishes AI tools approved and not approved for working with confidential documents.",
+      "prompt": "You are asked to translate a contract covered by an NDA between your company and the contractor SklepDemo. The company AI translator is slow, while a free public tool translates better and faster. What do you do?",
+      "options": [
+        { "id": "A", "text": "I translate the contract in the approved company tool — slower, but a document covered by an NDA must not leave the approved environment." },
+        { "id": "B", "text": "I translate in the free tool — what counts is translation quality, and the NDA applies to people, not software." },
+        { "id": "C", "text": "I translate in the free tool but remove the title page with the company names — the rest of the contract is “anonymous”." },
+        { "id": "D", "text": "I split the contract into small fragments and translate them in the free tool — in pieces, nobody can put it back together." }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Yes: you process a confidential document only in an environment approved by the company. The convenience and quality of the free tool do not change the NDA obligations.",
+      "feedbackIncorrect": "This is a security error. Pasting the text of an NDA-covered contract into an unapproved tool is a breach of confidentiality — also in fragments and without the title page (the content itself identifies the parties and the terms). Use only tools approved by the company.",
+      "references": ["MB2.3", "MB2.4"]
+    },
+    {
+      "id": "Q126",
+      "module": "MB2",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": true,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant consciously evaluates the permissions an AI app asks for, instead of accepting them by default.",
+      "prompt": "You are installing an AI assistant app on your work phone. On first launch it asks for permanent access to your contacts, photos, microphone, and location history, “to better personalize answers”. You only need it to summarize text notes. What do you do?",
+      "options": [
+        { "id": "A", "text": "I accept everything — without full permissions the assistant will work worse." },
+        { "id": "B", "text": "I accept everything, but I plan to turn the permissions off in a month, once I have tested the app." },
+        { "id": "C", "text": "I accept only the microphone — voice is the core of an assistant, the rest is a minor detail." },
+        { "id": "D", "text": "I refuse all access not needed for summarizing notes; if the app forces full permissions, I report it to the IT team instead of installing it." }
+      ],
+      "correct": ["D"],
+      "feedbackCorrect": "Yes: the principle of least privilege. Summarizing notes does not require contacts, photos, or location — on work equipment, excessive access is a risk to company and private data.",
+      "feedbackIncorrect": "This is a security error. Permanent access to contacts, photos, and location on a work phone goes beyond the need (summarizing notes) — “personalization” does not justify collecting company data. Grant minimal permissions, and report forced excessive access to IT.",
+      "references": ["MB2.4", "MB2.5"]
+    },
+    {
+      "id": "Q127",
+      "module": "MB2",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "The participant recognizes what counts as personal data under the GDPR in everyday content.",
+      "prompt": "Which of the following is personal data under the GDPR?",
+      "options": [
+        { "id": "A", "text": "The name of the AI model used in the company." },
+        { "id": "B", "text": "An employee’s e-mail address, john.synthetic@przyklad.test, which makes it possible to identify him." },
+        { "id": "C", "text": "The number of tickets handled by the whole team in a month." },
+        { "id": "D", "text": "The company’s public price list." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Personal data is any information that makes it possible to identify a specific person — a work e-mail address with a first and last name identifies the employee directly.",
+      "feedbackIncorrect": "Personal data concerns an identifiable PERSON. A model name, an aggregated team statistic, and a public price list do not point to anyone specific — an e-mail address with a first and last name does.",
+      "references": ["MB2.1"]
+    },
+    {
+      "id": "Q128",
+      "module": "MB2",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "The participant identifies content that can safely be pasted into a public AI tool.",
+      "prompt": "Which content can safely be pasted into a public AI chat? Select all that apply.",
+      "options": [
+        { "id": "A", "text": "An anonymized description of a problem, with personal data and identifiers removed." },
+        { "id": "B", "text": "A scan of an ID card — after all, you are only asking about the correctness of the document format." },
+        { "id": "C", "text": "A general question about formula syntax in a spreadsheet, without any data from the spreadsheet." },
+        { "id": "D", "text": "The company’s internal financial report marked as confidential." }
+      ],
+      "correct": ["A", "C"],
+      "feedbackCorrect": "Yes: content without personal data, secrets, or confidential information is safe — an anonymized problem description and a general syntax question reveal nothing.",
+      "feedbackIncorrect": "Only content stripped of personal data and confidential information is safe (A and C). An ID card scan is personal data outright, and a confidential financial report must not leave the approved environment — regardless of the intent of the question.",
+      "references": ["MB2.1", "MB2.3"]
+    }
+  ]
+}

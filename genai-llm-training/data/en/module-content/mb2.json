@@ -1,0 +1,126 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P2 Bezpieczne używanie AI",
+    "interaction": "Klasyfikacja treści (kind: classify) — co można wkleić do publicznego czatu, a co wymaga anonimizacji lub zostaje poza czatem",
+    "sections": "Ekrany odpowiadają sekcjom MB2.1–MB2.5 (referowane przez pytania banku Q123–Q128): dane osobowe RODO, minimalizacja/anonimizacja, sekrety, narzędzia zatwierdzone vs publiczne (NDA), uprawnienia aplikacji.",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp, SklepDemo, Jan Syntetyczny, Anna Testowa, domeny @przyklad.test / @example.com, placeholdery zamiast sekretów). Zero realnych danych, PII, numerów i tokenów."
+  },
+  "module": "MB2",
+  "intro": "The biggest AI risk in everyday work does not require any hacker — a simple “paste and send” is enough. In this module you will learn to recognize personal data, paste only what is really needed, keep passwords and keys away from chats, and tell company-approved tools apart from public ones. At the end, you will put it into practice.",
+  "screens": [
+    {
+      "id": "mb2-s1-dane-osobowe",
+      "title": "MB2.1 — What counts as personal data (GDPR in practice)",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Personal data", "text": "Any information that makes it possible to identify a specific person — directly (first and last name, e-mail address, a photo of their face) or by combining several facts (position + company + city). The GDPR protects it regardless of whether it concerns a customer, a coworker, or you." },
+        { "kind": "list", "items": [
+          "Obvious: first and last name, e-mail, address, phone number, likeness, identification number.",
+          "Less obvious: a customer ID in a system, an order history tied to a person, the content of their complaint.",
+          "Specially protected: data about health, views, religion — never paste these, in any form.",
+          "Combinations: “the head of returns at SklepDemo in Gdansk” identifies a person even though no name is given."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Why this applies to AI chats", "text": "Pasting personal data into a public chat means handing it over to an external company — usually with no legal basis and without the knowledge of the person it concerns. That is a real GDPR violation, not a formality.",
+          "links": [ { "label": "UODO — information about personal data protection and the GDPR", "href": "https://uodo.gov.pl/" } ]
+        }
+      ]
+    },
+    {
+      "id": "mb2-s2-minimalizacja",
+      "title": "MB2.2 — Minimization: paste only what is needed",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "The minimization principle is simple: the model needs the substance of the problem, not people’s identities. Before you paste anything, remove or replace everything that points to specific people and specific contracts. The point of the task stays — the risk disappears." },
+        { "kind": "table", "headers": ["Before (do not paste)", "After anonymization (you can paste)"], "rows": [
+          ["Customer John Synthetic (jan.syntetyczny@przyklad.test) demands a refund for an order at SklepDemo", "A customer demands a refund for an order — help me write a polite refusal"],
+          ["Anna Sample from HR complains about her manager, here is her full e-mail", "An employee reports a conflict with their manager — how do I handle such a conversation?"],
+          ["Contract no. 2024/DEMO with PipeDemo, rates and contractual penalties attached", "I have a B2B contract with penalties for delays — what should I check before signing?"]
+        ], "textAlt": "The table compares content before and after anonymization: instead of customer John Synthetic’s data with an e-mail address we paste just the description of the refund problem; instead of the employee’s full e-mail, a description of the conflict without names; instead of the contract number and rates, a general question about a B2B contract." },
+        { "kind": "callout", "variant": "safe", "title": "The placeholder technique", "text": "Replace specifics with roles: “[CUSTOMER]”, “[COMPANY]”, “[AMOUNT]”. The model will do just as well, and after receiving the answer you put the real data back in — on your side, outside the chat." }
+      ]
+    },
+    {
+      "id": "mb2-s3-sekrety",
+      "title": "MB2.3 — Secrets: passwords, keys, and tokens never go into a chat",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Passwords, API keys, access tokens, one-time codes, invitation links to systems — all of these are secrets. They differ from personal data in one thing: their leak gives someone immediate access to a system. That is why the rule is absolute: secrets never go into any chat, ever, not even in fragments." },
+        { "kind": "list", "items": [
+          "Asking AI for help with a configuration? Paste the file with the secret swapped out: instead of the real key, write “[API_KEY]”.",
+          "A secret “accidentally” pasted and immediately deleted from the chat — it may already have been stored on the provider’s side.",
+          "If a secret has leaked, deleting it is not enough: it must be revoked and a new one generated, and the incident reported.",
+          "This also applies to “unimportant” passwords — people reuse the same passwords in many places."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Pasted a secret? Act immediately", "text": "Do not count on nobody noticing. Change or revoke the secret right away and report the incident according to the company procedure (IT/security team). A quick reaction is the difference between an incident and a disaster." }
+      ]
+    },
+    {
+      "id": "mb2-s4-narzedzia",
+      "title": "MB2.4 — Approved vs public tools (and what the NDA says)",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Not every AI chat is the same. A company-approved tool has a signed agreement with the provider: data does not train models, it is stored as agreed, and it is clear who is responsible for it. A public, free chat is a “take it as it is” deal — often with the provider’s right to use your entries." },
+        { "kind": "table", "headers": ["Feature", "Company-approved tool", "Public free chat"], "rows": [
+          ["Data protection agreement", "Yes — the company signed and vetted it", "No — the provider’s general terms apply"],
+          ["Use of your entries for training", "Usually excluded by contract", "Often enabled by default"],
+          ["Data covered by a client NDA", "Only if company policy explicitly allows it", "Never — that is an NDA breach"],
+          ["Who is responsible in an incident", "A clear path: the company and the provider", "Unclear — you take the risk on yourself"]
+        ], "textAlt": "The table compares a company-approved tool with a public free chat: the approved one has a signed data protection agreement, training on entries disabled, and clear responsibility; the public chat runs on general terms, often trains on entries, and NDA-covered data must never be pasted there." },
+        { "kind": "callout", "variant": "warn", "title": "An NDA is not a formality", "text": "Materials covered by a confidentiality agreement with a client (specifications, price lists, plans) pasted into a public chat are a breach of contract — regardless of whether anyone notices. Not sure whether a tool is approved? Ask before you paste." }
+      ]
+    },
+    {
+      "id": "mb2-s5-uprawnienia",
+      "title": "MB2.5 — AI app permissions: grant as little as possible",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "More and more AI apps ask for access to your resources: your mailbox, calendar, document drive, contacts. Every consent is an open door — the app sees everything you let it into, not just what you currently need. The principle of least privilege applies: grant exactly as much access as the task requires, and not a bit more." },
+        { "kind": "list", "ordered": true, "items": [
+          "Before installing, check what access the app asks for — and whether it makes sense for its function (a notepad does not need your contacts).",
+          "Choose the minimal scope: access to one folder instead of the whole drive, to one calendar instead of the mailbox.",
+          "Treat AI plug-ins and browser add-ons the same way — “read all pages” is a very broad permission.",
+          "Every so often, review the access you have granted and revoke what you no longer use."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "An example of a good decision", "text": "The NotkaApp application asks for access to your whole drive in order to summarize documents. The safe move: create a separate “To summarize” folder, grant access only to it, and put there only the files you really want processed." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "mb2-classify",
+    "title": "To paste or not to paste?",
+    "intro": "Assess each piece of content: can it safely be pasted into a public AI chat, or does it need to be anonymized first or kept out of the chat? All examples are synthetic.",
+    "categories": [
+      { "id": "ok", "label": "Can be pasted into a public chat", "desc": "No personal data, secrets, or confidential content — just the substance of the problem." },
+      { "id": "stop", "label": "Do not paste / anonymize first", "desc": "Contains personal data, secrets, or content covered by confidentiality." }
+    ],
+    "items": [
+      { "id": "mb2-i1", "text": "“A customer demands a refund after the deadline — help me write a polite but firm refusal.”", "correctCategory": "ok", "rationale": "Just the description of the problem, zero identifying data — exemplary minimization." },
+      { "id": "mb2-i2", "text": "The full text of a complaint from John Synthetic with his e-mail address jan.syntetyczny@przyklad.test and order number.", "correctCategory": "stop", "rationale": "A first name, last name, and e-mail are personal data — replace them with placeholders like [CUSTOMER] before pasting." },
+      { "id": "mb2-i3", "text": "A configuration fragment with a real API key to the SklepDemo system, “because the AI is supposed to find the error”.", "correctCategory": "stop", "rationale": "Secrets never go into a chat — paste the configuration with the key swapped for [API_KEY]." },
+      { "id": "mb2-i4", "text": "“I have a table with columns: date, expense category, amount. How do I calculate monthly totals in a spreadsheet?”", "correctCategory": "ok", "rationale": "A question about a method, a description of the structure without a single real record — safe." },
+      { "id": "mb2-i5", "text": "A client’s product specification covered by an NDA — “just a fragment, so the AI can help with a summary”.", "correctCategory": "stop", "rationale": "The NDA covers fragments too. A client’s confidential materials do not go into public chats in any part." },
+      { "id": "mb2-i6", "text": "“An employee reports a conflict with their manager — how do I prepare for such a conversation?” (no names or department).", "correctCategory": "ok", "rationale": "A description of the situation with no way to identify the people — the personal data has been effectively removed." },
+      { "id": "mb2-i7", "text": "A list of training participants: first names, last names, and e-mails — “let the AI sort them alphabetically”.", "correctCategory": "stop", "rationale": "This is the personal data of many people at once. Do the sorting locally in a spreadsheet — AI is not needed here at all." },
+      { "id": "mb2-i8", "text": "Your own draft of an announcement about the company picnic — “improve the style and shorten it to three sentences”.", "correctCategory": "ok", "rationale": "Public content meant for publication, with no personal data — typical safe use of AI." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Personal data is anything that identifies a person — including a combination of facts without a name.",
+      "Minimization: paste the substance of the problem, not people’s identities — placeholders like [CUSTOMER], [COMPANY], [AMOUNT] do the job.",
+      "Passwords, keys, and tokens never go into a chat; a leaked secret = immediate change and report.",
+      "Company data and NDA-covered data only in company-approved tools — a public chat is someone else’s mailbox.",
+      "Grant AI apps the smallest possible permissions and regularly revoke unused access."
+    ],
+    "checklist": [
+      "Before pasting, do I check the text for names, e-mails, and other identifiers?",
+      "Do I replace specifics with placeholders instead of pasting the original?",
+      "Am I sure the content contains no password, key, or token?",
+      "Do I know which AI tools are approved in my company and for which data?",
+      "Do my AI apps have only the permissions they really need?"
+    ],
+    "checklistTitle": "Checklist — before you paste anything into a chat",
+    "nextStep": "Next step: module MB3 — you will see how attackers hide commands in content that AI reads for you, and how to defend against it."
+  }
+}

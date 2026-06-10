@@ -1,20 +1,28 @@
 {
   "paths": {
     "S1": {
-      "name": "Non tecnica / decisionale",
+      "name": "IA con QA — livello: Base",
       "assumedPathTime": "3.5-4.5 h (A4)"
     },
     "S2": {
-      "name": "Professionista-utente / QA",
+      "name": "IA con QA — livello: Pratico",
       "assumedPathTime": "6-7 h (A4)"
     },
     "S3": {
-      "name": "Ingegnere / automazione / QA tecnico",
+      "name": "IA con QA — livello: Ingegnere",
       "assumedPathTime": "9-10 h (A4)"
     },
     "S4": {
       "name": "Scala Holak — diagnosi e sviluppo",
       "assumedPathTime": "2.5-3 h"
+    },
+    "P1": {
+      "name": "IA a casa",
+      "assumedPathTime": "2.5-3 h"
+    },
+    "P2": {
+      "name": "Uso sicuro dell’IA",
+      "assumedPathTime": "3-3.5 h"
     }
   }
 }

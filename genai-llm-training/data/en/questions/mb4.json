@@ -1,0 +1,155 @@
+{
+  "_meta": {
+    "module": "MB4",
+    "issue": "#171 Rebuild ścieżek — bank pytań P2 „Bezpieczne używanie AI”, moduł MB4 (deepfake, scam i dezinformacja)",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo, Jan Syntetyczny, identyfikatory testowe). ZERO realnych danych/PII.",
+    "note": "Pytania modułu MB4 (Q135-Q140), pula dedykowana ścieżki P2. Bez pytań krytycznych. Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q135",
+      "module": "MB4",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "The participant understands what a deepfake is and why a recording is no longer proof in itself.",
+      "prompt": "What is a deepfake?",
+      "options": [
+        { "id": "A", "text": "Any video recording published anonymously on the internet." },
+        { "id": "B", "text": "A beautifying filter used in social media apps." },
+        { "id": "C", "text": "A recording or voice generated or modified by AI that realistically impersonates a real person." },
+        { "id": "D", "text": "A rumor spread by e-mail without any audio or video material." }
+      ],
+      "correct": ["C"],
+      "feedbackCorrect": "A deepfake is a synthetic image, video, or voice imitating a real person. Since a voice and a face can be faked, a recording alone is no longer proof — what matters is verifying the channel and the context.",
+      "feedbackIncorrect": "A deepfake is AI-generated content that realistically impersonates a real person (voice, face, video). An anonymous video, a filter, or a rumor is not the same phenomenon. Review the section on deepfakes.",
+      "references": ["MB4.1"]
+    },
+    {
+      "id": "Q136",
+      "module": "MB4",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "The participant lists typical warning signs of an AI-assisted scam.",
+      "prompt": "Which elements of a message are typical warning signs of a scam? Select all that apply.",
+      "options": [
+        { "id": "A", "text": "Strong time pressure: “you must do this within 10 minutes”." },
+        { "id": "B", "text": "The request came during working hours from a person you talk to often." },
+        { "id": "C", "text": "An unusual contact channel: the “CEO” writes from a private number asking for a transfer." },
+        { "id": "D", "text": "The message contains the sender’s full details matching the company address book." }
+      ],
+      "correct": ["A", "C"],
+      "feedbackCorrect": "Time pressure and an unusual channel are two classic social engineering signals. Scammers isolate the victim from normal procedures and force haste to switch off verification.",
+      "feedbackIncorrect": "The warning signs are time pressure (A) and an unusual contact channel (C). A normal conversation during working hours or correct sender details are not suspicious in themselves — though they do not guarantee authenticity either.",
+      "references": ["MB4.2"]
+    },
+    {
+      "id": "Q137",
+      "module": "MB4",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant applies the second-channel rule when faced with an unusual voice request.",
+      "prompt": "The “accountant” from SklepDemo calls you. The voice sounds like hers, but she asks you to urgently provide the login credentials to the invoicing system because “the audit is in progress and the system is about to lock”. What do you do?",
+      "options": [
+        { "id": "A", "text": "I provide the credentials — the voice matches, and an audit sounds serious." },
+        { "id": "B", "text": "I hang up and call the accountant back on her known company number to confirm the request; I never give login credentials to anyone by voice." },
+        { "id": "C", "text": "I give only the login, and send the password by text message — two channels are safer." },
+        { "id": "D", "text": "I ask her to call again in an hour — if it is a scammer, they will surely give up." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "The second-channel rule: you break off the contact initiated by the caller and verify the request through a channel you choose yourself (a known number). Login credentials are never given by voice to anyone — a voice can be faked.",
+      "feedbackIncorrect": "A voice is not proof of identity — audio deepfakes sound convincing. The only safe reaction: hang up and verify the request through a known channel you choose yourself (B). Splitting a secret across two channels or postponing the call does not protect you.",
+      "references": ["MB4.2", "MB4.3"]
+    },
+    {
+      "id": "Q138",
+      "module": "MB4",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant reacts correctly to video material that may be a deepfake before passing it on.",
+      "prompt": "A friend sends you a recording in which a well-known politician announces withdrawing all savings from banks, and asks: “forward this, people need to know”. The recording looks credible. What do you do?",
+      "options": [
+        { "id": "A", "text": "I forward it — better to warn people just in case, and if it is fake, no harm done." },
+        { "id": "B", "text": "I forward it only to family, with a note saying “not sure if this is real”." },
+        { "id": "C", "text": "I reply to my friend that the recording looks suspicious and ask him for the source, waiting until he confirms it himself." },
+        { "id": "D", "text": "I do not pass it on; I check whether independent, reliable sources confirm the information (official statements, media), and I report the fake on the platform." }
+      ],
+      "correct": ["D"],
+      "feedbackCorrect": "Sensational material that triggers strong emotions and calls to “forward this” is a disinformation pattern. Before you share anything: verify in independent sources, and report fakes — do not forward them even “with a disclaimer”.",
+      "feedbackIncorrect": "Forwarding — even “with a note” or only to family — fuels disinformation, and asking your friend for the source verifies nothing (he got it from a chain message too). Correct: do not pass it on, verify in independent sources, report it (D).",
+      "references": ["MB4.3", "MB4.4"]
+    },
+    {
+      "id": "Q139",
+      "module": "MB4",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "The participant knows the first step of the procedure after recognizing a scam attempt at work.",
+      "prompt": "You recognize that an e-mail requesting an urgent transfer is probably a “CEO fraud” scam. What is the correct first step?",
+      "options": [
+        { "id": "A", "text": "I report the message to the IT/security team according to the company procedure and do not reply to the sender." },
+        { "id": "B", "text": "I reply to the scammer to teach them a lesson and see if they confess." },
+        { "id": "C", "text": "I delete the e-mail and tell no one — the problem disappears with the message." },
+        { "id": "D", "text": "I forward the e-mail to colleagues with a warning before reporting it to anyone." }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Reporting it according to the procedure lets the company block the attack for other recipients too. You do not reply to the sender (you would confirm the address is live) and you do not delete the evidence.",
+      "feedbackIncorrect": "The correct first step is reporting to IT/security (A). Replying to the scammer confirms an active address, deleting the e-mail destroys the evidence and leaves others unprotected, and forwarding warnings yourself can be imprecise — that is what the procedure is for.",
+      "references": ["MB4.4"]
+    },
+    {
+      "id": "Q140",
+      "module": "MB4",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "The participant analyzes a multi-channel attack combining a deepfake with an e-mail and chooses the complete, correct response.",
+      "prompt": "Scenario: first you receive an e-mail from the “CFO” about a confidential acquisition of NotkaApp, and an hour later his “voice” calls with an order to immediately pay an invoice to a new supplier. The e-mail warned that he would call. Which analysis of the situation is correct?",
+      "options": [
+        { "id": "A", "text": "The e-mail and the call confirm each other, so the order is credible — two channels are sufficient verification." },
+        { "id": "B", "text": "This is a multi-stage attack pattern: both channels were initiated by the attacker, so they only “confirm” each other. I verify through a channel I initiate myself (the CFO’s known number) and report the incident." },
+        { "id": "C", "text": "It is enough to check whether the e-mail address looks like a company one — if the domain matches, the payment can be made." },
+        { "id": "D", "text": "Since the matter is confidential, I must not verify it with anyone — I carry out the order and wait for the official announcement." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Accurate analysis: announcing the call in the e-mail is deliberate credibility-building — two channels controlled by the attacker are not independent. Independent verification = a channel that YOU initiate; “confidentiality” that forbids verification is part of the attack.",
+      "feedbackIncorrect": "Two channels initiated by the attacker only confirm each other — this is a classic multi-stage attack, and the “confidentiality” clause is meant to cut you off from verification. A matching domain can also be spoofed. The correct analysis: B.",
+      "references": ["MB4.2", "MB4.4"]
+    }
+  ]
+}

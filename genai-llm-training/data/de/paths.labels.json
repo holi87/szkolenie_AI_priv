@@ -1,20 +1,28 @@
 {
   "paths": {
     "S1": {
-      "name": "Nicht-technisch / Entscheidungsebene",
+      "name": "KI mit QA — Stufe: Grundlagen",
       "assumedPathTime": "3.5-4.5 h (A4)"
     },
     "S2": {
-      "name": "Praktiker-Anwender / QA",
+      "name": "KI mit QA — Stufe: Praktiker",
       "assumedPathTime": "6-7 h (A4)"
     },
     "S3": {
-      "name": "Ingenieur / Automatisierung / technisches QA",
+      "name": "KI mit QA — Stufe: Ingenieur",
       "assumedPathTime": "9-10 h (A4)"
     },
     "S4": {
       "name": "Holak-Skala — Diagnose und Entwicklung",
       "assumedPathTime": "2.5-3 h"
+    },
+    "P1": {
+      "name": "KI zu Hause",
+      "assumedPathTime": "2.5-3 h"
+    },
+    "P2": {
+      "name": "Sichere KI-Nutzung",
+      "assumedPathTime": "3-3.5 h"
     }
   }
 }

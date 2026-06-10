@@ -1,0 +1,102 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P2 Bezpieczne używanie AI",
+    "interaction": "Klasyfikacja sytuacji (kind: classify) — odróżnianie ryzyk AI od bezpiecznych praktyk w codziennej pracy",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp, SklepDemo, domeny @przyklad.test). Zero realnych danych, PII, numerów i sekretów. Tłumaczenie wietnamskie (vi)."
+  },
+  "module": "MB1",
+  "intro": "AI có thể thật sự tăng tốc công việc của bạn — nhưng nó cũng có những cạm bẫy riêng: bịa đặt với giọng điệu tự tin, khiến ta dễ tin tưởng quá mức, và ta có thể vô tình dán vào chat những dữ liệu lẽ ra không được rời khỏi công ty. Mô-đun này là bản đồ các rủi ro quan trọng nhất: bạn sẽ lần lượt làm quen với chúng, để ở các mô-đun tiếp theo biết chính xác cần đề phòng điều gì.",
+  "screens": [
+    {
+      "id": "mb1-s1-halucynacje",
+      "title": "Ảo giác: giọng điệu tự tin không phải là bằng chứng của sự thật",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Mô hình ngôn ngữ không kiểm tra sự kiện — nó dự đoán những từ nào khớp nhất với câu hỏi của bạn. Vì vậy nó có thể đưa ra một ngày tháng bịa đặt, một điều luật không tồn tại hay một tên sản phẩm tự nghĩ ra, và làm điều đó với chính cái giọng điệu tự tin mà nó dùng khi nói những điều có thật. Hiện tượng này được gọi là ảo giác." },
+        { "kind": "definition", "term": "Ảo giác", "text": "Câu trả lời của AI nghe có vẻ đáng tin và được đưa ra với sự quả quyết hoàn toàn, nhưng lại sai một phần hoặc hoàn toàn. Mô hình không “nói dối” một cách có chủ đích — đơn giản là nó không phân biệt được điều nó biết với điều nghe có vẻ hay." },
+        { "kind": "callout", "variant": "warn", "title": "Nguyên tắc quan trọng nhất của khóa học này", "text": "Giọng điệu tự tin của câu trả lời không nói lên điều gì về tính đúng đắn của nó. Quyết định dựa trên câu trả lời của AI càng quan trọng, bạn càng phải kiểm chứng kỹ — toàn bộ mô-đun MB6 sẽ nói về cách làm điều đó." }
+      ]
+    },
+    {
+      "id": "mb1-s2-nadmierne-zaufanie",
+      "title": "Thao túng và tin tưởng quá mức",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "AI lịch sự, nhanh chóng và lúc nào cũng có câu trả lời — điều đó khiến ta dễ bắt đầu coi nó như một chuyên gia không bao giờ sai. Thêm vào đó, mô hình có xu hướng xuôi theo: nếu bạn gợi ý sẵn câu trả lời trong câu hỏi, nó thường sẽ xác nhận thay vì sửa lại. Ở phía bên kia còn có những người dùng AI để tạo ra các nội dung giả mạo đầy thuyết phục." },
+        { "kind": "list", "items": [
+          "Hiệu ứng uy quyền — câu trả lời trôi chảy, hùng biện trông như của chuyên gia, kể cả khi nó sai.",
+          "Xu hướng xuôi theo — mô hình sẵn sàng đồng ý với giả định ẩn trong câu hỏi của bạn (“đúng là X phải không?”).",
+          "Quy mô thao túng — AI cho phép tạo email, đánh giá và bài viết giả mạo hàng loạt với chi phí rẻ.",
+          "Cảnh giác bị ru ngủ — sau mười câu trả lời đúng, bạn ngừng kiểm tra câu thứ mười một."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Thái độ lành mạnh", "text": "Hãy coi AI như một thực tập sinh thông minh nhưng thiếu kinh nghiệm: nó soạn bản nháp rất tốt và gợi ý nhiều ý tưởng, nhưng trách nhiệm cuối cùng về kết quả thuộc về bạn. Mô-đun MB5 sẽ phát triển nguyên tắc này." }
+      ]
+    },
+    {
+      "id": "mb1-s3-wycieki-danych",
+      "title": "Rò rỉ dữ liệu qua các cuộc chat",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Mọi thứ bạn nhập vào một chat AI công khai đều rời khỏi máy tính của bạn và đi đến máy chủ của nhà cung cấp. Tùy theo điều khoản dịch vụ, nội dung đó có thể được lưu trữ, được con người xem lại hoặc dùng để huấn luyện các mô hình tiếp theo. Dán vào đó dữ liệu khách hàng hay tài liệu mật là một vụ rò rỉ tiềm tàng — kể cả khi không có gì xấu xảy ra ngay lập tức." },
+        { "kind": "table", "headers": ["Bạn dán gì", "Điều gì có thể xảy ra"], "rows": [
+          ["Dữ liệu cá nhân của khách hàng (ví dụ “Nam Mẫu, jan@przyklad.test”)", "Xâm phạm quyền riêng tư và GDPR — dữ liệu đã ra khỏi công ty"],
+          ["Tài liệu mật của công ty (bảng giá, chiến lược, hợp đồng)", "Vi phạm bí mật kinh doanh hoặc NDA với khách hàng"],
+          ["Mật khẩu, khóa hoặc token của hệ thống", "Bất kỳ ai có được dữ liệu này đều có thể vào hệ thống"],
+          ["Câu hỏi chung không chứa dữ liệu công ty", "Không sao cả — đây là cách dùng chat công khai an toàn"]
+        ], "textAlt": "Bảng cho thấy hậu quả của việc dán các loại nội dung khác nhau vào chat công khai: dữ liệu cá nhân có nguy cơ vi phạm GDPR, tài liệu mật có nguy cơ vi phạm bí mật kinh doanh, mật khẩu có nguy cơ bị chiếm hệ thống, còn câu hỏi chung không chứa dữ liệu công ty là an toàn." },
+        { "kind": "callout", "variant": "safe", "title": "Bộ lọc đơn giản trước khi dán", "text": "Trước khi dán bất cứ thứ gì, hãy tự hỏi: “Liệu mình có dám treo đúng nội dung này lên bảng thông báo ở trung tâm thương mại không?”. Nếu không — đừng dán, hoặc hãy xóa các phần nhạy cảm trước. Chi tiết bạn sẽ học trong mô-đun MB2." }
+      ]
+    },
+    {
+      "id": "mb1-s4-mapa",
+      "title": "AI giúp ích ở đâu và gây hại ở đâu",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Rủi ro phụ thuộc vào tác vụ. AI tỏa sáng ở những việc mà bạn dễ dàng tự đánh giá kết quả bằng mắt mình: bản nháp, bản tóm tắt, động não ý tưởng, trau chuốt văn phong. Nó trở nên nguy hiểm ở những việc mà sai sót gây tốn kém còn bạn không có cách nào phát hiện: sự kiện, con số, pháp luật, sức khỏe, các quyết định về con người." },
+        { "kind": "table", "headers": ["Tác vụ", "Rủi ro", "Vì sao"], "rows": [
+          ["Bản nháp email, tóm tắt ghi chú, ý tưởng", "Thấp", "Bạn tự thấy được kết quả có hợp lý không — dễ kiểm chứng"],
+          ["Dịch hoặc trau chuốt văn phong văn bản của chính bạn", "Thấp–trung bình", "Bạn nắm nội dung, nhưng các sắc thái có thể bị mất"],
+          ["Sự kiện, ngày tháng, con số, điều luật, lời khuyên sức khỏe", "Cao", "Ảo giác nghe giống hệt như sự thật"],
+          ["Quyết định về con người (đánh giá, tuyển dụng, khiếu nại)", "Cao", "Sai sót hoặc thiên kiến của mô hình ảnh hưởng đến một con người thật"]
+        ], "textAlt": "Bảng rủi ro của các tác vụ AI: bản nháp và bản tóm tắt có rủi ro thấp vì dễ kiểm chứng; bản dịch rủi ro thấp đến trung bình; sự kiện, con số và lời khuyên sức khỏe rủi ro cao vì ảo giác nghe như sự thật; quyết định về con người rủi ro cao vì sai sót ảnh hưởng đến người thật." },
+        { "kind": "paragraph", "text": "Bản đồ này sẽ được phát triển trong các mô-đun tiếp theo: dữ liệu nhạy cảm (MB2), tấn công qua nội dung (MB3), deepfake và lừa đảo (MB4), quy tắc trong công ty (MB5) và kiểm chứng câu trả lời (MB6). Trước mắt, hãy kiểm tra xem bạn có nhận ra rủi ro khi nhìn thấy nó không." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "mb1-classify",
+    "title": "Rủi ro hay thực hành an toàn?",
+    "intro": "Hãy đọc từng tình huống và quyết định: đây là rủi ro AI hay thực hành an toàn? Phần phản hồi sẽ giải thích lý do.",
+    "categories": [
+      { "id": "risk", "label": "Rủi ro AI", "desc": "Tình huống có thể kết thúc bằng sai sót, rò rỉ hoặc thiệt hại." },
+      { "id": "safe", "label": "Thực hành an toàn", "desc": "Cách dùng AI hợp lý, vẫn giữ được sự kiểm soát và thận trọng." }
+    ],
+    "items": [
+      { "id": "mb1-i1", "text": "Bạn sao chép câu trả lời của AI kèm ngày tháng và con số thẳng vào báo cáo gửi ban giám đốc, vì nó nghe rất chắc chắn.", "correctCategory": "risk", "rationale": "Giọng điệu tự tin không phải bằng chứng của sự thật — sự kiện và con số từ AI cần được kiểm chứng trước khi dùng." },
+      { "id": "mb1-i2", "text": "Bạn nhờ AI đề xuất ba tiêu đề cho bài thuyết trình, rồi tự mình chọn và chỉnh sửa phương án hay nhất.", "correctCategory": "safe", "rationale": "Động não ý tưởng là rủi ro thấp — bạn tự đánh giá kết quả bằng mắt mình và giữ quyền kiểm soát." },
+      { "id": "mb1-i3", "text": "Bạn dán vào chat công khai toàn bộ đơn khiếu nại của khách hàng kèm họ tên và địa chỉ email của họ.", "correctCategory": "risk", "rationale": "Dữ liệu cá nhân của khách hàng đã ra khỏi công ty — đây là rò rỉ tiềm tàng và vi phạm GDPR." },
+      { "id": "mb1-i4", "text": "Trước khi dán một đoạn của phiếu yêu cầu, bạn xóa khỏi đó họ tên và địa chỉ của khách hàng, chỉ giữ lại phần mô tả vấn đề.", "correctCategory": "safe", "rationale": "Ẩn danh hóa trước khi dán là vệ sinh cơ bản khi làm việc với chat AI." },
+      { "id": "mb1-i5", "text": "Bạn hỏi AI: “Đúng là đối thủ SklepDemo của chúng tôi đã phá sản phải không?” và coi lời xác nhận là sự thật.", "correctCategory": "risk", "rationale": "Mô hình có xu hướng xuôi theo giả định trong câu hỏi — lời xác nhận không phải là sự kiểm chứng." },
+      { "id": "mb1-i6", "text": "AI tóm tắt cho bạn một tài liệu dài — trước khi gửi bản tóm tắt đi, bạn đối chiếu các điểm chính với bản gốc.", "correctCategory": "safe", "rationale": "Tóm tắt cộng với kiểm tra nhanh so với bản gốc là cách dùng AI mẫu mực và an toàn." },
+      { "id": "mb1-i7", "text": "Sau một tháng nhận toàn câu trả lời đúng, bạn ngừng kiểm tra bất cứ thứ gì — “mô hình này có sai bao giờ đâu”.", "correctCategory": "risk", "rationale": "Cảnh giác bị ru ngủ là cạm bẫy kinh điển của tin tưởng quá mức — ảo giác sẽ đến mà không hề báo trước." },
+      { "id": "mb1-i8", "text": "Lời khuyên liên quan đến hợp đồng với khách hàng bạn không lấy từ chat, mà tham vấn bộ phận pháp chế.", "correctCategory": "safe", "rationale": "Pháp luật là lĩnh vực rủi ro cao — quyết định phải do người có đúng chuyên môn đưa ra." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "AI dự đoán từ ngữ chứ không kiểm tra sự kiện — giọng điệu tự tin của câu trả lời không có nghĩa nó là sự thật.",
+      "Tin tưởng quá mức lớn dần trong âm thầm: AI hoạt động tốt càng lâu, bạn càng dễ bỏ sót sai sót của nó.",
+      "Mọi thứ bạn dán vào chat công khai đều rời khỏi công ty — hãy để dữ liệu cá nhân và nội dung mật bên ngoài cuộc chat.",
+      "Rủi ro phụ thuộc vào tác vụ: bản nháp và ý tưởng thì an toàn; sự kiện, pháp luật, sức khỏe và quyết định về con người cần đến con người."
+    ],
+    "checklist": [
+      "Tôi có biết rằng ảo giác nghe tự tin y như sự thật không?",
+      "Tôi có kiểm chứng câu trả lời của AI kỹ hơn khi quyết định càng quan trọng không?",
+      "Trước khi dán bất cứ thứ gì vào chat, tôi có kiểm tra xem trong đó có dữ liệu cá nhân hoặc mật không?",
+      "Tôi có chỉ ra được những tác vụ mà AI giúp ích và những tác vụ mà nó có thể gây hại không?"
+    ],
+    "checklistTitle": "Danh sách kiểm tra — bản đồ rủi ro AI",
+    "nextStep": "Bước tiếp theo: mô-đun MB2 — bạn sẽ học cách nhận diện chính xác dữ liệu nhạy cảm và chuẩn bị nội dung sao cho có thể dán vào chat một cách an toàn."
+  }
+}
