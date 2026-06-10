@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mockupy — odświeżenie graficzne + efektowność (propozycja, 2026-06)</title>
+<style>
+/* ====================================================================
+   MOCKUP — propozycja odświeżenia. Tokeny = produkcyjne tokens.css
+   (Kierunek B „Deep Slate Premium"). Nowości oznaczone [NOWE].
+   ==================================================================== */
+:root {
+  --color-bg: #0B0E15;
+  --color-surface: #141923;
+  --color-surface-2: #1C2230;
+  --color-surface-3: #2A3142;
+  --color-fg: #EDF0F6;
+  --color-muted: #AAB3C3;
+  --color-border: #6E7890;
+  --color-border-subtle: #28303F;
+  --color-accent: #5B9BFE;
+  --color-accent-fg: #07101F;
+  --color-accent-quiet: #15233C;
+  --color-accent-2: #8E84F8;
+  --color-ok: #4ADE80;
+  --color-warn: #FBBF24;
+  --color-bad: #F87171;
+  --color-locked: #6B7280;
+  --grad-accent: linear-gradient(135deg, var(--color-accent), var(--color-accent-2));
+  --font-base: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --sp-2: .5rem; --sp-3: .75rem; --sp-4: 1rem; --sp-5: 1.5rem; --sp-6: 2rem; --sp-7: 3rem;
+  --shadow-md: 0 10px 28px rgba(0,0,0,.42);
+  --shadow-lg: 0 20px 48px rgba(0,0,0,.48);
+  --ring-accent: 0 0 0 3px rgba(91,155,254,.35);
+  --dur-fast: 120ms; --dur-base: 240ms;
+  /* [NOWE] tokeny efektowności */
+  --glow-accent: 0 0 24px rgba(91,155,254,.25);
+  --glow-ok: 0 0 20px rgba(74,222,128,.22);
+  --dur-slow: 600ms;
+  --ease-spring: cubic-bezier(.34,1.56,.64,1);
+}
+* { box-sizing: border-box; }
+body { margin:0; background:var(--color-bg); color:var(--color-fg); font-family:var(--font-base); line-height:1.65; }
+main { max-width: 1080px; margin:0 auto; padding: var(--sp-6) var(--sp-5) var(--sp-7); }
+h1 { font-size: clamp(1.8rem,4vw,2.6rem); line-height:1.2; margin:0 0 .25em; }
+h1 span { background: var(--grad-accent); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.lead { color: var(--color-muted); max-width: 70ch; }
+section { margin-top: var(--sp-7); }
+section > h2 { font-size:1.4rem; border-bottom:1px solid var(--color-border-subtle); padding-bottom:var(--sp-2); }
+.note { font-size:.85rem; color:var(--color-muted); background:var(--color-surface); border-left:3px solid var(--color-accent); padding:var(--sp-3) var(--sp-4); border-radius:0 8px 8px 0; margin: var(--sp-4) 0; }
+.tag-new { display:inline-block; font-size:.7rem; font-weight:700; letter-spacing:.05em; color:var(--color-accent-fg); background:var(--grad-accent); padding:.1em .5em; border-radius:99px; vertical-align:middle; }
+
+/* ============ 1. KARTY ŚCIEŻEK + selektor poziomu ============ */
+.paths { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:var(--sp-4); }
+.path-card {
+  position:relative; background:var(--color-surface); border:1px solid var(--color-border-subtle);
+  border-radius:14px; padding:var(--sp-5); cursor:pointer;
+  transition: transform var(--dur-base) var(--ease-spring), box-shadow var(--dur-base), border-color var(--dur-base);
+}
+/* [NOWE] hover: lift + gradientowa obwódka + glow */
+.path-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md), var(--glow-accent); border-color:transparent; }
+.path-card:hover::before { opacity:1; }
+.path-card::before {
+  content:""; position:absolute; inset:-1px; border-radius:14px; padding:1px;
+  background: var(--grad-accent); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude; opacity:0; transition:opacity var(--dur-base);
+  pointer-events:none;
+}
+.path-card:focus-visible { outline:none; box-shadow: var(--ring-accent); }
+.path-card h3 { margin:.2em 0; font-size:1.05rem; }
+.path-card .meta { font-size:.8rem; color:var(--color-muted); }
+.path-icon { width:38px; height:38px; border-radius:10px; display:grid; place-items:center; background:var(--color-accent-quiet); color:var(--color-accent); font-size:1.2rem; margin-bottom:var(--sp-3); }
+.badge { font-size:.7rem; font-weight:600; padding:.15em .6em; border-radius:99px; border:1px solid var(--color-border-subtle); color:var(--color-muted); }
+.badge--formative { color:var(--color-ok); border-color:rgba(74,222,128,.35); }
+.badge--cert { color:var(--color-accent); border-color:rgba(91,155,254,.35); }
+.badge--bonus { color:var(--color-warn); border-color:rgba(251,191,36,.4); }
+/* [NOWE] bonus poza gridem ścieżek — pełna szerokość, inny kształt niż karty P1–P3 */
+.bonus-card {
+  display:flex; gap:var(--sp-4); align-items:center; margin-top:var(--sp-4);
+  background:var(--color-surface); border:1px dashed var(--color-border); border-radius:12px;
+  padding:var(--sp-4) var(--sp-5); cursor:pointer;
+  transition: transform var(--dur-base) var(--ease-spring), box-shadow var(--dur-base), border-color var(--dur-base);
+}
+.bonus-card:hover { transform:translateY(-2px); box-shadow:var(--shadow-md); border-color:var(--color-warn); }
+.bonus-card:focus-visible { outline:none; box-shadow:var(--ring-accent); }
+.bonus-card .path-icon { margin-bottom:0; background:rgba(251,191,36,.12); color:var(--color-warn); }
+/* [NOWE] selektor poziomu w karcie „AI z QA" */
+.levels { display:flex; gap:6px; margin-top:var(--sp-3); background:var(--color-surface-2); padding:4px; border-radius:10px; }
+.levels button {
+  flex:1; font:inherit; font-size:.78rem; font-weight:600; padding:.4em .2em; border:0; border-radius:7px;
+  background:transparent; color:var(--color-muted); cursor:pointer; transition: all var(--dur-fast);
+}
+.levels button[aria-pressed="true"] { background:var(--color-accent); color:var(--color-accent-fg); box-shadow:var(--glow-accent); }
+.levels button:focus-visible { outline:none; box-shadow:var(--ring-accent); }
+.level-info { font-size:.78rem; color:var(--color-muted); margin-top:var(--sp-2); min-height:2.6em; }
+.level-info strong { color:var(--color-fg); }
+
+/* ============ 2. HUB MODUŁÓW — stany ============ */
+.modules { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:var(--sp-4); }
+.mod {
+  position:relative; display:flex; gap:var(--sp-4); align-items:center;
+  background:var(--color-surface); border:1px solid var(--color-border-subtle); border-radius:12px; padding:var(--sp-4);
+  transition: transform var(--dur-base) var(--ease-spring), box-shadow var(--dur-base);
+}
+.mod:hover { transform:translateY(-2px); box-shadow:var(--shadow-md); }
+.mod h4 { margin:0; font-size:.95rem; }
+.mod .sub { font-size:.78rem; color:var(--color-muted); }
+.mod-state { font-size:.7rem; font-weight:700; letter-spacing:.04em; text-transform:uppercase; }
+/* progress ring [NOWE] — SVG, animowany stroke-dashoffset */
+.ring { width:52px; height:52px; flex:none; }
+.ring circle { fill:none; stroke-width:5; }
+.ring .track { stroke: var(--color-surface-3); }
+.ring .bar { stroke: var(--color-accent); stroke-linecap:round; stroke-dasharray:138.2;
+  transform:rotate(-90deg); transform-origin:center; transition: stroke-dashoffset var(--dur-slow) ease-out; }
+.ring text { fill:var(--color-fg); font-size:13px; font-weight:700; text-anchor:middle; dominant-baseline:central; }
+.mod--done .ring .bar { stroke:var(--color-ok); }
+.mod--done { border-color:rgba(74,222,128,.3); }
+.mod--done .mod-state { color:var(--color-ok); }
+/* [NOWE] check-pop przy ukończeniu */
+.mod--done .ring .check { animation: pop var(--dur-slow) var(--ease-spring) both; transform-origin:center; }
+@keyframes pop { 0%{transform:scale(0)} 70%{transform:scale(1.25)} 100%{transform:scale(1)} }
+.mod--active .mod-state { color:var(--color-accent); }
+/* [NOWE] puls aktywnego modułu */
+.mod--active::after { content:""; position:absolute; inset:-1px; border-radius:12px; border:1px solid var(--color-accent);
+  animation: pulse 2.4s ease-in-out infinite; pointer-events:none; }
+@keyframes pulse { 0%,100%{opacity:.15} 50%{opacity:.6} }
+.mod--locked { opacity:.55; }
+.mod--locked .mod-state { color:var(--color-locked); }
+.mod--optional { border-style:dashed; }
+.mod--optional .mod-state { color:var(--color-warn); }
+
+/* ============ 3. QUIZ — mikrointerakcje ============ */
+.quizdemo { background:var(--color-surface); border:1px solid var(--color-border-subtle); border-radius:14px; padding:var(--sp-5); max-width:640px; }
+.qbar { height:8px; border-radius:99px; background:var(--color-surface-3); overflow:hidden; margin-bottom:var(--sp-5); position:relative; }
+.qbar > i { display:block; height:100%; width:46%; background:var(--grad-accent); border-radius:99px; transition: width var(--dur-slow) ease-out; }
+/* [NOWE] shimmer paska postępu */
+.qbar > i::after { content:""; position:absolute; inset:0; background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.25) 50%,transparent 70%);
+  animation: shimmer 2.2s linear infinite; }
+@keyframes shimmer { from{transform:translateX(-100%)} to{transform:translateX(100%)} }
+.answers { display:grid; gap:var(--sp-3); margin-top:var(--sp-4); }
+.answer { font:inherit; text-align:left; background:var(--color-surface-2); color:var(--color-fg);
+  border:1px solid var(--color-border); border-radius:10px; padding:var(--sp-3) var(--sp-4); cursor:pointer;
+  transition: all var(--dur-fast); }
+.answer:hover { background:var(--color-surface-3); }
+.answer:focus-visible { outline:none; box-shadow:var(--ring-accent); }
+/* [NOWE] feedback: poprawna = zielony puls, błędna = shake */
+.answer--ok { border-color:var(--color-ok); background:rgba(74,222,128,.08); box-shadow:var(--glow-ok); animation: okpulse .5s var(--ease-spring); }
+@keyframes okpulse { 0%{transform:scale(1)} 40%{transform:scale(1.02)} 100%{transform:scale(1)} }
+.answer--bad { border-color:var(--color-bad); background:rgba(248,113,113,.08); animation: shake .4s ease; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 50%{transform:translateX(5px)} 75%{transform:translateX(-3px)} }
+
+/* ============ 4. WYNIKI — wykresy ============ */
+.results { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:var(--sp-4); }
+.panel { background:var(--color-surface); border:1px solid var(--color-border-subtle); border-radius:14px; padding:var(--sp-5); }
+.panel h4 { margin:0 0 var(--sp-4); font-size:.9rem; color:var(--color-muted); text-transform:uppercase; letter-spacing:.05em; }
+/* donut [NOWE] */
+.donut { display:block; margin:0 auto; }
+.donut .track { fill:none; stroke:var(--color-surface-3); stroke-width:12; }
+.donut .val { fill:none; stroke:url(#gradDonut); stroke-width:12; stroke-linecap:round;
+  stroke-dasharray:339.3; stroke-dashoffset:339.3; transform:rotate(-90deg); transform-origin:center;
+  transition: stroke-dashoffset 1.2s cubic-bezier(.22,1,.36,1); }
+.donut .big { fill:var(--color-fg); font-size:30px; font-weight:700; text-anchor:middle; }
+.donut .small { fill:var(--color-muted); font-size:11px; text-anchor:middle; }
+.verdict { text-align:center; margin-top:var(--sp-3); font-weight:600; color:var(--color-ok); }
+/* bary per moduł [NOWE] */
+.bars { display:grid; gap:10px; }
+.bar-row { display:grid; grid-template-columns: 3.2em 1fr 3em; gap:10px; align-items:center; font-size:.8rem; }
+.bar-row .lbl { color:var(--color-muted); font-family:var(--font-mono); }
+.bar-row .pct { text-align:right; font-weight:600; font-variant-numeric:tabular-nums; }
+.bar-track { height:10px; border-radius:99px; background:var(--color-surface-3); overflow:hidden; }
+.bar-track > i { display:block; height:100%; width:0; border-radius:99px; background:var(--color-accent);
+  transition: width .9s cubic-bezier(.22,1,.36,1); }
+.bar-track > i.ok { background:var(--color-ok); }
+.bar-track > i.warn { background:var(--color-warn); }
+.bar-track > i.bad { background:var(--color-bad); }
+/* radar filarów [NOWE] */
+.radar polygon.grid, .radar line.grid { fill:none; stroke:var(--color-border-subtle); }
+.radar .area { fill:rgba(91,155,254,.22); stroke:var(--color-accent); stroke-width:2;
+  filter: drop-shadow(0 0 8px rgba(91,155,254,.4)); }
+.radar text { fill:var(--color-muted); font-size:10px; text-anchor:middle; }
+.radar circle.pt { fill:var(--color-accent); }
+
+/* ============ 5. CERTYFIKAT ============ */
+.cert { position:relative; overflow:hidden; max-width:620px; background:var(--color-surface); border-radius:16px;
+  padding:var(--sp-6); text-align:center; box-shadow:var(--shadow-lg); }
+.cert::before { content:""; position:absolute; inset:0; border-radius:16px; padding:2px; background:var(--grad-accent);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
+.cert .who { font-size:1.6rem; font-weight:700; margin:.3em 0; }
+.cert .lvl { display:inline-block; margin-top:var(--sp-2); font-size:.8rem; font-weight:700; padding:.3em 1em; border-radius:99px;
+  background:var(--color-accent-quiet); color:var(--color-accent); }
+.cert .id { font-family:var(--font-mono); font-size:.72rem; color:var(--color-muted); margin-top:var(--sp-4); }
+.confetti { position:absolute; width:8px; height:14px; top:-20px; border-radius:2px; opacity:.9;
+  animation: fall linear forwards; }
+@keyframes fall { to { transform: translateY(420px) rotate(720deg); opacity:0; } }
+button.cta { font:inherit; font-weight:600; background:var(--color-accent); color:var(--color-accent-fg);
+  border:0; border-radius:10px; padding:.6em 1.4em; cursor:pointer; margin-top:var(--sp-4);
+  transition: transform var(--dur-fast) var(--ease-spring), box-shadow var(--dur-fast); }
+button.cta:hover { transform:translateY(-2px); box-shadow:var(--glow-accent); }
+button.cta:focus-visible { outline:none; box-shadow:var(--ring-accent); }
+
+/* ============ a11y: redukcja ruchu ============ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
+}
+</style>
+</head>
+<body>
+<main>
+  <h1>Odświeżenie graficzne — <span>propozycja</span></h1>
+  <p class="lead">Mockup interaktywny na produkcyjnych tokenach Deep Slate. Pięć obszarów podkręcenia: karty ścieżek z selektorem poziomu, stany hubu modułów, mikrointerakcje quizu, wykresy wyników, ekran ukończenia (bez certyfikatu — ADR-0005). Wszystko czysty CSS/SVG + wanilia JS — zgodnie z ADR-0002 (zero buildu). Każda animacja respektuje <code>prefers-reduced-motion</code>.</p>
+
+  <!-- ============ 1 ============ -->
+  <section>
+    <h2>1. Wybór ścieżki <span class="tag-new">NOWE</span></h2>
+    <p class="note">Nowa macierz z <code>Rebuild.md</code>: 3 ścieżki o różnych treściach + Skala Holaka jako bonus poza numeracją (osobny pasek, nie konkuruje w pickerze). Karta „AI z QA" dostaje selektor poziomu (Podstawowy / Praktyk / Inżynier) — hover daje lift + gradientową obwódkę + glow.</p>
+    <div class="paths">
+      <article class="path-card" tabindex="0">
+        <div class="path-icon">⌂</div>
+        <h3>AI w domu</h3>
+        <p class="meta">6 modułów · ~3 h</p>
+        <span class="badge badge--formative">bez testu</span>
+      </article>
+      <article class="path-card" tabindex="0">
+        <div class="path-icon">🛡</div>
+        <h3>Bezpieczne używanie AI</h3>
+        <p class="meta">6 modułów · ~3,5 h</p>
+        <span class="badge badge--cert">test + zaliczenie</span>
+      </article>
+      <article class="path-card" tabindex="0" style="grid-row:span 1">
+        <div class="path-icon">⚙</div>
+        <h3>AI z QA</h3>
+        <p class="meta">12 modułów · poziom do wyboru</p>
+        <span class="badge badge--cert">zaliczenie + poziom</span>
+        <div class="levels" role="group" aria-label="Poziom ścieżki">
+          <button aria-pressed="false" data-lvl="0">Podstawowy</button>
+          <button aria-pressed="true"  data-lvl="1">Praktyk</button>
+          <button aria-pressed="false" data-lvl="2">Inżynier</button>
+        </div>
+        <p class="level-info" id="lvlInfo"><strong>8 wymaganych</strong> · test 40 pyt. · próg 78% · 1 zadanie praktyczne</p>
+      </article>
+    </div>
+    <!-- [NOWE] Skala Holaka jako BONUS poza numeracją ścieżek (Rebuild.md §2.0) -->
+    <article class="bonus-card" tabindex="0">
+      <div class="path-icon">📈</div>
+      <div>
+        <h3 style="margin:.1em 0">Bonus: Skala Holaka <span class="badge badge--bonus">bonus</span></h3>
+        <p class="meta" style="margin:0">Zdiagnozuj siebie i organizację — niezależnie od wybranej ścieżki · diagnoza + 4 moduły · ~2,5 h</p>
+      </div>
+    </article>
+  </section>
+
+  <!-- ============ 2 ============ -->
+  <section>
+    <h2>2. Hub modułów — stany <span class="tag-new">NOWE</span></h2>
+    <p class="note">Pierścień postępu zamiast paska, „check-pop" przy ukończeniu, puls obwódki na aktywnym module, kreskowana ramka dla opcjonalnych (poziom decyduje o badge wymagany/opcjonalny).</p>
+    <div class="modules">
+      <article class="mod mod--done">
+        <svg class="ring" viewBox="0 0 52 52" aria-hidden="true">
+          <circle class="track" cx="26" cy="26" r="22"/>
+          <circle class="bar" cx="26" cy="26" r="22" style="stroke-dashoffset:0"/>
+          <path class="check" d="M18 27l6 6 11-12" fill="none" stroke="var(--color-ok)" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+        <div><h4>M1 · Fundamenty GenAI</h4><div class="sub">35 min · quiz 8/8</div><div class="mod-state">ukończony</div></div>
+      </article>
+      <article class="mod mod--active">
+        <svg class="ring" viewBox="0 0 52 52" aria-hidden="true">
+          <circle class="track" cx="26" cy="26" r="22"/>
+          <circle class="bar" cx="26" cy="26" r="22" style="stroke-dashoffset:62"/>
+          <text x="26" y="27">55%</text>
+        </svg>
+        <div><h4>M6 · RAG</h4><div class="sub">70 min · w trakcie</div><div class="mod-state">w trakcie</div></div>
+      </article>
+      <article class="mod mod--optional">
+        <svg class="ring" viewBox="0 0 52 52" aria-hidden="true">
+          <circle class="track" cx="26" cy="26" r="22"/>
+          <circle class="bar" cx="26" cy="26" r="22" style="stroke-dashoffset:138.2"/>
+          <text x="26" y="27">0%</text>
+        </svg>
+        <div><h4>M9 · Integracje i agenty</h4><div class="sub">45 min</div><div class="mod-state">opcjonalny</div></div>
+      </article>
+      <article class="mod mod--locked">
+        <svg class="ring" viewBox="0 0 52 52" aria-hidden="true">
+          <circle class="track" cx="26" cy="26" r="22"/>
+          <text x="26" y="27">🔒</text>
+        </svg>
+        <div><h4>Test końcowy</h4><div class="sub">odblokowanie: wszystkie wymagane</div><div class="mod-state">zablokowany</div></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ 3 ============ -->
+  <section>
+    <h2>3. Quiz — mikrointerakcje <span class="tag-new">NOWE</span></h2>
+    <p class="note">Shimmer na pasku postępu, poprawna odpowiedź = zielony puls + glow, błędna = krótki shake. Kliknij odpowiedź, aby zobaczyć demo (B jest poprawna).</p>
+    <div class="quizdemo">
+      <div class="qbar" role="progressbar" aria-valuenow="46" aria-valuemin="0" aria-valuemax="100"><i></i></div>
+      <strong>P5. Co najlepiej ogranicza halucynacje w odpowiedziach LLM?</strong>
+      <div class="answers" id="answers">
+        <button class="answer">A. Zwiększenie parametru temperature</button>
+        <button class="answer" data-ok>B. Ugruntowanie odpowiedzi w źródłach (RAG) + weryfikacja</button>
+        <button class="answer">C. Dłuższy prompt systemowy</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 4 ============ -->
+  <section>
+    <h2>4. Ekran wyników — wykresy <span class="tag-new">NOWE</span></h2>
+    <p class="note">Trzy widoki: donut wyniku ogólnego (animowany count-up), bary per moduł (kolor wg progu), radar filarów kompetencji. Czysty SVG, zero bibliotek. Kliknij „Przelicz", aby odpalić animacje.</p>
+    <button class="cta" id="runCharts">Przelicz wyniki ▶</button>
+    <div class="results" style="margin-top:var(--sp-4)">
+      <div class="panel">
+        <h4>Wynik ogólny</h4>
+        <svg class="donut" width="160" height="160" viewBox="0 0 120 120">
+          <defs><linearGradient id="gradDonut" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#5B9BFE"/><stop offset="100%" stop-color="#8E84F8"/>
+          </linearGradient></defs>
+          <circle class="track" cx="60" cy="60" r="54"/>
+          <circle class="val" id="donutVal" cx="60" cy="60" r="54"/>
+          <text class="big" id="donutNum" x="60" y="58">0%</text>
+          <text class="small" x="60" y="76">próg 78%</text>
+        </svg>
+        <div class="verdict" id="verdict" style="opacity:0">✓ ZALICZONE · poziom Praktyk</div>
+      </div>
+      <div class="panel">
+        <h4>Wynik per moduł</h4>
+        <div class="bars" id="bars">
+          <div class="bar-row"><span class="lbl">M1</span><span class="bar-track"><i class="ok" data-w="92"></i></span><span class="pct">92%</span></div>
+          <div class="bar-row"><span class="lbl">M3</span><span class="bar-track"><i class="ok" data-w="85"></i></span><span class="pct">85%</span></div>
+          <div class="bar-row"><span class="lbl">M6</span><span class="bar-track"><i class="warn" data-w="74"></i></span><span class="pct">74%</span></div>
+          <div class="bar-row"><span class="lbl">M8</span><span class="bar-track"><i class="ok" data-w="88"></i></span><span class="pct">88%</span></div>
+          <div class="bar-row"><span class="lbl">M10</span><span class="bar-track"><i class="ok" data-w="100"></i></span><span class="pct">100%</span></div>
+          <div class="bar-row"><span class="lbl">M11</span><span class="bar-track"><i class="bad" data-w="61"></i></span><span class="pct">61%</span></div>
+        </div>
+      </div>
+      <div class="panel">
+        <h4>Filary kompetencji</h4>
+        <svg class="radar" width="100%" height="200" viewBox="0 0 200 200">
+          <polygon class="grid" points="100,20 177,77 147,168 53,168 23,77"/>
+          <polygon class="grid" points="100,47 151,85 131,145 69,145 49,85"/>
+          <polygon class="grid" points="100,73 126,93 116,123 84,123 74,93"/>
+          <line class="grid" x1="100" y1="100" x2="100" y2="20"/><line class="grid" x1="100" y1="100" x2="177" y2="77"/>
+          <line class="grid" x1="100" y1="100" x2="147" y2="168"/><line class="grid" x1="100" y1="100" x2="53" y2="168"/>
+          <line class="grid" x1="100" y1="100" x2="23" y2="77"/>
+          <polygon class="area" id="radarArea" points="100,100 100,100 100,100 100,100 100,100"/>
+          <text x="100" y="12">fundamenty</text><text x="186" y="74">RAG/dane</text>
+          <text x="152" y="182">QA praktyka</text><text x="48" y="182">security</text><text x="14" y="74">ewaluacja</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 5 ============ -->
+  <section>
+    <h2>5. Ukończenie ścieżki — celebracja <span class="tag-new">NOWE</span></h2>
+    <p class="note">BEZ certyfikatu i pseudonimu (ADR-0005: self-assessment, brak bazy weryfikacyjnej). To podkręcony nagłówek ekranu „Wynik": gradientowa ramka, badge zaliczenia + poziom, konfetti przy pierwszym zaliczeniu (jednorazowe, wyłączone przy reduced-motion). Niżej na ekranie: wykresy z sekcji 4, bramki, słabe obszary, eksport anonimowy.</p>
+    <div class="cert" id="cert">
+      <div style="font-size:.75rem;letter-spacing:.2em;color:var(--color-muted)">ŚCIEŻKA UKOŃCZONA</div>
+      <div class="who">✓ Zaliczone — 83%</div>
+      <div style="color:var(--color-muted)">AI z QA — GenAI &amp; LLM Training</div>
+      <span class="lvl">POZIOM: PRAKTYK</span>
+      <div class="id">wynik lokalny (localStorage) · eksport JSON/CSV anonimowy · 2026-06-10</div>
+      <br><button class="cta" id="party">🎉 Pokaż celebrację</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>Zasady motion (do design-system doc)</h2>
+    <ul style="color:var(--color-muted)">
+      <li>Animacje funkcjonalne, nie dekoracyjne: każda komunikuje zmianę stanu (postęp, wynik, feedback).</li>
+      <li>Durations: feedback ≤ 500 ms, wykresy ≤ 1,2 s, easing sprężysty tylko na elementach „nagrody" (check, certyfikat).</li>
+      <li><code>prefers-reduced-motion: reduce</code> — wszystko ląduje na stanie końcowym natychmiast (globalny override na dole CSS).</li>
+      <li>Glow oszczędnie: hover kart, poprawna odpowiedź, radar — nigdzie indziej.</li>
+      <li>Konfetti jednorazowe per zaliczenie ścieżki, bez dźwięku, bez pętli.</li>
+    </ul>
+  </section>
+</main>
+
+<script>
+// ---- selektor poziomu (demo) ----
+const LVL = [
+  '<strong>5 wymaganych</strong> · test 25 pyt. · próg 75% · bez zadań praktycznych',
+  '<strong>8 wymaganych</strong> · test 40 pyt. · próg 78% · 1 zadanie praktyczne',
+  '<strong>12 wymaganych</strong> · test 55 pyt. · próg 80% · 2 zadania praktyczne'
+];
+document.querySelectorAll('.levels button').forEach(b => b.addEventListener('click', e => {
+  e.stopPropagation();
+  document.querySelectorAll('.levels button').forEach(x => x.setAttribute('aria-pressed','false'));
+  b.setAttribute('aria-pressed','true');
+  document.getElementById('lvlInfo').innerHTML = LVL[+b.dataset.lvl];
+}));
+
+// ---- quiz feedback (demo) ----
+document.getElementById('answers').addEventListener('click', e => {
+  const btn = e.target.closest('.answer'); if (!btn) return;
+  document.querySelectorAll('.answer').forEach(a => a.classList.remove('answer--ok','answer--bad'));
+  btn.classList.add(btn.hasAttribute('data-ok') ? 'answer--ok' : 'answer--bad');
+});
+
+// ---- wykresy wyników ----
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+document.getElementById('runCharts').addEventListener('click', () => {
+  // donut: 83% z count-upem
+  const target = 83, C = 339.3;
+  document.getElementById('donutVal').style.strokeDashoffset = C * (1 - target/100);
+  const num = document.getElementById('donutNum');
+  if (reduced) { num.textContent = target + '%'; }
+  else {
+    const t0 = performance.now();
+    (function tick(t){ const p = Math.min((t - t0)/1100, 1);
+      num.textContent = Math.round(target * (1-Math.pow(1-p,3))) + '%';
+      if (p < 1) requestAnimationFrame(tick); })(t0);
+  }
+  document.getElementById('verdict').style.opacity = 1;
+  // bary
+  document.querySelectorAll('#bars i').forEach(i => i.style.width = i.dataset.w + '%');
+  // radar: 5 osi, wartości 0..1, wierzchołki pięciokąta r=80 wokół (100,100)
+  const vals = [.9, .75, .85, 1, .6];
+  const pts = vals.map((v,i) => {
+    const a = -Math.PI/2 + i * 2*Math.PI/5;
+    return (100 + Math.cos(a)*80*v).toFixed(1) + ',' + (100 + Math.sin(a)*80*v).toFixed(1);
+  }).join(' ');
+  document.getElementById('radarArea').setAttribute('points', pts);
+});
+
+// ---- konfetti ----
+document.getElementById('party').addEventListener('click', () => {
+  if (reduced) return;
+  const cert = document.getElementById('cert');
+  const colors = ['#5B9BFE','#8E84F8','#4ADE80','#FBBF24'];
+  for (let i = 0; i < 36; i++) {
+    const c = document.createElement('i');
+    c.className = 'confetti';
+    c.style.left = (3 + (i * 37) % 94) + '%';
+    c.style.background = colors[i % 4];
+    c.style.animationDuration = (1.6 + (i % 5) * .3) + 's';
+    c.style.animationDelay = ((i % 7) * .12) + 's';
+    cert.appendChild(c);
+    setTimeout(() => c.remove(), 4200);
+  }
+});
+</script>
+</body>
+</html>
