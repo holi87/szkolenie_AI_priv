@@ -1,0 +1,141 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P2 Bezpieczne używanie AI",
+    "interaction": "Rubryka weryfikacji odpowiedzi AI (kind: rubric, bez recordsPractical — ćwiczenie, nie bramka)",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp/SklepDemo, przyklad.test, Jan Syntetyczny). ZERO realnych danych/PII."
+  },
+  "module": "MB6",
+  "intro": "Model językowy generuje najbardziej prawdopodobną odpowiedź, nie sprawdzoną prawdę — i robi to zawsze tym samym, pewnym tonem. Ten moduł daje Ci prosty, powtarzalny sposób weryfikacji: źródło, data, drugi ślad, granice kompetencji. Na końcu przećwiczysz go na konkretnej odpowiedzi AI.",
+  "screens": [
+    {
+      "id": "mb6-s1-pewny-ton",
+      "title": "Dlaczego AI brzmi pewnie, gdy zmyśla",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Model nie „wie” i nie „sprawdza” — przewiduje kolejne słowa na podstawie wzorców z danych treningowych. Dlatego prawda i zmyślenie (halucynacja) wychodzą z niego identycznie płynnie, z identyczną swadą. Ton, długość i ładny format to styl, nie dowód." },
+        { "kind": "definition", "term": "Halucynacja", "text": "Wygenerowana przez model informacja, która brzmi wiarygodnie, ale jest nieprawdziwa — zmyślony fakt, liczba, cytat albo źródło." },
+        { "kind": "callout", "variant": "warn", "title": "Najczęstsza pułapka", "text": "Model potrafi zmyślić także ŹRÓDŁO: tytuł raportu, autora, link. Sam fakt, że odpowiedź ma przypis, niczego nie dowodzi — przypis trzeba otworzyć." }
+      ]
+    },
+    {
+      "id": "mb6-s2-fact-checking",
+      "title": "Fact-checking krok po kroku",
+      "type": "content",
+      "blocks": [
+        { "kind": "list", "ordered": true, "items": [
+          "Wskaż twierdzenia, które niosą decyzję: liczby, daty, nazwy, cytaty, zalecenia.",
+          "Otwórz podane źródło: czy istnieje? czy faktycznie zawiera tę informację?",
+          "Sprawdź datę: czy informacja jest aktualna dla Twojego pytania?",
+          "Znajdź drugi, NIEZALEŻNY ślad: inne źródło potwierdzające kluczowy fakt (nie kolejną odpowiedź tego samego modelu).",
+          "Dopiero potem używaj treści dalej — z poprawkami, jeśli weryfikacja coś wykazała."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Niezależność", "text": "Drugie streszczenie z tego samego czatu ani „potwierdź, że to prawda” w tym samym oknie to NIE jest niezależna weryfikacja — to ta sama maszyna i ten sam kontekst." }
+      ]
+    },
+    {
+      "id": "mb6-s3-kiedy-nie-ufac",
+      "title": "Tematy podwyższonego ryzyka",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Nie każda odpowiedź wymaga śledztwa — przepis na naleśniki zweryfikuje patelnia. Czujność podkręcasz proporcjonalnie do kosztu błędu:" },
+        { "kind": "table", "headers": ["Temat", "Ryzyko", "Weryfikator"], "rows": [
+          ["Zdrowie, leki, dawkowanie", "bardzo wysokie", "lekarz / farmaceuta"],
+          ["Prawo, podatki, „aktualne przepisy”", "wysokie (zmienność!)", "oficjalne, datowane źródło / specjalista"],
+          ["Pieniądze, inwestycje, umowy", "wysokie", "dokument źródłowy / doradca"],
+          ["Liczby i statystyki do publikacji", "średnie-wysokie", "raport źródłowy + drugi ślad"],
+          ["Świeże wydarzenia", "wysokie (data wiedzy modelu)", "bieżące wiarygodne media"]
+        ], "textAlt": "Tabela tematów podwyższonego ryzyka: zdrowie, prawo, finanse, statystyki i nowości wymagają weryfikacji w źródłach lub u specjalisty; im wyższy koszt błędu, tym silniejsza weryfikacja." },
+        { "kind": "callout", "variant": "warn", "title": "Data graniczna wiedzy", "text": "Model „zatrzymał się” na końcu swoich danych treningowych. Pytania o „aktualne” stawki, przepisy czy wersje oprogramowania to proszenie się o przeterminowaną odpowiedź podaną pewnym tonem." }
+      ]
+    },
+    {
+      "id": "mb6-s4-nawyk",
+      "title": "Nawyk: zweryfikuj, zanim przekażesz",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Najwięcej szkody robi nie sama halucynacja, lecz jej dalsze życie: przeklejona do oferty, wysłana rodzinie, powtórzona na spotkaniu. Twoja zasada: nie przekazujesz dalej niczego, czego nie umiesz obronić własnymi słowami i wskazać, skąd to wiesz." },
+        { "kind": "list", "items": [
+          "Masz 10 minut? Zweryfikuj to, co niesie decyzję; resztę jawnie oznacz jako niezweryfikowaną.",
+          "Ktoś pyta „skąd to wiesz?” — odpowiedź „z AI” nie wystarcza; miej źródło.",
+          "Wykryłeś halucynację w czyimś materiale? Powiedz o tym — przerywasz łańcuch."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Dobra wiadomość", "text": "Ten nawyk kosztuje minuty, a chroni Twoją wiarygodność — najtrudniejszy do odbudowania zasób w pracy i w rodzinie." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "rubric",
+    "id": "mb6-rubric",
+    "title": "Zweryfikuj odpowiedź AI według rubryki",
+    "intro": "AI wygenerowało akapit do biuletynu: „Według raportu Instytutu Syntetycznego z przyklad.test aż 87% firm w Polsce wdrożyło AI w obsłudze klienta. Liczba ta rośnie od lat. Pełny raport: przyklad.test/raport-ai”. Oceń tę odpowiedź według czterech kryteriów weryfikacji — wybierz działania, które naprawdę weryfikują.",
+    "criteria": [
+      {
+        "id": "mb6-c1",
+        "name": "Źródło: istnieje i potwierdza",
+        "prompt": "Co robisz z podanym źródłem, zanim użyjesz liczby 87%?",
+        "points": 1,
+        "hint": "Przypis trzeba otworzyć — model potrafi zmyślić raport razem z linkiem.",
+        "options": [
+          { "id": "a", "text": "Otwieram link i sprawdzam, czy raport istnieje oraz czy zawiera dokładnie tę liczbę." },
+          { "id": "b", "text": "Skoro link wygląda wiarygodnie, uznaję źródło za potwierdzone." },
+          { "id": "c", "text": "Pytam to samo AI, czy raport na pewno istnieje." }
+        ],
+        "correctOptionIds": ["a"]
+      },
+      {
+        "id": "mb6-c2",
+        "name": "Data i aktualność",
+        "prompt": "Jak sprawdzasz aktualność statystyki?",
+        "points": 1,
+        "hint": "„Rośnie od lat” bez daty to pusta deklaracja — wiedza modelu ma datę graniczną.",
+        "options": [
+          { "id": "a", "text": "Przyjmuję, że skoro AI odpowiedziało dziś, dane są z dziś." },
+          { "id": "b", "text": "Szukam w raporcie daty badania i sprawdzam, czy nowszych danych nie ma." },
+          { "id": "c", "text": "Uznaję, że trend „rośnie od lat” wystarcza zamiast daty." }
+        ],
+        "correctOptionIds": ["b"]
+      },
+      {
+        "id": "mb6-c3",
+        "name": "Drugi niezależny ślad",
+        "prompt": "Co stanowi niezależne potwierdzenie liczby 87%?",
+        "points": 1,
+        "hint": "Niezależny = inna maszyna/instytucja/publikacja, nie ten sam czat.",
+        "options": [
+          { "id": "a", "text": "Druga odpowiedź tego samego czatu, w której AI „potwierdza” liczbę." },
+          { "id": "b", "text": "Ta sama liczba przeklejona przez kolegę z tego samego narzędzia." },
+          { "id": "c", "text": "Inne wiarygodne źródło (np. niezależna publikacja branżowa) podające zbliżoną wartość." }
+        ],
+        "correctOptionIds": ["c"]
+      },
+      {
+        "id": "mb6-c4",
+        "name": "Granice kompetencji i decyzja",
+        "prompt": "Weryfikacja wykazała, że raportu nie da się znaleźć. Co robisz z akapitem?",
+        "points": 1,
+        "hint": "Niezweryfikowana liczba nie idzie do publikacji — niezależnie od tego, jak dobrze brzmi.",
+        "options": [
+          { "id": "a", "text": "Publikuję bez zmian — akapit brzmi profesjonalnie, a czytelnicy i tak nie sprawdzą." },
+          { "id": "b", "text": "Usuwam zmyśloną statystykę; jeśli temat wymaga liczby, szukam jej w istniejącym, sprawdzalnym źródle i cytuję to źródło." },
+          { "id": "c", "text": "Zostawiam liczbę, ale usuwam link, żeby nikt nie odkrył, że raport nie istnieje." }
+        ],
+        "correctOptionIds": ["b"]
+      }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Pewny ton, długość i format to styl modelu, nie dowód — prawda i halucynacja brzmią identycznie.",
+      "Weryfikacja = otwarte źródło + data + drugi niezależny ślad; ten sam czat nie weryfikuje sam siebie.",
+      "Zdrowie, prawo, pieniądze, statystyki i nowości — tu weryfikujesz zawsze, proporcjonalnie do kosztu błędu."
+    ],
+    "checklist": [
+      "Czy otworzyłem podane źródło i znalazłem w nim przywołaną informację?",
+      "Czy znam datę informacji i czy jest aktualna dla mojego użycia?",
+      "Czy mam drugi, niezależny ślad dla kluczowych faktów i liczb?",
+      "Czy umiem obronić tę treść własnymi słowami, zanim przekażę ją dalej?"
+    ],
+    "checklistTitle": "Checklista — zanim użyjesz odpowiedzi AI",
+    "nextStep": "To ostatni moduł ścieżki. Ukończ wymagane moduły i podejdź do testu końcowego — pamiętaj, że pytania krytyczne o dane wrażliwe wymagają kompletu poprawnych odpowiedzi."
+  }
+}

@@ -19,10 +19,10 @@ const progressWith = (completed = [], practicalTasks = []) => ({
   practicalTasks,
 });
 
-test("pathModuleList: 18 modułów (12 kursu + MSHP + MSHO + 4 MSK) w kolejności, flagi required zgodne z paths.json", () => {
+test("pathModuleList: 30 modułów (#171: 12 kursu + MSHP/MSHO + 4 MSK + 6 MB + 6 MD) w kolejności, flagi required zgodne z paths.json", () => {
   for (const pathId of ["S1", "S2", "S3"]) {
     const list = pathModuleList(pathsData, modulesData, pathId, progressWith());
-    assert.equal(list.length, 18);
+    assert.equal(list.length, 30);
     assert.deepEqual(list.map((m) => m.order), [...list.map((m) => m.order)].sort((a, b) => a - b));
     const req = new Set(requiredModules(pathsData, pathId));
     for (const m of list) assert.equal(m.required, req.has(m.id), `${pathId}/${m.id} required mismatch`);

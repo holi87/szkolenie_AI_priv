@@ -1,0 +1,162 @@
+/* rebuild.css — komponenty #171 (rebuild ścieżek + refresh wizualny; mockup docs/design/refresh-2026-06).
+   Selektor poziomu „AI z QA", pasek bonusu (Skala Holaka), wykresy wyniku (bary per moduł/filar),
+   celebracja zaliczenia (konfetti), mikrointerakcje feedbacku quizu, lift+glow kart ścieżek.
+   Tokeny z tokens.css; statusy nigdy samym kolorem (tekst/aria obok — WCAG 1.4.1);
+   wszystkie animacje wyłączane przez prefers-reduced-motion (sekcja na dole). */
+
+/* ----- Karty ścieżek: lift + gradientowa obwódka + glow na hover (mockup, sekcja 1) ----- */
+.path-card {
+  position: relative;
+  transition: transform var(--dur-base) ease, box-shadow var(--dur-base) ease;
+}
+.path-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md), 0 0 24px rgba(91, 155, 254, 0.18);
+}
+
+/* ----- Selektor poziomu (karta grupy „AI z QA") ----- */
+.level-switch {
+  display: flex;
+  gap: 6px;
+  margin: var(--sp-3) 0;
+  background: var(--color-surface-2);
+  padding: 4px;
+  border-radius: 10px;
+}
+.level-switch__btn {
+  flex: 1;
+  font: inherit;
+  font-size: var(--fs-300);
+  font-weight: var(--fw-medium);
+  padding: 0.45em 0.3em;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--color-muted);
+  cursor: pointer;
+  transition: background var(--dur-fast) ease, color var(--dur-fast) ease;
+}
+.level-switch__btn:hover { color: var(--color-fg); background: var(--color-surface-3); }
+.level-switch__btn[aria-pressed="true"] {
+  background: var(--color-accent);
+  color: var(--color-accent-fg);
+}
+.level-switch__btn:focus-visible { outline: none; box-shadow: var(--ring-accent); }
+
+/* ----- Pasek bonusu (Skala Holaka poza siatką wyboru) ----- */
+.bonus-card {
+  display: flex;
+  gap: var(--sp-4);
+  align-items: center;
+  margin-top: var(--sp-4);
+  background: var(--color-surface);
+  border: 1px dashed var(--color-border);
+  border-radius: 12px;
+  padding: var(--sp-4) var(--sp-5);
+  transition: transform var(--dur-base) ease, border-color var(--dur-base) ease, box-shadow var(--dur-base) ease;
+}
+.bonus-card:hover { transform: translateY(-2px); border-color: var(--color-warn); box-shadow: var(--shadow-md); }
+.bonus-card__sigil {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: rgba(251, 191, 36, 0.12);
+  color: var(--color-warn-text);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-300);
+}
+.bonus-card__body { flex: 1; min-width: 0; }
+.bonus-card__name { margin: 0; font-size: var(--fs-500); display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap; }
+.bonus-card__badge {
+  font-size: var(--fs-300);
+  font-weight: var(--fw-medium);
+  padding: 0.1em 0.6em;
+  border-radius: 99px;
+  border: 1px solid var(--color-border);
+  color: var(--color-warn-text);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.bonus-card__meta { margin: var(--sp-1) 0 0; font-size: var(--fs-400); color: var(--color-muted); }
+@media (max-width: 560px) {
+  .bonus-card { flex-direction: column; align-items: flex-start; }
+}
+
+/* ----- Wykresy wyniku: bary per moduł + filary (mockup, sekcja 4) ----- */
+.result-charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--sp-5);
+  margin: var(--sp-5) 0;
+}
+.chart-bars { display: grid; gap: 10px; }
+.chart-bar {
+  display: grid;
+  grid-template-columns: minmax(3.2em, auto) 1fr 3.2em;
+  gap: 10px;
+  align-items: center;
+  font-size: var(--fs-400);
+}
+.chart-bar__label { color: var(--color-muted); font-family: var(--font-mono); font-size: var(--fs-300); }
+.chart-bar__pct { text-align: right; font-weight: var(--fw-medium); font-variant-numeric: tabular-nums; }
+.chart-bar__track {
+  height: 10px;
+  border-radius: 99px;
+  background: var(--color-surface-3);
+  overflow: hidden;
+}
+.chart-bar__fill {
+  display: block;
+  height: 100%;
+  border-radius: 99px;
+  background: var(--color-accent);
+  animation: chart-grow 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  transform-origin: left center;
+}
+.chart-bar__fill--ok { background: var(--color-ok); }
+.chart-bar__fill--warn { background: var(--color-warn); }
+.chart-bar__fill--bad { background: var(--color-bad); }
+@keyframes chart-grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* ----- Celebracja zaliczenia: konfetti (dekoracyjne, aria-hidden, jednorazowe) ----- */
+.result-hero { position: relative; overflow: hidden; }
+.confetti { position: absolute; inset: 0; pointer-events: none; }
+.confetti__piece {
+  position: absolute;
+  top: -16px;
+  width: 8px;
+  height: 14px;
+  border-radius: 2px;
+  opacity: 0.9;
+  animation: confetti-fall 2s linear forwards;
+}
+@keyframes confetti-fall {
+  to { transform: translateY(360px) rotate(720deg); opacity: 0; }
+}
+
+/* ----- Mikrointerakcje feedbacku quizu (mockup, sekcja 3) ----- */
+.feedback--correct { animation: feedback-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1); }
+@keyframes feedback-pop {
+  0% { transform: scale(0.98); }
+  55% { transform: scale(1.01); }
+  100% { transform: scale(1); }
+}
+.feedback--incorrect, .feedback--critical { animation: feedback-shake 0.4s ease; }
+@keyframes feedback-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(4px); }
+  75% { transform: translateX(-2px); }
+}
+
+/* ----- Redukcja ruchu: wszystkie animacje tego pliku lądują na stanie końcowym ----- */
+@media (prefers-reduced-motion: reduce) {
+  .path-card, .path-card:hover,
+  .bonus-card, .bonus-card:hover { transform: none; transition: none; }
+  .chart-bar__fill { animation: none; }
+  .feedback--correct, .feedback--incorrect, .feedback--critical { animation: none; }
+  .confetti { display: none; }
+}

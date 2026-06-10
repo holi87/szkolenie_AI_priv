@@ -8,9 +8,9 @@
   "properties": {
     "paths": {
       "type": "object",
-      "required": ["S1", "S2", "S3", "S4"],
+      "required": ["S1", "S2", "S3", "S4", "P1", "P2"],
       "patternProperties": {
-        "^S[1-4]$": {
+        "^(S[1-4]|P[1-2])$": {
           "type": "object",
           "required": ["name", "assumedPathTime"],
           "properties": {

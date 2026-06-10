@@ -25,13 +25,21 @@ export const modulesData = applyModuleLabels(read("modules.json"), read(`${LOC}/
 export const rubricsData = read(`${LOC}/rubrics.json`);
 export const scenariosData = read(`${LOC}/scenarios.json`);
 export const goldenSetData = read("golden-set.json"); // wspólny (language-neutral)
-export const bank = mergeQuestionBank(
-  Array.from({ length: 12 }, (_, i) => read(`${LOC}/questions/m${String(i + 1).padStart(2, "0")}.json`)),
-);
-// Treść modułów scalona po id (M1..M12) — tak jak konsumuje ją app.js (data.moduleContent[id]).
-export const moduleContent = mergeModuleContent(
-  Array.from({ length: 12 }, (_, i) => read(`${LOC}/module-content/m${String(i + 1).padStart(2, "0")}.json`)),
-);
+// #171: bank = rdzeń m01..m12 + shardy P2 mb1..mb6 (Q117..Q152) — ten sam układ co QUESTION_SHARDS loadera.
+export const bank = mergeQuestionBank([
+  ...Array.from({ length: 12 }, (_, i) => read(`${LOC}/questions/m${String(i + 1).padStart(2, "0")}.json`)),
+  ...Array.from({ length: 6 }, (_, i) => read(`${LOC}/questions/mb${i + 1}.json`)),
+]);
+// Treść modułów scalona po id — tak jak konsumuje ją app.js (data.moduleContent[id]).
+// #171: komplet 30 plików (m01..m12 + mshp/msho + msk1..4 + mb1..6 + md1..6) — zgodnie z MODULE_CONTENT_SHARDS.
+export const moduleContent = mergeModuleContent([
+  ...Array.from({ length: 12 }, (_, i) => read(`${LOC}/module-content/m${String(i + 1).padStart(2, "0")}.json`)),
+  read(`${LOC}/module-content/mshp.json`),
+  read(`${LOC}/module-content/msho.json`),
+  ...Array.from({ length: 4 }, (_, i) => read(`${LOC}/module-content/msk${i + 1}.json`)),
+  ...Array.from({ length: 6 }, (_, i) => read(`${LOC}/module-content/mb${i + 1}.json`)),
+  ...Array.from({ length: 6 }, (_, i) => read(`${LOC}/module-content/md${i + 1}.json`)),
+]);
 
 /** Deterministyczny RNG (mulberry32) — powtarzalne losowanie testu w testach. */
 export function seededRng(seed) {

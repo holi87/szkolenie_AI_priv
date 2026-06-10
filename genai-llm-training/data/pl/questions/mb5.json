@@ -1,0 +1,155 @@
+{
+  "_meta": {
+    "module": "MB5",
+    "issue": "#171 Rebuild ścieżek — bank pytań P2 „Bezpieczne używanie AI”, moduł MB5 (AI w pracy: polityki i shadow AI)",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo, Jan Syntetyczny, identyfikatory testowe). ZERO realnych danych/PII.",
+    "note": "Pytania modułu MB5 (Q141-Q146), pula dedykowana ścieżki P2. Bez pytań krytycznych. Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q141",
+      "module": "MB5",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik rozumie pojęcie shadow AI i odróżnia je od zatwierdzonego użycia narzędzi.",
+      "prompt": "Co oznacza pojęcie „shadow AI” w firmie?",
+      "options": [
+        { "id": "A", "text": "Oficjalny program pilotażowy nowych narzędzi AI prowadzony przez dział IT." },
+        { "id": "B", "text": "Tryb ciemny (dark mode) w aplikacjach asystentów AI." },
+        { "id": "C", "text": "Model AI uruchamiany lokalnie na serwerach firmy zamiast w chmurze." },
+        { "id": "D", "text": "Używanie przez pracowników narzędzi AI poza wiedzą i zgodą firmy, bez kontroli nad danymi, które tam trafiają." }
+      ],
+      "correct": ["D"],
+      "feedbackCorrect": "Shadow AI to niezatwierdzone, niekontrolowane użycie narzędzi AI w pracy. Problemem nie jest samo narzędzie, lecz brak kontroli: nikt nie wie, jakie dane firmowe wypływają i na jakich warunkach są przetwarzane.",
+      "feedbackIncorrect": "Shadow AI to używanie narzędzi AI poza wiedzą i zgodą firmy (D) — analogia do „shadow IT”. Pilotaż IT, tryb ciemny ani lokalny hosting to nie shadow AI. Powtórz definicję z modułu.",
+      "references": ["MB5.1"]
+    },
+    {
+      "id": "Q142",
+      "module": "MB5",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik wie, kto odpowiada za treść wytworzoną z pomocą AI.",
+      "prompt": "Przygotowujesz z pomocą AI ofertę dla klienta firmy SklepDemo. W ofercie znalazł się zmyślony przez model parametr produktu. Kto odpowiada za ten błąd?",
+      "options": [
+        { "id": "A", "text": "Nikt — błędów wygenerowanych przez AI nie da się nikomu przypisać." },
+        { "id": "B", "text": "Ty — AI to narzędzie, a za treść, którą wysyłasz, odpowiada człowiek, który ją firmuje." },
+        { "id": "C", "text": "Dostawca modelu AI — to jego produkt wygenerował błąd." },
+        { "id": "D", "text": "Klient — powinien był sam zweryfikować parametry przed podpisaniem." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Tak: AI jest narzędziem jak edytor tekstu. Treść, którą podpisujesz i wysyłasz, jest Twoja — wraz z obowiązkiem weryfikacji. To fundament odpowiedzialnego użycia AI w pracy.",
+      "feedbackIncorrect": "Za treść wysłaną klientowi odpowiada człowiek, który ją firmuje (B). Regulaminy dostawców AI wprost wyłączają ich odpowiedzialność za wygenerowane treści, a przerzucanie weryfikacji na klienta to ryzyko utraty zaufania i konsekwencji umownych.",
+      "references": ["MB5.4"]
+    },
+    {
+      "id": "Q143",
+      "module": "MB5",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik wybiera zgodne z polityką postępowanie, gdy zatwierdzone narzędzie nie wystarcza.",
+      "prompt": "Firmowa polityka dopuszcza do danych klientów wyłącznie wewnętrznego asystenta AI. Odkrywasz nowe publiczne narzędzie, które zrobiłoby Twoją analizę zgłoszeń klientów dwa razy szybciej. Co robisz?",
+      "options": [
+        { "id": "A", "text": "Używam nowego narzędzia, ale tylko do mniejszych zadań — przy małej skali ryzyko jest pomijalne." },
+        { "id": "B", "text": "Używam nowego narzędzia z prywatnego laptopa — polityka firmowa nie obejmuje prywatnego sprzętu." },
+        { "id": "C", "text": "Zgłaszam narzędzie do IT/działu bezpieczeństwa z propozycją oceny i ewentualnego zatwierdzenia; do tego czasu pracuję na narzędziu dopuszczonym przez politykę." },
+        { "id": "D", "text": "Anonimizuję dane „na oko” i wrzucam do nowego narzędzia — przecież usunąłem nazwiska." }
+      ],
+      "correct": ["C"],
+      "feedbackCorrect": "Tak: ścieżka zatwierdzenia istnieje właśnie po to, by nowe narzędzia oceniać kontrolowanie zamiast używać ich w ukryciu. Zgłaszając narzędzie, łączysz innowacyjność z bezpieczeństwem.",
+      "feedbackIncorrect": "Mała skala, prywatny laptop ani amatorska anonimizacja nie uchylają polityki — dane klientów wciąż wypływają poza kontrolę firmy. Poprawnie: zgłosić narzędzie do oceny i do czasu zatwierdzenia pracować na dopuszczonym (C).",
+      "references": ["MB5.2", "MB5.1"]
+    },
+    {
+      "id": "Q144",
+      "module": "MB5",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik uwzględnia prawa autorskie i licencje przy użyciu treści wygenerowanych przez AI w materiałach firmowych.",
+      "prompt": "Tworzysz publiczną broszurę firmy NotkaApp. Generator obrazów stworzył idealną grafikę, ale przypomina rozpoznawalny styl znanej marki, a Ty nie znasz warunków licencyjnych generatora. Co robisz?",
+      "options": [
+        { "id": "A", "text": "Publikuję — treści z AI nie podlegają żadnym prawom, więc nie ma czego sprawdzać." },
+        { "id": "B", "text": "Sprawdzam warunki licencyjne generatora (czy dopuszcza użycie komercyjne) i konsultuję grafikę przypominającą cudzy styl, zanim cokolwiek opublikuję." },
+        { "id": "C", "text": "Publikuję z podpisem „wygenerowane przez AI” — oznaczenie źródła załatwia kwestie prawne." },
+        { "id": "D", "text": "Lekko modyfikuję grafikę filtrem — po zmianach prawa autorskie już nie obowiązują." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Tak: użycie komercyjne wymaga sprawdzenia licencji narzędzia, a podobieństwo do cudzej marki to ryzyko prawne niezależnie od tego, kto (lub co) grafikę wytworzyło. Wątpliwości konsultujesz przed publikacją.",
+      "feedbackIncorrect": "Treści z AI nie są „wolne od prawa”: licencja generatora określa dozwolone użycie, a podobieństwo do cudzej marki grozi naruszeniem niezależnie od podpisu czy filtra. Poprawnie: sprawdzić licencję i skonsultować (B).",
+      "references": ["MB5.3"]
+    },
+    {
+      "id": "Q145",
+      "module": "MB5",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik wskazuje, co zwykle określa firmowa polityka użycia AI.",
+      "prompt": "Co zazwyczaj określa firmowa polityka korzystania z AI? Wskaż wszystkie poprawne.",
+      "options": [
+        { "id": "A", "text": "Listę narzędzi AI zatwierdzonych do użytku służbowego." },
+        { "id": "B", "text": "Które kategorie danych wolno przetwarzać w których narzędziach." },
+        { "id": "C", "text": "Prywatne zakupy pracowników w sklepach internetowych." },
+        { "id": "D", "text": "Ulubione modele AI poszczególnych członków zarządu." }
+      ],
+      "correct": ["A", "B"],
+      "feedbackCorrect": "Polityka AI odpowiada na dwa pytania: CZYM wolno pracować (zatwierdzone narzędzia) i Z CZYM (kategorie danych dopuszczone do każdego narzędzia). To mapa bezpiecznego korzystania, nie lista zakazów dla samej zasady.",
+      "feedbackIncorrect": "Rdzeń polityki AI to zatwierdzone narzędzia (A) i dozwolone kategorie danych (B). Prywatne zakupy i czyjeś preferencje nie są przedmiotem polityki użycia AI.",
+      "references": ["MB5.2"]
+    },
+    {
+      "id": "Q146",
+      "module": "MB5",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik analizuje skutki shadow AI w zespole i wybiera reakcję naprawczą zamiast eskalacji ukrywania.",
+      "prompt": "Scenariusz: odkrywasz, że połowa Twojego zespołu od miesięcy wkleja opisy zgłoszeń klientów do prywatnych kont w publicznym czacie AI, bo „wszyscy tak robią i jest szybciej”. Wyniki są dobre, klienci zadowoleni. Która ocena sytuacji jest poprawna?",
+      "options": [
+        { "id": "A", "text": "Skoro wyniki są dobre i nikt nie zgłosił problemu, praktykę można uznać za sprawdzoną i nie ruszać tematu." },
+        { "id": "B", "text": "Wystarczy poprosić zespół o dyskrecję — ryzyko pojawia się dopiero wtedy, gdy praktyka wyjdzie na jaw." },
+        { "id": "C", "text": "To systemowe shadow AI: dane klientów od miesięcy wypływają poza kontrolę firmy niezależnie od jakości wyników. Trzeba to ujawnić, zatrzymać wklejanie danych klientów i zgłosić zapotrzebowanie na zatwierdzone narzędzie." },
+        { "id": "D", "text": "Problemem jest tylko używanie kont prywatnych — wystarczy założyć wspólne konto zespołowe w tym samym publicznym czacie." }
+      ],
+      "correct": ["C"],
+      "feedbackCorrect": "Trafna analiza: dobre wyniki nie kompensują niekontrolowanego wypływu danych klientów — ryzyko (prawne, umowne, reputacyjne) narasta z każdym wklejeniem. Naprawa = ujawnić, zatrzymać, dać zespołowi legalną alternatywę.",
+      "feedbackIncorrect": "Jakość wyników nie usuwa ryzyka: dane klientów wypływają poza kontrolę firmy niezależnie od efektów i dyskrecji, a wspólne konto w tym samym narzędziu niczego nie zmienia. Poprawna ocena: C — ujawnić, zatrzymać, zapewnić zatwierdzoną alternatywę.",
+      "references": ["MB5.1", "MB5.2"]
+    }
+  ]
+}

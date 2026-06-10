@@ -1,0 +1,102 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P1 AI w domu (formatywna)",
+    "interaction": "Klasyfikacja: w porządku vs ryzykowne (kind: classify)",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp, przyklad.test, Jan Syntetyczny, Anna Testowa). ZERO realnych danych/PII. Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MD4",
+  "intro": "Zaproszenie na urodziny babci, piosenka na rocznicę, film z wakacji z porządnym montażem — generatory obrazów, muzyki i wideo robią dziś w minuty to, co kiedyś wymagało grafika i studia. Ten moduł uczy korzystać z nich z radością i z głową: co wypada, co oznaczać i czyich praw nie naruszać.",
+  "screens": [
+    {
+      "id": "md4-s1-co-sie-da",
+      "title": "Co dziś wygenerujesz w domu",
+      "type": "content",
+      "blocks": [
+        { "kind": "list", "items": [
+          "Obrazy: kartki okolicznościowe, zaproszenia, ilustracje do rodzinnej kroniki, awatar na komunikator.",
+          "Muzyka: piosenka na urodziny z imieniem solenizanta, podkład do filmiku z wakacji.",
+          "Wideo: pokaz slajdów z animacjami, krótkie filmiki z opisu, napisy do nagrań automatycznie.",
+          "Retusz: usuwanie nieznajomych z tła, ożywianie starych, zniszczonych zdjęć rodzinnych."
+        ] },
+        { "kind": "paragraph", "text": "Sekret dobrego wyniku jest ten sam co przy promptach tekstowych: powiedz konkretnie, co chcesz (motyw, styl, kolory, nastrój), zobacz wynik i poproś o poprawki. Pierwsza wersja to szkic, nie wyrok." },
+        { "kind": "callout", "variant": "info", "title": "Spróbuj dziś", "text": "Najbliższa okazja rodzinna? Wygeneruj trzy wersje kartki w różnych stylach (np. akwarela, plakat retro, zdjęcie) i wybierz z kimś bliskim najlepszą." }
+      ]
+    },
+    {
+      "id": "md4-s2-oznaczanie",
+      "title": "Oznaczanie treści z AI",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "W rodzinie nikt nie wymaga metryczki na kartce urodzinowej. Ale gdy treść wychodzi szerzej — na grupę osiedlową, do internetu, do szkoły — uczciwe oznaczenie „wygenerowane przez AI” buduje zaufanie i ucina nieporozumienia. Coraz więcej platform wprost tego wymaga." },
+        { "kind": "list", "items": [
+          "Oznaczaj, gdy treść może zostać wzięta za prawdziwe zdjęcie lub nagranie rzeczywistego zdarzenia.",
+          "Oznaczaj zawsze, gdy publikujesz poza prywatnym gronem — profil publiczny, konkurs, ogłoszenie.",
+          "Nie musisz oznaczać oczywistej fantazji w prywatnym gronie — smok nad blokiem obroni się sam."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Granica twarda", "text": "Generowanie „prawdziwych” scen z udziałem realnych osób — sąsiada, polityka, koleżanki z klasy — i pokazywanie ich jako faktów to już nie żart, tylko dezinformacja albo naruszenie dóbr osobistych." }
+      ]
+    },
+    {
+      "id": "md4-s3-prawa",
+      "title": "Prawa do utworów w pigułce",
+      "type": "content",
+      "blocks": [
+        { "kind": "table", "headers": ["Pytanie", "Krótka odpowiedź"], "rows": [
+          ["Czy mogę używać wygenerowanej kartki prywatnie?", "Tak — użycie domowe jest najbezpieczniejszym scenariuszem."],
+          ["Czy mogę sprzedawać wygenerowane grafiki?", "Sprawdź licencję narzędzia: część dopuszcza użycie komercyjne, część nie."],
+          ["Czy wynik jest „mój”?", "Zależnie od narzędzia i prawa — nie zakładaj automatycznie pełnych praw autorskich."],
+          ["Czy mogę prosić o styl konkretnego, żyjącego artysty?", "Unikaj — naśladowanie rozpoznawalnego stylu do publikacji to obszar sporny prawnie i etycznie."]
+        ], "textAlt": "Tabela pytań o prawa: użycie domowe bezpieczne, komercyjne wymaga sprawdzenia licencji narzędzia, pełnia praw do wyniku niepewna, naśladowanie stylu żyjących artystów ryzykowne." },
+        { "kind": "callout", "variant": "info", "title": "Jedna zasada zamiast paragrafu", "text": "Im dalej od domowej lodówki ma trafić Twój wytwór, tym uważniej czytasz licencję narzędzia." }
+      ]
+    },
+    {
+      "id": "md4-s4-wizerunek",
+      "title": "Wizerunek: cudza twarz to nie materiał",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Najczęstszy domowy zgrzyt z generatorami nie dotyczy praw autorskich, tylko ludzi: wstawianie czyjejś twarzy do śmiesznych scenek bez pytania, „odmładzanie” zdjęć znajomych, generowanie wnuków, których nie ma. Technicznie proste, między ludźmi — różnie." },
+        { "kind": "list", "ordered": true, "items": [
+          "Twarz innej osoby = jej zgoda. Także w żartach, także w rodzinie.",
+          "Zdjęcia dzieci traktuj podwójnie ostrożnie — one nie mogą wyrazić świadomej zgody, a internet nie zapomina.",
+          "Nie wgrywaj cudzych zdjęć do narzędzi AI bez wiedzy tych osób — to ich wizerunek wędruje na obcy serwer."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Prosty test", "text": "Czy pokazałbyś tej osobie wynik prosto w oczy? Jeśli się wahasz — nie generuj albo najpierw zapytaj." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "md4-classify",
+    "title": "W porządku czy ryzykowne?",
+    "intro": "Oceń domowe pomysły na tworzenie z AI. Feedback wyjaśnia, gdzie przebiega granica.",
+    "categories": [
+      { "id": "ok", "label": "W porządku", "desc": "Prywatne lub oznaczone użycie, bez cudzego wizerunku i wprowadzania w błąd." },
+      { "id": "risky", "label": "Ryzykowne / nie rób tego", "desc": "Cudzy wizerunek bez zgody, wprowadzanie w błąd, naruszanie licencji." }
+    ],
+    "items": [
+      { "id": "md4-i1", "text": "Kartka urodzinowa dla babci z wygenerowanym bukietem w stylu akwareli.", "correctCategory": "ok", "rationale": "Prywatne, radosne użycie bez niczyjego wizerunku — wzorcowy scenariusz." },
+      { "id": "md4-i2", "text": "Wstawienie twarzy sąsiada do memów i wysłanie na grupę osiedlową „dla śmiechu”.", "correctCategory": "risky", "rationale": "Cudzy wizerunek bez zgody + publiczne grono = naruszenie dóbr osobistych, nie żart." },
+      { "id": "md4-i3", "text": "Piosenka z imieniem taty wygenerowana na jego pięćdziesiąte urodziny, puszczona na przyjęciu.", "correctCategory": "ok", "rationale": "Prywatna okazja, brak publikacji i cudzych praw — czysta radość." },
+      { "id": "md4-i4", "text": "Sprzedaż wygenerowanych plakatów bez sprawdzenia, czy licencja narzędzia dopuszcza użycie komercyjne.", "correctCategory": "risky", "rationale": "Komercja wymaga licencji — „darmowy generator” nie znaczy „do sprzedaży”." },
+      { "id": "md4-i5", "text": "Odnowienie zniszczonego zdjęcia dziadków z lat sześćdziesiątych do rodzinnego albumu.", "correctCategory": "ok", "rationale": "Retusz rodzinnej pamiątki do prywatnego albumu — dokładnie po to są te narzędzia." },
+      { "id": "md4-i6", "text": "Wygenerowanie realistycznego „zdjęcia” lokalnego polityka w sytuacji, która nie miała miejsca, i wrzucenie na forum bez oznaczenia.", "correctCategory": "risky", "rationale": "Realistyczna scena + realna osoba + brak oznaczenia = dezinformacja z konsekwencjami prawnymi." },
+      { "id": "md4-i7", "text": "Plakat na szkolny kiermasz z grafiką z AI i dopiskiem „ilustracja wygenerowana przez AI”.", "correctCategory": "ok", "rationale": "Publiczne użycie + uczciwe oznaczenie = wzorzec transparentności." },
+      { "id": "md4-i8", "text": "Wgranie zdjęć koleżanki do generatora awatarów „w prezencie”, bez jej wiedzy.", "correctCategory": "risky", "rationale": "Jej wizerunek wędruje na obcy serwer bez jej zgody — najpierw pytasz, potem generujesz." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Generatory to świetne narzędzie domowej kreatywności — konkretny opis, iteracja, wybór najlepszej wersji.",
+      "Im szerzej publikujesz, tym mocniej oznaczasz pochodzenie z AI i tym uważniej czytasz licencję.",
+      "Cudza twarz wymaga zgody — zawsze; zdjęcia dzieci chronisz podwójnie."
+    ],
+    "checklist": [
+      "Czy mój wytwór może zostać wzięty za prawdziwe zdjęcie/nagranie? Jeśli tak — czy jest oznaczony?",
+      "Czy licencja narzędzia pozwala na to, co planuję (zwłaszcza komercyjnie)?",
+      "Czy każda osoba widoczna w materiale wyraziła zgodę?"
+    ],
+    "checklistTitle": "Checklista — zanim opublikujesz wytwór AI",
+    "nextStep": "Następny krok: moduł o AI w rodzinie — jak rozmawiać z dziećmi o tych wszystkich możliwościach i ustalić zdrowe zasady."
+  }
+}

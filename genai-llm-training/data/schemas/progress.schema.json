@@ -7,12 +7,12 @@
   "required": ["version", "path", "modules", "updatedAt"],
   "properties": {
     "version": { "type": "string", "description": "Wersja schematu progresu (semver)" },
-    "path": { "type": "string", "enum": ["S1", "S2", "S3", "S4"] },
+    "path": { "type": "string", "enum": ["S1", "S2", "S3", "S4", "P1", "P2"] },
     "modules": {
       "type": "object",
       "description": "Stan per moduł (klucz = id modułu).",
       "patternProperties": {
-        "^M([1-9]|1[0-2]|SH|SK[1-9])$": {
+        "^M([1-9]|1[0-2]|SH|SHO|SHP|SK[1-9]|B[1-6]|D[1-6])$": {
           "type": "object",
           "required": ["status"],
           "properties": {
@@ -67,7 +67,7 @@
         "lastScorePct": { "type": "number", "minimum": 0, "maximum": 100 },
         "criticalQuestionsPassed": { "type": "boolean" },
         "passed": { "type": "boolean" },
-        "weakModules": { "type": "array", "items": { "type": "string", "pattern": "^M([1-9]|1[0-2])$" } },
+        "weakModules": { "type": "array", "items": { "type": "string", "pattern": "^M([1-9]|1[0-2]|B[1-6])$" } },
         "questionResults": {
           "type": "array",
           "description": "Per-pytanie testu końcowego (anonimowo) — sygnał kalibracyjny #28; obejmuje pytania spoza puli quizu inline (w tym golden).",
@@ -76,7 +76,7 @@
             "required": ["questionId", "correct"],
             "properties": {
               "questionId": { "type": "string", "pattern": "^Q[0-9]{3}$" },
-              "module": { "type": "string", "pattern": "^M([1-9]|1[0-2])$" },
+              "module": { "type": "string", "pattern": "^M([1-9]|1[0-2]|B[1-6])$" },
               "correct": { "type": "boolean" }
             },
             "additionalProperties": false

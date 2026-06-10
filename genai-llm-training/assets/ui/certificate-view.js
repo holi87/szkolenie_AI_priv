@@ -5,6 +5,7 @@
 import { el } from "./dom.js";
 import { icon } from "./icon.js";
 import { t } from "../i18n/i18n.js";
+import { pillarLabel } from "./module-hub.js";
 import { exportJson, exportCsv, exportQuestionStatsCsv } from "../core/certificate.js";
 
 // Rozwiązanie KODU powodu niezaliczenia z core (certificate.js zwraca kod, nie prozę — ADR-0004, core zero-i18n).
@@ -49,6 +50,74 @@ function gatesBlock(gates) {
       ]);
     })),
   ]);
+}
+
+/** Pasek wykresu: etykieta + tor + wypełnienie. Wartość niesie aria-label i tekst % (nie sam kolor — WCAG 1.4.1). */
+function chartBar(label, pct, ariaText) {
+  const tone = pct >= 80 ? "ok" : pct >= 60 ? "warn" : "bad";
+  return el("div", { class: "chart-bar" }, [
+    el("span", { class: "chart-bar__label", text: label }),
+    el("span", { class: "chart-bar__track", attrs: { role: "img", "aria-label": ariaText } }, [
+      el("span", { class: `chart-bar__fill chart-bar__fill--${tone}`, attrs: { style: `width:${Math.max(0, Math.min(100, pct))}%` } }),
+    ]),
+    el("span", { class: "chart-bar__pct", text: `${pct}%` }),
+  ]);
+}
+
+/**
+ * Wykresy wyniku (#171, refresh wizualny): bary per moduł + agregat per filar kompetencji.
+ * Dane: perModule ze scorePath ({ M1: {awarded,max,pct}, … }) — dostępne tylko dla świeżego wyniku
+ * (po odświeżeniu strony progres trzyma agregaty, nie per-moduł → blok pomijany, bez crasha).
+ */
+function chartsBlock(perModule, modulesData) {
+  if (!perModule || !modulesData || !Array.isArray(modulesData.modules)) return null;
+  const mods = modulesData.modules.filter((m) => perModule[m.id]);
+  if (mods.length === 0) return null;
+
+  const moduleRows = mods.map((m) => {
+    const pct = Math.round(perModule[m.id].pct);
+    return chartBar(m.id, pct, `${m.id} ${m.name || ""} — ${pct}%`);
+  });
+
+  const byPillar = {};
+  for (const m of mods) {
+    const a = (byPillar[m.pillar] = byPillar[m.pillar] || { awarded: 0, max: 0 });
+    a.awarded += perModule[m.id].awarded;
+    a.max += perModule[m.id].max;
+  }
+  const pillarRows = Object.entries(byPillar).map(([pillar, v]) => {
+    const pct = v.max > 0 ? Math.round((v.awarded / v.max) * 100) : 0;
+    const label = pillarLabel(pillar);
+    return chartBar(label, pct, `${label} — ${pct}%`);
+  });
+
+  return el("section", { class: "result-charts" }, [
+    el("div", { class: "result-charts__col" }, [
+      el("h2", { text: t("result.chart.perModule") }),
+      el("div", { class: "chart-bars" }, moduleRows),
+    ]),
+    el("div", { class: "result-charts__col" }, [
+      el("h2", { text: t("result.chart.pillars") }),
+      el("div", { class: "chart-bars" }, pillarRows),
+    ]),
+  ]);
+}
+
+/**
+ * Celebracja zaliczenia (#171): konfetti CSS — czysto dekoracyjne (aria-hidden), jednorazowe per render,
+ * wyłączone przy prefers-reduced-motion i w środowiskach bez matchMedia (testy DOM-stub).
+ */
+function celebrationConfetti() {
+  if (typeof globalThis.matchMedia !== "function") return null;
+  try { if (globalThis.matchMedia("(prefers-reduced-motion: reduce)").matches) return null; } catch { return null; }
+  const colors = ["var(--color-accent)", "var(--color-accent-2)", "var(--color-ok)", "var(--color-warn)"];
+  const pieces = Array.from({ length: 28 }, (_, i) =>
+    el("span", {
+      class: "confetti__piece",
+      attrs: { style: `left:${3 + ((i * 37) % 94)}%;background:${colors[i % colors.length]};animation-duration:${1.6 + (i % 5) * 0.3}s;animation-delay:${(i % 7) * 0.12}s` },
+    }),
+  );
+  return el("div", { class: "confetti", attrs: { "aria-hidden": "true" } }, pieces);
 }
 
 function weakAreasBlock(weakAreas) {
@@ -124,12 +193,16 @@ export function renderResult(result, opts = {}) {
   if (result.passed) {
     // result-hero (#145, M18 STAGE B): pierścień score + główna treść w jednym rzędzie (flex).
     const hero = el("div", { class: "result-hero" });
+    const confetti = celebrationConfetti(); // #171: celebracja zaliczenia (dekoracyjna, reduced-motion-safe)
+    if (confetti) hero.appendChild(confetti);
     hero.appendChild(scoreBlock(result.scorePct, true));
     const heroMain = el("div", { class: "result-hero__main" });
     heroMain.appendChild(el("h1", { text: t("result.passed.heading") }));
     heroMain.appendChild(passBadge());
     hero.appendChild(heroMain);
     root.appendChild(hero);
+    const charts = chartsBlock(opts.perModule, opts.modulesData); // #171: wykresy wyników
+    if (charts) root.appendChild(charts);
     const gIssued = gatesBlock(opts.gates);
     if (gIssued) root.appendChild(gIssued);
     if (progress) root.appendChild(exportButtons(progress, pathName));
@@ -149,6 +222,8 @@ export function renderResult(result, opts = {}) {
     const gFail = gatesBlock(opts.gates);
     root.appendChild(failNotice(result.scorePct, Boolean(gFail)));
     if (gFail) root.appendChild(gFail);
+    const charts = chartsBlock(opts.perModule, opts.modulesData); // #171: wykresy pomagają zlokalizować braki
+    if (charts) root.appendChild(charts);
     const wa = weakAreasBlock(result.weakAreas);
     if (wa) root.appendChild(wa);
     if (progress) root.appendChild(exportButtons(progress, pathName));

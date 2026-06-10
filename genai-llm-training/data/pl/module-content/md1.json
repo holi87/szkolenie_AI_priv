@@ -1,0 +1,109 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P1 AI w domu (formatywna)",
+    "interaction": "Klasyfikacja zadań (kind: classify) — ćwiczenie formatywne, NIE scorowane do zaliczenia",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE i ogólne (zero realnych danych/PII). Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MD1",
+  "intro": "AI nie jest magią ani science fiction — to narzędzie, które już dziś może pomóc ci napisać mail, zaplanować tydzień albo wytłumaczyć trudny temat prostymi słowami. W tym module zobaczysz, co AI naprawdę potrafi, gdzie się myli i od czego najlepiej zacząć. Bez testu, bez presji — to spokojny spacer po nowym terenie.",
+  "screens": [
+    {
+      "id": "md1-s1-czaty-asystenci",
+      "title": "Czaty i asystenci — twój nowy pomocnik",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Najpopularniejsza forma AI to czat: piszesz pytanie albo prośbę zwykłymi słowami, a asystent odpowiada. Nie musisz znać żadnych komend ani „języka komputerów” — rozmawiasz jak z pomocną osobą, która ma dużo cierpliwości i nigdy nie wzdycha, gdy pytasz trzeci raz o to samo." },
+        { "kind": "list", "items": [
+          "Możesz prosić o wyjaśnienia: „wytłumacz mi to tak, jakbym miała 10 lat”.",
+          "Możesz prosić o teksty: mail, życzenia, ogłoszenie, lista zakupów.",
+          "Możesz prosić o pomysły: co na obiad, co robić w deszczową sobotę, jaki prezent dla babci.",
+          "Możesz dopytywać i poprawiać: „krócej”, „prościej”, „a co jeśli…?”."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Nie ma głupich pytań", "text": "Asystent AI nie ocenia. Możesz pytać o rzeczy „oczywiste”, prosić o powtórzenie i pisać z literówkami — i tak zrozumie, o co chodzi." }
+      ]
+    },
+    {
+      "id": "md1-s2-multimodalnosc",
+      "title": "Tekst, obraz, głos — AI rozumie więcej niż litery",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Współczesne asystenty nie ograniczają się do tekstu. Możesz im pokazać zdjęcie, powiedzieć coś na głos albo poprosić o wygenerowanie obrazka. To otwiera bardzo praktyczne zastosowania w codziennym życiu." },
+        { "kind": "table", "headers": ["Co dajesz", "Co możesz dostać", "Przykład z życia"], "rows": [
+          ["Tekst", "Odpowiedź, tekst, plan, pomysły", "„Napisz uprzejmą odpowiedź na to zaproszenie”"],
+          ["Zdjęcie", "Opis, wyjaśnienie, tłumaczenie", "Zdjęcie etykiety po niemiecku → „co tu jest napisane?”"],
+          ["Głos", "Rozmowa bez pisania", "Gotujesz i pytasz na głos, czym zastąpić śmietanę"],
+          ["Prośba o obraz", "Wygenerowana grafika", "Kolorowanka dla dziecka, ilustracja na zaproszenie"]
+        ], "textAlt": "Tabela pokazuje cztery sposoby pracy z AI: tekst daje odpowiedzi i plany, zdjęcie daje opis lub tłumaczenie, głos pozwala rozmawiać bez pisania, a prośba o obraz daje wygenerowaną grafikę. Każdy wiersz ma przykład z życia domowego." },
+        { "kind": "callout", "variant": "info", "title": "Spróbuj z aparatem", "text": "Jednym z najprzyjemniejszych pierwszych kroków jest pokazanie AI zdjęcia: instrukcji obsługi, rośliny z balkonu, składu produktu — i pytanie „co to jest?” albo „wytłumacz prosto”." }
+      ]
+    },
+    {
+      "id": "md1-s3-czego-nie-potrafi",
+      "title": "Czego AI NIE potrafi — brzmi pewnie, bywa w błędzie",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Halucynacja", "text": "Sytuacja, w której AI podaje informację nieprawdziwą, ale brzmiącą bardzo przekonująco. Asystent nie kłamie celowo — po prostu „zgaduje” odpowiedź, która pasuje do pytania, i robi to tym samym pewnym tonem co przy faktach." },
+        { "kind": "paragraph", "text": "Wyobraź sobie znajomego, który jest oczytany i elokwentny, ale nigdy nie mówi „nie wiem”. Zapytany o godziny otwarcia przychodni poda jakieś godziny — może prawdziwe, może wymyślone. Tak właśnie działa AI: świetnie tłumaczy, podpowiada i pisze, ale nie jest wyrocznią." },
+        { "kind": "list", "items": [
+          "Daty, ceny, godziny otwarcia, przepisy prawa — zawsze sprawdź u źródła.",
+          "Porady zdrowotne i finansowe — traktuj jako wstęp do rozmowy z lekarzem lub doradcą, nie jako decyzję.",
+          "Wiadomości „z dziś” — asystent może nie znać najnowszych wydarzeń.",
+          "Liczenie i drobiazgowe fakty — AI bywa zaskakująco słabe w rzeczach, które wyglądają na proste."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Zasada ograniczonego zaufania", "text": "Im ważniejsza decyzja (zdrowie, pieniądze, dokumenty), tym bardziej odpowiedź AI jest tylko podpowiedzią do sprawdzenia — nie ostatnim słowem." }
+      ]
+    },
+    {
+      "id": "md1-s4-od-czego-zaczac",
+      "title": "Od czego zacząć — pierwszy tydzień z AI",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Najlepszy sposób na oswojenie AI to małe, bezpieczne zadania, w których pomyłka nic nie kosztuje. Anna Testowa zaczęła od planowania obiadów na tydzień, Jan Syntetyczny — od pisania uprzejmych odpowiedzi na maile. Po tygodniu oboje mieli już swoje ulubione zastosowania." },
+        { "kind": "list", "ordered": true, "items": [
+          "Wybierz jeden darmowy czat AI i załóż konto.",
+          "Zadaj pytanie o coś, na czym się znasz — zobaczysz, jak dobrze (i jak pewnie) odpowiada.",
+          "Poproś o pomoc w jednej prawdziwej, drobnej sprawie: mail, plan, przepis.",
+          "Celowo dopytaj i popraw odpowiedź — zobaczysz, że rozmowa działa lepiej niż jedno pytanie.",
+          "Sprawdź jedną „faktową” odpowiedź w innym źródle — poczujesz, gdzie przebiega granica zaufania."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Nic nie zepsujesz", "text": "Czat AI to bezpieczne miejsce na eksperymenty. Najgorsze, co może się zdarzyć, to nietrafiona odpowiedź — wtedy po prostu piszesz „nie o to chodziło” i próbujesz inaczej." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "md1-classify",
+    "title": "AI zrobi to dobrze czy potrzebny człowiek?",
+    "intro": "Przyporządkuj każde zadanie: czy AI poradzi sobie z nim dziś dobrze, czy raczej się pomyli i potrzebna jest weryfikacja lub człowiek? To ćwiczenie rozwojowe — feedback wyjaśnia każdą odpowiedź.",
+    "categories": [
+      { "id": "ai-dobrze", "label": "AI zrobi to dziś dobrze", "desc": "Zadania językowe i pomysłowe: tłumaczenie, pisanie, wyjaśnianie, planowanie." },
+      { "id": "czlowiek", "label": "Tu AI się myli / potrzebny człowiek", "desc": "Aktualne fakty, ważne decyzje, zdrowie, pieniądze — wymagają sprawdzenia." }
+    ],
+    "items": [
+      { "id": "md1-i1", "text": "Napisz uprzejmą odpowiedź na zaproszenie na komunię.", "correctCategory": "ai-dobrze", "rationale": "Pisanie tekstów to mocna strona AI — łatwo poprawisz ton i długość." },
+      { "id": "md1-i2", "text": "Podaj aktualne godziny otwarcia przychodni w mojej dzielnicy.", "correctCategory": "czlowiek", "rationale": "AI może zmyślić godziny pewnym tonem. Takie rzeczy sprawdzaj na stronie przychodni lub telefonicznie." },
+      { "id": "md1-i3", "text": "Wytłumacz prostymi słowami, czym jest inflacja.", "correctCategory": "ai-dobrze", "rationale": "Wyjaśnianie pojęć „po ludzku” to jedno z najlepszych zastosowań AI." },
+      { "id": "md1-i4", "text": "Zdecyduj, czy mam wziąć ten kredyt hipoteczny.", "correctCategory": "czlowiek", "rationale": "Ważna decyzja finansowa — AI może pomóc uporządkować pytania, ale decyzję skonsultuj z doradcą i własnym rozsądkiem." },
+      { "id": "md1-i5", "text": "Zaproponuj plan posiłków na tydzień z prostych składników.", "correctCategory": "ai-dobrze", "rationale": "Planowanie i pomysły to bezpieczne zadanie — najwyżej zmienisz danie, które ci nie pasuje." },
+      { "id": "md1-i6", "text": "Powiedz, jakie leki mam brać na ten ból głowy.", "correctCategory": "czlowiek", "rationale": "Zdrowie wymaga lekarza lub farmaceuty. AI może wyjaśnić pojęcia, ale nie powinno dawkować leków." },
+      { "id": "md1-i7", "text": "Przetłumacz przepis kulinarny z włoskiego na polski.", "correctCategory": "ai-dobrze", "rationale": "Tłumaczenia codziennych tekstów wychodzą AI bardzo dobrze." },
+      { "id": "md1-i8", "text": "Podaj wynik wczorajszego meczu i najnowsze wiadomości.", "correctCategory": "czlowiek", "rationale": "Najświeższe wydarzenia mogą być poza wiedzą asystenta — może podać stare lub zmyślone informacje." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "AI to rozmowa zwykłymi słowami — pytaj, dopytuj, poprawiaj, nic nie zepsujesz.",
+      "Asystent rozumie tekst, zdjęcia i głos — pokazanie zdjęcia bywa szybsze niż opisywanie.",
+      "AI brzmi pewnie także wtedy, gdy się myli — fakty, zdrowie i pieniądze zawsze sprawdzaj u źródła.",
+      "Zacznij od małych, bezpiecznych zadań: mail, plan tygodnia, wyjaśnienie trudnego tematu."
+    ],
+    "checklist": [
+      "Czy mam założone konto w jednym czacie AI i zadałem(-am) pierwsze pytanie?",
+      "Czy wiem, co to halucynacja i które odpowiedzi trzeba sprawdzać?",
+      "Czy spróbowałem(-am) dopytać i poprawić odpowiedź zamiast poprzestać na pierwszej?",
+      "Czy mam jedno codzienne zadanie, w którym AI realnie mi pomaga?"
+    ],
+    "checklistTitle": "Checklista — pierwsze kroki z AI",
+    "nextStep": "Następny krok: w module „Prompty na co dzień” nauczysz się tak formułować prośby, żeby odpowiedzi były trafne od razu — z kontekstem, celem i formatem."
+  }
+}

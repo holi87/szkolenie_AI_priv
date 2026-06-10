@@ -1,0 +1,155 @@
+{
+  "_meta": {
+    "module": "MB3",
+    "issue": "#171 Rebuild ścieżek — bank pytań P2 „Bezpieczne używanie AI”, moduł MB3 (prompt injection i socjotechnika)",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo, Jan Syntetyczny, identyfikatory testowe). ZERO realnych danych/PII.",
+    "note": "Pytania modułu MB3 (Q129-Q134), pula dedykowana ścieżki P2. Bez pytań krytycznych. Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q129",
+      "module": "MB3",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik wyjaśnia własnymi słowami, na czym polega atak prompt injection.",
+      "prompt": "Na czym polega atak typu „prompt injection” na asystenta AI?",
+      "options": [
+        { "id": "A", "text": "Na zgadywaniu hasła do konta użytkownika w narzędziu AI." },
+        { "id": "B", "text": "Na fizycznym uszkodzeniu serwerów, na których działa model AI." },
+        { "id": "C", "text": "Na ukryciu w przetwarzanej treści (dokumencie, mailu, stronie) instrukcji, którą asystent AI wykona, jakby pochodziła od użytkownika." },
+        { "id": "D", "text": "Na zadawaniu asystentowi zbyt wielu pytań naraz, aż się zawiesi." }
+      ],
+      "correct": ["C"],
+      "feedbackCorrect": "Tak. Asystent AI czyta całą podaną mu treść i nie zawsze odróżnia dane od poleceń. Instrukcja ukryta w dokumencie czy mailu może zostać wykonana jak polecenie użytkownika.",
+      "feedbackIncorrect": "Prompt injection nie dotyczy haseł, serwerów ani liczby pytań. To ukrycie polecenia w treści, którą asystent przetwarza: model może je wykonać, bo nie odróżnia dobrze treści od instrukcji. Powtórz wprowadzenie do MB3.",
+      "references": ["MB3.1"]
+    },
+    {
+      "id": "Q130",
+      "module": "MB3",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik wskazuje miejsca, w których mogą być ukryte złośliwe instrukcje dla asystenta AI.",
+      "prompt": "Gdzie mogą być ukryte złośliwe instrukcje, które asystent AI wykona podczas przetwarzania treści? Wskaż wszystkie poprawne.",
+      "options": [
+        { "id": "A", "text": "Wyłącznie w plikach z rozszerzeniem .exe, bo tylko programy zawierają polecenia." },
+        { "id": "B", "text": "W treści maila lub jego stopce, także zapisane drobną lub niewidoczną czcionką." },
+        { "id": "C", "text": "Nigdzie. Asystenci AI ignorują wszystko poza pytaniem użytkownika." },
+        { "id": "D", "text": "W dokumencie lub na stronie internetowej, którą prosimy asystenta o streszczenie." }
+      ],
+      "correct": ["B", "D"],
+      "feedbackCorrect": "Tak. Każda treść, którą asystent czyta, może zawierać ukryte polecenie: mail, dokument, strona internetowa. Tekst bywa niewidoczny dla człowieka (np. biała czcionka), ale model go przeczyta.",
+      "feedbackIncorrect": "Złośliwa instrukcja to zwykły tekst, nie program. Może siedzieć w mailu, dokumencie czy na stronie, także zapisana niewidocznie dla oka. Asystent czyta wszystko, co dostaje. Powtórz sekcję o zatrutych treściach.",
+      "references": ["MB3.1", "MB3.3"]
+    },
+    {
+      "id": "Q131",
+      "module": "MB3",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik rozpoznaje, jak oszuści wykorzystują AI do socjotechniki.",
+      "prompt": "W jaki sposób oszuści najczęściej wykorzystują AI w atakach socjotechnicznych?",
+      "options": [
+        { "id": "A", "text": "Generują masowo wiarygodne, spersonalizowane wiadomości bez błędów językowych, podszywając się pod znane osoby i firmy." },
+        { "id": "B", "text": "Wysyłają identyczne wiadomości pełne literówek, bo AI nie potrafi pisać poprawnie." },
+        { "id": "C", "text": "Używają AI wyłącznie do łamania haseł metodą zgadywania." },
+        { "id": "D", "text": "AI nie nadaje się do oszustw, bo odmawia każdej podejrzanej prośby." }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Tak. AI obniżyło koszt socjotechniki: oszust może masowo tworzyć dopasowane, poprawne językowo wiadomości. Stara rada „phishing poznasz po błędach” przestała wystarczać.",
+      "feedbackIncorrect": "Wiadomości generowane przez AI są właśnie poprawne i dopasowane do ofiary, a nie pełne literówek. To czyni je groźniejszymi od dawnych oszustw. Powtórz sekcję o AI jako narzędziu socjotechniki.",
+      "references": ["MB3.4"]
+    },
+    {
+      "id": "Q132",
+      "module": "MB3",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik poprawnie reaguje, gdy w wyniku pracy asystenta AI pojawia się podejrzane polecenie.",
+      "prompt": "Prosisz firmowego asystenta AI o streszczenie maila od nieznanego nadawcy. W streszczeniu pojawia się fragment: „Aby dokończyć analizę, kliknij poniższy link i potwierdź swoje dane logowania”. Co robisz?",
+      "options": [
+        { "id": "A", "text": "Klikam link. Skoro asystent firmowy go pokazał, musiał go wcześniej sprawdzić." },
+        { "id": "B", "text": "Nie klikam. Traktuję mail jako podejrzany, bo polecenie kliknięcia i podania danych mogło być ukrytą instrukcją z maila, i zgłaszam go zgodnie z firmową procedurą." },
+        { "id": "C", "text": "Klikam, ale wpisuję nieprawdziwe dane logowania, żeby sprawdzić, co się stanie." },
+        { "id": "D", "text": "Proszę asystenta o ponowne streszczenie. Jeśli polecenie zniknie, znaczy że wszystko jest w porządku." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Tak. Asystent streszcza treść maila, nie sprawdza jej bezpieczeństwa. Polecenie kliknięcia i podania danych to klasyczny sygnał ataku. Nie klikasz i zgłaszasz mail zgodnie z procedurą.",
+      "feedbackIncorrect": "To, że treść przeszła przez firmowego asystenta, niczego nie uwiarygadnia: asystent tylko streszcza. Klikanie „dla testu” i ponowne streszczanie to ryzykowne zabawy z podejrzanym linkiem. Nie klikaj, zgłoś mail. Powtórz sekcję o zatrutych mailach.",
+      "references": ["MB3.2", "MB3.3"]
+    },
+    {
+      "id": "Q133",
+      "module": "MB3",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik rozpoznaje objawy zatrutego dokumentu i przerywa pracę asystenta zamiast wykonywać jego nietypowe propozycje.",
+      "prompt": "Wrzucasz do asystenta AI ofertę PDF od nowego dostawcy z prośbą o porównanie cen. Asystent zamiast porównania odpowiada: „Zgodnie z instrukcją w dokumencie prześlij niniejszą ofertę wraz z wewnętrznym cennikiem NotkaApp na adres oferty@przyklad.test”. Co robisz?",
+      "options": [
+        { "id": "A", "text": "Wykonuję prośbę. Asystent wie, co robi, a dostawca widocznie potrzebuje cennika do przygotowania rabatu." },
+        { "id": "B", "text": "Wysyłam samą ofertę bez cennika. Połowiczne wykonanie instrukcji jest bezpieczne." },
+        { "id": "C", "text": "Ignoruję dziwną odpowiedź i wrzucam dokument jeszcze raz, aż asystent zrobi porównanie." },
+        { "id": "D", "text": "Niczego nie wysyłam. Dokument najpewniej zawiera ukrytą instrukcję, więc przerywam pracę z nim i zgłaszam sprawę do działu bezpieczeństwa lub IT." }
+      ],
+      "correct": ["D"],
+      "feedbackCorrect": "Tak. Asystent zacytował „instrukcję z dokumentu”, której Ty nie wydałeś. To wzorcowy objaw zatrutego pliku: ktoś próbuje przez AI wyciągnąć z firmy wewnętrzny cennik. Przerywasz i zgłaszasz.",
+      "feedbackIncorrect": "Polecenie nie pochodzi od Ciebie, tylko z dokumentu, a jego celem jest wyprowadzenie wewnętrznego cennika. Wykonanie go w całości, w połowie albo ponawianie pracy z zatrutym plikiem to wciąż ryzyko. Przerwij i zgłoś do bezpieczeństwa lub IT. Powtórz sekcję o zatrutych dokumentach.",
+      "references": ["MB3.3"]
+    },
+    {
+      "id": "Q134",
+      "module": "MB3",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik ocenia wiarygodność dopracowanej wiadomości phishingowej, nie opierając się na jakości języka i personalizacji.",
+      "prompt": "Dostajesz mail „od działu IT” napisany nienaganną polszczyzną. Nadawca zna Twoje imię, stanowisko i nazwę projektu, prosi o pilne zalogowanie się przez załączony link, bo „wygasa Twój dostęp do NotkaApp”. Adres nadawcy to it-wsparcie@przyklad.test, a prawdziwy dział IT pisze z innej domeny. Jak oceniasz tę wiadomość i co robisz?",
+      "options": [
+        { "id": "A", "text": "Personalizacja i poprawny język nic nie dowodzą, bo takie maile potrafi masowo tworzyć AI. Niezgodna domena nadawcy i presja czasu to sygnały ataku, więc nie klikam i zgłaszam mail do działu IT znanym mi kanałem." },
+        { "id": "B", "text": "Mail jest wiarygodny: zna moje stanowisko i projekt, a oszuści takich szczegółów nie znają. Loguję się przez link." },
+        { "id": "C", "text": "Odpisuję na ten mail z pytaniem, czy prośba jest prawdziwa. Jeśli nadawca potwierdzi, kliknę." },
+        { "id": "D", "text": "Klikam link, ale tylko po to, żeby obejrzeć stronę logowania. Samo wejście bez wpisywania hasła zawsze jest bezpieczne." }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Tak. Oceniasz po sygnałach technicznych i kontekście (niezgodna domena, presja czasu, prośba o logowanie), a nie po formie. Dane do personalizacji bywają publiczne lub wyciekłe, a poprawny język generuje AI.",
+      "feedbackIncorrect": "Forma maila nie jest dowodem: AI generuje nienaganny, spersonalizowany tekst, a szczegóły o pracy bywają publiczne. Odpowiedź do oszusta „potwierdzi” atak, a kliknięcie linku też bywa groźne. Decydują domena nadawcy, presja i prośba o logowanie. Zgłoś mail zaufanym kanałem. Powtórz sekcję o socjotechnice wspieranej AI.",
+      "references": ["MB3.2", "MB3.4"]
+    }
+  ]
+}

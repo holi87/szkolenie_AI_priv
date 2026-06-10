@@ -1,0 +1,102 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P1 AI w domu (formatywna)",
+    "interaction": "Klasyfikacja: zdrowa vs ryzykowna praktyka rodzinna (kind: classify)",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp, przyklad.test, Jan Syntetyczny, Anna Testowa). ZERO realnych danych/PII. Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MD5",
+  "intro": "Dzieci nie pytają, czy używać AI — już używają: do lekcji, rysunków, rozmów z chatbotami. Pytanie brzmi, czy robią to z Tobą, czy obok Ciebie. Ten moduł pomaga rozmawiać o AI bez straszenia i bez zachwytu na ślepo, ustawić zdrowe zasady i odróżnić pomoc w nauce od wyręczania w myśleniu.",
+  "screens": [
+    {
+      "id": "md5-s1-rozmowa",
+      "title": "Jak rozmawiać z dzieckiem o AI",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Najlepsza pierwsza rozmowa o AI nie jest wykładem, tylko wspólnym eksperymentem: usiądźcie razem, zapytajcie czat o coś, na czym dziecko się zna (ulubiona gra, zwierzę, drużyna) — i poszukajcie razem, co AI powiedziało dobrze, a gdzie się myli. Dziecko, które raz przyłapie AI na błędzie, zapamięta więcej niż z dziesięciu pogadanek." },
+        { "kind": "list", "items": [
+          "Mów prosto: „AI zgaduje bardzo dobrze, ale nie wie na pewno — dlatego sprawdzamy”.",
+          "Nie strasz i nie zachwycaj się na ślepo — oba skrajne tony zamykają rozmowę.",
+          "Ustal, że z dziwną, niepokojącą albo „zbyt dorosłą” odpowiedzią dziecko przychodzi do Ciebie — bez kary za samo pytanie."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Złote zdanie", "text": "„AI to bardzo oczytany pomocnik, który czasem zmyśla — i nigdy nie jest Twoim przyjacielem ani dorosłym, któremu mówi się sekrety”." }
+      ]
+    },
+    {
+      "id": "md5-s2-zasady",
+      "title": "Wspólne zasady zamiast zakazów",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Totalny zakaz działa do pierwszej przerwy w szkole — koledzy mają telefony. Skuteczniejsze są zasady ustalone razem, dostosowane do wieku, z jasnym „dlaczego”:" },
+        { "kind": "table", "headers": ["Obszar", "Przykładowa zasada", "Dlaczego"], "rows": [
+          ["Dane", "Nie podajemy AI imienia, adresu, szkoły ani zdjęć", "czat to nie pamiętnik; treści idą na serwer"],
+          ["Czas i miejsce", "AI na wspólnym sprzęcie, w widocznym miejscu (młodsze dzieci)", "obecność dorosłego zamiast inwigilacji"],
+          ["Treści", "Dziwne/niepokojące odpowiedzi pokazujemy rodzicowi", "filtry nie łapią wszystkiego"],
+          ["Szkoła", "AI pomaga zrozumieć, nie odrabia za Ciebie", "ocena ma mierzyć Twoją głowę"]
+        ], "textAlt": "Tabela zasad rodzinnych: ochrona danych dziecka, korzystanie w widocznym miejscu, zgłaszanie niepokojących treści, AI jako pomoc w zrozumieniu zamiast odrabiania prac." },
+        { "kind": "callout", "variant": "info", "title": "Kontrola rodzicielska", "text": "Włącz tryby dziecięce i filtry tam, gdzie są — ale traktuj je jak pasy bezpieczeństwa, nie jak kierowcę. Żaden filtr nie zastąpi rozmowy." }
+      ]
+    },
+    {
+      "id": "md5-s3-nauka",
+      "title": "Pomoc w nauce czy wyręczanie",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Granica jest prosta do nazwania i trudna do pilnowania: AI pomaga, gdy po jej użyciu dziecko umie WIĘCEJ; wyręcza, gdy umie tyle samo, a ma gotowy wynik. To samo narzędzie robi jedno i drugie — różnica siedzi w sposobie użycia." },
+        { "kind": "list", "items": [
+          "Pomoc: „wytłumacz mi ułamki na przykładzie pizzy”, „zadaj mi pięć pytań z tego rozdziału”, „sprawdź moje wypracowanie i powiedz, co poprawić — bez pisania za mnie”.",
+          "Wyręczanie: „napisz wypracowanie o Mickiewiczu na jutro”, „rozwiąż te zadania” — i kopiuj-wklej do zeszytu.",
+          "Test domowy: poproś dziecko, żeby wyjaśniło Ci wynik własnymi słowami. Umie? Była pomoc. Nie umie? Było wyręczanie."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Długi koszt", "text": "Wyręczanie oszczędza wieczór, a kosztuje umiejętność. Dziecko, które nauczy się „AI zrobi za mnie”, w teście, na egzaminie i w pierwszej pracy zostaje samo." }
+      ]
+    },
+    {
+      "id": "md5-s4-higiena",
+      "title": "Higiena cyfrowa całej rodziny",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Dzieci kopiują nie zasady, tylko zachowania. Jeśli rodzic przy obiedzie „tylko sprawdzi czat”, zasada „najpierw ludzie, potem ekrany” umiera w praktyce. Higiena cyfrowa działa, gdy obowiązuje wszystkich:" },
+        { "kind": "list", "ordered": true, "items": [
+          "Strefy bez ekranów: wspólne posiłki, godzina przed snem — dla dorosłych też.",
+          "Chatbot „towarzyski” to nie powiernik: uczucia i sekrety omawiamy z ludźmi; dziecko ma wiedzieć, że rozmowa z botem nie jest prywatna jak pamiętnik.",
+          "Raz na miesiąc wspólny przegląd: czego AI nas ostatnio nauczyło, gdzie się pomyliło, co zmieniamy w zasadach."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Cel", "text": "Nie wychowujemy dziecka, które nie używa AI — wychowujemy takie, które używa jej świadomie i wie, kiedy odłożyć." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "md5-classify",
+    "title": "Zdrowa czy ryzykowna praktyka rodzinna?",
+    "intro": "Oceń domowe praktyki związane z AI. Feedback wyjaśnia, co wzmacnia, a co podkopuje bezpieczeństwo i rozwój dziecka.",
+    "categories": [
+      { "id": "healthy", "label": "Zdrowa praktyka", "desc": "Wspólność, rozmowa, nauka myślenia, ochrona danych dziecka." },
+      { "id": "risky", "label": "Ryzykowna praktyka", "desc": "Wyręczanie, dane dziecka w sieci, AI jako niania lub powiernik." }
+    ],
+    "items": [
+      { "id": "md5-i1", "text": "Rodzic z dzieckiem wspólnie łapią AI na błędzie w temacie, na którym dziecko się zna.", "correctCategory": "healthy", "rationale": "Uczy zdrowego sceptycyzmu lepiej niż wykład — dziecko doświadcza omylności AI." },
+      { "id": "md5-i2", "text": "Ośmiolatek rozmawia wieczorami sam z chatbotem „przyjacielem” o swoich smutkach.", "correctCategory": "risky", "rationale": "Bot to nie powiernik: emocje dziecka potrzebują człowieka, a treść rozmów idzie na serwer." },
+      { "id": "md5-i3", "text": "Nastolatek prosi AI o pięć pytań sprawdzających przed klasówką i odpowiada na nie sam.", "correctCategory": "healthy", "rationale": "AI jako trener wiedzy — po użyciu dziecko umie więcej, nie mniej." },
+      { "id": "md5-i4", "text": "Rodzic wkleja do publicznego czatu opinię ze szkoły z imieniem i nazwiskiem dziecka, prosząc o analizę.", "correctCategory": "risky", "rationale": "Dane dziecka w publicznym narzędziu — analiza możliwa po anonimizacji." },
+      { "id": "md5-i5", "text": "Wypracowanie na jutro pisze AI, dziecko przepisuje do zeszytu, rodzic „nie widzi”.", "correctCategory": "risky", "rationale": "Wyręczanie z cichą zgodą dorosłego — podwójna lekcja: nie umiem i nie muszę." },
+      { "id": "md5-i6", "text": "Rodzina ustala wspólnie zasady AI przy kolacji, łącznie z zasadami dla rodziców.", "correctCategory": "healthy", "rationale": "Zasady współtworzone i symetryczne mają szansę być przestrzegane." },
+      { "id": "md5-i7", "text": "Tablet z chatbotem jako „niania” na całe popołudnie, żeby było cicho.", "correctCategory": "risky", "rationale": "AI bez obecności dorosłego jako opiekun — ani filtr, ani bot nie zastąpią uwagi." },
+      { "id": "md5-i8", "text": "Dziecko pokazuje rodzicowi dziwną odpowiedź czatu i wspólnie ją zgłaszacie w aplikacji.", "correctCategory": "healthy", "rationale": "Działa umowa „przychodzisz bez kary” + dziecko uczy się reagować, nie tylko unikać." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Rozmawiaj przez wspólne eksperymenty, nie wykłady — dziecko ma przyłapać AI na błędzie.",
+      "Zasady zamiast zakazów: dane chronimy, niepokojące treści zgłaszamy, AI pomaga rozumieć, nie odrabia.",
+      "Higiena cyfrowa obowiązuje też dorosłych — dzieci kopiują zachowania, nie regulaminy."
+    ],
+    "checklist": [
+      "Czy moje dziecko wie, czego nie podawać AI (imię, adres, szkoła, zdjęcia)?",
+      "Czy mamy umowę: dziwna odpowiedź = pokazujesz mi bez konsekwencji?",
+      "Czy umiem odróżnić, kiedy AI uczy, a kiedy wyręcza — i robię ten test?"
+    ],
+    "checklistTitle": "Checklista — AI w rodzinie",
+    "nextStep": "Następny krok: ostatni moduł ścieżki — prywatność domowa, czyli ustawienia kont AI i porządek w danych całego domu."
+  }
+}

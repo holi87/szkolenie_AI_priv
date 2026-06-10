@@ -1,0 +1,97 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P2 Bezpieczne używanie AI",
+    "interaction": "Klasyfikacja: zgodne z polityką vs shadow AI (kind: classify)",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp/SklepDemo, przyklad.test, Jan Syntetyczny). ZERO realnych danych/PII."
+  },
+  "module": "MB5",
+  "intro": "Firmy nie zakazują AI dla zasady — porządkują, CZYM wolno pracować i Z JAKIMI danymi. Ten moduł tłumaczy, czym jest shadow AI i dlaczego szkodzi, jak czytać politykę firmową, co z prawami autorskimi treści generowanych i kto odpowiada za wynik pracy z AI.",
+  "screens": [
+    {
+      "id": "mb5-s1-shadow-ai",
+      "title": "Shadow AI: praca w ukryciu",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Shadow AI", "text": "Używanie narzędzi AI do zadań służbowych poza wiedzą i zgodą firmy — najczęściej przez prywatne konta w publicznych czatach." },
+        { "kind": "paragraph", "text": "Problemem nie jest samo narzędzie, lecz brak kontroli: nikt nie wie, jakie dane firmowe i klienckie wypływają, na jakich warunkach są przetwarzane ani czy trafiają do treningu cudzego modelu. Dobre wyniki pracy nie kompensują tego ryzyka — ono rośnie z każdym wklejeniem." },
+        { "kind": "callout", "variant": "warn", "title": "Cichy koszt", "text": "Wyciek przez shadow AI wychodzi na jaw zwykle późno i przypadkiem — a wtedy dotyczy już miesięcy danych, nie jednej wiadomości." }
+      ]
+    },
+    {
+      "id": "mb5-s2-polityka",
+      "title": "Polityka firmowa: czym i z czym wolno pracować",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Dobra polityka AI odpowiada na dwa pytania: jakie narzędzia są zatwierdzone oraz jakie kategorie danych wolno w nich przetwarzać. To mapa, nie mur — pokazuje bezpieczną drogę zamiast zakazywać wszystkiego." },
+        { "kind": "table", "headers": ["Kategoria danych", "Publiczny czat (prywatne konto)", "Zatwierdzone narzędzie firmowe"], "rows": [
+          ["Ogólna wiedza, szkice bez danych firmowych", "zwykle dozwolone", "dozwolone"],
+          ["Wewnętrzne dokumenty, kod, plany", "niedozwolone", "dozwolone wg polityki"],
+          ["Dane klientów i osobowe", "niedozwolone", "tylko jeśli polityka wprost na to pozwala"]
+        ], "textAlt": "Macierz: im wrażliwsze dane, tym węższy wybór narzędzi — dane klientów wyłącznie w narzędziach wprost dopuszczonych przez politykę." },
+        { "kind": "callout", "variant": "safe", "title": "Nowe narzędzie?", "text": "Znalazłeś coś lepszego? Zgłoś do oceny (IT/bezpieczeństwo) zamiast używać po cichu. Ścieżka zatwierdzania istnieje po to, żeby innowacja nie wykluczała bezpieczeństwa." }
+      ]
+    },
+    {
+      "id": "mb5-s3-licencje",
+      "title": "Licencje i prawa autorskie treści AI",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Treści wygenerowane przez AI nie są „niczyje” w sensie praktycznym: warunki użycia określa licencja narzędzia (np. czy wolno używać komercyjnie), a wynik może naruszać cudze prawa, jeśli odtwarza rozpoznawalny styl, znak lub wizerunek." },
+        { "kind": "list", "items": [
+          "Przed komercyjnym użyciem sprawdź licencję generatora — „darmowy” nie znaczy „do wszystkiego”.",
+          "Grafika łudząco podobna do znanej marki lub stylu to ryzyko prawne niezależnie od tego, że „zrobiło ją AI”.",
+          "Oznaczaj treści AI tam, gdzie wymaga tego firma, platforma lub prawo — i wszędzie tam, gdzie zatajenie podważyłoby zaufanie."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Zasada kciuka", "text": "Wątpisz, czy możesz czegoś użyć publicznie? To pytanie do osoby odpowiedzialnej za prawo/markę — PRZED publikacją, nie po." }
+      ]
+    },
+    {
+      "id": "mb5-s4-odpowiedzialnosc",
+      "title": "Odpowiada człowiek, nie model",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "AI to narzędzie — jak edytor tekstu czy arkusz. Ofertę, raport albo odpowiedź klientowi firmujesz Ty, razem z błędami, które model zmyślił, a Ty przepuściłeś. Regulaminy dostawców AI wprost wyłączają ich odpowiedzialność za treść wyników." },
+        { "kind": "list", "ordered": true, "items": [
+          "Weryfikuj fakty, liczby i nazwy w treściach od AI, zanim je podpiszesz.",
+          "Nie wysyłaj dalej niczego, czego nie umiesz obronić własnymi słowami.",
+          "Przy ważnych treściach zostaw ślad weryfikacji: co sprawdzono i w jakim źródle."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Pamiętaj", "text": "„Tak wygenerowało AI” nie jest linią obrony — ani wobec klienta, ani wobec przełożonego, ani wobec prawa." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "mb5-classify",
+    "title": "Zgodne z polityką czy shadow AI?",
+    "intro": "Firma SklepDemo dopuszcza dane klientów wyłącznie w wewnętrznym asystencie AI; publiczne czaty są dozwolone tylko do treści bez danych firmowych. Oceń praktyki.",
+    "categories": [
+      { "id": "ok", "label": "Zgodne z polityką", "desc": "Zatwierdzone narzędzie albo treść bez danych firmowych/klienckich." },
+      { "id": "shadow", "label": "Shadow AI / naruszenie", "desc": "Niezatwierdzone narzędzie, dane poza kontrolą firmy, omijanie zasad." }
+    ],
+    "items": [
+      { "id": "mb5-i1", "text": "Pracownik pyta publiczny czat o ogólne dobre praktyki pisania maili — bez żadnych danych firmowych.", "correctCategory": "ok", "rationale": "Treść ogólna, zero danych firmowych — publiczny czat dozwolony." },
+      { "id": "mb5-i2", "text": "Zespół wkleja opisy zgłoszeń klientów do prywatnych kont w publicznym czacie, „bo szybciej”.", "correctCategory": "shadow", "rationale": "Dane klientów poza zatwierdzonym narzędziem — systemowe shadow AI, niezależnie od wyników." },
+      { "id": "mb5-i3", "text": "Analityk pracuje na danych klientów w wewnętrznym, zatwierdzonym asystencie AI.", "correctCategory": "ok", "rationale": "Dokładnie do tego zatwierdzono narzędzie wewnętrzne." },
+      { "id": "mb5-i4", "text": "Kierownik wysyła poufny raport do prywatnej skrzynki, żeby w domu przepuścić go przez ulubiony czat AI.", "correctCategory": "shadow", "rationale": "Poufne dane opuszczają kontrolę firmy podwójnie: prywatna poczta + niezatwierdzone narzędzie." },
+      { "id": "mb5-i5", "text": "Pracownica zgłasza nowe narzędzie AI do oceny działowi IT i czeka z użyciem na decyzję.", "correctCategory": "ok", "rationale": "Wzorcowa ścieżka: innowacja przez ocenę i zatwierdzenie, nie po cichu." },
+      { "id": "mb5-i6", "text": "Programista wkleja fragmenty wewnętrznego kodu do publicznego czatu z prywatnego konta, by szybciej znaleźć błąd.", "correctCategory": "shadow", "rationale": "Wewnętrzny kod to dane firmowe — publiczny czat z prywatnego konta łamie politykę." },
+      { "id": "mb5-i7", "text": "Marketing używa zatwierdzonego generatora grafik i przed publikacją sprawdza licencję na użycie komercyjne.", "correctCategory": "ok", "rationale": "Zatwierdzone narzędzie + świadomość licencyjna przed publikacją." },
+      { "id": "mb5-i8", "text": "Stażysta zakłada „wspólne konto zespołowe” w publicznym czacie, żeby cały zespół wklejał tam dane klientów „oficjalnie”.", "correctCategory": "shadow", "rationale": "Wspólne konto nie legalizuje niczego — dane klientów nadal trafiają do niezatwierdzonego narzędzia." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Shadow AI = praca na danych firmy poza jej wiedzą i kontrolą; dobre wyniki nie kompensują wycieku.",
+      "Polityka AI to mapa: zatwierdzone narzędzia × dozwolone kategorie danych. Nowe narzędzia zgłaszaj do oceny.",
+      "Licencję generatora sprawdzasz przed użyciem komercyjnym, a za treść firmowaną własnym nazwiskiem odpowiadasz Ty."
+    ],
+    "checklist": [
+      "Czy narzędzie, którego używam do tego zadania, jest zatwierdzone dla tego typu danych?",
+      "Czy umiem obronić treść od AI własnymi słowami, zanim ją podpiszę?",
+      "Czy znam ścieżkę zgłoszenia nowego narzędzia do oceny w mojej firmie?"
+    ],
+    "checklistTitle": "Checklista — AI w pracy",
+    "nextStep": "Następny krok: ostatni moduł ścieżki — weryfikacja treści AI, czyli jak sprawdzać odpowiedzi modelu, zanim przekażesz je dalej."
+  }
+}
