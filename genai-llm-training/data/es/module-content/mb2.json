@@ -1,0 +1,126 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P2 Bezpieczne używanie AI",
+    "interaction": "Klasyfikacja treści (kind: classify) — co można wkleić do publicznego czatu, a co wymaga anonimizacji lub zostaje poza czatem",
+    "sections": "Ekrany odpowiadają sekcjom MB2.1–MB2.5 (referowane przez pytania banku Q123–Q128): dane osobowe RODO, minimalizacja/anonimizacja, sekrety, narzędzia zatwierdzone vs publiczne (NDA), uprawnienia aplikacji.",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp, SklepDemo, Jan Syntetyczny, Anna Testowa, domeny @przyklad.test / @example.com, placeholdery zamiast sekretów). Zero realnych danych, PII, numerów i tokenów."
+  },
+  "module": "MB2",
+  "intro": "El mayor riesgo de la IA en el trabajo diario no necesita ningún hacker — basta el simple «pegar y enviar». En este módulo aprenderás a reconocer los datos personales, a pegar solo lo realmente necesario, a mantener las contraseñas y claves lejos de los chats y a distinguir las herramientas aprobadas por la empresa de las públicas. Al final lo comprobarás en la práctica.",
+  "screens": [
+    {
+      "id": "mb2-s1-dane-osobowe",
+      "title": "MB2.1 — Qué es un dato personal (el RGPD en la práctica)",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Datos personales", "text": "Toda la información que permite identificar a una persona concreta — directamente (nombre y apellidos, dirección de correo, foto de la cara) o combinando varios hechos (puesto + empresa + ciudad). El RGPD los protege independientemente de si pertenecen a un cliente, a un compañero o a ti." },
+        { "kind": "list", "items": [
+          "Evidentes: nombre y apellidos, correo electrónico, dirección, número de teléfono, imagen, número de identificación.",
+          "Menos evidentes: el identificador de un cliente en el sistema, el historial de pedidos asignado a una persona, el contenido de su reclamación.",
+          "Especialmente protegidos: datos sobre salud, opiniones, religión — esos no los pegues nunca, en ninguna forma.",
+          "Combinaciones: «la jefa del departamento de devoluciones de SklepDemo en Gdansk» identifica a la persona, aunque no aparezca el apellido."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Por qué esto afecta a los chats de IA", "text": "Pegar datos personales en un chat público es entregárselos a una empresa externa — casi siempre sin base legal y sin el conocimiento de la persona afectada. Es una violación real del RGPD, no una formalidad.",
+          "links": [ { "label": "UODO — informacje o ochronie danych osobowych i RODO", "href": "https://uodo.gov.pl/" } ]
+        }
+      ]
+    },
+    {
+      "id": "mb2-s2-minimalizacja",
+      "title": "MB2.2 — Minimización: pega solo lo necesario",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "El principio de minimización es sencillo: el modelo necesita el contenido del problema, no la identidad de las personas. Antes de pegar cualquier cosa, elimina o sustituye todo lo que señale a personas concretas y contratos concretos. El sentido de la tarea se mantiene — el riesgo desaparece." },
+        { "kind": "table", "headers": ["Antes (no lo pegues)", "Tras la anonimización (puedes pegarlo)"], "rows": [
+          ["El cliente Juan Sintético (jan.syntetyczny@przyklad.test) exige un reembolso por un pedido en SklepDemo", "Un cliente exige un reembolso por un pedido — ayúdame a escribir una respuesta de rechazo amable"],
+          ["Ana Ejemplo, de RR. HH., se queja de su jefe; te pego su correo entero", "Un empleado reporta un conflicto con su jefe — ¿cómo conducir esa conversación?"],
+          ["Contrato n.º 2024/DEMO con la empresa PipeDemo, tarifas y penalizaciones en el anexo", "Tengo un contrato B2B con penalizaciones por retraso — ¿qué comprobar antes de firmar?"]
+        ], "textAlt": "La tabla compara contenidos antes y después de la anonimización: en lugar de los datos del cliente Juan Sintético con su correo, pegamos solo la descripción del problema del reembolso; en lugar del correo entero de la empleada, la descripción del conflicto sin apellidos; en lugar del número del contrato y las tarifas, una pregunta general sobre un contrato B2B." },
+        { "kind": "callout", "variant": "safe", "title": "Técnica de los placeholders", "text": "Sustituye los datos concretos por roles: «[CLIENTE]», «[EMPRESA]», «[IMPORTE]». El modelo se las arreglará igual de bien, y al recibir la respuesta volverás a insertar los datos reales — ya en tu equipo, fuera del chat." }
+      ]
+    },
+    {
+      "id": "mb2-s3-sekrety",
+      "title": "MB2.3 — Secretos: contraseñas, claves y tokens nunca al chat",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Las contraseñas, las claves API, los tokens de acceso, los códigos de un solo uso, los enlaces de invitación a los sistemas — todo eso son secretos. Se diferencian de los datos personales en una cosa: su fuga da a alguien acceso inmediato al sistema. Por eso la regla es absoluta: los secretos no llegan a ningún chat, nunca, en ningún fragmento." },
+        { "kind": "list", "items": [
+          "¿Pides a la IA ayuda con una configuración? Pega el archivo con el secreto sustituido: en lugar de la clave real escribe «[CLAVE_API]».",
+          "Un secreto pegado «por accidente» y borrado de inmediato del chat — aun así pudo quedar ya guardado en el lado del proveedor.",
+          "Si un secreto se ha fugado, borrarlo no basta: hay que invalidarlo y generar uno nuevo, y notificar el suceso.",
+          "Esto también aplica a las contraseñas «poco importantes» — la gente usa las mismas contraseñas en muchos sitios."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "¿Pegaste un secreto? Actúa de inmediato", "text": "No cuentes con que nadie lo note. Cambia o invalida el secreto de inmediato y notifica el suceso según el procedimiento de la empresa (departamento de TI/seguridad). Una reacción rápida es la diferencia entre un incidente y una catástrofe." }
+      ]
+    },
+    {
+      "id": "mb2-s4-narzedzia",
+      "title": "MB2.4 — Herramientas aprobadas vs públicas (y qué dice el NDA)",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "No todos los chats de IA son iguales. Una herramienta aprobada por la empresa tiene un contrato firmado con el proveedor: los datos no entrenan modelos, se almacenan según lo acordado y se sabe quién responde por ellos. Un chat público y gratuito es un acuerdo de «tomas lo que hay» — a menudo con el derecho del proveedor a usar tus entradas." },
+        { "kind": "table", "headers": ["Característica", "Herramienta aprobada por la empresa", "Chat público gratuito"], "rows": [
+          ["Contrato de protección de datos", "Sí — la empresa lo firmó y lo revisó", "No — rigen los términos generales del proveedor"],
+          ["Uso de tus entradas para entrenar", "Normalmente excluido por contrato", "A menudo activado por defecto"],
+          ["Datos sujetos al NDA de un cliente", "Solo si la política de la empresa lo permite expresamente", "Nunca — es una violación del NDA"],
+          ["Quién responde en un incidente", "Vía clara: la empresa y el proveedor", "Poco clara — el riesgo lo asumes tú"]
+        ], "textAlt": "La tabla compara la herramienta aprobada por la empresa con el chat público gratuito: la aprobada tiene un contrato de protección de datos firmado, el entrenamiento con las entradas excluido y una responsabilidad clara; el chat público funciona con los términos generales, a menudo entrena con las entradas, y los datos sujetos a NDA no se pueden pegar allí nunca." },
+        { "kind": "callout", "variant": "warn", "title": "El NDA no es una formalidad", "text": "Los materiales sujetos a un acuerdo de confidencialidad con un cliente (especificaciones, listas de precios, planes) pegados en un chat público son una violación del contrato — independientemente de si alguien lo nota. ¿Dudas de si la herramienta está aprobada? Pregunta antes de pegar." }
+      ]
+    },
+    {
+      "id": "mb2-s5-uprawnienia",
+      "title": "MB2.5 — Permisos de las aplicaciones de IA: da lo mínimo",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Cada vez más aplicaciones de IA piden acceso a tus recursos: el buzón de correo, el calendario, el disco con documentos, los contactos. Cada consentimiento es una puerta abierta — la aplicación ve todo aquello a lo que la dejes entrar, no solo lo que necesita en ese momento. Rige el principio de mínimos privilegios: da exactamente tanto acceso como requiere la tarea, ni una pizca más." },
+        { "kind": "list", "ordered": true, "items": [
+          "Antes de instalar, comprueba qué accesos pide la aplicación — y si tienen sentido para su función (un bloc de notas no necesita tus contactos).",
+          "Elige el alcance mínimo: acceso a una carpeta en lugar de todo el disco, a un calendario en lugar del buzón.",
+          "Trata igual los plugins y complementos de IA en el navegador — «leer todas las páginas» es un permiso muy amplio.",
+          "De vez en cuando revisa los accesos concedidos y retira los que ya no usas."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Ejemplo de una buena decisión", "text": "La aplicación NotkaApp pide acceso a todo el disco para resumir documentos. La jugada segura: crea una carpeta aparte «Para resumir», da acceso solo a ella y pon allí únicamente los archivos que de verdad quieres procesar." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "mb2-classify",
+    "title": "¿Pegar o no pegar?",
+    "intro": "Evalúa cada contenido: ¿se puede pegar con seguridad en un chat público de IA, o hay que anonimizarlo primero o dejarlo fuera del chat? Todos los ejemplos son sintéticos.",
+    "categories": [
+      { "id": "ok", "label": "Se puede pegar en un chat público", "desc": "Sin datos personales, secretos ni contenidos confidenciales — solo el contenido del problema." },
+      { "id": "stop", "label": "No lo pegues / anonimiza primero", "desc": "Contiene datos personales, secretos o contenidos sujetos a confidencialidad." }
+    ],
+    "items": [
+      { "id": "mb2-i1", "text": "«Un cliente exige un reembolso fuera de plazo — ayúdame a escribir una respuesta de rechazo amable pero firme.»", "correctCategory": "ok", "rationale": "Solo la descripción del problema, cero datos identificativos — minimización ejemplar." },
+      { "id": "mb2-i2", "text": "El texto completo de la reclamación de Juan Sintético con su dirección de correo jan.syntetyczny@przyklad.test y el número de pedido.", "correctCategory": "stop", "rationale": "El nombre, los apellidos y el correo son datos personales — antes de pegar sustitúyelos por placeholders como [CLIENTE]." },
+      { "id": "mb2-i3", "text": "Un fragmento de configuración con la clave API real del sistema SklepDemo, «para que la IA encuentre el error».", "correctCategory": "stop", "rationale": "Los secretos nunca llegan al chat — pega la configuración con la clave sustituida por [CLAVE_API]." },
+      { "id": "mb2-i4", "text": "«Tengo una tabla con las columnas: fecha, categoría de gasto, importe. ¿Cómo calcular las sumas mensuales en la hoja de cálculo?»", "correctCategory": "ok", "rationale": "Una pregunta sobre el método, la descripción de la estructura sin un solo registro real — seguro." },
+      { "id": "mb2-i5", "text": "La especificación del producto de un cliente sujeta a NDA — «solo un fragmento, para que la IA ayude con el resumen».", "correctCategory": "stop", "rationale": "El NDA también cubre los fragmentos. Los materiales confidenciales del cliente no entran en los chats públicos en ninguna parte." },
+      { "id": "mb2-i6", "text": "«Un empleado reporta un conflicto con su jefe — ¿cómo prepararse para esa conversación?» (sin apellidos ni departamento).", "correctCategory": "ok", "rationale": "Una descripción de la situación sin posibilidad de identificar a las personas — los datos personales se han eliminado eficazmente." },
+      { "id": "mb2-i7", "text": "La lista de participantes de una formación: nombres, apellidos y correos — «que la IA los ordene alfabéticamente».", "correctCategory": "stop", "rationale": "Son datos personales de muchas personas a la vez. Haz la ordenación localmente en la hoja de cálculo — aquí la IA ni siquiera hace falta." },
+      { "id": "mb2-i8", "text": "Tu propio borrador del anuncio del pícnic de la empresa — «mejora el estilo y acórtalo a tres frases».", "correctCategory": "ok", "rationale": "Contenido público, destinado a publicarse, sin datos personales — un uso seguro y típico de la IA." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Es un dato personal todo lo que identifica a una persona — también una combinación de hechos sin apellido.",
+      "Minimización: pega el contenido del problema, no la identidad de las personas — los placeholders [CLIENTE], [EMPRESA], [IMPORTE] resuelven el asunto.",
+      "Las contraseñas, claves y tokens nunca llegan al chat; fuga de un secreto = cambio inmediato y notificación.",
+      "Los datos de la empresa y los sujetos a NDA solo en herramientas aprobadas por la empresa — un chat público es un buzón ajeno.",
+      "A las aplicaciones de IA dales los permisos mínimos posibles y retira regularmente los accesos sin usar."
+    ],
+    "checklist": [
+      "¿Antes de pegar reviso el texto en busca de apellidos, correos y otros identificadores?",
+      "¿Sustituyo los datos concretos por placeholders en lugar de pegar el original?",
+      "¿Tengo la certeza de que en el contenido no hay ninguna contraseña, clave ni token?",
+      "¿Sé qué herramientas de IA están aprobadas en mi empresa y para qué datos?",
+      "¿Las aplicaciones de IA tienen conmigo solo los permisos que de verdad necesitan?"
+    ],
+    "checklistTitle": "Checklist — antes de pegar cualquier cosa en el chat",
+    "nextStep": "Siguiente paso: módulo MB3 — verás cómo los atacantes ocultan órdenes en los contenidos que la IA lee por ti, y cómo defenderte de ello."
+  }
+}

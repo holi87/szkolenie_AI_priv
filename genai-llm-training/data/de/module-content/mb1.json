@@ -1,0 +1,102 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P2 Bezpieczne używanie AI",
+    "interaction": "Klasyfikacja sytuacji (kind: classify) — odróżnianie ryzyk AI od bezpiecznych praktyk w codziennej pracy",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp, SklepDemo, Jan Syntetyczny, domeny @przyklad.test). Zero realnych danych, PII, numerów i sekretów."
+  },
+  "module": "MB1",
+  "intro": "KI kann Ihre Arbeit spürbar beschleunigen — aber sie hat auch ihre Fallen: Sie erfindet Dinge in selbstsicherem Ton, man vertraut ihr leicht zu sehr, und in einen Chat lassen sich versehentlich Daten einfügen, die das Unternehmen nicht verlassen dürfen. Dieses Modul ist eine Landkarte der wichtigsten Risiken: Sie lernen sie der Reihe nach kennen, damit Sie in den folgenden Modulen genau wissen, worauf Sie achten müssen.",
+  "screens": [
+    {
+      "id": "mb1-s1-halucynacje",
+      "title": "Halluzinationen: ein sicherer Ton ist kein Wahrheitsbeweis",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Ein Sprachmodell prüft keine Fakten — es sagt voraus, welche Wörter am besten zu Ihrer Frage passen. Deshalb kann es ein erfundenes Datum, eine nicht existierende Vorschrift oder einen ausgedachten Produktnamen nennen — und zwar im selben selbstsicheren Ton, in dem es wahre Dinge sagt. Dieses Phänomen nennen wir Halluzination." },
+        { "kind": "definition", "term": "Halluzination", "text": "Eine KI-Antwort, die glaubwürdig klingt und mit voller Überzeugung vorgetragen wird, aber teilweise oder vollständig unwahr ist. Das Modell „lügt“ nicht absichtlich — es unterscheidet schlicht nicht zwischen dem, was es weiß, und dem, was gut klingt." },
+        { "kind": "callout", "variant": "warn", "title": "Die wichtigste Regel dieses Kurses", "text": "Der sichere Ton einer Antwort sagt nichts über ihre Richtigkeit aus. Je wichtiger die Entscheidung ist, die auf einer KI-Antwort beruht, desto gründlicher müssen Sie sie überprüfen — wie das geht, behandelt das gesamte Modul MB6." }
+      ]
+    },
+    {
+      "id": "mb1-s2-nadmierne-zaufanie",
+      "title": "Manipulation und übermäßiges Vertrauen",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "KI ist höflich, schnell und hat immer eine Antwort — dadurch beginnt man leicht, sie wie eine unfehlbare Expertin zu behandeln. Hinzu kommt: Das Modell neigt zum Zustimmen. Wenn Sie ihm die Antwort in der Frage bereits nahelegen, bestätigt es sie oft, statt sie zu korrigieren. Auf der anderen Seite gibt es auch Menschen, die KI nutzen, um überzeugende, falsche Inhalte zu erzeugen." },
+        { "kind": "list", "items": [
+          "Autoritätseffekt — eine flüssige, eloquente Antwort wirkt fachkundig, selbst wenn sie falsch ist.",
+          "Zustimmungsneigung — das Modell stimmt gern der Annahme zu, die in Ihrer Frage steckt („Stimmt es, dass X?“).",
+          "Manipulation im großen Stil — KI ermöglicht es, falsche E-Mails, Bewertungen und Artikel massenhaft und billig zu erzeugen.",
+          "Eingeschlafene Wachsamkeit — nach zehn guten Antworten prüfen Sie die elfte nicht mehr."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Eine gesunde Haltung", "text": "Behandeln Sie KI wie einen aufgeweckten, aber unerfahrenen Praktikanten: Er liefert hervorragende Entwürfe und gute Ideen, aber die endgültige Verantwortung für das Ergebnis tragen Sie. Diese Regel vertieft Modul MB5." }
+      ]
+    },
+    {
+      "id": "mb1-s3-wycieki-danych",
+      "title": "Datenlecks über Chats",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Alles, was Sie in einen öffentlichen KI-Chat eingeben, verlässt Ihren Computer und landet auf den Servern des Anbieters. Je nach Nutzungsbedingungen kann es gespeichert, von Menschen eingesehen oder zum Trainieren künftiger Modelle verwendet werden. Kundendaten oder ein vertrauliches Dokument dort einzufügen ist ein potenzielles Datenleck — selbst wenn nicht sofort etwas Schlimmes passiert." },
+        { "kind": "table", "headers": ["Was Sie einfügen", "Was passieren kann"], "rows": [
+          ["Personenbezogene Kundendaten (z. B. „Jan Synthetisch, jan@przyklad.test“)", "Verletzung der Privatsphäre und der DSGVO — die Daten haben das Unternehmen verlassen"],
+          ["Vertrauliches Firmendokument (Preisliste, Strategie, Vertrag)", "Bruch des Geschäftsgeheimnisses oder des NDA mit dem Kunden"],
+          ["Passwort, Schlüssel oder Token aus einem System", "Jeder, der Zugriff auf diese Daten erhält, kann in das System eindringen"],
+          ["Allgemeine Frage ohne Firmendaten", "Nichts — das ist eine sichere Nutzung des öffentlichen Chats"]
+        ], "textAlt": "Die Tabelle zeigt die Folgen des Einfügens verschiedener Inhalte in einen öffentlichen Chat: personenbezogene Daten drohen mit einer DSGVO-Verletzung, vertrauliche Dokumente mit dem Bruch des Geschäftsgeheimnisses, Passwörter mit der Übernahme des Systems, und allgemeine Fragen ohne Firmendaten sind sicher." },
+        { "kind": "callout", "variant": "safe", "title": "Ein einfacher Filter vor dem Einfügen", "text": "Bevor Sie etwas einfügen, fragen Sie sich: „Könnte ich dasselbe an ein schwarzes Brett im Einkaufszentrum hängen?“ Wenn nicht — fügen Sie es nicht ein oder entfernen Sie zuerst die sensiblen Stellen. Die Details lernen Sie in Modul MB2." }
+      ]
+    },
+    {
+      "id": "mb1-s4-mapa",
+      "title": "Wo KI hilft und wo sie schadet",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Das Risiko hängt von der Aufgabe ab. KI glänzt dort, wo Sie das Ergebnis mit eigenen Augen beurteilen können: Entwürfe, Zusammenfassungen, Brainstorming, Stilverbesserung. Gefährlich wird es dort, wo ein Fehler teuer ist und Sie ihn nicht erkennen können: Fakten, Zahlen, Recht, Gesundheit, Entscheidungen über Menschen." },
+        { "kind": "table", "headers": ["Aufgabe", "Risiko", "Warum"], "rows": [
+          ["E-Mail-Entwurf, Zusammenfassung einer Notiz, Ideen", "Niedrig", "Sie sehen selbst, ob das Ergebnis Sinn ergibt — leichte Überprüfung"],
+          ["Übersetzung oder Stilverbesserung des eigenen Textes", "Niedrig–mittel", "Sie kennen den Inhalt, aber Nuancen können verloren gehen"],
+          ["Fakten, Daten, Zahlen, Vorschriften, Gesundheitstipps", "Hoch", "Halluzinationen klingen genauso wie die Wahrheit"],
+          ["Entscheidungen über Menschen (Beurteilungen, Einstellung, Reklamationen)", "Hoch", "Ein Fehler oder eine Verzerrung des Modells trifft eine reale Person"]
+        ], "textAlt": "Risikotabelle für KI-Aufgaben: Entwürfe und Zusammenfassungen haben ein niedriges Risiko, weil sie leicht zu prüfen sind; Übersetzungen niedrig bis mittel; Fakten, Zahlen und Gesundheitstipps hoch, weil Halluzinationen wie die Wahrheit klingen; Entscheidungen über Menschen hoch, weil ein Fehler eine reale Person trifft." },
+        { "kind": "paragraph", "text": "Diese Landkarte vertiefen wir in den folgenden Modulen: sensible Daten (MB2), Angriffe über Inhalte (MB3), Deepfakes und Betrug (MB4), Firmenregeln (MB5) sowie das Überprüfen von Antworten (MB6). Prüfen Sie zunächst, ob Sie ein Risiko erkennen, wenn Sie es sehen." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "mb1-classify",
+    "title": "Risiko oder sichere Praxis?",
+    "intro": "Lesen Sie jede Situation und entscheiden Sie: Ist das ein KI-Risiko oder eine sichere Praxis? Das Feedback erklärt, warum.",
+    "categories": [
+      { "id": "risk", "label": "KI-Risiko", "desc": "Eine Situation, die mit einem Fehler, einem Datenleck oder einem Schaden enden kann." },
+      { "id": "safe", "label": "Sichere Praxis", "desc": "Vernünftige Nutzung von KI unter Wahrung von Kontrolle und Vorsicht." }
+    ],
+    "items": [
+      { "id": "mb1-i1", "text": "Sie kopieren eine KI-Antwort mit Daten und Zahlen direkt in einen Bericht für die Geschäftsleitung, weil sie sehr überzeugend klang.", "correctCategory": "risk", "rationale": "Ein sicherer Ton ist kein Wahrheitsbeweis — Fakten und Zahlen aus der KI müssen vor der Verwendung überprüft werden." },
+      { "id": "mb1-i2", "text": "Sie bitten die KI um drei Titelvorschläge für eine Präsentation und wählen dann selbst den besten aus und verbessern ihn.", "correctCategory": "safe", "rationale": "Brainstorming ist ein niedriges Risiko — Sie beurteilen das Ergebnis mit eigenen Augen und behalten die Kontrolle." },
+      { "id": "mb1-i3", "text": "Sie fügen die vollständige Reklamation eines Kunden mit seinem Vor- und Nachnamen und seiner E-Mail-Adresse in einen öffentlichen Chat ein.", "correctCategory": "risk", "rationale": "Personenbezogene Kundendaten haben das Unternehmen verlassen — das ist ein potenzielles Datenleck und eine DSGVO-Verletzung." },
+      { "id": "mb1-i4", "text": "Bevor Sie einen Ausschnitt aus einem Ticket einfügen, entfernen Sie daraus Name und Adresse des Kunden und lassen nur die Problembeschreibung stehen.", "correctCategory": "safe", "rationale": "Anonymisierung vor dem Einfügen ist die grundlegende Hygiene bei der Arbeit mit KI-Chats." },
+      { "id": "mb1-i5", "text": "Sie fragen die KI: „Stimmt es, dass unser Konkurrent SklepDemo pleitegegangen ist?“ und nehmen die Bestätigung als Tatsache.", "correctCategory": "risk", "rationale": "Das Modell neigt dazu, der Annahme in der Frage zuzustimmen — eine Bestätigung ist keine Überprüfung." },
+      { "id": "mb1-i6", "text": "Die KI hat Ihnen ein langes Dokument zusammengefasst — vor dem Weiterleiten vergleichen Sie die Kernpunkte mit dem Original.", "correctCategory": "safe", "rationale": "Zusammenfassung plus schnelle Kontrolle am Original ist eine vorbildliche, sichere KI-Nutzung." },
+      { "id": "mb1-i7", "text": "Nach einem Monat treffender Antworten prüfen Sie gar nichts mehr — „dieses Modell hat sich noch nie geirrt“.", "correctCategory": "risk", "rationale": "Eingeschlafene Wachsamkeit ist die klassische Falle des übermäßigen Vertrauens — die Halluzination kommt ohne Vorwarnung." },
+      { "id": "mb1-i8", "text": "Den Rat zu einem Kundenvertrag holen Sie nicht aus dem Chat, sondern klären ihn mit der Rechtsabteilung.", "correctCategory": "safe", "rationale": "Recht ist ein Hochrisikobereich — die Entscheidung trifft ein Mensch mit den entsprechenden Kompetenzen." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "KI sagt Wörter voraus, sie prüft keine Fakten — der sichere Ton einer Antwort bedeutet nicht, dass sie wahr ist.",
+      "Übermäßiges Vertrauen wächst leise: Je länger die KI gut funktioniert, desto leichter übersehen Sie ihren Fehler.",
+      "Alles, was Sie in einen öffentlichen Chat einfügen, verlässt das Unternehmen — personenbezogene Daten und vertrauliche Inhalte bleiben außerhalb des Chats.",
+      "Das Risiko hängt von der Aufgabe ab: Entwürfe und Ideen sind sicher; Fakten, Recht, Gesundheit und Entscheidungen über Menschen brauchen einen Menschen."
+    ],
+    "checklist": [
+      "Weiß ich, dass eine Halluzination genauso selbstsicher klingt wie die Wahrheit?",
+      "Überprüfe ich KI-Antworten umso gründlicher, je wichtiger die Entscheidung ist?",
+      "Prüfe ich vor dem Einfügen in einen Chat, ob der Text personenbezogene oder vertrauliche Daten enthält?",
+      "Kann ich die Aufgaben benennen, bei denen KI mir hilft, und die, bei denen sie schaden kann?"
+    ],
+    "checklistTitle": "Checkliste — Landkarte der KI-Risiken",
+    "nextStep": "Nächster Schritt: Modul MB2 — Sie lernen, sensible Daten genau zu erkennen und Inhalte so vorzubereiten, dass sie sicher in einen Chat eingefügt werden können."
+  }
+}

@@ -51,9 +51,10 @@ test("#138 path-select: stats-strip zawiera liczby liczbowe (dane derywowane, ni
 
 test("#138 path-select: path-card__sigil obecne na kartach ścieżek (istniejący hak)", () => {
   assert.match(pathSelectSnap, /class="[^"]*path-card__sigil[^"]*"/, "brak .path-card__sigil na kartach ścieżek");
-  // Dokładnie 4 sigile — jeden na kartę (S1/S2/S3/S4)
+  // #171: 3 sigile kart siatki (P1, P2, grupa QA) + osobny sigil paska bonusu (S4).
   const sigils = pathSelectSnap.match(/class="[^"]*path-card__sigil[^"]*"/g) || [];
-  assert.equal(sigils.length, 4, `oczekiwano 4 sigili (S1-S4), znaleziono ${sigils.length}`);
+  assert.equal(sigils.length, 3, `oczekiwano 3 sigili (P1, P2, grupa QA), znaleziono ${sigils.length}`);
+  assert.match(pathSelectSnap, /bonus-card__sigil/, "brak sigila na pasku bonusu (S4)");
 });
 
 test("#138 path-select: eyebrow ma akcent kolorowy przez klasę CSS (nie hardkodowany kolor)", () => {

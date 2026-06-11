@@ -1,0 +1,130 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P1 AI w domu (formatywna)",
+    "interaction": "Strojenie ustawień prywatności (kind: tune) — ćwiczenie formatywne z checkpointem",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp, przyklad.test, Jan Syntetyczny, Anna Testowa). ZERO realnych danych/PII. Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MD6",
+  "intro": "Ein Gespräch mit KI ist manchmal so offen wie ein Gespräch mit einem Freund — nur dass es auf einem fremden Server gespeichert wird. Dieses Modul zeigt, was Sie wirklich preisgeben, welche Kontoeinstellungen Sie in fünf Minuten umstellen sollten und was Sie niemals einfügen dürfen. Am Ende stellen Sie modellhafte Privatsphäre-Einstellungen ein.",
+  "screens": [
+    {
+      "id": "md6-s1-co-udostepniasz",
+      "title": "Was Sie wirklich preisgeben",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Jede Nachricht an einen KI-Chat landet auf dem Server des Anbieters. Dort kann sie als Verlauf gespeichert, stichprobenartig von Menschen gelesen (Qualitätskontrolle) und — je nach Einstellungen — zum Trainieren künftiger Modellversionen verwendet werden. Das ist kein Grund zur Panik; es ist ein Grund zu wissen, was man sendet." },
+        { "kind": "list", "items": [
+          "Gesprächsinhalte: Fragen, eingefügte Texte, hochgeladene Fotos und Dokumente.",
+          "Metadaten: wann, von welchem Gerät, wie oft Sie das Tool nutzen.",
+          "Stimme: Aufnahmen von Befehlen bei Sprachassistenten (meist mit einsehbarem Verlauf)."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Der Postkartentest", "text": "Schreiben Sie an die KI wie auf eine Postkarte: Alles wirklich Sensible bleibt außen vor. Die Postkarte liest der Briefträger — und das ist in Ordnung, solange Sie es wissen." }
+      ]
+    },
+    {
+      "id": "md6-s2-ustawienia",
+      "title": "Fünf Minuten in den Kontoeinstellungen",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Die meisten KI-Tools haben drei Einstellungen, die Sie finden und bewusst setzen sollten — die Namen unterscheiden sich, die Mechanik ist dieselbe:" },
+        { "kind": "table", "headers": ["Einstellung", "Was sie tut", "Empfehlung für zu Hause"], "rows": [
+          ["Gesprächsverlauf", "speichert alle Chats im Konto", "eingeschaltet für den Komfort, aber regelmäßig geleert; sensible Gespräche im temporären Modus"],
+          ["Training mit meinen Daten", "erlaubt, Ihre Gespräche zur Verbesserung des Modells zu verwenden", "ausschalten (Opt-out), wenn das Tool es erlaubt"],
+          ["Personalisierung/Gedächtnis", "die KI merkt sich Fakten über Sie zwischen den Gesprächen", "bewusst nutzen: bequem, aber sehen Sie ab und zu nach, WAS sie sich gemerkt hat"]
+        ], "textAlt": "Drei Schlüsseleinstellungen: Gesprächsverlauf (regelmäßig leeren), Training mit Daten (ausschalten, Opt-out), Gedächtnis und Personalisierung (gemerkte Fakten durchsehen)." },
+        { "kind": "callout", "variant": "safe", "title": "Machen Sie es heute", "text": "Öffnen Sie die Einstellungen Ihres wichtigsten KI-Chats und finden Sie diese drei Punkte. Fünf Minuten, einmalig, für jedes Konto im Haus." }
+      ]
+    },
+    {
+      "id": "md6-s3-czego-nie-wklejac",
+      "title": "Was Sie niemals einfügen",
+      "type": "content",
+      "blocks": [
+        { "kind": "list", "items": [
+          "Ausweisdokumente: Scans von Personalausweis, Reisepass, Schülerausweis — eigene und fremde.",
+          "Gesundheitsdaten mit Namen: Befunde, Rezepte, Unterlagen — fragen Sie allgemein, ohne Identität.",
+          "Passwörter, Codes, Kartendaten: keinem Chat, zu keinem Zweck, niemals.",
+          "Fotos von Kindern und anderen Personen ohne deren Zustimmung — das Bildnis wandert auf einen fremden Server.",
+          "Fremde Geheimnisse: Nachrichten von anderen, Dokumente aus der Arbeit — sie gehören nicht Ihnen, um sie zu teilen."
+        ] },
+        { "kind": "paragraph", "text": "Die allgemeine Regel: Fragen Sie nach dem PROBLEM, nicht nach der PERSON. „Wie spreche ich mit dem Arzt über Cholesterinwerte?“ funktioniert genauso gut, ohne den Befund mit dem Namen der Mutter einzufügen." },
+        { "kind": "callout", "variant": "info", "title": "Und wenn Sie es schon eingefügt haben?", "text": "Löschen Sie das Gespräch aus dem Verlauf, schalten Sie das Training mit Daten aus und merken Sie es sich für die Zukunft. Die Welt geht nicht unter — aber die Gewohnheit verbessern Sie am besten ab heute." }
+      ]
+    },
+    {
+      "id": "md6-s4-urzadzenia",
+      "title": "Ordnung in den Geräten zu Hause",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Die Privatsphäre der häuslichen KI ist auch Hardware: Lautsprecher, Kameras, Fernseher und Spielzeug mit Mikrofon. Eine Viertelstunde Aufräumen alle sechs Monate genügt:" },
+        { "kind": "list", "ordered": true, "items": [
+          "Sehen Sie die Aufnahmehistorie des Sprachassistenten durch und leeren Sie sie (in der Konto-App).",
+          "Prüfen Sie die physischen Mikrofonschalter und Kameraabdeckungen — und zeigen Sie den Familienmitgliedern, wo sie sind.",
+          "Halten Sie Geräte mit Kamera aus Schlafzimmer und Kinderzimmer fern.",
+          "Entziehen Sie Apps, die Sie nicht nutzen, die Berechtigungen (Mikrofon, Standort, Kontakte).",
+          "Gäste- und Kinderkonten: eigene Profile statt eines gemeinsamen Erwachsenenkontos."
+        ] }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "tune",
+    "id": "md6-tune",
+    "title": "Stellen Sie die Privatsphäre-Einstellungen ein",
+    "intro": "Stellen Sie die drei Regler so ein, wie Sie ein KI-Konto für Ihre Familie einrichten würden, und beobachten Sie, was jede Einstellung verändert. Prüfen Sie sich danach im Checkpoint.",
+    "outputLabel": "Die Wirkung Ihrer Konfiguration:",
+    "controls": [
+      {
+        "id": "md6-t-history",
+        "label": "Gesprächsverlauf",
+        "levels": [
+          { "value": "forever", "label": "Für immer eingeschaltet", "effect": "Bequem: Sie kehren zu alten Gesprächen zurück. Risiko: Jahre privater Fragen an einem Ort — ein gefundenes Fressen bei einem Einbruch ins Konto." },
+          { "value": "cleaned", "label": "Eingeschaltet, regelmäßig geleert", "effect": "Der vernünftige Mittelweg: Der laufende Komfort bleibt, das Archiv sensibler Gespräche verschwindet. Sensible Themen zusätzlich im temporären Modus." }
+        ]
+      },
+      {
+        "id": "md6-t-training",
+        "label": "Training mit meinen Daten",
+        "levels": [
+          { "value": "on", "label": "Standardmäßig eingeschaltet", "effect": "Ihre Gespräche können künftige Modelle verbessern. Der Inhalt verlässt Ihre Kontrolle dauerhaft — der Widerruf der Zustimmung holt Daten aus der Vergangenheit nicht zurück." },
+          { "value": "off", "label": "Ausgeschaltet (Opt-out)", "effect": "Die Gespräche dienen nur dem Betrieb Ihres Kontos. Die sicherste Einstellung für zu Hause — die Antwortqualität sinkt nicht." }
+        ]
+      },
+      {
+        "id": "md6-t-content",
+        "label": "Was ich in Gesprächen sende",
+        "levels": [
+          { "value": "everything", "label": "Alles, wie es kommt", "effect": "Scans, Befunde, Familienfotos im Chat. Jeder sensible Inhalt auf einem fremden Server ist ein Risiko, das Sie nicht kontrollieren." },
+          { "value": "filtered", "label": "Ohne persönliche Daten", "effect": "Sie fragen nach dem Problem, nicht nach der Person: dieselben guten Antworten, null sensible Daten außer Haus. Postkartentest bestanden." }
+        ]
+      }
+    ],
+    "checkpoint": {
+      "prompt": "Welche Konfiguration schützt die Privatsphäre zu Hause am besten und bewahrt zugleich den Komfort?",
+      "type": "single_choice",
+      "options": [
+        { "id": "A", "text": "Verlauf für immer + Training eingeschaltet + ich sende alles — so funktioniert die KI am besten." },
+        { "id": "B", "text": "Verlauf regelmäßig geleert + Training ausgeschaltet (Opt-out) + keine persönlichen Daten in den Gesprächen." },
+        { "id": "C", "text": "Alles ausgeschaltet und das Konto gelöscht — nur der Verzicht auf KI gibt Privatsphäre." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Ja: Das ist die Konfiguration „sicher und bequem“ — geleerter Verlauf, Daten außerhalb des Trainings, sensible Inhalte außerhalb des Chats. Die Antwortqualität leidet unter keiner dieser Einstellungen.",
+      "feedbackIncorrect": "Maximales Teilen verbessert die Antworten auf Alltagsfragen nicht, und der Verzicht auf KI ist keine Privatsphäre-Strategie, sondern eine Flucht. Der goldene Mittelweg: geleerter Verlauf + Opt-out vom Training + Postkartentest für die Inhalte."
+    }
+  },
+  "summary": {
+    "points": [
+      "Alles, was Sie der KI schreiben, landet auf einem fremden Server — schreiben Sie wie auf einer Postkarte.",
+      "Drei Einstellungen, in 5 Minuten erledigt: Verlauf (leeren), Training mit Daten (ausschalten), Gedächtnis (durchsehen).",
+      "Niemals: Ausweisdokumente, Gesundheitsdaten mit Namen, Passwörter, Fotos von Kindern, fremde Geheimnisse."
+    ],
+    "checklist": [
+      "Habe ich das Training mit meinen Daten in allen KI-Konten im Haus ausgeschaltet?",
+      "Weiß ich, wie ich in meinem Chat ein temporäres Gespräch starte?",
+      "Habe ich die Aufnahmehistorie des Sprachassistenten in diesem Halbjahr durchgesehen?",
+      "Kennen die Familienmitglieder die Regel: Frage nach dem Problem, nicht nach der Person?"
+    ],
+    "checklistTitle": "Checkliste — Privatsphäre zu Hause",
+    "nextStep": "Das ist das letzte Modul des Pfads. Kehren Sie jederzeit zu einem beliebigen Modul zurück — dieser Pfad ist formativ: ohne Test, in Ihrem Tempo. Und wenn Sie mehr wollen, sehen Sie sich den Pfad „Sichere KI-Nutzung“ an."
+  }
+}

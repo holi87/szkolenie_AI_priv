@@ -1,0 +1,155 @@
+{
+  "_meta": {
+    "module": "MB5",
+    "issue": "#171 Rebuild ścieżek — bank pytań P2 „Bezpieczne używanie AI”, moduł MB5 (AI w pracy: polityki i shadow AI)",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo, Jan Syntetyczny, identyfikatory testowe). ZERO realnych danych/PII.",
+    "note": "Pytania modułu MB5 (Q141-Q146), pula dedykowana ścieżki P2. Bez pytań krytycznych. Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q141",
+      "module": "MB5",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Der Teilnehmer versteht den Begriff Schatten-KI und unterscheidet ihn von der freigegebenen Nutzung von Tools.",
+      "prompt": "Was bedeutet der Begriff „Schatten-KI“ (shadow AI) im Unternehmen?",
+      "options": [
+        { "id": "A", "text": "Ein offizielles Pilotprogramm für neue KI-Tools, das von der IT-Abteilung geleitet wird." },
+        { "id": "B", "text": "Der Dunkelmodus (dark mode) in KI-Assistenten-Apps." },
+        { "id": "C", "text": "Ein KI-Modell, das lokal auf den Servern des Unternehmens statt in der Cloud betrieben wird." },
+        { "id": "D", "text": "Die Nutzung von KI-Tools durch Mitarbeitende ohne Wissen und Zustimmung des Unternehmens, ohne Kontrolle über die Daten, die dorthin gelangen." }
+      ],
+      "correct": ["D"],
+      "feedbackCorrect": "Schatten-KI ist die nicht freigegebene, unkontrollierte Nutzung von KI-Tools bei der Arbeit. Das Problem ist nicht das Tool selbst, sondern die fehlende Kontrolle: Niemand weiß, welche Unternehmensdaten abfließen und zu welchen Bedingungen sie verarbeitet werden.",
+      "feedbackIncorrect": "Schatten-KI ist die Nutzung von KI-Tools ohne Wissen und Zustimmung des Unternehmens (D) — analog zu „Shadow IT“. Ein IT-Pilotprojekt, der Dunkelmodus oder lokales Hosting sind keine Schatten-KI. Wiederhole die Definition aus dem Modul.",
+      "references": ["MB5.1"]
+    },
+    {
+      "id": "Q142",
+      "module": "MB5",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Der Teilnehmer weiß, wer für mit KI-Hilfe erstellte Inhalte verantwortlich ist.",
+      "prompt": "Du erstellst mit Hilfe von KI ein Angebot für einen Kunden der Firma SklepDemo. Im Angebot ist ein vom Modell erfundener Produktparameter gelandet. Wer ist für diesen Fehler verantwortlich?",
+      "options": [
+        { "id": "A", "text": "Niemand — von KI generierte Fehler lassen sich niemandem zuordnen." },
+        { "id": "B", "text": "Du — KI ist ein Werkzeug, und für den Inhalt, den du versendest, ist der Mensch verantwortlich, der ihn verantwortet." },
+        { "id": "C", "text": "Der Anbieter des KI-Modells — sein Produkt hat den Fehler generiert." },
+        { "id": "D", "text": "Der Kunde — er hätte die Parameter vor der Unterschrift selbst prüfen sollen." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Ja: KI ist ein Werkzeug wie ein Texteditor. Der Inhalt, den du unterschreibst und versendest, ist deiner — samt der Pflicht zur Verifikation. Das ist das Fundament der verantwortungsvollen KI-Nutzung bei der Arbeit.",
+      "feedbackIncorrect": "Für den an den Kunden gesendeten Inhalt ist der Mensch verantwortlich, der ihn verantwortet (B). Die Nutzungsbedingungen der KI-Anbieter schließen deren Haftung für generierte Inhalte ausdrücklich aus, und die Verifikation auf den Kunden abzuwälzen riskiert Vertrauensverlust und vertragliche Konsequenzen.",
+      "references": ["MB5.4"]
+    },
+    {
+      "id": "Q143",
+      "module": "MB5",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Der Teilnehmer wählt das richtlinienkonforme Vorgehen, wenn das freigegebene Tool nicht ausreicht.",
+      "prompt": "Die Unternehmensrichtlinie lässt für Kundendaten ausschließlich den internen KI-Assistenten zu. Du entdeckst ein neues öffentliches Tool, das deine Analyse von Kundenanfragen doppelt so schnell erledigen würde. Was tust du?",
+      "options": [
+        { "id": "A", "text": "Ich nutze das neue Tool, aber nur für kleinere Aufgaben — bei geringem Umfang ist das Risiko vernachlässigbar." },
+        { "id": "B", "text": "Ich nutze das neue Tool vom privaten Laptop aus — die Unternehmensrichtlinie gilt nicht für private Geräte." },
+        { "id": "C", "text": "Ich melde das Tool der IT-/Sicherheitsabteilung mit dem Vorschlag einer Bewertung und eventuellen Freigabe; bis dahin arbeite ich mit dem von der Richtlinie zugelassenen Tool." },
+        { "id": "D", "text": "Ich anonymisiere die Daten „nach Gefühl“ und lade sie in das neue Tool — ich habe ja die Nachnamen entfernt." }
+      ],
+      "correct": ["C"],
+      "feedbackCorrect": "Ja: Der Freigabeweg existiert genau dafür, neue Tools kontrolliert zu bewerten, statt sie heimlich zu nutzen. Indem du das Tool meldest, verbindest du Innovation mit Sicherheit.",
+      "feedbackIncorrect": "Geringer Umfang, ein privater Laptop oder eine laienhafte Anonymisierung heben die Richtlinie nicht auf — Kundendaten fließen weiterhin außerhalb der Unternehmenskontrolle ab. Richtig: das Tool zur Bewertung melden und bis zur Freigabe mit dem zugelassenen arbeiten (C).",
+      "references": ["MB5.2", "MB5.1"]
+    },
+    {
+      "id": "Q144",
+      "module": "MB5",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Der Teilnehmer berücksichtigt Urheberrecht und Lizenzen bei der Verwendung KI-generierter Inhalte in Unternehmensmaterialien.",
+      "prompt": "Du erstellst eine öffentliche Broschüre der Firma NotkaApp. Der Bildgenerator hat eine perfekte Grafik erstellt, aber sie ähnelt dem erkennbaren Stil einer bekannten Marke, und du kennst die Lizenzbedingungen des Generators nicht. Was tust du?",
+      "options": [
+        { "id": "A", "text": "Ich veröffentliche — KI-Inhalte unterliegen keinen Rechten, also gibt es nichts zu prüfen." },
+        { "id": "B", "text": "Ich prüfe die Lizenzbedingungen des Generators (ob er kommerzielle Nutzung erlaubt) und lasse die Grafik, die einem fremden Stil ähnelt, prüfen, bevor ich irgendetwas veröffentliche." },
+        { "id": "C", "text": "Ich veröffentliche mit dem Hinweis „von KI generiert“ — die Quellenangabe erledigt die rechtlichen Fragen." },
+        { "id": "D", "text": "Ich verändere die Grafik leicht mit einem Filter — nach Änderungen gilt das Urheberrecht nicht mehr." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Ja: Kommerzielle Nutzung erfordert die Prüfung der Tool-Lizenz, und die Ähnlichkeit mit einer fremden Marke ist ein rechtliches Risiko, unabhängig davon, wer (oder was) die Grafik erstellt hat. Zweifel klärst du vor der Veröffentlichung.",
+      "feedbackIncorrect": "KI-Inhalte sind nicht „rechtefrei“: Die Lizenz des Generators bestimmt die erlaubte Nutzung, und die Ähnlichkeit mit einer fremden Marke droht eine Verletzung zu sein, unabhängig von Hinweis oder Filter. Richtig: Lizenz prüfen und konsultieren (B).",
+      "references": ["MB5.3"]
+    },
+    {
+      "id": "Q145",
+      "module": "MB5",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Der Teilnehmer benennt, was eine Unternehmensrichtlinie zur KI-Nutzung üblicherweise festlegt.",
+      "prompt": "Was legt eine Unternehmensrichtlinie zur KI-Nutzung üblicherweise fest? Wähle alle richtigen aus.",
+      "options": [
+        { "id": "A", "text": "Die Liste der für die dienstliche Nutzung freigegebenen KI-Tools." },
+        { "id": "B", "text": "Welche Datenkategorien in welchen Tools verarbeitet werden dürfen." },
+        { "id": "C", "text": "Die privaten Einkäufe der Mitarbeitenden in Online-Shops." },
+        { "id": "D", "text": "Die Lieblings-KI-Modelle der einzelnen Vorstandsmitglieder." }
+      ],
+      "correct": ["A", "B"],
+      "feedbackCorrect": "Die KI-Richtlinie beantwortet zwei Fragen: WOMIT gearbeitet werden darf (freigegebene Tools) und MIT WELCHEN DATEN (für jedes Tool zugelassene Datenkategorien). Das ist eine Karte der sicheren Nutzung, keine Verbotsliste um des Prinzips willen.",
+      "feedbackIncorrect": "Der Kern der KI-Richtlinie sind die freigegebenen Tools (A) und die erlaubten Datenkategorien (B). Private Einkäufe und persönliche Vorlieben sind nicht Gegenstand einer Richtlinie zur KI-Nutzung.",
+      "references": ["MB5.2"]
+    },
+    {
+      "id": "Q146",
+      "module": "MB5",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Der Teilnehmer analysiert die Folgen von Schatten-KI im Team und wählt eine korrigierende Reaktion statt einer Eskalation des Verheimlichens.",
+      "prompt": "Szenario: Du entdeckst, dass die Hälfte deines Teams seit Monaten Beschreibungen von Kundenanfragen in private Konten eines öffentlichen KI-Chats einfügt, weil „das alle so machen und es schneller geht“. Die Ergebnisse sind gut, die Kunden zufrieden. Welche Bewertung der Situation ist richtig?",
+      "options": [
+        { "id": "A", "text": "Da die Ergebnisse gut sind und niemand ein Problem gemeldet hat, kann die Praxis als bewährt gelten und das Thema ruhen." },
+        { "id": "B", "text": "Es reicht, das Team um Diskretion zu bitten — das Risiko entsteht erst, wenn die Praxis ans Licht kommt." },
+        { "id": "C", "text": "Das ist systemische Schatten-KI: Kundendaten fließen seit Monaten außerhalb der Unternehmenskontrolle ab, unabhängig von der Qualität der Ergebnisse. Das muss offengelegt, das Einfügen von Kundendaten gestoppt und der Bedarf an einem freigegebenen Tool gemeldet werden." },
+        { "id": "D", "text": "Das Problem ist nur die Nutzung privater Konten — es reicht, ein gemeinsames Teamkonto im selben öffentlichen Chat anzulegen." }
+      ],
+      "correct": ["C"],
+      "feedbackCorrect": "Treffende Analyse: Gute Ergebnisse kompensieren nicht den unkontrollierten Abfluss von Kundendaten — das Risiko (rechtlich, vertraglich, reputationsbezogen) wächst mit jedem Einfügen. Die Korrektur = offenlegen, stoppen, dem Team eine legale Alternative geben.",
+      "feedbackIncorrect": "Die Qualität der Ergebnisse beseitigt das Risiko nicht: Kundendaten fließen unabhängig von Ergebnissen und Diskretion außerhalb der Unternehmenskontrolle ab, und ein gemeinsames Konto im selben Tool ändert nichts. Die richtige Bewertung: C — offenlegen, stoppen, eine freigegebene Alternative bereitstellen.",
+      "references": ["MB5.1", "MB5.2"]
+    }
+  ]
+}

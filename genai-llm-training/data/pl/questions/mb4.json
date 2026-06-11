@@ -1,0 +1,155 @@
+{
+  "_meta": {
+    "module": "MB4",
+    "issue": "#171 Rebuild ścieżek — bank pytań P2 „Bezpieczne używanie AI”, moduł MB4 (deepfake, scam i dezinformacja)",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo, Jan Syntetyczny, identyfikatory testowe). ZERO realnych danych/PII.",
+    "note": "Pytania modułu MB4 (Q135-Q140), pula dedykowana ścieżki P2. Bez pytań krytycznych. Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q135",
+      "module": "MB4",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik rozumie, czym jest deepfake i dlaczego nagranie nie jest już dowodem samym w sobie.",
+      "prompt": "Czym jest deepfake?",
+      "options": [
+        { "id": "A", "text": "Każde nagranie wideo opublikowane anonimowo w internecie." },
+        { "id": "B", "text": "Filtr upiększający stosowany w aplikacjach społecznościowych." },
+        { "id": "C", "text": "Wygenerowane lub zmodyfikowane przez AI nagranie albo głos, które realistycznie podszywa się pod prawdziwą osobę." },
+        { "id": "D", "text": "Plotka rozsyłana mailowo bez żadnego materiału audio-wideo." }
+      ],
+      "correct": ["C"],
+      "feedbackCorrect": "Deepfake to syntetyczny obraz, wideo lub głos imitujący prawdziwą osobę. Skoro głos i twarz da się podrobić, samo nagranie przestaje być dowodem — liczy się weryfikacja kanału i kontekstu.",
+      "feedbackIncorrect": "Deepfake to treść wygenerowana przez AI, która realistycznie podszywa się pod prawdziwą osobę (głos, twarz, wideo). Anonimowe wideo, filtr czy plotka to nie to samo zjawisko. Powtórz sekcję o deepfake'ach.",
+      "references": ["MB4.1"]
+    },
+    {
+      "id": "Q136",
+      "module": "MB4",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik wymienia typowe sygnały ostrzegawcze oszustwa wspieranego przez AI.",
+      "prompt": "Które elementy wiadomości są typowymi sygnałami ostrzegawczymi oszustwa? Wskaż wszystkie poprawne.",
+      "options": [
+        { "id": "A", "text": "Silna presja czasu: „musisz to zrobić w ciągu 10 minut”." },
+        { "id": "B", "text": "Prośba przyszła w godzinach pracy od osoby, z którą często rozmawiasz." },
+        { "id": "C", "text": "Nietypowy kanał kontaktu: „prezes” pisze z prywatnego numeru, prosząc o przelew." },
+        { "id": "D", "text": "Wiadomość zawiera pełne dane nadawcy zgodne z firmową książką adresową." }
+      ],
+      "correct": ["A", "C"],
+      "feedbackCorrect": "Presja czasu i nietypowy kanał to dwa klasyczne sygnały socjotechniki. Oszuści izolują ofiarę od normalnych procedur i wymuszają pośpiech, żeby wyłączyć weryfikację.",
+      "feedbackIncorrect": "Sygnałami ostrzegawczymi są presja czasu (A) i nietypowy kanał kontaktu (C). Zwykła rozmowa w godzinach pracy ani poprawne dane nadawcy nie są same w sobie podejrzane — choć i one nie gwarantują autentyczności.",
+      "references": ["MB4.2"]
+    },
+    {
+      "id": "Q137",
+      "module": "MB4",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik stosuje zasadę drugiego kanału przy nietypowej prośbie głosowej.",
+      "prompt": "Dzwoni do Ciebie „księgowa” z firmy SklepDemo. Głos brzmi jak jej, ale prosi o pilne podanie danych logowania do systemu fakturowania, bo „audyt trwa i system zaraz się zablokuje”. Co robisz?",
+      "options": [
+        { "id": "A", "text": "Podaję dane — głos się zgadza, a audyt brzmi poważnie." },
+        { "id": "B", "text": "Rozłączam się i oddzwaniam do księgowej na jej znany, firmowy numer, żeby potwierdzić prośbę; danych logowania nie podaję nikomu głosem." },
+        { "id": "C", "text": "Podaję tylko login, a hasło wysyłam SMS-em — w dwóch kanałach jest bezpieczniej." },
+        { "id": "D", "text": "Proszę, żeby zadzwoniła ponownie za godzinę — jeśli to oszust, na pewno się zniechęci." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Zasada drugiego kanału: przerywasz kontakt zainicjowany przez rozmówcę i weryfikujesz prośbę kanałem, który sam wybierasz (znany numer). Danych logowania nie podaje się głosem nikomu — głos można podrobić.",
+      "feedbackIncorrect": "Głos nie jest dowodem tożsamości — deepfake audio brzmi przekonująco. Jedyna bezpieczna reakcja: rozłączyć się i zweryfikować prośbę samodzielnie wybranym, znanym kanałem (B). Rozbicie sekretu na dwa kanały ani odroczenie rozmowy nie chroni.",
+      "references": ["MB4.2", "MB4.3"]
+    },
+    {
+      "id": "Q138",
+      "module": "MB4",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik poprawnie reaguje na materiał wideo, który może być deepfakiem, zanim przekaże go dalej.",
+      "prompt": "Znajomy przesyła Ci nagranie, na którym znany polityk ogłasza wycofanie wszystkich oszczędności z banków, i prosi: „roześlij dalej, ludzie muszą wiedzieć”. Nagranie wygląda wiarygodnie. Co robisz?",
+      "options": [
+        { "id": "A", "text": "Rozsyłam — lepiej ostrzec ludzi na zapas, a jeśli to fałszywka, nic się nie stanie." },
+        { "id": "B", "text": "Rozsyłam tylko do rodziny, z dopiskiem „nie wiem, czy prawdziwe”." },
+        { "id": "C", "text": "Odpowiadam znajomemu, że nagranie wygląda podejrzanie, i pytam go o źródło, czekając aż sam je potwierdzi." },
+        { "id": "D", "text": "Nie przekazuję dalej; sprawdzam, czy informację potwierdzają niezależne, wiarygodne źródła (oficjalne komunikaty, media), a fałszywkę zgłaszam w platformie." }
+      ],
+      "correct": ["D"],
+      "feedbackCorrect": "Sensacyjny materiał wywołujący silne emocje i wzywający „roześlij dalej” to wzorzec dezinformacji. Zanim cokolwiek udostępnisz: weryfikacja w niezależnych źródłach, a fałszywki zgłaszaj — nie rozsyłaj nawet „z zastrzeżeniem”.",
+      "feedbackIncorrect": "Rozesłanie — także „z dopiskiem” lub tylko do rodziny — napędza dezinformację, a pytanie znajomego o źródło niczego nie weryfikuje (on też dostał to z łańcuszka). Poprawnie: nie przekazywać, zweryfikować w niezależnych źródłach, zgłosić (D).",
+      "references": ["MB4.3", "MB4.4"]
+    },
+    {
+      "id": "Q139",
+      "module": "MB4",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik zna pierwszy krok procedury po rozpoznaniu próby oszustwa w pracy.",
+      "prompt": "Rozpoznajesz, że mail z prośbą o pilny przelew to prawdopodobnie oszustwo „na prezesa”. Jaki jest właściwy pierwszy krok?",
+      "options": [
+        { "id": "A", "text": "Zgłaszam wiadomość do działu IT/bezpieczeństwa zgodnie z firmową procedurą i nie odpowiadam nadawcy." },
+        { "id": "B", "text": "Odpisuję oszustowi, żeby dać mu nauczkę i sprawdzić, czy się przyzna." },
+        { "id": "C", "text": "Usuwam mail i nikomu nie mówię — problem znika razem z wiadomością." },
+        { "id": "D", "text": "Przesyłam mail kolegom z ostrzeżeniem, zanim zgłoszę go komukolwiek." }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Zgłoszenie zgodnie z procedurą pozwala firmie zablokować atak także u innych adresatów. Nie odpowiadasz nadawcy (potwierdziłbyś, że adres żyje) i nie kasujesz dowodu.",
+      "feedbackIncorrect": "Właściwy pierwszy krok to zgłoszenie do IT/bezpieczeństwa (A). Odpowiadanie oszustowi potwierdza aktywny adres, usunięcie maila niszczy dowód i zostawia innych bez ochrony, a samodzielne rozsyłanie ostrzeżeń bywa nieprecyzyjne — od tego jest procedura.",
+      "references": ["MB4.4"]
+    },
+    {
+      "id": "Q140",
+      "module": "MB4",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik analizuje wielokanałowy atak łączący deepfake z mailem i wybiera pełną, poprawną reakcję.",
+      "prompt": "Scenariusz: najpierw dostajesz mail od „dyrektora finansowego” o poufnym przejęciu firmy NotkaApp, a po godzinie dzwoni jego „głos” z poleceniem natychmiastowego opłacenia faktury u nowego dostawcy. Mail uprzedzał, że zadzwoni. Która analiza sytuacji jest poprawna?",
+      "options": [
+        { "id": "A", "text": "Mail i telefon potwierdzają się nawzajem, więc polecenie jest wiarygodne — dwa kanały to wystarczająca weryfikacja." },
+        { "id": "B", "text": "To wzorzec ataku wieloetapowego: oba kanały zainicjował napastnik, więc „potwierdzają” tylko siebie nawzajem. Weryfikuję kanałem, który sam inicjuję (znany numer dyrektora), i zgłaszam incydent." },
+        { "id": "C", "text": "Wystarczy sprawdzić, czy adres mailowy wygląda na firmowy — jeśli domena się zgadza, można płacić." },
+        { "id": "D", "text": "Skoro sprawa jest poufna, nie wolno mi jej z nikim weryfikować — wykonuję polecenie i czekam na oficjalny komunikat." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Trafna analiza: zapowiedź telefonu w mailu to celowe budowanie wiarygodności — oba kanały kontrolowane przez napastnika nie są niezależne. Niezależna weryfikacja = kanał, który TY inicjujesz; „poufność” wymuszająca brak weryfikacji to część ataku.",
+      "feedbackIncorrect": "Dwa kanały zainicjowane przez napastnika potwierdzają tylko siebie nawzajem — to klasyczny atak wieloetapowy, a klauzula „poufności” ma odciąć Cię od weryfikacji. Zgodna domena też bywa podrobiona. Poprawna analiza: B.",
+      "references": ["MB4.2", "MB4.4"]
+    }
+  ]
+}

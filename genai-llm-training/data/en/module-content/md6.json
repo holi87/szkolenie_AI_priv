@@ -1,0 +1,130 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P1 AI w domu (formatywna)",
+    "interaction": "Strojenie ustawień prywatności (kind: tune) — ćwiczenie formatywne z checkpointem",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp, przyklad.test, Jan Syntetyczny, Anna Testowa). ZERO realnych danych/PII. Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MD6",
+  "intro": "A conversation with AI can be as candid as a conversation with a friend — except it gets saved on someone else’s server. This module shows what you are really sharing, which account settings are worth changing in five minutes, and what never to paste. At the end you will tune a model set of privacy settings.",
+  "screens": [
+    {
+      "id": "md6-s1-co-udostepniasz",
+      "title": "What you are really sharing",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Every message to an AI chat goes to the provider’s server. There it may be stored as history, read in spot checks by humans (quality control), and — depending on your settings — used to train future versions of the model. This is not a reason to panic; it is a reason to know what you are sending." },
+        { "kind": "list", "items": [
+          "The content of your conversations: questions, pasted texts, uploaded photos and documents.",
+          "Metadata: when, from which device, how often you use it.",
+          "Voice: recordings of commands to voice assistants (usually with a reviewable history)."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "The postcard test", "text": "Write to AI as if on a postcard: anything truly sensitive stays off of it. The mail carrier reads the postcard — and that is fine, as long as you know it." }
+      ]
+    },
+    {
+      "id": "md6-s2-ustawienia",
+      "title": "Five minutes in your account settings",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Most AI tools have three settings worth finding and setting deliberately — the names differ, the mechanics are the same:" },
+        { "kind": "table", "headers": ["Setting", "What it does", "Home recommendation"], "rows": [
+          ["Chat history", "stores all your chats on the account", "on for convenience, but cleared regularly; sensitive conversations in temporary mode"],
+          ["Training on my data", "allows your conversations to be used to improve the model", "turn it off (opt out) if the tool allows it"],
+          ["Personalization/memory", "the AI remembers facts about you between conversations", "deliberately: convenient, but review WHAT it has remembered from time to time"]
+        ], "textAlt": "Three key settings: chat history (clear regularly), training on your data (opt out), memory and personalization (review the remembered facts)." },
+        { "kind": "callout", "variant": "safe", "title": "Do it today", "text": "Open the settings of your main AI chat and find these three items. Five minutes, once, for every account in the household." }
+      ]
+    },
+    {
+      "id": "md6-s3-czego-nie-wklejac",
+      "title": "What never to paste",
+      "type": "content",
+      "blocks": [
+        { "kind": "list", "items": [
+          "Identity documents: scans of an ID card, passport, or school ID — yours and other people’s.",
+          "Health data with names: test results, prescriptions, medical records — ask in general terms, without identities.",
+          "Passwords, codes, card details: to no chat, for no purpose, ever.",
+          "Photos of children and other people without their consent — the likeness travels to someone else’s server.",
+          "Other people’s secrets: messages from others, documents from work — they are not yours to share."
+        ] },
+        { "kind": "paragraph", "text": "The general rule: ask about the PROBLEM, not the PERSON. “How do I talk to a doctor about cholesterol results?” works just as well without pasting the result with Mom’s name on it." },
+        { "kind": "callout", "variant": "info", "title": "And if you already pasted it?", "text": "Delete the conversation from your history, turn off training on your data, and remember for next time. The world does not end — but the habit is worth fixing starting today." }
+      ]
+    },
+    {
+      "id": "md6-s4-urzadzenia",
+      "title": "Keeping home devices in order",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Home AI privacy is also about hardware: speakers, cameras, TVs, and toys with microphones. A quarter of an hour of tidying up every six months is enough:" },
+        { "kind": "list", "ordered": true, "items": [
+          "Review and clear the voice assistant’s recording history (in the account app).",
+          "Check the physical microphone switches and camera covers — and teach the household where they are.",
+          "Keep devices with cameras out of the bedroom and the child’s room.",
+          "Remove permissions from apps you do not use (microphone, location, contacts).",
+          "Guest and child accounts: separate profiles instead of a shared adult account."
+        ] }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "tune",
+    "id": "md6-tune",
+    "title": "Tune your privacy settings",
+    "intro": "Set the three sliders the way you would set up an AI account for your family, and watch what each setting changes. Then check yourself in the checkpoint.",
+    "outputLabel": "The effect of your configuration:",
+    "controls": [
+      {
+        "id": "md6-t-history",
+        "label": "Chat history",
+        "levels": [
+          { "value": "forever", "label": "On forever", "effect": "Convenient: you can go back to old conversations. The risk: years of private questions in one place — a tempting prize if the account gets broken into." },
+          { "value": "cleaned", "label": "On, cleared regularly", "effect": "A sensible middle ground: the day-to-day convenience stays, the archive of sensitive conversations disappears. Sensitive topics additionally in temporary mode." }
+        ]
+      },
+      {
+        "id": "md6-t-training",
+        "label": "Training on my data",
+        "levels": [
+          { "value": "on", "label": "On by default", "effect": "Your conversations may improve future models. The content leaves your control permanently — withdrawing consent does not pull back past data." },
+          { "value": "off", "label": "Off (opt-out)", "effect": "Your conversations serve only the operation of your account. The safest home setting — the quality of the answers does not drop." }
+        ]
+      },
+      {
+        "id": "md6-t-content",
+        "label": "What I send in conversations",
+        "levels": [
+          { "value": "everything", "label": "Everything, no filter", "effect": "Scans, test results, family photos in the chat. Every sensitive item on someone else’s server is a risk you do not control." },
+          { "value": "filtered", "label": "No personal data", "effect": "You ask about the problem, not the person: the same good answers, zero sensitive data leaving home. Postcard test passed." }
+        ]
+      }
+    ],
+    "checkpoint": {
+      "prompt": "Which configuration best protects home privacy while keeping the convenience?",
+      "type": "single_choice",
+      "options": [
+        { "id": "A", "text": "History forever + training on + I send everything — that is when AI works best." },
+        { "id": "B", "text": "History cleared regularly + training off (opt-out) + no personal data in conversations." },
+        { "id": "C", "text": "Everything off and the account deleted — only no AI at all gives you privacy." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Yes: this is the “safe and convenient” configuration — cleared history, data kept out of training, sensitive content kept out of the chat. The quality of the answers does not suffer from any of these settings.",
+      "feedbackIncorrect": "Maximum sharing does not improve the answers to everyday questions, and giving up AI is not a privacy strategy, just an escape. The golden middle: cleared history + opting out of training + the postcard test for content."
+    }
+  },
+  "summary": {
+    "points": [
+      "Everything you write to AI lands on someone else’s server — write as if on a postcard.",
+      "Three settings to sort out in 5 minutes: history (clear it), training on your data (turn it off), memory (review it).",
+      "Never: identity documents, health data with names, passwords, photos of children, other people’s secrets."
+    ],
+    "checklist": [
+      "Have I turned off training on my data in all the AI accounts at home?",
+      "Do I know how to start a temporary conversation in my chat?",
+      "Have I reviewed the voice assistant’s recording history in the past six months?",
+      "Does my household know the rule: ask about the problem, not the person?"
+    ],
+    "checklistTitle": "Checklist — home privacy",
+    "nextStep": "This is the last module of the path. Come back to any module whenever you like — this path is formative: no test, at your own pace. And if you want more, check out the “Safe use of AI” path."
+  }
+}

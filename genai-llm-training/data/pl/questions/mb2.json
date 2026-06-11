@@ -1,0 +1,155 @@
+{
+  "_meta": {
+    "module": "MB2",
+    "issue": "#171 Rebuild ścieżek — bank pytań P2 „Bezpieczne używanie AI”, moduł MB2 (dane wrażliwe i prywatność)",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo, Jan Syntetyczny, identyfikatory testowe). ZERO realnych danych/PII.",
+    "note": "Pytania modułu MB2 (Q123-Q128), pula dedykowana ścieżki P2. 4 pytania KRYTYCZNE (Q123-Q126) — bramka 100% w teście końcowym P2. Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q123",
+      "module": "MB2",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": true,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik rozpoznaje dane osobowe w treści roboczej i nie wkleja ich do publicznego narzędzia AI bez anonimizacji.",
+      "prompt": "Kolega z obsługi klienta w SklepDemo prosi Cię o pomoc: chce wkleić do publicznego czatu AI pełną treść reklamacji klientki — z imieniem, nazwiskiem, adresem i numerem zamówienia — żeby AI zaproponowało uprzejmą odpowiedź. Co robisz?",
+      "options": [
+        { "id": "A", "text": "Pomagam wkleić całość — narzędzie i tak nie zapisuje rozmów, a odpowiedź będzie lepsza z pełnym kontekstem." },
+        { "id": "B", "text": "Proponuję najpierw usunąć dane osobowe (imię, nazwisko, adres, numer zamówienia) i wkleić tylko opis problemu — AI nie potrzebuje tożsamości klientki, by zaproponować odpowiedź." },
+        { "id": "C", "text": "Radzę zmienić tylko nazwisko na inicjał — reszta danych może zostać, bo to dane firmowe, nie osobowe." },
+        { "id": "D", "text": "Sugeruję wkleić dane, ale dopisać na końcu prośbę, żeby AI je zapomniało po udzieleniu odpowiedzi." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Dokładnie tak: zasada minimalizacji (RODO) — model dostaje tylko to, co potrzebne do zadania. Opis problemu wystarcza; tożsamość klientki nie wnosi nic do jakości odpowiedzi, a tworzy ryzyko wycieku.",
+      "feedbackIncorrect": "To jest błąd bezpieczeństwa. Dane osobowe klientki (imię, nazwisko, adres, numer zamówienia) nie mogą trafić do publicznego narzędzia AI — ani w całości, ani „z inicjałem”, a prośba „zapomnij po odpowiedzi” niczego nie gwarantuje. Wklejaj wyłącznie zanonimizowany opis problemu.",
+      "references": ["MB2.1", "MB2.2"]
+    },
+    {
+      "id": "Q124",
+      "module": "MB2",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": true,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik nie przekazuje sekretów (hasła, klucze, tokeny) do narzędzi AI niezależnie od celu.",
+      "prompt": "Konfigurujesz integrację w NotkaApp i masz plik konfiguracyjny z kluczem API (tok_test_abc123) oraz hasłami do środowiska. Asystent AI mógłby szybko znaleźć błąd w konfiguracji. Co robisz?",
+      "options": [
+        { "id": "A", "text": "Wklejam cały plik — klucz jest „testowy”, więc nie ma ryzyka." },
+        { "id": "B", "text": "Wklejam plik, ale proszę AI, żeby nie używało klucza do niczego." },
+        { "id": "C", "text": "Zastępuję wartości sekretów placeholderami (np. KLUCZ_API, HASLO) i wklejam tak oczyszczony plik — strukturę da się debugować bez prawdziwych wartości." },
+        { "id": "D", "text": "Wklejam tylko połowę klucza — z niepełnej wartości nikt nic nie odtworzy." }
+      ],
+      "correct": ["C"],
+      "feedbackCorrect": "Tak — sekrety nigdy nie trafiają do czatu, nawet „testowe”: błąd konfiguracji widać w strukturze, nie w wartościach. Placeholdery zachowują pełną debugowalność bez ryzyka.",
+      "feedbackIncorrect": "To jest błąd bezpieczeństwa. Hasła, klucze i tokeny NIGDY nie trafiają do narzędzi AI — ani w całości, ani w połowie, ani z prośbą „nie używaj”. Zastąp wartości placeholderami; struktura pliku wystarczy do znalezienia błędu.",
+      "references": ["MB2.2", "MB2.3"]
+    },
+    {
+      "id": "Q125",
+      "module": "MB2",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": true,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik rozróżnia narzędzia AI zatwierdzone i niezatwierdzone do pracy z dokumentami poufnymi.",
+      "prompt": "Dostajesz do przetłumaczenia umowę objętą NDA między Twoją firmą a kontrahentem SklepDemo. Firmowy translator AI jest wolny, a darmowe publiczne narzędzie tłumaczy lepiej i szybciej. Co robisz?",
+      "options": [
+        { "id": "A", "text": "Tłumaczę umowę w zatwierdzonym narzędziu firmowym — wolniejsze, ale dokument objęty NDA nie może opuścić zatwierdzonego środowiska." },
+        { "id": "B", "text": "Tłumaczę w darmowym narzędziu — liczy się jakość tłumaczenia, a NDA dotyczy ludzi, nie programów." },
+        { "id": "C", "text": "Tłumaczę w darmowym narzędziu, ale usuwam stronę tytułową z nazwami firm — reszta umowy jest „anonimowa”." },
+        { "id": "D", "text": "Dzielę umowę na małe fragmenty i tłumaczę w darmowym narzędziu — w kawałkach nikt jej nie złoży w całość." }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Tak: dokument poufny przetwarzasz wyłącznie w środowisku zatwierdzonym przez firmę. Wygoda i jakość darmowego narzędzia nie zmieniają zobowiązań NDA.",
+      "feedbackIncorrect": "To jest błąd bezpieczeństwa. Treść umowy objętej NDA wklejona do niezatwierdzonego narzędzia to złamanie poufności — także we fragmentach i bez strony tytułowej (treść sama identyfikuje strony i warunki). Używaj wyłącznie narzędzi zatwierdzonych przez firmę.",
+      "references": ["MB2.3", "MB2.4"]
+    },
+    {
+      "id": "Q126",
+      "module": "MB2",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": true,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik świadomie ocenia uprawnienia, o które prosi aplikacja AI, zamiast akceptować je domyślnie.",
+      "prompt": "Instalujesz na służbowym telefonie aplikację asystenta AI. Przy pierwszym uruchomieniu prosi o stały dostęp do kontaktów, zdjęć, mikrofonu i historii lokalizacji, „aby lepiej personalizować odpowiedzi”. Potrzebujesz tylko podsumowywania notatek tekstowych. Co robisz?",
+      "options": [
+        { "id": "A", "text": "Akceptuję wszystko — bez pełnych uprawnień asystent będzie działał gorzej." },
+        { "id": "B", "text": "Akceptuję wszystko, ale planuję wyłączyć uprawnienia za miesiąc, jak przetestuję aplikację." },
+        { "id": "C", "text": "Akceptuję tylko mikrofon — głos to podstawa asystenta, reszta to drobiazg." },
+        { "id": "D", "text": "Odmawiam wszystkich dostępów niepotrzebnych do podsumowywania notatek; jeśli aplikacja wymusza pełne uprawnienia, zgłaszam ją do działu IT zamiast instalować." }
+      ],
+      "correct": ["D"],
+      "feedbackCorrect": "Tak: zasada najmniejszych uprawnień. Podsumowywanie notatek nie wymaga kontaktów, zdjęć ani lokalizacji — na służbowym sprzęcie nadmiarowe dostępy to ryzyko dla danych firmowych i prywatnych.",
+      "feedbackIncorrect": "To jest błąd bezpieczeństwa. Stały dostęp do kontaktów, zdjęć i lokalizacji na służbowym telefonie wykracza poza potrzebę (podsumowanie notatek) — „personalizacja” nie uzasadnia zbierania danych firmowych. Przyznawaj minimalne uprawnienia, wymuszone nadmiarowe dostępy zgłaszaj do IT.",
+      "references": ["MB2.4", "MB2.5"]
+    },
+    {
+      "id": "Q127",
+      "module": "MB2",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik rozpoznaje, co jest daną osobową w rozumieniu RODO w codziennych treściach.",
+      "prompt": "Które z poniższych jest daną osobową w rozumieniu RODO?",
+      "options": [
+        { "id": "A", "text": "Nazwa modelu AI używanego w firmie." },
+        { "id": "B", "text": "Adres e-mail pracownika jan.syntetyczny@przyklad.test, pozwalający go zidentyfikować." },
+        { "id": "C", "text": "Liczba zgłoszeń obsłużonych przez cały zespół w miesiącu." },
+        { "id": "D", "text": "Publiczny cennik usług firmy." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Dana osobowa to każda informacja pozwalająca zidentyfikować konkretną osobę — służbowy adres e-mail z imieniem i nazwiskiem identyfikuje pracownika wprost.",
+      "feedbackIncorrect": "Dana osobowa dotyczy możliwej do zidentyfikowania OSOBY. Nazwa modelu, zagregowana statystyka zespołu i publiczny cennik nie wskazują nikogo konkretnego — adres e-mail z imieniem i nazwiskiem tak.",
+      "references": ["MB2.1"]
+    },
+    {
+      "id": "Q128",
+      "module": "MB2",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik wskazuje treści, które można bezpiecznie wkleić do publicznego narzędzia AI.",
+      "prompt": "Które treści można bezpiecznie wkleić do publicznego czatu AI? Wskaż wszystkie poprawne.",
+      "options": [
+        { "id": "A", "text": "Zanonimizowany opis problemu, z którego usunięto dane osobowe i identyfikatory." },
+        { "id": "B", "text": "Skan dowodu osobistego — przecież pytasz tylko o poprawność formatu dokumentu." },
+        { "id": "C", "text": "Ogólne pytanie o składnię formuły w arkuszu kalkulacyjnym, bez danych z arkusza." },
+        { "id": "D", "text": "Wewnętrzny raport finansowy firmy oznaczony jako poufny." }
+      ],
+      "correct": ["A", "C"],
+      "feedbackCorrect": "Tak: bezpieczne są treści bez danych osobowych, sekretów i informacji poufnych — zanonimizowany opis problemu i ogólne pytanie o składnię niczego nie ujawniają.",
+      "feedbackIncorrect": "Bezpieczne są tylko treści pozbawione danych osobowych i informacji poufnych (A i C). Skan dowodu to dane osobowe wprost, a poufny raport finansowy nie może opuścić zatwierdzonego środowiska — niezależnie od intencji pytania.",
+      "references": ["MB2.1", "MB2.3"]
+    }
+  ]
+}

@@ -1,0 +1,99 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P2 Bezpieczne używanie AI",
+    "interaction": "Klasyfikacja: sygnał ostrzegawczy vs normalna sytuacja (kind: classify)",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp/SklepDemo, przyklad.test, Jan Syntetyczny). ZERO realnych danych/PII."
+  },
+  "module": "MB4",
+  "intro": "Głos da się podrobić z kilkunastu sekund nagrania, twarz z kilku zdjęć. Nagranie przestało być dowodem — ale oszustwa wspierane przez AI wciąż zdradzają się tym samym: presją, nietypowym kanałem i prośbą o pieniądze lub dane. Ten moduł uczy je rozpoznawać i poprawnie reagować.",
+  "screens": [
+    {
+      "id": "mb4-s1-deepfake",
+      "title": "Deepfake: głos i twarz na zamówienie",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Deepfake", "text": "Wygenerowane lub zmodyfikowane przez AI nagranie (głos, zdjęcie, wideo), które realistycznie podszywa się pod prawdziwą osobę." },
+        { "kind": "paragraph", "text": "Dawniej podrobienie głosu wymagało studia i aktora. Dziś wystarczy próbka z mediów społecznościowych i ogólnodostępne narzędzie. Konsekwencja praktyczna: „słyszałem jego głos” i „widziałem ją na wideo” nie są już dowodem tożsamości." },
+        { "kind": "callout", "variant": "warn", "title": "Oszustwo „na prezesa” i „na wnuczka 2.0”", "text": "Te same stare schematy, nowy silnik: telefon z głosem szefa o pilnym przelewie albo „wnuczka” proszącego o pieniądze. Głos się zgadza, schemat się zgadza — i właśnie schemat, nie głos, powinien włączyć Ci alarm." }
+      ]
+    },
+    {
+      "id": "mb4-s2-sygnaly",
+      "title": "Sygnały ostrzegawcze",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Skoro forma (głos, twarz, język) bywa doskonała, oceniaj okoliczności. Oszustwa niemal zawsze łączą kilka z tych elementów:" },
+        { "kind": "list", "items": [
+          "Presja czasu: „natychmiast”, „w ciągu godziny”, „zanim system się zablokuje”.",
+          "Tajność: „nie mów nikomu”, „sprawa poufna, tylko między nami”.",
+          "Nietypowy kanał: prywatny numer, nowy komunikator, konto „zapasowe”.",
+          "Prośba o pieniądze, dane logowania albo kody.",
+          "Odstępstwo od procedury: „tym razem pomińmy formalności”."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Zasada", "text": "Jeden sygnał to powód do czujności. Dwa lub więcej — traktuj jak próbę oszustwa, dopóki nie zweryfikujesz inaczej." }
+      ]
+    },
+    {
+      "id": "mb4-s3-drugi-kanal",
+      "title": "Zasada drugiego kanału",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Najskuteczniejsza obrona nie wymaga technologii: przerwij kontakt, który ktoś zainicjował, i zweryfikuj sprawę kanałem, który wybierasz samodzielnie. Oddzwoń na numer, który masz w kontaktach. Podejdź do biurka. Napisz na znany, firmowy adres." },
+        { "kind": "table", "headers": ["Sytuacja", "Weryfikacja drugim kanałem"], "rows": [
+          ["Telefon „szefa” o pilnym przelewie", "Rozłącz się, zadzwoń na znany numer szefa lub potwierdź osobiście"],
+          ["Wideo-rozmowa z „kontrahentem” zmieniającym numer konta", "Zadzwoń na numer z umowy, nie z wiadomości"],
+          ["SMS od „dziecka” z nowego numeru z prośbą o pieniądze", "Zadzwoń na stary, znany numer dziecka"]
+        ], "textAlt": "Przykłady weryfikacji drugim kanałem: zawsze kontakt zainicjowany przez Ciebie na znany wcześniej numer lub adres, nigdy przez kanał wskazany w podejrzanej wiadomości." },
+        { "kind": "callout", "variant": "safe", "title": "Klucz", "text": "Drugi kanał działa tylko wtedy, gdy TY go inicjujesz. Numer „do potwierdzenia” podany w podejrzanej wiadomości to wciąż kanał oszusta." }
+      ]
+    },
+    {
+      "id": "mb4-s4-zgloszenie",
+      "title": "Procedura zgłoszenia",
+      "type": "content",
+      "blocks": [
+        { "kind": "list", "ordered": true, "items": [
+          "Nie działaj pod presją: brak natychmiastowej odpowiedzi to nie błąd, to procedura.",
+          "Zachowaj dowody: wiadomość, numer, nagranie — nie kasuj niczego.",
+          "W pracy: zgłoś do działu IT/bezpieczeństwa. Prywatnie: zgłoś na policję i w platformie, z której przyszedł kontakt.",
+          "Ostrzeż osobę, pod którą się podszyto — jej wizerunku użyto i może być celem kolejnych prób."
+        ] },
+        { "kind": "paragraph", "text": "Dezinformacji nie podawaj dalej nawet „z ostrzeżeniem” — każde udostępnienie zwiększa zasięg fałszywki. Zamiast tego zgłoś materiał w platformie i, jeśli temat jest ważny, podziel się linkiem do zweryfikowanego źródła." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "mb4-classify",
+    "title": "Sygnał ostrzegawczy czy normalna sytuacja?",
+    "intro": "Oceń każdą sytuację: czy zawiera sygnały możliwego oszustwa lub deepfake'a, czy jest normalna? Feedback wyjaśnia, na co patrzeć.",
+    "categories": [
+      { "id": "warning", "label": "Sygnał ostrzegawczy (możliwy scam/deepfake)", "desc": "Presja, tajność, nietypowy kanał, prośba o pieniądze/dane, omijanie procedur." },
+      { "id": "normal", "label": "Normalna sytuacja", "desc": "Znany kanał, brak presji, zgodne z procedurami." }
+    ],
+    "items": [
+      { "id": "mb4-i1", "text": "Głos „dyrektora” w telefonie prosi o natychmiastowy przelew i błaga o dyskrecję.", "correctCategory": "warning", "rationale": "Presja + tajność + pieniądze — schemat „na prezesa”; głos nie jest dowodem." },
+      { "id": "mb4-i2", "text": "Księgowa na cotygodniowym spotkaniu przypomina o terminie faktur zgodnie z procedurą.", "correctCategory": "normal", "rationale": "Znany kanał, znana procedura, zero presji i tajności." },
+      { "id": "mb4-i3", "text": "Kontrahent w mailu z nowej domeny informuje o „pilnej zmianie numeru konta” do dzisiejszej płatności.", "correctCategory": "warning", "rationale": "Zmiana konta + nowa domena + presja czasu = klasyka oszustwa płatniczego; weryfikuj drugim kanałem." },
+      { "id": "mb4-i4", "text": "Wideo, na którym znana osoba poleca inwestycję „podwajającą pieniądze w tydzień”, z linkiem w opisie.", "correctCategory": "warning", "rationale": "Deepfake inwestycyjny: nierealna obietnica + sławna twarz + link. Nie klikaj, zgłoś." },
+      { "id": "mb4-i5", "text": "Syn dzwoni ze swojego zwykłego numeru przypomnieć o wspólnym obiedzie w niedzielę.", "correctCategory": "normal", "rationale": "Znany numer, zwykła sprawa, brak prośby o pieniądze czy dane." },
+      { "id": "mb4-i6", "text": "SMS z nieznanego numeru: „Mamo, zniszczyłem telefon, pisz tylko tutaj i przelej mi pieniądze na nowy”.", "correctCategory": "warning", "rationale": "Nowy kanał + izolacja („pisz tylko tutaj”) + pieniądze — „na wnuczka 2.0”; zadzwoń na stary numer." },
+      { "id": "mb4-i7", "text": "Dział IT wysyła zaplanowaną wcześniej ankietę bezpieczeństwa przez firmowy system, bez próśb o hasła.", "correctCategory": "normal", "rationale": "Zapowiedziane działanie, firmowy kanał, brak prośby o sekrety." },
+      { "id": "mb4-i8", "text": "„Rekruter” proponuje świetną pracę, ale najpierw prosi o opłatę rekrutacyjną i skan dowodu na komunikatorze.", "correctCategory": "warning", "rationale": "Opłata z góry + dane osobowe + niefirmowy kanał = oszustwo rekrutacyjne." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Nagranie i głos przestały być dowodem tożsamości — oceniaj schemat sytuacji, nie formę.",
+      "Dwa lub więcej sygnałów (presja, tajność, nietypowy kanał, pieniądze/dane) traktuj jak oszustwo do czasu weryfikacji.",
+      "Weryfikuj drugim kanałem, który sam inicjujesz; dowody zachowuj i zgłaszaj, fałszywek nie podawaj dalej."
+    ],
+    "checklist": [
+      "Czy ta prośba wywiera presję czasu, tajności albo dotyczy pieniędzy/danych?",
+      "Czy mogę zweryfikować ją kanałem, który sam zainicjuję (znany numer, osobiście)?",
+      "Czy wiem, gdzie zgłosić podejrzenie w pracy i prywatnie?"
+    ],
+    "checklistTitle": "Checklista — zanim zareagujesz na pilną prośbę",
+    "nextStep": "Następny krok: moduł o politykach AI w pracy — dowiesz się, których narzędzi wolno używać służbowo i czym grozi shadow AI."
+  }
+}

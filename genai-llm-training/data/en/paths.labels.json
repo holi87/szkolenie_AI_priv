@@ -1,20 +1,28 @@
 {
   "paths": {
     "S1": {
-      "name": "Non-technical / decision-making",
+      "name": "AI with QA — level: Foundation",
       "assumedPathTime": "3.5-4.5 h (A4)"
     },
     "S2": {
-      "name": "Practitioner-user / QA",
+      "name": "AI with QA — level: Practitioner",
       "assumedPathTime": "6-7 h (A4)"
     },
     "S3": {
-      "name": "Engineer / automation / technical QA",
+      "name": "AI with QA — level: Engineer",
       "assumedPathTime": "9-10 h (A4)"
     },
     "S4": {
       "name": "Holak Scale — diagnosis & growth",
       "assumedPathTime": "2.5-3 h"
+    },
+    "P1": {
+      "name": "AI at Home",
+      "assumedPathTime": "2.5-3 h"
+    },
+    "P2": {
+      "name": "Safe AI Use",
+      "assumedPathTime": "3-3.5 h"
     }
   }
 }

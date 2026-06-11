@@ -1,0 +1,155 @@
+{
+  "_meta": {
+    "module": "MB6",
+    "issue": "#171 Rebuild ścieżek — bank pytań P2 „Bezpieczne używanie AI”, moduł MB6 (weryfikacja treści AI)",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo, Jan Syntetyczny, identyfikatory testowe). ZERO realnych danych/PII.",
+    "note": "Pytania modułu MB6 (Q147-Q152), pula dedykowana ścieżki P2. Bez pytań krytycznych. Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q147",
+      "module": "MB6",
+      "pillar": "qa_practice",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik rozumie, dlaczego pewny ton odpowiedzi AI nie świadczy o jej prawdziwości.",
+      "prompt": "Dlaczego odpowiedź AI może brzmieć bardzo pewnie, a mimo to być błędna?",
+      "options": [
+        { "id": "A", "text": "Model generuje najbardziej prawdopodobną językowo odpowiedź — płynność i pewny ton nie są miarą prawdziwości." },
+        { "id": "B", "text": "Modele celowo kłamią, żeby użytkownik wracał i zadawał więcej pytań." },
+        { "id": "C", "text": "Pewny ton pojawia się tylko wtedy, gdy model jest podłączony do internetu." },
+        { "id": "D", "text": "To niemożliwe — jeśli odpowiedź brzmi pewnie, model ma dla niej źródła." }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Model przewiduje kolejne słowa, a nie sprawdza faktów — dlatego potrafi z identyczną swadą podać prawdę i zmyślenie (halucynację). Ton odpowiedzi to styl, nie dowód.",
+      "feedbackIncorrect": "Model nie kłamie celowo ani nie sygnalizuje pewności źródłami — generuje najbardziej prawdopodobną językowo odpowiedź, więc błąd brzmi równie pewnie jak prawda (A). Powtórz sekcję o naturze halucynacji.",
+      "references": ["MB6.1"]
+    },
+    {
+      "id": "Q148",
+      "module": "MB6",
+      "pillar": "qa_practice",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik weryfikuje podane przez AI źródło zamiast ufać samemu faktowi jego przytoczenia.",
+      "prompt": "AI przygotowało Ci akapit do firmowego biuletynu NotkaApp z konkretną statystyką i odnośnikiem do raportu. Brzmi profesjonalnie. Co robisz przed publikacją?",
+      "options": [
+        { "id": "A", "text": "Publikuję — skoro AI podało odnośnik, statystyka jest potwierdzona." },
+        { "id": "B", "text": "Otwieram odnośnik i sprawdzam, czy raport istnieje i czy faktycznie zawiera tę statystykę; szukam też drugiego, niezależnego potwierdzenia." },
+        { "id": "C", "text": "Usuwam odnośnik i zostawiam samą statystykę — bez linku nikt nie sprawdzi i nie będzie problemu." },
+        { "id": "D", "text": "Proszę to samo AI o potwierdzenie, że statystyka jest prawdziwa — jeśli potwierdzi, publikuję." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Tak: modele potrafią zmyślić zarówno liczbę, jak i wiarygodnie wyglądający odnośnik. Weryfikacja = otworzyć źródło, sprawdzić treść i znaleźć niezależne potwierdzenie — dopiero wtedy publikacja.",
+      "feedbackIncorrect": "Sam odnośnik niczego nie dowodzi (bywa zmyślony), ukrycie linku nie naprawia błędnej liczby, a „potwierdzenie” u tego samego modelu to ta sama niewiarygodna maszyna. Poprawnie: otworzyć i sprawdzić źródło + drugi niezależny ślad (B).",
+      "references": ["MB6.2"]
+    },
+    {
+      "id": "Q149",
+      "module": "MB6",
+      "pillar": "qa_practice",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik rozpoznaje tematy podwyższonego ryzyka, w których odpowiedź AI wymaga weryfikacji u specjalisty.",
+      "prompt": "Kolega chce wysłać mamie zalecenia dawkowania leku, które wygenerowało mu AI, „bo brzmią sensownie i są ładnie rozpisane”. Co mu radzisz?",
+      "options": [
+        { "id": "A", "text": "Niech wyśle — AI uczyło się na tekstach medycznych, więc zna się lepiej niż niejeden lekarz." },
+        { "id": "B", "text": "Niech wyśle, ale z dopiskiem, że to z AI — mama sama zdecyduje, czy zaufać." },
+        { "id": "C", "text": "Dawkowanie leków to temat podwyższonego ryzyka: zalecenia musi potwierdzić lekarz lub farmaceuta, a wygenerowany tekst może być punktem wyjścia do rozmowy z nimi, nie zaleceniem." },
+        { "id": "D", "text": "Niech zapyta drugi model AI i porówna — jeśli odpowiedzi się zgadzają, można wysyłać." }
+      ],
+      "correct": ["C"],
+      "feedbackCorrect": "Tak: zdrowie, prawo i pieniądze to tematy, w których błąd AI kosztuje najwięcej — tu weryfikatorem jest specjalista, nie drugi model. AI może pomóc przygotować pytania do lekarza, nie zastąpić jego decyzji.",
+      "feedbackIncorrect": "W tematach wysokiego ryzyka (zdrowie, prawo, finanse) zgodność dwóch modeli ani dopisek „z AI” nie wystarczą — oba modele mogą powielać ten sam błąd, a odpowiedzialności nie przeniesiesz na mamę. Zalecenia potwierdza lekarz lub farmaceuta (C).",
+      "references": ["MB6.3"]
+    },
+    {
+      "id": "Q150",
+      "module": "MB6",
+      "pillar": "qa_practice",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik rozpoznaje granice wiedzy modelu (aktualność danych) jako źródło błędów.",
+      "prompt": "Scenariusz: pytasz AI o aktualne przepisy dotyczące ulg podatkowych. Model odpowiada szczegółowo i rzeczowo, ale bez dat i źródeł. Które ryzyko jest tu NAJWAŻNIEJSZE?",
+      "options": [
+        { "id": "A", "text": "Odpowiedź może opisywać stan prawny sprzed miesięcy lub lat — wiedza modelu ma datę graniczną, a przepisy się zmieniają." },
+        { "id": "B", "text": "Odpowiedź jest zbyt szczegółowa — krótsze odpowiedzi są zawsze bardziej wiarygodne." },
+        { "id": "C", "text": "Model mógł odpowiedzieć w złym dialekcie języka polskiego." },
+        { "id": "D", "text": "Brak ryzyka — przepisy podatkowe są na tyle stabilne, że data wiedzy modelu nie ma znaczenia." }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Najpoważniejsze ryzyko to nieaktualność: model „zatrzymał się” na dacie końca swoich danych treningowych, a prawo zmienia się często. Tematy „aktualne przepisy/stawki/terminy” zawsze weryfikuj w oficjalnym, datowanym źródle.",
+      "feedbackIncorrect": "Długość odpowiedzi i styl to nie miary ryzyka — kluczowa jest data graniczna wiedzy modelu: opisany stan prawny może być nieaktualny (A). Sprawdzaj przepisy w oficjalnym, datowanym źródle.",
+      "references": ["MB6.3", "MB6.2"]
+    },
+    {
+      "id": "Q151",
+      "module": "MB6",
+      "pillar": "qa_practice",
+      "paths": ["P2"],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik buduje nawyk weryfikacji proporcjonalnej do wagi decyzji przed przekazaniem treści dalej.",
+      "prompt": "Masz 10 minut do spotkania zarządu SklepDemo. AI streściło Ci 40-stronicowy raport, a Ty masz na podstawie streszczenia rekomendować decyzję budżetową. Co robisz?",
+      "options": [
+        { "id": "A", "text": "Prezentuję streszczenie w całości — przy tak krótkim czasie nie ma innego wyjścia, a AI rzadko się myli." },
+        { "id": "B", "text": "Weryfikuję w oryginale raportu kluczowe liczby i wnioski, na których opiera się rekomendacja; resztę streszczenia oznaczam jako niezweryfikowaną i mówię o tym wprost." },
+        { "id": "C", "text": "Odwołuję swoją część spotkania — bez przeczytania całych 40 stron nie wolno nic rekomendować." },
+        { "id": "D", "text": "Proszę AI o drugie, krótsze streszczenie i porównuję oba — zgodność streszczeń potwierdza poprawność." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Tak: weryfikacja proporcjonalna do wagi — to, co niesie decyzję (liczby, wnioski), sprawdzasz w źródle; resztę jawnie oznaczasz. Przejrzystość wobec zarządu jest częścią rzetelności, a dwa streszczenia tego samego modelu nie są niezależne.",
+      "feedbackIncorrect": "Prezentowanie niezweryfikowanego streszczenia pod decyzję budżetową to przeniesienie halucynacji na zarząd; dwa streszczenia z tej samej maszyny nie są niezależną weryfikacją; odwołanie spotkania to ucieczka, nie zarządzenie ryzykiem. Poprawnie: zweryfikować w oryginale to, co kluczowe, i jawnie oznaczyć resztę (B).",
+      "references": ["MB6.4", "MB6.2"]
+    },
+    {
+      "id": "Q152",
+      "module": "MB6",
+      "pillar": "qa_practice",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik zna podstawowe kroki szybkiej weryfikacji treści wygenerowanej przez AI.",
+      "prompt": "Które kroki należą do szybkiej weryfikacji odpowiedzi AI przed użyciem jej dalej? Wskaż wszystkie poprawne.",
+      "options": [
+        { "id": "A", "text": "Sprawdzenie, czy podane źródło istnieje i faktycznie zawiera przywołaną informację." },
+        { "id": "B", "text": "Ocena, czy odpowiedź brzmi pewnie i profesjonalnie." },
+        { "id": "C", "text": "Poszukanie drugiego, niezależnego potwierdzenia kluczowych faktów i liczb." },
+        { "id": "D", "text": "Sprawdzenie, czy odpowiedź jest wystarczająco długa i ładnie sformatowana." }
+      ],
+      "correct": ["A", "C"],
+      "feedbackCorrect": "Dokładnie: weryfikacja opiera się na źródłach (czy istnieją i potwierdzają treść) oraz niezależnym śladzie dla kluczowych faktów. Ton, długość i formatowanie to kosmetyka — nie mówią nic o prawdziwości.",
+      "feedbackIncorrect": "Pewny ton, długość i ładny format to cechy stylu, które model generuje równie chętnie dla prawdy i zmyślenia. Weryfikują źródła (A) i niezależne potwierdzenie (C).",
+      "references": ["MB6.2", "MB6.4"]
+    }
+  ]
+}

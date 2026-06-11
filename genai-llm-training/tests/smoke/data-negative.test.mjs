@@ -67,15 +67,18 @@ function fabricateEn(dataDir, { fixPrefix = true, mutate } = {}) {
   cpSync(join(dataDir, "pl"), join(dataDir, "en"), { recursive: true });
   deplonizeJsonDir(join(dataDir, "en")); // leak-clean (#133): bez znaków PL — inaczej leak-gate odrzuca PL-w-EN
   if (fixPrefix) {
-    const m10 = join(dataDir, "en", "questions", "m10.json");
-    const doc = JSON.parse(readFileSync(m10, "utf8"));
-    for (const q of doc.questions || []) {
-      if (q.isCritical && typeof q.feedbackIncorrect === "string") {
-        // Po deplonizacji prefiks PL to „To jest blad bezpieczenstwa." — podmieniamy na właściwy EN.
-        q.feedbackIncorrect = q.feedbackIncorrect.replace(/^To jest blad bezpieczenstwa\./, "This is a security error.");
+    // Krytyczne żyją w M10 (Q081–Q085) i MB2 (Q123–Q126) — prefiks musi być EN w OBU shardach.
+    for (const shard of ["m10.json", "mb2.json"]) {
+      const f = join(dataDir, "en", "questions", shard);
+      const doc = JSON.parse(readFileSync(f, "utf8"));
+      for (const q of doc.questions || []) {
+        if (q.isCritical && typeof q.feedbackIncorrect === "string") {
+          // Po deplonizacji prefiks PL to „To jest blad bezpieczenstwa." — podmieniamy na właściwy EN.
+          q.feedbackIncorrect = q.feedbackIncorrect.replace(/^To jest blad bezpieczenstwa\./, "This is a security error.");
+        }
       }
+      writeFileSync(f, JSON.stringify(doc, null, 2));
     }
-    writeFileSync(m10, JSON.stringify(doc, null, 2));
   }
   if (typeof mutate === "function") mutate(dataDir);
 }

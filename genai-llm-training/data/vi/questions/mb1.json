@@ -1,0 +1,155 @@
+{
+  "_meta": {
+    "module": "MB1",
+    "issue": "#171 Rebuild ścieżek — bank pytań P2 „Bezpieczne używanie AI”, moduł MB1 (mapa ryzyk AI)",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo, dane testowe). ZERO realnych danych/PII.",
+    "note": "Tłumaczenie wietnamskie (vi) pytań modułu MB1 (Q117-Q122), pula dedykowana ścieżki P2. Bez pytań krytycznych."
+  },
+  "questions": [
+    {
+      "id": "Q117",
+      "module": "MB1",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Học viên giải thích ảo giác AI là gì và vì sao nó nghe có vẻ đáng tin.",
+      "prompt": "“Ảo giác” trong câu trả lời của các công cụ AI là gì?",
+      "options": [
+        { "id": "A", "text": "Lỗi kỹ thuật khiến công cụ ngừng phản hồi và phải khởi động lại." },
+        { "id": "B", "text": "Câu trả lời nghe rất chắc chắn nhưng chứa các sự kiện, nguồn hoặc con số bịa đặt, không hề tồn tại." },
+        { "id": "C", "text": "Tình huống AI từ chối trả lời câu hỏi của người dùng." },
+        { "id": "D", "text": "Lời nói dối có chủ đích được nhà sản xuất công cụ lập trình sẵn." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Đúng vậy. Ảo giác là câu trả lời bịa đặt nhưng được đưa ra với giọng điệu tự tin và ngôn ngữ trôi chảy. Chính hình thức đáng tin đó khiến ta dễ nhầm nó là sự thật.",
+      "feedbackIncorrect": "Ảo giác không phải là sự cố, sự từ chối hay lời nói dối có chủ đích của nhà sản xuất. Đó là nội dung bịa đặt (sự kiện, nguồn, con số) mà mô hình đưa ra với vẻ tự tin y như nội dung thật. Hãy quay lại phần về ảo giác trong MB1.",
+      "references": ["MB1.1"]
+    },
+    {
+      "id": "Q118",
+      "module": "MB1",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Học viên chỉ ra các rủi ro chính của việc dùng các công cụ AI công khai hằng ngày.",
+      "prompt": "Những điều nào dưới đây là rủi ro thực sự khi dùng chat AI công khai hằng ngày trong công việc? Hãy chọn tất cả đáp án đúng.",
+      "options": [
+        { "id": "A", "text": "Dữ liệu công ty được dán vào có thể rời khỏi công ty và vượt ra ngoài tầm kiểm soát của công ty." },
+        { "id": "B", "text": "Công cụ AI có thể tự đột nhập vào mạng nội bộ của công ty chỉ vì bạn đặt một câu hỏi." },
+        { "id": "C", "text": "Câu trả lời có thể chứa thông tin bịa đặt mà ta chuyển tiếp đi một cách thiếu phản biện." },
+        { "id": "D", "text": "Mọi lần sử dụng AI đều tự động vi phạm pháp luật, bất kể nội dung câu hỏi." }
+      ],
+      "correct": ["A", "C"],
+      "feedbackCorrect": "Chính xác: hai rủi ro hằng ngày là rò rỉ dữ liệu được dán ra ngoài công ty và ảo giác mà ta sao chép lại thiếu phản biện. Cả hai phụ thuộc vào việc ta dán gì, dán thế nào và có kiểm tra câu trả lời hay không.",
+      "feedbackIncorrect": "Rủi ro thực sự là rò rỉ dữ liệu được dán vào (A) và việc lan truyền nội dung bịa đặt (C). Chat AI không đột nhập vào mạng chỉ vì một câu hỏi, và bản thân việc dùng AI không vi phạm pháp luật. Hãy ôn lại bản đồ rủi ro trong MB1.",
+      "references": ["MB1.1", "MB1.2"]
+    },
+    {
+      "id": "Q119",
+      "module": "MB1",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Học viên nhận diện các biểu hiện của việc tin tưởng quá mức vào công cụ AI trong công việc hằng ngày.",
+      "prompt": "Hành vi nào là biểu hiện của việc tin tưởng AI quá mức?",
+      "options": [
+        { "id": "A", "text": "So sánh câu trả lời của AI với tài liệu của công ty trước khi sử dụng." },
+        { "id": "B", "text": "Hỏi lại AI về căn cứ lập luận và kiểm tra các nguồn được nêu." },
+        { "id": "C", "text": "Coi AI là trợ giúp cho bản nháp, sau đó tự mình chỉnh sửa lại." },
+        { "id": "D", "text": "Chuyển tiếp câu trả lời của AI mà không kiểm tra, vì “AI thì đâu có sai bao giờ”." }
+      ],
+      "correct": ["D"],
+      "feedbackCorrect": "Đúng vậy. Tin tưởng quá mức nghĩa là từ bỏ việc tự kiểm chứng. Giả định rằng AI không sai là giả định sai lầm: mô hình có thể vừa rất tự tin vừa đang nhầm lẫn.",
+      "feedbackIncorrect": "So sánh với tài liệu, kiểm tra nguồn và tự chỉnh sửa bản nháp là những thói quen lành mạnh. Biểu hiện của tin tưởng quá mức là chuyển tiếp câu trả lời mà không hề kiểm chứng. Hãy ôn lại phần về tin tưởng quá mức.",
+      "references": ["MB1.4"]
+    },
+    {
+      "id": "Q120",
+      "module": "MB1",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Học viên áp dụng nguyên tắc kiểm chứng nội dung AI trước khi gửi cho khách hàng.",
+      "prompt": "Nam Mẫu ở bộ phận bán hàng của SklepDemo vừa tạo trong chat AI một câu trả lời cho khách hàng kèm mô tả thông số sản phẩm và muốn gửi đi ngay vì “nghe rất chuyên nghiệp”. Bạn biết rằng AI không có quyền truy cập vào bảng chào hàng hiện tại. Bạn khuyên anh ấy điều gì?",
+      "options": [
+        { "id": "A", "text": "Trước khi gửi, hãy đối chiếu từng thông số với phiếu sản phẩm hiện hành, vì AI có thể đã bịa ra những chi tiết mà nó không biết." },
+        { "id": "B", "text": "Cứ gửi đi. Giọng điệu chuyên nghiệp của câu trả lời chứng tỏ nội dung là chính xác." },
+        { "id": "C", "text": "Hãy hỏi AI ngay trong cùng cuộc chat xem nó có chắc chắn về câu trả lời không, và gửi nếu nó xác nhận." },
+        { "id": "D", "text": "Hãy tạo lại câu trả lời thêm lần nữa. Nếu phiên bản thứ hai tương tự, nghĩa là nội dung đúng." }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Đúng vậy. Vì AI không biết bảng chào hàng hiện tại nên các thông số có thể là bịa đặt. Cách kiểm chứng đáng tin duy nhất là đối chiếu với nguồn sự thật của công ty, tức phiếu sản phẩm.",
+      "feedbackIncorrect": "Giọng điệu chuyên nghiệp không chứng minh tính chính xác, còn việc hỏi AI “bạn có chắc không” hay tạo lại câu trả lời vẫn chỉ là cùng một cỗ máy không đáng tin đó. Nội dung gửi khách hàng phải được đối chiếu với nguồn của công ty (phiếu sản phẩm) trước khi gửi.",
+      "references": ["MB1.1", "MB1.4"]
+    },
+    {
+      "id": "Q121",
+      "module": "MB1",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Học viên phản ứng đúng khi AI đưa ra nguồn hoặc điều khoản pháp luật bịa đặt.",
+      "prompt": "Bạn đang soạn một ghi chú nội bộ trong NotkaApp. Chat AI đưa cho bạn nội dung một “điều khoản pháp luật” kèm số điều và phần lập luận đầy tự tin, nhưng bạn không thể tìm thấy điều khoản đó trên cổng thông tin pháp luật chính thức. Bạn làm gì?",
+      "options": [
+        { "id": "A", "text": "Tôi trích dẫn điều khoản từ câu trả lời của AI. Số điều và giọng điệu tự tin là đủ để xác nhận." },
+        { "id": "B", "text": "Tôi trích dẫn điều khoản nhưng ghi thêm “nguồn: AI” vào ghi chú để chuyển trách nhiệm sang công cụ." },
+        { "id": "C", "text": "Tôi coi điều khoản đó có thể là ảo giác, không trích dẫn nó và xây dựng ghi chú dựa trên nội dung tìm thấy trong nguồn chính thức hoặc được người có chuyên môn xác nhận." },
+        { "id": "D", "text": "Tôi yêu cầu AI đưa liên kết đến điều khoản và sẽ trích dẫn nếu có bất kỳ liên kết nào xuất hiện." }
+      ],
+      "correct": ["C"],
+      "feedbackCorrect": "Đúng vậy. Khi nguồn chính thức không xác nhận điều khoản đó tồn tại, rất có thể đây là ảo giác. Vào ghi chú chỉ đưa nội dung đã được xác nhận trong nguồn đáng tin hoặc bởi người có chuyên môn.",
+      "feedbackIncorrect": "Số điều, giọng điệu tự tin, dòng ghi chú “nguồn: AI” hay liên kết do AI tạo ra đều không xác nhận được điều gì. AI có thể bịa cả liên kết. Nếu nguồn chính thức không biết điều khoản đó, đừng trích dẫn nó. Hãy ôn lại phần về ảo giác và kiểm chứng.",
+      "references": ["MB1.1", "MB1.4"]
+    },
+    {
+      "id": "Q122",
+      "module": "MB1",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Học viên đánh giá tình huống trong đó nhiều rủi ro AI chồng lên nhau và chọn phản ứng hạn chế được tất cả các rủi ro đó.",
+      "prompt": "Lan Mẫu ở bộ phận nhân sự khoe rằng trợ lý AI công khai mới “hiểu công ty còn hơn cả intranet”: cô đã dán vào đó quy chế nội bộ và danh sách nhân viên, và giờ ngày nào cũng hỏi nó về các vấn đề nhân sự rồi áp dụng câu trả lời mà không kiểm tra. Nhận định nào về tình huống này là chính xác nhất?",
+      "options": [
+        { "id": "A", "text": "Tình huống này an toàn, vì trợ lý trả lời chính xác, còn dữ liệu nhân sự thì ai trong công ty cũng biết." },
+        { "id": "B", "text": "Vấn đề duy nhất là chất lượng câu trả lời. Chỉ cần Lan kiểm tra nội dung, còn việc dán tài liệu thì có thể tiếp tục." },
+        { "id": "C", "text": "Vấn đề duy nhất là các tài liệu đã dán. Còn câu trả lời của một trợ lý “hiểu công ty” thì đã có thể tin mà không cần kiểm tra." },
+        { "id": "D", "text": "Ở đây chồng lên nhau hai rủi ro: dữ liệu nhân viên và tài liệu nội bộ đã rò rỉ vào một công cụ công khai, còn các câu trả lời được áp dụng mà không kiểm chứng có thể chứa ảo giác. Cần dừng ngay thực hành này và báo cáo vụ rò rỉ theo quy trình của công ty." }
+      ],
+      "correct": ["D"],
+      "feedbackCorrect": "Đúng vậy. Đây là hai rủi ro độc lập xảy ra cùng lúc: rò rỉ dữ liệu cá nhân và tài liệu nội bộ, cùng việc tin tưởng quá mức vào các câu trả lời không được kiểm tra. Phản ứng phải bao trùm cả hai: dừng thực hành và báo cáo vụ rò rỉ.",
+      "feedbackIncorrect": "Đánh giá chưa đầy đủ. Vấn đề vừa là rò rỉ (danh sách nhân viên và quy chế nằm trong công cụ công khai), vừa là tin tưởng quá mức (áp dụng câu trả lời mà không kiểm tra). Chỉ khắc phục một trong hai là chưa đủ. Hãy ôn lại bản đồ rủi ro trong MB1.",
+      "references": ["MB1.2", "MB1.3", "MB1.4"]
+    }
+  ]
+}

@@ -1,0 +1,130 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P1 AI w domu (formatywna)",
+    "interaction": "Strojenie ustawień prywatności (kind: tune) — ćwiczenie formatywne z checkpointem",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp, przyklad.test, Jan Syntetyczny, Anna Testowa). ZERO realnych danych/PII. Moduł formatywny — bez progu zaliczenia i certyfikatu. Tłumaczenie wietnamskie (vi)."
+  },
+  "module": "MD6",
+  "intro": "Trò chuyện với AI có lúc chân thành như trò chuyện với một người bạn — chỉ khác là nó được lưu trên máy chủ của người khác. Mô-đun này cho thấy bạn thật sự chia sẻ những gì, những cài đặt tài khoản nào đáng chỉnh lại trong năm phút và những gì không bao giờ được dán vào. Ở phần cuối, bạn sẽ tự tay tinh chỉnh bộ cài đặt quyền riêng tư mẫu.",
+  "screens": [
+    {
+      "id": "md6-s1-co-udostepniasz",
+      "title": "Bạn thật sự chia sẻ những gì",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Mỗi tin nhắn gửi đến chat AI đều đi đến máy chủ của nhà cung cấp. Ở đó nó có thể được lưu thành lịch sử, được con người đọc xác suất (kiểm soát chất lượng) và — tùy theo cài đặt — được dùng để huấn luyện các phiên bản mô hình tiếp theo. Đây không phải lý do để hoảng sợ; đây là lý do để biết mình đang gửi gì." },
+        { "kind": "list", "items": [
+          "Nội dung cuộc trò chuyện: câu hỏi, văn bản dán vào, ảnh và tài liệu tải lên.",
+          "Siêu dữ liệu: khi nào, từ thiết bị nào, bạn dùng thường xuyên ra sao.",
+          "Giọng nói: bản ghi âm các câu lệnh ở trợ lý giọng nói (thường kèm lịch sử có thể xem lại)."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Phép thử bưu thiếp", "text": "Hãy viết cho AI như viết trên bưu thiếp: mọi thứ thật sự nhạy cảm để bên ngoài nó. Bưu thiếp thì người đưa thư đọc được — và điều đó vẫn ổn, chừng nào bạn biết về nó." }
+      ]
+    },
+    {
+      "id": "md6-s2-ustawienia",
+      "title": "Năm phút trong cài đặt tài khoản",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Hầu hết các công cụ AI có ba cài đặt đáng tìm ra và thiết lập một cách có ý thức — tên gọi khác nhau, cơ chế là một:" },
+        { "kind": "table", "headers": ["Cài đặt", "Nó làm gì", "Khuyến nghị cho gia đình"], "rows": [
+          ["Lịch sử trò chuyện", "lưu toàn bộ các cuộc chat trong tài khoản", "bật để tiện lợi, nhưng dọn dẹp đều đặn; các cuộc trò chuyện nhạy cảm dùng chế độ tạm thời"],
+          ["Huấn luyện trên dữ liệu của tôi", "cho phép dùng các cuộc trò chuyện của bạn để cải thiện mô hình", "tắt (opt-out), nếu công cụ cho phép"],
+          ["Cá nhân hóa/bộ nhớ", "AI ghi nhớ các thông tin về bạn giữa các cuộc trò chuyện", "dùng có ý thức: tiện lợi, nhưng thỉnh thoảng hãy xem lại NÓ ĐÃ NHỚ những gì"]
+        ], "textAlt": "Ba cài đặt then chốt: lịch sử trò chuyện (dọn dẹp đều đặn), huấn luyện trên dữ liệu (tắt opt-out), bộ nhớ và cá nhân hóa (xem lại các thông tin được ghi nhớ)." },
+        { "kind": "callout", "variant": "safe", "title": "Làm ngay hôm nay", "text": "Hãy mở phần cài đặt của ứng dụng chat AI chính của bạn và tìm ba mục này. Năm phút, một lần duy nhất, cho mỗi tài khoản trong nhà." }
+      ]
+    },
+    {
+      "id": "md6-s3-czego-nie-wklejac",
+      "title": "Những gì không bao giờ được dán vào",
+      "type": "content",
+      "blocks": [
+        { "kind": "list", "items": [
+          "Giấy tờ tùy thân: bản scan căn cước, hộ chiếu, thẻ học sinh — của mình và của người khác.",
+          "Dữ liệu sức khỏe kèm họ tên: kết quả xét nghiệm, đơn thuốc, hồ sơ bệnh án — hãy hỏi chung chung, không kèm danh tính.",
+          "Mật khẩu, mã số, dữ liệu thẻ: không cho bất kỳ chat nào, vì bất kỳ mục đích gì, không bao giờ.",
+          "Ảnh trẻ em và người khác khi chưa có sự đồng ý của họ — hình ảnh cá nhân đi đến máy chủ xa lạ.",
+          "Bí mật của người khác: tin nhắn từ người khác, tài liệu công việc — chúng không phải của bạn để chia sẻ."
+        ] },
+        { "kind": "paragraph", "text": "Quy tắc chung: hỏi về VẤN ĐỀ, không hỏi về CON NGƯỜI. “Nói chuyện với bác sĩ về kết quả cholesterol như thế nào?” hiệu quả không kém mà không cần dán kết quả xét nghiệm kèm tên của mẹ." },
+        { "kind": "callout", "variant": "info", "title": "Nếu lỡ dán rồi thì sao?", "text": "Hãy xóa cuộc trò chuyện khỏi lịch sử, tắt huấn luyện trên dữ liệu và ghi nhớ cho lần sau. Thế giới chưa sụp đổ — nhưng thói quen thì đáng sửa ngay từ hôm nay." }
+      ]
+    },
+    {
+      "id": "md6-s4-urzadzenia",
+      "title": "Ngăn nắp trong các thiết bị gia đình",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Quyền riêng tư của AI trong nhà còn là chuyện thiết bị: loa, camera, tivi và đồ chơi có micro. Mười lăm phút dọn dẹp mỗi nửa năm là đủ:" },
+        { "kind": "list", "ordered": true, "items": [
+          "Xem lại và xóa lịch sử ghi âm của trợ lý giọng nói (trong ứng dụng tài khoản).",
+          "Kiểm tra công tắc micro vật lý và nắp che camera — và chỉ cho người nhà biết chúng ở đâu.",
+          "Thiết bị có camera để ngoài phòng ngủ và phòng trẻ em.",
+          "Thu hồi quyền của những ứng dụng bạn không dùng (micro, vị trí, danh bạ).",
+          "Tài khoản cho khách và trẻ em: hồ sơ riêng thay vì dùng chung tài khoản người lớn."
+        ] }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "tune",
+    "id": "md6-tune",
+    "title": "Tinh chỉnh cài đặt quyền riêng tư",
+    "intro": "Hãy đặt ba thanh trượt như cách bạn sẽ thiết lập tài khoản AI cho gia đình mình, và quan sát mỗi cài đặt thay đổi điều gì. Sau đó tự kiểm tra ở checkpoint.",
+    "outputLabel": "Hiệu quả cấu hình của bạn:",
+    "controls": [
+      {
+        "id": "md6-t-history",
+        "label": "Lịch sử trò chuyện",
+        "levels": [
+          { "value": "forever", "label": "Bật vĩnh viễn", "effect": "Tiện lợi: bạn quay lại được các cuộc trò chuyện cũ. Rủi ro: nhiều năm câu hỏi riêng tư nằm ở một chỗ — miếng mồi béo bở khi tài khoản bị xâm nhập." },
+          { "value": "cleaned", "label": "Bật, dọn dẹp đều đặn", "effect": "Điểm cân bằng hợp lý: sự tiện lợi trước mắt vẫn còn, kho lưu các cuộc trò chuyện nhạy cảm biến mất. Chủ đề nhạy cảm thì dùng thêm chế độ tạm thời." }
+        ]
+      },
+      {
+        "id": "md6-t-training",
+        "label": "Huấn luyện trên dữ liệu của tôi",
+        "levels": [
+          { "value": "on", "label": "Bật mặc định", "effect": "Các cuộc trò chuyện của bạn có thể cải thiện những mô hình tương lai. Nội dung rời khỏi tầm kiểm soát của bạn vĩnh viễn — rút lại sự đồng ý không rút lại được dữ liệu trong quá khứ." },
+          { "value": "off", "label": "Tắt (opt-out)", "effect": "Các cuộc trò chuyện chỉ phục vụ việc vận hành tài khoản của bạn. Cài đặt gia đình an toàn nhất — chất lượng câu trả lời không giảm." }
+        ]
+      },
+      {
+        "id": "md6-t-content",
+        "label": "Tôi gửi gì trong các cuộc trò chuyện",
+        "levels": [
+          { "value": "everything", "label": "Mọi thứ tuốt tuồn tuột", "effect": "Bản scan, kết quả xét nghiệm, ảnh gia đình trong chat. Mỗi nội dung nhạy cảm trên máy chủ xa lạ là một rủi ro bạn không kiểm soát được." },
+          { "value": "filtered", "label": "Không kèm dữ liệu cá nhân", "effect": "Bạn hỏi về vấn đề, không về con người: vẫn những câu trả lời tốt như vậy, không một dữ liệu nhạy cảm nào ra khỏi nhà. Phép thử bưu thiếp đã vượt qua." }
+        ]
+      }
+    ],
+    "checkpoint": {
+      "prompt": "Cấu hình nào bảo vệ quyền riêng tư gia đình tốt nhất mà vẫn giữ được sự tiện lợi?",
+      "type": "single_choice",
+      "options": [
+        { "id": "A", "text": "Lịch sử vĩnh viễn + huấn luyện bật + gửi mọi thứ — khi đó AI hoạt động tốt nhất." },
+        { "id": "B", "text": "Lịch sử dọn dẹp đều đặn + huấn luyện tắt (opt-out) + không kèm dữ liệu cá nhân trong các cuộc trò chuyện." },
+        { "id": "C", "text": "Tắt tất cả và xóa tài khoản — chỉ việc không dùng AI mới cho quyền riêng tư." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Đúng vậy: đây là cấu hình “an toàn mà tiện lợi” — lịch sử được dọn dẹp, dữ liệu nằm ngoài huấn luyện, nội dung nhạy cảm nằm ngoài chat. Chất lượng câu trả lời không hề suy giảm ở bất kỳ cài đặt nào trong số này.",
+      "feedbackIncorrect": "Chia sẻ tối đa không làm câu trả lời cho các câu hỏi thường ngày tốt hơn, còn từ bỏ AI không phải là chiến lược quyền riêng tư mà là sự trốn chạy. Điểm cân bằng vàng: lịch sử được dọn dẹp + opt-out khỏi huấn luyện + phép thử bưu thiếp cho nội dung."
+    }
+  },
+  "summary": {
+    "points": [
+      "Mọi thứ bạn viết cho AI đều nằm trên máy chủ của người khác — hãy viết như trên bưu thiếp.",
+      "Ba cài đặt xử lý xong trong 5 phút: lịch sử (dọn dẹp), huấn luyện trên dữ liệu (tắt), bộ nhớ (xem lại).",
+      "Không bao giờ: giấy tờ tùy thân, dữ liệu sức khỏe kèm họ tên, mật khẩu, ảnh trẻ em, bí mật của người khác."
+    ],
+    "checklist": [
+      "Tôi đã tắt huấn luyện trên dữ liệu của mình ở mọi tài khoản AI trong nhà chưa?",
+      "Tôi có biết cách bật cuộc trò chuyện tạm thời trong ứng dụng chat của mình không?",
+      "Tôi đã xem lại lịch sử ghi âm của trợ lý giọng nói trong nửa năm nay chưa?",
+      "Người nhà tôi có biết nguyên tắc: hỏi về vấn đề, không hỏi về con người không?"
+    ],
+    "checklistTitle": "Danh sách kiểm tra — quyền riêng tư trong nhà",
+    "nextStep": "Đây là mô-đun cuối cùng của lộ trình. Hãy quay lại bất kỳ mô-đun nào khi bạn muốn — lộ trình này mang tính rèn luyện: không bài kiểm tra, theo nhịp độ của bạn. Còn nếu muốn nhiều hơn, hãy xem lộ trình “Sử dụng AI an toàn”."
+  }
+}

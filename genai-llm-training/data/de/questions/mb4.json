@@ -1,0 +1,155 @@
+{
+  "_meta": {
+    "module": "MB4",
+    "issue": "#171 Rebuild ścieżek — bank pytań P2 „Bezpieczne używanie AI”, moduł MB4 (deepfake, scam i dezinformacja)",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo, Jan Syntetyczny, identyfikatory testowe). ZERO realnych danych/PII.",
+    "note": "Pytania modułu MB4 (Q135-Q140), pula dedykowana ścieżki P2. Bez pytań krytycznych. Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q135",
+      "module": "MB4",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Der Teilnehmer versteht, was ein Deepfake ist und warum eine Aufnahme allein kein Beweis mehr ist.",
+      "prompt": "Was ist ein Deepfake?",
+      "options": [
+        { "id": "A", "text": "Jede anonym im Internet veröffentlichte Videoaufnahme." },
+        { "id": "B", "text": "Ein Beauty-Filter, der in Social-Media-Apps verwendet wird." },
+        { "id": "C", "text": "Eine von KI generierte oder veränderte Aufnahme oder Stimme, die sich realistisch als echte Person ausgibt." },
+        { "id": "D", "text": "Ein per E-Mail verbreitetes Gerücht ohne jegliches Audio- oder Videomaterial." }
+      ],
+      "correct": ["C"],
+      "feedbackCorrect": "Ein Deepfake ist ein synthetisches Bild, Video oder eine Stimme, die eine echte Person imitiert. Wenn sich Stimme und Gesicht fälschen lassen, ist die Aufnahme allein kein Beweis mehr — entscheidend ist die Verifikation von Kanal und Kontext.",
+      "feedbackIncorrect": "Ein Deepfake ist von KI generierter Inhalt, der sich realistisch als echte Person ausgibt (Stimme, Gesicht, Video). Ein anonymes Video, ein Filter oder ein Gerücht sind nicht dasselbe Phänomen. Wiederhole den Abschnitt über Deepfakes.",
+      "references": ["MB4.1"]
+    },
+    {
+      "id": "Q136",
+      "module": "MB4",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Der Teilnehmer nennt typische Warnsignale eines KI-gestützten Betrugs.",
+      "prompt": "Welche Elemente einer Nachricht sind typische Warnsignale für Betrug? Wähle alle richtigen aus.",
+      "options": [
+        { "id": "A", "text": "Starker Zeitdruck: „du musst das innerhalb von 10 Minuten erledigen“." },
+        { "id": "B", "text": "Die Bitte kam während der Arbeitszeit von einer Person, mit der du oft sprichst." },
+        { "id": "C", "text": "Ein ungewöhnlicher Kontaktkanal: der „Geschäftsführer“ schreibt von einer privaten Nummer und bittet um eine Überweisung." },
+        { "id": "D", "text": "Die Nachricht enthält vollständige Absenderdaten, die mit dem Firmenadressbuch übereinstimmen." }
+      ],
+      "correct": ["A", "C"],
+      "feedbackCorrect": "Zeitdruck und ein ungewöhnlicher Kanal sind zwei klassische Signale des Social Engineering. Betrüger isolieren das Opfer von den normalen Verfahren und erzwingen Eile, um die Verifikation auszuschalten.",
+      "feedbackIncorrect": "Warnsignale sind der Zeitdruck (A) und der ungewöhnliche Kontaktkanal (C). Ein normales Gespräch während der Arbeitszeit oder korrekte Absenderdaten sind an sich nicht verdächtig — auch wenn sie keine Echtheit garantieren.",
+      "references": ["MB4.2"]
+    },
+    {
+      "id": "Q137",
+      "module": "MB4",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Der Teilnehmer wendet die Regel des zweiten Kanals bei einer ungewöhnlichen sprachlichen Bitte an.",
+      "prompt": "Die „Buchhalterin“ der Firma SklepDemo ruft dich an. Die Stimme klingt wie ihre, aber sie bittet dringend um die Anmeldedaten zum Fakturierungssystem, weil „das Audit läuft und das System gleich gesperrt wird“. Was tust du?",
+      "options": [
+        { "id": "A", "text": "Ich gebe die Daten heraus — die Stimme stimmt, und ein Audit klingt ernst." },
+        { "id": "B", "text": "Ich lege auf und rufe die Buchhalterin auf ihrer bekannten Firmennummer zurück, um die Bitte zu bestätigen; Anmeldedaten gebe ich niemandem mündlich weiter." },
+        { "id": "C", "text": "Ich gebe nur den Login heraus und sende das Passwort per SMS — über zwei Kanäle ist es sicherer." },
+        { "id": "D", "text": "Ich bitte sie, in einer Stunde noch einmal anzurufen — wenn es ein Betrüger ist, gibt er sicher auf." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Die Regel des zweiten Kanals: Du brichst den vom Anrufer initiierten Kontakt ab und verifizierst die Bitte über einen Kanal, den du selbst wählst (bekannte Nummer). Anmeldedaten gibt man niemandem mündlich weiter — eine Stimme lässt sich fälschen.",
+      "feedbackIncorrect": "Eine Stimme ist kein Identitätsnachweis — Audio-Deepfakes klingen überzeugend. Die einzig sichere Reaktion: auflegen und die Bitte über einen selbst gewählten, bekannten Kanal verifizieren (B). Das Aufteilen des Geheimnisses auf zwei Kanäle oder das Vertagen des Gesprächs schützt nicht.",
+      "references": ["MB4.2", "MB4.3"]
+    },
+    {
+      "id": "Q138",
+      "module": "MB4",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Der Teilnehmer reagiert richtig auf Videomaterial, das ein Deepfake sein könnte, bevor er es weitergibt.",
+      "prompt": "Ein Bekannter schickt dir eine Aufnahme, in der ein bekannter Politiker dazu aufruft, alle Ersparnisse von den Banken abzuheben, und bittet: „leite es weiter, die Leute müssen es wissen“. Die Aufnahme sieht glaubwürdig aus. Was tust du?",
+      "options": [
+        { "id": "A", "text": "Ich leite es weiter — besser die Leute vorsorglich warnen, und wenn es eine Fälschung ist, passiert nichts." },
+        { "id": "B", "text": "Ich leite es nur an die Familie weiter, mit dem Vermerk „ich weiß nicht, ob es echt ist“." },
+        { "id": "C", "text": "Ich antworte dem Bekannten, dass die Aufnahme verdächtig aussieht, frage ihn nach der Quelle und warte, bis er sie selbst bestätigt." },
+        { "id": "D", "text": "Ich leite nichts weiter; ich prüfe, ob unabhängige, verlässliche Quellen (offizielle Mitteilungen, Medien) die Information bestätigen, und melde die Fälschung auf der Plattform." }
+      ],
+      "correct": ["D"],
+      "feedbackCorrect": "Sensationsmaterial, das starke Emotionen auslöst und zum „Weiterleiten“ auffordert, ist das Muster der Desinformation. Bevor du irgendetwas teilst: Verifikation in unabhängigen Quellen, und Fälschungen melden — nicht weiterleiten, auch nicht „mit Vorbehalt“.",
+      "feedbackIncorrect": "Das Weiterleiten — auch „mit Vermerk“ oder nur an die Familie — treibt die Desinformation an, und den Bekannten nach der Quelle zu fragen verifiziert nichts (er hat es auch aus der Kettennachricht). Richtig: nicht weitergeben, in unabhängigen Quellen verifizieren, melden (D).",
+      "references": ["MB4.3", "MB4.4"]
+    },
+    {
+      "id": "Q139",
+      "module": "MB4",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Der Teilnehmer kennt den ersten Schritt des Verfahrens nach dem Erkennen eines Betrugsversuchs bei der Arbeit.",
+      "prompt": "Du erkennst, dass die E-Mail mit der Bitte um eine dringende Überweisung wahrscheinlich ein „CEO-Fraud“ ist. Was ist der richtige erste Schritt?",
+      "options": [
+        { "id": "A", "text": "Ich melde die Nachricht der IT-/Sicherheitsabteilung gemäß dem Unternehmensverfahren und antworte dem Absender nicht." },
+        { "id": "B", "text": "Ich antworte dem Betrüger, um ihm eine Lektion zu erteilen und zu sehen, ob er gesteht." },
+        { "id": "C", "text": "Ich lösche die E-Mail und sage niemandem etwas — das Problem verschwindet mit der Nachricht." },
+        { "id": "D", "text": "Ich leite die E-Mail mit einer Warnung an Kollegen weiter, bevor ich sie irgendwem melde." }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Die Meldung gemäß Verfahren ermöglicht es dem Unternehmen, den Angriff auch bei anderen Empfängern zu blockieren. Du antwortest dem Absender nicht (du würdest bestätigen, dass die Adresse aktiv ist) und löschst den Beweis nicht.",
+      "feedbackIncorrect": "Der richtige erste Schritt ist die Meldung an IT/Sicherheit (A). Dem Betrüger zu antworten bestätigt eine aktive Adresse, das Löschen der E-Mail vernichtet den Beweis und lässt andere ungeschützt, und eigenmächtig verschickte Warnungen sind oft ungenau — dafür gibt es das Verfahren.",
+      "references": ["MB4.4"]
+    },
+    {
+      "id": "Q140",
+      "module": "MB4",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Der Teilnehmer analysiert einen mehrkanaligen Angriff, der einen Deepfake mit einer E-Mail kombiniert, und wählt die vollständige, richtige Reaktion.",
+      "prompt": "Szenario: Zuerst erhältst du eine E-Mail vom „Finanzdirektor“ über eine vertrauliche Übernahme der Firma NotkaApp, und eine Stunde später ruft seine „Stimme“ an mit der Anweisung, sofort eine Rechnung bei einem neuen Lieferanten zu bezahlen. Die E-Mail hatte den Anruf angekündigt. Welche Analyse der Situation ist richtig?",
+      "options": [
+        { "id": "A", "text": "E-Mail und Anruf bestätigen sich gegenseitig, also ist die Anweisung glaubwürdig — zwei Kanäle sind eine ausreichende Verifikation." },
+        { "id": "B", "text": "Das ist das Muster eines mehrstufigen Angriffs: Beide Kanäle hat der Angreifer initiiert, also „bestätigen“ sie nur einander. Ich verifiziere über einen Kanal, den ich selbst initiiere (bekannte Nummer des Direktors), und melde den Vorfall." },
+        { "id": "C", "text": "Es reicht zu prüfen, ob die E-Mail-Adresse nach einer Firmenadresse aussieht — wenn die Domain stimmt, kann man zahlen." },
+        { "id": "D", "text": "Da die Sache vertraulich ist, darf ich sie mit niemandem verifizieren — ich führe die Anweisung aus und warte auf die offizielle Mitteilung." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Treffende Analyse: Die Ankündigung des Anrufs in der E-Mail ist gezielter Aufbau von Glaubwürdigkeit — zwei vom Angreifer kontrollierte Kanäle sind nicht unabhängig. Unabhängige Verifikation = ein Kanal, den DU initiierst; eine „Vertraulichkeit“, die die Verifikation verbietet, ist Teil des Angriffs.",
+      "feedbackIncorrect": "Zwei vom Angreifer initiierte Kanäle bestätigen nur einander — das ist ein klassischer mehrstufiger Angriff, und die „Vertraulichkeitsklausel“ soll dich von der Verifikation abschneiden. Auch eine stimmige Domain kann gefälscht sein. Die richtige Analyse: B.",
+      "references": ["MB4.2", "MB4.4"]
+    }
+  ]
+}

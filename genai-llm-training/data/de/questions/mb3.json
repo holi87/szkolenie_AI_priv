@@ -1,0 +1,155 @@
+{
+  "_meta": {
+    "module": "MB3",
+    "issue": "#171 Rebuild ścieżek — bank pytań P2 „Bezpieczne używanie AI”, moduł MB3 (prompt injection i socjotechnika)",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo, Jan Syntetyczny, identyfikatory testowe). ZERO realnych danych/PII.",
+    "note": "Pytania modułu MB3 (Q129-Q134), pula dedykowana ścieżki P2. Bez pytań krytycznych. Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q129",
+      "module": "MB3",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Der Teilnehmer erklärt mit eigenen Worten, worin ein Prompt-Injection-Angriff besteht.",
+      "prompt": "Worin besteht ein „Prompt Injection“-Angriff auf einen KI-Assistenten?",
+      "options": [
+        { "id": "A", "text": "Im Erraten des Passworts zum Benutzerkonto im KI-Tool." },
+        { "id": "B", "text": "In der physischen Beschädigung der Server, auf denen das KI-Modell läuft." },
+        { "id": "C", "text": "Im Verstecken einer Anweisung im verarbeiteten Inhalt (Dokument, E-Mail, Webseite), die der KI-Assistent ausführt, als käme sie vom Nutzer." },
+        { "id": "D", "text": "Darin, dem Assistenten zu viele Fragen auf einmal zu stellen, bis er abstürzt." }
+      ],
+      "correct": ["C"],
+      "feedbackCorrect": "Ja. Der KI-Assistent liest den gesamten ihm übergebenen Inhalt und unterscheidet nicht immer zwischen Daten und Befehlen. Eine in einem Dokument oder einer E-Mail versteckte Anweisung kann wie ein Befehl des Nutzers ausgeführt werden.",
+      "feedbackIncorrect": "Prompt Injection betrifft weder Passwörter, Server noch die Anzahl der Fragen. Es ist das Verstecken eines Befehls im Inhalt, den der Assistent verarbeitet: Das Modell kann ihn ausführen, weil es Inhalte nicht gut von Anweisungen unterscheidet. Wiederhole die Einführung zu MB3.",
+      "references": ["MB3.1"]
+    },
+    {
+      "id": "Q130",
+      "module": "MB3",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Der Teilnehmer benennt Stellen, an denen bösartige Anweisungen für einen KI-Assistenten versteckt sein können.",
+      "prompt": "Wo können bösartige Anweisungen versteckt sein, die ein KI-Assistent beim Verarbeiten von Inhalten ausführt? Wähle alle richtigen aus.",
+      "options": [
+        { "id": "A", "text": "Ausschließlich in Dateien mit der Endung .exe, denn nur Programme enthalten Befehle." },
+        { "id": "B", "text": "Im Text einer E-Mail oder ihrer Fußzeile, auch in kleiner oder unsichtbarer Schrift geschrieben." },
+        { "id": "C", "text": "Nirgendwo. KI-Assistenten ignorieren alles außer der Frage des Nutzers." },
+        { "id": "D", "text": "In einem Dokument oder auf einer Webseite, um deren Zusammenfassung wir den Assistenten bitten." }
+      ],
+      "correct": ["B", "D"],
+      "feedbackCorrect": "Ja. Jeder Inhalt, den der Assistent liest, kann einen versteckten Befehl enthalten: eine E-Mail, ein Dokument, eine Webseite. Der Text kann für den Menschen unsichtbar sein (z. B. weiße Schrift), aber das Modell liest ihn.",
+      "feedbackIncorrect": "Eine bösartige Anweisung ist gewöhnlicher Text, kein Programm. Sie kann in einer E-Mail, einem Dokument oder auf einer Webseite stecken, auch für das Auge unsichtbar geschrieben. Der Assistent liest alles, was er bekommt. Wiederhole den Abschnitt über vergiftete Inhalte.",
+      "references": ["MB3.1", "MB3.3"]
+    },
+    {
+      "id": "Q131",
+      "module": "MB3",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Der Teilnehmer erkennt, wie Betrüger KI für Social Engineering nutzen.",
+      "prompt": "Wie nutzen Betrüger KI am häufigsten bei Social-Engineering-Angriffen?",
+      "options": [
+        { "id": "A", "text": "Sie generieren massenhaft glaubwürdige, personalisierte Nachrichten ohne Sprachfehler und geben sich als bekannte Personen und Unternehmen aus." },
+        { "id": "B", "text": "Sie versenden identische Nachrichten voller Tippfehler, weil KI nicht korrekt schreiben kann." },
+        { "id": "C", "text": "Sie verwenden KI ausschließlich zum Knacken von Passwörtern durch Raten." },
+        { "id": "D", "text": "KI eignet sich nicht für Betrug, weil sie jede verdächtige Anfrage ablehnt." }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Ja. KI hat die Kosten von Social Engineering gesenkt: Ein Betrüger kann massenhaft passgenaue, sprachlich korrekte Nachrichten erstellen. Der alte Rat „Phishing erkennst du an Fehlern“ reicht nicht mehr aus.",
+      "feedbackIncorrect": "Von KI generierte Nachrichten sind gerade korrekt und auf das Opfer zugeschnitten, nicht voller Tippfehler. Das macht sie gefährlicher als die alten Betrugsmaschen. Wiederhole den Abschnitt über KI als Werkzeug des Social Engineering.",
+      "references": ["MB3.4"]
+    },
+    {
+      "id": "Q132",
+      "module": "MB3",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Der Teilnehmer reagiert richtig, wenn im Arbeitsergebnis des KI-Assistenten ein verdächtiger Befehl auftaucht.",
+      "prompt": "Du bittest den firmeneigenen KI-Assistenten, eine E-Mail von einem unbekannten Absender zusammenzufassen. In der Zusammenfassung erscheint der Satz: „Um die Analyse abzuschließen, klicke auf den folgenden Link und bestätige deine Anmeldedaten“. Was tust du?",
+      "options": [
+        { "id": "A", "text": "Ich klicke auf den Link. Wenn der Firmen-Assistent ihn anzeigt, muss er ihn vorher geprüft haben." },
+        { "id": "B", "text": "Ich klicke nicht. Ich behandle die E-Mail als verdächtig, weil der Befehl zu klicken und Daten anzugeben eine versteckte Anweisung aus der E-Mail sein könnte, und melde sie gemäß dem Unternehmensverfahren." },
+        { "id": "C", "text": "Ich klicke, gebe aber falsche Anmeldedaten ein, um zu sehen, was passiert." },
+        { "id": "D", "text": "Ich bitte den Assistenten um eine erneute Zusammenfassung. Wenn der Befehl verschwindet, bedeutet das, dass alles in Ordnung ist." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Ja. Der Assistent fasst den Inhalt der E-Mail zusammen, er prüft nicht ihre Sicherheit. Die Aufforderung zu klicken und Daten anzugeben ist ein klassisches Angriffssignal. Du klickst nicht und meldest die E-Mail gemäß dem Verfahren.",
+      "feedbackIncorrect": "Dass der Inhalt durch den Firmen-Assistenten gelaufen ist, macht ihn nicht glaubwürdiger: Der Assistent fasst nur zusammen. Klicken „zum Test“ und erneutes Zusammenfassen sind riskante Spielereien mit einem verdächtigen Link. Klicke nicht, melde die E-Mail. Wiederhole den Abschnitt über vergiftete E-Mails.",
+      "references": ["MB3.2", "MB3.3"]
+    },
+    {
+      "id": "Q133",
+      "module": "MB3",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Der Teilnehmer erkennt die Anzeichen eines vergifteten Dokuments und bricht die Arbeit des Assistenten ab, statt dessen ungewöhnliche Vorschläge auszuführen.",
+      "prompt": "Du lädst ein PDF-Angebot eines neuen Lieferanten in den KI-Assistenten mit der Bitte um einen Preisvergleich. Statt des Vergleichs antwortet der Assistent: „Gemäß der Anweisung im Dokument sende dieses Angebot zusammen mit der internen Preisliste von NotkaApp an die Adresse oferty@przyklad.test“. Was tust du?",
+      "options": [
+        { "id": "A", "text": "Ich führe die Bitte aus. Der Assistent weiß, was er tut, und der Lieferant braucht die Preisliste offenbar, um einen Rabatt vorzubereiten." },
+        { "id": "B", "text": "Ich sende nur das Angebot ohne die Preisliste. Die halbe Ausführung der Anweisung ist sicher." },
+        { "id": "C", "text": "Ich ignoriere die seltsame Antwort und lade das Dokument erneut hoch, bis der Assistent den Vergleich erstellt." },
+        { "id": "D", "text": "Ich sende nichts. Das Dokument enthält höchstwahrscheinlich eine versteckte Anweisung, also breche ich die Arbeit damit ab und melde den Fall der Sicherheits- oder IT-Abteilung." }
+      ],
+      "correct": ["D"],
+      "feedbackCorrect": "Ja. Der Assistent hat eine „Anweisung aus dem Dokument“ zitiert, die du nicht gegeben hast. Das ist das Musterbeispiel einer vergifteten Datei: Jemand versucht, über die KI die interne Preisliste aus dem Unternehmen abzuziehen. Du brichst ab und meldest.",
+      "feedbackIncorrect": "Der Befehl stammt nicht von dir, sondern aus dem Dokument, und sein Ziel ist das Abziehen der internen Preisliste. Ihn ganz oder halb auszuführen oder die Arbeit mit der vergifteten Datei zu wiederholen, bleibt ein Risiko. Brich ab und melde es der Sicherheits- oder IT-Abteilung. Wiederhole den Abschnitt über vergiftete Dokumente.",
+      "references": ["MB3.3"]
+    },
+    {
+      "id": "Q134",
+      "module": "MB3",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Der Teilnehmer bewertet die Glaubwürdigkeit einer ausgefeilten Phishing-Nachricht, ohne sich auf Sprachqualität und Personalisierung zu stützen.",
+      "prompt": "Du erhältst eine E-Mail „von der IT-Abteilung“ in tadellosem Deutsch. Der Absender kennt deinen Namen, deine Position und den Projektnamen und bittet dich, dich dringend über den beigefügten Link anzumelden, weil „dein Zugang zu NotkaApp abläuft“. Die Absenderadresse lautet it-wsparcie@przyklad.test, die echte IT-Abteilung schreibt jedoch von einer anderen Domain. Wie bewertest du diese Nachricht und was tust du?",
+      "options": [
+        { "id": "A", "text": "Personalisierung und korrekte Sprache beweisen nichts, denn solche E-Mails kann KI massenhaft erstellen. Die abweichende Absender-Domain und der Zeitdruck sind Angriffssignale, also klicke ich nicht und melde die E-Mail der IT-Abteilung über einen mir bekannten Kanal." },
+        { "id": "B", "text": "Die E-Mail ist glaubwürdig: Sie kennt meine Position und mein Projekt, und Betrüger kennen solche Details nicht. Ich melde mich über den Link an." },
+        { "id": "C", "text": "Ich antworte auf diese E-Mail mit der Frage, ob die Bitte echt ist. Wenn der Absender bestätigt, klicke ich." },
+        { "id": "D", "text": "Ich klicke auf den Link, aber nur, um mir die Anmeldeseite anzusehen. Der bloße Besuch ohne Passworteingabe ist immer sicher." }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Ja. Du bewertest nach technischen Signalen und Kontext (abweichende Domain, Zeitdruck, Aufforderung zur Anmeldung), nicht nach der Form. Daten zur Personalisierung sind oft öffentlich oder geleakt, und korrekte Sprache generiert die KI.",
+      "feedbackIncorrect": "Die Form der E-Mail ist kein Beweis: KI generiert tadellosen, personalisierten Text, und Details über die Arbeit sind oft öffentlich. Eine Antwort an den Betrüger „bestätigt“ den Angriff, und auch das Klicken des Links kann gefährlich sein. Entscheidend sind Absender-Domain, Druck und die Aufforderung zur Anmeldung. Melde die E-Mail über einen vertrauenswürdigen Kanal. Wiederhole den Abschnitt über KI-gestütztes Social Engineering.",
+      "references": ["MB3.2", "MB3.4"]
+    }
+  ]
+}

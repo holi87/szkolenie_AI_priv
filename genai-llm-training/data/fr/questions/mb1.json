@@ -1,0 +1,155 @@
+{
+  "_meta": {
+    "module": "MB1",
+    "issue": "#171 Rebuild ścieżek — bank pytań P2 „Bezpieczne używanie AI”, moduł MB1 (mapa ryzyk AI)",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo, Jan Syntetyczny, identyfikatory testowe). ZERO realnych danych/PII.",
+    "note": "Pytania modułu MB1 (Q117-Q122), pula dedykowana ścieżki P2. Bez pytań krytycznych. Plik <800 LOC (AGENTS). Tłumaczenie FR."
+  },
+  "questions": [
+    {
+      "id": "Q117",
+      "module": "MB1",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Le participant explique ce qu'est une hallucination de l'IA et pourquoi elle semble crédible.",
+      "prompt": "Qu'est-ce qu'une « hallucination » dans les réponses des outils d'IA ?",
+      "options": [
+        { "id": "A", "text": "Une erreur technique après laquelle l'outil cesse de répondre et doit être redémarré." },
+        { "id": "B", "text": "Une réponse au ton assuré contenant des faits, des sources ou des chiffres inventés qui n'existent pas." },
+        { "id": "C", "text": "Une situation dans laquelle l'IA refuse de répondre à la question de l'utilisateur." },
+        { "id": "D", "text": "Un mensonge délibéré programmé par le fabricant de l'outil." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Oui. Une hallucination est une réponse inventée, mais donnée sur un ton assuré et dans une langue correcte. C'est précisément cette forme crédible qui fait qu'on la prend facilement pour la vérité.",
+      "feedbackIncorrect": "Une hallucination n'est ni une panne, ni un refus, ni un mensonge délibéré du fabricant. C'est un contenu inventé (faits, sources, chiffres) que le modèle présente avec autant d'assurance que la vérité. Revoyez la section sur les hallucinations dans MB1.",
+      "references": ["MB1.1"]
+    },
+    {
+      "id": "Q118",
+      "module": "MB1",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Le participant identifie les principaux risques de l'utilisation quotidienne des outils d'IA publics.",
+      "prompt": "Parmi les éléments suivants, lesquels sont des risques réels de l'utilisation quotidienne d'un chat IA public au travail ? Indiquez toutes les réponses correctes.",
+      "options": [
+        { "id": "A", "text": "Des données d'entreprise collées dans le chat peuvent quitter l'entreprise et échapper à son contrôle." },
+        { "id": "B", "text": "L'outil d'IA peut s'introduire de lui-même dans le réseau de l'entreprise après qu'on lui a posé une question." },
+        { "id": "C", "text": "La réponse peut contenir des informations inventées que nous transmettrons sans esprit critique." },
+        { "id": "D", "text": "Toute utilisation de l'IA enfreint automatiquement la loi, quel que soit le contenu de la question." }
+      ],
+      "correct": ["A", "C"],
+      "feedbackCorrect": "Exactement : les deux risques quotidiens sont la fuite des données collées hors de l'entreprise et les hallucinations que nous propageons sans esprit critique. Les deux dépendent de ce que nous collons, de la manière dont nous le faisons et de la vérification de la réponse.",
+      "feedbackIncorrect": "Les risques réels sont la fuite des données collées (A) et la propagation d'un contenu inventé (C). Un chat IA ne s'introduit pas dans le réseau parce qu'on lui pose une question, et la simple utilisation de l'IA n'enfreint pas la loi. Révisez la carte des risques de MB1.",
+      "references": ["MB1.1", "MB1.2"]
+    },
+    {
+      "id": "Q119",
+      "module": "MB1",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Le participant reconnaît les signes d'une confiance excessive envers les outils d'IA dans le travail quotidien.",
+      "prompt": "Quel comportement est un signe de confiance excessive envers l'IA ?",
+      "options": [
+        { "id": "A", "text": "Comparer la réponse de l'IA à la documentation de l'entreprise avant de l'utiliser." },
+        { "id": "B", "text": "Demander à l'IA de justifier sa réponse et vérifier les sources fournies." },
+        { "id": "C", "text": "Traiter l'IA comme une aide pour un brouillon que l'on corrige ensuite soi-même." },
+        { "id": "D", "text": "Transmettre la réponse de l'IA sans la vérifier, parce que « l'IA ne se trompe jamais »." }
+      ],
+      "correct": ["D"],
+      "feedbackCorrect": "Oui. La confiance excessive, c'est renoncer à sa propre vérification. Supposer que l'IA ne se trompe pas est faux : le modèle peut être sûr de lui et se tromper en même temps.",
+      "feedbackIncorrect": "Comparer à la documentation, vérifier les sources et corriger soi-même un brouillon sont de saines habitudes. Le signe d'une confiance excessive est de transmettre une réponse sans aucune vérification. Revoyez la section sur la confiance excessive.",
+      "references": ["MB1.4"]
+    },
+    {
+      "id": "Q120",
+      "module": "MB1",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Le participant applique le principe de vérification du contenu IA avant de l'envoyer à un client.",
+      "prompt": "Jean Synthétique, du service commercial de SklepDemo, a généré dans un chat IA une réponse pour un client avec la description des caractéristiques d'un produit et veut l'envoyer immédiatement, parce qu'elle « sonne professionnel ». Vous savez que l'IA n'avait pas accès à l'offre actuelle. Que lui conseillez-vous ?",
+      "options": [
+        { "id": "A", "text": "Avant d'envoyer, qu'il compare chaque caractéristique avec la fiche produit actuelle, car l'IA a pu inventer des détails qu'elle ne connaissait pas." },
+        { "id": "B", "text": "Qu'il envoie. Le ton professionnel de la réponse prouve que le contenu est correct." },
+        { "id": "C", "text": "Qu'il demande à l'IA, dans le même chat, si elle est sûre de sa réponse, et qu'il envoie si elle confirme." },
+        { "id": "D", "text": "Qu'il génère la réponse une nouvelle fois. Si la deuxième version est similaire, c'est qu'elle est vraie." }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Oui. Puisque l'IA ne connaissait pas l'offre actuelle, les caractéristiques peuvent être inventées. La seule vérification fiable est la comparaison avec la source de vérité de l'entreprise, c'est-à-dire la fiche produit.",
+      "feedbackIncorrect": "Un ton professionnel ne prouve pas l'exactitude, et demander à l'IA « es-tu sûre ? » ou régénérer la réponse, c'est toujours la même machine non fiable. Comparez le contenu destiné au client avec la source de l'entreprise (la fiche produit) avant l'envoi.",
+      "references": ["MB1.1", "MB1.4"]
+    },
+    {
+      "id": "Q121",
+      "module": "MB1",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Le participant réagit correctement lorsque l'IA fournit une source ou une disposition légale inventée.",
+      "prompt": "Vous préparez une note interne dans NotkaApp. Le chat IA vous a fourni le texte d'une « disposition légale » avec un numéro d'article et une justification assurée, mais vous ne trouvez pas cet article sur le site officiel des textes de loi. Que faites-vous ?",
+      "options": [
+        { "id": "A", "text": "Je cite la disposition issue de la réponse de l'IA. Le numéro d'article et le ton assuré suffisent comme confirmation." },
+        { "id": "B", "text": "Je cite la disposition, mais j'ajoute « source : IA » dans la note, pour reporter la responsabilité sur l'outil." },
+        { "id": "C", "text": "Je considère que la disposition peut être une hallucination, je ne la cite pas et je fonde la note sur un contenu trouvé dans une source officielle ou confirmé par une personne compétente." },
+        { "id": "D", "text": "Je demande à l'IA un lien vers la disposition et je la cite si un lien quelconque apparaît." }
+      ],
+      "correct": ["C"],
+      "feedbackCorrect": "Oui. Puisque la source officielle ne confirme pas l'existence de la disposition, il s'agit très probablement d'une hallucination. Seul un contenu confirmé par une source fiable ou par une personne compétente entre dans la note.",
+      "feedbackIncorrect": "Le numéro d'article, le ton assuré, la mention « source : IA » ou un lien généré ne confirment rien. L'IA sait aussi inventer des liens. Si la source officielle ne connaît pas la disposition, ne la citez pas. Revoyez la section sur les hallucinations et la vérification.",
+      "references": ["MB1.1", "MB1.4"]
+    },
+    {
+      "id": "Q122",
+      "module": "MB1",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Le participant évalue une situation où plusieurs risques liés à l'IA se combinent et choisit la réaction qui les limite tous.",
+      "prompt": "Anne Exemple, du service RH, se vante que son nouvel assistant IA public « connaît l'entreprise mieux que l'intranet » : elle y a collé le règlement interne et la liste des salariés, et elle l'interroge désormais chaque jour sur des questions RH en appliquant les réponses sans les vérifier. Quel résumé de la situation est le plus juste ?",
+      "options": [
+        { "id": "A", "text": "La situation est sûre, car l'assistant répond avec justesse et, de toute façon, tout le monde dans l'entreprise connaît les données RH." },
+        { "id": "B", "text": "Le seul problème est la qualité des réponses. Il suffit qu'Anne vérifie les contenus, et elle peut continuer à coller des documents." },
+        { "id": "C", "text": "Le seul problème, ce sont les documents collés. On peut désormais faire confiance, sans vérification, aux réponses d'un assistant qui « connaît l'entreprise »." },
+        { "id": "D", "text": "Deux risques se superposent ici : les données des salariés et les documents internes ont fui vers un outil public, et les réponses appliquées sans vérification peuvent contenir des hallucinations. Il faut arrêter cette pratique et signaler la fuite conformément à la procédure de l'entreprise." }
+      ],
+      "correct": ["D"],
+      "feedbackCorrect": "Oui. Ce sont deux risques indépendants à la fois : une fuite de données personnelles et de documents internes, et une confiance excessive dans des réponses non vérifiées. La réaction doit couvrir les deux : arrêter la pratique et signaler la fuite.",
+      "feedbackIncorrect": "Évaluation incomplète. Le problème est à la fois la fuite (liste des salariés et règlement dans un outil public) et la confiance excessive (application des réponses sans vérification). N'en corriger qu'un seul ne suffit pas. Révisez la carte des risques de MB1.",
+      "references": ["MB1.2", "MB1.3", "MB1.4"]
+    }
+  ]
+}

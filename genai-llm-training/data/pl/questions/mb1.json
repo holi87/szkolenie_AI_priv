@@ -1,0 +1,155 @@
+{
+  "_meta": {
+    "module": "MB1",
+    "issue": "#171 Rebuild ścieżek — bank pytań P2 „Bezpieczne używanie AI”, moduł MB1 (mapa ryzyk AI)",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo, Jan Syntetyczny, identyfikatory testowe). ZERO realnych danych/PII.",
+    "note": "Pytania modułu MB1 (Q117-Q122), pula dedykowana ścieżki P2. Bez pytań krytycznych. Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q117",
+      "module": "MB1",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik wyjaśnia, czym jest halucynacja AI i dlaczego brzmi wiarygodnie.",
+      "prompt": "Czym jest „halucynacja” w odpowiedziach narzędzi AI?",
+      "options": [
+        { "id": "A", "text": "Błąd techniczny, po którym narzędzie przestaje odpowiadać i trzeba je zrestartować." },
+        { "id": "B", "text": "Pewnie brzmiąca odpowiedź zawierająca zmyślone fakty, źródła lub liczby, które nie istnieją." },
+        { "id": "C", "text": "Sytuacja, w której AI odmawia odpowiedzi na pytanie użytkownika." },
+        { "id": "D", "text": "Celowe kłamstwo zaprogramowane przez producenta narzędzia." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Tak. Halucynacja to odpowiedź zmyślona, ale podana pewnym tonem i poprawnym językiem. Właśnie ta wiarygodna forma sprawia, że łatwo ją wziąć za prawdę.",
+      "feedbackIncorrect": "Halucynacja to nie awaria, odmowa ani celowe kłamstwo producenta. To zmyślona treść (fakty, źródła, liczby), którą model podaje równie pewnie jak prawdziwą. Wróć do sekcji o halucynacjach w MB1.",
+      "references": ["MB1.1"]
+    },
+    {
+      "id": "Q118",
+      "module": "MB1",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik wskazuje główne ryzyka codziennego korzystania z publicznych narzędzi AI.",
+      "prompt": "Które z poniższych to realne ryzyka codziennego korzystania z publicznego czatu AI w pracy? Wskaż wszystkie poprawne.",
+      "options": [
+        { "id": "A", "text": "Wklejone dane firmowe mogą opuścić firmę i trafić poza jej kontrolę." },
+        { "id": "B", "text": "Narzędzie AI może samo włamać się do firmowej sieci po zadaniu pytania." },
+        { "id": "C", "text": "Odpowiedź może zawierać zmyślone informacje, które bezkrytycznie przekażemy dalej." },
+        { "id": "D", "text": "Każde użycie AI automatycznie łamie prawo, niezależnie od treści pytania." }
+      ],
+      "correct": ["A", "C"],
+      "feedbackCorrect": "Dokładnie: dwa codzienne ryzyka to wyciek wklejonych danych poza firmę oraz halucynacje, które bezkrytycznie powielamy. Oba zależą od tego, co i jak wkleimy oraz czy sprawdzimy odpowiedź.",
+      "feedbackIncorrect": "Realne ryzyka to wyciek wklejonych danych (A) i powielenie zmyślonej treści (C). Czat AI nie włamuje się do sieci od zadania pytania, a samo korzystanie z AI nie łamie prawa. Powtórz mapę ryzyk z MB1.",
+      "references": ["MB1.1", "MB1.2"]
+    },
+    {
+      "id": "Q119",
+      "module": "MB1",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Uczestnik rozpoznaje objawy nadmiernego zaufania do narzędzi AI w codziennej pracy.",
+      "prompt": "Które zachowanie jest objawem nadmiernego zaufania do AI?",
+      "options": [
+        { "id": "A", "text": "Porównanie odpowiedzi AI z firmową dokumentacją przed jej użyciem." },
+        { "id": "B", "text": "Dopytywanie AI o uzasadnienie i sprawdzanie podanych źródeł." },
+        { "id": "C", "text": "Traktowanie AI jako pomocy przy szkicu, który potem samodzielnie poprawiamy." },
+        { "id": "D", "text": "Przekazywanie odpowiedzi AI dalej bez sprawdzenia, bo „AI się przecież nie myli”." }
+      ],
+      "correct": ["D"],
+      "feedbackCorrect": "Tak. Nadmierne zaufanie to rezygnacja z własnej weryfikacji. Założenie, że AI się nie myli, jest fałszywe: model bywa pewny i jednocześnie w błędzie.",
+      "feedbackIncorrect": "Porównywanie z dokumentacją, sprawdzanie źródeł i samodzielne poprawianie szkicu to zdrowe nawyki. Objawem nadmiernego zaufania jest przekazywanie odpowiedzi dalej bez żadnej weryfikacji. Powtórz sekcję o nadmiernym zaufaniu.",
+      "references": ["MB1.4"]
+    },
+    {
+      "id": "Q120",
+      "module": "MB1",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik stosuje zasadę weryfikacji treści AI przed wysłaniem jej do klienta.",
+      "prompt": "Jan Syntetyczny z działu sprzedaży SklepDemo wygenerował w czacie AI odpowiedź dla klienta z opisem parametrów produktu i chce ją od razu wysłać, bo „brzmi profesjonalnie”. Wiesz, że AI nie miało dostępu do aktualnej oferty. Co mu radzisz?",
+      "options": [
+        { "id": "A", "text": "Zanim wyśle, niech porówna każdy parametr z aktualną kartą produktu, bo AI mogło zmyślić szczegóły, których nie znało." },
+        { "id": "B", "text": "Niech wysyła. Profesjonalny ton odpowiedzi świadczy o tym, że treść jest poprawna." },
+        { "id": "C", "text": "Niech zapyta AI w tym samym czacie, czy jest pewne swojej odpowiedzi, i wyśle, jeśli potwierdzi." },
+        { "id": "D", "text": "Niech wygeneruje odpowiedź jeszcze raz. Jeśli druga wersja będzie podobna, znaczy że jest prawdziwa." }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Tak. Skoro AI nie znało aktualnej oferty, parametry mogą być zmyślone. Jedyną wiarygodną weryfikacją jest porównanie z firmowym źródłem prawdy, czyli kartą produktu.",
+      "feedbackIncorrect": "Profesjonalny ton nie dowodzi poprawności, a pytanie AI „czy jesteś pewne” lub powtórzenie generacji to dalej ta sama niewiarygodna maszyna. Treść dla klienta porównaj z firmowym źródłem (kartą produktu) przed wysyłką.",
+      "references": ["MB1.1", "MB1.4"]
+    },
+    {
+      "id": "Q121",
+      "module": "MB1",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik reaguje poprawnie, gdy AI podaje zmyślone źródło lub przepis.",
+      "prompt": "Przygotowujesz wewnętrzną notatkę w NotkaApp. Czat AI podał Ci treść „przepisu prawnego” z numerem artykułu i pewnym uzasadnieniem, ale w oficjalnym serwisie z przepisami nie możesz znaleźć takiego artykułu. Co robisz?",
+      "options": [
+        { "id": "A", "text": "Cytuję przepis z odpowiedzi AI. Numer artykułu i pewny ton wystarczą jako potwierdzenie." },
+        { "id": "B", "text": "Cytuję przepis, ale dopisuję w notatce „źródło: AI”, żeby przenieść odpowiedzialność na narzędzie." },
+        { "id": "C", "text": "Uznaję, że przepis może być halucynacją, nie cytuję go i opieram notatkę na treści znalezionej w oficjalnym źródle albo potwierdzonej przez osobę kompetentną." },
+        { "id": "D", "text": "Proszę AI o podanie linku do przepisu i cytuję, jeśli jakikolwiek link się pojawi." }
+      ],
+      "correct": ["C"],
+      "feedbackCorrect": "Tak. Skoro oficjalne źródło nie potwierdza istnienia przepisu, to najpewniej halucynacja. Do notatki trafia tylko treść potwierdzona w wiarygodnym źródle lub przez kompetentną osobę.",
+      "feedbackIncorrect": "Numer artykułu, pewny ton, dopisek „źródło: AI” ani wygenerowany link niczego nie potwierdzają. AI potrafi zmyślić również linki. Jeśli oficjalne źródło nie zna przepisu, nie cytuj go. Powtórz sekcję o halucynacjach i weryfikacji.",
+      "references": ["MB1.1", "MB1.4"]
+    },
+    {
+      "id": "Q122",
+      "module": "MB1",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Uczestnik ocenia sytuację, w której łączą się różne ryzyka AI, i wybiera reakcję ograniczającą wszystkie z nich.",
+      "prompt": "Anna Testowa z działu HR chwali się, że nowy publiczny asystent AI „zna firmę lepiej niż intranet”: wkleiła do niego wewnętrzny regulamin i listę pracowników, a teraz codziennie pyta go o sprawy kadrowe i stosuje odpowiedzi bez sprawdzania. Które podsumowanie sytuacji jest najtrafniejsze?",
+      "options": [
+        { "id": "A", "text": "Sytuacja jest bezpieczna, bo asystent odpowiada trafnie, a dane HR i tak zna każdy w firmie." },
+        { "id": "B", "text": "Jedyny problem to jakość odpowiedzi. Wystarczy, że Anna będzie sprawdzać treści, a wklejanie dokumentów może kontynuować." },
+        { "id": "C", "text": "Jedyny problem to wklejone dokumenty. Odpowiedziom asystenta, który „zna firmę”, można już ufać bez sprawdzania." },
+        { "id": "D", "text": "Nakładają się tu dwa ryzyka: dane pracowników i wewnętrzne dokumenty wyciekły do publicznego narzędzia, a odpowiedzi stosowane bez weryfikacji mogą zawierać halucynacje. Trzeba przerwać tę praktykę i zgłosić wyciek zgodnie z firmową procedurą." }
+      ],
+      "correct": ["D"],
+      "feedbackCorrect": "Tak. To dwa niezależne ryzyka naraz: wyciek danych osobowych i dokumentów wewnętrznych oraz nadmierne zaufanie do niesprawdzanych odpowiedzi. Reakcja musi objąć oba: zatrzymanie praktyki i zgłoszenie wycieku.",
+      "feedbackIncorrect": "Niepełna ocena. Problemem jest zarówno wyciek (lista pracowników i regulamin w publicznym narzędziu), jak i nadmierne zaufanie (stosowanie odpowiedzi bez sprawdzania). Naprawienie tylko jednego z nich nie wystarczy. Powtórz mapę ryzyk z MB1.",
+      "references": ["MB1.2", "MB1.3", "MB1.4"]
+    }
+  ]
+}

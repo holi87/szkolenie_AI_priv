@@ -1,0 +1,99 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P2 Bezpieczne używanie AI",
+    "interaction": "Klasyfikacja: sygnał ostrzegawczy vs normalna sytuacja (kind: classify)",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp/SklepDemo, przyklad.test, Jan Syntetyczny). ZERO realnych danych/PII. Tłumaczenie wietnamskie (vi)."
+  },
+  "module": "MB4",
+  "intro": "Giọng nói có thể bị làm giả từ vài chục giây ghi âm, khuôn mặt từ vài tấm ảnh. Bản ghi không còn là bằng chứng — nhưng các trò lừa đảo có AI hỗ trợ vẫn tự lộ mình bằng những thứ quen thuộc: áp lực, kênh liên lạc bất thường và yêu cầu tiền hoặc dữ liệu. Module này dạy bạn nhận diện chúng và phản ứng đúng cách.",
+  "screens": [
+    {
+      "id": "mb4-s1-deepfake",
+      "title": "Deepfake: giọng nói và khuôn mặt theo đơn đặt hàng",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Deepfake", "text": "Bản ghi (giọng nói, ảnh, video) do AI tạo ra hoặc chỉnh sửa, mạo danh một người thật một cách chân thực." },
+        { "kind": "paragraph", "text": "Trước đây, làm giả giọng nói cần đến phòng thu và diễn viên. Ngày nay chỉ cần một mẫu từ mạng xã hội và một công cụ phổ biến. Hệ quả thực tế: “tôi đã nghe giọng anh ấy” và “tôi đã thấy cô ấy trên video” không còn là bằng chứng danh tính nữa." },
+        { "kind": "callout", "variant": "warn", "title": "Trò lừa “giả danh sếp” và “giả danh cháu 2.0”", "text": "Vẫn những kịch bản cũ, chỉ thay động cơ mới: cuộc gọi với giọng của sếp về một khoản chuyển tiền gấp, hoặc “đứa cháu” xin tiền. Giọng nói khớp, kịch bản cũng khớp — và chính kịch bản, chứ không phải giọng nói, mới là thứ phải bật chuông báo động trong bạn." }
+      ]
+    },
+    {
+      "id": "mb4-s2-sygnaly",
+      "title": "Các dấu hiệu cảnh báo",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Khi hình thức (giọng nói, khuôn mặt, ngôn ngữ) có thể hoàn hảo, hãy đánh giá hoàn cảnh. Các trò lừa đảo hầu như luôn kết hợp vài yếu tố sau:" },
+        { "kind": "list", "items": [
+          "Áp lực thời gian: “ngay lập tức”, “trong vòng một giờ”, “trước khi hệ thống bị khóa”.",
+          "Bí mật: “đừng nói với ai”, “việc tuyệt mật, chỉ giữa chúng ta”.",
+          "Kênh bất thường: số riêng, ứng dụng chat mới, tài khoản “dự phòng”.",
+          "Yêu cầu tiền, thông tin đăng nhập hoặc mã xác nhận.",
+          "Phá lệ quy trình: “lần này bỏ qua thủ tục đi”."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Nguyên tắc", "text": "Một dấu hiệu là lý do để cảnh giác. Hai dấu hiệu trở lên — hãy coi đó là một nỗ lực lừa đảo cho đến khi bạn xác minh được điều ngược lại." }
+      ]
+    },
+    {
+      "id": "mb4-s3-drugi-kanal",
+      "title": "Nguyên tắc kênh thứ hai",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Cách phòng vệ hiệu quả nhất không cần đến công nghệ: ngắt liên lạc mà người kia khởi xướng, rồi xác minh sự việc qua một kênh do chính bạn lựa chọn. Gọi lại số có sẵn trong danh bạ. Đi đến tận bàn làm việc. Viết vào địa chỉ công ty quen thuộc." },
+        { "kind": "table", "headers": ["Tình huống", "Xác minh qua kênh thứ hai"], "rows": [
+          ["Cuộc gọi của “sếp” về khoản chuyển tiền gấp", "Cúp máy, gọi vào số quen thuộc của sếp hoặc xác nhận trực tiếp"],
+          ["Cuộc gọi video với “đối tác” muốn đổi số tài khoản", "Gọi vào số ghi trong hợp đồng, không phải số trong tin nhắn"],
+          ["SMS từ “con” với số mới xin tiền", "Gọi vào số cũ, quen thuộc của con"]
+        ], "textAlt": "Các ví dụ xác minh qua kênh thứ hai: luôn là liên lạc do chính bạn khởi xướng tới số hoặc địa chỉ đã biết từ trước, không bao giờ qua kênh được chỉ ra trong tin nhắn đáng ngờ." },
+        { "kind": "callout", "variant": "safe", "title": "Mấu chốt", "text": "Kênh thứ hai chỉ hiệu quả khi BẠN là người khởi xướng nó. Số “để xác nhận” được ghi trong tin nhắn đáng ngờ vẫn là kênh của kẻ lừa đảo." }
+      ]
+    },
+    {
+      "id": "mb4-s4-zgloszenie",
+      "title": "Quy trình báo cáo",
+      "type": "content",
+      "blocks": [
+        { "kind": "list", "ordered": true, "items": [
+          "Đừng hành động dưới áp lực: không trả lời ngay lập tức không phải là sai sót, đó là quy trình.",
+          "Giữ lại bằng chứng: tin nhắn, số điện thoại, bản ghi — đừng xóa gì cả.",
+          "Tại nơi làm việc: báo cho bộ phận IT/an ninh. Việc cá nhân: báo công an và báo cáo trên nền tảng nơi cuộc liên lạc xuất phát.",
+          "Cảnh báo người bị mạo danh — hình ảnh của họ đã bị lợi dụng và họ có thể là mục tiêu của những lần tiếp theo."
+        ] },
+        { "kind": "paragraph", "text": "Đừng lan truyền thông tin sai lệch, kể cả “kèm lời cảnh báo” — mỗi lần chia sẻ là một lần tăng độ phủ của tin giả. Thay vào đó, hãy báo cáo nội dung trên nền tảng và, nếu chủ đề quan trọng, chia sẻ đường dẫn đến nguồn đã được kiểm chứng." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "mb4-classify",
+    "title": "Dấu hiệu cảnh báo hay tình huống bình thường?",
+    "intro": "Hãy đánh giá từng tình huống: nó chứa các dấu hiệu của một vụ lừa đảo hoặc deepfake tiềm tàng, hay là bình thường? Phần phản hồi giải thích cần nhìn vào đâu.",
+    "categories": [
+      { "id": "warning", "label": "Dấu hiệu cảnh báo (có thể là scam/deepfake)", "desc": "Áp lực, bí mật, kênh bất thường, yêu cầu tiền/dữ liệu, lách quy trình." },
+      { "id": "normal", "label": "Tình huống bình thường", "desc": "Kênh quen thuộc, không áp lực, đúng quy trình." }
+    ],
+    "items": [
+      { "id": "mb4-i1", "text": "Giọng của “giám đốc” trong điện thoại yêu cầu chuyển tiền ngay lập tức và năn nỉ giữ kín.", "correctCategory": "warning", "rationale": "Áp lực + bí mật + tiền bạc — kịch bản “giả danh sếp”; giọng nói không phải bằng chứng." },
+      { "id": "mb4-i2", "text": "Kế toán trong cuộc họp hằng tuần nhắc về hạn nộp hóa đơn theo đúng quy trình.", "correctCategory": "normal", "rationale": "Kênh quen thuộc, quy trình quen thuộc, không hề có áp lực hay bí mật." },
+      { "id": "mb4-i3", "text": "Đối tác gửi e-mail từ một tên miền mới thông báo về việc “đổi gấp số tài khoản” cho khoản thanh toán hôm nay.", "correctCategory": "warning", "rationale": "Đổi tài khoản + tên miền mới + áp lực thời gian = lừa đảo thanh toán kinh điển; hãy xác minh qua kênh thứ hai." },
+      { "id": "mb4-i4", "text": "Video trong đó một người nổi tiếng giới thiệu khoản đầu tư “nhân đôi tiền trong một tuần”, kèm đường dẫn trong mô tả.", "correctCategory": "warning", "rationale": "Deepfake đầu tư: lời hứa phi thực tế + gương mặt nổi tiếng + đường dẫn. Đừng bấm, hãy báo cáo." },
+      { "id": "mb4-i5", "text": "Con trai gọi từ số quen thuộc của mình để nhắc về bữa trưa chung vào Chủ nhật.", "correctCategory": "normal", "rationale": "Số quen thuộc, chuyện bình thường, không xin tiền hay dữ liệu." },
+      { "id": "mb4-i6", "text": "SMS từ số lạ: “Mẹ ơi, con làm hỏng điện thoại rồi, chỉ nhắn vào đây thôi và chuyển tiền cho con mua máy mới”.", "correctCategory": "warning", "rationale": "Kênh mới + cô lập (“chỉ nhắn vào đây”) + tiền bạc — “giả danh cháu 2.0”; hãy gọi vào số cũ." },
+      { "id": "mb4-i7", "text": "Bộ phận IT gửi khảo sát an ninh đã lên lịch từ trước qua hệ thống công ty, không hỏi mật khẩu.", "correctCategory": "normal", "rationale": "Hoạt động được thông báo trước, kênh công ty, không yêu cầu bí mật nào." },
+      { "id": "mb4-i8", "text": "“Nhà tuyển dụng” mời chào công việc tuyệt vời, nhưng trước hết yêu cầu phí tuyển dụng và bản chụp giấy tờ tùy thân qua ứng dụng chat.", "correctCategory": "warning", "rationale": "Phí trả trước + dữ liệu cá nhân + kênh ngoài công ty = lừa đảo tuyển dụng." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Bản ghi và giọng nói không còn là bằng chứng danh tính — hãy đánh giá kịch bản tình huống, đừng đánh giá hình thức.",
+      "Hai dấu hiệu trở lên (áp lực, bí mật, kênh bất thường, tiền/dữ liệu) — coi là lừa đảo cho đến khi xác minh xong.",
+      "Xác minh qua kênh thứ hai do chính bạn khởi xướng; giữ bằng chứng và báo cáo, đừng lan truyền tin giả."
+    ],
+    "checklist": [
+      "Yêu cầu này có gây áp lực thời gian, đòi giữ bí mật, hoặc liên quan đến tiền/dữ liệu không?",
+      "Tôi có thể xác minh nó qua kênh do chính tôi khởi xướng (số quen thuộc, gặp trực tiếp) không?",
+      "Tôi có biết nơi báo cáo nghi vấn ở công ty và trong đời sống cá nhân không?"
+    ],
+    "checklistTitle": "Checklist — trước khi phản ứng với một yêu cầu gấp",
+    "nextStep": "Bước tiếp theo: module về chính sách AI tại nơi làm việc — bạn sẽ biết công cụ nào được phép dùng cho công việc và shadow AI nguy hiểm ra sao."
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P2 Bezpieczne używanie AI",
+    "interaction": "Klasyfikacja treści (kind: classify) — co można wkleić do publicznego czatu, a co wymaga anonimizacji lub zostaje poza czatem",
+    "sections": "Ekrany odpowiadają sekcjom MB2.1–MB2.5 (referowane przez pytania banku Q123–Q128): dane osobowe RODO, minimalizacja/anonimizacja, sekrety, narzędzia zatwierdzone vs publiczne (NDA), uprawnienia aplikacji.",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp, SklepDemo, Jan Syntetyczny, Anna Testowa, domeny @przyklad.test / @example.com, placeholdery zamiast sekretów). Zero realnych danych, PII, numerów i tokenów. Tłumaczenie IT."
+  },
+  "module": "MB2",
+  "intro": "Il rischio maggiore dell'IA nel lavoro quotidiano non richiede nessun hacker — basta un semplice «incolla e invia». In questo modulo imparerai a riconoscere i dati personali, a incollare solo ciò che serve davvero, a tenere password e chiavi lontane dalle chat e a distinguere gli strumenti approvati dall'azienda da quelli pubblici. Alla fine lo verificherai nella pratica.",
+  "screens": [
+    {
+      "id": "mb2-s1-dane-osobowe",
+      "title": "MB2.1 — Cos'è un dato personale (il GDPR in pratica)",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Dati personali", "text": "Tutte le informazioni che permettono di identificare una persona specifica — direttamente (nome e cognome, indirizzo e-mail, foto del volto) oppure combinando più fatti (ruolo + azienda + città). Il GDPR li protegge indipendentemente dal fatto che riguardino un cliente, un collega o te stesso." },
+        { "kind": "list", "items": [
+          "Ovvi: nome e cognome, e-mail, indirizzo, numero di telefono, immagine, numero identificativo.",
+          "Meno ovvi: l'identificativo di un cliente nel sistema, lo storico ordini associato a una persona, il contenuto del suo reclamo.",
+          "Particolarmente protetti: dati su salute, opinioni, religione — questi non incollarli mai, in nessuna forma.",
+          "Combinazioni: «la responsabile del reparto resi di SklepDemo a Danzica» identifica una persona, anche senza il cognome."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Perché riguarda le chat IA", "text": "Incollare dati personali in una chat pubblica significa consegnarli a un'azienda esterna — quasi sempre senza base giuridica e all'insaputa della persona interessata. È una violazione reale del GDPR, non una formalità.",
+          "links": [ { "label": "UODO — informazioni sulla protezione dei dati personali e sul GDPR", "href": "https://uodo.gov.pl/" } ]
+        }
+      ]
+    },
+    {
+      "id": "mb2-s2-minimalizacja",
+      "title": "MB2.2 — Minimizzazione: incolla solo ciò che serve",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Il principio di minimizzazione è semplice: il modello ha bisogno del contenuto del problema, non dell'identità delle persone. Prima di incollare qualsiasi cosa, rimuovi o sostituisci tutto ciò che indica persone specifiche e contratti specifici. Il senso del compito resta — il rischio scompare." },
+        { "kind": "table", "headers": ["Prima (non incollare)", "Dopo l'anonimizzazione (puoi incollare)"], "rows": [
+          ["Il cliente Gianni Sintetico (jan.syntetyczny@przyklad.test) chiede il rimborso di un ordine su SklepDemo", "Un cliente chiede il rimborso di un ordine — aiutami a scrivere una risposta di rifiuto cortese"],
+          ["Anna Esempio del reparto HR si lamenta del suo superiore, ti incollo la sua e-mail per intero", "Un dipendente segnala un conflitto con il superiore — come condurre una conversazione del genere?"],
+          ["Contratto n. 2024/DEMO con l'azienda PipeDemo, tariffe e penali in allegato", "Ho un contratto B2B con penali per il ritardo — cosa controllare prima di firmare?"]
+        ], "textAlt": "La tabella confronta i contenuti prima e dopo l'anonimizzazione: invece dei dati del cliente Gianni Sintetico con l'indirizzo e-mail incolliamo solo la descrizione del problema di rimborso; invece dell'e-mail completa della dipendente la descrizione del conflitto senza cognomi; invece del numero di contratto e delle tariffe una domanda generica sul contratto B2B." },
+        { "kind": "callout", "variant": "safe", "title": "La tecnica dei placeholder", "text": "Sostituisci i dettagli concreti con dei ruoli: «[CLIENTE]», «[AZIENDA]», «[IMPORTO]». Il modello se la caverà altrettanto bene, e una volta ricevuta la risposta reinserirai i dati veri — sul tuo computer, fuori dalla chat." }
+      ]
+    },
+    {
+      "id": "mb2-s3-sekrety",
+      "title": "MB2.3 — Segreti: password, chiavi e token mai in chat",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Password, chiavi API, token di accesso, codici monouso, link di invito ai sistemi — tutto questo sono segreti. Si distinguono dai dati personali per una cosa: la loro fuga dà a qualcuno accesso immediato a un sistema. Per questo la regola è assoluta: i segreti non finiscono in nessuna chat, mai, in nessun frammento." },
+        { "kind": "list", "items": [
+          "Chiedi all'IA aiuto con una configurazione? Incolla il file con il segreto sostituito: al posto della chiave vera scrivi «[CHIAVE_API]».",
+          "Un segreto incollato «per sbaglio» e subito cancellato dalla chat — potrebbe comunque essere già stato salvato dal fornitore.",
+          "Se un segreto è trapelato, cancellarlo non basta: bisogna revocarlo, generarne uno nuovo e segnalare l'accaduto.",
+          "Vale anche per le password «poco importanti» — le persone usano le stesse password in molti posti."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Hai incollato un segreto? Agisci subito", "text": "Non contare sul fatto che nessuno se ne accorga. Cambia o revoca il segreto immediatamente e segnala l'accaduto secondo la procedura aziendale (reparto IT/sicurezza). Una reazione rapida fa la differenza tra un incidente e una catastrofe." }
+      ]
+    },
+    {
+      "id": "mb2-s4-narzedzia",
+      "title": "MB2.4 — Strumenti approvati vs pubblici (e cosa dice l'NDA)",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Non tutte le chat IA sono uguali. Uno strumento approvato dall'azienda ha un contratto firmato con il fornitore: i dati non addestrano i modelli, vengono conservati secondo gli accordi e si sa chi ne risponde. Una chat pubblica e gratuita è un accordo «prendi quello che c'è» — spesso con il diritto del fornitore di usare ciò che scrivi." },
+        { "kind": "table", "headers": ["Caratteristica", "Strumento approvato dall'azienda", "Chat pubblica gratuita"], "rows": [
+          ["Contratto sulla protezione dei dati", "Sì — l'azienda lo ha firmato e verificato", "No — valgono i termini di servizio generali del fornitore"],
+          ["Uso dei tuoi contenuti per l'addestramento", "Di solito escluso per contratto", "Spesso attivo per impostazione predefinita"],
+          ["Dati coperti dall'NDA del cliente", "Solo se la policy aziendale lo consente esplicitamente", "Mai — è una violazione dell'NDA"],
+          ["Chi risponde in caso di incidente", "Percorso chiaro: l'azienda e il fornitore", "Poco chiaro — il rischio te lo prendi tu"]
+        ], "textAlt": "La tabella confronta lo strumento approvato dall'azienda con la chat pubblica gratuita: quello approvato ha un contratto firmato sulla protezione dei dati, l'addestramento sui contenuti escluso e responsabilità chiare; la chat pubblica funziona con i termini di servizio generali, spesso addestra sui contenuti, e i dati coperti da NDA non vanno mai incollati lì." },
+        { "kind": "callout", "variant": "warn", "title": "L'NDA non è una formalità", "text": "I materiali coperti da un accordo di riservatezza con il cliente (specifiche, listini, piani) incollati in una chat pubblica sono una violazione del contratto — indipendentemente dal fatto che qualcuno se ne accorga. Hai dubbi che lo strumento sia approvato? Chiedi prima di incollare." }
+      ]
+    },
+    {
+      "id": "mb2-s5-uprawnienia",
+      "title": "MB2.5 — Permessi delle app IA: concedi il minimo",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Sempre più app IA chiedono accesso alle tue risorse: casella di posta, calendario, disco con i documenti, contatti. Ogni consenso è una porta aperta — l'app vede tutto ciò a cui la fai entrare, non solo ciò che le serve in quel momento. Vale il principio del minimo privilegio: concedi esattamente l'accesso che il compito richiede, e nemmeno un po' di più." },
+        { "kind": "list", "ordered": true, "items": [
+          "Prima di installare controlla quali accessi chiede l'app — e se hanno senso per la sua funzione (un'app per appunti non ha bisogno dei tuoi contatti).",
+          "Scegli l'ambito minimo: accesso a una sola cartella invece che a tutto il disco, a un solo calendario invece che alla casella di posta.",
+          "Tratta allo stesso modo plugin ed estensioni IA del browser — «leggi tutte le pagine» è un permesso molto ampio.",
+          "Ogni tanto rivedi gli accessi concessi e revoca quelli che non usi più."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Esempio di una buona decisione", "text": "L'app NotkaApp chiede accesso a tutto il disco per riassumere documenti. La mossa sicura: crea una cartella separata «Da riassumere», concedi l'accesso solo a quella e mettici esclusivamente i file che vuoi davvero elaborare." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "mb2-classify",
+    "title": "Incollare o non incollare?",
+    "intro": "Valuta ogni contenuto: si può incollare in sicurezza in una chat IA pubblica, oppure va prima anonimizzato o lasciato fuori dalla chat? Tutti gli esempi sono sintetici.",
+    "categories": [
+      { "id": "ok", "label": "Si può incollare nella chat pubblica", "desc": "Niente dati personali, segreti o contenuti riservati — solo il contenuto del problema." },
+      { "id": "stop", "label": "Non incollare / prima anonimizza", "desc": "Contiene dati personali, segreti o contenuti coperti da riservatezza." }
+    ],
+    "items": [
+      { "id": "mb2-i1", "text": "«Un cliente chiede il rimborso oltre i termini — aiutami a scrivere una risposta di rifiuto cortese ma ferma.»", "correctCategory": "ok", "rationale": "Solo la descrizione del problema, zero dati identificativi — minimizzazione esemplare." },
+      { "id": "mb2-i2", "text": "Il testo completo del reclamo di Gianni Sintetico con il suo indirizzo e-mail jan.syntetyczny@przyklad.test e il numero d'ordine.", "correctCategory": "stop", "rationale": "Nome, cognome ed e-mail sono dati personali — prima di incollare sostituiscili con placeholder tipo [CLIENTE]." },
+      { "id": "mb2-i3", "text": "Un frammento di configurazione con la vera chiave API del sistema SklepDemo, «perché l'IA deve trovare l'errore».", "correctCategory": "stop", "rationale": "I segreti non finiscono mai in chat — incolla la configurazione con la chiave sostituita da [CHIAVE_API]." },
+      { "id": "mb2-i4", "text": "«Ho una tabella con le colonne: data, categoria di spesa, importo. Come calcolare i totali mensili nel foglio di calcolo?»", "correctCategory": "ok", "rationale": "Una domanda sul metodo, la descrizione della struttura senza un solo record reale — sicuro." },
+      { "id": "mb2-i5", "text": "La specifica di prodotto di un cliente coperta da NDA — «solo un frammento, perché l'IA aiuti con il riassunto».", "correctCategory": "stop", "rationale": "L'NDA copre anche i frammenti. I materiali riservati del cliente non entrano nelle chat pubbliche in nessuna parte." },
+      { "id": "mb2-i6", "text": "«Un dipendente segnala un conflitto con il superiore — come prepararsi a una conversazione del genere?» (senza cognomi né reparto).", "correctCategory": "ok", "rationale": "La descrizione della situazione senza possibilità di identificare le persone — i dati personali sono stati rimossi efficacemente." },
+      { "id": "mb2-i7", "text": "L'elenco dei partecipanti a un corso: nomi, cognomi ed e-mail — «che l'IA li metta in ordine alfabetico».", "correctCategory": "stop", "rationale": "Sono i dati personali di molte persone insieme. L'ordinamento fallo in locale nel foglio di calcolo — qui l'IA non serve affatto." },
+      { "id": "mb2-i8", "text": "La tua bozza dell'annuncio per il picnic aziendale — «migliora lo stile e accorcia a tre frasi».", "correctCategory": "ok", "rationale": "Contenuto pubblico, destinato alla pubblicazione, senza dati personali — un tipico uso sicuro dell'IA." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "È un dato personale tutto ciò che identifica una persona — anche una combinazione di fatti senza il cognome.",
+      "Minimizzazione: incolla il contenuto del problema, non l'identità delle persone — i placeholder [CLIENTE], [AZIENDA], [IMPORTO] risolvono la questione.",
+      "Password, chiavi e token non finiscono mai in chat; fuga di un segreto = cambio immediato e segnalazione.",
+      "I dati aziendali e quelli coperti da NDA solo negli strumenti approvati dall'azienda — la chat pubblica è una cassetta postale altrui.",
+      "Concedi alle app IA i permessi minimi possibili e revoca regolarmente gli accessi inutilizzati."
+    ],
+    "checklist": [
+      "Prima di incollare controllo il testo cercando cognomi, e-mail e altri identificativi?",
+      "Sostituisco i dettagli concreti con placeholder invece di incollare l'originale?",
+      "Sono sicuro che nel contenuto non ci sia nessuna password, chiave o token?",
+      "So quali strumenti IA sono approvati nella mia azienda e per quali dati?",
+      "Le app IA hanno da me solo i permessi di cui hanno davvero bisogno?"
+    ],
+    "checklistTitle": "Checklist — prima di incollare qualsiasi cosa in chat",
+    "nextStep": "Prossimo passo: modulo MB3 — vedrai come gli aggressori nascondono comandi nei contenuti che l'IA legge per te, e come difenderti."
+  }
+}

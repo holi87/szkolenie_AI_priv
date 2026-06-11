@@ -1,0 +1,103 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P1 AI w domu (formatywna)",
+    "interaction": "Klasyfikacja: zadanie dla asystenta vs lepiej zrobić samemu (kind: classify)",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp, przyklad.test, Jan Syntetyczny, Anna Testowa). ZERO realnych danych/PII. Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MD3",
+  "intro": "AI masz już w kieszeni: w telefonie, aparacie, tłumaczu i głośniku w salonie. Ten moduł pokazuje, które z tych funkcji naprawdę ułatwiają życie, a które są gadżetem na pięć minut — i jak zacząć z nich korzystać bez przewracania domu do góry nogami.",
+  "screens": [
+    {
+      "id": "md3-s1-asystenci",
+      "title": "Asystent głosowy: do czego się nadaje",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Asystent głosowy najlepiej sprawdza się w krótkich zadaniach z jasnym wynikiem, które wykonujesz z zajętymi rękami: minutnik przy gotowaniu, przypomnienie, wiadomość, sterowanie światłem czy muzyką. Gorzej radzi sobie z długimi, wieloetapowymi sprawami, które wymagają oceniania po drodze." },
+        { "kind": "list", "items": [
+          "Świetne: „nastaw minutnik na 12 minut”, „przypomnij mi jutro o 8 o lekach”, „dodaj mleko do listy zakupów”.",
+          "Dobre: szybkie pytania o pogodę, trasę, godziny otwarcia — z nawykiem weryfikacji ważnych odpowiedzi.",
+          "Słabe: „zaplanuj remont kuchni” — za dużo decyzji i kontekstu na jedną komendę głosową."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Zasada kciuka", "text": "Jeśli zadanie zmieściłoby się na karteczce samoprzylepnej — to robota dla asystenta. Jeśli potrzebuje rozmowy — usiądź do czatu AI, gdzie widzisz i poprawiasz odpowiedzi." }
+      ]
+    },
+    {
+      "id": "md3-s2-telefon",
+      "title": "AI w aparacie, zdjęciach i tłumaczu",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Najwięcej cichej, użytecznej AI siedzi w telefonie. Nie wygląda jak czat, a robi robotę:" },
+        { "kind": "list", "items": [
+          "Aparat: tryb nocny, usuwanie przypadkowych osób z kadru, wyostrzanie starych zdjęć.",
+          "Galeria: szukanie po treści — wpisz „paragon”, „pies”, „plaża”, zamiast przewijać tysiące miniatur.",
+          "Tłumacz: rozmowa na żywo i tłumaczenie napisów przez aparat — menu, rozkład jazdy, etykieta leku na wakacjach.",
+          "Dyktowanie i transkrypcja: mów zamiast pisać; nagranie z zebrania rodzinnej narady zamienia się w notatkę."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Od czego zacząć", "text": "Wybierz JEDNĄ funkcję z tej listy i używaj jej przez tydzień. Nawyk z jednej funkcji uczy więcej niż przegląd dwudziestu." }
+      ]
+    },
+    {
+      "id": "md3-s3-smart-home",
+      "title": "Inteligentny dom: wartość czy gadżet",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "W domu AI bywa naprawdę pomocna — i bywa zabawką, która po miesiącu kurzy się w szufladzie. Różnica zwykle sprowadza się do jednego: czy urządzenie rozwiązuje problem, który faktycznie masz." },
+        { "kind": "table", "headers": ["Zastosowanie", "Wartość", "Dlaczego"], "rows": [
+          ["Termostat uczący się rytmu dnia", "realna", "oszczędza pieniądze bez Twojej uwagi"],
+          ["Światła na harmonogram i komendę głosową", "realna", "wygoda codzienna, też dla osób starszych"],
+          ["Czujnik dymu/wody powiadamiający na telefon", "realna", "bezpieczeństwo, działa gdy Cię nie ma"],
+          ["Lodówka z ekranem proponująca przepisy", "zwykle gadżet", "to samo zrobi telefon, bez wymiany lodówki"],
+          ["Czajnik sterowany z aplikacji", "zwykle gadżet", "i tak musisz wstać, żeby nalać wodę"]
+        ], "textAlt": "Tabela: realną wartość dają urządzenia oszczędzające pieniądze, czas lub zwiększające bezpieczeństwo (termostat, światła, czujniki); gadżetami bywają urządzenia dublujące telefon, jak lodówka z ekranem czy zdalny czajnik." },
+        { "kind": "callout", "variant": "warn", "title": "Zanim kupisz", "text": "Zapytaj: jaki MÓJ problem to rozwiązuje? Jeśli odpowiedź zaczyna się od „fajnie byłoby…”, to gadżet. Jeśli od „w końcu nie będę musiał…”, to wartość." }
+      ]
+    },
+    {
+      "id": "md3-s4-higiena",
+      "title": "Mała higiena domowej AI",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Urządzenia z mikrofonem i kamerą to wygoda, która wymaga dwóch minut rozsądku przy konfiguracji. Szczegółowo zajmiemy się tym w module o prywatności — tu wersja minimalna:" },
+        { "kind": "list", "ordered": true, "items": [
+          "Sprawdź, gdzie jest fizyczny wyłącznik mikrofonu w głośniku — i używaj go, gdy chcesz.",
+          "Nie stawiaj urządzeń z kamerą w sypialni ani w pokoju dziecka.",
+          "Raz na jakiś czas przejrzyj w aplikacji historię nagrań asystenta i wyczyść ją."
+        ] }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "md3-classify",
+    "title": "Zadanie dla asystenta czy lepiej samemu?",
+    "intro": "Zdecyduj, które zadania warto oddać asystentowi głosowemu lub AI w telefonie, a które lepiej zrobić samodzielnie. Feedback wyjaśnia dlaczego.",
+    "categories": [
+      { "id": "assistant", "label": "Zadanie dla asystenta", "desc": "Krótkie, jasny wynik, niska cena błędu — AI zrobi to szybciej." },
+      { "id": "self", "label": "Lepiej zrobić samemu", "desc": "Wymaga oceny, zaufania lub dotyczy spraw, gdzie błąd kosztuje." }
+    ],
+    "items": [
+      { "id": "md3-i1", "text": "Nastawienie minutnika na pierogi, gdy masz ręce w mące.", "correctCategory": "assistant", "rationale": "Krótka komenda, jasny wynik, zero ryzyka — idealne dla głosu." },
+      { "id": "md3-i2", "text": "Wybranie oferty kredytu na podstawie jednej odpowiedzi asystenta.", "correctCategory": "self", "rationale": "Decyzja finansowa wymaga porównania ofert i weryfikacji — AI może pomóc zebrać dane, ale nie decydować." },
+      { "id": "md3-i3", "text": "Znalezienie zdjęcia paragonu w galerii po wpisaniu słowa „paragon”.", "correctCategory": "assistant", "rationale": "Wyszukiwanie po treści to mocna strona AI w galerii — sekundy zamiast przewijania." },
+      { "id": "md3-i4", "text": "Przetłumaczenie menu w zagranicznej restauracji aparatem telefonu.", "correctCategory": "assistant", "rationale": "Tłumaczenie na żywo to dojrzała funkcja; cena pomyłki przy menu jest niska." },
+      { "id": "md3-i5", "text": "Napisanie osobistych życzeń ślubnych dla najbliższej przyjaciółki.", "correctCategory": "self", "rationale": "Wartością życzeń jest osobisty charakter — AI może podsunąć szkic, ale słowa powinny być Twoje." },
+      { "id": "md3-i6", "text": "Dodanie „kup mleko i masło” do listy zakupów w drodze do auta.", "correctCategory": "assistant", "rationale": "Szybka notatka głosowa — dokładnie to, do czego asystent powstał." },
+      { "id": "md3-i7", "text": "Ocena, czy mail z banku z prośbą o dane to oszustwo.", "correctCategory": "self", "rationale": "Bezpieczeństwo wymaga Twojej czujności i weryfikacji w banku — nie deleguj jej do automatu." },
+      { "id": "md3-i8", "text": "Zamiana nagrania z rodzinnej narady o wakacjach na notatkę z listą ustaleń.", "correctCategory": "assistant", "rationale": "Transkrypcja i podsumowanie to mocne strony AI — a notatkę i tak przejrzysz." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Asystent głosowy = zadania z karteczki samoprzylepnej; rozmowy i decyzje = czat, w którym widzisz odpowiedzi.",
+      "Najwięcej użytecznej AI już masz: galeria, tłumacz, dyktowanie — wybierz jedną funkcję i wyrób nawyk.",
+      "Przy zakupach do domu pytaj o SWÓJ problem do rozwiązania; mikrofony i kamery konfiguruj z głową."
+    ],
+    "checklist": [
+      "Czy wiem, gdzie w moim telefonie jest wyszukiwanie zdjęć po treści?",
+      "Czy przetestowałem tłumaczenie aparatem na żywo?",
+      "Czy wiem, jak wyłączyć mikrofon w domowym głośniku?"
+    ],
+    "checklistTitle": "Checklista — AI w telefonie i domu",
+    "nextStep": "Następny krok: moduł o tworzeniu z AI — obrazy, muzyka i wideo na domowe okazje."
+  }
+}

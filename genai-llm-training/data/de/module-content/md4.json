@@ -1,0 +1,102 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P1 AI w domu (formatywna)",
+    "interaction": "Klasyfikacja: w porządku vs ryzykowne (kind: classify)",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp, przyklad.test, Jan Syntetyczny, Anna Testowa). ZERO realnych danych/PII. Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MD4",
+  "intro": "Eine Einladung zum Geburtstag der Oma, ein Lied zum Jahrestag, ein Urlaubsfilm mit ordentlichem Schnitt — Generatoren für Bilder, Musik und Video erledigen heute in Minuten, was früher einen Grafiker und ein Studio erforderte. Dieses Modul lehrt, sie mit Freude und mit Verstand zu nutzen: was sich gehört, was zu kennzeichnen ist und wessen Rechte nicht verletzt werden dürfen.",
+  "screens": [
+    {
+      "id": "md4-s1-co-sie-da",
+      "title": "Was Sie heute zu Hause generieren können",
+      "type": "content",
+      "blocks": [
+        { "kind": "list", "items": [
+          "Bilder: Glückwunschkarten, Einladungen, Illustrationen für die Familienchronik, ein Avatar für den Messenger.",
+          "Musik: ein Geburtstagslied mit dem Namen des Geburtstagskindes, Hintergrundmusik für ein Urlaubsvideo.",
+          "Video: Diashows mit Animationen, kurze Filme aus einer Beschreibung, automatische Untertitel für Aufnahmen.",
+          "Retusche: Entfernen von Fremden aus dem Hintergrund, Wiederbeleben alter, beschädigter Familienfotos."
+        ] },
+        { "kind": "paragraph", "text": "Das Geheimnis eines guten Ergebnisses ist dasselbe wie bei Text-Prompts: Sagen Sie konkret, was Sie wollen (Motiv, Stil, Farben, Stimmung), sehen Sie sich das Ergebnis an und bitten Sie um Korrekturen. Die erste Version ist ein Entwurf, kein Endurteil." },
+        { "kind": "callout", "variant": "info", "title": "Probieren Sie es heute", "text": "Der nächste Familienanlass? Generieren Sie drei Versionen einer Karte in verschiedenen Stilen (z. B. Aquarell, Retro-Poster, Foto) und wählen Sie mit einem nahestehenden Menschen die beste aus." }
+      ]
+    },
+    {
+      "id": "md4-s2-oznaczanie",
+      "title": "Kennzeichnung von KI-Inhalten",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "In der Familie verlangt niemand einen Herkunftsnachweis auf der Geburtstagskarte. Aber wenn ein Inhalt weiter hinausgeht — in die Nachbarschaftsgruppe, ins Internet, in die Schule — schafft die ehrliche Kennzeichnung „mit KI generiert“ Vertrauen und beugt Missverständnissen vor. Immer mehr Plattformen verlangen das ausdrücklich." },
+        { "kind": "list", "items": [
+          "Kennzeichnen Sie, wenn der Inhalt für ein echtes Foto oder die Aufnahme eines realen Ereignisses gehalten werden kann.",
+          "Kennzeichnen Sie immer, wenn Sie außerhalb des privaten Kreises veröffentlichen — öffentliches Profil, Wettbewerb, Anzeige.",
+          "Offensichtliche Fantasie im privaten Kreis müssen Sie nicht kennzeichnen — der Drache über dem Wohnblock verteidigt sich selbst."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Eine harte Grenze", "text": "„Echte“ Szenen mit realen Personen zu generieren — dem Nachbarn, einem Politiker, einer Klassenkameradin — und sie als Fakten zu präsentieren, ist kein Scherz mehr, sondern Desinformation oder eine Verletzung der Persönlichkeitsrechte." }
+      ]
+    },
+    {
+      "id": "md4-s3-prawa",
+      "title": "Rechte an Werken in Kurzform",
+      "type": "content",
+      "blocks": [
+        { "kind": "table", "headers": ["Frage", "Kurze Antwort"], "rows": [
+          ["Darf ich eine generierte Karte privat verwenden?", "Ja — die häusliche Nutzung ist das sicherste Szenario."],
+          ["Darf ich generierte Grafiken verkaufen?", "Prüfen Sie die Lizenz des Tools: Manche erlauben die kommerzielle Nutzung, manche nicht."],
+          ["Gehört das Ergebnis „mir“?", "Je nach Tool und Rechtslage — gehen Sie nicht automatisch von vollen Urheberrechten aus."],
+          ["Darf ich um den Stil eines konkreten, lebenden Künstlers bitten?", "Vermeiden Sie das — das Nachahmen eines erkennbaren Stils zur Veröffentlichung ist rechtlich und ethisch umstritten."]
+        ], "textAlt": "Tabelle der Rechtsfragen: häusliche Nutzung sicher, kommerzielle Nutzung erfordert die Prüfung der Tool-Lizenz, volle Rechte am Ergebnis unsicher, das Nachahmen des Stils lebender Künstler riskant." },
+        { "kind": "callout", "variant": "info", "title": "Eine Regel statt eines Paragrafen", "text": "Je weiter weg vom heimischen Kühlschrank Ihr Werk gelangen soll, desto aufmerksamer lesen Sie die Lizenz des Tools." }
+      ]
+    },
+    {
+      "id": "md4-s4-wizerunek",
+      "title": "Das eigene Bild: ein fremdes Gesicht ist kein Material",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Der häufigste häusliche Konflikt mit Generatoren betrifft nicht das Urheberrecht, sondern Menschen: das Einfügen eines fremden Gesichts in lustige Szenen ohne zu fragen, das „Verjüngen“ von Fotos von Bekannten, das Generieren von Enkelkindern, die es nicht gibt. Technisch einfach — zwischenmenschlich sehr unterschiedlich." },
+        { "kind": "list", "ordered": true, "items": [
+          "Das Gesicht einer anderen Person = ihre Zustimmung. Auch bei Scherzen, auch in der Familie.",
+          "Behandeln Sie Fotos von Kindern doppelt vorsichtig — sie können keine bewusste Zustimmung geben, und das Internet vergisst nicht.",
+          "Laden Sie fremde Fotos nicht ohne das Wissen dieser Personen in KI-Tools hoch — ihr Bild wandert auf einen fremden Server."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Ein einfacher Test", "text": "Würden Sie dieser Person das Ergebnis direkt ins Gesicht zeigen? Wenn Sie zögern — generieren Sie nicht oder fragen Sie zuerst." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "md4-classify",
+    "title": "In Ordnung oder riskant?",
+    "intro": "Beurteilen Sie häusliche Ideen für das Erschaffen mit KI. Das Feedback erklärt, wo die Grenze verläuft.",
+    "categories": [
+      { "id": "ok", "label": "In Ordnung", "desc": "Private oder gekennzeichnete Nutzung, ohne fremdes Bildnis und ohne Irreführung." },
+      { "id": "risky", "label": "Riskant / tun Sie das nicht", "desc": "Fremdes Bildnis ohne Zustimmung, Irreführung, Lizenzverletzung." }
+    ],
+    "items": [
+      { "id": "md4-i1", "text": "Eine Geburtstagskarte für die Oma mit einem generierten Blumenstrauß im Aquarellstil.", "correctCategory": "ok", "rationale": "Private, fröhliche Nutzung ohne das Bildnis einer Person — das Musterszenario." },
+      { "id": "md4-i2", "text": "Das Gesicht des Nachbarn in Memes einfügen und „zum Spaß“ in die Nachbarschaftsgruppe schicken.", "correctCategory": "risky", "rationale": "Fremdes Bildnis ohne Zustimmung + öffentlicher Kreis = Verletzung der Persönlichkeitsrechte, kein Scherz." },
+      { "id": "md4-i3", "text": "Ein Lied mit dem Namen des Vaters, generiert zu seinem fünfzigsten Geburtstag und auf der Feier abgespielt.", "correctCategory": "ok", "rationale": "Privater Anlass, keine Veröffentlichung und keine fremden Rechte — reine Freude." },
+      { "id": "md4-i4", "text": "Generierte Poster verkaufen, ohne zu prüfen, ob die Lizenz des Tools die kommerzielle Nutzung erlaubt.", "correctCategory": "risky", "rationale": "Kommerz erfordert eine Lizenz — „kostenloser Generator“ heißt nicht „zum Verkauf“." },
+      { "id": "md4-i5", "text": "Ein beschädigtes Foto der Großeltern aus den Sechzigerjahren für das Familienalbum restaurieren.", "correctCategory": "ok", "rationale": "Die Retusche eines Familienandenkens für das private Album — genau dafür sind diese Tools da." },
+      { "id": "md4-i6", "text": "Ein realistisches „Foto“ eines Lokalpolitikers in einer Situation generieren, die nie stattgefunden hat, und es ohne Kennzeichnung in ein Forum stellen.", "correctCategory": "risky", "rationale": "Realistische Szene + reale Person + fehlende Kennzeichnung = Desinformation mit rechtlichen Konsequenzen." },
+      { "id": "md4-i7", "text": "Ein Poster für den Schulbasar mit KI-Grafik und dem Hinweis „Illustration mit KI generiert“.", "correctCategory": "ok", "rationale": "Öffentliche Nutzung + ehrliche Kennzeichnung = das Muster an Transparenz." },
+      { "id": "md4-i8", "text": "Fotos einer Freundin ohne ihr Wissen in einen Avatar-Generator hochladen — „als Geschenk“.", "correctCategory": "risky", "rationale": "Ihr Bildnis wandert ohne ihre Zustimmung auf einen fremden Server — erst fragen, dann generieren." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Generatoren sind ein großartiges Werkzeug häuslicher Kreativität — konkrete Beschreibung, Iteration, Auswahl der besten Version.",
+      "Je breiter Sie veröffentlichen, desto deutlicher kennzeichnen Sie die KI-Herkunft und desto aufmerksamer lesen Sie die Lizenz.",
+      "Ein fremdes Gesicht erfordert Zustimmung — immer; Fotos von Kindern schützen Sie doppelt."
+    ],
+    "checklist": [
+      "Kann mein Werk für ein echtes Foto oder eine echte Aufnahme gehalten werden? Wenn ja — ist es gekennzeichnet?",
+      "Erlaubt die Lizenz des Tools, was ich plane (besonders kommerziell)?",
+      "Hat jede im Material sichtbare Person zugestimmt?"
+    ],
+    "checklistTitle": "Checkliste — bevor Sie ein KI-Werk veröffentlichen",
+    "nextStep": "Nächster Schritt: das Modul über KI in der Familie — wie Sie mit Kindern über all diese Möglichkeiten sprechen und gesunde Regeln vereinbaren."
+  }
+}

@@ -1,0 +1,155 @@
+{
+  "_meta": {
+    "module": "MB2",
+    "issue": "#171 Rebuild ścieżek — bank pytań P2 „Bezpieczne używanie AI”, moduł MB2 (dane wrażliwe i prywatność)",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo, Jan Syntetyczny, identyfikatory testowe). ZERO realnych danych/PII.",
+    "note": "Pytania modułu MB2 (Q123-Q128), pula dedykowana ścieżki P2. 4 pytania KRYTYCZNE (Q123-Q126) — bramka 100% w teście końcowym P2. Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q123",
+      "module": "MB2",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": true,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Der Teilnehmer erkennt personenbezogene Daten in Arbeitsinhalten und fügt sie nicht ohne Anonymisierung in ein öffentliches KI-Tool ein.",
+      "prompt": "Ein Kollege aus dem Kundenservice von SklepDemo bittet dich um Hilfe: Er will den vollständigen Text einer Kundenreklamation — mit Vorname, Nachname, Adresse und Bestellnummer — in einen öffentlichen KI-Chat einfügen, damit die KI eine höfliche Antwort vorschlägt. Was tust du?",
+      "options": [
+        { "id": "A", "text": "Ich helfe, alles einzufügen — das Tool speichert die Gespräche ohnehin nicht, und die Antwort wird mit vollem Kontext besser." },
+        { "id": "B", "text": "Ich schlage vor, zuerst die personenbezogenen Daten zu entfernen (Vorname, Nachname, Adresse, Bestellnummer) und nur die Problembeschreibung einzufügen — die KI braucht die Identität der Kundin nicht, um eine Antwort vorzuschlagen." },
+        { "id": "C", "text": "Ich rate, nur den Nachnamen durch ein Initial zu ersetzen — die übrigen Daten können bleiben, denn das sind Unternehmensdaten, keine personenbezogenen Daten." },
+        { "id": "D", "text": "Ich schlage vor, die Daten einzufügen, aber am Ende die Bitte anzufügen, dass die KI sie nach der Antwort vergisst." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Genau so: das Prinzip der Datenminimierung (DSGVO) — das Modell bekommt nur das, was für die Aufgabe nötig ist. Die Problembeschreibung reicht; die Identität der Kundin trägt nichts zur Qualität der Antwort bei und schafft ein Leck-Risiko.",
+      "feedbackIncorrect": "Dies ist ein Sicherheitsfehler. Die personenbezogenen Daten der Kundin (Vorname, Nachname, Adresse, Bestellnummer) dürfen nicht in ein öffentliches KI-Tool gelangen — weder vollständig noch „mit Initial“, und die Bitte „vergiss es nach der Antwort“ garantiert nichts. Füge ausschließlich eine anonymisierte Problembeschreibung ein.",
+      "references": ["MB2.1", "MB2.2"]
+    },
+    {
+      "id": "Q124",
+      "module": "MB2",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": true,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Der Teilnehmer gibt keine Geheimnisse (Passwörter, Schlüssel, Tokens) an KI-Tools weiter, unabhängig vom Zweck.",
+      "prompt": "Du konfigurierst eine Integration in NotkaApp und hast eine Konfigurationsdatei mit einem API-Schlüssel (tok_test_abc123) sowie Passwörtern für die Umgebung. Der KI-Assistent könnte den Fehler in der Konfiguration schnell finden. Was tust du?",
+      "options": [
+        { "id": "A", "text": "Ich füge die ganze Datei ein — der Schlüssel ist „nur ein Testschlüssel“, also besteht kein Risiko." },
+        { "id": "B", "text": "Ich füge die Datei ein, bitte die KI aber, den Schlüssel für nichts zu verwenden." },
+        { "id": "C", "text": "Ich ersetze die Werte der Geheimnisse durch Platzhalter (z. B. API_SCHLUESSEL, PASSWORT) und füge die so bereinigte Datei ein — die Struktur lässt sich ohne echte Werte debuggen." },
+        { "id": "D", "text": "Ich füge nur die Hälfte des Schlüssels ein — aus einem unvollständigen Wert kann niemand etwas rekonstruieren." }
+      ],
+      "correct": ["C"],
+      "feedbackCorrect": "Ja — Geheimnisse gelangen niemals in den Chat, auch keine „Testwerte“: Ein Konfigurationsfehler zeigt sich in der Struktur, nicht in den Werten. Platzhalter erhalten die volle Debugbarkeit ohne Risiko.",
+      "feedbackIncorrect": "Dies ist ein Sicherheitsfehler. Passwörter, Schlüssel und Tokens gelangen NIEMALS in KI-Tools — weder vollständig, noch zur Hälfte, noch mit der Bitte „nicht verwenden“. Ersetze die Werte durch Platzhalter; die Dateistruktur reicht aus, um den Fehler zu finden.",
+      "references": ["MB2.2", "MB2.3"]
+    },
+    {
+      "id": "Q125",
+      "module": "MB2",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": true,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Der Teilnehmer unterscheidet KI-Tools, die für die Arbeit mit vertraulichen Dokumenten freigegeben sind, von nicht freigegebenen.",
+      "prompt": "Du sollst einen Vertrag übersetzen, der einer NDA zwischen deinem Unternehmen und dem Vertragspartner SklepDemo unterliegt. Der firmeneigene KI-Übersetzer ist langsam, ein kostenloses öffentliches Tool übersetzt besser und schneller. Was tust du?",
+      "options": [
+        { "id": "A", "text": "Ich übersetze den Vertrag im freigegebenen Firmen-Tool — langsamer, aber ein der NDA unterliegendes Dokument darf die freigegebene Umgebung nicht verlassen." },
+        { "id": "B", "text": "Ich übersetze im kostenlosen Tool — die Qualität der Übersetzung zählt, und die NDA betrifft Menschen, keine Programme." },
+        { "id": "C", "text": "Ich übersetze im kostenlosen Tool, entferne aber das Deckblatt mit den Firmennamen — der Rest des Vertrags ist „anonym“." },
+        { "id": "D", "text": "Ich teile den Vertrag in kleine Fragmente und übersetze im kostenlosen Tool — aus Stücken kann ihn niemand wieder zusammensetzen." }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Ja: Ein vertrauliches Dokument verarbeitest du ausschließlich in der vom Unternehmen freigegebenen Umgebung. Komfort und Qualität des kostenlosen Tools ändern nichts an den NDA-Verpflichtungen.",
+      "feedbackIncorrect": "Dies ist ein Sicherheitsfehler. Der Inhalt eines NDA-Vertrags, der in ein nicht freigegebenes Tool eingefügt wird, ist ein Bruch der Vertraulichkeit — auch in Fragmenten und ohne Deckblatt (der Inhalt selbst identifiziert die Parteien und Bedingungen). Verwende ausschließlich vom Unternehmen freigegebene Tools.",
+      "references": ["MB2.3", "MB2.4"]
+    },
+    {
+      "id": "Q126",
+      "module": "MB2",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": true,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Der Teilnehmer bewertet bewusst die Berechtigungen, die eine KI-App anfordert, statt sie standardmäßig zu akzeptieren.",
+      "prompt": "Du installierst auf dem Diensttelefon eine KI-Assistenten-App. Beim ersten Start verlangt sie dauerhaften Zugriff auf Kontakte, Fotos, Mikrofon und Standortverlauf, „um die Antworten besser zu personalisieren“. Du brauchst nur das Zusammenfassen von Textnotizen. Was tust du?",
+      "options": [
+        { "id": "A", "text": "Ich akzeptiere alles — ohne volle Berechtigungen wird der Assistent schlechter funktionieren." },
+        { "id": "B", "text": "Ich akzeptiere alles, plane aber, die Berechtigungen in einem Monat abzuschalten, sobald ich die App getestet habe." },
+        { "id": "C", "text": "Ich akzeptiere nur das Mikrofon — die Stimme ist die Basis des Assistenten, der Rest ist eine Kleinigkeit." },
+        { "id": "D", "text": "Ich verweigere alle Zugriffe, die für das Zusammenfassen von Notizen nicht nötig sind; wenn die App volle Berechtigungen erzwingt, melde ich sie der IT-Abteilung, statt sie zu installieren." }
+      ],
+      "correct": ["D"],
+      "feedbackCorrect": "Ja: das Prinzip der geringsten Berechtigungen. Das Zusammenfassen von Notizen erfordert weder Kontakte, Fotos noch Standort — auf einem Dienstgerät sind überflüssige Zugriffe ein Risiko für Unternehmens- und private Daten.",
+      "feedbackIncorrect": "Dies ist ein Sicherheitsfehler. Dauerhafter Zugriff auf Kontakte, Fotos und Standort auf dem Diensttelefon geht über den Bedarf (Zusammenfassen von Notizen) hinaus — „Personalisierung“ rechtfertigt kein Sammeln von Unternehmensdaten. Gewähre minimale Berechtigungen und melde erzwungene überflüssige Zugriffe der IT.",
+      "references": ["MB2.4", "MB2.5"]
+    },
+    {
+      "id": "Q127",
+      "module": "MB2",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Der Teilnehmer erkennt, was in alltäglichen Inhalten ein personenbezogenes Datum im Sinne der DSGVO ist.",
+      "prompt": "Welche der folgenden Angaben ist ein personenbezogenes Datum im Sinne der DSGVO?",
+      "options": [
+        { "id": "A", "text": "Der Name des im Unternehmen verwendeten KI-Modells." },
+        { "id": "B", "text": "Die E-Mail-Adresse des Mitarbeiters jan.syntetyczny@przyklad.test, die seine Identifizierung ermöglicht." },
+        { "id": "C", "text": "Die Anzahl der vom gesamten Team in einem Monat bearbeiteten Anfragen." },
+        { "id": "D", "text": "Die öffentliche Preisliste der Unternehmensleistungen." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Ein personenbezogenes Datum ist jede Information, die die Identifizierung einer konkreten Person ermöglicht — eine dienstliche E-Mail-Adresse mit Vor- und Nachnamen identifiziert den Mitarbeiter direkt.",
+      "feedbackIncorrect": "Ein personenbezogenes Datum bezieht sich auf eine identifizierbare PERSON. Der Modellname, eine aggregierte Teamstatistik und eine öffentliche Preisliste verweisen auf niemanden Konkretes — eine E-Mail-Adresse mit Vor- und Nachnamen schon.",
+      "references": ["MB2.1"]
+    },
+    {
+      "id": "Q128",
+      "module": "MB2",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Der Teilnehmer benennt Inhalte, die sicher in ein öffentliches KI-Tool eingefügt werden können.",
+      "prompt": "Welche Inhalte können sicher in einen öffentlichen KI-Chat eingefügt werden? Wähle alle richtigen aus.",
+      "options": [
+        { "id": "A", "text": "Eine anonymisierte Problembeschreibung, aus der personenbezogene Daten und Identifikatoren entfernt wurden." },
+        { "id": "B", "text": "Der Scan eines Personalausweises — du fragst ja nur nach der Korrektheit des Dokumentformats." },
+        { "id": "C", "text": "Eine allgemeine Frage zur Syntax einer Formel in einer Tabellenkalkulation, ohne Daten aus der Tabelle." },
+        { "id": "D", "text": "Ein interner, als vertraulich gekennzeichneter Finanzbericht des Unternehmens." }
+      ],
+      "correct": ["A", "C"],
+      "feedbackCorrect": "Ja: Sicher sind Inhalte ohne personenbezogene Daten, Geheimnisse und vertrauliche Informationen — eine anonymisierte Problembeschreibung und eine allgemeine Syntaxfrage geben nichts preis.",
+      "feedbackIncorrect": "Sicher sind nur Inhalte ohne personenbezogene Daten und vertrauliche Informationen (A und C). Ein Ausweisscan ist direkt ein personenbezogenes Datum, und ein vertraulicher Finanzbericht darf die freigegebene Umgebung nicht verlassen — unabhängig von der Absicht der Frage.",
+      "references": ["MB2.1", "MB2.3"]
+    }
+  ]
+}

@@ -447,6 +447,7 @@ function start(initialData, ctx = {}) {
     });
     store.recordFinalTest(result);
     const outcome = buildResult(result, { pathName: pathName(data, pathId), modulesData: data.modules });
+    outcome.perModule = result.perModule; // #171: dane do wykresów wyniku (bary per moduł + filary)
     state.result = outcome;
     showResult(outcome, result.gates);
     refreshHeaderAndNav();
@@ -467,6 +468,7 @@ function start(initialData, ctx = {}) {
     const pathId = store.getActivePath();
     mount(refs.view, renderResult(result, {
       progress: store.getProgress(), pathName: pathName(data, pathId), gates,
+      perModule: result.perModule || null, modulesData: data.modules, // #171: wykresy (tylko świeży wynik)
       canRetry: !result.passed && store.canAttemptFinalTest(),
       attemptInfo: t("test.attemptsUsed", { attempts: (store.getProgress().finalTest || {}).attempts || 0 }),
       onRetry: () => { showFinalTest(); focusView(); },

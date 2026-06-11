@@ -24,11 +24,11 @@
       ],
       "properties": {
         "id": { "type": "string", "pattern": "^Q[0-9]{3}$" },
-        "module": { "type": "string", "pattern": "^M([1-9]|1[0-2]|SH)$" },
+        "module": { "type": "string", "pattern": "^M([1-9]|1[0-2]|SH|B[1-6])$" },
         "pillar": { "type": "string", "enum": ["foundations_technical", "qa_practice", "security_governance"] },
         "paths": {
           "type": "array", "minItems": 1, "uniqueItems": true,
-          "items": { "type": "string", "enum": ["S1", "S2", "S3"] }
+          "items": { "type": "string", "enum": ["S1", "S2", "S3", "P2"] }
         },
         "difficulty": { "type": "string", "enum": ["L1", "L2", "L3", "L4"] },
         "bloom": { "type": "string", "enum": ["remember", "understand", "apply", "analysis", "evaluation", "create"] },
@@ -100,9 +100,9 @@
           "then": { "required": ["sequence"] }
         },
         {
-          "comment": "pytania krytyczne tylko w M10",
+          "comment": "pytania krytyczne tylko w modułach bezpieczeństwa: M10 (ścieżki S1-S3) i MB2 (P2 — dane wrażliwe, #171)",
           "if": { "properties": { "isCritical": { "const": true } } },
-          "then": { "properties": { "module": { "const": "M10" } } }
+          "then": { "properties": { "module": { "enum": ["M10", "MB2"] } } }
         }
       ]
     }

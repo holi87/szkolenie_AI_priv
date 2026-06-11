@@ -1,0 +1,155 @@
+{
+  "_meta": {
+    "module": "MB5",
+    "issue": "#171 Rebuild ścieżek — bank pytań P2 „Bezpieczne używanie AI”, moduł MB5 (AI w pracy: polityki i shadow AI)",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo, Jan Syntetyczny, identyfikatory testowe). ZERO realnych danych/PII.",
+    "note": "Pytania modułu MB5 (Q141-Q146), pula dedykowana ścieżki P2. Bez pytań krytycznych. Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q141",
+      "module": "MB5",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "El participante entiende el concepto de shadow AI y lo distingue del uso aprobado de las herramientas.",
+      "prompt": "¿Qué significa el concepto de «shadow AI» en una empresa?",
+      "options": [
+        { "id": "A", "text": "Un programa piloto oficial de nuevas herramientas de IA dirigido por el departamento de TI." },
+        { "id": "B", "text": "El modo oscuro (dark mode) en las aplicaciones de asistentes de IA." },
+        { "id": "C", "text": "Un modelo de IA ejecutado localmente en los servidores de la empresa en lugar de en la nube." },
+        { "id": "D", "text": "El uso por parte de los empleados de herramientas de IA sin el conocimiento ni el consentimiento de la empresa, sin control sobre los datos que llegan allí." }
+      ],
+      "correct": ["D"],
+      "feedbackCorrect": "Shadow AI es el uso no aprobado y no controlado de herramientas de IA en el trabajo. El problema no es la herramienta en sí, sino la falta de control: nadie sabe qué datos de la empresa salen ni en qué condiciones se procesan.",
+      "feedbackIncorrect": "Shadow AI es usar herramientas de IA sin el conocimiento ni el consentimiento de la empresa (D) — una analogía del «shadow IT». Un piloto de TI, el modo oscuro o el hosting local no son shadow AI. Repasa la definición del módulo.",
+      "references": ["MB5.1"]
+    },
+    {
+      "id": "Q142",
+      "module": "MB5",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "El participante sabe quién responde por el contenido creado con ayuda de la IA.",
+      "prompt": "Preparas con ayuda de la IA una oferta para un cliente de la empresa SklepDemo. En la oferta apareció un parámetro del producto inventado por el modelo. ¿Quién responde por este error?",
+      "options": [
+        { "id": "A", "text": "Nadie — los errores generados por la IA no se pueden atribuir a nadie." },
+        { "id": "B", "text": "Tú — la IA es una herramienta, y por el contenido que envías responde la persona que lo firma." },
+        { "id": "C", "text": "El proveedor del modelo de IA — fue su producto el que generó el error." },
+        { "id": "D", "text": "El cliente — debería haber verificado por sí mismo los parámetros antes de firmar." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Sí: la IA es una herramienta como un editor de texto. El contenido que firmas y envías es tuyo — junto con la obligación de verificarlo. Es el fundamento del uso responsable de la IA en el trabajo.",
+      "feedbackIncorrect": "Por el contenido enviado al cliente responde la persona que lo firma (B). Los términos de los proveedores de IA excluyen expresamente su responsabilidad por los contenidos generados, y trasladar la verificación al cliente es un riesgo de perder confianza y de consecuencias contractuales.",
+      "references": ["MB5.4"]
+    },
+    {
+      "id": "Q143",
+      "module": "MB5",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "El participante elige una conducta conforme a la política cuando la herramienta aprobada no basta.",
+      "prompt": "La política de la empresa solo permite usar con los datos de clientes el asistente interno de IA. Descubres una nueva herramienta pública que haría tu análisis de incidencias de clientes el doble de rápido. ¿Qué haces?",
+      "options": [
+        { "id": "A", "text": "Uso la nueva herramienta, pero solo para tareas menores — a pequeña escala el riesgo es despreciable." },
+        { "id": "B", "text": "Uso la nueva herramienta desde mi portátil privado — la política de la empresa no cubre el equipo privado." },
+        { "id": "C", "text": "Reporto la herramienta a TI/al departamento de seguridad proponiendo su evaluación y eventual aprobación; hasta entonces trabajo con la herramienta permitida por la política." },
+        { "id": "D", "text": "Anonimizo los datos «a ojo» y los subo a la nueva herramienta — al fin y al cabo he quitado los apellidos." }
+      ],
+      "correct": ["C"],
+      "feedbackCorrect": "Sí: la vía de aprobación existe precisamente para evaluar las nuevas herramientas de forma controlada en lugar de usarlas a escondidas. Al reportar la herramienta, combinas innovación y seguridad.",
+      "feedbackIncorrect": "La pequeña escala, el portátil privado o una anonimización amateur no anulan la política — los datos de clientes siguen saliendo fuera del control de la empresa. Lo correcto: reportar la herramienta para su evaluación y, hasta su aprobación, trabajar con la permitida (C).",
+      "references": ["MB5.2", "MB5.1"]
+    },
+    {
+      "id": "Q144",
+      "module": "MB5",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "El participante tiene en cuenta los derechos de autor y las licencias al usar contenidos generados por IA en materiales de la empresa.",
+      "prompt": "Creas un folleto público de la empresa NotkaApp. El generador de imágenes creó el gráfico ideal, pero recuerda al estilo reconocible de una marca famosa, y tú no conoces las condiciones de licencia del generador. ¿Qué haces?",
+      "options": [
+        { "id": "A", "text": "Lo publico — los contenidos de IA no están sujetos a ningún derecho, así que no hay nada que comprobar." },
+        { "id": "B", "text": "Compruebo las condiciones de licencia del generador (si permite el uso comercial) y consulto el gráfico que recuerda al estilo ajeno antes de publicar nada." },
+        { "id": "C", "text": "Lo publico con la firma «generado por IA» — indicar la fuente resuelve las cuestiones legales." },
+        { "id": "D", "text": "Modifico ligeramente el gráfico con un filtro — tras los cambios los derechos de autor ya no aplican." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Sí: el uso comercial exige comprobar la licencia de la herramienta, y el parecido con una marca ajena es un riesgo legal independientemente de quién (o qué) creó el gráfico. Las dudas se consultan antes de publicar.",
+      "feedbackIncorrect": "Los contenidos de IA no están «libres de derecho»: la licencia del generador define el uso permitido, y el parecido con una marca ajena amenaza con una infracción independientemente de la firma o el filtro. Lo correcto: comprobar la licencia y consultar (B).",
+      "references": ["MB5.3"]
+    },
+    {
+      "id": "Q145",
+      "module": "MB5",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "El participante señala lo que suele definir la política de uso de IA de una empresa.",
+      "prompt": "¿Qué suele definir la política de uso de IA de una empresa? Marca todas las opciones correctas.",
+      "options": [
+        { "id": "A", "text": "La lista de herramientas de IA aprobadas para el uso profesional." },
+        { "id": "B", "text": "Qué categorías de datos se pueden procesar en qué herramientas." },
+        { "id": "C", "text": "Las compras privadas de los empleados en tiendas en línea." },
+        { "id": "D", "text": "Los modelos de IA favoritos de cada miembro de la dirección." }
+      ],
+      "correct": ["A", "B"],
+      "feedbackCorrect": "La política de IA responde a dos preguntas: CON QUÉ se puede trabajar (herramientas aprobadas) y CON QUÉ DATOS (categorías de datos permitidas para cada herramienta). Es un mapa de uso seguro, no una lista de prohibiciones porque sí.",
+      "feedbackIncorrect": "El núcleo de la política de IA son las herramientas aprobadas (A) y las categorías de datos permitidas (B). Las compras privadas y las preferencias de alguien no son objeto de una política de uso de IA.",
+      "references": ["MB5.2"]
+    },
+    {
+      "id": "Q146",
+      "module": "MB5",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "El participante analiza las consecuencias del shadow AI en el equipo y elige una reacción correctiva en lugar de escalar el ocultamiento.",
+      "prompt": "Escenario: descubres que la mitad de tu equipo lleva meses pegando descripciones de incidencias de clientes en cuentas privadas de un chat público de IA, porque «todos lo hacen y es más rápido». Los resultados son buenos, los clientes están satisfechos. ¿Qué evaluación de la situación es correcta?",
+      "options": [
+        { "id": "A", "text": "Como los resultados son buenos y nadie ha señalado un problema, la práctica puede considerarse probada y no hay que tocar el tema." },
+        { "id": "B", "text": "Basta pedir discreción al equipo — el riesgo solo aparece cuando la práctica sale a la luz." },
+        { "id": "C", "text": "Es shadow AI sistémico: los datos de clientes llevan meses saliendo fuera del control de la empresa, independientemente de la calidad de los resultados. Hay que sacarlo a la luz, detener el pegado de datos de clientes y solicitar una herramienta aprobada." },
+        { "id": "D", "text": "El problema es solo el uso de cuentas privadas — basta crear una cuenta común de equipo en el mismo chat público." }
+      ],
+      "correct": ["C"],
+      "feedbackCorrect": "Análisis acertado: los buenos resultados no compensan la salida incontrolada de datos de clientes — el riesgo (legal, contractual, reputacional) crece con cada pegado. La corrección = sacarlo a la luz, detenerlo, dar al equipo una alternativa legal.",
+      "feedbackIncorrect": "La calidad de los resultados no elimina el riesgo: los datos de clientes salen fuera del control de la empresa independientemente de los efectos y la discreción, y una cuenta común en la misma herramienta no cambia nada. La evaluación correcta: C — sacarlo a la luz, detenerlo, proporcionar una alternativa aprobada.",
+      "references": ["MB5.1", "MB5.2"]
+    }
+  ]
+}

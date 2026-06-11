@@ -1,0 +1,109 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P1 AI w domu (formatywna)",
+    "interaction": "Klasyfikacja zadań (kind: classify) — ćwiczenie formatywne, NIE scorowane do zaliczenia",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE i ogólne (zero realnych danych/PII). Moduł formatywny — bez progu zaliczenia i certyfikatu. Tłumaczenie IT."
+  },
+  "module": "MD1",
+  "intro": "L'IA non è magia né fantascienza — è uno strumento che già oggi può aiutarti a scrivere un'e-mail, pianificare la settimana o spiegarti un argomento difficile con parole semplici. In questo modulo vedrai cosa sa fare davvero l'IA, dove sbaglia e da dove conviene cominciare. Senza test, senza pressione — è una passeggiata tranquilla su un terreno nuovo.",
+  "screens": [
+    {
+      "id": "md1-s1-czaty-asystenci",
+      "title": "Chat e assistenti — il tuo nuovo aiutante",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "La forma più diffusa di IA è la chat: scrivi una domanda o una richiesta con parole normali e l'assistente risponde. Non devi conoscere nessun comando né il «linguaggio dei computer» — parli come con una persona disponibile, che ha tanta pazienza e non sbuffa mai quando chiedi la stessa cosa per la terza volta." },
+        { "kind": "list", "items": [
+          "Puoi chiedere spiegazioni: «spiegamelo come se avessi 10 anni».",
+          "Puoi chiedere testi: un'e-mail, gli auguri, un annuncio, la lista della spesa.",
+          "Puoi chiedere idee: cosa cucinare per pranzo, cosa fare in un sabato di pioggia, che regalo fare alla nonna.",
+          "Puoi fare domande di seguito e correggere: «più corto», «più semplice», «e se invece…?»."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Non esistono domande stupide", "text": "L'assistente IA non giudica. Puoi chiedere cose «ovvie», chiedere di ripetere e scrivere con errori di battitura — capirà lo stesso cosa intendi." }
+      ]
+    },
+    {
+      "id": "md1-s2-multimodalnosc",
+      "title": "Testo, immagine, voce — l'IA capisce più delle lettere",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Gli assistenti moderni non si limitano al testo. Puoi mostrare loro una foto, dire qualcosa a voce o chiedere di generare un'immagine. Questo apre usi molto pratici nella vita di tutti i giorni." },
+        { "kind": "table", "headers": ["Cosa dai", "Cosa puoi ricevere", "Esempio dalla vita reale"], "rows": [
+          ["Testo", "Una risposta, un testo, un piano, delle idee", "«Scrivi una risposta cortese a questo invito»"],
+          ["Foto", "Una descrizione, una spiegazione, una traduzione", "Foto di un'etichetta in tedesco → «cosa c'è scritto qui?»"],
+          ["Voce", "Una conversazione senza scrivere", "Stai cucinando e chiedi a voce con cosa sostituire la panna"],
+          ["Richiesta di un'immagine", "Una grafica generata", "Un disegno da colorare per il bambino, un'illustrazione per un invito"]
+        ], "textAlt": "La tabella mostra quattro modi di lavorare con l'IA: il testo dà risposte e piani, la foto dà una descrizione o una traduzione, la voce permette di conversare senza scrivere, e la richiesta di un'immagine dà una grafica generata. Ogni riga ha un esempio di vita domestica." },
+        { "kind": "callout", "variant": "info", "title": "Prova con la fotocamera", "text": "Uno dei primi passi più piacevoli è mostrare all'IA una foto: un manuale di istruzioni, la pianta del balcone, gli ingredienti di un prodotto — e chiedere «cos'è?» oppure «spiegamelo in modo semplice»." }
+      ]
+    },
+    {
+      "id": "md1-s3-czego-nie-potrafi",
+      "title": "Cosa l'IA NON sa fare — suona sicura, ma a volte sbaglia",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Allucinazione", "text": "La situazione in cui l'IA fornisce un'informazione falsa ma molto convincente. L'assistente non mente apposta — semplicemente «indovina» la risposta che si adatta alla domanda, e lo fa con lo stesso tono sicuro che usa per i fatti veri." },
+        { "kind": "paragraph", "text": "Immagina un conoscente colto ed eloquente che però non dice mai «non lo so». Se gli chiedi gli orari di apertura dell'ambulatorio, ti dirà degli orari — forse veri, forse inventati. L'IA funziona proprio così: spiega, suggerisce e scrive benissimo, ma non è un oracolo." },
+        { "kind": "list", "items": [
+          "Date, prezzi, orari di apertura, norme di legge — verifica sempre alla fonte.",
+          "Consigli su salute e finanze — trattali come preparazione alla conversazione con il medico o il consulente, non come una decisione.",
+          "Le notizie «di oggi» — l'assistente potrebbe non conoscere gli eventi più recenti.",
+          "Calcoli e fatti minuziosi — l'IA è a volte sorprendentemente debole nelle cose che sembrano semplici."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Il principio della fiducia limitata", "text": "Più importante è la decisione (salute, denaro, documenti), più la risposta dell'IA è solo un suggerimento da verificare — non l'ultima parola." }
+      ]
+    },
+    {
+      "id": "md1-s4-od-czego-zaczac",
+      "title": "Da dove cominciare — la prima settimana con l'IA",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Il modo migliore per prendere confidenza con l'IA sono i compiti piccoli e sicuri, in cui un errore non costa nulla. Anna Esempio ha cominciato pianificando i pranzi della settimana, Gianni Sintetico — scrivendo risposte cortesi alle e-mail. Dopo una settimana entrambi avevano già i loro usi preferiti." },
+        { "kind": "list", "ordered": true, "items": [
+          "Scegli una chat IA gratuita e crea un account.",
+          "Fai una domanda su qualcosa che conosci bene — vedrai quanto bene (e con quanta sicurezza) risponde.",
+          "Chiedi aiuto per una piccola questione vera: un'e-mail, un piano, una ricetta.",
+          "Fai apposta domande di seguito e correggi la risposta — vedrai che la conversazione funziona meglio di una domanda sola.",
+          "Verifica una risposta «sui fatti» in un'altra fonte — sentirai dove passa il confine della fiducia."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Non rompi niente", "text": "La chat IA è un posto sicuro per sperimentare. Il peggio che può succedere è una risposta fuori bersaglio — allora scrivi semplicemente «non intendevo questo» e provi in un altro modo." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "md1-classify",
+    "title": "L'IA lo farà bene o serve una persona?",
+    "intro": "Assegna ogni compito: l'IA oggi se la caverà bene, oppure è probabile che sbagli e servono una verifica o una persona? È un esercizio di crescita — il feedback spiega ogni risposta.",
+    "categories": [
+      { "id": "ai-dobrze", "label": "L'IA oggi lo fa bene", "desc": "Compiti linguistici e creativi: tradurre, scrivere, spiegare, pianificare." },
+      { "id": "czlowiek", "label": "Qui l'IA sbaglia / serve una persona", "desc": "Fatti attuali, decisioni importanti, salute, denaro — richiedono una verifica." }
+    ],
+    "items": [
+      { "id": "md1-i1", "text": "Scrivi una risposta cortese all'invito a una prima comunione.", "correctCategory": "ai-dobrze", "rationale": "Scrivere testi è il punto forte dell'IA — correggi facilmente tono e lunghezza." },
+      { "id": "md1-i2", "text": "Dimmi gli orari di apertura attuali dell'ambulatorio del mio quartiere.", "correctCategory": "czlowiek", "rationale": "L'IA può inventare gli orari con tono sicuro. Queste cose verificale sul sito dell'ambulatorio o per telefono." },
+      { "id": "md1-i3", "text": "Spiega con parole semplici cos'è l'inflazione.", "correctCategory": "ai-dobrze", "rationale": "Spiegare i concetti «in modo umano» è uno dei migliori usi dell'IA." },
+      { "id": "md1-i4", "text": "Decidi tu se devo accendere questo mutuo.", "correctCategory": "czlowiek", "rationale": "Una decisione finanziaria importante — l'IA può aiutarti a mettere in ordine le domande, ma la decisione discutila con un consulente e con il tuo buon senso." },
+      { "id": "md1-i5", "text": "Proponi un piano dei pasti per la settimana con ingredienti semplici.", "correctCategory": "ai-dobrze", "rationale": "Pianificazione e idee sono un compito sicuro — al massimo cambi il piatto che non ti convince." },
+      { "id": "md1-i6", "text": "Dimmi quali farmaci prendere per questo mal di testa.", "correctCategory": "czlowiek", "rationale": "La salute richiede un medico o un farmacista. L'IA può spiegare i concetti, ma non deve dosare i farmaci." },
+      { "id": "md1-i7", "text": "Traduci una ricetta di cucina dal francese all'italiano.", "correctCategory": "ai-dobrze", "rationale": "Le traduzioni di testi quotidiani riescono molto bene all'IA." },
+      { "id": "md1-i8", "text": "Dimmi il risultato della partita di ieri e le ultime notizie.", "correctCategory": "czlowiek", "rationale": "Gli eventi più recenti possono essere fuori dalla conoscenza dell'assistente — potrebbe dare informazioni vecchie o inventate." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "L'IA è una conversazione con parole normali — chiedi, approfondisci, correggi, non rompi niente.",
+      "L'assistente capisce testo, foto e voce — mostrare una foto a volte è più veloce che descrivere.",
+      "L'IA suona sicura anche quando sbaglia — fatti, salute e denaro verificali sempre alla fonte.",
+      "Comincia da compiti piccoli e sicuri: un'e-mail, il piano della settimana, la spiegazione di un argomento difficile."
+    ],
+    "checklist": [
+      "Ho creato un account in una chat IA e ho fatto la prima domanda?",
+      "So cos'è un'allucinazione e quali risposte vanno verificate?",
+      "Ho provato ad approfondire e correggere una risposta invece di fermarmi alla prima?",
+      "Ho un compito quotidiano in cui l'IA mi aiuta davvero?"
+    ],
+    "checklistTitle": "Checklist — i primi passi con l'IA",
+    "nextStep": "Prossimo passo: nel modulo «Prompt per tutti i giorni» imparerai a formulare le richieste in modo che le risposte siano azzeccate al primo colpo — con contesto, obiettivo e formato."
+  }
+}

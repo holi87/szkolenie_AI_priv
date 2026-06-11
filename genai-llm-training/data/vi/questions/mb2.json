@@ -1,0 +1,155 @@
+{
+  "_meta": {
+    "module": "MB2",
+    "issue": "#171 Rebuild ścieżek — bank pytań P2 „Bezpieczne używanie AI”, moduł MB2 (dane wrażliwe i prywatność)",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo, identyfikatory testowe). ZERO realnych danych/PII.",
+    "note": "Tłumaczenie wietnamskie (vi) pytań modułu MB2 (Q123-Q128), pula dedykowana ścieżki P2. 4 pytania KRYTYCZNE (Q123-Q126) — bramka 100% w teście końcowym P2."
+  },
+  "questions": [
+    {
+      "id": "Q123",
+      "module": "MB2",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": true,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Học viên nhận diện dữ liệu cá nhân trong nội dung công việc và không dán chúng vào công cụ AI công khai khi chưa ẩn danh hóa.",
+      "prompt": "Một đồng nghiệp ở bộ phận chăm sóc khách hàng của SklepDemo nhờ bạn giúp: anh ấy muốn dán vào chat AI công khai toàn bộ nội dung đơn khiếu nại của một khách hàng nữ — kèm họ tên, địa chỉ và mã đơn hàng — để AI đề xuất một câu trả lời lịch sự. Bạn làm gì?",
+      "options": [
+        { "id": "A", "text": "Tôi giúp dán toàn bộ — công cụ này đằng nào cũng không lưu hội thoại, và câu trả lời sẽ tốt hơn khi có đầy đủ ngữ cảnh." },
+        { "id": "B", "text": "Tôi đề nghị trước hết xóa dữ liệu cá nhân (họ tên, địa chỉ, mã đơn hàng) và chỉ dán phần mô tả vấn đề — AI không cần danh tính khách hàng để đề xuất câu trả lời." },
+        { "id": "C", "text": "Tôi khuyên chỉ đổi họ thành chữ viết tắt — phần dữ liệu còn lại có thể giữ nguyên, vì đó là dữ liệu công ty chứ không phải dữ liệu cá nhân." },
+        { "id": "D", "text": "Tôi gợi ý cứ dán dữ liệu, nhưng viết thêm ở cuối lời đề nghị AI quên chúng đi sau khi trả lời." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Chính xác: nguyên tắc tối thiểu hóa dữ liệu (GDPR) — mô hình chỉ nhận đúng những gì cần cho tác vụ. Phần mô tả vấn đề là đủ; danh tính khách hàng không cải thiện chất lượng câu trả lời mà chỉ tạo ra rủi ro rò rỉ.",
+      "feedbackIncorrect": "Đây là lỗi bảo mật. Dữ liệu cá nhân của khách hàng (họ tên, địa chỉ, mã đơn hàng) không được phép đi vào công cụ AI công khai — dù nguyên vẹn hay “với chữ viết tắt”, còn lời đề nghị “hãy quên sau khi trả lời” không bảo đảm điều gì. Chỉ dán phần mô tả vấn đề đã được ẩn danh hóa.",
+      "references": ["MB2.1", "MB2.2"]
+    },
+    {
+      "id": "Q124",
+      "module": "MB2",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": true,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Học viên không chuyển bí mật (mật khẩu, khóa, token) cho công cụ AI, bất kể mục đích là gì.",
+      "prompt": "Bạn đang cấu hình một tích hợp trong NotkaApp và có một file cấu hình chứa khóa API (tok_test_abc123) cùng các mật khẩu của môi trường. Trợ lý AI có thể tìm ra lỗi cấu hình rất nhanh. Bạn làm gì?",
+      "options": [
+        { "id": "A", "text": "Tôi dán cả file — khóa này là “khóa thử nghiệm” nên không có rủi ro." },
+        { "id": "B", "text": "Tôi dán file, nhưng đề nghị AI đừng dùng khóa đó vào việc gì cả." },
+        { "id": "C", "text": "Tôi thay các giá trị bí mật bằng placeholder (ví dụ KHOA_API, MAT_KHAU) và dán file đã được làm sạch như vậy — cấu trúc vẫn gỡ lỗi được mà không cần giá trị thật." },
+        { "id": "D", "text": "Tôi chỉ dán một nửa khóa — từ giá trị không đầy đủ thì không ai khôi phục được gì." }
+      ],
+      "correct": ["C"],
+      "feedbackCorrect": "Đúng vậy — bí mật không bao giờ được đưa vào chat, kể cả loại “thử nghiệm”: lỗi cấu hình nằm ở cấu trúc, không nằm ở các giá trị. Placeholder giữ nguyên khả năng gỡ lỗi mà không có rủi ro.",
+      "feedbackIncorrect": "Đây là lỗi bảo mật. Mật khẩu, khóa và token KHÔNG BAO GIỜ được đưa vào công cụ AI — dù nguyên vẹn, một nửa, hay kèm lời đề nghị “đừng dùng”. Hãy thay các giá trị bằng placeholder; cấu trúc file là đủ để tìm ra lỗi.",
+      "references": ["MB2.2", "MB2.3"]
+    },
+    {
+      "id": "Q125",
+      "module": "MB2",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": true,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Học viên phân biệt công cụ AI được phê duyệt và chưa được phê duyệt để xử lý tài liệu mật.",
+      "prompt": "Bạn được giao dịch một hợp đồng thuộc diện NDA giữa công ty của bạn và đối tác SklepDemo. Trình dịch AI của công ty thì chậm, còn công cụ công khai miễn phí dịch tốt hơn và nhanh hơn. Bạn làm gì?",
+      "options": [
+        { "id": "A", "text": "Tôi dịch hợp đồng trong công cụ được công ty phê duyệt — chậm hơn, nhưng tài liệu thuộc diện NDA không được rời khỏi môi trường đã phê duyệt." },
+        { "id": "B", "text": "Tôi dịch bằng công cụ miễn phí — quan trọng là chất lượng bản dịch, còn NDA áp dụng cho con người chứ không phải phần mềm." },
+        { "id": "C", "text": "Tôi dịch bằng công cụ miễn phí, nhưng xóa trang bìa có tên các công ty — phần còn lại của hợp đồng là “ẩn danh”." },
+        { "id": "D", "text": "Tôi chia hợp đồng thành các đoạn nhỏ và dịch bằng công cụ miễn phí — ở dạng từng mảnh thì không ai ghép lại được thành bản đầy đủ." }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Đúng vậy: tài liệu mật chỉ được xử lý trong môi trường đã được công ty phê duyệt. Sự tiện lợi và chất lượng của công cụ miễn phí không thay đổi các nghĩa vụ NDA.",
+      "feedbackIncorrect": "Đây là lỗi bảo mật. Nội dung hợp đồng thuộc diện NDA được dán vào công cụ chưa phê duyệt là vi phạm tính bảo mật — kể cả theo từng đoạn và không có trang bìa (bản thân nội dung đã tiết lộ các bên và các điều khoản). Chỉ dùng các công cụ được công ty phê duyệt.",
+      "references": ["MB2.3", "MB2.4"]
+    },
+    {
+      "id": "Q126",
+      "module": "MB2",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": true,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Học viên đánh giá một cách có ý thức các quyền mà ứng dụng AI yêu cầu, thay vì chấp nhận chúng theo mặc định.",
+      "prompt": "Bạn cài lên điện thoại công việc một ứng dụng trợ lý AI. Ở lần khởi động đầu tiên, nó xin quyền truy cập thường trực vào danh bạ, ảnh, micro và lịch sử vị trí, “để cá nhân hóa câu trả lời tốt hơn”. Bạn chỉ cần chức năng tóm tắt các ghi chú văn bản. Bạn làm gì?",
+      "options": [
+        { "id": "A", "text": "Tôi chấp nhận tất cả — không có đủ quyền thì trợ lý sẽ hoạt động kém hơn." },
+        { "id": "B", "text": "Tôi chấp nhận tất cả, nhưng dự định tắt các quyền sau một tháng, khi đã thử nghiệm xong ứng dụng." },
+        { "id": "C", "text": "Tôi chỉ chấp nhận micro — giọng nói là nền tảng của trợ lý, phần còn lại là chuyện vặt." },
+        { "id": "D", "text": "Tôi từ chối mọi quyền truy cập không cần thiết cho việc tóm tắt ghi chú; nếu ứng dụng ép buộc cấp đầy đủ quyền, tôi báo cáo nó cho bộ phận IT thay vì cài đặt." }
+      ],
+      "correct": ["D"],
+      "feedbackCorrect": "Đúng vậy: nguyên tắc quyền tối thiểu. Tóm tắt ghi chú không cần danh bạ, ảnh hay vị trí — trên thiết bị công việc, các quyền truy cập dư thừa là rủi ro cho dữ liệu công ty và dữ liệu riêng tư.",
+      "feedbackIncorrect": "Đây là lỗi bảo mật. Quyền truy cập thường trực vào danh bạ, ảnh và vị trí trên điện thoại công việc vượt quá nhu cầu (tóm tắt ghi chú) — “cá nhân hóa” không biện minh cho việc thu thập dữ liệu công ty. Hãy cấp quyền tối thiểu, còn các quyền dư thừa bị ép buộc thì báo cáo cho IT.",
+      "references": ["MB2.4", "MB2.5"]
+    },
+    {
+      "id": "Q127",
+      "module": "MB2",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Học viên nhận diện đâu là dữ liệu cá nhân theo nghĩa của GDPR trong các nội dung hằng ngày.",
+      "prompt": "Điều nào dưới đây là dữ liệu cá nhân theo nghĩa của GDPR?",
+      "options": [
+        { "id": "A", "text": "Tên mô hình AI được dùng trong công ty." },
+        { "id": "B", "text": "Địa chỉ email của nhân viên jan.syntetyczny@przyklad.test, cho phép nhận dạng người đó." },
+        { "id": "C", "text": "Số lượng yêu cầu mà cả nhóm xử lý trong một tháng." },
+        { "id": "D", "text": "Bảng giá dịch vụ công khai của công ty." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Dữ liệu cá nhân là mọi thông tin cho phép nhận dạng một người cụ thể — địa chỉ email công việc chứa họ tên nhận dạng trực tiếp nhân viên đó.",
+      "feedbackIncorrect": "Dữ liệu cá nhân liên quan đến một CON NGƯỜI có thể nhận dạng được. Tên mô hình, số liệu thống kê tổng hợp của nhóm và bảng giá công khai không chỉ ra ai cụ thể — còn địa chỉ email chứa họ tên thì có.",
+      "references": ["MB2.1"]
+    },
+    {
+      "id": "Q128",
+      "module": "MB2",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Học viên chỉ ra những nội dung có thể dán an toàn vào công cụ AI công khai.",
+      "prompt": "Những nội dung nào có thể dán an toàn vào chat AI công khai? Hãy chọn tất cả đáp án đúng.",
+      "options": [
+        { "id": "A", "text": "Mô tả vấn đề đã được ẩn danh hóa, trong đó dữ liệu cá nhân và các mã định danh đã bị xóa." },
+        { "id": "B", "text": "Bản scan chứng minh thư — vì bạn chỉ hỏi về tính đúng đắn của định dạng tài liệu thôi mà." },
+        { "id": "C", "text": "Câu hỏi chung về cú pháp công thức trong bảng tính, không kèm dữ liệu từ bảng tính." },
+        { "id": "D", "text": "Báo cáo tài chính nội bộ của công ty được đánh dấu là mật." }
+      ],
+      "correct": ["A", "C"],
+      "feedbackCorrect": "Đúng vậy: an toàn là những nội dung không chứa dữ liệu cá nhân, bí mật và thông tin mật — mô tả vấn đề đã ẩn danh hóa và câu hỏi chung về cú pháp không tiết lộ điều gì.",
+      "feedbackIncorrect": "Chỉ an toàn những nội dung không chứa dữ liệu cá nhân và thông tin mật (A và C). Bản scan giấy tờ tùy thân là dữ liệu cá nhân trực tiếp, còn báo cáo tài chính mật không được rời khỏi môi trường đã phê duyệt — bất kể ý định của câu hỏi là gì.",
+      "references": ["MB2.1", "MB2.3"]
+    }
+  ]
+}

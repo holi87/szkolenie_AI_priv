@@ -1,20 +1,28 @@
 {
   "paths": {
     "S1": {
-      "name": "Phi kỹ thuật / ra quyết định",
+      "name": "AI với QA — cấp độ: Cơ bản",
       "assumedPathTime": "3.5-4.5 h (A4)"
     },
     "S2": {
-      "name": "Người dùng thực hành / QA",
+      "name": "AI với QA — cấp độ: Thực hành",
       "assumedPathTime": "6-7 h (A4)"
     },
     "S3": {
-      "name": "Kỹ sư / tự động hóa / QA kỹ thuật",
+      "name": "AI với QA — cấp độ: Kỹ sư",
       "assumedPathTime": "9-10 h (A4)"
     },
     "S4": {
       "name": "Thang đo Holak — chẩn đoán và phát triển",
       "assumedPathTime": "2.5-3 h"
+    },
+    "P1": {
+      "name": "AI tại nhà",
+      "assumedPathTime": "2.5-3 h"
+    },
+    "P2": {
+      "name": "Sử dụng AI an toàn",
+      "assumedPathTime": "3-3.5 h"
     }
   }
 }

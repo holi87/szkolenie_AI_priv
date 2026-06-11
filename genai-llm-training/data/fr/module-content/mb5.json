@@ -1,0 +1,97 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P2 Bezpieczne używanie AI",
+    "interaction": "Klasyfikacja: zgodne z polityką vs shadow AI (kind: classify)",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp/SklepDemo, przyklad.test, Jan Syntetyczny). ZERO realnych danych/PII."
+  },
+  "module": "MB5",
+  "intro": "Les entreprises n'interdisent pas l'IA par principe — elles clarifient AVEC QUOI on peut travailler et AVEC QUELLES données. Ce module explique ce qu'est le shadow AI et pourquoi il nuit, comment lire la politique de l'entreprise, ce qu'il en est des droits d'auteur des contenus générés, et qui répond du résultat d'un travail fait avec l'IA.",
+  "screens": [
+    {
+      "id": "mb5-s1-shadow-ai",
+      "title": "Shadow AI : travailler en cachette",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Shadow AI", "text": "Utilisation d'outils d'IA pour des tâches professionnelles à l'insu et sans l'accord de l'entreprise — le plus souvent via des comptes privés sur des chats publics." },
+        { "kind": "paragraph", "text": "Le problème n'est pas l'outil lui-même, mais l'absence de contrôle : personne ne sait quelles données de l'entreprise et des clients s'échappent, à quelles conditions elles sont traitées, ni si elles servent à entraîner le modèle d'un tiers. Les bons résultats du travail ne compensent pas ce risque — il grandit à chaque collage." },
+        { "kind": "callout", "variant": "warn", "title": "Le coût silencieux", "text": "Une fuite via le shadow AI se découvre généralement tard et par hasard — et elle concerne alors des mois de données, pas un seul message." }
+      ]
+    },
+    {
+      "id": "mb5-s2-polityka",
+      "title": "Politique d'entreprise : avec quoi et avec quelles données travailler",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Une bonne politique d'IA répond à deux questions : quels outils sont approuvés et quelles catégories de données peut-on y traiter. C'est une carte, pas un mur — elle montre le chemin sûr au lieu de tout interdire." },
+        { "kind": "table", "headers": ["Catégorie de données", "Chat public (compte privé)", "Outil d'entreprise approuvé"], "rows": [
+          ["Connaissances générales, ébauches sans données d'entreprise", "généralement autorisé", "autorisé"],
+          ["Documents internes, code, plans", "non autorisé", "autorisé selon la politique"],
+          ["Données clients et données personnelles", "non autorisé", "seulement si la politique l'autorise explicitement"]
+        ], "textAlt": "Matrice : plus les données sont sensibles, plus le choix d'outils est restreint — les données clients exclusivement dans les outils explicitement admis par la politique." },
+        { "kind": "callout", "variant": "safe", "title": "Un nouvel outil ?", "text": "Vous avez trouvé mieux ? Soumettez-le à évaluation (IT/sécurité) au lieu de l'utiliser en douce. Le circuit d'approbation existe pour que l'innovation n'exclue pas la sécurité." }
+      ]
+    },
+    {
+      "id": "mb5-s3-licencje",
+      "title": "Licences et droits d'auteur des contenus d'IA",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Les contenus générés par l'IA ne sont pas « à personne » au sens pratique : les conditions d'usage sont fixées par la licence de l'outil (p. ex. l'usage commercial est-il permis), et le résultat peut violer les droits d'autrui s'il reproduit un style, une marque ou une image reconnaissables." },
+        { "kind": "list", "items": [
+          "Avant tout usage commercial, vérifiez la licence du générateur — « gratuit » ne veut pas dire « pour tout ».",
+          "Un visuel ressemblant à s'y méprendre à une marque ou un style connus est un risque juridique, même si « c'est l'IA qui l'a fait ».",
+          "Étiquetez les contenus d'IA là où l'entreprise, la plateforme ou la loi l'exigent — et partout où le cacher minerait la confiance."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Règle de bon sens", "text": "Vous doutez de pouvoir utiliser quelque chose publiquement ? C'est une question pour la personne responsable du juridique/de la marque — AVANT la publication, pas après." }
+      ]
+    },
+    {
+      "id": "mb5-s4-odpowiedzialnosc",
+      "title": "C'est l'humain qui répond, pas le modèle",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "L'IA est un outil — comme un traitement de texte ou un tableur. L'offre, le rapport ou la réponse au client, c'est vous qui les signez, avec les erreurs que le modèle a inventées et que vous avez laissées passer. Les conditions d'utilisation des fournisseurs d'IA excluent explicitement leur responsabilité quant au contenu des résultats." },
+        { "kind": "list", "ordered": true, "items": [
+          "Vérifiez les faits, les chiffres et les noms dans les contenus venant de l'IA avant de les signer.",
+          "Ne transmettez rien que vous ne sauriez défendre avec vos propres mots.",
+          "Pour les contenus importants, laissez une trace de vérification : ce qui a été vérifié et dans quelle source."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Rappelez-vous", "text": "« C'est ce que l'IA a généré » n'est pas une ligne de défense — ni face au client, ni face au supérieur, ni face à la loi." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "mb5-classify",
+    "title": "Conforme à la politique ou shadow AI ?",
+    "intro": "L'entreprise SklepDemo n'admet les données clients que dans l'assistant IA interne ; les chats publics ne sont autorisés que pour des contenus sans données d'entreprise. Évaluez les pratiques.",
+    "categories": [
+      { "id": "ok", "label": "Conforme à la politique", "desc": "Outil approuvé, ou contenu sans données d'entreprise/clients." },
+      { "id": "shadow", "label": "Shadow AI / violation", "desc": "Outil non approuvé, données hors du contrôle de l'entreprise, contournement des règles." }
+    ],
+    "items": [
+      { "id": "mb5-i1", "text": "Un salarié demande à un chat public les bonnes pratiques générales de rédaction de courriels — sans aucune donnée d'entreprise.", "correctCategory": "ok", "rationale": "Contenu général, zéro donnée d'entreprise — le chat public est autorisé." },
+      { "id": "mb5-i2", "text": "L'équipe colle des descriptions de tickets clients dans des comptes privés d'un chat public, « parce que c'est plus rapide ».", "correctCategory": "shadow", "rationale": "Données clients hors de l'outil approuvé — du shadow AI systémique, quels que soient les résultats." },
+      { "id": "mb5-i3", "text": "Un analyste travaille sur des données clients dans l'assistant IA interne et approuvé.", "correctCategory": "ok", "rationale": "C'est exactement pour cela que l'outil interne a été approuvé." },
+      { "id": "mb5-i4", "text": "Un responsable envoie un rapport confidentiel sur sa boîte privée pour le passer chez lui dans son chat d'IA préféré.", "correctCategory": "shadow", "rationale": "Les données confidentielles quittent le contrôle de l'entreprise doublement : messagerie privée + outil non approuvé." },
+      { "id": "mb5-i5", "text": "Une salariée soumet un nouvel outil d'IA à l'évaluation du service IT et attend la décision avant de l'utiliser.", "correctCategory": "ok", "rationale": "Le circuit exemplaire : l'innovation passe par l'évaluation et l'approbation, pas par la discrétion." },
+      { "id": "mb5-i6", "text": "Un développeur colle des fragments de code interne dans un chat public depuis son compte privé, pour trouver un bug plus vite.", "correctCategory": "shadow", "rationale": "Le code interne est une donnée d'entreprise — le chat public depuis un compte privé viole la politique." },
+      { "id": "mb5-i7", "text": "Le marketing utilise un générateur de visuels approuvé et vérifie avant publication la licence d'usage commercial.", "correctCategory": "ok", "rationale": "Outil approuvé + conscience des licences avant publication." },
+      { "id": "mb5-i8", "text": "Un stagiaire crée un « compte commun d'équipe » sur un chat public pour que toute l'équipe y colle des données clients « officiellement ».", "correctCategory": "shadow", "rationale": "Un compte commun ne légalise rien — les données clients vont toujours dans un outil non approuvé." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Shadow AI = travailler sur les données de l'entreprise à son insu et hors de son contrôle ; les bons résultats ne compensent pas une fuite.",
+      "La politique d'IA est une carte : outils approuvés × catégories de données autorisées. Soumettez les nouveaux outils à évaluation.",
+      "Vous vérifiez la licence du générateur avant tout usage commercial, et le contenu signé de votre nom, c'est vous qui en répondez."
+    ],
+    "checklist": [
+      "L'outil que j'utilise pour cette tâche est-il approuvé pour ce type de données ?",
+      "Suis-je capable de défendre le contenu venant de l'IA avec mes propres mots avant de le signer ?",
+      "Est-ce que je connais le circuit pour soumettre un nouvel outil à évaluation dans mon entreprise ?"
+    ],
+    "checklistTitle": "Check-list — l'IA au travail",
+    "nextStep": "Prochaine étape : le dernier module du parcours — la vérification des contenus d'IA, c'est-à-dire comment contrôler les réponses du modèle avant de les transmettre."
+  }
+}

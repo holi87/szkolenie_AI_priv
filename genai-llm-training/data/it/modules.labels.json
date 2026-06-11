@@ -343,5 +343,209 @@
       "Riconosce cosa distingue il livello 8 dal 9 e il 10 dall'11",
       "Distingue uno sviluppo misurato e calibrato da un falso senso di maturità"
     ]
+  },
+  "MB1": {
+    "name": "Mappa dei rischi dell'IA",
+    "level": "base",
+    "interactiveElement": "Classifica: rischio o pratica sicura",
+    "keyConcepts": [
+      "allucinazioni",
+      "eccesso di fiducia",
+      "fughe di dati",
+      "manipolazione",
+      "uso consapevole dell'IA"
+    ],
+    "learningOutcomes": [
+      "Elenca i principali rischi dell'uso quotidiano dell'IA",
+      "Riconosce che un tono sicuro non significa verità",
+      "Individua le situazioni in cui l'IA aiuta e quelle in cui danneggia"
+    ]
+  },
+  "MB2": {
+    "name": "Dati sensibili e privacy",
+    "level": "base",
+    "interactiveElement": "Classifica: cosa si può incollare nella chat",
+    "keyConcepts": [
+      "dati personali (GDPR)",
+      "minimizzazione dei dati",
+      "segreti e password",
+      "strumenti approvati",
+      "permessi delle app"
+    ],
+    "learningOutcomes": [
+      "Riconosce dati personali e riservati nei contenuti quotidiani",
+      "Anonimizza il contenuto prima di incollarlo in uno strumento di IA",
+      "Non condivide segreti (password, chiavi, token) con le chat di IA"
+    ]
+  },
+  "MB3": {
+    "name": "Prompt injection e ingegneria sociale",
+    "level": "base/intermedio",
+    "interactiveElement": "Classifica: attacco o richiesta normale",
+    "keyConcepts": [
+      "prompt injection",
+      "istruzioni nascoste nei dati",
+      "furto d'identità",
+      "ingegneria sociale",
+      "segnalazione degli incidenti"
+    ],
+    "learningOutcomes": [
+      "Riconosce le istruzioni iniettate nei contenuti letti dall'IA",
+      "Applica la regola: il contenuto dei dati non è un comando",
+      "Sa come reagire e a chi segnalare un tentativo di manipolazione"
+    ]
+  },
+  "MB4": {
+    "name": "Deepfake, truffe e disinformazione",
+    "level": "base",
+    "interactiveElement": "Classifica: segnale d'allarme o situazione normale",
+    "keyConcepts": [
+      "deepfake voce e video",
+      "truffa del CEO",
+      "pressione del tempo",
+      "verifica sul secondo canale",
+      "segnalazione delle truffe"
+    ],
+    "learningOutcomes": [
+      "Riconosce i segnali tipici di deepfake e truffe assistite dall'IA",
+      "Applica la regola del secondo canale prima di agire sotto pressione",
+      "Conosce la procedura per segnalare una situazione sospetta"
+    ]
+  },
+  "MB5": {
+    "name": "IA al lavoro: policy e shadow AI",
+    "level": "base",
+    "interactiveElement": "Classifica: conforme alla policy o shadow AI",
+    "keyConcepts": [
+      "shadow AI",
+      "policy aziendale",
+      "strumenti approvati",
+      "licenze e diritto d'autore",
+      "responsabilità del risultato"
+    ],
+    "learningOutcomes": [
+      "Riconosce lo shadow AI e le sue conseguenze per l'azienda",
+      "Sceglie lo strumento conforme alla policy in base al tipo di dati",
+      "Sa che l'essere umano risponde del contenuto creato con l'IA"
+    ]
+  },
+  "MB6": {
+    "name": "Verifica dei contenuti dell'IA",
+    "level": "base/intermedio",
+    "interactiveElement": "Griglia di verifica di una risposta dell'IA",
+    "keyConcepts": [
+      "fact-checking",
+      "fonti e date",
+      "seconda traccia indipendente",
+      "limiti di competenza del modello",
+      "verifica prima di inoltrare"
+    ],
+    "learningOutcomes": [
+      "Controlla una risposta dell'IA secondo semplici criteri di verifica",
+      "Individua i temi ad alto rischio (numeri, diritto, salute, novità)",
+      "Costruisce l'abitudine di verificare prima di diffondere contenuti"
+    ]
+  },
+  "MD1": {
+    "name": "Cosa sa fare l'IA oggi",
+    "level": "base",
+    "interactiveElement": "Classifica: cosa fa bene l'IA e dove sbaglia",
+    "keyConcepts": [
+      "assistenti IA",
+      "chat",
+      "multimodalità",
+      "limiti delle capacità",
+      "sano scetticismo"
+    ],
+    "learningOutcomes": [
+      "Elenca gli usi quotidiani dell'IA in casa",
+      "Riconosce i compiti in cui l'IA è poco affidabile",
+      "Inizia a usare l'IA con compiti semplici e sicuri"
+    ]
+  },
+  "MD2": {
+    "name": "Prompt per tutti i giorni",
+    "level": "base",
+    "interactiveElement": "Messa a punto di un prompt domestico",
+    "keyConcepts": [
+      "contesto",
+      "obiettivo e formato",
+      "iterazione",
+      "precisazione",
+      "esempi domestici"
+    ],
+    "learningOutcomes": [
+      "Formula richieste con contesto, obiettivo e formato della risposta",
+      "Migliora la risposta dell'IA con precisazioni invece di cercare il prompt perfetto",
+      "Usa l'IA nei compiti quotidiani: email, piani, ricette, apprendimento"
+    ]
+  },
+  "MD3": {
+    "name": "IA nel telefono e in casa",
+    "level": "base",
+    "interactiveElement": "Classifica: compito per l'assistente o no",
+    "keyConcepts": [
+      "assistente vocale",
+      "IA nella fotocamera",
+      "traduzione in tempo reale",
+      "casa intelligente",
+      "valore reale vs gadget"
+    ],
+    "learningOutcomes": [
+      "Individua le funzioni IA del telefono che semplificano davvero la vita",
+      "Sceglie compiti sensati per l'assistente vocale",
+      "Distingue le funzioni utili dai gadget di marketing"
+    ]
+  },
+  "MD4": {
+    "name": "Creare: immagini, audio, video",
+    "level": "base",
+    "interactiveElement": "Classifica: va bene o è rischioso",
+    "keyConcepts": [
+      "generatori di immagini",
+      "musica e video IA",
+      "etichettatura dei contenuti IA",
+      "diritti sulle opere",
+      "immagine altrui"
+    ],
+    "learningOutcomes": [
+      "Crea semplici materiali domestici con i generatori",
+      "Etichetta i contenuti generati dall'IA dove necessario",
+      "Rispetta l'immagine e i diritti altrui creando con l'IA"
+    ]
+  },
+  "MD5": {
+    "name": "IA, bambini e famiglia",
+    "level": "base",
+    "interactiveElement": "Classifica: pratica familiare sana o rischiosa",
+    "keyConcepts": [
+      "parlare di IA con il bambino",
+      "uso condiviso",
+      "aiutare vs sostituirsi",
+      "igiene digitale",
+      "controllo genitori"
+    ],
+    "learningOutcomes": [
+      "Parla con il bambino delle possibilità e dei limiti dell'IA",
+      "Stabilisce regole familiari sane per l'uso dell'IA",
+      "Distingue l'IA che aiuta a imparare da quella che sostituisce il pensiero"
+    ]
+  },
+  "MD6": {
+    "name": "Privacy domestica",
+    "level": "base",
+    "interactiveElement": "Messa a punto delle impostazioni di privacy",
+    "keyConcepts": [
+      "cronologia delle chat",
+      "addestramento sui tuoi dati",
+      "opt-out",
+      "cosa non incollare mai",
+      "dispositivi di casa"
+    ],
+    "learningOutcomes": [
+      "Controlla e imposta le opzioni di privacy negli strumenti di IA",
+      "Sa quali contenuti non incollare mai nelle chat (documenti, foto di bambini, dati sanitari)",
+      "Mette ordine nei permessi dei dispositivi di casa"
+    ]
   }
 }

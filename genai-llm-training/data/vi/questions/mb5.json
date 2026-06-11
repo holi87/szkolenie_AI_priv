@@ -1,0 +1,155 @@
+{
+  "_meta": {
+    "module": "MB5",
+    "issue": "#171 Rebuild ścieżek — bank pytań P2 (VI), moduł MB5 (AI w pracy: polityki i shadow AI)",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE. ZERO realnych danych/PII.",
+    "note": "Tłumaczenie VI kanonu PL. Pola scoringowe identyczne z PL."
+  },
+  "questions": [
+    {
+      "id": "Q141",
+      "module": "MB5",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Người học hiểu khái niệm shadow AI và phân biệt nó với việc dùng công cụ được phê duyệt.",
+      "prompt": "Khái niệm “shadow AI” trong công ty nghĩa là gì?",
+      "options": [
+        { "id": "A", "text": "Chương trình thí điểm chính thức các công cụ AI mới do bộ phận IT triển khai." },
+        { "id": "B", "text": "Chế độ tối (dark mode) trong các ứng dụng trợ lý AI." },
+        { "id": "C", "text": "Mô hình AI chạy cục bộ trên máy chủ công ty thay vì trên đám mây." },
+        { "id": "D", "text": "Nhân viên dùng công cụ AI ngoài tầm hiểu biết và sự đồng ý của công ty, không kiểm soát được dữ liệu gửi vào đó." }
+      ],
+      "correct": ["D"],
+      "feedbackCorrect": "Shadow AI là việc dùng công cụ AI không được phê duyệt, không được kiểm soát trong công việc. Vấn đề không nằm ở công cụ mà ở việc mất kiểm soát: không ai biết dữ liệu công ty nào rò rỉ ra ngoài và bị xử lý theo điều kiện nào.",
+      "feedbackIncorrect": "Shadow AI là dùng công cụ AI ngoài tầm hiểu biết và đồng ý của công ty (D) — tương tự “shadow IT”. Thí điểm của IT, chế độ tối hay chạy mô hình cục bộ không phải shadow AI. Hãy xem lại định nghĩa trong mô-đun.",
+      "references": ["MB5.1"]
+    },
+    {
+      "id": "Q142",
+      "module": "MB5",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Người học biết ai chịu trách nhiệm về nội dung tạo ra với sự trợ giúp của AI.",
+      "prompt": "Bạn soạn báo giá cho khách hàng của SklepDemo với sự trợ giúp của AI. Trong báo giá có một thông số sản phẩm do mô hình bịa ra. Ai chịu trách nhiệm về lỗi này?",
+      "options": [
+        { "id": "A", "text": "Không ai cả — lỗi do AI tạo ra không thể quy cho ai." },
+        { "id": "B", "text": "Bạn — AI là công cụ, còn người ký gửi nội dung chịu trách nhiệm về nó." },
+        { "id": "C", "text": "Nhà cung cấp mô hình AI — sản phẩm của họ tạo ra lỗi." },
+        { "id": "D", "text": "Khách hàng — lẽ ra phải tự kiểm tra thông số trước khi ký." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Đúng: AI là công cụ như trình soạn thảo văn bản. Nội dung bạn ký và gửi đi là của bạn — kèm theo nghĩa vụ kiểm chứng. Đây là nền tảng của việc dùng AI có trách nhiệm trong công việc.",
+      "feedbackIncorrect": "Người ký gửi nội dung cho khách hàng chịu trách nhiệm về nó (B). Điều khoản của các nhà cung cấp AI loại trừ rõ ràng trách nhiệm của họ về nội dung tạo sinh, còn đẩy việc kiểm chứng sang khách hàng là rủi ro mất lòng tin và hậu quả hợp đồng.",
+      "references": ["MB5.4"]
+    },
+    {
+      "id": "Q143",
+      "module": "MB5",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Người học chọn cách xử sự đúng chính sách khi công cụ được phê duyệt không đáp ứng đủ nhu cầu.",
+      "prompt": "Chính sách công ty chỉ cho phép trợ lý AI nội bộ tiếp cận dữ liệu khách hàng. Bạn phát hiện một công cụ công khai mới có thể phân tích phản ánh của khách hàng nhanh gấp đôi. Bạn làm gì?",
+      "options": [
+        { "id": "A", "text": "Dùng công cụ mới, nhưng chỉ cho việc nhỏ — quy mô nhỏ thì rủi ro không đáng kể." },
+        { "id": "B", "text": "Dùng công cụ mới từ laptop cá nhân — chính sách công ty không bao trùm thiết bị riêng." },
+        { "id": "C", "text": "Đề xuất công cụ cho IT/bộ phận an ninh đánh giá và phê duyệt; trong thời gian chờ, làm việc trên công cụ được chính sách cho phép." },
+        { "id": "D", "text": "Ẩn danh hóa dữ liệu “đại khái” rồi đưa vào công cụ mới — dù sao cũng đã xóa tên họ." }
+      ],
+      "correct": ["C"],
+      "feedbackCorrect": "Đúng: quy trình phê duyệt tồn tại chính là để đánh giá công cụ mới một cách có kiểm soát thay vì dùng lén. Đề xuất công cụ là cách kết hợp đổi mới với an toàn.",
+      "feedbackIncorrect": "Quy mô nhỏ, laptop cá nhân hay ẩn danh hóa nghiệp dư không vô hiệu hóa chính sách — dữ liệu khách hàng vẫn rò rỉ ngoài tầm kiểm soát của công ty. Đúng: đề xuất công cụ để đánh giá và dùng công cụ được phép cho đến khi phê duyệt (C).",
+      "references": ["MB5.2", "MB5.1"]
+    },
+    {
+      "id": "Q144",
+      "module": "MB5",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Người học cân nhắc bản quyền và giấy phép khi dùng nội dung do AI tạo trong tài liệu công ty.",
+      "prompt": "Bạn làm brochure công khai cho công ty NotkaApp. Trình tạo ảnh đã tạo một đồ họa hoàn hảo, nhưng nó giống phong cách dễ nhận ra của một thương hiệu nổi tiếng, và bạn không biết điều khoản giấy phép của trình tạo. Bạn làm gì?",
+      "options": [
+        { "id": "A", "text": "Cứ đăng — nội dung từ AI không chịu bất kỳ luật nào, nên chẳng có gì phải kiểm tra." },
+        { "id": "B", "text": "Kiểm tra điều khoản giấy phép của trình tạo (có cho phép dùng thương mại không) và tham vấn về đồ họa giống phong cách của bên khác, trước khi công bố bất cứ thứ gì." },
+        { "id": "C", "text": "Đăng kèm chú thích “do AI tạo” — ghi nguồn là giải quyết xong vấn đề pháp lý." },
+        { "id": "D", "text": "Chỉnh nhẹ đồ họa bằng bộ lọc — sau chỉnh sửa thì bản quyền hết hiệu lực." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Đúng: dùng thương mại đòi hỏi kiểm tra giấy phép công cụ, còn sự giống thương hiệu của bên khác là rủi ro pháp lý bất kể ai (hay cái gì) tạo ra đồ họa. Khi nghi ngờ, tham vấn trước khi công bố.",
+      "feedbackIncorrect": "Nội dung từ AI không hề “miễn trừ pháp luật”: giấy phép trình tạo quy định phạm vi sử dụng, còn sự giống thương hiệu khác có nguy cơ vi phạm bất kể chú thích hay bộ lọc. Đúng: kiểm tra giấy phép và tham vấn (B).",
+      "references": ["MB5.3"]
+    },
+    {
+      "id": "Q145",
+      "module": "MB5",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Người học chỉ ra chính sách AI của công ty thường quy định những gì.",
+      "prompt": "Chính sách sử dụng AI của công ty thường quy định những gì? Chọn tất cả đáp án đúng.",
+      "options": [
+        { "id": "A", "text": "Danh sách công cụ AI được phê duyệt cho công việc." },
+        { "id": "B", "text": "Loại dữ liệu nào được phép xử lý trong công cụ nào." },
+        { "id": "C", "text": "Việc mua sắm cá nhân của nhân viên ở các cửa hàng trực tuyến." },
+        { "id": "D", "text": "Mô hình AI ưa thích của từng thành viên ban lãnh đạo." }
+      ],
+      "correct": ["A", "B"],
+      "feedbackCorrect": "Chính sách AI trả lời hai câu hỏi: được làm việc BẰNG GÌ (công cụ phê duyệt) và VỚI GÌ (loại dữ liệu cho phép ở mỗi công cụ). Đó là bản đồ sử dụng an toàn, không phải danh sách cấm vì nguyên tắc.",
+      "feedbackIncorrect": "Cốt lõi của chính sách AI là công cụ được phê duyệt (A) và loại dữ liệu cho phép (B). Mua sắm cá nhân và sở thích của ai đó không phải đối tượng của chính sách sử dụng AI.",
+      "references": ["MB5.2"]
+    },
+    {
+      "id": "Q146",
+      "module": "MB5",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Người học phân tích hậu quả của shadow AI trong nhóm và chọn cách khắc phục thay vì che giấu thêm.",
+      "prompt": "Tình huống: bạn phát hiện một nửa nhóm của mình nhiều tháng nay dán mô tả phản ánh của khách hàng vào tài khoản cá nhân trên chat AI công khai, vì “ai cũng làm thế và nhanh hơn”. Kết quả tốt, khách hàng hài lòng. Đánh giá nào về tình huống là đúng?",
+      "options": [
+        { "id": "A", "text": "Kết quả tốt và chưa ai báo cáo vấn đề, vậy có thể coi đây là cách làm đã được kiểm chứng và không đụng đến nữa." },
+        { "id": "B", "text": "Chỉ cần đề nghị nhóm kín tiếng — rủi ro chỉ xuất hiện khi việc này bị lộ." },
+        { "id": "C", "text": "Đây là shadow AI mang tính hệ thống: dữ liệu khách hàng nhiều tháng nay rò rỉ ngoài tầm kiểm soát của công ty bất kể chất lượng kết quả. Phải công khai việc này, dừng dán dữ liệu khách hàng và đề xuất nhu cầu về công cụ được phê duyệt." },
+        { "id": "D", "text": "Vấn đề chỉ là dùng tài khoản cá nhân — chỉ cần lập tài khoản nhóm chung trong chính chat công khai đó." }
+      ],
+      "correct": ["C"],
+      "feedbackCorrect": "Phân tích chính xác: kết quả tốt không bù đắp được việc dữ liệu khách hàng rò rỉ mất kiểm soát — rủi ro (pháp lý, hợp đồng, uy tín) tăng theo mỗi lần dán. Khắc phục = công khai, dừng lại, cho nhóm một lựa chọn hợp lệ.",
+      "feedbackIncorrect": "Chất lượng kết quả không xóa được rủi ro: dữ liệu khách hàng rò rỉ ngoài kiểm soát công ty bất kể hiệu quả và sự kín tiếng, còn tài khoản chung trong cùng công cụ chẳng thay đổi gì. Đánh giá đúng: C — công khai, dừng lại, cung cấp lựa chọn được phê duyệt.",
+      "references": ["MB5.1", "MB5.2"]
+    }
+  ]
+}

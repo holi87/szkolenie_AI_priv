@@ -1,0 +1,99 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P2 Bezpieczne używanie AI",
+    "interaction": "Klasyfikacja: sygnał ostrzegawczy vs normalna sytuacja (kind: classify)",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp/SklepDemo, przyklad.test, Jan Syntetyczny). ZERO realnych danych/PII."
+  },
+  "module": "MB4",
+  "intro": "A voice can be faked from a dozen seconds of recording, a face from a few photos. A recording is no longer proof — but AI-assisted scams still give themselves away the same way: with pressure, an unusual channel, and a request for money or data. This module teaches you to recognize them and respond correctly.",
+  "screens": [
+    {
+      "id": "mb4-s1-deepfake",
+      "title": "Deepfake: a voice and a face made to order",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Deepfake", "text": "A recording (voice, photo, video) generated or modified by AI that realistically impersonates a real person." },
+        { "kind": "paragraph", "text": "Faking a voice used to require a studio and an actor. Today a sample from social media and a widely available tool are enough. The practical consequence: “I heard his voice” and “I saw her on video” are no longer proof of identity." },
+        { "kind": "callout", "variant": "warn", "title": "“CEO fraud” and the “grandchild scam 2.0”", "text": "The same old schemes, a new engine: a phone call with the boss’s voice about an urgent transfer, or a “grandchild” asking for money. The voice matches, the scheme matches — and it is the scheme, not the voice, that should set off your alarm." }
+      ]
+    },
+    {
+      "id": "mb4-s2-sygnaly",
+      "title": "Warning signs",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Since the form (voice, face, language) can be flawless, judge the circumstances. Scams almost always combine several of these elements:" },
+        { "kind": "list", "items": [
+          "Time pressure: “immediately”, “within the hour”, “before the system locks”.",
+          "Secrecy: “tell no one”, “confidential matter, just between us”.",
+          "An unusual channel: a private number, a new messenger, a “backup” account.",
+          "A request for money, login credentials, or codes.",
+          "A departure from procedure: “let’s skip the formalities this time”."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "The rule", "text": "One signal is a reason for vigilance. Two or more — treat it as a scam attempt until you verify otherwise." }
+      ]
+    },
+    {
+      "id": "mb4-s3-drugi-kanal",
+      "title": "The second-channel rule",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "The most effective defense requires no technology: break off the contact that someone else initiated and verify the matter through a channel you choose yourself. Call back the number you have in your contacts. Walk over to the desk. Write to the known company address." },
+        { "kind": "table", "headers": ["Situation", "Second-channel verification"], "rows": [
+          ["A call from the “boss” about an urgent transfer", "Hang up, call the boss’s known number or confirm in person"],
+          ["A video call with a “contractor” changing the bank account number", "Call the number from the contract, not from the message"],
+          ["A text from your “child” from a new number asking for money", "Call the child’s old, known number"]
+        ], "textAlt": "Examples of second-channel verification: always contact initiated by you to a previously known number or address, never through a channel indicated in a suspicious message." },
+        { "kind": "callout", "variant": "safe", "title": "The key", "text": "The second channel only works when YOU initiate it. A “confirmation” number given in a suspicious message is still the scammer’s channel." }
+      ]
+    },
+    {
+      "id": "mb4-s4-zgloszenie",
+      "title": "The reporting procedure",
+      "type": "content",
+      "blocks": [
+        { "kind": "list", "ordered": true, "items": [
+          "Do not act under pressure: not replying immediately is not a mistake, it is the procedure.",
+          "Keep the evidence: the message, the number, the recording — do not delete anything.",
+          "At work: report to the IT/security team. Privately: report to the police and on the platform the contact came from.",
+          "Warn the person who was impersonated — their likeness was used and they may be the target of further attempts."
+        ] },
+        { "kind": "paragraph", "text": "Do not pass disinformation on even “with a warning” — every share increases the reach of the fake. Instead, report the material on the platform and, if the topic is important, share a link to a verified source." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "mb4-classify",
+    "title": "Warning sign or normal situation?",
+    "intro": "Assess each situation: does it contain signals of a possible scam or deepfake, or is it normal? The feedback explains what to look at.",
+    "categories": [
+      { "id": "warning", "label": "Warning sign (possible scam/deepfake)", "desc": "Pressure, secrecy, an unusual channel, a request for money/data, bypassing procedures." },
+      { "id": "normal", "label": "Normal situation", "desc": "A known channel, no pressure, consistent with procedures." }
+    ],
+    "items": [
+      { "id": "mb4-i1", "text": "The “director’s” voice on the phone asks for an immediate transfer and begs for discretion.", "correctCategory": "warning", "rationale": "Pressure + secrecy + money — the “CEO fraud” scheme; a voice is not proof." },
+      { "id": "mb4-i2", "text": "At the weekly meeting, the accountant reminds everyone of the invoice deadline in line with the procedure.", "correctCategory": "normal", "rationale": "A known channel, a known procedure, zero pressure and secrecy." },
+      { "id": "mb4-i3", "text": "A contractor in an e-mail from a new domain announces an “urgent change of bank account number” for today’s payment.", "correctCategory": "warning", "rationale": "Account change + new domain + time pressure = a classic payment scam; verify through a second channel." },
+      { "id": "mb4-i4", "text": "A video in which a famous person recommends an investment that “doubles your money in a week”, with a link in the description.", "correctCategory": "warning", "rationale": "An investment deepfake: an unrealistic promise + a famous face + a link. Do not click, report it." },
+      { "id": "mb4-i5", "text": "Your son calls from his usual number to remind you about Sunday lunch together.", "correctCategory": "normal", "rationale": "A known number, an ordinary matter, no request for money or data." },
+      { "id": "mb4-i6", "text": "A text from an unknown number: “Mom, I broke my phone, write only here and transfer me money for a new one”.", "correctCategory": "warning", "rationale": "A new channel + isolation (“write only here”) + money — the “grandchild scam 2.0”; call the old number." },
+      { "id": "mb4-i7", "text": "The IT team sends a previously scheduled security survey through the company system, with no requests for passwords.", "correctCategory": "normal", "rationale": "An announced action, a company channel, no request for secrets." },
+      { "id": "mb4-i8", "text": "A “recruiter” offers a great job, but first asks for a recruitment fee and a scan of your ID on a messenger.", "correctCategory": "warning", "rationale": "An upfront fee + personal data + a non-company channel = a recruitment scam." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Recordings and voices are no longer proof of identity — judge the pattern of the situation, not the form.",
+      "Treat two or more signals (pressure, secrecy, an unusual channel, money/data) as a scam until verified.",
+      "Verify through a second channel that you initiate yourself; keep evidence and report, do not pass fakes on."
+    ],
+    "checklist": [
+      "Does this request apply time pressure or secrecy, or does it concern money/data?",
+      "Can I verify it through a channel I initiate myself (a known number, in person)?",
+      "Do I know where to report a suspicion at work and privately?"
+    ],
+    "checklistTitle": "Checklist — before you react to an urgent request",
+    "nextStep": "Next step: the module on AI policies at work — you will learn which tools may be used for work and what the dangers of shadow AI are."
+  }
+}

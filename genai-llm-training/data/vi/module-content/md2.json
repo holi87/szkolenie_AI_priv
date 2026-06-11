@@ -1,0 +1,127 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P1 AI w domu (formatywna)",
+    "interaction": "Suwaki promptu (kind: tune) — ćwiczenie formatywne, NIE scorowane do zaliczenia",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE i ogólne (zero realnych danych/PII). Moduł formatywny — bez progu zaliczenia i certyfikatu. Tłumaczenie wietnamskie (vi)."
+  },
+  "module": "MD2",
+  "intro": "Sự khác biệt giữa “AI chẳng giúp gì cho tôi” và “AI tiết kiệm cho tôi một giờ mỗi ngày” thường nằm ở cách bạn đưa ra lời đề nghị. Trong mô-đun này, bạn sẽ học ba thành phần đơn giản của một lời đề nghị tốt — ngữ cảnh, mục tiêu, định dạng — và thấy rằng việc chỉnh sửa câu trả lời trong cuộc trò chuyện hiệu quả hơn việc đi tìm câu hỏi “hoàn hảo”. Tất cả qua các ví dụ gia đình.",
+  "screens": [
+    {
+      "id": "md2-s1-jak-prosic",
+      "title": "Ba thành phần của một lời đề nghị tốt",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Prompt", "text": "Đơn giản là lời đề nghị của bạn gửi đến AI — câu hỏi hoặc yêu cầu viết bằng từ ngữ thường ngày. Bạn nói càng rõ ai đang hỏi, hỏi để làm gì và mong đợi câu trả lời như thế nào, kết quả nhận được càng tốt." },
+        { "kind": "list", "items": [
+          "NGỮ CẢNH — ai và trong tình huống nào: “Tôi là phụ huynh của hai đứa trẻ, tôi nấu những món đơn giản”.",
+          "MỤC TIÊU — bạn muốn đạt được gì: “Tôi cần kế hoạch bữa trưa cho 5 ngày, nấu trong tối đa 30 phút”.",
+          "ĐỊNH DẠNG — câu trả lời nên trông ra sao: “Hãy liệt kê theo gạch đầu dòng, kèm danh sách mua sắm ở cuối”."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Hãy tự so sánh", "text": "“Nấu gì cho bữa trưa?” sẽ cho bạn những ý tưởng ngẫu nhiên. “Tôi là phụ huynh, các con không ăn cay, tôi có 30 phút — hãy đề xuất 3 món trưa theo gạch đầu dòng” sẽ cho bạn thứ thật sự dùng được." }
+      ]
+    },
+    {
+      "id": "md2-s2-iterowanie",
+      "title": "Lặp và chỉnh — trò chuyện thay vì câu hỏi hoàn hảo",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Bạn không cần viết một lời đề nghị hoàn hảo ngay lần đầu. Chat là một cuộc trò chuyện: bạn nhận phiên bản đầu tiên, nói cần sửa gì, và nhận phiên bản tốt hơn. Anna Testowa ví điều này với phòng thử đồ — bộ đầu tiên hiếm khi vừa vặn ngay, nhưng sau hai lần chỉnh thì vừa như in." },
+        { "kind": "list", "ordered": true, "items": [
+          "Viết lời đề nghị tốt nhất có thể — không cần cầu toàn.",
+          "Đọc câu trả lời và gọi tên điều chưa ổn: quá dài? quá trang trọng? lạc đề?",
+          "Yêu cầu chỉnh sửa bằng một câu: “ngắn hơn”, “giọng ấm áp hơn”, “không dùng từ khó”.",
+          "Lặp lại cho đến khi ổn — thường chỉ cần 2-3 vòng."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Chỉnh sửa không phải là thất bại", "text": "Hỏi thêm và điều chỉnh là cách làm việc bình thường với AI — giống như nói rõ hơn món mình gọi ở nhà hàng. Trợ lý sẽ không phật ý vì lần sửa thứ năm." }
+      ]
+    },
+    {
+      "id": "md2-s3-przyklady-domowe",
+      "title": "Prompt gia đình — năm tình huống có sẵn",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Hãy xem cùng ba thành phần đó (ngữ cảnh, mục tiêu, định dạng) hoạt động thế nào trong những việc gia đình điển hình. Mỗi “lời đề nghị tốt hơn” bạn có thể coi như một mẫu và thay chi tiết bằng của mình." },
+        { "kind": "table", "headers": ["Tình huống", "Lời đề nghị yếu", "Lời đề nghị tốt hơn"], "rows": [
+          ["Email", "“Viết email đi”", "“Hãy viết một email ngắn, lịch sự gửi ban quản lý chung cư (liên hệ: zarzad@przyklad.test) đề nghị sửa chuông cửa liên lạc. Đi thẳng vào việc, không trách móc.”"],
+          ["Kế hoạch tuần", "“Lên kế hoạch tuần cho tôi”", "“Tôi làm việc đến 16 giờ, các con học bơi vào thứ Ba. Hãy xếp kế hoạch việc nhà cho cả tuần thành bảng, mỗi ngày 2 việc.”"],
+          ["Công thức từ tủ lạnh", "“Nấu gì bây giờ?”", "“Tôi có trứng, mì, rau chân vịt và phô mai. Hãy đề xuất 2 món trưa nhanh chỉ từ những nguyên liệu này, các bước theo gạch đầu dòng.”"],
+          ["Học ngoại ngữ", "“Dạy tôi tiếng Anh”", "“Tôi biết tiếng Anh ở trình độ cơ bản. Mỗi ngày tôi muốn 5 câu về nấu ăn kèm bản dịch và một bài quiz đơn giản ở cuối.”"],
+          ["Du lịch", "“Đi đâu bây giờ?”", "“Tôi lên kế hoạch chuyến đi 3 ngày với bé 7 tuổi, cách nhà tối đa 200 km, chi phí vừa phải. Hãy đề xuất 3 lựa chọn với ưu và nhược điểm theo gạch đầu dòng.”"]
+        ], "textAlt": "Bảng so sánh lời đề nghị yếu và tốt hơn trong năm tình huống: email, kế hoạch tuần, công thức từ tủ lạnh, học ngoại ngữ và du lịch. Lời đề nghị tốt hơn luôn chứa ngữ cảnh (ai và trong tình huống nào), mục tiêu (cần tạo ra cái gì cụ thể) và định dạng (gạch đầu dòng, bảng, quiz)." },
+        { "kind": "callout", "variant": "info", "title": "Sưu tầm những mẫu yêu thích", "text": "Khi một lời đề nghị nào đó hoạt động tuyệt vời, hãy lưu nó vào ghi chú (ví dụ trong NotkaApp). Sau một tháng, bạn có bộ prompt riêng cho mọi dịp." }
+      ]
+    },
+    {
+      "id": "md2-s4-przed-cwiczeniem",
+      "title": "Hãy thử trong thực tế",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Lát nữa bạn sẽ chơi với các “thanh trượt” của lời đề nghị: bạn sẽ thấy cùng một tình huống — nhờ viết email gửi hàng xóm — thay đổi ra sao khi bạn thêm ngữ cảnh, xác định định dạng và yêu cầu ngôn ngữ đơn giản. Ở đây không có ngưỡng đạt; mục tiêu là tận mắt cảm nhận rằng lời đề nghị rõ ràng = câu trả lời tốt hơn." },
+        { "kind": "callout", "variant": "safe", "title": "Nguyên tắc vàng", "text": "Nếu câu trả lời làm bạn thất vọng, trong 9 trên 10 trường hợp, thêm một câu ngữ cảnh hoặc xác định định dạng sẽ giúp ích — trước khi bạn kết luận rằng “AI không hoạt động”." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "tune",
+    "id": "md2-tune",
+    "title": "Tinh chỉnh lời đề nghị của bạn",
+    "intro": "Tình huống: bạn nhờ AI viết email gửi hàng xóm về việc sửa nhà gây ồn. Hãy gạt các thanh trượt và quan sát câu trả lời thay đổi thế nào. Sau đó trả lời một câu hỏi kiểm tra.",
+    "outputLabel": "Câu trả lời của AI trông như thế nào",
+    "controls": [
+      {
+        "id": "kontekst",
+        "label": "Ngữ cảnh",
+        "levels": [
+          { "value": "brak", "label": "Không có", "effect": "AI đoán mò tình huống: email chung chung, có thể quá gay gắt hoặc hoàn toàn lạc đề — nó không biết ai viết và viết cho ai." },
+          { "value": "kto-i-po-co", "label": "Ai và để làm gì", "effect": "AI biết bạn viết với tư cách hàng xóm, bạn coi trọng quan hệ tốt và chỉ muốn thống nhất giờ yên tĩnh — email đi thẳng vào trọng tâm." }
+        ]
+      },
+      {
+        "id": "format",
+        "label": "Định dạng",
+        "levels": [
+          { "value": "dowolny", "label": "Tùy ý", "effect": "Bạn nhận một khối văn bản dài — phải tự rút gọn và sắp xếp lại trước khi gửi." },
+          { "value": "lista-punktow", "label": "Ngắn gọn, có gạch đầu dòng", "effect": "Email có 3 câu mở đầu và các điểm cụ thể (đề nghị về việc gì, khung giờ đề xuất) — gần như sẵn sàng gửi đi mà không cần sửa." }
+        ]
+      },
+      {
+        "id": "ton",
+        "label": "Giọng điệu",
+        "levels": [
+          { "value": "dowolny", "label": "Tùy ý", "effect": "AI mặc định viết kiểu hành chính, cứng nhắc (“Liên quan đến tình huống đã phát sinh…”) — nghe như công văn của cơ quan, không phải thư của hàng xóm." },
+          { "value": "prosty-jezyk", "label": "Ngôn ngữ đơn giản, thân thiện", "effect": "Email nghe tự nhiên và gần gũi — nêu vấn đề một cách lịch sự và đề xuất giải pháp, không làm sứt mẻ quan hệ với hàng xóm." }
+        ]
+      }
+    ],
+    "checkpoint": {
+      "prompt": "Tổ hợp thiết lập nào sẽ cho email gửi hàng xóm tốt nhất?",
+      "type": "single_choice",
+      "options": [
+        { "id": "a", "text": "Ngữ cảnh: không có · Định dạng: tùy ý · Giọng điệu: tùy ý — AI tự biết rõ nhất." },
+        { "id": "b", "text": "Ngữ cảnh: ai và để làm gì · Định dạng: ngắn gọn, có gạch đầu dòng · Giọng điệu: ngôn ngữ đơn giản, thân thiện." },
+        { "id": "c", "text": "Ngữ cảnh: ai và để làm gì · Định dạng: tùy ý · Giọng điệu: tùy ý — chỉ cần ngữ cảnh là đủ." },
+        { "id": "d", "text": "Ngữ cảnh: không có · Định dạng: ngắn gọn, có gạch đầu dòng · Giọng điệu: ngôn ngữ đơn giản — hình thức quan trọng hơn nội dung." }
+      ],
+      "correct": ["b"],
+      "feedbackCorrect": "Chính xác! Ngữ cảnh cho AI biết thực chất vấn đề là gì, định dạng sắp xếp nội dung, còn giọng điệu đơn giản giữ gìn mối quan hệ. Ba thành phần này cùng nhau tạo ra email sẵn sàng để gửi.",
+      "feedbackIncorrect": "Gần đúng rồi! Hiệu quả nhất là trọn bộ: ngữ cảnh (ai viết và để làm gì), định dạng (ngắn gọn, gạch đầu dòng) và giọng điệu (ngôn ngữ đơn giản, thân thiện). Riêng ngữ cảnh có giúp ích, nhưng thiếu định dạng và giọng điệu thì email vẫn cần chỉnh sửa."
+    }
+  },
+  "summary": {
+    "points": [
+      "Một lời đề nghị tốt có ba thành phần: ngữ cảnh (ai và trong tình huống nào), mục tiêu (cần tạo ra gì) và định dạng (trông như thế nào).",
+      "Đừng đi tìm prompt hoàn hảo — hãy chỉnh câu trả lời trong cuộc trò chuyện, thường chỉ cần 2-3 vòng.",
+      "Các tình huống gia đình (email, kế hoạch, công thức, học ngoại ngữ, du lịch) có những khuôn mẫu lời đề nghị lặp lại — hãy sưu tầm những mẫu hiệu quả.",
+      "Câu trả lời gây thất vọng thường là dấu hiệu thiếu ngữ cảnh hoặc định dạng — chứ không phải “AI không hoạt động”."
+    ],
+    "checklist": [
+      "Lời đề nghị của tôi có nói rõ tôi là ai và hỏi để làm gì không?",
+      "Tôi đã xác định câu trả lời nên trông như thế nào chưa (gạch đầu dòng, bảng, độ dài)?",
+      "Tôi đã chỉnh sửa câu trả lời thay vì bắt đầu lại từ đầu chưa?",
+      "Tôi đã lưu lại lời đề nghị hoạt động tuyệt vời để dùng lại chưa?"
+    ],
+    "checklistTitle": "Danh sách kiểm tra — lời đề nghị tốt gửi AI",
+    "nextStep": "Bước tiếp theo: trong mô-đun “AI trong điện thoại và ngôi nhà”, bạn sẽ thấy AI đã sống ở đâu trong các thiết bị của bạn — và những chức năng nào trong số đó thật sự giúp cuộc sống dễ dàng hơn."
+  }
+}

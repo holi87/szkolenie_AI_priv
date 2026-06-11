@@ -1,0 +1,103 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P1 AI w domu (formatywna)",
+    "interaction": "Klasyfikacja: zadanie dla asystenta vs lepiej zrobić samemu (kind: classify)",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp, przyklad.test, Jan Syntetyczny, Anna Testowa). ZERO realnych danych/PII. Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MD3",
+  "intro": "KI haben Sie bereits in der Tasche: im Telefon, in der Kamera, im Übersetzer und im Lautsprecher im Wohnzimmer. Dieses Modul zeigt, welche dieser Funktionen das Leben wirklich leichter machen und welche nur ein Gadget für fünf Minuten sind — und wie Sie anfangen, sie zu nutzen, ohne das Haus auf den Kopf zu stellen.",
+  "screens": [
+    {
+      "id": "md3-s1-asystenci",
+      "title": "Sprachassistent: wofür er taugt",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Ein Sprachassistent bewährt sich am besten bei kurzen Aufgaben mit klarem Ergebnis, die Sie mit vollen Händen erledigen: ein Timer beim Kochen, eine Erinnerung, eine Nachricht, das Steuern von Licht oder Musik. Schlechter kommt er mit langen, mehrstufigen Angelegenheiten zurecht, die unterwegs eine Beurteilung erfordern." },
+        { "kind": "list", "items": [
+          "Hervorragend: „stelle einen Timer auf 12 Minuten“, „erinnere mich morgen um 8 an die Medikamente“, „füge Milch zur Einkaufsliste hinzu“.",
+          "Gut: schnelle Fragen nach Wetter, Route, Öffnungszeiten — mit der Gewohnheit, wichtige Antworten zu überprüfen.",
+          "Schwach: „plane die Küchenrenovierung“ — zu viele Entscheidungen und zu viel Kontext für einen einzigen Sprachbefehl."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Faustregel", "text": "Wenn die Aufgabe auf einen Klebezettel passt — ist sie ein Job für den Assistenten. Wenn sie ein Gespräch braucht — setzen Sie sich an den KI-Chat, wo Sie die Antworten sehen und nachbessern." }
+      ]
+    },
+    {
+      "id": "md3-s2-telefon",
+      "title": "KI in Kamera, Fotos und Übersetzer",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Die meiste stille, nützliche KI sitzt im Telefon. Sie sieht nicht wie ein Chat aus, macht aber ihre Arbeit:" },
+        { "kind": "list", "items": [
+          "Kamera: Nachtmodus, Entfernen zufälliger Personen aus dem Bild, Schärfen alter Fotos.",
+          "Galerie: Suche nach Inhalt — tippen Sie „Kassenbon“, „Hund“, „Strand“, statt Tausende Miniaturen durchzublättern.",
+          "Übersetzer: Live-Gespräch und Übersetzung von Schrift durch die Kamera — Speisekarte, Fahrplan, Medikamenten-Etikett im Urlaub.",
+          "Diktieren und Transkription: Sprechen statt Tippen; die Aufnahme einer Familienbesprechung wird zu einer Notiz."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Womit anfangen", "text": "Wählen Sie EINE Funktion aus dieser Liste und nutzen Sie sie eine Woche lang. Die Gewohnheit aus einer Funktion lehrt mehr als der Überblick über zwanzig." }
+      ]
+    },
+    {
+      "id": "md3-s3-smart-home",
+      "title": "Smart Home: Wert oder Gadget",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Zu Hause ist KI manchmal wirklich hilfreich — und manchmal ein Spielzeug, das nach einem Monat in der Schublade verstaubt. Der Unterschied läuft meist auf eines hinaus: ob das Gerät ein Problem löst, das Sie tatsächlich haben." },
+        { "kind": "table", "headers": ["Anwendung", "Wert", "Warum"], "rows": [
+          ["Thermostat, das den Tagesrhythmus lernt", "echt", "spart Geld ohne Ihr Zutun"],
+          ["Licht nach Zeitplan und Sprachbefehl", "echt", "täglicher Komfort, auch für ältere Menschen"],
+          ["Rauch-/Wassermelder mit Benachrichtigung aufs Telefon", "echt", "Sicherheit, funktioniert auch in Ihrer Abwesenheit"],
+          ["Kühlschrank mit Bildschirm, der Rezepte vorschlägt", "meist Gadget", "dasselbe macht das Telefon, ohne den Kühlschrank zu tauschen"],
+          ["Wasserkocher mit App-Steuerung", "meist Gadget", "aufstehen müssen Sie trotzdem, um Wasser einzufüllen"]
+        ], "textAlt": "Tabelle: Echten Wert liefern Geräte, die Geld oder Zeit sparen oder die Sicherheit erhöhen (Thermostat, Licht, Melder); Gadgets sind oft Geräte, die das Telefon verdoppeln, wie ein Kühlschrank mit Bildschirm oder ein ferngesteuerter Wasserkocher." },
+        { "kind": "callout", "variant": "warn", "title": "Bevor Sie kaufen", "text": "Fragen Sie: Welches MEINER Probleme löst das? Wenn die Antwort mit „es wäre schön …“ beginnt, ist es ein Gadget. Wenn mit „endlich muss ich nicht mehr …“, ist es Wert." }
+      ]
+    },
+    {
+      "id": "md3-s4-higiena",
+      "title": "Kleine Hygiene der häuslichen KI",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Geräte mit Mikrofon und Kamera sind ein Komfort, der bei der Einrichtung zwei Minuten Vernunft verlangt. Ausführlich behandeln wir das im Modul über Privatsphäre — hier die Minimalversion:" },
+        { "kind": "list", "ordered": true, "items": [
+          "Prüfen Sie, wo am Lautsprecher der physische Mikrofonschalter ist — und nutzen Sie ihn, wann immer Sie wollen.",
+          "Stellen Sie Geräte mit Kamera weder ins Schlafzimmer noch ins Kinderzimmer.",
+          "Sehen Sie ab und zu in der App die Aufnahmehistorie des Assistenten durch und leeren Sie sie."
+        ] }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "md3-classify",
+    "title": "Aufgabe für den Assistenten oder besser selbst?",
+    "intro": "Entscheiden Sie, welche Aufgaben Sie dem Sprachassistenten oder der KI im Telefon übergeben sollten und welche Sie besser selbst erledigen. Das Feedback erklärt, warum.",
+    "categories": [
+      { "id": "assistant", "label": "Aufgabe für den Assistenten", "desc": "Kurz, klares Ergebnis, niedriger Fehlerpreis — die KI erledigt das schneller." },
+      { "id": "self", "label": "Besser selbst erledigen", "desc": "Erfordert Urteilsvermögen, Vertrauen oder betrifft Dinge, bei denen ein Fehler teuer ist." }
+    ],
+    "items": [
+      { "id": "md3-i1", "text": "Einen Timer für die Piroggen stellen, wenn Sie Mehl an den Händen haben.", "correctCategory": "assistant", "rationale": "Kurzer Befehl, klares Ergebnis, null Risiko — ideal für die Stimme." },
+      { "id": "md3-i2", "text": "Ein Kreditangebot auf Basis einer einzigen Assistenten-Antwort auswählen.", "correctCategory": "self", "rationale": "Eine Finanzentscheidung erfordert den Vergleich von Angeboten und Überprüfung — die KI kann beim Sammeln der Daten helfen, aber nicht entscheiden." },
+      { "id": "md3-i3", "text": "Das Foto eines Kassenbons in der Galerie finden, indem Sie das Wort „Kassenbon“ eintippen.", "correctCategory": "assistant", "rationale": "Die Suche nach Inhalt ist eine Stärke der KI in der Galerie — Sekunden statt Blättern." },
+      { "id": "md3-i4", "text": "Die Speisekarte in einem ausländischen Restaurant mit der Telefonkamera übersetzen.", "correctCategory": "assistant", "rationale": "Live-Übersetzung ist eine ausgereifte Funktion; der Preis eines Fehlers bei einer Speisekarte ist niedrig." },
+      { "id": "md3-i5", "text": "Persönliche Hochzeitsglückwünsche für die beste Freundin schreiben.", "correctCategory": "self", "rationale": "Der Wert von Glückwünschen liegt im Persönlichen — die KI kann einen Entwurf liefern, aber die Worte sollten Ihre eigenen sein." },
+      { "id": "md3-i6", "text": "„Kauf Milch und Butter“ auf dem Weg zum Auto zur Einkaufsliste hinzufügen.", "correctCategory": "assistant", "rationale": "Eine schnelle Sprachnotiz — genau dafür wurde der Assistent geschaffen." },
+      { "id": "md3-i7", "text": "Beurteilen, ob eine E-Mail der Bank mit der Bitte um Daten ein Betrug ist.", "correctCategory": "self", "rationale": "Sicherheit erfordert Ihre Wachsamkeit und die Überprüfung bei der Bank — delegieren Sie sie nicht an einen Automaten." },
+      { "id": "md3-i8", "text": "Die Aufnahme einer Familienbesprechung über den Urlaub in eine Notiz mit einer Liste der Beschlüsse verwandeln.", "correctCategory": "assistant", "rationale": "Transkription und Zusammenfassung sind Stärken der KI — und die Notiz sehen Sie ohnehin durch." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Sprachassistent = Aufgaben vom Klebezettel; Gespräche und Entscheidungen = der Chat, in dem Sie die Antworten sehen.",
+      "Die meiste nützliche KI haben Sie schon: Galerie, Übersetzer, Diktieren — wählen Sie eine Funktion und machen Sie sie zur Gewohnheit.",
+      "Fragen Sie bei Anschaffungen fürs Haus nach IHREM zu lösenden Problem; Mikrofone und Kameras richten Sie mit Verstand ein."
+    ],
+    "checklist": [
+      "Weiß ich, wo in meinem Telefon die Fotosuche nach Inhalt ist?",
+      "Habe ich die Live-Übersetzung mit der Kamera ausprobiert?",
+      "Weiß ich, wie ich das Mikrofon im Lautsprecher zu Hause ausschalte?"
+    ],
+    "checklistTitle": "Checkliste — KI im Telefon und zu Hause",
+    "nextStep": "Nächster Schritt: das Modul über das Erschaffen mit KI — Bilder, Musik und Videos für häusliche Anlässe."
+  }
+}

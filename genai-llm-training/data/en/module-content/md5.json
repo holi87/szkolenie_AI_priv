@@ -1,0 +1,102 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P1 AI w domu (formatywna)",
+    "interaction": "Klasyfikacja: zdrowa vs ryzykowna praktyka rodzinna (kind: classify)",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp, przyklad.test, Jan Syntetyczny, Anna Testowa). ZERO realnych danych/PII. Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MD5",
+  "intro": "Children do not ask whether to use AI — they already use it: for homework, drawings, conversations with chatbots. The question is whether they do it with you or alongside you. This module helps you talk about AI without scare tactics and without blind enthusiasm, set healthy rules, and tell the difference between help with learning and doing the thinking for them.",
+  "screens": [
+    {
+      "id": "md5-s1-rozmowa",
+      "title": "How to talk with your child about AI",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "The best first conversation about AI is not a lecture but a shared experiment: sit down together, ask the chat about something your child knows well (a favorite game, an animal, a team) — and look together for what the AI got right and where it is wrong. A child who catches AI making a mistake once will remember more than from ten talks." },
+        { "kind": "list", "items": [
+          "Keep it simple: “AI guesses very well, but it does not know for sure — that is why we check”.",
+          "Do not scare and do not gush blindly — both extreme tones shut the conversation down.",
+          "Agree that with a strange, unsettling, or “too grown-up” answer, your child comes to you — with no punishment for the question itself."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "The golden sentence", "text": "“AI is a very well-read helper that sometimes makes things up — and it is never your friend or a grown-up you tell secrets to”." }
+      ]
+    },
+    {
+      "id": "md5-s2-zasady",
+      "title": "Shared rules instead of bans",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "A total ban works until the first school recess — the other kids have phones. What works better are rules agreed together, adapted to age, with a clear “why”:" },
+        { "kind": "table", "headers": ["Area", "Example rule", "Why"], "rows": [
+          ["Data", "We do not give AI our name, address, school, or photos", "a chat is not a diary; the content goes to a server"],
+          ["Time and place", "AI on a shared device, in a visible spot (younger children)", "an adult’s presence instead of surveillance"],
+          ["Content", "We show strange/unsettling answers to a parent", "filters do not catch everything"],
+          ["School", "AI helps you understand, it does not do the work for you", "a grade is meant to measure your own head"]
+        ], "textAlt": "Table of family rules: protecting the child’s data, using AI in a visible spot, reporting unsettling content, AI as help with understanding instead of doing the homework." },
+        { "kind": "callout", "variant": "info", "title": "Parental controls", "text": "Turn on kids’ modes and filters where they exist — but treat them like seat belts, not like the driver. No filter replaces a conversation." }
+      ]
+    },
+    {
+      "id": "md5-s3-nauka",
+      "title": "Help with learning or doing it for them",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "The line is easy to name and hard to police: AI helps when, after using it, your child knows MORE; it does the work for them when they know just as much but have a finished result. The same tool does both — the difference lies in how it is used." },
+        { "kind": "list", "items": [
+          "Help: “explain fractions to me using pizza”, “quiz me with five questions from this chapter”, “check my essay and tell me what to improve — without writing it for me”.",
+          "Doing it for them: “write an essay about Shakespeare for tomorrow”, “solve these problems” — and copy-paste into the notebook.",
+          "The home test: ask your child to explain the result in their own words. They can? It was help. They cannot? It was doing it for them."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "The long-term cost", "text": "Doing it for them saves an evening and costs a skill. A child who learns “AI will do it for me” is left alone in the test, in the exam, and in their first job." }
+      ]
+    },
+    {
+      "id": "md5-s4-higiena",
+      "title": "Digital hygiene for the whole family",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Children copy behaviors, not rules. If a parent “just checks the chat” at dinner, the rule “people first, screens later” dies in practice. Digital hygiene works when it applies to everyone:" },
+        { "kind": "list", "ordered": true, "items": [
+          "Screen-free zones: shared meals, the hour before bed — for adults too.",
+          "A “companion” chatbot is not a confidant: feelings and secrets are discussed with people; your child should know that a conversation with a bot is not private like a diary.",
+          "Once a month, a shared review: what AI taught us lately, where it got things wrong, what we change in the rules."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "The goal", "text": "We are not raising a child who does not use AI — we are raising one who uses it consciously and knows when to put it down." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "md5-classify",
+    "title": "A healthy or a risky family practice?",
+    "intro": "Assess these household AI practices. The feedback explains what strengthens and what undermines a child’s safety and development.",
+    "categories": [
+      { "id": "healthy", "label": "Healthy practice", "desc": "Doing things together, conversation, learning to think, protecting the child’s data." },
+      { "id": "risky", "label": "Risky practice", "desc": "Doing the work for them, the child’s data online, AI as a babysitter or confidant." }
+    ],
+    "items": [
+      { "id": "md5-i1", "text": "A parent and child together catch the AI making a mistake on a topic the child knows well.", "correctCategory": "healthy", "rationale": "Teaches healthy skepticism better than a lecture — the child experiences AI’s fallibility firsthand." },
+      { "id": "md5-i2", "text": "An eight-year-old spends evenings talking alone with a chatbot “friend” about his sadness.", "correctCategory": "risky", "rationale": "A bot is not a confidant: a child’s emotions need a human, and the content of the conversations goes to a server." },
+      { "id": "md5-i3", "text": "A teenager asks the AI for five practice questions before a test and answers them himself.", "correctCategory": "healthy", "rationale": "AI as a knowledge coach — after using it, the child knows more, not less." },
+      { "id": "md5-i4", "text": "A parent pastes a school report with the child’s full name into a public chat, asking for analysis.", "correctCategory": "risky", "rationale": "The child’s data in a public tool — the analysis is possible after anonymization." },
+      { "id": "md5-i5", "text": "The AI writes tomorrow’s essay, the child copies it into the notebook, the parent “does not see”.", "correctCategory": "risky", "rationale": "Doing the work for them with the adult’s silent consent — a double lesson: I cannot do it and I do not have to." },
+      { "id": "md5-i6", "text": "The family agrees on AI rules together over dinner, including rules for the parents.", "correctCategory": "healthy", "rationale": "Rules that are co-created and symmetrical have a chance of being followed." },
+      { "id": "md5-i7", "text": "A tablet with a chatbot as a “babysitter” for the whole afternoon, to keep things quiet.", "correctCategory": "risky", "rationale": "AI as a caregiver without an adult present — neither a filter nor a bot replaces attention." },
+      { "id": "md5-i8", "text": "The child shows the parent a strange chat answer and together you report it in the app.", "correctCategory": "healthy", "rationale": "The “you come to me without punishment” agreement works — and the child learns to respond, not just avoid." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Talk through shared experiments, not lectures — let your child catch the AI making a mistake.",
+      "Rules instead of bans: we protect data, we report unsettling content, AI helps with understanding, it does not do the homework.",
+      "Digital hygiene applies to adults too — children copy behaviors, not rulebooks."
+    ],
+    "checklist": [
+      "Does my child know what not to give AI (name, address, school, photos)?",
+      "Do we have an agreement: a strange answer = you show me, no consequences?",
+      "Can I tell when AI is teaching and when it is doing the work — and do I run that test?"
+    ],
+    "checklistTitle": "Checklist — AI in the family",
+    "nextStep": "Next step: the last module of the path — home privacy, that is, AI account settings and keeping the whole household’s data in order."
+  }
+}

@@ -5,7 +5,38 @@
 // "nie da się zaliczyć ścieżki z pominięciem wymaganych modułów".
 
 // S4 (M15/ADR-0009) = ścieżka FORMATYWNA (Skala Holaka): diagnoza + szkolenie, bez testu/scoringu/certyfikatu.
-export const PATH_IDS = ["S1", "S2", "S3", "S4"];
+// #171: P1 „AI w domu" (formatywna) + P2 „Bezpieczne używanie AI" (zaliczeniowa); S1/S2/S3 = POZIOMY ścieżki
+// „AI z QA" (pole level w paths.json) grupowane w UI w jedną kartę; S4 = BONUS (bonus:true) poza siatką wyboru.
+// Kolejność = kolejność kart na ekranie wyboru (P1, P2, poziomy QA, bonus).
+export const PATH_IDS = ["P1", "P2", "S1", "S2", "S3", "S4"];
+
+/** Ścieżki-POZIOMY (#171): mają numeryczne pole level — UI grupuje je w jedną kartę „AI z QA" z selektorem. */
+export function levelPathIds(pathsData) {
+  return Object.entries((pathsData && pathsData.paths) || {})
+    .filter(([, p]) => typeof p.level === "number")
+    .sort((a, b) => a[1].level - b[1].level)
+    .map(([id]) => id);
+}
+
+/** Poziom ścieżki (1..3) lub null, gdy ścieżka nie jest poziomem grupy „AI z QA". */
+export function pathLevel(pathsData, pathId) {
+  const p = pathsData && pathsData.paths && pathsData.paths[pathId];
+  return p && typeof p.level === "number" ? p.level : null;
+}
+
+/** Ścieżka BONUSOWA (#171, S4 Skala Holaka): prezentowana poza siatką wyboru (osobny pasek), id bez zmian. */
+export function isBonusPath(pathsData, pathId) {
+  const p = pathsData && pathsData.paths && pathsData.paths[pathId];
+  return Boolean(p && p.bonus === true);
+}
+
+/** Ścieżki samodzielne (#171): nie-poziomy i nie-bonus (P1, P2) — własna karta na ekranie wyboru. */
+export function standalonePathIds(pathsData) {
+  return PATH_IDS.filter((id) => {
+    const p = pathsData && pathsData.paths && pathsData.paths[id];
+    return p && typeof p.level !== "number" && p.bonus !== true;
+  });
+}
 
 export function isValidPath(pathId) {
   return PATH_IDS.includes(pathId);
@@ -64,14 +95,14 @@ export function pathModuleList(pathsData, modulesData, pathId, progress) {
 }
 
 /**
- * Moduły WIDOCZNE dla ścieżki = persona-set (M13/ADR-0006): pomija moduły czysto opcjonalne (variant
- * "opcjonalny"). Required + warianty świadomościowy/rozszerzony/skrócony/praktyczny/full zostają, więc każda
- * persona ma INNY zestaw modułów (S1≈7, S2≈10, S3=12) — życzenie „inne moduły dopasowane do celu" (#3).
- * Gating niezmieniony: requiredModules są zawsze required→widoczne; isFinalTestUnlocked działa jak dotąd.
+ * Moduły WIDOCZNE dla ścieżki. #171 (decyzja właściciela, Rebuild.md §2.2): w ramach poziomu „AI z QA"
+ * moduły opcjonalne są WIDOCZNE z badge „opcjonalny" (zachęta do rozszerzania) — koniec ukrywania
+ * persona-set z M13/ADR-0006 (poziom gra rolę dawnej persony; pełna lista 12 modułów + oznaczenia).
+ * Gating niezmieniony: required decyduje o blokerach testu; opcjonalne nie blokują zaliczenia.
  */
 export function pathVisibleModuleIds(pathsData, pathId) {
   const mm = getPath(pathsData, pathId).modules || {};
-  return new Set(Object.keys(mm).filter((id) => mm[id] && mm[id].variant !== "opcjonalny"));
+  return new Set(Object.keys(mm));
 }
 
 /** Status modułu z progresu: completed | in_progress | available (self-paced, brak twardego locka). */

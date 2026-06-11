@@ -343,5 +343,209 @@
       "Nhận ra điều gì phân biệt mức 8 với mức 9 và mức 10 với mức 11",
       "Phân biệt sự phát triển được đo lường, được hiệu chỉnh với cảm giác sai lầm về sự trưởng thành"
     ]
+  },
+  "MB1": {
+    "name": "Bản đồ rủi ro của AI",
+    "level": "cơ bản",
+    "interactiveElement": "Phân loại: rủi ro hay thực hành an toàn",
+    "keyConcepts": [
+      "ảo giác",
+      "tin tưởng quá mức",
+      "rò rỉ dữ liệu",
+      "thao túng",
+      "dùng AI có ý thức"
+    ],
+    "learningOutcomes": [
+      "Liệt kê các rủi ro chính khi dùng AI hằng ngày",
+      "Nhận ra giọng điệu tự tin không có nghĩa là sự thật",
+      "Chỉ ra tình huống AI giúp ích và tình huống AI gây hại"
+    ]
+  },
+  "MB2": {
+    "name": "Dữ liệu nhạy cảm và quyền riêng tư",
+    "level": "cơ bản",
+    "interactiveElement": "Phân loại: được dán gì vào chat",
+    "keyConcepts": [
+      "dữ liệu cá nhân (GDPR)",
+      "tối thiểu hóa dữ liệu",
+      "bí mật và mật khẩu",
+      "công cụ được phê duyệt",
+      "quyền của ứng dụng"
+    ],
+    "learningOutcomes": [
+      "Nhận diện dữ liệu cá nhân và bảo mật trong nội dung hằng ngày",
+      "Ẩn danh hóa nội dung trước khi dán vào công cụ AI",
+      "Không chia sẻ bí mật (mật khẩu, khóa, token) với chat AI"
+    ]
+  },
+  "MB3": {
+    "name": "Prompt injection và thao túng tâm lý",
+    "level": "cơ bản/trung cấp",
+    "interactiveElement": "Phân loại: tấn công hay yêu cầu bình thường",
+    "keyConcepts": [
+      "prompt injection",
+      "chỉ thị ẩn trong dữ liệu",
+      "mạo danh",
+      "thao túng tâm lý",
+      "báo cáo sự cố"
+    ],
+    "learningOutcomes": [
+      "Nhận diện chỉ thị được tiêm vào nội dung mà AI đọc",
+      "Áp dụng nguyên tắc: nội dung từ dữ liệu không phải mệnh lệnh",
+      "Biết cách phản ứng và báo cáo âm mưu thao túng cho ai"
+    ]
+  },
+  "MB4": {
+    "name": "Deepfake, lừa đảo và tin giả",
+    "level": "cơ bản",
+    "interactiveElement": "Phân loại: dấu hiệu cảnh báo hay tình huống bình thường",
+    "keyConcepts": [
+      "deepfake giọng nói và video",
+      "lừa đảo giả danh giám đốc",
+      "áp lực thời gian",
+      "xác minh kênh thứ hai",
+      "báo cáo lừa đảo"
+    ],
+    "learningOutcomes": [
+      "Nhận diện dấu hiệu điển hình của deepfake và lừa đảo có AI hỗ trợ",
+      "Áp dụng nguyên tắc kênh thứ hai trước khi hành động dưới áp lực",
+      "Biết quy trình báo cáo tình huống đáng ngờ"
+    ]
+  },
+  "MB5": {
+    "name": "AI trong công việc: chính sách và shadow AI",
+    "level": "cơ bản",
+    "interactiveElement": "Phân loại: đúng chính sách hay shadow AI",
+    "keyConcepts": [
+      "shadow AI",
+      "chính sách công ty",
+      "công cụ được phê duyệt",
+      "giấy phép và bản quyền",
+      "trách nhiệm về kết quả"
+    ],
+    "learningOutcomes": [
+      "Nhận diện shadow AI và hậu quả của nó cho công ty",
+      "Chọn công cụ đúng chính sách theo loại dữ liệu",
+      "Biết rằng con người chịu trách nhiệm về nội dung tạo với AI"
+    ]
+  },
+  "MB6": {
+    "name": "Kiểm chứng nội dung AI",
+    "level": "cơ bản/trung cấp",
+    "interactiveElement": "Bảng tiêu chí kiểm chứng câu trả lời AI",
+    "keyConcepts": [
+      "kiểm chứng dữ kiện",
+      "nguồn và ngày tháng",
+      "dấu vết độc lập thứ hai",
+      "giới hạn năng lực mô hình",
+      "kiểm chứng trước khi chuyển tiếp"
+    ],
+    "learningOutcomes": [
+      "Kiểm tra câu trả lời AI theo các tiêu chí đơn giản",
+      "Chỉ ra các chủ đề rủi ro cao (con số, pháp luật, sức khỏe, tin mới)",
+      "Xây dựng thói quen kiểm chứng trước khi truyền nội dung đi"
+    ]
+  },
+  "MD1": {
+    "name": "AI làm được gì hôm nay",
+    "level": "cơ bản",
+    "interactiveElement": "Phân loại: AI làm tốt gì và sai ở đâu",
+    "keyConcepts": [
+      "trợ lý AI",
+      "chat",
+      "đa phương thức",
+      "giới hạn năng lực",
+      "hoài nghi lành mạnh"
+    ],
+    "learningOutcomes": [
+      "Liệt kê các ứng dụng AI hằng ngày tại nhà",
+      "Nhận diện nhiệm vụ mà AI hay thiếu tin cậy",
+      "Bắt đầu dùng AI từ những việc đơn giản, an toàn"
+    ]
+  },
+  "MD2": {
+    "name": "Prompt cho mỗi ngày",
+    "level": "cơ bản",
+    "interactiveElement": "Tinh chỉnh prompt gia đình",
+    "keyConcepts": [
+      "ngữ cảnh",
+      "mục tiêu và định dạng",
+      "lặp lại",
+      "làm rõ",
+      "ví dụ gia đình"
+    ],
+    "learningOutcomes": [
+      "Diễn đạt yêu cầu với ngữ cảnh, mục tiêu và định dạng câu trả lời",
+      "Cải thiện câu trả lời AI bằng cách làm rõ thay vì tìm prompt hoàn hảo",
+      "Dùng AI cho việc hằng ngày: email, kế hoạch, công thức nấu ăn, học tập"
+    ]
+  },
+  "MD3": {
+    "name": "AI trong điện thoại và ngôi nhà",
+    "level": "cơ bản",
+    "interactiveElement": "Phân loại: việc cho trợ lý hay không",
+    "keyConcepts": [
+      "trợ lý giọng nói",
+      "AI trong camera",
+      "dịch trực tiếp",
+      "nhà thông minh",
+      "giá trị thật vs đồ chơi"
+    ],
+    "learningOutcomes": [
+      "Chỉ ra các tính năng AI trên điện thoại thật sự hữu ích",
+      "Chọn nhiệm vụ hợp lý cho trợ lý giọng nói",
+      "Phân biệt tính năng hữu ích với chiêu trò tiếp thị"
+    ]
+  },
+  "MD4": {
+    "name": "Sáng tạo: hình ảnh, âm thanh, video",
+    "level": "cơ bản",
+    "interactiveElement": "Phân loại: ổn hay rủi ro",
+    "keyConcepts": [
+      "trình tạo ảnh",
+      "nhạc và video AI",
+      "gắn nhãn nội dung AI",
+      "quyền với tác phẩm",
+      "hình ảnh người khác"
+    ],
+    "learningOutcomes": [
+      "Tạo tư liệu gia đình đơn giản bằng trình tạo",
+      "Gắn nhãn nội dung do AI tạo khi cần",
+      "Tôn trọng hình ảnh và quyền của người khác khi sáng tạo với AI"
+    ]
+  },
+  "MD5": {
+    "name": "AI, trẻ em và gia đình",
+    "level": "cơ bản",
+    "interactiveElement": "Phân loại: thực hành gia đình lành mạnh hay rủi ro",
+    "keyConcepts": [
+      "trò chuyện với con về AI",
+      "dùng chung",
+      "giúp đỡ vs làm thay",
+      "vệ sinh số",
+      "kiểm soát của cha mẹ"
+    ],
+    "learningOutcomes": [
+      "Trò chuyện với con về khả năng và giới hạn của AI",
+      "Đặt ra quy tắc gia đình lành mạnh khi dùng AI",
+      "Phân biệt AI hỗ trợ học tập với AI làm thay suy nghĩ"
+    ]
+  },
+  "MD6": {
+    "name": "Quyền riêng tư trong nhà",
+    "level": "cơ bản",
+    "interactiveElement": "Tinh chỉnh cài đặt quyền riêng tư",
+    "keyConcepts": [
+      "lịch sử chat",
+      "huấn luyện trên dữ liệu của bạn",
+      "opt-out",
+      "những gì không bao giờ dán",
+      "thiết bị trong nhà"
+    ],
+    "learningOutcomes": [
+      "Xem và thiết lập tùy chọn quyền riêng tư trong công cụ AI",
+      "Biết nội dung nào không bao giờ dán vào chat (giấy tờ, ảnh trẻ em, dữ liệu sức khỏe)",
+      "Dọn dẹp quyền truy cập của thiết bị trong nhà"
+    ]
   }
 }

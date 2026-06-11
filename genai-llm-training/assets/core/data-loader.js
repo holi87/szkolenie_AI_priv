@@ -2,18 +2,25 @@
 // Czysta funkcja scalania (mergeQuestionBank) jest testowalna w Node bez sieci.
 // loadTrainingData to cienki wrapper na fetch() — ścieżki WZGLĘDNE (wymóg GitHub Pages, ADR-0002).
 
-/** Shardy banku pytań: data/questions/m01.json … m12.json (po jednym na moduł). */
-export const QUESTION_SHARDS = Array.from({ length: 12 }, (_, i) => `m${String(i + 1).padStart(2, "0")}.json`);
+/** Shardy banku pytań: data/questions/m01.json … m12.json (rdzeń, po jednym na moduł)
+ * + mb1.json … mb6.json (#171: pula dedykowana ścieżki P2 „Bezpieczne używanie AI", Q117..Q152). */
+export const QUESTION_SHARDS = [
+  ...Array.from({ length: 12 }, (_, i) => `m${String(i + 1).padStart(2, "0")}.json`),
+  ...Array.from({ length: 6 }, (_, i) => `mb${i + 1}.json`),
+];
 
 /** Shardy treści modułów: data/module-content/m01.json … m12.json + mshp.json + msho.json (2 moduły
  * diagnostyczne Skali Holaka: osoba v2.1p + organizacja v2.1e — M16/#122, rozdzielone z dawnego MSH; ADR-0008)
  * + msk1..msk4.json (moduły szkoleniowe ścieżki formatywnej S4, M15/ADR-0009 — treść + interakcje, bez puli
- * pytań). Wszystkie diagnostyczne (scope="diagnostic"): poza bankiem/golden/scoringiem. */
+ * pytań) + mb1..mb6.json (#171: P2 „Bezpieczne używanie AI") + md1..md6.json (#171: P1 „AI w domu",
+ * formatywne bez puli pytań). Diagnostyczne (scope="diagnostic"): poza bankiem/golden/scoringiem. */
 export const MODULE_CONTENT_SHARDS = [
   ...Array.from({ length: 12 }, (_, i) => `m${String(i + 1).padStart(2, "0")}.json`),
   "mshp.json",
   "msho.json",
   ...Array.from({ length: 4 }, (_, i) => `msk${i + 1}.json`),
+  ...Array.from({ length: 6 }, (_, i) => `mb${i + 1}.json`),
+  ...Array.from({ length: 6 }, (_, i) => `md${i + 1}.json`),
 ];
 
 /** Scala pliki treści modułów w mapę { M1: {...}, … } po polu `module`. */

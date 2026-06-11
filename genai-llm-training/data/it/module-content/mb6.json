@@ -1,0 +1,141 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P2 Bezpieczne używanie AI",
+    "interaction": "Rubryka weryfikacji odpowiedzi AI (kind: rubric, bez recordsPractical — ćwiczenie, nie bramka)",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp/SklepDemo, przyklad.test, Jan Syntetyczny). ZERO realnych danych/PII. Tłumaczenie IT."
+  },
+  "module": "MB6",
+  "intro": "Un modello linguistico genera la risposta più probabile, non una verità verificata — e lo fa sempre con lo stesso tono sicuro. Questo modulo ti dà un metodo di verifica semplice e ripetibile: fonte, data, seconda traccia, limiti di competenza. Alla fine lo metterai alla prova su una risposta concreta dell'IA.",
+  "screens": [
+    {
+      "id": "mb6-s1-pewny-ton",
+      "title": "Perché l'IA suona sicura quando inventa",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Il modello non «sa» e non «verifica» — prevede le parole successive in base agli schemi dei dati di addestramento. Per questo la verità e l'invenzione (allucinazione) gli escono con la stessa scioltezza, con la stessa disinvoltura. Il tono, la lunghezza e il bel formato sono stile, non prova." },
+        { "kind": "definition", "term": "Allucinazione", "text": "Un'informazione generata dal modello che suona credibile ma è falsa — un fatto, un numero, una citazione o una fonte inventati." },
+        { "kind": "callout", "variant": "warn", "title": "La trappola più frequente", "text": "Il modello può inventare anche la FONTE: il titolo di un report, l'autore, il link. Il solo fatto che la risposta abbia una nota a piè di pagina non dimostra nulla — la nota va aperta." }
+      ]
+    },
+    {
+      "id": "mb6-s2-fact-checking",
+      "title": "Fact-checking passo dopo passo",
+      "type": "content",
+      "blocks": [
+        { "kind": "list", "ordered": true, "items": [
+          "Individua le affermazioni che pesano sulla decisione: numeri, date, nomi, citazioni, raccomandazioni.",
+          "Apri la fonte indicata: esiste? Contiene davvero quell'informazione?",
+          "Controlla la data: l'informazione è attuale per la tua domanda?",
+          "Trova una seconda traccia INDIPENDENTE: un'altra fonte che confermi il fatto chiave (non un'altra risposta dello stesso modello).",
+          "Solo allora usa il contenuto — con le correzioni, se la verifica ha rivelato qualcosa."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Indipendenza", "text": "Un secondo riassunto dalla stessa chat o un «conferma che è vero» nella stessa finestra NON sono una verifica indipendente — è la stessa macchina e lo stesso contesto." }
+      ]
+    },
+    {
+      "id": "mb6-s3-kiedy-nie-ufac",
+      "title": "Temi ad alto rischio",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Non ogni risposta richiede un'indagine — la ricetta delle crêpe la verifica la padella. Alza la vigilanza in proporzione al costo dell'errore:" },
+        { "kind": "table", "headers": ["Tema", "Rischio", "Chi verifica"], "rows": [
+          ["Salute, farmaci, dosaggi", "molto alto", "medico / farmacista"],
+          ["Diritto, tasse, «norme vigenti»", "alto (cambiano!)", "fonte ufficiale e datata / specialista"],
+          ["Denaro, investimenti, contratti", "alto", "documento originale / consulente"],
+          ["Numeri e statistiche da pubblicare", "medio-alto", "report originale + seconda traccia"],
+          ["Eventi recenti", "alto (data limite del modello)", "media affidabili e aggiornati"]
+        ], "textAlt": "Tabella dei temi ad alto rischio: salute, diritto, finanze, statistiche e novità richiedono la verifica nelle fonti o presso uno specialista; più alto è il costo dell'errore, più rigorosa è la verifica." },
+        { "kind": "callout", "variant": "warn", "title": "La data limite della conoscenza", "text": "Il modello si è «fermato» alla fine dei suoi dati di addestramento. Le domande su tariffe, norme o versioni di software «attuali» sono un invito a una risposta scaduta, servita con tono sicuro." }
+      ]
+    },
+    {
+      "id": "mb6-s4-nawyk",
+      "title": "L'abitudine: verifica prima di inoltrare",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Il danno maggiore non lo fa l'allucinazione in sé, ma la sua vita successiva: incollata in un'offerta, inviata alla famiglia, ripetuta in riunione. La tua regola: non trasmetti nulla che tu non sappia difendere con parole tue e di cui non sappia indicare la provenienza." },
+        { "kind": "list", "items": [
+          "Hai 10 minuti? Verifica ciò che pesa sulla decisione; il resto contrassegnalo apertamente come non verificato.",
+          "Qualcuno chiede «come fai a saperlo?» — rispondere «dall'IA» non basta; abbi una fonte.",
+          "Hai scoperto un'allucinazione nel materiale di qualcun altro? Diglielo — interrompi la catena."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "La buona notizia", "text": "Questa abitudine costa minuti, ma protegge la tua credibilità — la risorsa più difficile da ricostruire, al lavoro e in famiglia." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "rubric",
+    "id": "mb6-rubric",
+    "title": "Verifica una risposta dell'IA con la griglia",
+    "intro": "L'IA ha generato un paragrafo per una newsletter: «Secondo il report dell'Istituto Sintetico di przyklad.test ben l'87% delle aziende in Polonia ha adottato l'IA nel servizio clienti. Il numero cresce da anni. Report completo: przyklad.test/raport-ai». Valuta questa risposta secondo i quattro criteri di verifica — scegli le azioni che verificano davvero.",
+    "criteria": [
+      {
+        "id": "mb6-c1",
+        "name": "Fonte: esiste e conferma",
+        "prompt": "Cosa fai con la fonte indicata, prima di usare il numero 87%?",
+        "points": 1,
+        "hint": "La nota va aperta — il modello può inventare il report insieme al link.",
+        "options": [
+          { "id": "a", "text": "Apro il link e controllo se il report esiste e se contiene esattamente quel numero." },
+          { "id": "b", "text": "Visto che il link sembra credibile, considero la fonte confermata." },
+          { "id": "c", "text": "Chiedo alla stessa IA se il report esiste davvero." }
+        ],
+        "correctOptionIds": ["a"]
+      },
+      {
+        "id": "mb6-c2",
+        "name": "Data e attualità",
+        "prompt": "Come controlli l'attualità della statistica?",
+        "points": 1,
+        "hint": "«Cresce da anni» senza una data è una dichiarazione vuota — la conoscenza del modello ha una data limite.",
+        "options": [
+          { "id": "a", "text": "Presumo che, dato che l'IA ha risposto oggi, i dati siano di oggi." },
+          { "id": "b", "text": "Cerco nel report la data della rilevazione e controllo che non esistano dati più recenti." },
+          { "id": "c", "text": "Ritengo che la tendenza «cresce da anni» basti al posto della data." }
+        ],
+        "correctOptionIds": ["b"]
+      },
+      {
+        "id": "mb6-c3",
+        "name": "Seconda traccia indipendente",
+        "prompt": "Cosa costituisce una conferma indipendente del numero 87%?",
+        "points": 1,
+        "hint": "Indipendente = un'altra macchina/istituzione/pubblicazione, non la stessa chat.",
+        "options": [
+          { "id": "a", "text": "Una seconda risposta della stessa chat, in cui l'IA «conferma» il numero." },
+          { "id": "b", "text": "Lo stesso numero incollato da un collega dallo stesso strumento." },
+          { "id": "c", "text": "Un'altra fonte affidabile (es. una pubblicazione di settore indipendente) che riporta un valore simile." }
+        ],
+        "correctOptionIds": ["c"]
+      },
+      {
+        "id": "mb6-c4",
+        "name": "Limiti di competenza e decisione",
+        "prompt": "La verifica ha mostrato che il report non si trova. Cosa fai con il paragrafo?",
+        "points": 1,
+        "hint": "Un numero non verificato non va in pubblicazione — non importa quanto suoni bene.",
+        "options": [
+          { "id": "a", "text": "Pubblico senza modifiche — il paragrafo suona professionale e tanto i lettori non controlleranno." },
+          { "id": "b", "text": "Elimino la statistica inventata; se il tema richiede un numero, lo cerco in una fonte esistente e verificabile e cito quella fonte." },
+          { "id": "c", "text": "Lascio il numero ma tolgo il link, così nessuno scopre che il report non esiste." }
+        ],
+        "correctOptionIds": ["b"]
+      }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Tono sicuro, lunghezza e formato sono lo stile del modello, non una prova — verità e allucinazione suonano identiche.",
+      "Verifica = fonte aperta + data + seconda traccia indipendente; la stessa chat non verifica se stessa.",
+      "Salute, diritto, denaro, statistiche e novità — qui verifichi sempre, in proporzione al costo dell'errore."
+    ],
+    "checklist": [
+      "Ho aperto la fonte indicata e vi ho trovato l'informazione citata?",
+      "Conosco la data dell'informazione ed è attuale per il mio uso?",
+      "Ho una seconda traccia indipendente per i fatti e i numeri chiave?",
+      "So difendere questo contenuto con parole mie prima di trasmetterlo?"
+    ],
+    "checklistTitle": "Checklist — prima di usare una risposta dell'IA",
+    "nextStep": "Questo è l'ultimo modulo del percorso. Completa i moduli richiesti e affronta il test finale — ricorda che le domande critiche sui dati sensibili richiedono tutte le risposte corrette."
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P2 Bezpieczne używanie AI",
+    "interaction": "Klasyfikacja treści (kind: classify) — co można wkleić do publicznego czatu, a co wymaga anonimizacji lub zostaje poza czatem",
+    "sections": "Ekrany odpowiadają sekcjom MB2.1–MB2.5 (referowane przez pytania banku Q123–Q128): dane osobowe RODO, minimalizacja/anonimizacja, sekrety, narzędzia zatwierdzone vs publiczne (NDA), uprawnienia aplikacji.",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp, SklepDemo, Jan Syntetyczny, Anna Testowa, domeny @przyklad.test / @example.com, placeholdery zamiast sekretów). Zero realnych danych, PII, numerów i tokenów. Tłumaczenie wietnamskie (vi)."
+  },
+  "module": "MB2",
+  "intro": "Rủi ro AI lớn nhất trong công việc hằng ngày không cần đến hacker nào cả — chỉ cần một thao tác “dán rồi gửi” bình thường. Trong module này, bạn sẽ học cách nhận diện dữ liệu cá nhân, chỉ dán những gì thật sự cần thiết, giữ mật khẩu và khóa truy cập tránh xa các cuộc chat, và phân biệt công cụ được công ty phê duyệt với công cụ công khai. Cuối module, bạn sẽ kiểm tra điều đó trong thực hành.",
+  "screens": [
+    {
+      "id": "mb2-s1-dane-osobowe",
+      "title": "MB2.1 — Dữ liệu cá nhân là gì (GDPR trong thực tế)",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Dữ liệu cá nhân", "text": "Mọi thông tin cho phép nhận diện một người cụ thể — một cách trực tiếp (họ tên, địa chỉ e-mail, ảnh khuôn mặt) hoặc khi ghép vài dữ kiện lại với nhau (chức danh + công ty + thành phố). GDPR bảo vệ chúng bất kể đó là dữ liệu của khách hàng, đồng nghiệp hay chính bạn." },
+        { "kind": "list", "items": [
+          "Hiển nhiên: họ tên, e-mail, địa chỉ, số điện thoại, hình ảnh, số định danh.",
+          "Ít hiển nhiên hơn: mã khách hàng trong hệ thống, lịch sử đơn hàng gắn với một người, nội dung đơn khiếu nại của họ.",
+          "Được bảo vệ đặc biệt: dữ liệu về sức khỏe, quan điểm, tôn giáo — những thứ này không bao giờ dán vào chat, dưới bất kỳ hình thức nào.",
+          "Tổ hợp dữ kiện: “trưởng bộ phận hoàn trả của SklepDemo ở Đà Nẵng” vẫn nhận diện được một người, dù không nêu tên."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Vì sao điều này liên quan đến chat AI", "text": "Dán dữ liệu cá nhân vào một chat công khai nghĩa là trao chúng cho một công ty bên ngoài — thường là không có cơ sở pháp lý và người liên quan không hề hay biết. Đó là vi phạm thực sự đối với quy định bảo vệ dữ liệu, không phải chuyện hình thức.",
+          "links": [ { "label": "UODO — thông tin về bảo vệ dữ liệu cá nhân và GDPR", "href": "https://uodo.gov.pl/" } ]
+        }
+      ]
+    },
+    {
+      "id": "mb2-s2-minimalizacja",
+      "title": "MB2.2 — Tối thiểu hóa: chỉ dán những gì cần thiết",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Nguyên tắc tối thiểu hóa rất đơn giản: mô hình cần nội dung của vấn đề, chứ không cần danh tính của con người. Trước khi dán bất cứ thứ gì, hãy xóa hoặc thay thế mọi chi tiết chỉ đến người cụ thể và hợp đồng cụ thể. Bản chất công việc vẫn còn nguyên — rủi ro thì biến mất." },
+        { "kind": "table", "headers": ["Trước (đừng dán)", "Sau khi ẩn danh hóa (có thể dán)"], "rows": [
+          ["Khách hàng Nam Mẫu (jan.syntetyczny@przyklad.test) yêu cầu hoàn tiền cho đơn hàng tại SklepDemo", "Khách hàng yêu cầu hoàn tiền cho đơn hàng — giúp tôi viết một câu trả lời từ chối lịch sự"],
+          ["Lan Mẫu ở bộ phận nhân sự phàn nàn về cấp trên, tôi gửi nguyên văn e-mail của cô ấy cho bạn", "Một nhân viên báo cáo mâu thuẫn với cấp trên — nên dẫn dắt cuộc trò chuyện như thế nào?"],
+          ["Hợp đồng số 2024/DEMO với công ty PipeDemo, đơn giá và mức phạt hợp đồng trong tệp đính kèm", "Tôi có một hợp đồng B2B với điều khoản phạt do chậm tiến độ — cần kiểm tra gì trước khi ký?"]
+        ], "textAlt": "Bảng so sánh nội dung trước và sau khi ẩn danh hóa: thay vì dữ liệu của khách hàng Nam Mẫu kèm địa chỉ e-mail, ta chỉ dán mô tả vấn đề hoàn tiền; thay vì nguyên văn e-mail của nhân viên là mô tả mâu thuẫn không nêu tên; thay vì số hợp đồng và đơn giá là một câu hỏi chung về hợp đồng B2B." },
+        { "kind": "callout", "variant": "safe", "title": "Kỹ thuật dùng placeholder", "text": "Hãy thay các chi tiết cụ thể bằng vai trò: “[KHÁCH HÀNG]”, “[CÔNG TY]”, “[SỐ TIỀN]”. Mô hình vẫn xử lý tốt như thường, và sau khi nhận câu trả lời, bạn điền lại dữ liệu thật — trên máy của mình, bên ngoài cuộc chat." }
+      ]
+    },
+    {
+      "id": "mb2-s3-sekrety",
+      "title": "MB2.3 — Bí mật truy cập: mật khẩu, khóa và token không bao giờ vào chat",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Mật khẩu, khóa API, token truy cập, mã dùng một lần, đường dẫn mời vào hệ thống — tất cả đều là bí mật truy cập. Chúng khác dữ liệu cá nhân ở một điểm: rò rỉ chúng là trao cho ai đó quyền truy cập tức thì vào hệ thống. Vì vậy nguyên tắc là tuyệt đối: bí mật truy cập không được đưa vào bất kỳ cuộc chat nào, không bao giờ, dù chỉ một phần." },
+        { "kind": "list", "items": [
+          "Nhờ AI giúp cấu hình? Hãy dán tệp đã thay thế bí mật: thay vì khóa thật, hãy ghi “[KHÓA_API]”.",
+          "Bí mật “lỡ tay” dán vào rồi xóa ngay khỏi chat — vẫn có thể đã được lưu lại phía nhà cung cấp.",
+          "Nếu bí mật đã rò rỉ, chỉ xóa thôi là chưa đủ: phải vô hiệu hóa nó, tạo cái mới và báo cáo sự việc.",
+          "Điều này áp dụng cả với những mật khẩu “không mấy quan trọng” — mọi người thường dùng cùng một mật khẩu ở nhiều nơi."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Lỡ dán bí mật rồi? Hành động ngay", "text": "Đừng trông chờ rằng không ai để ý. Hãy đổi hoặc vô hiệu hóa bí mật ngay lập tức và báo cáo sự việc theo quy trình của công ty (bộ phận IT/an ninh). Phản ứng nhanh là khác biệt giữa một sự cố và một thảm họa." }
+      ]
+    },
+    {
+      "id": "mb2-s4-narzedzia",
+      "title": "MB2.4 — Công cụ được phê duyệt vs công cụ công khai (và NDA nói gì)",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Không phải chat AI nào cũng như nhau. Công cụ được công ty phê duyệt có hợp đồng đã ký với nhà cung cấp: dữ liệu không dùng để huấn luyện mô hình, được lưu trữ theo thỏa thuận và rõ ràng ai chịu trách nhiệm về chúng. Chat công khai miễn phí là kiểu thỏa thuận “có gì dùng nấy” — thường kèm quyền của nhà cung cấp được sử dụng nội dung bạn nhập." },
+        { "kind": "table", "headers": ["Đặc điểm", "Công cụ được công ty phê duyệt", "Chat công khai miễn phí"], "rows": [
+          ["Hợp đồng bảo vệ dữ liệu", "Có — công ty đã ký và đã rà soát", "Không — chỉ áp dụng điều khoản chung của nhà cung cấp"],
+          ["Dùng nội dung bạn nhập để huấn luyện", "Thường bị loại trừ theo hợp đồng", "Thường được bật mặc định"],
+          ["Dữ liệu thuộc NDA của khách hàng", "Chỉ khi chính sách công ty cho phép rõ ràng", "Không bao giờ — đó là vi phạm NDA"],
+          ["Ai chịu trách nhiệm khi có sự cố", "Lộ trình rõ ràng: công ty và nhà cung cấp", "Mơ hồ — rủi ro bạn tự gánh"]
+        ], "textAlt": "Bảng so sánh công cụ được công ty phê duyệt với chat công khai miễn phí: công cụ được phê duyệt có hợp đồng bảo vệ dữ liệu đã ký, loại trừ việc huấn luyện trên nội dung nhập vào và trách nhiệm rõ ràng; chat công khai chạy theo điều khoản chung, thường huấn luyện trên nội dung nhập vào, còn dữ liệu thuộc NDA thì không bao giờ được dán vào đó." },
+        { "kind": "callout", "variant": "warn", "title": "NDA không phải chuyện hình thức", "text": "Tài liệu thuộc thỏa thuận bảo mật với khách hàng (đặc tả, bảng giá, kế hoạch) bị dán vào chat công khai là vi phạm hợp đồng — bất kể có ai phát hiện hay không. Không chắc công cụ đã được phê duyệt chưa? Hãy hỏi trước khi dán." }
+      ]
+    },
+    {
+      "id": "mb2-s5-uprawnienia",
+      "title": "MB2.5 — Quyền hạn của ứng dụng AI: cấp càng ít càng tốt",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Ngày càng nhiều ứng dụng AI xin quyền truy cập vào tài nguyên của bạn: hộp thư, lịch, ổ đĩa chứa tài liệu, danh bạ. Mỗi lần đồng ý là một cánh cửa mở — ứng dụng nhìn thấy tất cả những gì bạn cho nó vào, không chỉ thứ nó đang cần. Nguyên tắc quyền tối thiểu luôn áp dụng: cấp đúng mức truy cập mà tác vụ yêu cầu, không hơn một chút nào." },
+        { "kind": "list", "ordered": true, "items": [
+          "Trước khi cài đặt, kiểm tra ứng dụng xin những quyền truy cập nào — và chúng có hợp lý với chức năng của nó không (ứng dụng ghi chú không cần danh bạ của bạn).",
+          "Chọn phạm vi tối thiểu: truy cập một thư mục thay vì cả ổ đĩa, một cuốn lịch thay vì cả hộp thư.",
+          "Tiện ích mở rộng và add-on AI trong trình duyệt cũng xử lý như vậy — “đọc tất cả các trang” là một quyền rất rộng.",
+          "Thỉnh thoảng rà soát lại các quyền đã cấp và thu hồi những quyền bạn không còn dùng."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Ví dụ về một quyết định tốt", "text": "Ứng dụng NotkaApp xin quyền truy cập toàn bộ ổ đĩa để tóm tắt tài liệu. Cách làm an toàn: tạo một thư mục riêng “Cần tóm tắt”, chỉ cấp quyền truy cập vào đó và chỉ bỏ vào những tệp bạn thật sự muốn xử lý." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "mb2-classify",
+    "title": "Dán hay không dán?",
+    "intro": "Hãy đánh giá từng nội dung: có thể dán an toàn vào chat AI công khai, hay phải ẩn danh hóa trước hoặc để bên ngoài cuộc chat? Tất cả ví dụ đều là dữ liệu tổng hợp.",
+    "categories": [
+      { "id": "ok", "label": "Có thể dán vào chat công khai", "desc": "Không có dữ liệu cá nhân, bí mật truy cập hay nội dung mật — chỉ là nội dung của vấn đề." },
+      { "id": "stop", "label": "Đừng dán / ẩn danh hóa trước", "desc": "Chứa dữ liệu cá nhân, bí mật truy cập hoặc nội dung thuộc diện bảo mật." }
+    ],
+    "items": [
+      { "id": "mb2-i1", "text": "“Khách hàng yêu cầu hoàn tiền sau thời hạn — giúp tôi viết một câu trả lời từ chối lịch sự nhưng dứt khoát.”", "correctCategory": "ok", "rationale": "Chỉ là mô tả vấn đề, không có chi tiết nhận diện nào — tối thiểu hóa mẫu mực." },
+      { "id": "mb2-i2", "text": "Toàn bộ nội dung đơn khiếu nại của Nam Mẫu kèm địa chỉ e-mail jan.syntetyczny@przyklad.test và mã đơn hàng.", "correctCategory": "stop", "rationale": "Họ tên và e-mail là dữ liệu cá nhân — trước khi dán, hãy thay bằng placeholder kiểu [KHÁCH HÀNG]." },
+      { "id": "mb2-i3", "text": "Đoạn cấu hình chứa khóa API thật của hệ thống SklepDemo, “vì AI cần tìm ra lỗi”.", "correctCategory": "stop", "rationale": "Bí mật truy cập không bao giờ vào chat — hãy dán cấu hình đã thay khóa bằng [KHÓA_API]." },
+      { "id": "mb2-i4", "text": "“Tôi có một bảng với các cột: ngày, hạng mục chi tiêu, số tiền. Làm sao tính tổng theo tháng trong bảng tính?”", "correctCategory": "ok", "rationale": "Câu hỏi về phương pháp, mô tả cấu trúc mà không có một bản ghi thật nào — an toàn." },
+      { "id": "mb2-i5", "text": "Đặc tả sản phẩm của khách hàng thuộc diện NDA — “chỉ một đoạn thôi, để AI giúp tóm tắt”.", "correctCategory": "stop", "rationale": "NDA bao trùm cả các trích đoạn. Tài liệu mật của khách hàng không được đưa vào chat công khai, dù chỉ một phần." },
+      { "id": "mb2-i6", "text": "“Một nhân viên báo cáo mâu thuẫn với cấp trên — nên chuẩn bị cho cuộc trò chuyện này thế nào?” (không nêu tên và bộ phận).", "correctCategory": "ok", "rationale": "Mô tả tình huống mà không thể nhận diện được ai — dữ liệu cá nhân đã được loại bỏ hiệu quả." },
+      { "id": "mb2-i7", "text": "Danh sách học viên khóa đào tạo: họ tên và e-mail — “để AI xếp họ theo thứ tự bảng chữ cái”.", "correctCategory": "stop", "rationale": "Đây là dữ liệu cá nhân của nhiều người cùng lúc. Việc sắp xếp hãy làm trên bảng tính tại máy mình — ở đây hoàn toàn không cần đến AI." },
+      { "id": "mb2-i8", "text": "Bản nháp thông báo dã ngoại công ty do chính bạn viết — “chỉnh văn phong và rút gọn còn ba câu”.", "correctCategory": "ok", "rationale": "Nội dung công khai, vốn để đăng tải, không có dữ liệu cá nhân — một cách dùng AI an toàn điển hình." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Dữ liệu cá nhân là mọi thứ giúp nhận diện một người — kể cả tổ hợp dữ kiện không có tên.",
+      "Tối thiểu hóa: dán nội dung vấn đề, không dán danh tính con người — các placeholder [KHÁCH HÀNG], [CÔNG TY], [SỐ TIỀN] giải quyết được việc này.",
+      "Mật khẩu, khóa và token không bao giờ vào chat; rò rỉ bí mật = đổi ngay lập tức và báo cáo.",
+      "Dữ liệu công ty và dữ liệu thuộc NDA chỉ dùng trong công cụ được công ty phê duyệt — chat công khai là chiếc hộp của người khác.",
+      "Cấp cho ứng dụng AI quyền hạn nhỏ nhất có thể và thường xuyên thu hồi các quyền không dùng đến."
+    ],
+    "checklist": [
+      "Trước khi dán, tôi có rà soát văn bản để tìm họ tên, e-mail và các định danh khác không?",
+      "Tôi có thay chi tiết cụ thể bằng placeholder thay vì dán nguyên bản không?",
+      "Tôi có chắc trong nội dung không còn mật khẩu, khóa hay token nào không?",
+      "Tôi có biết những công cụ AI nào được phê duyệt ở công ty mình và cho loại dữ liệu nào không?",
+      "Các ứng dụng AI của tôi có chỉ giữ đúng những quyền chúng thật sự cần không?"
+    ],
+    "checklistTitle": "Checklist — trước khi dán bất cứ thứ gì vào chat",
+    "nextStep": "Bước tiếp theo: module MB3 — bạn sẽ thấy kẻ tấn công giấu chỉ thị trong những nội dung mà AI đọc thay bạn như thế nào, và cách phòng vệ trước điều đó."
+  }
+}

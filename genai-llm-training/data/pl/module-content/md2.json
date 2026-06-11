@@ -1,0 +1,127 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P1 AI w domu (formatywna)",
+    "interaction": "Suwaki promptu (kind: tune) — ćwiczenie formatywne, NIE scorowane do zaliczenia",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE i ogólne (zero realnych danych/PII). Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MD2",
+  "intro": "Różnica między „AI mi nie pomaga” a „AI oszczędza mi godzinę dziennie” to najczęściej sposób, w jaki prosisz. W tym module nauczysz się trzech prostych składników dobrej prośby — kontekst, cel, format — i zobaczysz, że poprawianie odpowiedzi w rozmowie działa lepiej niż szukanie „idealnego” pytania. Wszystko na domowych przykładach.",
+  "screens": [
+    {
+      "id": "md2-s1-jak-prosic",
+      "title": "Trzy składniki dobrej prośby",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Prompt", "text": "Po prostu twoja prośba do AI — pytanie lub polecenie napisane zwykłymi słowami. Im jaśniej powiesz, kto pyta, po co i jakiej odpowiedzi oczekujesz, tym lepszy wynik dostaniesz." },
+        { "kind": "list", "items": [
+          "KONTEKST — kto i w jakiej sytuacji: „Jestem rodzicem dwójki dzieci, gotuję proste rzeczy”.",
+          "CEL — co chcesz osiągnąć: „Potrzebuję planu obiadów na 5 dni, do 30 minut gotowania”.",
+          "FORMAT — jak ma wyglądać odpowiedź: „Wypisz w punktach, z listą zakupów na końcu”."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Porównaj sam(a)", "text": "„Co na obiad?” da ci losowe pomysły. „Jestem rodzicem, dzieci nie jedzą ostrego, mam 30 minut — zaproponuj 3 obiady w punktach” da ci coś, z czego naprawdę skorzystasz." }
+      ]
+    },
+    {
+      "id": "md2-s2-iterowanie",
+      "title": "Iterowanie — rozmowa zamiast idealnego pytania",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Nie musisz pisać perfekcyjnej prośby za pierwszym razem. Czat to rozmowa: dostajesz pierwszą wersję, mówisz co poprawić, dostajesz lepszą. Anna Testowa porównuje to do przymierzalni — pierwsza propozycja rzadko leży idealnie, ale po dwóch poprawkach pasuje jak ulał." },
+        { "kind": "list", "ordered": true, "items": [
+          "Napisz prośbę najlepiej jak umiesz — bez perfekcjonizmu.",
+          "Przeczytaj odpowiedź i nazwij, co ci nie pasuje: za długie? za oficjalne? nie ten temat?",
+          "Poproś o poprawkę jednym zdaniem: „krócej”, „cieplejszym tonem”, „bez trudnych słów”.",
+          "Powtarzaj, aż będzie dobrze — zwykle wystarczą 2-3 rundy."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Poprawianie to nie porażka", "text": "Dopytywanie i korygowanie to normalny sposób pracy z AI — tak samo jak doprecyzowanie zamówienia w restauracji. Asystent nie obrazi się za piątą poprawkę." }
+      ]
+    },
+    {
+      "id": "md2-s3-przyklady-domowe",
+      "title": "Prompty domowe — pięć gotowych sytuacji",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Zobacz, jak te same trzy składniki (kontekst, cel, format) działają w typowych domowych sprawach. Każdą „lepszą prośbę” możesz potraktować jak szablon i podmienić szczegóły na swoje." },
+        { "kind": "table", "headers": ["Sytuacja", "Słaba prośba", "Lepsza prośba"], "rows": [
+          ["Mail", "„Napisz mail”", "„Napisz krótki, uprzejmy mail do wspólnoty (kontakt: zarzad@przyklad.test) z prośbą o naprawę domofonu. Rzeczowo, bez pretensji.”"],
+          ["Plan tygodnia", "„Zaplanuj mi tydzień”", "„Pracuję do 16, dzieci mają basen we wtorek. Ułóż plan domowych obowiązków na tydzień w tabelce, po 2 zadania dziennie.”"],
+          ["Przepis z lodówki", "„Co ugotować?”", "„Mam jajka, makaron, szpinak i ser. Zaproponuj 2 szybkie obiady tylko z tych składników, kroki w punktach.”"],
+          ["Nauka języka", "„Naucz mnie angielskiego”", "„Znam angielski na poziomie podstawowym. Codziennie chcę 5 zdań o gotowaniu z tłumaczeniem i prostym quizem na końcu.”"],
+          ["Podróż", "„Gdzie pojechać?”", "„Planuję 3-dniowy wyjazd z 7-latkiem, do 200 km od domu, niedrogo. Zaproponuj 3 opcje z plusami i minusami w punktach.”"]
+        ], "textAlt": "Tabela porównuje słabe i lepsze prośby w pięciu sytuacjach: mail, plan tygodnia, przepis z lodówki, nauka języka i podróż. Lepsze prośby zawsze zawierają kontekst (kto i w jakiej sytuacji), cel (co konkretnie ma powstać) i format (punkty, tabelka, quiz)." },
+        { "kind": "callout", "variant": "info", "title": "Zbieraj swoje ulubione", "text": "Gdy jakaś prośba zadziała świetnie, zapisz ją w notatkach (np. w NotkaApp). Po miesiącu masz własną ściągę promptów na każdą okazję." }
+      ]
+    },
+    {
+      "id": "md2-s4-przed-cwiczeniem",
+      "title": "Sprawdź to w praktyce",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Za chwilę pobawisz się „suwakami” prośby: zobaczysz, jak ta sama sytuacja — prośba o mail do sąsiadów — zmienia się, gdy dodasz kontekst, określisz format i poprosisz o prosty język. Nie ma tu progu zaliczenia; celem jest poczucie na własne oczy, że jasna prośba = lepsza odpowiedź." },
+        { "kind": "callout", "variant": "safe", "title": "Złota zasada", "text": "Jeśli odpowiedź cię rozczarowała, w 9 na 10 przypadków pomoże dodanie jednego zdania kontekstu albo określenie formatu — zanim uznasz, że „AI nie działa”." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "tune",
+    "id": "md2-tune",
+    "title": "Dostrój swoją prośbę",
+    "intro": "Sytuacja: prosisz AI o mail do sąsiadów w sprawie hałasującego remontu. Przestawiaj suwaki i obserwuj, jak zmienia się odpowiedź. Potem odpowiedz na jedno pytanie kontrolne.",
+    "outputLabel": "Jak wygląda odpowiedź AI",
+    "controls": [
+      {
+        "id": "kontekst",
+        "label": "Kontekst",
+        "levels": [
+          { "value": "brak", "label": "Brak", "effect": "AI zgaduje sytuację: mail wychodzi ogólnikowy, może być zbyt ostry albo zupełnie nie na temat — nie wie, kto pisze i do kogo." },
+          { "value": "kto-i-po-co", "label": "Kto i po co", "effect": "AI wie, że piszesz jako sąsiad(ka), zależy ci na dobrych relacjach i chcesz tylko ustalić godziny ciszy — mail trafia w sedno sprawy." }
+        ]
+      },
+      {
+        "id": "format",
+        "label": "Format",
+        "levels": [
+          { "value": "dowolny", "label": "Dowolny", "effect": "Dostajesz długi blok tekstu — trzeba go samodzielnie skracać i porządkować przed wysłaniem." },
+          { "value": "lista-punktow", "label": "Krótko, z punktami", "effect": "Mail ma 3 zdania wstępu i konkretne punkty (czego dotyczy prośba, proponowane godziny) — gotowy do wysłania niemal bez poprawek." }
+        ]
+      },
+      {
+        "id": "ton",
+        "label": "Ton",
+        "levels": [
+          { "value": "dowolny", "label": "Dowolny", "effect": "AI domyślnie pisze urzędowo i sztywno („W nawiązaniu do zaistniałej sytuacji…”) — brzmi jak pismo z urzędu, nie jak list od sąsiada." },
+          { "value": "prosty-jezyk", "label": "Prosty, życzliwy język", "effect": "Mail brzmi naturalnie i po ludzku — uprzejmie nazywa problem i proponuje rozwiązanie, nie psując relacji z sąsiadami." }
+        ]
+      }
+    ],
+    "checkpoint": {
+      "prompt": "Która kombinacja ustawień da najlepszy mail do sąsiadów?",
+      "type": "single_choice",
+      "options": [
+        { "id": "a", "text": "Kontekst: brak · Format: dowolny · Ton: dowolny — AI samo wie najlepiej." },
+        { "id": "b", "text": "Kontekst: kto i po co · Format: krótko, z punktami · Ton: prosty, życzliwy język." },
+        { "id": "c", "text": "Kontekst: kto i po co · Format: dowolny · Ton: dowolny — wystarczy sam kontekst." },
+        { "id": "d", "text": "Kontekst: brak · Format: krótko, z punktami · Ton: prosty język — forma jest ważniejsza niż treść." }
+      ],
+      "correct": ["b"],
+      "feedbackCorrect": "Dokładnie tak! Kontekst mówi AI, o co naprawdę chodzi, format porządkuje treść, a prosty ton dba o relacje. Te trzy składniki razem dają mail gotowy do wysłania.",
+      "feedbackIncorrect": "Prawie! Najlepiej działa komplet: kontekst (kto pisze i po co), format (krótko, w punktach) i ton (prosty, życzliwy język). Sam kontekst pomaga, ale bez formatu i tonu mail nadal wymaga poprawek."
+    }
+  },
+  "summary": {
+    "points": [
+      "Dobra prośba ma trzy składniki: kontekst (kto i w jakiej sytuacji), cel (co ma powstać) i format (jak ma wyglądać).",
+      "Nie szukaj idealnego promptu — popraw odpowiedź w rozmowie, zwykle wystarczą 2-3 rundy.",
+      "Domowe sytuacje (mail, plan, przepis, nauka języka, podróż) mają powtarzalne wzorce próśb — zbieraj te, które działają.",
+      "Rozczarowująca odpowiedź to najczęściej sygnał, że zabrakło kontekstu lub formatu — nie że „AI nie działa”."
+    ],
+    "checklist": [
+      "Czy moja prośba mówi, kim jestem i po co pytam?",
+      "Czy określiłem(-am), jak ma wyglądać odpowiedź (punkty, tabelka, długość)?",
+      "Czy poprawiłem(-am) odpowiedź zamiast zaczynać od zera?",
+      "Czy zapisałem(-am) prośbę, która zadziałała świetnie, żeby użyć jej ponownie?"
+    ],
+    "checklistTitle": "Checklista — dobra prośba do AI",
+    "nextStep": "Następny krok: w module „AI w telefonie i domu” zobaczysz, gdzie AI już mieszka w twoich urządzeniach — i które z tych funkcji naprawdę ułatwiają życie."
+  }
+}

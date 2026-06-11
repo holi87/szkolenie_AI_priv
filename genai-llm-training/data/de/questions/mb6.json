@@ -1,0 +1,155 @@
+{
+  "_meta": {
+    "module": "MB6",
+    "issue": "#171 Rebuild ścieżek — bank pytań P2 (DE), moduł MB6 (weryfikacja treści AI)",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE. ZERO realnych danych/PII.",
+    "note": "Tłumaczenie DE kanonu PL. Pola scoringowe identyczne z PL."
+  },
+  "questions": [
+    {
+      "id": "Q147",
+      "module": "MB6",
+      "pillar": "qa_practice",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Der Teilnehmer versteht, warum ein selbstsicherer Ton einer KI-Antwort nichts über ihre Richtigkeit aussagt.",
+      "prompt": "Warum kann eine KI-Antwort sehr selbstsicher klingen und trotzdem falsch sein?",
+      "options": [
+        { "id": "A", "text": "Das Modell erzeugt die sprachlich wahrscheinlichste Antwort — Flüssigkeit und sicherer Ton sind kein Maß für Wahrheit." },
+        { "id": "B", "text": "Modelle lügen absichtlich, damit Nutzer zurückkommen und mehr Fragen stellen." },
+        { "id": "C", "text": "Ein sicherer Ton entsteht nur, wenn das Modell mit dem Internet verbunden ist." },
+        { "id": "D", "text": "Das ist unmöglich — wenn eine Antwort sicher klingt, hat das Modell Quellen dafür." }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Das Modell sagt das nächste Wort voraus und prüft keine Fakten — deshalb liefert es Wahrheit und Erfindung (Halluzination) mit derselben Eloquenz. Der Ton ist Stil, kein Beweis.",
+      "feedbackIncorrect": "Das Modell lügt nicht absichtlich und signalisiert Sicherheit nicht durch Quellen — es erzeugt die sprachlich wahrscheinlichste Antwort, daher klingt ein Fehler genauso sicher wie die Wahrheit (A). Wiederholen Sie den Abschnitt über Halluzinationen.",
+      "references": ["MB6.1"]
+    },
+    {
+      "id": "Q148",
+      "module": "MB6",
+      "pillar": "qa_practice",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Der Teilnehmer prüft die von der KI genannte Quelle, statt der bloßen Existenz eines Verweises zu vertrauen.",
+      "prompt": "Die KI hat einen Absatz für den Newsletter von NotkaApp vorbereitet — mit einer konkreten Statistik und einem Link zu einem Bericht. Klingt professionell. Was tun Sie vor der Veröffentlichung?",
+      "options": [
+        { "id": "A", "text": "Veröffentlichen — wenn die KI einen Link angibt, ist die Statistik bestätigt." },
+        { "id": "B", "text": "Den Link öffnen und prüfen, ob der Bericht existiert und diese Statistik wirklich enthält; zusätzlich eine zweite, unabhängige Bestätigung suchen." },
+        { "id": "C", "text": "Den Link entfernen und nur die Statistik behalten — ohne Link prüft niemand nach, also gibt es kein Problem." },
+        { "id": "D", "text": "Dieselbe KI bitten zu bestätigen, dass die Statistik stimmt — wenn sie bestätigt, veröffentlichen." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Richtig: Modelle können sowohl die Zahl als auch einen glaubwürdig aussehenden Verweis erfinden. Verifikation heißt: Quelle öffnen, Inhalt prüfen, unabhängige Bestätigung finden — erst dann veröffentlichen.",
+      "feedbackIncorrect": "Ein Verweis allein beweist nichts (er kann erfunden sein), das Verstecken des Links repariert keine falsche Zahl, und eine „Bestätigung” derselben KI ist dieselbe unzuverlässige Maschine. Richtig: Quelle öffnen und prüfen + zweite unabhängige Spur (B).",
+      "references": ["MB6.2"]
+    },
+    {
+      "id": "Q149",
+      "module": "MB6",
+      "pillar": "qa_practice",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Der Teilnehmer erkennt Hochrisikothemen, bei denen KI-Antworten von Fachleuten geprüft werden müssen.",
+      "prompt": "Ein Kollege will seiner Mutter Dosierungsempfehlungen für ein Medikament schicken, die ihm eine KI erstellt hat, „weil sie vernünftig klingen und schön gegliedert sind”. Was raten Sie ihm?",
+      "options": [
+        { "id": "A", "text": "Schicken — die KI wurde mit medizinischen Texten trainiert und kennt sich besser aus als so mancher Arzt." },
+        { "id": "B", "text": "Schicken, aber mit dem Hinweis, dass es von einer KI stammt — die Mutter entscheidet selbst, ob sie vertraut." },
+        { "id": "C", "text": "Medikamentendosierung ist ein Hochrisikothema: Empfehlungen muss ein Arzt oder Apotheker bestätigen; der generierte Text kann Gesprächsgrundlage sein, keine Empfehlung." },
+        { "id": "D", "text": "Ein zweites KI-Modell fragen und vergleichen — wenn die Antworten übereinstimmen, kann man es schicken." }
+      ],
+      "correct": ["C"],
+      "feedbackCorrect": "Richtig: Gesundheit, Recht und Geld sind Themen, bei denen ein KI-Fehler am meisten kostet — hier verifiziert ein Fachmann, nicht ein zweites Modell. KI kann helfen, Fragen an den Arzt vorzubereiten, nicht seine Entscheidung ersetzen.",
+      "feedbackIncorrect": "Bei Hochrisikothemen (Gesundheit, Recht, Finanzen) reichen weder die Übereinstimmung zweier Modelle noch der Hinweis „von KI” — beide Modelle können denselben Fehler wiederholen, und Verantwortung lässt sich nicht auf die Mutter abwälzen. Empfehlungen bestätigt ein Arzt oder Apotheker (C).",
+      "references": ["MB6.3"]
+    },
+    {
+      "id": "Q150",
+      "module": "MB6",
+      "pillar": "qa_practice",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Der Teilnehmer erkennt die Wissensgrenzen des Modells (Aktualität der Daten) als Fehlerquelle.",
+      "prompt": "Szenario: Sie fragen die KI nach aktuellen Steuervergünstigungen. Das Modell antwortet detailliert und sachlich, aber ohne Daten und Quellen. Welches Risiko ist hier das WICHTIGSTE?",
+      "options": [
+        { "id": "A", "text": "Die Antwort kann den Rechtsstand von vor Monaten oder Jahren beschreiben — das Wissen des Modells hat ein Stichtagsdatum, und Vorschriften ändern sich." },
+        { "id": "B", "text": "Die Antwort ist zu detailliert — kürzere Antworten sind immer glaubwürdiger." },
+        { "id": "C", "text": "Das Modell könnte im falschen deutschen Dialekt geantwortet haben." },
+        { "id": "D", "text": "Kein Risiko — Steuervorschriften sind so stabil, dass das Wissensdatum des Modells keine Rolle spielt." }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Das größte Risiko ist die Veraltung: Das Modell ist am Ende seiner Trainingsdaten „stehen geblieben”, und Recht ändert sich oft. Themen wie „aktuelle Vorschriften/Sätze/Fristen” immer in einer offiziellen, datierten Quelle prüfen.",
+      "feedbackIncorrect": "Länge und Stil der Antwort sind keine Risikomaße — entscheidend ist das Stichtagsdatum des Modellwissens: Der beschriebene Rechtsstand kann veraltet sein (A). Prüfen Sie Vorschriften in einer offiziellen, datierten Quelle.",
+      "references": ["MB6.3", "MB6.2"]
+    },
+    {
+      "id": "Q151",
+      "module": "MB6",
+      "pillar": "qa_practice",
+      "paths": ["P2"],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Der Teilnehmer entwickelt die Gewohnheit, proportional zur Tragweite der Entscheidung zu verifizieren, bevor er Inhalte weitergibt.",
+      "prompt": "Sie haben 10 Minuten bis zur Vorstandssitzung von SklepDemo. Die KI hat Ihnen einen 40-seitigen Bericht zusammengefasst, und Sie sollen auf dieser Basis eine Budgetentscheidung empfehlen. Was tun Sie?",
+      "options": [
+        { "id": "A", "text": "Die Zusammenfassung komplett präsentieren — bei so wenig Zeit gibt es keinen anderen Weg, und KI irrt sich selten." },
+        { "id": "B", "text": "Die Schlüsselzahlen und Schlussfolgerungen, auf denen die Empfehlung beruht, im Originalbericht prüfen; den Rest der Zusammenfassung als ungeprüft kennzeichnen und das offen sagen." },
+        { "id": "C", "text": "Meinen Teil der Sitzung absagen — ohne alle 40 Seiten gelesen zu haben, darf man nichts empfehlen." },
+        { "id": "D", "text": "Die KI um eine zweite, kürzere Zusammenfassung bitten und beide vergleichen — Übereinstimmung bestätigt die Korrektheit." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Richtig: Verifikation proportional zur Tragweite — was die Entscheidung trägt (Zahlen, Schlussfolgerungen), prüfen Sie in der Quelle; den Rest kennzeichnen Sie offen. Transparenz gegenüber dem Vorstand gehört zur Redlichkeit, und zwei Zusammenfassungen desselben Modells sind nicht unabhängig.",
+      "feedbackIncorrect": "Eine ungeprüfte Zusammenfassung als Entscheidungsgrundlage zu präsentieren überträgt Halluzinationen auf den Vorstand; zwei Zusammenfassungen derselben Maschine sind keine unabhängige Verifikation; die Sitzung abzusagen ist Flucht, kein Risikomanagement. Richtig: das Entscheidende im Original prüfen und den Rest offen kennzeichnen (B).",
+      "references": ["MB6.4", "MB6.2"]
+    },
+    {
+      "id": "Q152",
+      "module": "MB6",
+      "pillar": "qa_practice",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Der Teilnehmer kennt die Grundschritte einer schnellen Verifikation KI-generierter Inhalte.",
+      "prompt": "Welche Schritte gehören zur schnellen Verifikation einer KI-Antwort vor der Weiterverwendung? Wählen Sie alle richtigen.",
+      "options": [
+        { "id": "A", "text": "Prüfen, ob die angegebene Quelle existiert und die zitierte Information tatsächlich enthält." },
+        { "id": "B", "text": "Bewerten, ob die Antwort sicher und professionell klingt." },
+        { "id": "C", "text": "Eine zweite, unabhängige Bestätigung der Schlüsselfakten und Zahlen suchen." },
+        { "id": "D", "text": "Prüfen, ob die Antwort lang genug und schön formatiert ist." }
+      ],
+      "correct": ["A", "C"],
+      "feedbackCorrect": "Genau: Verifikation stützt sich auf Quellen (existieren sie und bestätigen sie den Inhalt?) und eine unabhängige Spur für Schlüsselfakten. Ton, Länge und Formatierung sind Kosmetik — sie sagen nichts über die Wahrheit.",
+      "feedbackIncorrect": "Sicherer Ton, Länge und schönes Format sind Stilmerkmale, die das Modell für Wahrheit und Erfindung gleichermaßen erzeugt. Verifiziert wird über Quellen (A) und unabhängige Bestätigung (C).",
+      "references": ["MB6.2", "MB6.4"]
+    }
+  ]
+}

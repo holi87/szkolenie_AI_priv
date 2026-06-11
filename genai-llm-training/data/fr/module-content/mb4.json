@@ -1,0 +1,99 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P2 Bezpieczne używanie AI",
+    "interaction": "Klasyfikacja: sygnał ostrzegawczy vs normalna sytuacja (kind: classify)",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp/SklepDemo, przyklad.test, Jan Syntetyczny). ZERO realnych danych/PII."
+  },
+  "module": "MB4",
+  "intro": "Une voix peut être imitée à partir d'une quinzaine de secondes d'enregistrement, un visage à partir de quelques photos. L'enregistrement a cessé d'être une preuve — mais les escroqueries assistées par l'IA se trahissent toujours de la même manière : pression, canal inhabituel et demande d'argent ou de données. Ce module apprend à les reconnaître et à réagir correctement.",
+  "screens": [
+    {
+      "id": "mb4-s1-deepfake",
+      "title": "Deepfake : voix et visage sur commande",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Deepfake", "text": "Enregistrement (voix, photo, vidéo) généré ou modifié par l'IA, qui usurpe de façon réaliste l'identité d'une personne réelle." },
+        { "kind": "paragraph", "text": "Autrefois, imiter une voix exigeait un studio et un acteur. Aujourd'hui, il suffit d'un échantillon pris sur les réseaux sociaux et d'un outil accessible à tous. Conséquence pratique : « j'ai entendu sa voix » et « je l'ai vue en vidéo » ne sont plus des preuves d'identité." },
+        { "kind": "callout", "variant": "warn", "title": "Fraude au président et « au petit-fils 2.0 »", "text": "Les mêmes vieux schémas, un nouveau moteur : un appel avec la voix du chef au sujet d'un virement urgent, ou un « petit-fils » qui demande de l'argent. La voix correspond, le schéma correspond — et c'est justement le schéma, pas la voix, qui doit déclencher votre alarme." }
+      ]
+    },
+    {
+      "id": "mb4-s2-sygnaly",
+      "title": "Signaux d'alerte",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Puisque la forme (voix, visage, langue) peut être parfaite, jugez les circonstances. Les escroqueries combinent presque toujours plusieurs de ces éléments :" },
+        { "kind": "list", "items": [
+          "Pression temporelle : « immédiatement », « dans l'heure », « avant que le système ne se bloque ».",
+          "Secret : « n'en parle à personne », « affaire confidentielle, juste entre nous ».",
+          "Canal inhabituel : numéro privé, nouvelle messagerie, compte « de secours ».",
+          "Demande d'argent, d'identifiants de connexion ou de codes.",
+          "Écart à la procédure : « cette fois, sautons les formalités »."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Règle", "text": "Un signal est une raison de vigilance. Deux ou plus — traitez la situation comme une tentative d'escroquerie tant que vous n'avez pas vérifié le contraire." }
+      ]
+    },
+    {
+      "id": "mb4-s3-drugi-kanal",
+      "title": "La règle du second canal",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "La défense la plus efficace n'exige aucune technologie : interrompez le contact que quelqu'un a initié et vérifiez l'affaire par un canal que vous choisissez vous-même. Rappelez le numéro que vous avez dans vos contacts. Allez voir la personne à son bureau. Écrivez à l'adresse professionnelle connue." },
+        { "kind": "table", "headers": ["Situation", "Vérification par un second canal"], "rows": [
+          ["Appel du « chef » au sujet d'un virement urgent", "Raccrochez, appelez le numéro connu du chef ou confirmez en personne"],
+          ["Visioconférence avec un « partenaire » qui change de numéro de compte", "Appelez le numéro figurant sur le contrat, pas celui du message"],
+          ["SMS de votre « enfant » depuis un nouveau numéro demandant de l'argent", "Appelez l'ancien numéro connu de l'enfant"]
+        ], "textAlt": "Exemples de vérification par second canal : toujours un contact initié par vous, vers un numéro ou une adresse connus auparavant, jamais par le canal indiqué dans le message suspect." },
+        { "kind": "callout", "variant": "safe", "title": "La clé", "text": "Le second canal ne fonctionne que si c'est VOUS qui l'initiez. Le numéro « de confirmation » indiqué dans un message suspect reste le canal de l'escroc." }
+      ]
+    },
+    {
+      "id": "mb4-s4-zgloszenie",
+      "title": "Procédure de signalement",
+      "type": "content",
+      "blocks": [
+        { "kind": "list", "ordered": true, "items": [
+          "N'agissez pas sous pression : l'absence de réponse immédiate n'est pas une erreur, c'est la procédure.",
+          "Conservez les preuves : message, numéro, enregistrement — ne supprimez rien.",
+          "Au travail : signalez au service IT/sécurité. À titre privé : signalez à la police et sur la plateforme d'où venait le contact.",
+          "Prévenez la personne dont l'identité a été usurpée — son image a été utilisée et elle peut être la cible de nouvelles tentatives."
+        ] },
+        { "kind": "paragraph", "text": "Ne relayez pas la désinformation, même « avec un avertissement » — chaque partage augmente la portée du faux. Signalez plutôt le contenu sur la plateforme et, si le sujet est important, partagez le lien d'une source vérifiée." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "mb4-classify",
+    "title": "Signal d'alerte ou situation normale ?",
+    "intro": "Évaluez chaque situation : contient-elle des signaux d'une possible escroquerie ou d'un deepfake, ou est-elle normale ? Le feedback explique quoi regarder.",
+    "categories": [
+      { "id": "warning", "label": "Signal d'alerte (possible arnaque/deepfake)", "desc": "Pression, secret, canal inhabituel, demande d'argent/de données, contournement des procédures." },
+      { "id": "normal", "label": "Situation normale", "desc": "Canal connu, pas de pression, conforme aux procédures." }
+    ],
+    "items": [
+      { "id": "mb4-i1", "text": "La voix du « directeur » au téléphone demande un virement immédiat et supplie de rester discret.", "correctCategory": "warning", "rationale": "Pression + secret + argent — le schéma de la fraude au président ; la voix n'est pas une preuve." },
+      { "id": "mb4-i2", "text": "La comptable, lors de la réunion hebdomadaire, rappelle l'échéance des factures conformément à la procédure.", "correctCategory": "normal", "rationale": "Canal connu, procédure connue, zéro pression et zéro secret." },
+      { "id": "mb4-i3", "text": "Un partenaire, dans un courriel envoyé depuis un nouveau domaine, annonce un « changement urgent de numéro de compte » pour le paiement du jour.", "correctCategory": "warning", "rationale": "Changement de compte + nouveau domaine + pression temporelle = le classique de la fraude au paiement ; vérifiez par un second canal." },
+      { "id": "mb4-i4", "text": "Une vidéo où une personnalité connue recommande un investissement « qui double l'argent en une semaine », avec un lien dans la description.", "correctCategory": "warning", "rationale": "Deepfake d'investissement : promesse irréaliste + visage célèbre + lien. Ne cliquez pas, signalez." },
+      { "id": "mb4-i5", "text": "Votre fils appelle depuis son numéro habituel pour rappeler le déjeuner commun de dimanche.", "correctCategory": "normal", "rationale": "Numéro connu, affaire ordinaire, aucune demande d'argent ni de données." },
+      { "id": "mb4-i6", "text": "SMS d'un numéro inconnu : « Maman, j'ai cassé mon téléphone, écris seulement ici et vire-moi de l'argent pour un nouveau ».", "correctCategory": "warning", "rationale": "Nouveau canal + isolement (« écris seulement ici ») + argent — l'arnaque « au petit-fils 2.0 » ; appelez l'ancien numéro." },
+      { "id": "mb4-i7", "text": "Le service IT envoie une enquête de sécurité annoncée à l'avance, via le système de l'entreprise, sans demander de mots de passe.", "correctCategory": "normal", "rationale": "Action annoncée, canal de l'entreprise, aucune demande de secrets." },
+      { "id": "mb4-i8", "text": "Un « recruteur » propose un excellent emploi, mais demande d'abord des frais de recrutement et un scan de votre pièce d'identité sur une messagerie.", "correctCategory": "warning", "rationale": "Paiement d'avance + données personnelles + canal non professionnel = escroquerie au recrutement." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "L'enregistrement et la voix ont cessé d'être des preuves d'identité — jugez le schéma de la situation, pas la forme.",
+      "Deux signaux ou plus (pression, secret, canal inhabituel, argent/données) : traitez comme une escroquerie jusqu'à vérification.",
+      "Vérifiez par un second canal que vous initiez vous-même ; conservez les preuves et signalez, ne relayez pas les faux."
+    ],
+    "checklist": [
+      "Cette demande exerce-t-elle une pression de temps ou de secret, ou concerne-t-elle de l'argent/des données ?",
+      "Puis-je la vérifier par un canal que j'initie moi-même (numéro connu, en personne) ?",
+      "Est-ce que je sais où signaler un soupçon au travail et à titre privé ?"
+    ],
+    "checklistTitle": "Check-list — avant de réagir à une demande urgente",
+    "nextStep": "Prochaine étape : le module sur les politiques d'IA au travail — vous découvrirez quels outils sont autorisés à usage professionnel et ce que risque le shadow AI."
+  }
+}

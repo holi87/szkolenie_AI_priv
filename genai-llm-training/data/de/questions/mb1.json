@@ -1,0 +1,155 @@
+{
+  "_meta": {
+    "module": "MB1",
+    "issue": "#171 Rebuild ścieżek — bank pytań P2 „Bezpieczne używanie AI”, moduł MB1 (mapa ryzyk AI)",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo, Jan Syntetyczny, identyfikatory testowe). ZERO realnych danych/PII.",
+    "note": "Pytania modułu MB1 (Q117-Q122), pula dedykowana ścieżki P2. Bez pytań krytycznych. Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q117",
+      "module": "MB1",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Der Teilnehmer erklärt, was eine KI-Halluzination ist und warum sie glaubwürdig klingt.",
+      "prompt": "Was ist eine „Halluzination“ in den Antworten von KI-Tools?",
+      "options": [
+        { "id": "A", "text": "Ein technischer Fehler, nach dem das Tool nicht mehr antwortet und neu gestartet werden muss." },
+        { "id": "B", "text": "Eine selbstsicher klingende Antwort mit erfundenen Fakten, Quellen oder Zahlen, die nicht existieren." },
+        { "id": "C", "text": "Eine Situation, in der die KI die Antwort auf die Frage des Nutzers verweigert." },
+        { "id": "D", "text": "Eine absichtliche Lüge, die vom Hersteller des Tools einprogrammiert wurde." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Ja. Eine Halluzination ist eine erfundene Antwort, die jedoch in sicherem Ton und korrekter Sprache präsentiert wird. Genau diese glaubwürdige Form macht es leicht, sie für die Wahrheit zu halten.",
+      "feedbackIncorrect": "Eine Halluzination ist weder ein Ausfall, eine Verweigerung noch eine absichtliche Lüge des Herstellers. Es ist erfundener Inhalt (Fakten, Quellen, Zahlen), den das Modell genauso selbstsicher präsentiert wie wahre Inhalte. Kehre zum Abschnitt über Halluzinationen in MB1 zurück.",
+      "references": ["MB1.1"]
+    },
+    {
+      "id": "Q118",
+      "module": "MB1",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Der Teilnehmer benennt die wichtigsten Risiken der alltäglichen Nutzung öffentlicher KI-Tools.",
+      "prompt": "Welche der folgenden Punkte sind reale Risiken der alltäglichen Nutzung eines öffentlichen KI-Chats bei der Arbeit? Wähle alle richtigen aus.",
+      "options": [
+        { "id": "A", "text": "Eingefügte Unternehmensdaten können das Unternehmen verlassen und außerhalb seiner Kontrolle geraten." },
+        { "id": "B", "text": "Das KI-Tool kann sich nach einer gestellten Frage selbst in das Firmennetzwerk einhacken." },
+        { "id": "C", "text": "Die Antwort kann erfundene Informationen enthalten, die wir unkritisch weitergeben." },
+        { "id": "D", "text": "Jede Nutzung von KI verstößt automatisch gegen das Gesetz, unabhängig vom Inhalt der Frage." }
+      ],
+      "correct": ["A", "C"],
+      "feedbackCorrect": "Genau: Zwei alltägliche Risiken sind das Abfließen eingefügter Daten aus dem Unternehmen sowie Halluzinationen, die wir unkritisch weiterverbreiten. Beide hängen davon ab, was und wie wir einfügen und ob wir die Antwort prüfen.",
+      "feedbackIncorrect": "Die realen Risiken sind das Abfließen eingefügter Daten (A) und die Weiterverbreitung erfundener Inhalte (C). Ein KI-Chat hackt sich nicht durch eine gestellte Frage in das Netzwerk ein, und die bloße Nutzung von KI verstößt nicht gegen das Gesetz. Wiederhole die Risikokarte aus MB1.",
+      "references": ["MB1.1", "MB1.2"]
+    },
+    {
+      "id": "Q119",
+      "module": "MB1",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Der Teilnehmer erkennt Anzeichen übermäßigen Vertrauens in KI-Tools im Arbeitsalltag.",
+      "prompt": "Welches Verhalten ist ein Anzeichen für übermäßiges Vertrauen in KI?",
+      "options": [
+        { "id": "A", "text": "Der Vergleich der KI-Antwort mit der Unternehmensdokumentation vor ihrer Verwendung." },
+        { "id": "B", "text": "Nachfragen bei der KI nach einer Begründung und Prüfen der angegebenen Quellen." },
+        { "id": "C", "text": "Die KI als Hilfe für einen Entwurf zu betrachten, den wir anschließend selbst überarbeiten." },
+        { "id": "D", "text": "KI-Antworten ungeprüft weiterzugeben, weil „die KI sich ja nicht irrt“." }
+      ],
+      "correct": ["D"],
+      "feedbackCorrect": "Ja. Übermäßiges Vertrauen bedeutet, auf die eigene Verifikation zu verzichten. Die Annahme, dass sich die KI nicht irrt, ist falsch: Das Modell kann selbstsicher und gleichzeitig im Irrtum sein.",
+      "feedbackIncorrect": "Der Vergleich mit der Dokumentation, das Prüfen von Quellen und das eigene Überarbeiten eines Entwurfs sind gesunde Gewohnheiten. Ein Anzeichen für übermäßiges Vertrauen ist das Weitergeben von Antworten ohne jede Verifikation. Wiederhole den Abschnitt über übermäßiges Vertrauen.",
+      "references": ["MB1.4"]
+    },
+    {
+      "id": "Q120",
+      "module": "MB1",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Der Teilnehmer wendet die Regel der Verifikation von KI-Inhalten an, bevor sie an einen Kunden gesendet werden.",
+      "prompt": "Jan Synthetisch aus der Vertriebsabteilung von SklepDemo hat im KI-Chat eine Antwort für einen Kunden mit der Beschreibung von Produktparametern generiert und will sie sofort senden, weil sie „professionell klingt“. Du weißt, dass die KI keinen Zugriff auf das aktuelle Angebot hatte. Was rätst du ihm?",
+      "options": [
+        { "id": "A", "text": "Bevor er sendet, soll er jeden Parameter mit dem aktuellen Produktdatenblatt vergleichen, denn die KI könnte Details erfunden haben, die sie nicht kannte." },
+        { "id": "B", "text": "Er soll senden. Der professionelle Ton der Antwort belegt, dass der Inhalt korrekt ist." },
+        { "id": "C", "text": "Er soll die KI im selben Chat fragen, ob sie sich ihrer Antwort sicher ist, und senden, wenn sie es bestätigt." },
+        { "id": "D", "text": "Er soll die Antwort noch einmal generieren. Wenn die zweite Version ähnlich ist, bedeutet das, dass sie wahr ist." }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "Ja. Da die KI das aktuelle Angebot nicht kannte, können die Parameter erfunden sein. Die einzige verlässliche Verifikation ist der Vergleich mit der unternehmensinternen Quelle der Wahrheit, also dem Produktdatenblatt.",
+      "feedbackIncorrect": "Ein professioneller Ton belegt keine Korrektheit, und die KI zu fragen „bist du sicher“ oder die Generierung zu wiederholen, ist immer noch dieselbe unzuverlässige Maschine. Vergleiche Inhalte für Kunden vor dem Versand mit der unternehmensinternen Quelle (dem Produktdatenblatt).",
+      "references": ["MB1.1", "MB1.4"]
+    },
+    {
+      "id": "Q121",
+      "module": "MB1",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Der Teilnehmer reagiert richtig, wenn die KI eine erfundene Quelle oder Rechtsvorschrift angibt.",
+      "prompt": "Du bereitest eine interne Notiz in NotkaApp vor. Der KI-Chat hat dir den Inhalt einer „Rechtsvorschrift“ mit Artikelnummer und sicherer Begründung geliefert, aber im offiziellen Rechtsportal kannst du einen solchen Artikel nicht finden. Was tust du?",
+      "options": [
+        { "id": "A", "text": "Ich zitiere die Vorschrift aus der KI-Antwort. Die Artikelnummer und der sichere Ton reichen als Bestätigung aus." },
+        { "id": "B", "text": "Ich zitiere die Vorschrift, vermerke aber in der Notiz „Quelle: KI“, um die Verantwortung auf das Tool zu übertragen." },
+        { "id": "C", "text": "Ich gehe davon aus, dass die Vorschrift eine Halluzination sein kann, zitiere sie nicht und stütze die Notiz auf Inhalte aus einer offiziellen Quelle oder auf die Bestätigung durch eine kompetente Person." },
+        { "id": "D", "text": "Ich bitte die KI um einen Link zur Vorschrift und zitiere, sobald irgendein Link erscheint." }
+      ],
+      "correct": ["C"],
+      "feedbackCorrect": "Ja. Wenn die offizielle Quelle die Existenz der Vorschrift nicht bestätigt, handelt es sich höchstwahrscheinlich um eine Halluzination. In die Notiz gehört nur Inhalt, der in einer verlässlichen Quelle oder durch eine kompetente Person bestätigt wurde.",
+      "feedbackIncorrect": "Weder die Artikelnummer, der sichere Ton, der Vermerk „Quelle: KI“ noch ein generierter Link bestätigen irgendetwas. Die KI kann auch Links erfinden. Wenn die offizielle Quelle die Vorschrift nicht kennt, zitiere sie nicht. Wiederhole den Abschnitt über Halluzinationen und Verifikation.",
+      "references": ["MB1.1", "MB1.4"]
+    },
+    {
+      "id": "Q122",
+      "module": "MB1",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Der Teilnehmer bewertet eine Situation, in der sich verschiedene KI-Risiken überlagern, und wählt die Reaktion, die alle eindämmt.",
+      "prompt": "Anna Beispiel aus der HR-Abteilung prahlt damit, dass der neue öffentliche KI-Assistent „die Firma besser kennt als das Intranet“: Sie hat die interne Betriebsordnung und die Mitarbeiterliste in ihn eingefügt und fragt ihn nun täglich zu Personalangelegenheiten und wendet die Antworten ungeprüft an. Welche Zusammenfassung der Situation ist am treffendsten?",
+      "options": [
+        { "id": "A", "text": "Die Situation ist sicher, denn der Assistent antwortet treffend, und die HR-Daten kennt ohnehin jeder im Unternehmen." },
+        { "id": "B", "text": "Das einzige Problem ist die Qualität der Antworten. Es reicht, wenn Anna die Inhalte prüft; das Einfügen von Dokumenten kann sie fortsetzen." },
+        { "id": "C", "text": "Das einzige Problem sind die eingefügten Dokumente. Den Antworten des Assistenten, der „die Firma kennt“, kann man bereits ungeprüft vertrauen." },
+        { "id": "D", "text": "Hier überlagern sich zwei Risiken: Mitarbeiterdaten und interne Dokumente sind in ein öffentliches Tool abgeflossen, und ungeprüft angewendete Antworten können Halluzinationen enthalten. Diese Praxis muss gestoppt und das Datenleck gemäß dem Unternehmensverfahren gemeldet werden." }
+      ],
+      "correct": ["D"],
+      "feedbackCorrect": "Ja. Das sind zwei unabhängige Risiken zugleich: das Abfließen personenbezogener Daten und interner Dokumente sowie übermäßiges Vertrauen in ungeprüfte Antworten. Die Reaktion muss beide umfassen: die Praxis stoppen und das Datenleck melden.",
+      "feedbackIncorrect": "Unvollständige Bewertung. Das Problem ist sowohl das Datenleck (Mitarbeiterliste und Betriebsordnung in einem öffentlichen Tool) als auch das übermäßige Vertrauen (Anwendung der Antworten ohne Prüfung). Nur eines davon zu beheben reicht nicht. Wiederhole die Risikokarte aus MB1.",
+      "references": ["MB1.2", "MB1.3", "MB1.4"]
+    }
+  ]
+}

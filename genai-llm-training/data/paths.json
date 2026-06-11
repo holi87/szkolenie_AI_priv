@@ -79,6 +79,7 @@
   },
   "paths": {
     "S1": {
+      "level": 1,
       "modules": {
         "M1": {
           "required": true,
@@ -160,6 +161,7 @@
       "attempts": 3
     },
     "S2": {
+      "level": 2,
       "modules": {
         "M1": {
           "required": true,
@@ -251,6 +253,7 @@
       "attempts": 3
     },
     "S3": {
+      "level": 3,
       "modules": {
         "M1": {
           "required": true,
@@ -353,6 +356,7 @@
     },
     "S4": {
       "formative": true,
+      "bonus": true,
       "modules": {
         "MSHP": { "required": false, "variant": "diagnostyczny" },
         "MSHO": { "required": false, "variant": "diagnostyczny" },
@@ -362,7 +366,53 @@
         "MSK4": { "required": true, "variant": "formatywny" }
       },
       "estContentTimeMin": 150,
-      "estContentTimeNote": "2 autodiagnozy Skali Holaka (MSHP osoba + MSHO organizacja, po ~15 min) + 4 moduły szkoleniowe ~30 min (bez quizów; treść + interakcje). M16/#122: diagnoza rozdzielona na osobę (v2.1p) i organizację (v2.1e) — wybieralne niezależnie. Ścieżka FORMATYWNA (M15/ADR-0009) — brak testu końcowego, progu, scoringu i certyfikatu."
+      "estContentTimeNote": "2 autodiagnozy Skali Holaka (MSHP osoba + MSHO organizacja, po ~15 min) + 4 moduły szkoleniowe ~30 min (bez quizów; treść + interakcje). M16/#122: diagnoza rozdzielona na osobę (v2.1p) i organizację (v2.1e) — wybieralne niezależnie. Ścieżka FORMATYWNA (M15/ADR-0009) — brak testu końcowego, progu, scoringu i certyfikatu. #171: prezentowana jako BONUS poza siatką wyboru ścieżek (bonus:true)."
+    },
+    "P1": {
+      "formative": true,
+      "modules": {
+        "MD1": { "required": true, "variant": "formatywny" },
+        "MD2": { "required": true, "variant": "formatywny" },
+        "MD3": { "required": true, "variant": "formatywny" },
+        "MD4": { "required": true, "variant": "formatywny" },
+        "MD5": { "required": true, "variant": "formatywny" },
+        "MD6": { "required": true, "variant": "formatywny" }
+      },
+      "estContentTimeMin": 165,
+      "estContentTimeNote": "#171: ścieżka P1 „AI w domu” — 6 modułów formatywnych MD1..MD6 (treść + interakcje, bez puli pytań — wzorzec MSK/ADR-0009). Bez testu końcowego, progu, scoringu i certyfikatu (ADR-0005). Odbiorca: osoba nietechniczna, prywatne użycie AI."
+    },
+    "P2": {
+      "modules": {
+        "MB1": { "required": true, "variant": "full" },
+        "MB2": { "required": true, "variant": "full" },
+        "MB3": { "required": true, "variant": "full" },
+        "MB4": { "required": true, "variant": "full" },
+        "MB5": { "required": true, "variant": "full" },
+        "MB6": { "required": true, "variant": "full" }
+      },
+      "requiredModules": ["MB1", "MB2", "MB3", "MB4", "MB5", "MB6"],
+      "estContentTimeMin": 190,
+      "estContentTimeNote": "#171: ścieżka P2 „Bezpieczne używanie AI” — 6 modułów MB1..MB6, pula 36 pytań dedykowanych (Q117..Q152). Konserwatywne domyślne (AGENTS): pytania krytyczne (MB2, dane wrażliwe) bramkowane 100%.",
+      "finalTestQuestions": 20,
+      "dedicatedQuestionsMin": 0,
+      "passThresholdPct": 75,
+      "criticalQuestionsRequiredPct": 100,
+      "practicalTasks": 0,
+      "extraPassConditions": [
+        "100% pytań krytycznych MB2"
+      ],
+      "gates": [
+        {
+          "type": "overallThreshold",
+          "minPct": 75
+        },
+        {
+          "type": "criticalQuestions",
+          "module": "MB2",
+          "minPct": 100
+        }
+      ],
+      "attempts": 3
     }
   }
 }

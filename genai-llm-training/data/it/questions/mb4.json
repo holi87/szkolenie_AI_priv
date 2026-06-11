@@ -1,0 +1,155 @@
+{
+  "_meta": {
+    "module": "MB4",
+    "issue": "#171 Rebuild ścieżek — bank pytań P2 „Bezpieczne używanie AI”, moduł MB4 (deepfake, scam i dezinformacja)",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo, Jan Syntetyczny, identyfikatory testowe). ZERO realnych danych/PII.",
+    "note": "Pytania modułu MB4 (Q135-Q140), pula dedykowana ścieżki P2. Bez pytań krytycznych. Plik <800 LOC (AGENTS). Tłumaczenie IT."
+  },
+  "questions": [
+    {
+      "id": "Q135",
+      "module": "MB4",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Il partecipante capisce cos'è un deepfake e perché una registrazione non è più una prova di per sé.",
+      "prompt": "Cos'è un deepfake?",
+      "options": [
+        { "id": "A", "text": "Qualsiasi video pubblicato in modo anonimo su internet." },
+        { "id": "B", "text": "Un filtro di bellezza usato nelle app dei social network." },
+        { "id": "C", "text": "Una registrazione o una voce generata o modificata dall'IA, che imita in modo realistico una persona reale." },
+        { "id": "D", "text": "Una diceria diffusa via e-mail senza alcun materiale audio-video." }
+      ],
+      "correct": ["C"],
+      "feedbackCorrect": "Un deepfake è un'immagine, un video o una voce sintetica che imita una persona reale. Se voce e volto si possono falsificare, la registrazione da sola smette di essere una prova — contano la verifica del canale e del contesto.",
+      "feedbackIncorrect": "Un deepfake è un contenuto generato dall'IA che imita in modo realistico una persona reale (voce, volto, video). Un video anonimo, un filtro o una diceria non sono lo stesso fenomeno. Ripassa la sezione sui deepfake.",
+      "references": ["MB4.1"]
+    },
+    {
+      "id": "Q136",
+      "module": "MB4",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Il partecipante elenca i tipici segnali d'allarme di una truffa supportata dall'IA.",
+      "prompt": "Quali elementi di un messaggio sono tipici segnali d'allarme di una truffa? Indica tutte le risposte corrette.",
+      "options": [
+        { "id": "A", "text": "Forte pressione del tempo: «devi farlo entro 10 minuti»." },
+        { "id": "B", "text": "La richiesta è arrivata in orario di lavoro da una persona con cui parli spesso." },
+        { "id": "C", "text": "Canale di contatto insolito: il «CEO» scrive da un numero privato chiedendo un bonifico." },
+        { "id": "D", "text": "Il messaggio contiene i dati completi del mittente, conformi alla rubrica aziendale." }
+      ],
+      "correct": ["A", "C"],
+      "feedbackCorrect": "La pressione del tempo e il canale insolito sono due classici segnali di ingegneria sociale. I truffatori isolano la vittima dalle procedure normali e impongono fretta per disattivare la verifica.",
+      "feedbackIncorrect": "I segnali d'allarme sono la pressione del tempo (A) e il canale di contatto insolito (C). Una normale conversazione in orario di lavoro o i dati corretti del mittente non sono sospetti di per sé — anche se nemmeno loro garantiscono l'autenticità.",
+      "references": ["MB4.2"]
+    },
+    {
+      "id": "Q137",
+      "module": "MB4",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Il partecipante applica il principio del secondo canale di fronte a una richiesta vocale insolita.",
+      "prompt": "Ti chiama la «contabile» dell'azienda SklepDemo. La voce sembra la sua, ma chiede di fornire urgentemente le credenziali di accesso al sistema di fatturazione, perché «l'audit è in corso e il sistema sta per bloccarsi». Cosa fai?",
+      "options": [
+        { "id": "A", "text": "Fornisco le credenziali — la voce corrisponde, e un audit suona serio." },
+        { "id": "B", "text": "Riaggancio e richiamo la contabile al suo numero aziendale conosciuto per confermare la richiesta; le credenziali di accesso non le do a nessuno a voce." },
+        { "id": "C", "text": "Fornisco solo il login, e la password la mando via SMS — su due canali è più sicuro." },
+        { "id": "D", "text": "Le chiedo di richiamare fra un'ora — se è un truffatore, di sicuro si scoraggerà." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Principio del secondo canale: interrompi il contatto avviato dall'interlocutore e verifichi la richiesta tramite un canale che scegli tu (il numero conosciuto). Le credenziali di accesso non si danno a voce a nessuno — la voce si può falsificare.",
+      "feedbackIncorrect": "La voce non è una prova d'identità — un deepfake audio suona convincente. L'unica reazione sicura: riagganciare e verificare la richiesta tramite un canale conosciuto scelto da te (B). Dividere il segreto su due canali o rinviare la chiamata non protegge.",
+      "references": ["MB4.2", "MB4.3"]
+    },
+    {
+      "id": "Q138",
+      "module": "MB4",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Il partecipante reagisce correttamente a un video che potrebbe essere un deepfake, prima di inoltrarlo.",
+      "prompt": "Un conoscente ti invia un video in cui un noto politico annuncia il ritiro di tutti i risparmi dalle banche, e ti chiede: «inoltralo, la gente deve sapere». Il video sembra credibile. Cosa fai?",
+      "options": [
+        { "id": "A", "text": "Lo inoltro — meglio avvisare la gente per precauzione, e se è un falso, non succederà nulla." },
+        { "id": "B", "text": "Lo inoltro solo alla famiglia, con la nota «non so se è vero»." },
+        { "id": "C", "text": "Rispondo al conoscente che il video sembra sospetto e gli chiedo la fonte, aspettando che la confermi lui stesso." },
+        { "id": "D", "text": "Non lo inoltro; controllo se l'informazione è confermata da fonti indipendenti e affidabili (comunicati ufficiali, media), e segnalo il falso sulla piattaforma." }
+      ],
+      "correct": ["D"],
+      "feedbackCorrect": "Un materiale sensazionalistico che suscita forti emozioni e invita a «inoltrare» è lo schema tipico della disinformazione. Prima di condividere qualsiasi cosa: verifica su fonti indipendenti, e i falsi segnalali — non inoltrarli nemmeno «con riserva».",
+      "feedbackIncorrect": "Inoltrare — anche «con una nota» o solo alla famiglia — alimenta la disinformazione, e chiedere la fonte al conoscente non verifica nulla (anche lui l'ha ricevuto da una catena). Corretto: non inoltrare, verificare su fonti indipendenti, segnalare (D).",
+      "references": ["MB4.3", "MB4.4"]
+    },
+    {
+      "id": "Q139",
+      "module": "MB4",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "Il partecipante conosce il primo passo della procedura dopo aver riconosciuto un tentativo di truffa al lavoro.",
+      "prompt": "Riconosci che un'e-mail con la richiesta di un bonifico urgente è probabilmente una «truffa del CEO». Qual è il primo passo corretto?",
+      "options": [
+        { "id": "A", "text": "Segnalo il messaggio al reparto IT/sicurezza secondo la procedura aziendale e non rispondo al mittente." },
+        { "id": "B", "text": "Rispondo al truffatore per dargli una lezione e vedere se confessa." },
+        { "id": "C", "text": "Cancello l'e-mail e non lo dico a nessuno — il problema sparisce insieme al messaggio." },
+        { "id": "D", "text": "Inoltro l'e-mail ai colleghi con un avviso, prima di segnalarla a chiunque." }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "La segnalazione secondo la procedura permette all'azienda di bloccare l'attacco anche per gli altri destinatari. Non rispondi al mittente (confermeresti che l'indirizzo è attivo) e non cancelli la prova.",
+      "feedbackIncorrect": "Il primo passo corretto è la segnalazione all'IT/sicurezza (A). Rispondere al truffatore conferma che l'indirizzo è attivo, cancellare l'e-mail distrugge la prova e lascia gli altri senza protezione, e diffondere avvisi per conto proprio è spesso impreciso — per questo esiste la procedura.",
+      "references": ["MB4.4"]
+    },
+    {
+      "id": "Q140",
+      "module": "MB4",
+      "pillar": "security_governance",
+      "paths": ["P2"],
+      "difficulty": "L3",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "Il partecipante analizza un attacco multicanale che combina deepfake ed e-mail e sceglie la reazione completa e corretta.",
+      "prompt": "Scenario: prima ricevi un'e-mail dal «direttore finanziario» su un'acquisizione riservata dell'azienda NotkaApp, e un'ora dopo chiama la sua «voce» con l'ordine di pagare immediatamente una fattura presso un nuovo fornitore. L'e-mail preannunciava la chiamata. Quale analisi della situazione è corretta?",
+      "options": [
+        { "id": "A", "text": "L'e-mail e la telefonata si confermano a vicenda, quindi l'ordine è credibile — due canali sono una verifica sufficiente." },
+        { "id": "B", "text": "È lo schema di un attacco a più fasi: entrambi i canali sono stati avviati dall'aggressore, quindi «confermano» solo se stessi a vicenda. Verifico tramite un canale che avvio io (il numero conosciuto del direttore) e segnalo l'incidente." },
+        { "id": "C", "text": "Basta controllare se l'indirizzo e-mail sembra aziendale — se il dominio corrisponde, si può pagare." },
+        { "id": "D", "text": "Visto che la questione è riservata, non posso verificarla con nessuno — eseguo l'ordine e aspetto il comunicato ufficiale." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Analisi corretta: preannunciare la chiamata nell'e-mail è una costruzione deliberata di credibilità — due canali controllati dall'aggressore non sono indipendenti. Verifica indipendente = un canale che avvii TU; la «riservatezza» che impedisce la verifica fa parte dell'attacco.",
+      "feedbackIncorrect": "Due canali avviati dall'aggressore confermano solo se stessi a vicenda — è il classico attacco a più fasi, e la clausola di «riservatezza» serve a tagliarti fuori dalla verifica. Anche un dominio corrispondente può essere falsificato. L'analisi corretta è la B.",
+      "references": ["MB4.2", "MB4.4"]
+    }
+  ]
+}

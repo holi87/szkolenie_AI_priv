@@ -1,0 +1,155 @@
+{
+  "_meta": {
+    "module": "MB6",
+    "issue": "#171 Rebuild ścieżek — bank pytań P2 „Bezpieczne używanie AI”, moduł MB6 (weryfikacja treści AI)",
+    "schema": "../schemas/questions.schema.json",
+    "dataPolicy": "WSZYSTKIE dane SYNTETYCZNE (przyklad.test, NotkaApp/SklepDemo, Jan Syntetyczny, identyfikatory testowe). ZERO realnych danych/PII.",
+    "note": "Pytania modułu MB6 (Q147-Q152), pula dedykowana ścieżki P2. Bez pytań krytycznych. Plik <800 LOC (AGENTS)."
+  },
+  "questions": [
+    {
+      "id": "Q147",
+      "module": "MB6",
+      "pillar": "qa_practice",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "understand",
+      "type": "single_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "El participante entiende por qué el tono seguro de una respuesta de IA no demuestra su veracidad.",
+      "prompt": "¿Por qué una respuesta de IA puede sonar muy segura y aun así ser errónea?",
+      "options": [
+        { "id": "A", "text": "El modelo genera la respuesta lingüísticamente más probable — la fluidez y el tono seguro no son una medida de veracidad." },
+        { "id": "B", "text": "Los modelos mienten a propósito para que el usuario vuelva y haga más preguntas." },
+        { "id": "C", "text": "El tono seguro aparece solo cuando el modelo está conectado a internet." },
+        { "id": "D", "text": "Es imposible — si la respuesta suena segura, el modelo tiene fuentes para ella." }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "El modelo predice las siguientes palabras, no comprueba los hechos — por eso puede presentar con la misma soltura la verdad y una invención (alucinación). El tono de la respuesta es estilo, no una prueba.",
+      "feedbackIncorrect": "El modelo no miente a propósito ni señala su seguridad con fuentes — genera la respuesta lingüísticamente más probable, así que un error suena tan seguro como la verdad (A). Repasa la sección sobre la naturaleza de las alucinaciones.",
+      "references": ["MB6.1"]
+    },
+    {
+      "id": "Q148",
+      "module": "MB6",
+      "pillar": "qa_practice",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "El participante verifica la fuente indicada por la IA en lugar de fiarse del mero hecho de que la cite.",
+      "prompt": "La IA te preparó un párrafo para el boletín de la empresa NotkaApp con una estadística concreta y un enlace a un informe. Suena profesional. ¿Qué haces antes de publicarlo?",
+      "options": [
+        { "id": "A", "text": "Lo publico — si la IA dio el enlace, la estadística está confirmada." },
+        { "id": "B", "text": "Abro el enlace y compruebo si el informe existe y si de verdad contiene esa estadística; busco también una segunda confirmación independiente." },
+        { "id": "C", "text": "Quito el enlace y dejo solo la estadística — sin enlace nadie lo comprobará y no habrá problema." },
+        { "id": "D", "text": "Pido a la misma IA que confirme que la estadística es verdadera — si lo confirma, publico." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Sí: los modelos pueden inventar tanto la cifra como un enlace de aspecto creíble. Verificación = abrir la fuente, comprobar el contenido y encontrar una confirmación independiente — solo entonces se publica.",
+      "feedbackIncorrect": "El enlace por sí solo no demuestra nada (puede ser inventado), ocultar el enlace no arregla la cifra errónea, y la «confirmación» del mismo modelo es la misma máquina poco fiable. Lo correcto: abrir y comprobar la fuente + una segunda pista independiente (B).",
+      "references": ["MB6.2"]
+    },
+    {
+      "id": "Q149",
+      "module": "MB6",
+      "pillar": "qa_practice",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "apply",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "El participante reconoce los temas de riesgo elevado en los que la respuesta de la IA exige verificación por un especialista.",
+      "prompt": "Un compañero quiere enviar a su madre las recomendaciones de dosificación de un medicamento que le generó la IA, «porque suenan sensatas y están bien estructuradas». ¿Qué le aconsejas?",
+      "options": [
+        { "id": "A", "text": "Que las envíe — la IA aprendió con textos médicos, así que sabe más que muchos médicos." },
+        { "id": "B", "text": "Que las envíe, pero con la nota de que vienen de la IA — la madre decidirá por sí misma si confiar." },
+        { "id": "C", "text": "La dosificación de medicamentos es un tema de riesgo elevado: las recomendaciones debe confirmarlas un médico o un farmacéutico, y el texto generado puede ser un punto de partida para hablar con ellos, no una recomendación." },
+        { "id": "D", "text": "Que pregunte a un segundo modelo de IA y compare — si las respuestas coinciden, se puede enviar." }
+      ],
+      "correct": ["C"],
+      "feedbackCorrect": "Sí: la salud, el derecho y el dinero son temas en los que un error de la IA cuesta más — aquí el verificador es un especialista, no un segundo modelo. La IA puede ayudar a preparar preguntas para el médico, no sustituir su decisión.",
+      "feedbackIncorrect": "En temas de alto riesgo (salud, derecho, finanzas) ni la coincidencia de dos modelos ni la nota «de la IA» bastan — ambos modelos pueden repetir el mismo error, y la responsabilidad no se traslada a la madre. Las recomendaciones las confirma un médico o un farmacéutico (C).",
+      "references": ["MB6.3"]
+    },
+    {
+      "id": "Q150",
+      "module": "MB6",
+      "pillar": "qa_practice",
+      "paths": ["P2"],
+      "difficulty": "L2",
+      "bloom": "analysis",
+      "type": "scenariusz",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "El participante reconoce los límites del conocimiento del modelo (actualidad de los datos) como fuente de errores.",
+      "prompt": "Escenario: preguntas a la IA por la normativa vigente sobre deducciones fiscales. El modelo responde con detalle y precisión, pero sin fechas ni fuentes. ¿Qué riesgo es aquí el MÁS importante?",
+      "options": [
+        { "id": "A", "text": "La respuesta puede describir el estado legal de hace meses o años — el conocimiento del modelo tiene una fecha de corte, y la normativa cambia." },
+        { "id": "B", "text": "La respuesta es demasiado detallada — las respuestas más cortas siempre son más fiables." },
+        { "id": "C", "text": "El modelo pudo responder en un dialecto equivocado del idioma." },
+        { "id": "D", "text": "No hay riesgo — la normativa fiscal es tan estable que la fecha del conocimiento del modelo no importa." }
+      ],
+      "correct": ["A"],
+      "feedbackCorrect": "El riesgo más serio es la desactualización: el modelo «se detuvo» en la fecha de corte de sus datos de entrenamiento, y el derecho cambia a menudo. Los temas «normativa/tipos/plazos vigentes» verifícalos siempre en una fuente oficial y fechada.",
+      "feedbackIncorrect": "La longitud de la respuesta y el estilo no son medidas de riesgo — lo clave es la fecha de corte del conocimiento del modelo: el estado legal descrito puede estar desactualizado (A). Comprueba la normativa en una fuente oficial y fechada.",
+      "references": ["MB6.3", "MB6.2"]
+    },
+    {
+      "id": "Q151",
+      "module": "MB6",
+      "pillar": "qa_practice",
+      "paths": ["P2"],
+      "difficulty": "L3",
+      "bloom": "evaluation",
+      "type": "scenariusz_decyzyjny",
+      "isCritical": false,
+      "golden": false,
+      "points": 2,
+      "learningOutcome": "El participante construye el hábito de verificar de forma proporcional a la importancia de la decisión antes de transmitir un contenido.",
+      "prompt": "Tienes 10 minutos antes de la reunión de la dirección de SklepDemo. La IA te resumió un informe de 40 páginas y, sobre la base del resumen, debes recomendar una decisión presupuestaria. ¿Qué haces?",
+      "options": [
+        { "id": "A", "text": "Presento el resumen entero — con tan poco tiempo no hay otra salida, y la IA rara vez se equivoca." },
+        { "id": "B", "text": "Verifico en el informe original las cifras y conclusiones clave en las que se apoya la recomendación; el resto del resumen lo marco como no verificado y lo digo abiertamente." },
+        { "id": "C", "text": "Cancelo mi parte de la reunión — sin leer las 40 páginas enteras no se puede recomendar nada." },
+        { "id": "D", "text": "Pido a la IA un segundo resumen más corto y comparo ambos — la coincidencia de los resúmenes confirma la corrección." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Sí: verificación proporcional a la importancia — lo que sostiene la decisión (cifras, conclusiones) lo compruebas en la fuente; el resto lo marcas abiertamente. La transparencia ante la dirección es parte de la honestidad, y dos resúmenes del mismo modelo no son independientes.",
+      "feedbackIncorrect": "Presentar un resumen no verificado para una decisión presupuestaria es trasladar la alucinación a la dirección; dos resúmenes de la misma máquina no son una verificación independiente; cancelar la reunión es huir, no gestionar el riesgo. Lo correcto: verificar en el original lo clave y marcar abiertamente el resto (B).",
+      "references": ["MB6.4", "MB6.2"]
+    },
+    {
+      "id": "Q152",
+      "module": "MB6",
+      "pillar": "qa_practice",
+      "paths": ["P2"],
+      "difficulty": "L1",
+      "bloom": "remember",
+      "type": "multiple_choice",
+      "isCritical": false,
+      "golden": false,
+      "points": 1,
+      "learningOutcome": "El participante conoce los pasos básicos de la verificación rápida de un contenido generado por IA.",
+      "prompt": "¿Qué pasos forman parte de la verificación rápida de una respuesta de IA antes de seguir usándola? Marca todas las opciones correctas.",
+      "options": [
+        { "id": "A", "text": "Comprobar si la fuente indicada existe y de verdad contiene la información citada." },
+        { "id": "B", "text": "Evaluar si la respuesta suena segura y profesional." },
+        { "id": "C", "text": "Buscar una segunda confirmación independiente de los hechos y cifras clave." },
+        { "id": "D", "text": "Comprobar si la respuesta es lo bastante larga y está bien formateada." }
+      ],
+      "correct": ["A", "C"],
+      "feedbackCorrect": "Exactamente: la verificación se basa en las fuentes (si existen y confirman el contenido) y en una pista independiente para los hechos clave. El tono, la longitud y el formato son cosmética — no dicen nada sobre la veracidad.",
+      "feedbackIncorrect": "El tono seguro, la longitud y el formato bonito son rasgos de estilo que el modelo genera con el mismo gusto para la verdad y la invención. Verifican las fuentes (A) y la confirmación independiente (C).",
+      "references": ["MB6.2", "MB6.4"]
+    }
+  ]
+}

@@ -9,7 +9,8 @@
   "pillars": {
     "foundations_technical": "Fundamenty i techniczne rozumienie GenAI/LLM (architektura, parametry, embeddings, vector DB, RAG, ewaluacja)",
     "qa_practice": "Praktyczne zastosowanie w QA (prompt engineering, przypadki testowe, weryfikacja outputu)",
-    "security_governance": "Bezpieczeństwo, higiena danych, governance i kontrola agentów"
+    "security_governance": "Bezpieczeństwo, higiena danych, governance i kontrola agentów",
+    "everyday": "Codzienne, prywatne użycie AI (asystenci, prompty domowe, tworzenie, rodzina, prywatność) — filar ścieżki P1 „AI w domu” (#171)"
   },
   "modules": [
     {
@@ -506,6 +507,301 @@
         "Ocenia dojrzałość powtarzalnego workflow AI (skilla) wg konkretnych kryteriów",
         "Rozpoznaje, co odróżnia poziom 8 od 9 oraz 10 od 11",
         "Odróżnia mierzony, kalibrowany rozwój od fałszywego poczucia dojrzałości"
+      ]
+    },
+    {
+      "id": "MB1",
+      "order": 19,
+      "timeFullMin": 30,
+      "pillar": "security_governance",
+      "scope": "dedicated",
+      "questionRange": {
+        "from": "Q117",
+        "to": "Q122",
+        "count": 6
+      },
+      "name": "Mapa ryzyk AI",
+      "level": "podstawowy",
+      "interactiveElement": "Klasyfikacja: ryzyko czy bezpieczna praktyka",
+      "keyConcepts": [
+        "halucynacje",
+        "nadmierne zaufanie",
+        "wycieki danych",
+        "manipulacja",
+        "świadome użycie AI"
+      ],
+      "learningOutcomes": [
+        "Wymienia główne ryzyka codziennego używania AI",
+        "Rozpoznaje, że pewny ton odpowiedzi nie oznacza prawdy",
+        "Wskazuje sytuacje, w których AI pomaga, i takie, w których szkodzi"
+      ]
+    },
+    {
+      "id": "MB2",
+      "order": 20,
+      "timeFullMin": 35,
+      "pillar": "security_governance",
+      "scope": "dedicated",
+      "questionRange": {
+        "from": "Q123",
+        "to": "Q128",
+        "count": 6
+      },
+      "criticalQuestions": 4,
+      "name": "Dane wrażliwe i prywatność",
+      "level": "podstawowy",
+      "interactiveElement": "Klasyfikacja: co wolno wkleić do czatu",
+      "keyConcepts": [
+        "dane osobowe (RODO)",
+        "minimalizacja danych",
+        "sekrety i hasła",
+        "narzędzia zatwierdzone",
+        "uprawnienia aplikacji"
+      ],
+      "learningOutcomes": [
+        "Rozpoznaje dane osobowe i poufne w codziennych treściach",
+        "Anonimizuje treść przed wklejeniem do narzędzia AI",
+        "Nie przekazuje sekretów (haseł, kluczy, tokenów) do czatów AI"
+      ]
+    },
+    {
+      "id": "MB3",
+      "order": 21,
+      "timeFullMin": 30,
+      "pillar": "security_governance",
+      "scope": "dedicated",
+      "questionRange": {
+        "from": "Q129",
+        "to": "Q134",
+        "count": 6
+      },
+      "name": "Prompt injection i socjotechnika",
+      "level": "podstawowy/średni",
+      "interactiveElement": "Klasyfikacja: atak czy zwykła prośba",
+      "keyConcepts": [
+        "prompt injection",
+        "instrukcje ukryte w danych",
+        "podszywanie się",
+        "socjotechnika",
+        "zgłaszanie incydentów"
+      ],
+      "learningOutcomes": [
+        "Rozpoznaje instrukcje wstrzyknięte w treści, które czyta AI",
+        "Stosuje zasadę: treść z danych to nie polecenie",
+        "Wie, jak zareagować i komu zgłosić próbę manipulacji"
+      ]
+    },
+    {
+      "id": "MB4",
+      "order": 22,
+      "timeFullMin": 35,
+      "pillar": "security_governance",
+      "scope": "dedicated",
+      "questionRange": {
+        "from": "Q135",
+        "to": "Q140",
+        "count": 6
+      },
+      "name": "Deepfake, scam i dezinformacja",
+      "level": "podstawowy",
+      "interactiveElement": "Klasyfikacja: sygnał ostrzegawczy czy normalna sytuacja",
+      "keyConcepts": [
+        "deepfake głosu i wideo",
+        "oszustwo na prezesa",
+        "presja czasu",
+        "weryfikacja drugim kanałem",
+        "zgłaszanie oszustw"
+      ],
+      "learningOutcomes": [
+        "Rozpoznaje typowe sygnały deepfake'ów i oszustw wspieranych AI",
+        "Stosuje zasadę drugiego kanału przed działaniem pod presją",
+        "Zna procedurę zgłoszenia podejrzanej sytuacji"
+      ]
+    },
+    {
+      "id": "MB5",
+      "order": 23,
+      "timeFullMin": 30,
+      "pillar": "security_governance",
+      "scope": "dedicated",
+      "questionRange": {
+        "from": "Q141",
+        "to": "Q146",
+        "count": 6
+      },
+      "name": "AI w pracy: polityki i shadow AI",
+      "level": "podstawowy",
+      "interactiveElement": "Klasyfikacja: zgodne z polityką czy shadow AI",
+      "keyConcepts": [
+        "shadow AI",
+        "polityka firmowa",
+        "narzędzia zatwierdzone",
+        "licencje i prawa autorskie",
+        "odpowiedzialność za wynik"
+      ],
+      "learningOutcomes": [
+        "Rozpoznaje shadow AI i jego konsekwencje dla firmy",
+        "Dobiera narzędzie zgodne z polityką do typu danych",
+        "Wie, że za treść wytworzoną z pomocą AI odpowiada człowiek"
+      ]
+    },
+    {
+      "id": "MB6",
+      "order": 24,
+      "timeFullMin": 30,
+      "pillar": "qa_practice",
+      "scope": "dedicated",
+      "questionRange": {
+        "from": "Q147",
+        "to": "Q152",
+        "count": 6
+      },
+      "name": "Weryfikacja treści AI",
+      "level": "podstawowy/średni",
+      "interactiveElement": "Rubryka weryfikacji odpowiedzi AI",
+      "keyConcepts": [
+        "fact-checking",
+        "źródła i daty",
+        "drugi niezależny ślad",
+        "granice kompetencji modelu",
+        "weryfikuj zanim przekażesz"
+      ],
+      "learningOutcomes": [
+        "Sprawdza odpowiedź AI według prostych kryteriów weryfikacji",
+        "Wskazuje tematy podwyższonego ryzyka (liczby, prawo, zdrowie, nowości)",
+        "Buduje nawyk weryfikacji przed przekazaniem treści dalej"
+      ]
+    },
+    {
+      "id": "MD1",
+      "order": 25,
+      "timeFullMin": 25,
+      "pillar": "everyday",
+      "scope": "diagnostic",
+      "name": "Co AI potrafi dziś",
+      "level": "podstawowy",
+      "interactiveElement": "Klasyfikacja: co AI zrobi dobrze, a gdzie się myli",
+      "keyConcepts": [
+        "asystenci AI",
+        "czaty",
+        "multimodalność",
+        "granice możliwości",
+        "zdrowy sceptycyzm"
+      ],
+      "learningOutcomes": [
+        "Wymienia codzienne zastosowania AI w domu",
+        "Rozpoznaje zadania, w których AI bywa zawodne",
+        "Zaczyna korzystać z AI od bezpiecznych, prostych zadań"
+      ]
+    },
+    {
+      "id": "MD2",
+      "order": 26,
+      "timeFullMin": 30,
+      "pillar": "everyday",
+      "scope": "diagnostic",
+      "name": "Prompty na co dzień",
+      "level": "podstawowy",
+      "interactiveElement": "Strojenie promptu domowego",
+      "keyConcepts": [
+        "kontekst",
+        "cel i format",
+        "iterowanie",
+        "doprecyzowanie",
+        "przykłady domowe"
+      ],
+      "learningOutcomes": [
+        "Formułuje prośby z kontekstem, celem i formatem odpowiedzi",
+        "Poprawia odpowiedź AI kolejnymi doprecyzowaniami zamiast szukać idealnego promptu",
+        "Stosuje AI do codziennych zadań: maile, plany, przepisy, nauka"
+      ]
+    },
+    {
+      "id": "MD3",
+      "order": 27,
+      "timeFullMin": 25,
+      "pillar": "everyday",
+      "scope": "diagnostic",
+      "name": "AI w telefonie i domu",
+      "level": "podstawowy",
+      "interactiveElement": "Klasyfikacja: zadanie dla asystenta czy nie",
+      "keyConcepts": [
+        "asystent głosowy",
+        "AI w aparacie",
+        "tłumaczenie na żywo",
+        "inteligentny dom",
+        "realna wartość vs gadżet"
+      ],
+      "learningOutcomes": [
+        "Wskazuje funkcje AI w telefonie, które realnie ułatwiają życie",
+        "Dobiera zadania sensowne dla asystenta głosowego",
+        "Odróżnia użyteczne funkcje od marketingowych gadżetów"
+      ]
+    },
+    {
+      "id": "MD4",
+      "order": 28,
+      "timeFullMin": 30,
+      "pillar": "everyday",
+      "scope": "diagnostic",
+      "name": "Tworzenie: obraz, dźwięk, wideo",
+      "level": "podstawowy",
+      "interactiveElement": "Klasyfikacja: w porządku czy ryzykowne",
+      "keyConcepts": [
+        "generatory obrazów",
+        "muzyka i wideo AI",
+        "oznaczanie treści AI",
+        "prawa do utworów",
+        "wizerunek innych osób"
+      ],
+      "learningOutcomes": [
+        "Tworzy proste materiały domowe z pomocą generatorów",
+        "Oznacza treści wygenerowane przez AI tam, gdzie to potrzebne",
+        "Szanuje wizerunek i prawa innych osób przy tworzeniu z AI"
+      ]
+    },
+    {
+      "id": "MD5",
+      "order": 29,
+      "timeFullMin": 25,
+      "pillar": "everyday",
+      "scope": "diagnostic",
+      "name": "AI a dzieci i rodzina",
+      "level": "podstawowy",
+      "interactiveElement": "Klasyfikacja: zdrowa czy ryzykowna praktyka rodzinna",
+      "keyConcepts": [
+        "rozmowa o AI z dzieckiem",
+        "wspólne korzystanie",
+        "pomoc vs wyręczanie",
+        "higiena cyfrowa",
+        "kontrola rodzicielska"
+      ],
+      "learningOutcomes": [
+        "Rozmawia z dzieckiem o możliwościach i granicach AI",
+        "Ustawia zdrowe zasady korzystania z AI w rodzinie",
+        "Odróżnia AI jako pomoc w nauce od wyręczania w myśleniu"
+      ]
+    },
+    {
+      "id": "MD6",
+      "order": 30,
+      "timeFullMin": 30,
+      "pillar": "everyday",
+      "scope": "diagnostic",
+      "name": "Prywatność domowa",
+      "level": "podstawowy",
+      "interactiveElement": "Strojenie ustawień prywatności",
+      "keyConcepts": [
+        "historia czatów",
+        "trening na danych",
+        "opt-out",
+        "czego nie wklejać",
+        "urządzenia domowe"
+      ],
+      "learningOutcomes": [
+        "Sprawdza i ustawia opcje prywatności w narzędziach AI",
+        "Wie, których treści nie wklejać do czatów (dokumenty, zdjęcia dzieci, dane zdrowotne)",
+        "Robi porządek w uprawnieniach urządzeń domowych"
       ]
     }
   ]

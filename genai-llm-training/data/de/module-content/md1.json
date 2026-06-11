@@ -1,0 +1,109 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P1 AI w domu (formatywna)",
+    "interaction": "Klasyfikacja zadań (kind: classify) — ćwiczenie formatywne, NIE scorowane do zaliczenia",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE i ogólne (zero realnych danych/PII). Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MD1",
+  "intro": "KI ist keine Magie und keine Science-Fiction — sie ist ein Werkzeug, das Ihnen schon heute helfen kann, eine E-Mail zu schreiben, die Woche zu planen oder ein schwieriges Thema in einfachen Worten zu erklären. In diesem Modul sehen Sie, was KI wirklich kann, wo sie sich irrt und womit Sie am besten anfangen. Ohne Test, ohne Druck — ein gemütlicher Spaziergang durch neues Gelände.",
+  "screens": [
+    {
+      "id": "md1-s1-czaty-asystenci",
+      "title": "Chats und Assistenten — Ihr neuer Helfer",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Die beliebteste Form von KI ist der Chat: Sie schreiben eine Frage oder eine Bitte in ganz normalen Worten, und der Assistent antwortet. Sie müssen keine Befehle und keine „Computersprache“ kennen — Sie unterhalten sich wie mit einer hilfsbereiten Person, die viel Geduld hat und nie seufzt, wenn Sie zum dritten Mal dasselbe fragen." },
+        { "kind": "list", "items": [
+          "Sie können um Erklärungen bitten: „Erkläre mir das so, als wäre ich 10 Jahre alt“.",
+          "Sie können um Texte bitten: eine E-Mail, Glückwünsche, eine Anzeige, eine Einkaufsliste.",
+          "Sie können um Ideen bitten: was es zum Mittagessen gibt, was man an einem verregneten Samstag unternimmt, welches Geschenk die Oma bekommt.",
+          "Sie können nachfragen und nachbessern: „kürzer“, „einfacher“, „und was, wenn …?“."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Es gibt keine dummen Fragen", "text": "Der KI-Assistent urteilt nicht. Sie können nach „offensichtlichen“ Dingen fragen, um eine Wiederholung bitten und mit Tippfehlern schreiben — er versteht trotzdem, worum es geht." }
+      ]
+    },
+    {
+      "id": "md1-s2-multimodalnosc",
+      "title": "Text, Bild, Stimme — KI versteht mehr als Buchstaben",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Moderne Assistenten beschränken sich nicht auf Text. Sie können ihnen ein Foto zeigen, etwas laut sagen oder um ein generiertes Bild bitten. Das eröffnet sehr praktische Anwendungen im Alltag." },
+        { "kind": "table", "headers": ["Was Sie geben", "Was Sie bekommen können", "Beispiel aus dem Leben"], "rows": [
+          ["Text", "Antwort, Text, Plan, Ideen", "„Schreibe eine höfliche Antwort auf diese Einladung“"],
+          ["Foto", "Beschreibung, Erklärung, Übersetzung", "Foto eines Etiketts auf Französisch → „Was steht hier?“"],
+          ["Stimme", "Gespräch ohne Tippen", "Sie kochen und fragen laut, womit sich Sahne ersetzen lässt"],
+          ["Bitte um ein Bild", "Generierte Grafik", "Ein Ausmalbild für das Kind, eine Illustration für eine Einladung"]
+        ], "textAlt": "Die Tabelle zeigt vier Arbeitsweisen mit KI: Text liefert Antworten und Pläne, ein Foto liefert eine Beschreibung oder Übersetzung, die Stimme erlaubt ein Gespräch ohne Tippen, und die Bitte um ein Bild liefert eine generierte Grafik. Jede Zeile enthält ein Beispiel aus dem häuslichen Alltag." },
+        { "kind": "callout", "variant": "info", "title": "Probieren Sie es mit der Kamera", "text": "Einer der schönsten ersten Schritte ist, der KI ein Foto zu zeigen: eine Bedienungsanleitung, eine Pflanze vom Balkon, die Zutatenliste eines Produkts — und zu fragen „Was ist das?“ oder „Erkläre es einfach“." }
+      ]
+    },
+    {
+      "id": "md1-s3-czego-nie-potrafi",
+      "title": "Was KI NICHT kann — sie klingt sicher, liegt aber manchmal daneben",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Halluzination", "text": "Eine Situation, in der die KI eine unwahre, aber sehr überzeugend klingende Information liefert. Der Assistent lügt nicht absichtlich — er „rät“ einfach eine Antwort, die zur Frage passt, und tut das im selben sicheren Ton wie bei Fakten." },
+        { "kind": "paragraph", "text": "Stellen Sie sich einen belesenen, eloquenten Bekannten vor, der nie „ich weiß nicht“ sagt. Nach den Öffnungszeiten der Arztpraxis gefragt, nennt er irgendwelche Zeiten — vielleicht echte, vielleicht erfundene. Genau so funktioniert KI: Sie erklärt, schlägt vor und schreibt hervorragend, aber sie ist kein Orakel." },
+        { "kind": "list", "items": [
+          "Daten, Preise, Öffnungszeiten, Rechtsvorschriften — prüfen Sie immer an der Quelle.",
+          "Gesundheits- und Finanztipps — behandeln Sie sie als Einstieg in das Gespräch mit Arzt oder Berater, nicht als Entscheidung.",
+          "Nachrichten „von heute“ — der Assistent kennt die neuesten Ereignisse möglicherweise nicht.",
+          "Rechnen und kleinteilige Fakten — KI ist überraschend schwach bei Dingen, die einfach aussehen."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Das Prinzip des begrenzten Vertrauens", "text": "Je wichtiger die Entscheidung (Gesundheit, Geld, Dokumente), desto mehr ist die KI-Antwort nur ein Hinweis zum Überprüfen — nicht das letzte Wort." }
+      ]
+    },
+    {
+      "id": "md1-s4-od-czego-zaczac",
+      "title": "Womit anfangen — die erste Woche mit KI",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Der beste Weg, sich mit KI vertraut zu machen, sind kleine, sichere Aufgaben, bei denen ein Fehler nichts kostet. Anna Beispiel begann mit der Planung der Mittagessen für die Woche, Jan Synthetisch — mit dem Schreiben höflicher Antworten auf E-Mails. Nach einer Woche hatten beide bereits ihre Lieblingsanwendungen." },
+        { "kind": "list", "ordered": true, "items": [
+          "Wählen Sie einen kostenlosen KI-Chat und legen Sie ein Konto an.",
+          "Stellen Sie eine Frage zu etwas, womit Sie sich auskennen — Sie sehen, wie gut (und wie selbstsicher) er antwortet.",
+          "Bitten Sie um Hilfe bei einer echten, kleinen Sache: eine E-Mail, ein Plan, ein Rezept.",
+          "Fragen Sie gezielt nach und verbessern Sie die Antwort — Sie werden sehen, dass das Gespräch besser funktioniert als eine einzelne Frage.",
+          "Prüfen Sie eine „Fakten“-Antwort in einer anderen Quelle — Sie spüren, wo die Vertrauensgrenze verläuft."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Sie können nichts kaputt machen", "text": "Ein KI-Chat ist ein sicherer Ort zum Experimentieren. Das Schlimmste, was passieren kann, ist eine unpassende Antwort — dann schreiben Sie einfach „darum ging es nicht“ und versuchen es anders." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "md1-classify",
+    "title": "Macht die KI das gut oder braucht es einen Menschen?",
+    "intro": "Ordnen Sie jede Aufgabe zu: Erledigt die KI sie heute gut, oder irrt sie sich eher, sodass eine Überprüfung oder ein Mensch nötig ist? Dies ist eine Lernübung — das Feedback erklärt jede Antwort.",
+    "categories": [
+      { "id": "ai-dobrze", "label": "Das macht die KI heute gut", "desc": "Sprach- und Ideenaufgaben: Übersetzen, Schreiben, Erklären, Planen." },
+      { "id": "czlowiek", "label": "Hier irrt die KI / es braucht einen Menschen", "desc": "Aktuelle Fakten, wichtige Entscheidungen, Gesundheit, Geld — das erfordert Überprüfung." }
+    ],
+    "items": [
+      { "id": "md1-i1", "text": "Schreibe eine höfliche Antwort auf eine Einladung zur Erstkommunion.", "correctCategory": "ai-dobrze", "rationale": "Texte schreiben ist eine Stärke der KI — Ton und Länge passen Sie leicht an." },
+      { "id": "md1-i2", "text": "Nenne die aktuellen Öffnungszeiten der Arztpraxis in meinem Stadtteil.", "correctCategory": "czlowiek", "rationale": "Die KI kann Öffnungszeiten in sicherem Ton erfinden. Solche Dinge prüfen Sie auf der Website der Praxis oder telefonisch." },
+      { "id": "md1-i3", "text": "Erkläre in einfachen Worten, was Inflation ist.", "correctCategory": "ai-dobrze", "rationale": "Begriffe „menschlich“ zu erklären ist eine der besten Anwendungen von KI." },
+      { "id": "md1-i4", "text": "Entscheide, ob ich diesen Hypothekenkredit aufnehmen soll.", "correctCategory": "czlowiek", "rationale": "Eine wichtige Finanzentscheidung — die KI kann helfen, die Fragen zu ordnen, aber die Entscheidung besprechen Sie mit einem Berater und Ihrem eigenen Verstand." },
+      { "id": "md1-i5", "text": "Schlage einen Wochenplan für Mahlzeiten aus einfachen Zutaten vor.", "correctCategory": "ai-dobrze", "rationale": "Planung und Ideen sind eine sichere Aufgabe — schlimmstenfalls tauschen Sie ein Gericht aus, das Ihnen nicht zusagt." },
+      { "id": "md1-i6", "text": "Sage mir, welche Medikamente ich gegen diese Kopfschmerzen nehmen soll.", "correctCategory": "czlowiek", "rationale": "Gesundheit erfordert Arzt oder Apotheker. Die KI kann Begriffe erklären, aber sie sollte keine Medikamente dosieren." },
+      { "id": "md1-i7", "text": "Übersetze ein Kochrezept aus dem Italienischen ins Deutsche.", "correctCategory": "ai-dobrze", "rationale": "Übersetzungen von Alltagstexten gelingen der KI sehr gut." },
+      { "id": "md1-i8", "text": "Nenne das Ergebnis des gestrigen Spiels und die neuesten Nachrichten.", "correctCategory": "czlowiek", "rationale": "Die aktuellsten Ereignisse können außerhalb des Wissens des Assistenten liegen — er kann alte oder erfundene Informationen liefern." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "KI ist ein Gespräch in normalen Worten — fragen Sie, fragen Sie nach, bessern Sie nach, Sie können nichts kaputt machen.",
+      "Der Assistent versteht Text, Fotos und Stimme — ein Foto zu zeigen ist oft schneller als zu beschreiben.",
+      "KI klingt auch dann sicher, wenn sie sich irrt — Fakten, Gesundheit und Geld prüfen Sie immer an der Quelle.",
+      "Beginnen Sie mit kleinen, sicheren Aufgaben: eine E-Mail, ein Wochenplan, die Erklärung eines schwierigen Themas."
+    ],
+    "checklist": [
+      "Habe ich ein Konto in einem KI-Chat angelegt und die erste Frage gestellt?",
+      "Weiß ich, was eine Halluzination ist und welche Antworten geprüft werden müssen?",
+      "Habe ich versucht, nachzufragen und die Antwort zu verbessern, statt bei der ersten zu bleiben?",
+      "Habe ich eine alltägliche Aufgabe, bei der KI mir wirklich hilft?"
+    ],
+    "checklistTitle": "Checkliste — erste Schritte mit KI",
+    "nextStep": "Nächster Schritt: Im Modul „Prompts im Alltag“ lernen Sie, Bitten so zu formulieren, dass die Antworten sofort treffen — mit Kontext, Ziel und Format."
+  }
+}

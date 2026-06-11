@@ -1,0 +1,126 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P2 Bezpieczne używanie AI",
+    "interaction": "Klasyfikacja treści (kind: classify) — co można wkleić do publicznego czatu, a co wymaga anonimizacji lub zostaje poza czatem",
+    "sections": "Ekrany odpowiadają sekcjom MB2.1–MB2.5 (referowane przez pytania banku Q123–Q128): dane osobowe RODO, minimalizacja/anonimizacja, sekrety, narzędzia zatwierdzone vs publiczne (NDA), uprawnienia aplikacji.",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp, SklepDemo, Jan Syntetyczny, Anna Testowa, domeny @przyklad.test / @example.com, placeholdery zamiast sekretów). Zero realnych danych, PII, numerów i tokenów."
+  },
+  "module": "MB2",
+  "intro": "Le plus grand risque de l'IA au travail quotidien ne nécessite aucun pirate — un simple « coller et envoyer » suffit. Dans ce module, vous apprendrez à reconnaître les données personnelles, à ne coller que ce qui est vraiment nécessaire, à tenir mots de passe et clés à l'écart des chats, et à distinguer les outils approuvés par l'entreprise des outils publics. À la fin, vous le vérifierez en pratique.",
+  "screens": [
+    {
+      "id": "mb2-s1-dane-osobowe",
+      "title": "MB2.1 — Ce qu'est une donnée personnelle (le RGPD en pratique)",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Données personnelles", "text": "Toutes les informations qui permettent d'identifier une personne précise — directement (nom et prénom, adresse e-mail, photo du visage) ou par recoupement de plusieurs faits (poste + entreprise + ville). Le RGPD les protège, qu'elles concernent un client, un collègue ou vous-même." },
+        { "kind": "list", "items": [
+          "Évidentes : nom et prénom, e-mail, adresse, numéro de téléphone, image, numéro d'identification.",
+          "Moins évidentes : identifiant client dans un système, historique de commandes rattaché à une personne, contenu de sa réclamation.",
+          "Particulièrement protégées : données de santé, opinions, religion — celles-là, ne les collez jamais, sous aucune forme.",
+          "Combinaisons : « la responsable du service retours de SklepDemo à Gdansk » identifie une personne, même sans nom de famille."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Pourquoi cela concerne les chats d'IA", "text": "Coller des données personnelles dans un chat public, c'est les transmettre à une entreprise tierce — le plus souvent sans base légale et à l'insu de la personne concernée. C'est une véritable violation du RGPD, pas une formalité.",
+          "links": [ { "label": "UODO — informations sur la protection des données personnelles et le RGPD", "href": "https://uodo.gov.pl/" } ]
+        }
+      ]
+    },
+    {
+      "id": "mb2-s2-minimalizacja",
+      "title": "MB2.2 — Minimisation : ne collez que le nécessaire",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Le principe de minimisation est simple : le modèle a besoin du contenu du problème, pas de l'identité des personnes. Avant de coller quoi que ce soit, supprimez ou remplacez tout ce qui désigne des personnes précises et des contrats précis. Le sens de la tâche reste — le risque disparaît." },
+        { "kind": "table", "headers": ["Avant (ne collez pas)", "Après anonymisation (vous pouvez coller)"], "rows": [
+          ["Le client Jean Synthétique (jan.syntetyczny@przyklad.test) exige un remboursement pour une commande chez SklepDemo", "Un client exige un remboursement pour une commande — aidez-moi à rédiger une réponse de refus polie"],
+          ["Anne Exemple du service RH se plaint de son supérieur, je vous donne son e-mail en entier", "Un salarié signale un conflit avec son supérieur — comment mener cette conversation ?"],
+          ["Contrat n° 2024/DEMO avec la société PipeDemo, tarifs et pénalités contractuelles en pièce jointe", "J'ai un contrat B2B avec des pénalités de retard — que vérifier avant de signer ?"]
+        ], "textAlt": "Le tableau compare les contenus avant et après anonymisation : au lieu des données du client Jean Synthétique avec son adresse e-mail, on colle seulement la description du problème de remboursement ; au lieu de l'e-mail complet d'une salariée, la description du conflit sans noms ; au lieu du numéro de contrat et des tarifs, une question générale sur un contrat B2B." },
+        { "kind": "callout", "variant": "safe", "title": "La technique des placeholders", "text": "Remplacez les éléments concrets par des rôles : « [CLIENT] », « [ENTREPRISE] », « [MONTANT] ». Le modèle s'en sortira tout aussi bien, et une fois la réponse reçue, vous réinsérerez les vraies données — chez vous, hors du chat." }
+      ]
+    },
+    {
+      "id": "mb2-s3-sekrety",
+      "title": "MB2.3 — Secrets : mots de passe, clés et jetons, jamais dans le chat",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Mots de passe, clés API, jetons d'accès, codes à usage unique, liens d'invitation aux systèmes — tout cela, ce sont des secrets. Ils diffèrent des données personnelles sur un point : leur fuite donne à quelqu'un un accès immédiat au système. La règle est donc absolue : les secrets ne vont dans aucun chat, jamais, même en fragment." },
+        { "kind": "list", "items": [
+          "Vous demandez à l'IA de l'aide pour une configuration ? Collez le fichier avec le secret remplacé : au lieu de la vraie clé, écrivez « [CLE_API] ».",
+          "Un secret collé « par accident » et aussitôt effacé du chat — il a peut-être déjà été enregistré côté fournisseur.",
+          "Si un secret a fuité, le supprimer ne suffit pas : il faut le révoquer, en générer un nouveau et signaler l'incident.",
+          "Cela vaut aussi pour les mots de passe « peu importants » — les gens réutilisent les mêmes mots de passe à plusieurs endroits."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Vous avez collé un secret ? Agissez tout de suite", "text": "Ne comptez pas sur le fait que personne ne le remarquera. Changez ou révoquez le secret immédiatement et signalez l'incident selon la procédure de l'entreprise (service IT/sécurité). Une réaction rapide fait la différence entre un incident et une catastrophe." }
+      ]
+    },
+    {
+      "id": "mb2-s4-narzedzia",
+      "title": "MB2.4 — Outils approuvés vs publics (et ce qu'en dit le NDA)",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Tous les chats d'IA ne se valent pas. Un outil approuvé par l'entreprise a un contrat signé avec le fournisseur : les données n'entraînent pas les modèles, elles sont conservées selon les accords et l'on sait qui en répond. Un chat public et gratuit, c'est un contrat « à prendre ou à laisser » — souvent avec le droit pour le fournisseur d'exploiter vos saisies." },
+        { "kind": "table", "headers": ["Caractéristique", "Outil approuvé par l'entreprise", "Chat public gratuit"], "rows": [
+          ["Contrat de protection des données", "Oui — l'entreprise l'a signé et vérifié", "Non — seules les conditions générales du fournisseur s'appliquent"],
+          ["Utilisation de vos saisies pour l'entraînement", "Généralement exclue par contrat", "Souvent activée par défaut"],
+          ["Données couvertes par le NDA d'un client", "Seulement si la politique de l'entreprise l'autorise explicitement", "Jamais — c'est une violation du NDA"],
+          ["Qui répond en cas d'incident", "Chemin clair : l'entreprise et le fournisseur", "Flou — vous assumez le risque vous-même"]
+        ], "textAlt": "Le tableau compare l'outil approuvé par l'entreprise au chat public gratuit : l'outil approuvé a un contrat de protection des données signé, l'entraînement sur les saisies désactivé et une responsabilité claire ; le chat public fonctionne sur les conditions générales, entraîne souvent sur les saisies, et les données couvertes par un NDA ne doivent jamais y être collées." },
+        { "kind": "callout", "variant": "warn", "title": "Le NDA n'est pas une formalité", "text": "Des documents couverts par un accord de confidentialité avec un client (spécifications, tarifs, plans) collés dans un chat public constituent une violation du contrat — que quelqu'un le remarque ou non. Vous doutez qu'un outil soit approuvé ? Demandez avant de coller." }
+      ]
+    },
+    {
+      "id": "mb2-s5-uprawnienia",
+      "title": "MB2.5 — Autorisations des applications d'IA : donnez-en le moins possible",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "De plus en plus d'applications d'IA demandent l'accès à vos ressources : boîte mail, calendrier, disque de documents, contacts. Chaque consentement est une porte ouverte — l'application voit tout ce à quoi vous la laissez entrer, pas seulement ce dont elle a besoin sur le moment. La règle du moindre privilège s'applique : donnez exactement l'accès qu'exige la tâche, pas une miette de plus." },
+        { "kind": "list", "ordered": true, "items": [
+          "Avant l'installation, vérifiez quels accès demande l'application — et s'ils ont du sens pour sa fonction (un bloc-notes n'a pas besoin de vos contacts).",
+          "Choisissez la portée minimale : accès à un seul dossier plutôt qu'à tout le disque, à un seul calendrier plutôt qu'à la boîte mail.",
+          "Traitez de la même façon les extensions et modules d'IA du navigateur — « lire toutes les pages » est une autorisation très large.",
+          "De temps en temps, passez en revue les accès accordés et retirez ceux que vous n'utilisez plus."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Exemple de bonne décision", "text": "L'application NotkaApp demande l'accès à tout le disque pour résumer des documents. Le geste sûr : créez un dossier séparé « À résumer », donnez l'accès uniquement à celui-ci et n'y placez que les fichiers que vous voulez vraiment traiter." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "mb2-classify",
+    "title": "Coller ou ne pas coller ?",
+    "intro": "Évaluez chaque contenu : peut-on le coller en toute sécurité dans un chat d'IA public, ou faut-il d'abord l'anonymiser ou le laisser hors du chat ? Tous les exemples sont synthétiques.",
+    "categories": [
+      { "id": "ok", "label": "Peut être collé dans un chat public", "desc": "Pas de données personnelles, de secrets ni de contenus confidentiels — seulement le contenu du problème." },
+      { "id": "stop", "label": "Ne collez pas / anonymisez d'abord", "desc": "Contient des données personnelles, des secrets ou des contenus confidentiels." }
+    ],
+    "items": [
+      { "id": "mb2-i1", "text": "« Un client exige un remboursement hors délai — aidez-moi à rédiger une réponse de refus polie mais ferme. »", "correctCategory": "ok", "rationale": "Seule la description du problème, zéro donnée identifiante — minimisation exemplaire." },
+      { "id": "mb2-i2", "text": "Le texte complet d'une réclamation de Jean Synthétique avec son adresse e-mail jan.syntetyczny@przyklad.test et son numéro de commande.", "correctCategory": "stop", "rationale": "Nom, prénom et e-mail sont des données personnelles — avant de coller, remplacez-les par des placeholders type [CLIENT]." },
+      { "id": "mb2-i3", "text": "Un extrait de configuration avec la vraie clé API du système SklepDemo, « pour que l'IA trouve l'erreur ».", "correctCategory": "stop", "rationale": "Les secrets ne vont jamais dans le chat — collez la configuration en remplaçant la clé par [CLE_API]." },
+      { "id": "mb2-i4", "text": "« J'ai un tableau avec les colonnes : date, catégorie de dépense, montant. Comment calculer les totaux mensuels dans un tableur ? »", "correctCategory": "ok", "rationale": "Question de méthode, description de la structure sans un seul enregistrement réel — sûr." },
+      { "id": "mb2-i5", "text": "La spécification produit d'un client couverte par un NDA — « juste un extrait, pour que l'IA aide à la résumer ».", "correctCategory": "stop", "rationale": "Le NDA couvre aussi les extraits. Les documents confidentiels d'un client n'entrent dans aucun chat public, même en partie." },
+      { "id": "mb2-i6", "text": "« Un salarié signale un conflit avec son supérieur — comment me préparer à cette conversation ? » (sans noms ni service).", "correctCategory": "ok", "rationale": "Description de la situation sans possibilité d'identifier les personnes — les données personnelles ont été efficacement retirées." },
+      { "id": "mb2-i7", "text": "La liste des participants à une formation : prénoms, noms et e-mails — « que l'IA les classe par ordre alphabétique ».", "correctCategory": "stop", "rationale": "Ce sont les données personnelles de plusieurs personnes à la fois. Faites le tri localement dans un tableur — l'IA n'est ici pas du tout nécessaire." },
+      { "id": "mb2-i8", "text": "Votre propre brouillon d'annonce pour le pique-nique d'entreprise — « améliore le style et raccourcis à trois phrases ».", "correctCategory": "ok", "rationale": "Contenu public, destiné à la diffusion, sans données personnelles — usage sûr et typique de l'IA." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Est une donnée personnelle tout ce qui identifie une personne — y compris une combinaison de faits sans nom de famille.",
+      "Minimisation : collez le contenu du problème, pas l'identité des personnes — les placeholders [CLIENT], [ENTREPRISE], [MONTANT] font l'affaire.",
+      "Mots de passe, clés et jetons ne vont jamais dans le chat ; fuite d'un secret = changement immédiat et signalement.",
+      "Les données d'entreprise et celles couvertes par un NDA, uniquement dans les outils approuvés par l'entreprise — un chat public est une boîte étrangère.",
+      "Donnez aux applications d'IA les autorisations les plus réduites possibles et retirez régulièrement les accès inutilisés."
+    ],
+    "checklist": [
+      "Avant de coller, est-ce que je vérifie le texte à la recherche de noms, d'e-mails et d'autres identifiants ?",
+      "Est-ce que je remplace les éléments concrets par des placeholders au lieu de coller l'original ?",
+      "Suis-je certain que le contenu ne contient aucun mot de passe, clé ni jeton ?",
+      "Est-ce que je sais quels outils d'IA sont approuvés dans mon entreprise et pour quelles données ?",
+      "Mes applications d'IA n'ont-elles que les autorisations dont elles ont vraiment besoin ?"
+    ],
+    "checklistTitle": "Check-list — avant de coller quoi que ce soit dans le chat",
+    "nextStep": "Prochaine étape : le module MB3 — vous verrez comment les attaquants cachent des instructions dans les contenus que l'IA lit à votre place, et comment vous en défendre."
+  }
+}

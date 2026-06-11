@@ -1,0 +1,102 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P1 AI w domu (formatywna)",
+    "interaction": "Klasyfikacja: zdrowa vs ryzykowna praktyka rodzinna (kind: classify)",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp, przyklad.test, Jan Syntetyczny, Anna Testowa). ZERO realnych danych/PII. Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MD5",
+  "intro": "Los niños no preguntan si usar la IA — ya la usan: para los deberes, para dibujar, para hablar con chatbots. La pregunta es si lo hacen contigo o a tus espaldas. Este módulo te ayuda a hablar de la IA sin asustar y sin entusiasmarse a ciegas, a fijar reglas sanas y a distinguir la ayuda para aprender de hacer el trabajo por ellos.",
+  "screens": [
+    {
+      "id": "md5-s1-rozmowa",
+      "title": "Cómo hablar con tu hijo sobre la IA",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "La mejor primera conversación sobre la IA no es una charla magistral, sino un experimento en común: sentaos juntos, preguntadle al chat sobre algo que el niño domine (su juego favorito, un animal, su equipo) — y buscad juntos qué ha dicho bien la IA y dónde se equivoca. Un niño que pilla a la IA en un error una vez recordará más que con diez sermones." },
+        { "kind": "list", "items": [
+          "Habla claro: «la IA adivina muy bien, pero no lo sabe seguro — por eso lo comprobamos».",
+          "No asustes ni te entusiasmes a ciegas — los dos tonos extremos cierran la conversación.",
+          "Acordad que con una respuesta rara, inquietante o «demasiado adulta» el niño acude a ti — sin castigo por la simple pregunta."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "La frase de oro", "text": "«La IA es un ayudante muy leído que a veces se inventa cosas — y nunca es tu amigo ni un adulto al que se le cuentan secretos»." }
+      ]
+    },
+    {
+      "id": "md5-s2-zasady",
+      "title": "Reglas en común en lugar de prohibiciones",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "La prohibición total dura hasta el primer recreo — los compañeros tienen móviles. Funcionan mejor las reglas acordadas juntos, adaptadas a la edad, con un «porqué» claro:" },
+        { "kind": "table", "headers": ["Ámbito", "Regla de ejemplo", "Por qué"], "rows": [
+          ["Datos", "No le damos a la IA el nombre, la dirección, el colegio ni fotos", "el chat no es un diario; el contenido va a un servidor"],
+          ["Tiempo y lugar", "La IA en un dispositivo compartido, en un sitio visible (niños pequeños)", "presencia del adulto en lugar de vigilancia"],
+          ["Contenidos", "Las respuestas raras o inquietantes se enseñan a los padres", "los filtros no lo atrapan todo"],
+          ["Colegio", "La IA te ayuda a entender, no hace los deberes por ti", "la nota debe medir tu cabeza"]
+        ], "textAlt": "Tabla de reglas familiares: proteger los datos del niño, usar la IA en un lugar visible, avisar de contenidos inquietantes, la IA como ayuda para entender en lugar de hacer los deberes." },
+        { "kind": "callout", "variant": "info", "title": "Control parental", "text": "Activa los modos infantiles y los filtros donde existan — pero trátalos como el cinturón de seguridad, no como el conductor. Ningún filtro sustituye la conversación." }
+      ]
+    },
+    {
+      "id": "md5-s3-nauka",
+      "title": "Ayuda para aprender o hacerlo por ellos",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "La frontera es fácil de nombrar y difícil de vigilar: la IA ayuda cuando, después de usarla, el niño sabe MÁS; lo hace por él cuando sabe lo mismo pero tiene el resultado listo. La misma herramienta hace las dos cosas — la diferencia está en la forma de usarla." },
+        { "kind": "list", "items": [
+          "Ayuda: «explícame las fracciones con el ejemplo de una pizza», «hazme cinco preguntas de este tema», «revisa mi redacción y dime qué mejorar — sin escribirla por mí».",
+          "Hacerlo por él: «escribe la redacción sobre Cervantes para mañana», «resuelve estos ejercicios» — y copiar y pegar al cuaderno.",
+          "Test casero: pide a tu hijo que te explique el resultado con sus propias palabras. ¿Sabe? Fue ayuda. ¿No sabe? Se lo hicieron."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "El coste a largo plazo", "text": "Que la IA lo haga por él ahorra una tarde y cuesta una habilidad. El niño que aprende que «la IA lo hará por mí» se queda solo en el examen, en la selectividad y en su primer trabajo." }
+      ]
+    },
+    {
+      "id": "md5-s4-higiena",
+      "title": "Higiene digital de toda la familia",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Los niños no copian las reglas, copian los comportamientos. Si el padre durante la comida «solo mira el chat un momento», la regla «primero las personas, luego las pantallas» muere en la práctica. La higiene digital funciona cuando obliga a todos:" },
+        { "kind": "list", "ordered": true, "items": [
+          "Zonas sin pantallas: las comidas en familia, la hora antes de dormir — también para los adultos.",
+          "El chatbot «de compañía» no es un confidente: los sentimientos y los secretos se hablan con personas; el niño debe saber que la conversación con un bot no es privada como un diario.",
+          "Una vez al mes, revisión en familia: qué nos ha enseñado la IA últimamente, dónde se ha equivocado, qué cambiamos en las reglas."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "El objetivo", "text": "No educamos a un niño que no usa la IA — educamos a uno que la usa de forma consciente y sabe cuándo dejarla a un lado." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "md5-classify",
+    "title": "¿Práctica familiar sana o arriesgada?",
+    "intro": "Evalúa estas prácticas domésticas con la IA. El feedback explica qué refuerza y qué socava la seguridad y el desarrollo del niño.",
+    "categories": [
+      { "id": "healthy", "label": "Práctica sana", "desc": "Hacerlo juntos, conversación, aprender a pensar, proteger los datos del niño." },
+      { "id": "risky", "label": "Práctica arriesgada", "desc": "Hacer el trabajo por el niño, datos del niño en la red, la IA como niñera o confidente." }
+    ],
+    "items": [
+      { "id": "md5-i1", "text": "Padre e hijo pillan juntos a la IA en un error sobre un tema que el niño domina.", "correctCategory": "healthy", "rationale": "Enseña un escepticismo sano mejor que un sermón — el niño experimenta que la IA se equivoca." },
+      { "id": "md5-i2", "text": "Un niño de ocho años habla solo por las noches con un chatbot «amigo» sobre sus penas.", "correctCategory": "risky", "rationale": "El bot no es un confidente: las emociones del niño necesitan a una persona, y el contenido de las conversaciones va a un servidor." },
+      { "id": "md5-i3", "text": "Un adolescente pide a la IA cinco preguntas de repaso antes del examen y las responde él solo.", "correctCategory": "healthy", "rationale": "La IA como entrenadora de conocimientos — después de usarla el niño sabe más, no menos." },
+      { "id": "md5-i4", "text": "Un padre pega en un chat público un informe del colegio con el nombre y apellido del niño, pidiendo un análisis.", "correctCategory": "risky", "rationale": "Datos del niño en una herramienta pública — el análisis es posible tras anonimizar." },
+      { "id": "md5-i5", "text": "La redacción para mañana la escribe la IA, el niño la copia al cuaderno y el padre «no ve nada».", "correctCategory": "risky", "rationale": "Trabajo hecho por la IA con el consentimiento tácito del adulto — lección doble: no sé hacerlo y no me hace falta." },
+      { "id": "md5-i6", "text": "La familia acuerda durante la cena las reglas de la IA, incluidas las reglas para los padres.", "correctCategory": "healthy", "rationale": "Las reglas creadas en común y simétricas tienen posibilidades de cumplirse." },
+      { "id": "md5-i7", "text": "La tableta con un chatbot como «niñera» toda la tarde, para que haya silencio.", "correctCategory": "risky", "rationale": "La IA sin presencia de un adulto como cuidadora — ni el filtro ni el bot sustituyen la atención." },
+      { "id": "md5-i8", "text": "El niño enseña a su padre una respuesta rara del chat y la reportáis juntos en la aplicación.", "correctCategory": "healthy", "rationale": "Funciona el pacto «vienes sin castigo» + el niño aprende a reaccionar, no solo a evitar." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Habla mediante experimentos en común, no sermones — que el niño pille a la IA en un error.",
+      "Reglas en lugar de prohibiciones: los datos se protegen, los contenidos inquietantes se avisan, la IA ayuda a entender, no hace los deberes.",
+      "La higiene digital obliga también a los adultos — los niños copian comportamientos, no reglamentos."
+    ],
+    "checklist": [
+      "¿Sabe mi hijo qué no darle a la IA (nombre, dirección, colegio, fotos)?",
+      "¿Tenemos el pacto: respuesta rara = me la enseñas sin consecuencias?",
+      "¿Sé distinguir cuándo la IA enseña y cuándo lo hace por él — y hago ese test?"
+    ],
+    "checklistTitle": "Checklist — la IA en la familia",
+    "nextStep": "Siguiente paso: el último módulo del itinerario — la privacidad doméstica, es decir, los ajustes de las cuentas de IA y el orden en los datos de toda la casa."
+  }
+}

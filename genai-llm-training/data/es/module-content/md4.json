@@ -1,0 +1,102 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P1 AI w domu (formatywna)",
+    "interaction": "Klasyfikacja: w porządku vs ryzykowne (kind: classify)",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp, przyklad.test, Jan Syntetyczny, Anna Testowa). ZERO realnych danych/PII. Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MD4",
+  "intro": "La invitación al cumpleaños de la abuela, una canción para el aniversario, el vídeo de las vacaciones con un montaje decente — los generadores de imágenes, música y vídeo hacen hoy en minutos lo que antes exigía un diseñador y un estudio. Este módulo te enseña a usarlos con alegría y con cabeza: qué está bien, qué hay que etiquetar y qué derechos no vulnerar.",
+  "screens": [
+    {
+      "id": "md4-s1-co-sie-da",
+      "title": "Qué puedes generar hoy en casa",
+      "type": "content",
+      "blocks": [
+        { "kind": "list", "items": [
+          "Imágenes: tarjetas de felicitación, invitaciones, ilustraciones para la crónica familiar, un avatar para la app de mensajería.",
+          "Música: una canción de cumpleaños con el nombre del homenajeado, una banda sonora para el vídeo de las vacaciones.",
+          "Vídeo: un pase de diapositivas con animaciones, clips cortos a partir de una descripción, subtítulos automáticos para las grabaciones.",
+          "Retoque: eliminar a desconocidos del fondo, devolver la vida a fotos familiares antiguas y deterioradas."
+        ] },
+        { "kind": "paragraph", "text": "El secreto de un buen resultado es el mismo que con los prompts de texto: di en concreto qué quieres (motivo, estilo, colores, ambiente), mira el resultado y pide correcciones. La primera versión es un boceto, no una sentencia." },
+        { "kind": "callout", "variant": "info", "title": "Pruébalo hoy", "text": "¿La próxima ocasión familiar? Genera tres versiones de la tarjeta en estilos distintos (p. ej. acuarela, cartel retro, foto) y elige la mejor con alguien cercano." }
+      ]
+    },
+    {
+      "id": "md4-s2-oznaczanie",
+      "title": "Etiquetar los contenidos de IA",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "En familia, nadie exige un certificado en la tarjeta de cumpleaños. Pero cuando el contenido sale más lejos — al grupo del vecindario, a internet, al colegio — la etiqueta honesta de «generado por IA» construye confianza y corta los malentendidos. Cada vez más plataformas lo exigen expresamente." },
+        { "kind": "list", "items": [
+          "Etiqueta cuando el contenido pueda tomarse por una foto real o la grabación de un hecho real.",
+          "Etiqueta siempre que publiques fuera del círculo privado — un perfil público, un concurso, un anuncio.",
+          "No hace falta etiquetar la fantasía evidente en el círculo privado — el dragón sobre el edificio se defiende solo."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Límite firme", "text": "Generar escenas «reales» con personas reales — el vecino, un político, una compañera de clase — y mostrarlas como hechos ya no es una broma, sino desinformación o una violación de los derechos de la persona." }
+      ]
+    },
+    {
+      "id": "md4-s3-prawa",
+      "title": "Los derechos sobre las obras, en píldora",
+      "type": "content",
+      "blocks": [
+        { "kind": "table", "headers": ["Pregunta", "Respuesta corta"], "rows": [
+          ["¿Puedo usar una tarjeta generada en privado?", "Sí — el uso doméstico es el escenario más seguro."],
+          ["¿Puedo vender gráficos generados?", "Comprueba la licencia de la herramienta: unas permiten el uso comercial, otras no."],
+          ["¿El resultado es «mío»?", "Depende de la herramienta y de la ley — no des por hecho automáticamente los derechos de autor plenos."],
+          ["¿Puedo pedir el estilo de un artista concreto y vivo?", "Evítalo — imitar un estilo reconocible para publicar es un terreno disputado legal y éticamente."]
+        ], "textAlt": "Tabla de preguntas sobre derechos: el uso doméstico es seguro, el comercial exige comprobar la licencia de la herramienta, la plenitud de derechos sobre el resultado es incierta, imitar el estilo de artistas vivos es arriesgado." },
+        { "kind": "callout", "variant": "info", "title": "Una regla en lugar de un articulado", "text": "Cuanto más lejos de la nevera de casa vaya a llegar tu creación, con más atención lees la licencia de la herramienta." }
+      ]
+    },
+    {
+      "id": "md4-s4-wizerunek",
+      "title": "La imagen personal: la cara de otro no es material",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "El roce doméstico más frecuente con los generadores no tiene que ver con los derechos de autor, sino con las personas: meter la cara de alguien en escenas graciosas sin preguntar, «rejuvenecer» fotos de conocidos, generar nietos que no existen. Técnicamente es sencillo; entre las personas — depende." },
+        { "kind": "list", "ordered": true, "items": [
+          "La cara de otra persona = su consentimiento. También en las bromas, también en familia.",
+          "Las fotos de los niños trátalas con doble cuidado — ellos no pueden dar un consentimiento consciente, e internet no olvida.",
+          "No subas fotos ajenas a herramientas de IA sin que esas personas lo sepan — es su imagen la que viaja a un servidor ajeno."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Test sencillo", "text": "¿Le enseñarías el resultado a esa persona mirándola a los ojos? Si dudas — no lo generes, o pregunta primero." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "md4-classify",
+    "title": "¿Está bien o es arriesgado?",
+    "intro": "Evalúa estas ideas domésticas para crear con IA. El feedback explica dónde pasa el límite.",
+    "categories": [
+      { "id": "ok", "label": "Está bien", "desc": "Uso privado o etiquetado, sin la imagen de otra persona ni engaño." },
+      { "id": "risky", "label": "Arriesgado / no lo hagas", "desc": "La imagen de otra persona sin consentimiento, inducir a error, vulnerar la licencia." }
+    ],
+    "items": [
+      { "id": "md4-i1", "text": "Una tarjeta de cumpleaños para la abuela con un ramo generado en estilo acuarela.", "correctCategory": "ok", "rationale": "Uso privado y alegre, sin la imagen de nadie — el escenario ejemplar." },
+      { "id": "md4-i2", "text": "Meter la cara del vecino en memes y enviarlos al grupo del vecindario «para reírse».", "correctCategory": "risky", "rationale": "La imagen de otro sin consentimiento + un círculo público = una violación de sus derechos, no una broma." },
+      { "id": "md4-i3", "text": "Una canción con el nombre de papá generada para su cincuenta cumpleaños y puesta en la fiesta.", "correctCategory": "ok", "rationale": "Ocasión privada, sin publicación ni derechos ajenos — pura alegría." },
+      { "id": "md4-i4", "text": "Vender carteles generados sin comprobar si la licencia de la herramienta permite el uso comercial.", "correctCategory": "risky", "rationale": "El comercio exige licencia — «generador gratuito» no significa «para vender»." },
+      { "id": "md4-i5", "text": "Restaurar una foto deteriorada de los abuelos de los años sesenta para el álbum familiar.", "correctCategory": "ok", "rationale": "Retocar un recuerdo familiar para un álbum privado — exactamente para eso existen estas herramientas." },
+      { "id": "md4-i6", "text": "Generar una «foto» realista de un político local en una situación que no ocurrió y subirla a un foro sin etiquetar.", "correctCategory": "risky", "rationale": "Escena realista + persona real + sin etiqueta = desinformación con consecuencias legales." },
+      { "id": "md4-i7", "text": "Un cartel para el mercadillo del colegio con un gráfico de IA y la nota «ilustración generada por IA».", "correctCategory": "ok", "rationale": "Uso público + etiqueta honesta = el modelo de transparencia." },
+      { "id": "md4-i8", "text": "Subir fotos de una amiga a un generador de avatares «como regalo», sin que ella lo sepa.", "correctCategory": "risky", "rationale": "Su imagen viaja a un servidor ajeno sin su consentimiento — primero preguntas, luego generas." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Los generadores son una gran herramienta de creatividad doméstica — descripción concreta, iteración, elegir la mejor versión.",
+      "Cuanto más amplia la publicación, con más claridad etiquetas el origen de IA y con más atención lees la licencia.",
+      "La cara de otra persona exige consentimiento — siempre; las fotos de los niños las proteges por partida doble."
+    ],
+    "checklist": [
+      "¿Mi creación puede tomarse por una foto o grabación real? Si es así — ¿está etiquetada?",
+      "¿La licencia de la herramienta permite lo que planeo (sobre todo comercialmente)?",
+      "¿Cada persona visible en el material ha dado su consentimiento?"
+    ],
+    "checklistTitle": "Checklist — antes de publicar una creación de IA",
+    "nextStep": "Siguiente paso: el módulo sobre la IA en la familia — cómo hablar con los niños de todas estas posibilidades y acordar reglas sanas."
+  }
+}

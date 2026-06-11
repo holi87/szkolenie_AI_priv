@@ -1,0 +1,102 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P1 AI w domu (formatywna)",
+    "interaction": "Klasyfikacja: zdrowa vs ryzykowna praktyka rodzinna (kind: classify)",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp, przyklad.test, Jan Syntetyczny, Anna Testowa). ZERO realnych danych/PII. Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MD5",
+  "intro": "Kinder fragen nicht, ob sie KI benutzen sollen — sie benutzen sie schon: für Hausaufgaben, Zeichnungen, Gespräche mit Chatbots. Die Frage ist, ob sie es mit Ihnen tun oder an Ihnen vorbei. Dieses Modul hilft, über KI zu sprechen ohne Angstmacherei und ohne blinde Begeisterung, gesunde Regeln aufzustellen und Lernhilfe vom Abnehmen des Denkens zu unterscheiden.",
+  "screens": [
+    {
+      "id": "md5-s1-rozmowa",
+      "title": "Wie Sie mit Ihrem Kind über KI sprechen",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Das beste erste Gespräch über KI ist kein Vortrag, sondern ein gemeinsames Experiment: Setzen Sie sich zusammen, fragen Sie den Chat nach etwas, womit sich das Kind auskennt (Lieblingsspiel, Tier, Mannschaft) — und suchen Sie gemeinsam, was die KI richtig gesagt hat und wo sie sich irrt. Ein Kind, das die KI einmal bei einem Fehler ertappt, behält mehr als von zehn Belehrungen." },
+        { "kind": "list", "items": [
+          "Sprechen Sie einfach: „Die KI rät sehr gut, aber sie weiß es nicht sicher — deshalb prüfen wir nach“.",
+          "Machen Sie keine Angst und schwärmen Sie nicht blind — beide Extremtöne beenden das Gespräch.",
+          "Vereinbaren Sie, dass das Kind mit einer seltsamen, beunruhigenden oder „zu erwachsenen“ Antwort zu Ihnen kommt — ohne Strafe für die Frage selbst."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Der goldene Satz", "text": "„KI ist ein sehr belesener Helfer, der manchmal Dinge erfindet — und sie ist niemals dein Freund oder ein Erwachsener, dem man Geheimnisse erzählt“." }
+      ]
+    },
+    {
+      "id": "md5-s2-zasady",
+      "title": "Gemeinsame Regeln statt Verbote",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Ein Totalverbot funktioniert bis zur ersten Pause in der Schule — die Mitschüler haben Telefone. Wirksamer sind gemeinsam vereinbarte, altersgerechte Regeln mit einem klaren „Warum“:" },
+        { "kind": "table", "headers": ["Bereich", "Beispielregel", "Warum"], "rows": [
+          ["Daten", "Wir geben der KI weder Namen noch Adresse, Schule oder Fotos", "der Chat ist kein Tagebuch; Inhalte gehen auf einen Server"],
+          ["Zeit und Ort", "KI auf dem gemeinsamen Gerät, an einem sichtbaren Ort (jüngere Kinder)", "Anwesenheit eines Erwachsenen statt Überwachung"],
+          ["Inhalte", "Seltsame/beunruhigende Antworten zeigen wir einem Elternteil", "Filter fangen nicht alles ab"],
+          ["Schule", "KI hilft zu verstehen, sie erledigt nichts für dich", "die Note soll deinen Kopf messen"]
+        ], "textAlt": "Tabelle der Familienregeln: Schutz der Daten des Kindes, Nutzung an einem sichtbaren Ort, Melden beunruhigender Inhalte, KI als Verstehenshilfe statt Erledigen der Aufgaben." },
+        { "kind": "callout", "variant": "info", "title": "Kindersicherung", "text": "Aktivieren Sie Kindermodi und Filter, wo es sie gibt — aber behandeln Sie sie wie Sicherheitsgurte, nicht wie den Fahrer. Kein Filter ersetzt das Gespräch." }
+      ]
+    },
+    {
+      "id": "md5-s3-nauka",
+      "title": "Lernhilfe oder Erledigen-Lassen",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Die Grenze ist leicht zu benennen und schwer zu bewachen: KI hilft, wenn das Kind nach ihrer Nutzung MEHR kann; sie nimmt das Denken ab, wenn es genauso viel kann, aber ein fertiges Ergebnis hat. Dasselbe Werkzeug tut beides — der Unterschied liegt in der Art der Nutzung." },
+        { "kind": "list", "items": [
+          "Hilfe: „erkläre mir Brüche am Beispiel einer Pizza“, „stelle mir fünf Fragen zu diesem Kapitel“, „prüfe meinen Aufsatz und sage, was zu verbessern ist — ohne für mich zu schreiben“.",
+          "Erledigen-Lassen: „schreibe den Aufsatz über Goethe für morgen“, „löse diese Aufgaben“ — und Kopieren-Einfügen ins Heft.",
+          "Der Haustest: Bitten Sie das Kind, Ihnen das Ergebnis in eigenen Worten zu erklären. Kann es das? Es war Hilfe. Kann es das nicht? Es war Erledigen-Lassen."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Die langfristigen Kosten", "text": "Erledigen-Lassen spart einen Abend und kostet eine Fähigkeit. Ein Kind, das lernt „die KI macht das für mich“, steht im Test, in der Prüfung und im ersten Job allein da." }
+      ]
+    },
+    {
+      "id": "md5-s4-higiena",
+      "title": "Digitale Hygiene der ganzen Familie",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Kinder kopieren keine Regeln, sondern Verhalten. Wenn ein Elternteil beim Mittagessen „nur kurz den Chat checkt“, stirbt die Regel „erst Menschen, dann Bildschirme“ in der Praxis. Digitale Hygiene funktioniert, wenn sie für alle gilt:" },
+        { "kind": "list", "ordered": true, "items": [
+          "Bildschirmfreie Zonen: gemeinsame Mahlzeiten, die Stunde vor dem Schlafengehen — auch für Erwachsene.",
+          "Ein „geselliger“ Chatbot ist kein Vertrauter: Gefühle und Geheimnisse besprechen wir mit Menschen; das Kind soll wissen, dass ein Gespräch mit dem Bot nicht privat ist wie ein Tagebuch.",
+          "Einmal im Monat ein gemeinsamer Rückblick: Was hat uns die KI zuletzt gelehrt, wo hat sie sich geirrt, was ändern wir an den Regeln."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Das Ziel", "text": "Wir erziehen kein Kind, das keine KI benutzt — wir erziehen eines, das sie bewusst benutzt und weiß, wann es sie weglegt." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "md5-classify",
+    "title": "Gesunde oder riskante Familienpraxis?",
+    "intro": "Beurteilen Sie häusliche Praktiken rund um KI. Das Feedback erklärt, was die Sicherheit und Entwicklung des Kindes stärkt und was sie untergräbt.",
+    "categories": [
+      { "id": "healthy", "label": "Gesunde Praxis", "desc": "Gemeinsamkeit, Gespräch, Denken lernen, Schutz der Daten des Kindes." },
+      { "id": "risky", "label": "Riskante Praxis", "desc": "Erledigen-Lassen, Daten des Kindes im Netz, KI als Babysitter oder Vertraute." }
+    ],
+    "items": [
+      { "id": "md5-i1", "text": "Elternteil und Kind ertappen die KI gemeinsam bei einem Fehler in einem Thema, mit dem sich das Kind auskennt.", "correctCategory": "healthy", "rationale": "Das lehrt gesunde Skepsis besser als ein Vortrag — das Kind erlebt die Fehlbarkeit der KI." },
+      { "id": "md5-i2", "text": "Ein Achtjähriger spricht abends allein mit einem Chatbot-„Freund“ über seinen Kummer.", "correctCategory": "risky", "rationale": "Ein Bot ist kein Vertrauter: Die Gefühle eines Kindes brauchen einen Menschen, und der Gesprächsinhalt geht auf einen Server." },
+      { "id": "md5-i3", "text": "Ein Teenager bittet die KI um fünf Prüfungsfragen vor der Klassenarbeit und beantwortet sie selbst.", "correctCategory": "healthy", "rationale": "KI als Wissenstrainer — nach der Nutzung kann das Kind mehr, nicht weniger." },
+      { "id": "md5-i4", "text": "Ein Elternteil fügt eine Schulbeurteilung mit Vor- und Nachnamen des Kindes in einen öffentlichen Chat ein und bittet um eine Analyse.", "correctCategory": "risky", "rationale": "Daten des Kindes in einem öffentlichen Tool — die Analyse ist nach einer Anonymisierung möglich." },
+      { "id": "md5-i5", "text": "Den Aufsatz für morgen schreibt die KI, das Kind schreibt ihn ins Heft ab, der Elternteil „sieht nichts“.", "correctCategory": "risky", "rationale": "Erledigen-Lassen mit stiller Zustimmung des Erwachsenen — eine doppelte Lektion: Ich kann es nicht und ich muss es nicht." },
+      { "id": "md5-i6", "text": "Die Familie vereinbart beim Abendessen gemeinsam KI-Regeln, einschließlich Regeln für die Eltern.", "correctCategory": "healthy", "rationale": "Gemeinsam erarbeitete und symmetrische Regeln haben eine Chance, eingehalten zu werden." },
+      { "id": "md5-i7", "text": "Das Tablet mit Chatbot als „Babysitter“ für den ganzen Nachmittag, damit Ruhe ist.", "correctCategory": "risky", "rationale": "KI ohne Anwesenheit eines Erwachsenen als Betreuer — weder Filter noch Bot ersetzen Aufmerksamkeit." },
+      { "id": "md5-i8", "text": "Das Kind zeigt dem Elternteil eine seltsame Chat-Antwort, und gemeinsam melden Sie sie in der App.", "correctCategory": "healthy", "rationale": "Die Abmachung „du kommst ohne Strafe“ wirkt + das Kind lernt zu reagieren, nicht nur auszuweichen." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Sprechen Sie über gemeinsame Experimente, nicht über Vorträge — das Kind soll die KI bei einem Fehler ertappen.",
+      "Regeln statt Verbote: Daten schützen wir, beunruhigende Inhalte melden wir, KI hilft zu verstehen, sie erledigt nichts.",
+      "Digitale Hygiene gilt auch für Erwachsene — Kinder kopieren Verhalten, nicht Hausordnungen."
+    ],
+    "checklist": [
+      "Weiß mein Kind, was es der KI nicht geben darf (Name, Adresse, Schule, Fotos)?",
+      "Haben wir die Abmachung: seltsame Antwort = du zeigst sie mir ohne Konsequenzen?",
+      "Kann ich unterscheiden, wann KI lehrt und wann sie das Denken abnimmt — und mache ich diesen Test?"
+    ],
+    "checklistTitle": "Checkliste — KI in der Familie",
+    "nextStep": "Nächster Schritt: das letzte Modul des Pfads — Privatsphäre zu Hause, also die Einstellungen der KI-Konten und Ordnung in den Daten des ganzen Hauses."
+  }
+}

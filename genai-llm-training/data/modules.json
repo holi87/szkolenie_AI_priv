@@ -9,7 +9,8 @@
   "pillars": {
     "foundations_technical": "Fundamenty i techniczne rozumienie GenAI/LLM (architektura, parametry, embeddings, vector DB, RAG, ewaluacja)",
     "qa_practice": "Praktyczne zastosowanie w QA (prompt engineering, przypadki testowe, weryfikacja outputu)",
-    "security_governance": "Bezpieczeństwo, higiena danych, governance i kontrola agentów"
+    "security_governance": "Bezpieczeństwo, higiena danych, governance i kontrola agentów",
+    "everyday": "Codzienne, prywatne użycie AI (asystenci, prompty domowe, tworzenie, rodzina, prywatność) — filar ścieżki P1 „AI w domu” (#171)"
   },
   "modules": [
     {
@@ -197,6 +198,121 @@
       "order": 18,
       "timeFullMin": 30,
       "pillar": "qa_practice",
+      "scope": "diagnostic"
+    },
+    {
+      "id": "MB1",
+      "order": 19,
+      "timeFullMin": 30,
+      "pillar": "security_governance",
+      "scope": "dedicated",
+      "questionRange": {
+        "from": "Q117",
+        "to": "Q122",
+        "count": 6
+      }
+    },
+    {
+      "id": "MB2",
+      "order": 20,
+      "timeFullMin": 35,
+      "pillar": "security_governance",
+      "scope": "dedicated",
+      "questionRange": {
+        "from": "Q123",
+        "to": "Q128",
+        "count": 6
+      },
+      "criticalQuestions": 4
+    },
+    {
+      "id": "MB3",
+      "order": 21,
+      "timeFullMin": 30,
+      "pillar": "security_governance",
+      "scope": "dedicated",
+      "questionRange": {
+        "from": "Q129",
+        "to": "Q134",
+        "count": 6
+      }
+    },
+    {
+      "id": "MB4",
+      "order": 22,
+      "timeFullMin": 35,
+      "pillar": "security_governance",
+      "scope": "dedicated",
+      "questionRange": {
+        "from": "Q135",
+        "to": "Q140",
+        "count": 6
+      }
+    },
+    {
+      "id": "MB5",
+      "order": 23,
+      "timeFullMin": 30,
+      "pillar": "security_governance",
+      "scope": "dedicated",
+      "questionRange": {
+        "from": "Q141",
+        "to": "Q146",
+        "count": 6
+      }
+    },
+    {
+      "id": "MB6",
+      "order": 24,
+      "timeFullMin": 30,
+      "pillar": "qa_practice",
+      "scope": "dedicated",
+      "questionRange": {
+        "from": "Q147",
+        "to": "Q152",
+        "count": 6
+      }
+    },
+    {
+      "id": "MD1",
+      "order": 25,
+      "timeFullMin": 25,
+      "pillar": "everyday",
+      "scope": "diagnostic"
+    },
+    {
+      "id": "MD2",
+      "order": 26,
+      "timeFullMin": 30,
+      "pillar": "everyday",
+      "scope": "diagnostic"
+    },
+    {
+      "id": "MD3",
+      "order": 27,
+      "timeFullMin": 25,
+      "pillar": "everyday",
+      "scope": "diagnostic"
+    },
+    {
+      "id": "MD4",
+      "order": 28,
+      "timeFullMin": 30,
+      "pillar": "everyday",
+      "scope": "diagnostic"
+    },
+    {
+      "id": "MD5",
+      "order": 29,
+      "timeFullMin": 25,
+      "pillar": "everyday",
+      "scope": "diagnostic"
+    },
+    {
+      "id": "MD6",
+      "order": 30,
+      "timeFullMin": 30,
+      "pillar": "everyday",
       "scope": "diagnostic"
     }
   ]

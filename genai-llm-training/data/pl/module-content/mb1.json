@@ -1,0 +1,102 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P2 Bezpieczne używanie AI",
+    "interaction": "Klasyfikacja sytuacji (kind: classify) — odróżnianie ryzyk AI od bezpiecznych praktyk w codziennej pracy",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp, SklepDemo, Jan Syntetyczny, domeny @przyklad.test). Zero realnych danych, PII, numerów i sekretów."
+  },
+  "module": "MB1",
+  "intro": "AI potrafi realnie przyspieszyć twoją pracę — ale ma też swoje pułapki: zmyśla z pewnym tonem, łatwo mu zaufać za bardzo, a do czatu można niechcący wkleić dane, które nie powinny opuścić firmy. Ten moduł to mapa najważniejszych ryzyk: poznasz je po kolei, żeby w kolejnych modułach wiedzieć, czego dokładnie pilnować.",
+  "screens": [
+    {
+      "id": "mb1-s1-halucynacje",
+      "title": "Halucynacje: pewny ton to nie dowód prawdy",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Model językowy nie sprawdza faktów — przewiduje, jakie słowa najlepiej pasują do twojego pytania. Dlatego potrafi podać zmyśloną datę, nieistniejący przepis albo wymyśloną nazwę produktu, i zrobi to tym samym pewnym tonem, którym podaje rzeczy prawdziwe. To zjawisko nazywamy halucynacją." },
+        { "kind": "definition", "term": "Halucynacja", "text": "Odpowiedź AI, która brzmi wiarygodnie i jest podana z pełnym przekonaniem, ale jest częściowo lub całkowicie nieprawdziwa. Model nie „kłamie” celowo — po prostu nie odróżnia tego, co wie, od tego, co dobrze brzmi." },
+        { "kind": "callout", "variant": "warn", "title": "Najważniejsza zasada tego kursu", "text": "Pewny ton odpowiedzi nie mówi nic o jej prawdziwości. Im ważniejsza decyzja oparta o odpowiedź AI, tym mocniej musisz ją zweryfikować — o tym, jak to robić, jest cały moduł MB6." }
+      ]
+    },
+    {
+      "id": "mb1-s2-nadmierne-zaufanie",
+      "title": "Manipulacja i nadmierne zaufanie",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "AI jest uprzejme, szybkie i zawsze ma odpowiedź — to sprawia, że łatwo zacząć traktować je jak nieomylnego eksperta. Do tego model ma tendencję do przytakiwania: jeśli zasugerujesz mu odpowiedź w pytaniu, często ją potwierdzi, zamiast ją skorygować. Po drugiej stronie są też ludzie, którzy używają AI do tworzenia przekonujących, fałszywych treści." },
+        { "kind": "list", "items": [
+          "Efekt autorytetu — płynna, elokwentna odpowiedź wygląda na ekspercką, nawet gdy jest błędna.",
+          "Przytakiwanie — model chętnie zgadza się z założeniem ukrytym w twoim pytaniu („prawda, że X?”).",
+          "Skala manipulacji — AI pozwala tworzyć fałszywe maile, recenzje i artykuły masowo i tanio.",
+          "Uśpiona czujność — po dziesięciu dobrych odpowiedziach przestajesz sprawdzać jedenastą."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Zdrowe nastawienie", "text": "Traktuj AI jak bystrego, ale niedoświadczonego stażystę: świetnie przygotuje szkic i podpowie pomysły, ale ostateczną odpowiedzialność za wynik ponosisz ty. Tę zasadę rozwinie moduł MB5." }
+      ]
+    },
+    {
+      "id": "mb1-s3-wycieki-danych",
+      "title": "Wycieki danych przez czaty",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Wszystko, co wpisujesz do publicznego czatu AI, opuszcza twój komputer i trafia na serwery dostawcy. W zależności od regulaminu może być przechowywane, przeglądane przez ludzi albo użyte do trenowania kolejnych modeli. Wklejenie tam danych klienta czy poufnego dokumentu to potencjalny wyciek — nawet jeśli nic złego się od razu nie stanie." },
+        { "kind": "table", "headers": ["Co wklejasz", "Co się może stać"], "rows": [
+          ["Dane osobowe klienta (np. „Jan Syntetyczny, jan@przyklad.test”)", "Naruszenie prywatności i RODO — dane wyszły poza firmę"],
+          ["Poufny dokument firmowy (cennik, strategia, umowa)", "Złamanie tajemnicy firmy lub NDA z klientem"],
+          ["Hasło, klucz lub token z systemu", "Każdy, kto uzyska dostęp do tych danych, może wejść do systemu"],
+          ["Ogólne pytanie bez danych firmowych", "Nic — to bezpieczne użycie publicznego czatu"]
+        ], "textAlt": "Tabela pokazuje skutki wklejania różnych treści do publicznego czatu: dane osobowe grożą naruszeniem RODO, poufne dokumenty złamaniem tajemnicy firmy, hasła przejęciem systemu, a ogólne pytania bez danych firmowych są bezpieczne." },
+        { "kind": "callout", "variant": "safe", "title": "Prosty filtr przed wklejeniem", "text": "Zanim coś wkleisz, zadaj sobie pytanie: „Czy mógłbym to samo powiesić na tablicy ogłoszeń w galerii handlowej?”. Jeśli nie — nie wklejaj albo najpierw usuń wrażliwe fragmenty. Szczegóły poznasz w module MB2." }
+      ]
+    },
+    {
+      "id": "mb1-s4-mapa",
+      "title": "Gdzie AI pomaga, a gdzie szkodzi",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Ryzyko zależy od zadania. AI błyszczy tam, gdzie wynik łatwo ocenić własnymi oczami: szkice, streszczenia, burza mózgów, poprawa stylu. Robi się niebezpieczne tam, gdzie błąd jest kosztowny, a ty nie masz jak go wychwycić: fakty, liczby, prawo, zdrowie, decyzje o ludziach." },
+        { "kind": "table", "headers": ["Zadanie", "Ryzyko", "Dlaczego"], "rows": [
+          ["Szkic maila, streszczenie notatki, pomysły", "Niskie", "Sam widzisz, czy wynik ma sens — łatwa weryfikacja"],
+          ["Tłumaczenie lub poprawa stylu własnego tekstu", "Niskie–średnie", "Znasz treść, ale niuanse mogą się zgubić"],
+          ["Fakty, daty, liczby, przepisy, porady zdrowotne", "Wysokie", "Halucynacje brzmią identycznie jak prawda"],
+          ["Decyzje o ludziach (oceny, rekrutacja, reklamacje)", "Wysokie", "Błąd lub uprzedzenie modelu dotyka realną osobę"]
+        ], "textAlt": "Tabela ryzyka zadań AI: szkice i streszczenia mają niskie ryzyko bo łatwo je zweryfikować; tłumaczenia niskie do średniego; fakty, liczby i porady zdrowotne wysokie bo halucynacje brzmią jak prawda; decyzje o ludziach wysokie bo błąd dotyka realną osobę." },
+        { "kind": "paragraph", "text": "Tę mapę rozwiniemy w kolejnych modułach: dane wrażliwe (MB2), ataki przez treści (MB3), deepfake i scam (MB4), zasady firmowe (MB5) oraz weryfikacja odpowiedzi (MB6). Na razie sprawdź, czy rozpoznajesz ryzyko, gdy je widzisz." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "mb1-classify",
+    "title": "Ryzyko czy bezpieczna praktyka?",
+    "intro": "Przeczytaj każdą sytuację i zdecyduj: to ryzyko AI czy bezpieczna praktyka? Feedback wyjaśni, dlaczego.",
+    "categories": [
+      { "id": "risk", "label": "Ryzyko AI", "desc": "Sytuacja, która może skończyć się błędem, wyciekiem lub szkodą." },
+      { "id": "safe", "label": "Bezpieczna praktyka", "desc": "Rozsądne użycie AI z zachowaniem kontroli i ostrożności." }
+    ],
+    "items": [
+      { "id": "mb1-i1", "text": "Kopiujesz odpowiedź AI z datami i liczbami prosto do raportu dla zarządu, bo brzmiała bardzo pewnie.", "correctCategory": "risk", "rationale": "Pewny ton nie jest dowodem prawdy — fakty i liczby z AI wymagają weryfikacji przed użyciem." },
+      { "id": "mb1-i2", "text": "Prosisz AI o trzy propozycje tytułu prezentacji, a potem sam wybierasz i poprawiasz najlepszą.", "correctCategory": "safe", "rationale": "Burza mózgów to niskie ryzyko — wynik oceniasz własnymi oczami i zachowujesz kontrolę." },
+      { "id": "mb1-i3", "text": "Wklejasz do publicznego czatu pełną reklamację klienta z jego imieniem, nazwiskiem i adresem e-mail.", "correctCategory": "risk", "rationale": "Dane osobowe klienta wyszły poza firmę — to potencjalny wyciek i naruszenie RODO." },
+      { "id": "mb1-i4", "text": "Przed wklejeniem fragmentu zgłoszenia usuwasz z niego nazwisko i adres klienta, zostawiając sam opis problemu.", "correctCategory": "safe", "rationale": "Anonimizacja przed wklejeniem to podstawowa higiena pracy z czatami AI." },
+      { "id": "mb1-i5", "text": "Pytasz AI: „Prawda, że nasz konkurent SklepDemo zbankrutował?” i przyjmujesz potwierdzenie za fakt.", "correctCategory": "risk", "rationale": "Model ma tendencję do przytakiwania założeniu z pytania — potwierdzenie nie jest weryfikacją." },
+      { "id": "mb1-i6", "text": "AI streściło ci długi dokument — przed wysłaniem streszczenia dalej porównujesz kluczowe punkty z oryginałem.", "correctCategory": "safe", "rationale": "Streszczenie plus szybka kontrola z oryginałem to wzorcowe, bezpieczne użycie AI." },
+      { "id": "mb1-i7", "text": "Po miesiącu trafnych odpowiedzi przestajesz sprawdzać cokolwiek — „ten model się jeszcze nie pomylił”.", "correctCategory": "risk", "rationale": "Uśpiona czujność to klasyczna pułapka nadmiernego zaufania — halucynacja przyjdzie bez ostrzeżenia." },
+      { "id": "mb1-i8", "text": "Porady dotyczącej umowy z klientem nie bierzesz z czatu, tylko konsultujesz z działem prawnym.", "correctCategory": "safe", "rationale": "Prawo to obszar wysokiego ryzyka — decyzję podejmuje człowiek z odpowiednimi kompetencjami." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "AI przewiduje słowa, nie sprawdza faktów — pewny ton odpowiedzi nie oznacza, że jest prawdziwa.",
+      "Nadmierne zaufanie rośnie po cichu: im dłużej AI działa dobrze, tym łatwiej przegapić jego błąd.",
+      "Wszystko, co wklejasz do publicznego czatu, opuszcza firmę — dane osobowe i poufne treści zostawiaj poza czatem.",
+      "Ryzyko zależy od zadania: szkice i pomysły są bezpieczne, fakty, prawo, zdrowie i decyzje o ludziach wymagają człowieka."
+    ],
+    "checklist": [
+      "Czy wiem, że halucynacja brzmi tak samo pewnie jak prawda?",
+      "Czy weryfikuję odpowiedzi AI tym mocniej, im ważniejsza decyzja?",
+      "Czy przed wklejeniem czegokolwiek do czatu sprawdzam, czy nie ma tam danych osobowych lub poufnych?",
+      "Czy umiem wskazać zadania, w których AI mi pomaga, i te, w których może zaszkodzić?"
+    ],
+    "checklistTitle": "Checklista — mapa ryzyk AI",
+    "nextStep": "Następny krok: moduł MB2 — nauczysz się dokładnie rozpoznawać dane wrażliwe i przygotowywać treści tak, żeby można je było bezpiecznie wkleić do czatu."
+  }
+}

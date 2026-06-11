@@ -1,0 +1,130 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P1 AI w domu (formatywna)",
+    "interaction": "Strojenie ustawień prywatności (kind: tune) — ćwiczenie formatywne z checkpointem",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp, przyklad.test, Jan Syntetyczny, Anna Testowa). ZERO realnych danych/PII. Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MD6",
+  "intro": "Rozmowa z AI bywa szczera jak rozmowa z przyjacielem — tyle że zapisuje się na cudzym serwerze. Ten moduł pokazuje, co naprawdę udostępniasz, które ustawienia konta warto przestawić w pięć minut i czego nie wklejać nigdy. Na końcu wystroisz modelowe ustawienia prywatności.",
+  "screens": [
+    {
+      "id": "md6-s1-co-udostepniasz",
+      "title": "Co naprawdę udostępniasz",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Każda wiadomość do czatu AI trafia na serwer dostawcy. Tam może być przechowywana jako historia, czytana wyrywkowo przez ludzi (kontrola jakości) i — zależnie od ustawień — użyta do trenowania kolejnych wersji modelu. To nie jest powód do paniki; to powód, by wiedzieć, co się wysyła." },
+        { "kind": "list", "items": [
+          "Treść rozmów: pytania, wklejone teksty, wgrane zdjęcia i dokumenty.",
+          "Metadane: kiedy, z jakiego urządzenia, jak często korzystasz.",
+          "Głos: nagrania komend u asystentów głosowych (zwykle z historią do przejrzenia)."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Test pocztówki", "text": "Pisz do AI jak na pocztówce: wszystko, co naprawdę wrażliwe, zostaje poza nią. Pocztówkę czyta listonosz — i to jest w porządku, dopóki o tym wiesz." }
+      ]
+    },
+    {
+      "id": "md6-s2-ustawienia",
+      "title": "Pięć minut w ustawieniach konta",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Większość narzędzi AI ma trzy ustawienia, które warto znaleźć i świadomie ustawić — nazwy się różnią, mechanika jest ta sama:" },
+        { "kind": "table", "headers": ["Ustawienie", "Co robi", "Rekomendacja domowa"], "rows": [
+          ["Historia rozmów", "przechowuje wszystkie czaty na koncie", "włączona dla wygody, ale czyszczona regularnie; wrażliwe rozmowy w trybie tymczasowym"],
+          ["Trening na moich danych", "pozwala używać Twoich rozmów do ulepszania modelu", "wyłącz (opt-out), jeśli narzędzie na to pozwala"],
+          ["Personalizacja/pamięć", "AI zapamiętuje fakty o Tobie między rozmowami", "świadomie: wygodne, ale przejrzyj czasem, CO zapamiętało"]
+        ], "textAlt": "Trzy kluczowe ustawienia: historia rozmów (czyść regularnie), trening na danych (wyłącz opt-out), pamięć i personalizacja (przeglądaj zapamiętane fakty)." },
+        { "kind": "callout", "variant": "safe", "title": "Zrób dziś", "text": "Otwórz ustawienia swojego głównego czatu AI i znajdź te trzy pozycje. Pięć minut, jednorazowo, dla każdego konta w domu." }
+      ]
+    },
+    {
+      "id": "md6-s3-czego-nie-wklejac",
+      "title": "Czego nie wklejać nigdy",
+      "type": "content",
+      "blocks": [
+        { "kind": "list", "items": [
+          "Dokumenty tożsamości: skany dowodu, paszportu, legitymacji — swoich i cudzych.",
+          "Dane zdrowotne z nazwiskami: wyniki badań, recepty, dokumentacja — pytaj ogólnie, bez tożsamości.",
+          "Hasła, kody, dane karty: żadnemu czatowi, w żadnym celu, nigdy.",
+          "Zdjęcia dzieci i innych osób bez ich zgody — wizerunek wędruje na obcy serwer.",
+          "Cudze sekrety: wiadomości od innych, dokumenty z pracy — nie są Twoje do udostępniania."
+        ] },
+        { "kind": "paragraph", "text": "Reguła ogólna: pytaj o PROBLEM, nie o OSOBĘ. „Jak rozmawiać z lekarzem o wynikach cholesterolu?” działa równie dobrze bez wklejania wyniku z nazwiskiem mamy." },
+        { "kind": "callout", "variant": "info", "title": "A jeśli już wkleiłeś?", "text": "Usuń rozmowę z historii, wyłącz trening na danych i zapamiętaj na przyszłość. Świat się nie kończy — ale nawyk warto poprawić od dziś." }
+      ]
+    },
+    {
+      "id": "md6-s4-urzadzenia",
+      "title": "Porządek w urządzeniach domowych",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Prywatność domowej AI to też sprzęt: głośniki, kamery, telewizory i zabawki z mikrofonem. Kwadrans porządków raz na pół roku wystarczy:" },
+        { "kind": "list", "ordered": true, "items": [
+          "Przejrzyj i wyczyść historię nagrań asystenta głosowego (w aplikacji konta).",
+          "Sprawdź fizyczne wyłączniki mikrofonów i zasłony kamer — i naucz domowników, gdzie są.",
+          "Urządzenia z kamerą trzymaj poza sypialnią i pokojem dziecka.",
+          "Usuń uprawnienia aplikacjom, których nie używasz (mikrofon, lokalizacja, kontakty).",
+          "Konta gości i dzieci: osobne profile zamiast wspólnego konta dorosłego."
+        ] }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "tune",
+    "id": "md6-tune",
+    "title": "Wystrój ustawienia prywatności",
+    "intro": "Ustaw trzy suwaki tak, jak ustawiłbyś konto AI dla swojej rodziny, i obserwuj, co zmienia każde ustawienie. Potem sprawdź się w checkpoincie.",
+    "outputLabel": "Efekt Twojej konfiguracji:",
+    "controls": [
+      {
+        "id": "md6-t-history",
+        "label": "Historia rozmów",
+        "levels": [
+          { "value": "forever", "label": "Włączona na zawsze", "effect": "Wygodnie: wracasz do starych rozmów. Ryzyko: lata prywatnych pytań w jednym miejscu — łakomy kąsek przy włamaniu na konto." },
+          { "value": "cleaned", "label": "Włączona, czyszczona regularnie", "effect": "Rozsądny środek: bieżąca wygoda zostaje, archiwum wrażliwych rozmów znika. Wrażliwe tematy dodatkowo w trybie tymczasowym." }
+        ]
+      },
+      {
+        "id": "md6-t-training",
+        "label": "Trening na moich danych",
+        "levels": [
+          { "value": "on", "label": "Domyślnie włączony", "effect": "Twoje rozmowy mogą ulepszać przyszłe modele. Treść opuszcza Twoją kontrolę na stałe — cofnięcie zgody nie cofa danych z przeszłości." },
+          { "value": "off", "label": "Wyłączony (opt-out)", "effect": "Rozmowy służą tylko obsłudze Twojego konta. Najbezpieczniejsze domowe ustawienie — jakość odpowiedzi nie spada." }
+        ]
+      },
+      {
+        "id": "md6-t-content",
+        "label": "Co wysyłam w rozmowach",
+        "levels": [
+          { "value": "everything", "label": "Wszystko jak leci", "effect": "Skany, wyniki badań, zdjęcia rodziny w czacie. Każda wrażliwa treść na obcym serwerze to ryzyko, którego nie kontrolujesz." },
+          { "value": "filtered", "label": "Bez danych osobistych", "effect": "Pytasz o problem, nie o osobę: te same dobre odpowiedzi, zero wrażliwych danych poza domem. Test pocztówki zdany." }
+        ]
+      }
+    ],
+    "checkpoint": {
+      "prompt": "Która konfiguracja najlepiej chroni prywatność domową przy zachowaniu wygody?",
+      "type": "single_choice",
+      "options": [
+        { "id": "A", "text": "Historia na zawsze + trening włączony + wysyłam wszystko — AI działa wtedy najlepiej." },
+        { "id": "B", "text": "Historia czyszczona regularnie + trening wyłączony (opt-out) + bez danych osobistych w rozmowach." },
+        { "id": "C", "text": "Wszystko wyłączone i konto skasowane — tylko brak AI daje prywatność." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Tak: to konfiguracja „bezpiecznie i wygodnie” — czyszczona historia, dane poza treningiem, wrażliwe treści poza czatem. Jakość odpowiedzi nie cierpi na żadnym z tych ustawień.",
+      "feedbackIncorrect": "Maksymalne udostępnianie nie poprawia odpowiedzi na codzienne pytania, a rezygnacja z AI to nie strategia prywatności, tylko ucieczka. Złoty środek: czyszczona historia + opt-out z treningu + test pocztówki dla treści."
+    }
+  },
+  "summary": {
+    "points": [
+      "Wszystko, co piszesz do AI, ląduje na cudzym serwerze — pisz jak na pocztówce.",
+      "Trzy ustawienia do ogarnięcia w 5 minut: historia (czyść), trening na danych (wyłącz), pamięć (przeglądaj).",
+      "Nigdy: dokumenty tożsamości, dane zdrowotne z nazwiskami, hasła, zdjęcia dzieci, cudze sekrety."
+    ],
+    "checklist": [
+      "Czy wyłączyłem trening na moich danych we wszystkich kontach AI w domu?",
+      "Czy wiem, jak włączyć rozmowę tymczasową w moim czacie?",
+      "Czy przejrzałem historię nagrań asystenta głosowego w tym półroczu?",
+      "Czy domownicy znają zasadę: pytaj o problem, nie o osobę?"
+    ],
+    "checklistTitle": "Checklista — prywatność domowa",
+    "nextStep": "To ostatni moduł ścieżki. Wróć do dowolnego modułu, kiedy chcesz — ta ścieżka jest formatywna: bez testu, w Twoim tempie. A jeśli chcesz więcej, sprawdź ścieżkę „Bezpieczne używanie AI”."
+  }
+}

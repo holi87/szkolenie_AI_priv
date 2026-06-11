@@ -1,20 +1,28 @@
 {
   "paths": {
     "S1": {
-      "name": "Nietechniczna / decyzyjna",
+      "name": "AI z QA — poziom: Podstawowy",
       "assumedPathTime": "3.5-4.5 h (A4)"
     },
     "S2": {
-      "name": "Praktyk-użytkownik / QA",
+      "name": "AI z QA — poziom: Praktyk",
       "assumedPathTime": "6-7 h (A4)"
     },
     "S3": {
-      "name": "Inżynier / automatyzacja / techniczny QA",
+      "name": "AI z QA — poziom: Inżynier",
       "assumedPathTime": "9-10 h (A4)"
     },
     "S4": {
       "name": "Skala Holaka — diagnoza i rozwój",
       "assumedPathTime": "2.5-3 h"
+    },
+    "P1": {
+      "name": "AI w domu",
+      "assumedPathTime": "2.5-3 h"
+    },
+    "P2": {
+      "name": "Bezpieczne używanie AI",
+      "assumedPathTime": "3-3.5 h"
     }
   }
 }

@@ -7,17 +7,19 @@
 /* @import musi być PIERWSZĄ regułą (spec CSS). Ścieżka WZGLĘDNA — GitHub Pages, ADR-0002.
    ?v=<wersja> NA KAŻDYM imporcie — wrapper bez wersji na importach nie wymusza re-fetchu
    zmienionych tokens/primitives (user dostałby nowy wrapper, starą paletę). Bump z #app-version. */
-@import "tokens.css?v=1.3";
+@import "tokens.css?v=1.4";
 /* Prymitywy wizualne (STAGE A, issue #139, M18): eyebrow, stats-strip, section-head. */
-@import "styles/primitives.css?v=1.3";
+@import "styles/primitives.css?v=1.4";
 /* Quiz + test końcowy (STAGE B, issue #143, M18): quiz-chip--crit, test-title, test-meta, path-badge--eyebrow. */
-@import "styles/quiz-test.css?v=1.3";
+@import "styles/quiz-test.css?v=1.4";
 /* Blok chrome interakcji + next-step-link (STAGE B, issue #144, M18): block, block__eyebrow, next-step-link, tune-output__label. */
-@import "styles/interactions.css?v=1.3";
+@import "styles/interactions.css?v=1.4";
 /* Ekran wyniku + certyfikat (STAGE B, issue #145, M18): result-hero, result-status--fail, attempt-note. */
-@import "styles/result-cert.css?v=1.3";
+@import "styles/result-cert.css?v=1.4";
 /* Mikro-motion, :active, spójność radius (STAGE D, issue #151, M18): polish.css */
-@import "styles/polish.css?v=1.3";
+@import "styles/polish.css?v=1.4";
+/* Rebuild ścieżek + refresh wizualny (#171): selektor poziomu, bonus, wykresy wyniku, konfetti, feedback quizu. */
+@import "styles/rebuild.css?v=1.4";
 
 /* ============================================================
    RESET + BASE

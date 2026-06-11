@@ -1,0 +1,99 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P2 Bezpieczne używanie AI",
+    "interaction": "Klasyfikacja: sygnał ostrzegawczy vs normalna sytuacja (kind: classify)",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp/SklepDemo, przyklad.test, Jan Syntetyczny). ZERO realnych danych/PII. Tłumaczenie IT."
+  },
+  "module": "MB4",
+  "intro": "Una voce si può falsificare con una decina di secondi di registrazione, un volto con poche foto. Una registrazione non è più una prova — ma le truffe sostenute dall'IA si tradiscono ancora con le stesse cose: pressione, canale insolito e richiesta di denaro o dati. Questo modulo insegna a riconoscerle e a reagire correttamente.",
+  "screens": [
+    {
+      "id": "mb4-s1-deepfake",
+      "title": "Deepfake: voce e volto su ordinazione",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Deepfake", "text": "Una registrazione generata o modificata dall'IA (voce, foto, video) che imita in modo realistico una persona vera." },
+        { "kind": "paragraph", "text": "Una volta falsificare una voce richiedeva uno studio e un attore. Oggi bastano un campione preso dai social media e uno strumento alla portata di tutti. La conseguenza pratica: «ho sentito la sua voce» e «l'ho vista in video» non sono più una prova di identità." },
+        { "kind": "callout", "variant": "warn", "title": "La truffa del CEO e la «truffa del nipote 2.0»", "text": "Gli stessi vecchi schemi, un motore nuovo: una telefonata con la voce del capo su un bonifico urgente, oppure un «nipote» che chiede soldi. La voce torna, lo schema torna — ed è proprio lo schema, non la voce, che deve far scattare l'allarme." }
+      ]
+    },
+    {
+      "id": "mb4-s2-sygnaly",
+      "title": "Segnali d'allarme",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Se la forma (voce, volto, lingua) può essere perfetta, valuta le circostanze. Le truffe combinano quasi sempre alcuni di questi elementi:" },
+        { "kind": "list", "items": [
+          "Pressione del tempo: «subito», «entro un'ora», «prima che il sistema si blocchi».",
+          "Segretezza: «non dirlo a nessuno», «questione riservata, resta tra noi».",
+          "Canale insolito: numero privato, una nuova app di messaggistica, un account «di riserva».",
+          "Richiesta di denaro, credenziali di accesso o codici.",
+          "Deroga alla procedura: «per questa volta saltiamo le formalità»."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "La regola", "text": "Un segnale è un motivo di vigilanza. Due o più — trattalo come un tentativo di truffa, finché non avrai verificato il contrario." }
+      ]
+    },
+    {
+      "id": "mb4-s3-drugi-kanal",
+      "title": "La regola del secondo canale",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "La difesa più efficace non richiede tecnologia: interrompi il contatto che qualcun altro ha avviato e verifica la questione tramite un canale che scegli tu. Richiama il numero che hai in rubrica. Vai alla scrivania della persona. Scrivi all'indirizzo aziendale conosciuto." },
+        { "kind": "table", "headers": ["Situazione", "Verifica sul secondo canale"], "rows": [
+          ["Telefonata del «capo» su un bonifico urgente", "Riattacca, chiama il numero conosciuto del capo o conferma di persona"],
+          ["Videochiamata con un «fornitore» che cambia il numero di conto", "Chiama il numero che figura nel contratto, non quello del messaggio"],
+          ["SMS dal «figlio» da un numero nuovo con una richiesta di soldi", "Chiama il vecchio numero conosciuto del figlio"]
+        ], "textAlt": "Esempi di verifica sul secondo canale: sempre un contatto avviato da te verso un numero o un indirizzo già conosciuto, mai tramite il canale indicato nel messaggio sospetto." },
+        { "kind": "callout", "variant": "safe", "title": "Il punto chiave", "text": "Il secondo canale funziona solo se sei TU ad avviarlo. Il numero «per la conferma» indicato nel messaggio sospetto è ancora il canale del truffatore." }
+      ]
+    },
+    {
+      "id": "mb4-s4-zgloszenie",
+      "title": "Procedura di segnalazione",
+      "type": "content",
+      "blocks": [
+        { "kind": "list", "ordered": true, "items": [
+          "Non agire sotto pressione: non rispondere subito non è un errore, è la procedura.",
+          "Conserva le prove: il messaggio, il numero, la registrazione — non cancellare niente.",
+          "Al lavoro: segnala al reparto IT/sicurezza. In privato: denuncia alla polizia e segnala sulla piattaforma da cui è arrivato il contatto.",
+          "Avvisa la persona di cui è stata imitata l'identità — la sua immagine è stata usata e potrebbe essere il bersaglio di altri tentativi."
+        ] },
+        { "kind": "paragraph", "text": "Non inoltrare la disinformazione nemmeno «con un avvertimento» — ogni condivisione aumenta la portata del falso. Segnala invece il materiale sulla piattaforma e, se il tema è importante, condividi il link a una fonte verificata." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "mb4-classify",
+    "title": "Segnale d'allarme o situazione normale?",
+    "intro": "Valuta ogni situazione: contiene segnali di una possibile truffa o di un deepfake, oppure è normale? Il feedback spiega cosa guardare.",
+    "categories": [
+      { "id": "warning", "label": "Segnale d'allarme (possibile scam/deepfake)", "desc": "Pressione, segretezza, canale insolito, richiesta di denaro/dati, procedure aggirate." },
+      { "id": "normal", "label": "Situazione normale", "desc": "Canale conosciuto, nessuna pressione, conforme alle procedure." }
+    ],
+    "items": [
+      { "id": "mb4-i1", "text": "La voce del «direttore» al telefono chiede un bonifico immediato e implora discrezione.", "correctCategory": "warning", "rationale": "Pressione + segretezza + denaro — lo schema della truffa del CEO; la voce non è una prova." },
+      { "id": "mb4-i2", "text": "La contabile, alla riunione settimanale, ricorda la scadenza delle fatture secondo la procedura.", "correctCategory": "normal", "rationale": "Canale conosciuto, procedura conosciuta, zero pressione e segretezza." },
+      { "id": "mb4-i3", "text": "Un fornitore, in un'e-mail da un dominio nuovo, comunica un «cambio urgente del numero di conto» per il pagamento di oggi.", "correctCategory": "warning", "rationale": "Cambio di conto + dominio nuovo + pressione del tempo = un classico della truffa sui pagamenti; verifica sul secondo canale." },
+      { "id": "mb4-i4", "text": "Un video in cui una persona famosa raccomanda un investimento che «raddoppia i soldi in una settimana», con un link nella descrizione.", "correctCategory": "warning", "rationale": "Deepfake d'investimento: promessa irrealistica + volto famoso + link. Non cliccare, segnala." },
+      { "id": "mb4-i5", "text": "Tuo figlio chiama dal suo solito numero per ricordarti il pranzo insieme di domenica.", "correctCategory": "normal", "rationale": "Numero conosciuto, questione ordinaria, nessuna richiesta di denaro o dati." },
+      { "id": "mb4-i6", "text": "Un SMS da un numero sconosciuto: «Mamma, ho distrutto il telefono, scrivimi solo qui e mandami i soldi per uno nuovo».", "correctCategory": "warning", "rationale": "Canale nuovo + isolamento («scrivimi solo qui») + denaro — la «truffa del nipote 2.0»; chiama il vecchio numero." },
+      { "id": "mb4-i7", "text": "Il reparto IT invia un questionario sulla sicurezza pianificato in anticipo tramite il sistema aziendale, senza chiedere password.", "correctCategory": "normal", "rationale": "Azione annunciata, canale aziendale, nessuna richiesta di segreti." },
+      { "id": "mb4-i8", "text": "Un «recruiter» propone un ottimo lavoro, ma prima chiede una tassa di selezione e la scansione del documento d'identità su un'app di messaggistica.", "correctCategory": "warning", "rationale": "Pagamento anticipato + dati personali + canale non aziendale = truffa del falso recruiter." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Registrazioni e voce non sono più una prova di identità — valuta lo schema della situazione, non la forma.",
+      "Due o più segnali (pressione, segretezza, canale insolito, denaro/dati): trattali come una truffa fino alla verifica.",
+      "Verifica su un secondo canale che avvii tu stesso; conserva le prove e segnala, non inoltrare i falsi."
+    ],
+    "checklist": [
+      "Questa richiesta impone pressione di tempo, segretezza, oppure riguarda denaro o dati?",
+      "Posso verificarla tramite un canale che avvio io (numero conosciuto, di persona)?",
+      "So dove segnalare un sospetto al lavoro e in privato?"
+    ],
+    "checklistTitle": "Checklist — prima di reagire a una richiesta urgente",
+    "nextStep": "Prossimo passo: il modulo sulle policy IA al lavoro — scoprirai quali strumenti si possono usare per lavoro e quali rischi comporta la shadow AI."
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P2 Bezpieczne używanie AI",
+    "interaction": "Klasyfikacja: sygnał ostrzegawczy vs normalna sytuacja (kind: classify)",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp/SklepDemo, przyklad.test, Jan Syntetyczny). ZERO realnych danych/PII."
+  },
+  "module": "MB4",
+  "intro": "Eine Stimme lässt sich aus gut zehn Sekunden Aufnahme fälschen, ein Gesicht aus ein paar Fotos. Eine Aufnahme ist kein Beweis mehr — aber KI-gestützte Betrugsmaschen verraten sich weiterhin durch dasselbe: Druck, einen ungewöhnlichen Kanal und die Bitte um Geld oder Daten. Dieses Modul lehrt Sie, sie zu erkennen und richtig zu reagieren.",
+  "screens": [
+    {
+      "id": "mb4-s1-deepfake",
+      "title": "Deepfake: Stimme und Gesicht auf Bestellung",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Deepfake", "text": "Eine von KI erzeugte oder veränderte Aufnahme (Stimme, Foto, Video), die sich realistisch als eine echte Person ausgibt." },
+        { "kind": "paragraph", "text": "Früher brauchte man für eine gefälschte Stimme ein Studio und einen Schauspieler. Heute genügen eine Probe aus den sozialen Medien und ein frei verfügbares Werkzeug. Die praktische Konsequenz: „Ich habe seine Stimme gehört“ und „Ich habe sie im Video gesehen“ sind kein Identitätsbeweis mehr." },
+        { "kind": "callout", "variant": "warn", "title": "CEO-Betrug und „Enkeltrick 2.0“", "text": "Dieselben alten Maschen, neuer Motor: ein Anruf mit der Stimme des Chefs wegen einer dringenden Überweisung oder ein „Enkel“, der um Geld bittet. Die Stimme stimmt, das Muster stimmt — und genau das Muster, nicht die Stimme, sollte bei Ihnen den Alarm auslösen." }
+      ]
+    },
+    {
+      "id": "mb4-s2-sygnaly",
+      "title": "Warnsignale",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Da die Form (Stimme, Gesicht, Sprache) perfekt sein kann, beurteilen Sie die Umstände. Betrugsmaschen kombinieren fast immer mehrere dieser Elemente:" },
+        { "kind": "list", "items": [
+          "Zeitdruck: „sofort“, „innerhalb einer Stunde“, „bevor das System sich sperrt“.",
+          "Geheimhaltung: „sag niemandem etwas“, „vertrauliche Sache, nur unter uns“.",
+          "Ungewöhnlicher Kanal: private Nummer, neuer Messenger, ein „Ersatzkonto“.",
+          "Bitte um Geld, Zugangsdaten oder Codes.",
+          "Abweichung vom Verfahren: „lassen wir diesmal die Formalitäten weg“."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Die Regel", "text": "Ein Signal ist ein Grund zur Wachsamkeit. Zwei oder mehr — behandeln Sie es als Betrugsversuch, bis Sie es anders verifiziert haben." }
+      ]
+    },
+    {
+      "id": "mb4-s3-drugi-kanal",
+      "title": "Die Regel des zweiten Kanals",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Die wirksamste Verteidigung braucht keine Technologie: Brechen Sie den Kontakt ab, den jemand anderes begonnen hat, und überprüfen Sie die Sache über einen Kanal, den Sie selbst wählen. Rufen Sie die Nummer zurück, die Sie in Ihren Kontakten haben. Gehen Sie zum Schreibtisch hinüber. Schreiben Sie an die bekannte Firmenadresse." },
+        { "kind": "table", "headers": ["Situation", "Überprüfung über den zweiten Kanal"], "rows": [
+          ["Anruf des „Chefs“ wegen einer dringenden Überweisung", "Legen Sie auf, rufen Sie die bekannte Nummer des Chefs an oder bestätigen Sie persönlich"],
+          ["Videoanruf eines „Geschäftspartners“, der die Kontonummer ändert", "Rufen Sie die Nummer aus dem Vertrag an, nicht die aus der Nachricht"],
+          ["SMS vom „Kind“ von einer neuen Nummer mit der Bitte um Geld", "Rufen Sie die alte, bekannte Nummer des Kindes an"]
+        ], "textAlt": "Beispiele für die Überprüfung über den zweiten Kanal: immer ein von Ihnen begonnener Kontakt über eine vorher bekannte Nummer oder Adresse, niemals über den in der verdächtigen Nachricht angegebenen Kanal." },
+        { "kind": "callout", "variant": "safe", "title": "Der Schlüssel", "text": "Der zweite Kanal funktioniert nur, wenn SIE ihn initiieren. Die in der verdächtigen Nachricht angegebene Nummer „zur Bestätigung“ ist weiterhin der Kanal des Betrügers." }
+      ]
+    },
+    {
+      "id": "mb4-s4-zgloszenie",
+      "title": "Das Meldeverfahren",
+      "type": "content",
+      "blocks": [
+        { "kind": "list", "ordered": true, "items": [
+          "Handeln Sie nicht unter Druck: Keine sofortige Antwort zu geben ist kein Fehler, sondern Verfahren.",
+          "Bewahren Sie Beweise auf: Nachricht, Nummer, Aufnahme — löschen Sie nichts.",
+          "Im Beruf: Melden Sie es der IT-/Sicherheitsabteilung. Privat: Melden Sie es der Polizei und auf der Plattform, über die der Kontakt kam.",
+          "Warnen Sie die Person, als die sich jemand ausgegeben hat — ihr Bildnis wurde benutzt, und sie kann das Ziel weiterer Versuche sein."
+        ] },
+        { "kind": "paragraph", "text": "Geben Sie Desinformation nicht weiter, auch nicht „mit Warnung“ — jedes Teilen vergrößert die Reichweite der Fälschung. Melden Sie das Material stattdessen auf der Plattform und teilen Sie, wenn das Thema wichtig ist, den Link zu einer verifizierten Quelle." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "mb4-classify",
+    "title": "Warnsignal oder normale Situation?",
+    "intro": "Beurteilen Sie jede Situation: Enthält sie Signale für einen möglichen Betrug oder Deepfake, oder ist sie normal? Das Feedback erklärt, worauf Sie achten sollten.",
+    "categories": [
+      { "id": "warning", "label": "Warnsignal (möglicher Scam/Deepfake)", "desc": "Druck, Geheimhaltung, ungewöhnlicher Kanal, Bitte um Geld/Daten, Umgehen von Verfahren." },
+      { "id": "normal", "label": "Normale Situation", "desc": "Bekannter Kanal, kein Druck, verfahrenskonform." }
+    ],
+    "items": [
+      { "id": "mb4-i1", "text": "Die Stimme des „Direktors“ am Telefon bittet um eine sofortige Überweisung und fleht um Diskretion.", "correctCategory": "warning", "rationale": "Druck + Geheimhaltung + Geld — das CEO-Betrugs-Muster; die Stimme ist kein Beweis." },
+      { "id": "mb4-i2", "text": "Die Buchhalterin erinnert im wöchentlichen Meeting verfahrensgemäß an die Rechnungsfrist.", "correctCategory": "normal", "rationale": "Bekannter Kanal, bekanntes Verfahren, null Druck und Geheimhaltung." },
+      { "id": "mb4-i3", "text": "Ein Geschäftspartner informiert in einer E-Mail von einer neuen Domain über eine „dringende Änderung der Kontonummer“ für die heutige Zahlung.", "correctCategory": "warning", "rationale": "Kontoänderung + neue Domain + Zeitdruck = ein Klassiker des Zahlungsbetrugs; überprüfen Sie über den zweiten Kanal." },
+      { "id": "mb4-i4", "text": "Ein Video, in dem eine bekannte Person eine Investition empfiehlt, „die das Geld in einer Woche verdoppelt“, mit Link in der Beschreibung.", "correctCategory": "warning", "rationale": "Investment-Deepfake: unrealistisches Versprechen + berühmtes Gesicht + Link. Nicht klicken, melden." },
+      { "id": "mb4-i5", "text": "Der Sohn ruft von seiner gewohnten Nummer an, um an das gemeinsame Mittagessen am Sonntag zu erinnern.", "correctCategory": "normal", "rationale": "Bekannte Nummer, gewöhnliche Angelegenheit, keine Bitte um Geld oder Daten." },
+      { "id": "mb4-i6", "text": "SMS von einer unbekannten Nummer: „Mama, mein Handy ist kaputt, schreib nur hierher und überweis mir Geld für ein neues.“", "correctCategory": "warning", "rationale": "Neuer Kanal + Isolation („schreib nur hierher“) + Geld — „Enkeltrick 2.0“; rufen Sie die alte Nummer an." },
+      { "id": "mb4-i7", "text": "Die IT-Abteilung verschickt eine vorher angekündigte Sicherheitsumfrage über das Firmensystem, ohne nach Passwörtern zu fragen.", "correctCategory": "normal", "rationale": "Angekündigte Aktion, Firmenkanal, keine Bitte um Geheimnisse." },
+      { "id": "mb4-i8", "text": "Ein „Recruiter“ bietet einen tollen Job an, bittet aber zuerst um eine Vermittlungsgebühr und einen Ausweisscan über den Messenger.", "correctCategory": "warning", "rationale": "Vorauszahlung + personenbezogene Daten + nicht-firmlicher Kanal = Rekrutierungsbetrug." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Aufnahme und Stimme sind kein Identitätsbeweis mehr — beurteilen Sie das Muster der Situation, nicht die Form.",
+      "Zwei oder mehr Signale (Druck, Geheimhaltung, ungewöhnlicher Kanal, Geld/Daten) behandeln Sie bis zur Überprüfung als Betrug.",
+      "Überprüfen Sie über einen zweiten Kanal, den Sie selbst initiieren; bewahren Sie Beweise auf und melden Sie, Fälschungen geben Sie nicht weiter."
+    ],
+    "checklist": [
+      "Übt diese Bitte Zeitdruck oder Geheimhaltungsdruck aus oder betrifft sie Geld/Daten?",
+      "Kann ich sie über einen Kanal überprüfen, den ich selbst initiiere (bekannte Nummer, persönlich)?",
+      "Weiß ich, wo ich einen Verdacht im Beruf und privat melde?"
+    ],
+    "checklistTitle": "Checkliste — bevor Sie auf eine dringende Bitte reagieren",
+    "nextStep": "Nächster Schritt: das Modul über KI-Richtlinien am Arbeitsplatz — Sie erfahren, welche Werkzeuge dienstlich genutzt werden dürfen und welche Gefahr von Shadow AI ausgeht."
+  }
+}

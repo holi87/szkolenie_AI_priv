@@ -1,0 +1,127 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P1 AI w domu (formatywna)",
+    "interaction": "Suwaki promptu (kind: tune) — ćwiczenie formatywne, NIE scorowane do zaliczenia",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE i ogólne (zero realnych danych/PII). Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MD2",
+  "intro": "La diferencia entre «la IA no me ayuda» y «la IA me ahorra una hora al día» suele estar en la forma de pedir. En este módulo aprenderás los tres ingredientes sencillos de una buena petición — contexto, objetivo, formato — y verás que corregir la respuesta en la conversación funciona mejor que buscar la pregunta «perfecta». Todo con ejemplos domésticos.",
+  "screens": [
+    {
+      "id": "md2-s1-jak-prosic",
+      "title": "Los tres ingredientes de una buena petición",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Prompt", "text": "Simplemente tu petición a la IA — una pregunta o una orden escrita con palabras normales. Cuanto más claro digas quién pregunta, para qué y qué respuesta esperas, mejor resultado obtendrás." },
+        { "kind": "list", "items": [
+          "CONTEXTO — quién y en qué situación: «Soy madre/padre de dos niños, cocino cosas sencillas».",
+          "OBJETIVO — qué quieres conseguir: «Necesito un plan de comidas para 5 días, con un máximo de 30 minutos de cocina».",
+          "FORMATO — cómo debe verse la respuesta: «Ponlo en puntos, con la lista de la compra al final»."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Compruébalo tú", "text": "«¿Qué hago de comer?» te dará ideas al azar. «Soy madre/padre, a los niños no les gusta el picante, tengo 30 minutos — propón 3 comidas en puntos» te dará algo que de verdad aprovecharás." }
+      ]
+    },
+    {
+      "id": "md2-s2-iterowanie",
+      "title": "Iterar — una conversación en lugar de la pregunta perfecta",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "No tienes que escribir la petición perfecta a la primera. El chat es una conversación: recibes una primera versión, dices qué corregir, recibes una mejor. Ana Ejemplo lo compara con un probador — la primera propuesta rara vez sienta perfecta, pero tras dos ajustes queda como un guante." },
+        { "kind": "list", "ordered": true, "items": [
+          "Escribe la petición lo mejor que sepas — sin perfeccionismo.",
+          "Lee la respuesta y pon nombre a lo que no te convence: ¿demasiado larga? ¿demasiado formal? ¿no era ese el tema?",
+          "Pide la corrección con una sola frase: «más corto», «con un tono más cálido», «sin palabras difíciles».",
+          "Repite hasta que quede bien — normalmente bastan 2-3 rondas."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Corregir no es fracasar", "text": "Repreguntar y corregir es la forma normal de trabajar con la IA — igual que precisar un pedido en un restaurante. El asistente no se ofenderá por la quinta corrección." }
+      ]
+    },
+    {
+      "id": "md2-s3-przyklady-domowe",
+      "title": "Prompts domésticos — cinco situaciones listas para usar",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Mira cómo esos mismos tres ingredientes (contexto, objetivo, formato) funcionan en los asuntos domésticos típicos. Cada «petición mejor» puedes tratarla como una plantilla y cambiar los detalles por los tuyos." },
+        { "kind": "table", "headers": ["Situación", "Petición floja", "Petición mejor"], "rows": [
+          ["Correo", "«Escribe un correo»", "«Escribe un correo corto y amable a la comunidad de vecinos (contacto: zarzad@przyklad.test) pidiendo la reparación del portero automático. Con datos concretos, sin reproches.»"],
+          ["Plan de la semana", "«Planifícame la semana»", "«Trabajo hasta las 16, los niños tienen piscina el martes. Organiza un plan de tareas domésticas para la semana en una tabla, 2 tareas por día.»"],
+          ["Receta con lo que hay en la nevera", "«¿Qué cocino?»", "«Tengo huevos, pasta, espinacas y queso. Propón 2 comidas rápidas solo con estos ingredientes, con los pasos en puntos.»"],
+          ["Aprender un idioma", "«Enséñame inglés»", "«Tengo un nivel básico de inglés. Quiero cada día 5 frases sobre cocina con traducción y un quiz sencillo al final.»"],
+          ["Viaje", "«¿Adónde voy?»", "«Planeo una escapada de 3 días con un niño de 7 años, a menos de 200 km de casa, barata. Propón 3 opciones con pros y contras en puntos.»"]
+        ], "textAlt": "La tabla compara peticiones flojas y mejores en cinco situaciones: correo, plan de la semana, receta con lo de la nevera, aprendizaje de un idioma y viaje. Las peticiones mejores siempre incluyen contexto (quién y en qué situación), objetivo (qué debe salir exactamente) y formato (puntos, tabla, quiz)." },
+        { "kind": "callout", "variant": "info", "title": "Colecciona tus favoritos", "text": "Cuando una petición funcione de maravilla, guárdala en tus notas (p. ej. en NotkaApp). En un mes tendrás tu propia chuleta de prompts para cada ocasión." }
+      ]
+    },
+    {
+      "id": "md2-s4-przed-cwiczeniem",
+      "title": "Compruébalo en la práctica",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Dentro de un momento jugarás con los «deslizadores» de la petición: verás cómo la misma situación — pedir un correo para los vecinos — cambia cuando añades contexto, defines el formato y pides un lenguaje sencillo. Aquí no hay umbral de aprobado; el objetivo es sentir con tus propios ojos que una petición clara = una respuesta mejor." },
+        { "kind": "callout", "variant": "safe", "title": "Regla de oro", "text": "Si la respuesta te decepcionó, en 9 de cada 10 casos ayudará añadir una frase de contexto o definir el formato — antes de concluir que «la IA no funciona»." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "tune",
+    "id": "md2-tune",
+    "title": "Afina tu petición",
+    "intro": "Situación: pides a la IA un correo para los vecinos sobre una reforma ruidosa. Mueve los deslizadores y observa cómo cambia la respuesta. Después responde a una pregunta de control.",
+    "outputLabel": "Cómo queda la respuesta de la IA",
+    "controls": [
+      {
+        "id": "kontekst",
+        "label": "Contexto",
+        "levels": [
+          { "value": "brak", "label": "Ninguno", "effect": "La IA adivina la situación: el correo sale genérico, puede ser demasiado duro o no venir al caso — no sabe quién escribe ni a quién." },
+          { "value": "kto-i-po-co", "label": "Quién y para qué", "effect": "La IA sabe que escribes como vecino/a, que te importa la buena relación y que solo quieres acordar las horas de silencio — el correo da en el clavo." }
+        ]
+      },
+      {
+        "id": "format",
+        "label": "Formato",
+        "levels": [
+          { "value": "dowolny", "label": "Libre", "effect": "Recibes un bloque largo de texto — hay que acortarlo y ordenarlo por tu cuenta antes de enviarlo." },
+          { "value": "lista-punktow", "label": "Corto, con puntos", "effect": "El correo tiene 3 frases de introducción y puntos concretos (de qué trata la petición, las horas propuestas) — listo para enviar casi sin retoques." }
+        ]
+      },
+      {
+        "id": "ton",
+        "label": "Tono",
+        "levels": [
+          { "value": "dowolny", "label": "Libre", "effect": "Por defecto la IA escribe en tono burocrático y rígido («En relación con la situación acaecida…») — suena a oficio de la administración, no a una carta de un vecino." },
+          { "value": "prosty-jezyk", "label": "Lenguaje sencillo y cordial", "effect": "El correo suena natural y humano — nombra el problema con amabilidad y propone una solución, sin estropear la relación con los vecinos." }
+        ]
+      }
+    ],
+    "checkpoint": {
+      "prompt": "¿Qué combinación de ajustes dará el mejor correo para los vecinos?",
+      "type": "single_choice",
+      "options": [
+        { "id": "a", "text": "Contexto: ninguno · Formato: libre · Tono: libre — la IA ya sabe lo que hace." },
+        { "id": "b", "text": "Contexto: quién y para qué · Formato: corto, con puntos · Tono: lenguaje sencillo y cordial." },
+        { "id": "c", "text": "Contexto: quién y para qué · Formato: libre · Tono: libre — con el contexto basta." },
+        { "id": "d", "text": "Contexto: ninguno · Formato: corto, con puntos · Tono: lenguaje sencillo — la forma importa más que el contenido." }
+      ],
+      "correct": ["b"],
+      "feedbackCorrect": "¡Exacto! El contexto le dice a la IA de qué se trata realmente, el formato ordena el contenido y el tono sencillo cuida la relación. Esos tres ingredientes juntos dan un correo listo para enviar.",
+      "feedbackIncorrect": "¡Casi! Lo que mejor funciona es el conjunto completo: contexto (quién escribe y para qué), formato (corto, en puntos) y tono (lenguaje sencillo y cordial). El contexto solo ayuda, pero sin formato y tono el correo sigue necesitando retoques."
+    }
+  },
+  "summary": {
+    "points": [
+      "Una buena petición tiene tres ingredientes: contexto (quién y en qué situación), objetivo (qué debe salir) y formato (cómo debe verse).",
+      "No busques el prompt perfecto — corrige la respuesta en la conversación, normalmente bastan 2-3 rondas.",
+      "Las situaciones domésticas (correo, plan, receta, idioma, viaje) tienen patrones de petición repetibles — colecciona los que funcionan.",
+      "Una respuesta decepcionante suele ser la señal de que faltó contexto o formato — no de que «la IA no funciona»."
+    ],
+    "checklist": [
+      "¿Mi petición dice quién soy y para qué pregunto?",
+      "¿He definido cómo debe verse la respuesta (puntos, tabla, longitud)?",
+      "¿He corregido la respuesta en lugar de empezar de cero?",
+      "¿He guardado la petición que funcionó de maravilla para volver a usarla?"
+    ],
+    "checklistTitle": "Checklist — una buena petición a la IA",
+    "nextStep": "Siguiente paso: en el módulo «IA en el móvil y en casa» verás dónde vive ya la IA en tus dispositivos — y cuáles de esas funciones facilitan la vida de verdad."
+  }
+}

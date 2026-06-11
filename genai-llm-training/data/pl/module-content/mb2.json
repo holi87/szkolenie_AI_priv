@@ -1,0 +1,126 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P2 Bezpieczne używanie AI",
+    "interaction": "Klasyfikacja treści (kind: classify) — co można wkleić do publicznego czatu, a co wymaga anonimizacji lub zostaje poza czatem",
+    "sections": "Ekrany odpowiadają sekcjom MB2.1–MB2.5 (referowane przez pytania banku Q123–Q128): dane osobowe RODO, minimalizacja/anonimizacja, sekrety, narzędzia zatwierdzone vs publiczne (NDA), uprawnienia aplikacji.",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp, SklepDemo, Jan Syntetyczny, Anna Testowa, domeny @przyklad.test / @example.com, placeholdery zamiast sekretów). Zero realnych danych, PII, numerów i tokenów."
+  },
+  "module": "MB2",
+  "intro": "Największe ryzyko AI w codziennej pracy nie wymaga żadnego hakera — wystarczy zwykłe „wklej i wyślij”. W tym module nauczysz się rozpoznawać dane osobowe, wklejać tylko to, co naprawdę potrzebne, trzymać hasła i klucze z dala od czatów oraz odróżniać narzędzia zatwierdzone przez firmę od publicznych. Na końcu sprawdzisz to w praktyce.",
+  "screens": [
+    {
+      "id": "mb2-s1-dane-osobowe",
+      "title": "MB2.1 — Co jest daną osobową (RODO w praktyce)",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Dane osobowe", "text": "Wszystkie informacje, które pozwalają zidentyfikować konkretną osobę — wprost (imię i nazwisko, adres e-mail, zdjęcie twarzy) albo po połączeniu kilku faktów (stanowisko + firma + miasto). RODO chroni je niezależnie od tego, czy dotyczą klienta, współpracownika czy ciebie." },
+        { "kind": "list", "items": [
+          "Oczywiste: imię i nazwisko, e-mail, adres, numer telefonu, wizerunek, numer identyfikacyjny.",
+          "Mniej oczywiste: identyfikator klienta w systemie, historia zamówień przypisana do osoby, treść jej reklamacji.",
+          "Szczególnie chronione: dane o zdrowiu, poglądach, wyznaniu — tych nie wklejaj nigdy, w żadnej formie.",
+          "Kombinacje: „kierowniczka działu zwrotów w SklepDemo z Gdańska” identyfikuje osobę, choć nie pada nazwisko."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Dlaczego to dotyczy czatów AI", "text": "Wklejenie danych osobowych do publicznego czatu to przekazanie ich zewnętrznej firmie — najczęściej bez podstawy prawnej i bez wiedzy osoby, której dotyczą. To realne naruszenie RODO, nie formalność.",
+          "links": [ { "label": "UODO — informacje o ochronie danych osobowych i RODO", "href": "https://uodo.gov.pl/" } ]
+        }
+      ]
+    },
+    {
+      "id": "mb2-s2-minimalizacja",
+      "title": "MB2.2 — Minimalizacja: wklejaj tylko to, co potrzebne",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Zasada minimalizacji jest prosta: model potrzebuje treści problemu, a nie tożsamości ludzi. Zanim wkleisz cokolwiek, usuń lub zamień wszystko, co wskazuje na konkretne osoby i konkretne umowy. Sens zadania zostaje — ryzyko znika." },
+        { "kind": "table", "headers": ["Przed (nie wklejaj)", "Po anonimizacji (możesz wkleić)"], "rows": [
+          ["Klient Jan Syntetyczny (jan.syntetyczny@przyklad.test) żąda zwrotu za zamówienie w SklepDemo", "Klient żąda zwrotu za zamówienie — pomóż mi napisać uprzejmą odpowiedź odmowną"],
+          ["Anna Testowa z działu HR skarży się na przełożonego, podaję ci jej maila w całości", "Pracownik zgłasza konflikt z przełożonym — jak poprowadzić taką rozmowę?"],
+          ["Umowa nr 2024/DEMO z firmą PipeDemo, stawki i kary umowne w załączniku", "Mam umowę B2B z karami umownymi za opóźnienie — co sprawdzić przed podpisaniem?"]
+        ], "textAlt": "Tabela porównuje treści przed i po anonimizacji: zamiast danych klienta Jana Syntetycznego z adresem e-mail wklejamy sam opis problemu zwrotu; zamiast pełnego maila pracownicy opis konfliktu bez nazwisk; zamiast numeru umowy i stawek ogólne pytanie o umowę B2B." },
+        { "kind": "callout", "variant": "safe", "title": "Technika placeholderów", "text": "Zamieniaj konkrety na role: „[KLIENT]”, „[FIRMA]”, „[KWOTA]”. Model poradzi sobie tak samo dobrze, a po otrzymaniu odpowiedzi wstawisz prawdziwe dane z powrotem — już u siebie, poza czatem." }
+      ]
+    },
+    {
+      "id": "mb2-s3-sekrety",
+      "title": "MB2.3 — Sekrety: hasła, klucze i tokeny nigdy do czatu",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Hasła, klucze API, tokeny dostępu, kody jednorazowe, linki zapraszające do systemów — to wszystko sekrety. Różnią się od danych osobowych jedną rzeczą: ich wyciek daje komuś natychmiastowy dostęp do systemu. Dlatego zasada jest bezwzględna: sekrety nie trafiają do żadnego czatu, nigdy, w żadnym fragmencie." },
+        { "kind": "list", "items": [
+          "Prosisz AI o pomoc z konfiguracją? Wklej plik z zamienionym sekretem: zamiast prawdziwego klucza wpisz „[KLUCZ_API]”.",
+          "Sekret „przypadkowo” wklejony i natychmiast skasowany z czatu — i tak mógł już zostać zapisany po stronie dostawcy.",
+          "Jeśli sekret wyciekł, samo usunięcie nie wystarczy: trzeba go unieważnić i wygenerować nowy, a zdarzenie zgłosić.",
+          "Dotyczy to też haseł „mało ważnych” — ludzie używają tych samych haseł w wielu miejscach."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Wkleiłeś sekret? Działaj od razu", "text": "Nie licz na to, że nikt nie zauważy. Zmień lub unieważnij sekret natychmiast i zgłoś zdarzenie zgodnie z firmową procedurą (dział IT/bezpieczeństwa). Szybka reakcja to różnica między incydentem a katastrofą." }
+      ]
+    },
+    {
+      "id": "mb2-s4-narzedzia",
+      "title": "MB2.4 — Narzędzia zatwierdzone vs publiczne (i co na to NDA)",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Nie każdy czat AI jest taki sam. Narzędzie zatwierdzone przez firmę ma podpisaną umowę z dostawcą: dane nie trenują modeli, są przechowywane zgodnie z ustaleniami i wiadomo, kto za nie odpowiada. Publiczny, darmowy czat to umowa „bierzesz, co jest” — często z prawem dostawcy do wykorzystania twoich wpisów." },
+        { "kind": "table", "headers": ["Cecha", "Narzędzie zatwierdzone przez firmę", "Publiczny darmowy czat"], "rows": [
+          ["Umowa o ochronie danych", "Tak — firma ją podpisała i sprawdziła", "Nie — obowiązuje ogólny regulamin dostawcy"],
+          ["Użycie twoich wpisów do trenowania", "Zwykle wyłączone umownie", "Często domyślnie włączone"],
+          ["Dane objęte NDA klienta", "Tylko jeśli polityka firmy wprost na to pozwala", "Nigdy — to złamanie NDA"],
+          ["Kto odpowiada przy incydencie", "Jasna ścieżka: firma i dostawca", "Niejasna — ryzyko bierzesz na siebie"]
+        ], "textAlt": "Tabela porównuje narzędzie zatwierdzone przez firmę z publicznym darmowym czatem: zatwierdzone ma podpisaną umowę o ochronie danych, wyłączone trenowanie na wpisach i jasną odpowiedzialność; publiczny czat działa na ogólnym regulaminie, często trenuje na wpisach, a danych objętych NDA nie wolno tam wklejać nigdy." },
+        { "kind": "callout", "variant": "warn", "title": "NDA to nie formalność", "text": "Materiały objęte umową o poufności z klientem (specyfikacje, cenniki, plany) wklejone do publicznego czatu to złamanie umowy — niezależnie od tego, czy ktokolwiek to zauważy. Wątpisz, czy narzędzie jest zatwierdzone? Zapytaj, zanim wkleisz." }
+      ]
+    },
+    {
+      "id": "mb2-s5-uprawnienia",
+      "title": "MB2.5 — Uprawnienia aplikacji AI: dawaj jak najmniej",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Coraz więcej aplikacji AI prosi o dostęp do twoich zasobów: skrzynki pocztowej, kalendarza, dysku z dokumentami, kontaktów. Każda zgoda to otwarte drzwi — aplikacja widzi wszystko, do czego ją wpuścisz, nie tylko to, czego akurat potrzebujesz. Obowiązuje zasada najmniejszych uprawnień: dawaj dokładnie tyle dostępu, ile wymaga zadanie, ani odrobiny więcej." },
+        { "kind": "list", "ordered": true, "items": [
+          "Przed instalacją sprawdź, o jakie dostępy prosi aplikacja — i czy mają sens dla jej funkcji (notatnik nie potrzebuje twoich kontaktów).",
+          "Wybieraj zakres minimalny: dostęp do jednego folderu zamiast całego dysku, do jednego kalendarza zamiast skrzynki.",
+          "Wtyczki i dodatki AI w przeglądarce traktuj tak samo — „czytaj wszystkie strony” to bardzo szerokie uprawnienie.",
+          "Co jakiś czas przejrzyj przyznane dostępy i odbierz te, których już nie używasz."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Przykład dobrej decyzji", "text": "Aplikacja NotkaApp prosi o dostęp do całego dysku, żeby streszczać dokumenty. Bezpieczny ruch: utwórz osobny folder „Do streszczenia”, dawaj dostęp tylko do niego i wrzucaj tam wyłącznie pliki, które naprawdę chcesz przetworzyć." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "mb2-classify",
+    "title": "Wkleić czy nie wkleić?",
+    "intro": "Oceń każdą treść: można ją bezpiecznie wkleić do publicznego czatu AI, czy trzeba ją najpierw zanonimizować albo zostawić poza czatem? Wszystkie przykłady są syntetyczne.",
+    "categories": [
+      { "id": "ok", "label": "Można wkleić do publicznego czatu", "desc": "Brak danych osobowych, sekretów i treści poufnych — sama treść problemu." },
+      { "id": "stop", "label": "Nie wklejaj / najpierw zanonimizuj", "desc": "Zawiera dane osobowe, sekrety lub treści objęte poufnością." }
+    ],
+    "items": [
+      { "id": "mb2-i1", "text": "„Klient żąda zwrotu po terminie — pomóż mi napisać uprzejmą, ale stanowczą odpowiedź odmowną.”", "correctCategory": "ok", "rationale": "Sam opis problemu, zero danych identyfikujących — wzorcowa minimalizacja." },
+      { "id": "mb2-i2", "text": "Pełna treść reklamacji od Jana Syntetycznego z jego adresem e-mail jan.syntetyczny@przyklad.test i numerem zamówienia.", "correctCategory": "stop", "rationale": "Imię, nazwisko i e-mail to dane osobowe — przed wklejeniem zamień je na placeholdery typu [KLIENT]." },
+      { "id": "mb2-i3", "text": "Fragment konfiguracji z prawdziwym kluczem API do systemu SklepDemo, „bo AI ma znaleźć błąd”.", "correctCategory": "stop", "rationale": "Sekrety nigdy nie trafiają do czatu — wklej konfigurację z podmianą klucza na [KLUCZ_API]." },
+      { "id": "mb2-i4", "text": "„Mam tabelę z kolumnami: data, kategoria wydatku, kwota. Jak policzyć sumy miesięczne w arkuszu?”", "correctCategory": "ok", "rationale": "Pytanie o metodę, opis struktury bez ani jednego prawdziwego rekordu — bezpieczne." },
+      { "id": "mb2-i5", "text": "Specyfikacja produktu klienta objęta NDA — „tylko fragment, żeby AI pomogło ze streszczeniem”.", "correctCategory": "stop", "rationale": "NDA obejmuje też fragmenty. Materiały poufne klienta nie wchodzą do publicznych czatów w żadnej części." },
+      { "id": "mb2-i6", "text": "„Pracownik zgłasza konflikt z przełożonym — jak przygotować się do takiej rozmowy?” (bez nazwisk i działu).", "correctCategory": "ok", "rationale": "Opis sytuacji bez możliwości zidentyfikowania osób — dane osobowe zostały skutecznie usunięte." },
+      { "id": "mb2-i7", "text": "Lista uczestników szkolenia: imiona, nazwiska i e-maile — „niech AI ułoży ich alfabetycznie”.", "correctCategory": "stop", "rationale": "To dane osobowe wielu osób naraz. Sortowanie zrób lokalnie w arkuszu — AI nie jest tu w ogóle potrzebne." },
+      { "id": "mb2-i8", "text": "Twój własny szkic ogłoszenia o firmowym pikniku — „popraw styl i skróć do trzech zdań”.", "correctCategory": "ok", "rationale": "Treść jawna, przeznaczona do publikacji, bez danych osobowych — typowe bezpieczne użycie AI." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Daną osobową jest wszystko, co identyfikuje osobę — także kombinacja faktów bez nazwiska.",
+      "Minimalizacja: wklejaj treść problemu, nie tożsamość ludzi — placeholdery [KLIENT], [FIRMA], [KWOTA] załatwiają sprawę.",
+      "Hasła, klucze i tokeny nigdy nie trafiają do czatu; wyciek sekretu = natychmiastowa zmiana i zgłoszenie.",
+      "Dane firmowe i objęte NDA tylko w narzędziach zatwierdzonych przez firmę — publiczny czat to obca skrzynka.",
+      "Aplikacjom AI dawaj najmniejsze możliwe uprawnienia i regularnie odbieraj nieużywane dostępy."
+    ],
+    "checklist": [
+      "Czy przed wklejeniem sprawdzam tekst pod kątem nazwisk, e-maili i innych identyfikatorów?",
+      "Czy zamieniam konkrety na placeholdery zamiast wklejać oryginał?",
+      "Czy mam pewność, że w treści nie ma żadnego hasła, klucza ani tokenu?",
+      "Czy wiem, które narzędzia AI są zatwierdzone w mojej firmie i do jakich danych?",
+      "Czy aplikacje AI mają u mnie tylko te uprawnienia, których naprawdę potrzebują?"
+    ],
+    "checklistTitle": "Checklista — zanim wkleisz cokolwiek do czatu",
+    "nextStep": "Następny krok: moduł MB3 — zobaczysz, jak atakujący ukrywają polecenia w treściach, które AI czyta za ciebie, i jak się przed tym bronić."
+  }
+}

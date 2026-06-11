@@ -1,0 +1,102 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P1 AI w domu (formatywna)",
+    "interaction": "Klasyfikacja: w porządku vs ryzykowne (kind: classify)",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp, przyklad.test, Jan Syntetyczny, Anna Testowa). ZERO realnych danych/PII. Moduł formatywny — bez progu zaliczenia i certyfikatu. Tłumaczenie wietnamskie (vi)."
+  },
+  "module": "MD4",
+  "intro": "Thiệp mời sinh nhật bà, bài hát cho ngày kỷ niệm, video kỳ nghỉ được dựng chỉn chu — các trình tạo hình ảnh, âm nhạc và video ngày nay làm trong vài phút những việc trước kia cần đến họa sĩ và phòng thu. Mô-đun này dạy bạn dùng chúng với niềm vui và sự tỉnh táo: điều gì là phù hợp, điều gì cần gắn nhãn và không được xâm phạm quyền của ai.",
+  "screens": [
+    {
+      "id": "md4-s1-co-sie-da",
+      "title": "Hôm nay bạn có thể tạo gì tại nhà",
+      "type": "content",
+      "blocks": [
+        { "kind": "list", "items": [
+          "Hình ảnh: thiệp chúc mừng, thiệp mời, hình minh họa cho biên niên gia đình, ảnh đại diện cho ứng dụng nhắn tin.",
+          "Âm nhạc: bài hát sinh nhật có tên nhân vật chính, nhạc nền cho video kỳ nghỉ.",
+          "Video: trình chiếu ảnh có hiệu ứng động, video ngắn từ mô tả, phụ đề tự động cho các bản ghi.",
+          "Chỉnh sửa: xóa người lạ khỏi hậu cảnh, hồi sinh những bức ảnh gia đình cũ, hư hỏng."
+        ] },
+        { "kind": "paragraph", "text": "Bí quyết cho kết quả tốt giống hệt như với prompt văn bản: nói cụ thể bạn muốn gì (chủ đề, phong cách, màu sắc, không khí), xem kết quả và yêu cầu chỉnh sửa. Phiên bản đầu tiên là bản phác, không phải bản án." },
+        { "kind": "callout", "variant": "info", "title": "Hãy thử ngay hôm nay", "text": "Dịp gia đình gần nhất là gì? Hãy tạo ba phiên bản thiệp theo các phong cách khác nhau (ví dụ màu nước, áp phích retro, ảnh chụp) và cùng người thân chọn ra bản đẹp nhất." }
+      ]
+    },
+    {
+      "id": "md4-s2-oznaczanie",
+      "title": "Gắn nhãn nội dung tạo bằng AI",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Trong gia đình, không ai đòi hỏi tem nhãn trên tấm thiệp sinh nhật. Nhưng khi nội dung lan ra rộng hơn — lên nhóm khu phố, lên internet, đến trường học — việc gắn nhãn trung thực “được tạo bằng AI” xây dựng lòng tin và chặn trước những hiểu lầm. Ngày càng nhiều nền tảng yêu cầu thẳng điều này." },
+        { "kind": "list", "items": [
+          "Hãy gắn nhãn khi nội dung có thể bị nhầm là ảnh chụp thật hoặc bản ghi của một sự kiện có thật.",
+          "Luôn gắn nhãn khi bạn đăng ra ngoài phạm vi riêng tư — hồ sơ công khai, cuộc thi, tin rao.",
+          "Bạn không cần gắn nhãn một sản phẩm tưởng tượng hiển nhiên trong phạm vi riêng tư — con rồng bay trên tòa chung cư tự nó nói lên điều đó."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Ranh giới cứng", "text": "Tạo những cảnh “như thật” có sự xuất hiện của người thật — hàng xóm, chính trị gia, bạn cùng lớp — và trưng ra như sự thật thì không còn là trò đùa, mà là tin giả hoặc xâm phạm quyền nhân thân." }
+      ]
+    },
+    {
+      "id": "md4-s3-prawa",
+      "title": "Quyền đối với tác phẩm — tóm gọn",
+      "type": "content",
+      "blocks": [
+        { "kind": "table", "headers": ["Câu hỏi", "Câu trả lời ngắn"], "rows": [
+          ["Tôi có thể dùng tấm thiệp được tạo cho mục đích riêng tư không?", "Có — sử dụng tại gia là kịch bản an toàn nhất."],
+          ["Tôi có thể bán các hình ảnh được tạo không?", "Hãy kiểm tra giấy phép của công cụ: một số cho phép sử dụng thương mại, một số thì không."],
+          ["Kết quả có phải là “của tôi” không?", "Tùy công cụ và pháp luật — đừng mặc định rằng bạn có đầy đủ bản quyền."],
+          ["Tôi có thể yêu cầu phong cách của một nghệ sĩ cụ thể còn sống không?", "Nên tránh — bắt chước phong cách dễ nhận ra để công bố là vùng tranh cãi về pháp lý và đạo đức."]
+        ], "textAlt": "Bảng các câu hỏi về quyền: sử dụng tại gia an toàn, sử dụng thương mại cần kiểm tra giấy phép của công cụ, quyền đầy đủ đối với kết quả không chắc chắn, bắt chước phong cách nghệ sĩ còn sống là rủi ro." },
+        { "kind": "callout", "variant": "info", "title": "Một nguyên tắc thay cho điều khoản", "text": "Sản phẩm của bạn càng đi xa khỏi cánh cửa tủ lạnh nhà mình, bạn càng phải đọc kỹ giấy phép của công cụ." }
+      ]
+    },
+    {
+      "id": "md4-s4-wizerunek",
+      "title": "Hình ảnh cá nhân: gương mặt người khác không phải là chất liệu",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Va chạm thường gặp nhất tại gia với các trình tạo không liên quan đến bản quyền, mà đến con người: ghép mặt ai đó vào những cảnh hài hước mà không hỏi, “trẻ hóa” ảnh người quen, tạo ra những đứa cháu không tồn tại. Về kỹ thuật thì đơn giản, giữa người với người — thì không hẳn." },
+        { "kind": "list", "ordered": true, "items": [
+          "Gương mặt của người khác = sự đồng ý của người đó. Kể cả khi đùa, kể cả trong gia đình.",
+          "Ảnh trẻ em phải thận trọng gấp đôi — các em chưa thể đưa ra sự đồng ý có ý thức, còn internet thì không quên.",
+          "Đừng tải ảnh của người khác lên công cụ AI khi họ không biết — hình ảnh của họ đang đi đến máy chủ xa lạ."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Phép thử đơn giản", "text": "Bạn có dám cho người đó xem kết quả tận mặt không? Nếu bạn do dự — đừng tạo, hoặc hãy hỏi trước." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "md4-classify",
+    "title": "Ổn hay rủi ro?",
+    "intro": "Hãy đánh giá những ý tưởng sáng tạo bằng AI tại gia. Phần phản hồi giải thích ranh giới nằm ở đâu.",
+    "categories": [
+      { "id": "ok", "label": "Ổn", "desc": "Sử dụng riêng tư hoặc có gắn nhãn, không dùng hình ảnh người khác và không gây hiểu lầm." },
+      { "id": "risky", "label": "Rủi ro / đừng làm vậy", "desc": "Hình ảnh người khác không có sự đồng ý, gây hiểu lầm, vi phạm giấy phép." }
+    ],
+    "items": [
+      { "id": "md4-i1", "text": "Thiệp sinh nhật cho bà với bó hoa được tạo theo phong cách màu nước.", "correctCategory": "ok", "rationale": "Sử dụng riêng tư, vui vẻ, không dùng hình ảnh của ai — kịch bản mẫu mực." },
+      { "id": "md4-i2", "text": "Ghép mặt hàng xóm vào meme và gửi lên nhóm khu phố “cho vui”.", "correctCategory": "risky", "rationale": "Hình ảnh người khác không có sự đồng ý + phạm vi công khai = xâm phạm quyền nhân thân, không phải trò đùa." },
+      { "id": "md4-i3", "text": "Bài hát có tên bố được tạo cho sinh nhật lần thứ năm mươi của ông, mở tại bữa tiệc.", "correctCategory": "ok", "rationale": "Dịp riêng tư, không công bố và không động đến quyền của ai — niềm vui thuần túy." },
+      { "id": "md4-i4", "text": "Bán các áp phích được tạo mà không kiểm tra xem giấy phép công cụ có cho phép sử dụng thương mại không.", "correctCategory": "risky", "rationale": "Thương mại đòi hỏi giấy phép — “trình tạo miễn phí” không có nghĩa là “được phép bán”." },
+      { "id": "md4-i5", "text": "Phục chế bức ảnh hư hỏng của ông bà từ những năm sáu mươi cho album gia đình.", "correctCategory": "ok", "rationale": "Chỉnh sửa kỷ vật gia đình cho album riêng — những công cụ này sinh ra chính là để làm việc đó." },
+      { "id": "md4-i6", "text": "Tạo một “bức ảnh” như thật của chính trị gia địa phương trong tình huống chưa từng xảy ra và đăng lên diễn đàn không gắn nhãn.", "correctCategory": "risky", "rationale": "Cảnh như thật + người thật + không gắn nhãn = tin giả với hậu quả pháp lý." },
+      { "id": "md4-i7", "text": "Áp phích cho hội chợ trường học với hình ảnh từ AI kèm dòng chữ “hình minh họa được tạo bằng AI”.", "correctCategory": "ok", "rationale": "Sử dụng công khai + gắn nhãn trung thực = chuẩn mực của sự minh bạch." },
+      { "id": "md4-i8", "text": "Tải ảnh của cô bạn lên trình tạo ảnh đại diện “làm quà”, khi cô ấy không hề biết.", "correctCategory": "risky", "rationale": "Hình ảnh của cô ấy đi đến máy chủ xa lạ mà không có sự đồng ý — hỏi trước, tạo sau." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Các trình tạo là công cụ tuyệt vời cho sáng tạo tại gia — mô tả cụ thể, lặp chỉnh, chọn phiên bản tốt nhất.",
+      "Bạn đăng càng rộng, càng phải gắn nhãn rõ nguồn gốc AI và đọc kỹ giấy phép.",
+      "Gương mặt người khác cần sự đồng ý — luôn luôn; ảnh trẻ em được bảo vệ gấp đôi."
+    ],
+    "checklist": [
+      "Sản phẩm của tôi có thể bị nhầm là ảnh/bản ghi thật không? Nếu có — nó đã được gắn nhãn chưa?",
+      "Giấy phép của công cụ có cho phép điều tôi dự định không (nhất là về thương mại)?",
+      "Mọi người xuất hiện trong tư liệu đã đồng ý chưa?"
+    ],
+    "checklistTitle": "Danh sách kiểm tra — trước khi bạn công bố sản phẩm AI",
+    "nextStep": "Bước tiếp theo: mô-đun về AI trong gia đình — cách trò chuyện với con cái về tất cả những khả năng này và đặt ra những quy tắc lành mạnh."
+  }
+}

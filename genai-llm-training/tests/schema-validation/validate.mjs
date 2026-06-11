@@ -102,8 +102,12 @@ function validate(data, schema, root, path) {
 }
 
 // ---------------- Stałe domenowe (wymagania 06/07) ----------------
-const EXPECTED_COUNTS = { M1:8,M2:9,M3:7,M4:8,M5:8,M6:10,M7:10,M8:12,M9:8,M10:14,M11:10,M12:12 };
-const TOTAL = 116;
+// #171: bank = 116 pytań rdzenia M1..M12 (S1/S2/S3) + 36 pytań ścieżki P2 (MB1..MB6, Q117..Q152, dedykowane).
+const EXPECTED_COUNTS = { M1:8,M2:9,M3:7,M4:8,M5:8,M6:10,M7:10,M8:12,M9:8,M10:14,M11:10,M12:12, MB1:6,MB2:6,MB3:6,MB4:6,MB5:6,MB6:6 };
+// Moduły RDZENIA kursu QA — golden set (kalibracja dryfu) pozostaje 24 pytania wyłącznie z M1..M12 (2/moduł);
+// MB poza goldenem (świeża pula bez historii kalibracji, pytania krytyczne MB2 i tak są 100%-bramkowane).
+const CORE_MODULES = ["M1","M2","M3","M4","M5","M6","M7","M8","M9","M10","M11","M12"];
+const TOTAL = 152;
 // M14/ADR-0008: moduł diagnostyczny (scope="diagnostic", np. MSH/Skala Holaka) NIE ma puli pytań — wykluczamy go
 // z kontroli zależnych od pytań. EXPECTED_COUNTS/golden/per-module iterują po kluczach EXPECTED_COUNTS (MSH tam
 // nieobecny → exempt-by-construction); scope-checki iterują po Q (MSH ma 0 pytań → nieosiągalny). Jedyna pętla
@@ -113,7 +117,8 @@ const hasBankQuestions = (m) => Boolean(m) && m.scope !== "diagnostic";
 // Wykluczamy ją z kontroli zależnych od testu (pula>=finalTestQuestions, kwota dedykowanych, progi/bramki) — pól tych
 // formatywna nie ma (conditional required w paths.schema), a iteracje czytałyby undefined (np. p.gates.length → crash).
 const isFormative = (p) => Boolean(p) && p.formative === true;
-const DIFF_TARGET = { L1: 41, L2: 46, L3: 23, L4: 6 };
+// #171: rdzeń 41/46/23/6 + MB 16/14/6/0 (ścieżka świadomościowa P2 — bez L4, L4 pozostaje S3-only).
+const DIFF_TARGET = { L1: 57, L2: 60, L3: 29, L4: 6 };
 const SCENARIO_TYPES = new Set(["scenariusz", "scenariusz_decyzyjny"]);
 const TECHNICAL_MODULES = new Set(["M4", "M5", "M6", "M12"]);
 const GOLDEN_DIFF = { L1: 8, L2: 10, L3: 5, L4: 1 };
@@ -211,14 +216,15 @@ for (const sp of walkSchemaFiles(SCHEMAS)) {
 function loadQuestions(locale) {
   const QDIR = join(DATA, locale, "questions");
   if (!existsSync(QDIR)) return null;
-  const files = readdirSync(QDIR).filter((f) => /^m\d{2}\.json$/.test(f)).sort();
+  // #171: shardy rdzenia m01..m12.json + shardy P2 mb1..mb6.json (moduł derywowany z nazwy pliku).
+  const files = readdirSync(QDIR).filter((f) => /^(m\d{2}|mb\d)\.json$/.test(f)).sort();
   if (files.length === 0) return null;
   const schema = load(join(SCHEMAS, "questions.schema.json"));
   const all = [];
   for (const f of files) {
     const doc = load(join(QDIR, f));
     validate(doc, schema, schema, `${locale}/questions/${f}`).forEach((x) => fail(`[schema ${locale}/questions/${f}] ${x}`));
-    const modFromName = "M" + String(parseInt(f.slice(1, 3), 10));
+    const modFromName = f.startsWith("mb") ? "MB" + f.slice(2, 3) : "M" + String(parseInt(f.slice(1, 3), 10));
     for (const q of doc.questions || []) {
       if (q.module !== modFromName) fail(`${locale}/questions/${f}: ${q.id} ma module=${q.module} != ${modFromName} (plik ma zawierać tylko swój moduł)`);
     }
@@ -255,15 +261,31 @@ if (Qall) {
   const scn = Q.filter((q) => SCENARIO_TYPES.has(q.type)).length;
   if (scn / TOTAL < 0.35) fail(`pytania scenariuszowe/decyzyjne ${scn}/${TOTAL} = ${(scn/TOTAL*100).toFixed(1)}% < 35%`);
   // criticals — prefiks bezpieczeństwa LOCALE-AWARE (kanon); pozostałe locale sprawdza checkContentParity.
+  // #171: krytyczne żyją w modułach bezpieczeństwa M10 (rdzeń S1-S3) i MB2 (P2). Liczność DERYWOWANA z
+  // modules.json (criticalQuestions), pokrycie ścieżek DERYWOWANE z paths.json: pytanie krytyczne musi
+  // obejmować KAŻDĄ nieformatywną ścieżkę zawierającą jego moduł (test ścieżki wymusza 100% jej krytycznych).
+  const CRITICAL_MODULES = ["M10", "MB2"];
   const crit = Q.filter((q) => q.isCritical);
-  if (crit.length !== 5) fail(`pytania krytyczne: ${crit.length} != 5`);
+  if (modules) {
+    for (const mid of CRITICAL_MODULES) {
+      const declared = (modules.modules.find((m) => m.id === mid) || {}).criticalQuestions || 0;
+      const got = crit.filter((q) => q.module === mid).length;
+      if (declared === 0) fail(`${mid}: moduł krytyczny bez criticalQuestions w modules.json`);
+      if (got !== declared) fail(`pytania krytyczne ${mid}: ${got} != ${declared} (criticalQuestions w modules.json)`);
+    }
+  }
   const canonPrefix = CRITICAL_PREFIX[CANON] || CRITICAL_PREFIX.pl;
   for (const q of crit) {
-    if (q.module !== "M10") fail(`${q.id} krytyczne poza M10`);
+    if (!CRITICAL_MODULES.includes(q.module)) fail(`${q.id} krytyczne poza modułami bezpieczeństwa (${CRITICAL_MODULES.join(", ")})`);
     if (q.type !== "scenariusz_decyzyjny") warn.push(`${q.id} krytyczne nie jest scenariusz_decyzyjny`);
     if ((q.correct || []).length !== 1) fail(`${q.id} krytyczne musi mieć dokładnie 1 poprawną odpowiedź`);
     if (!(q.feedbackIncorrect || "").startsWith(canonPrefix)) fail(`${q.id} krytyczne: feedbackIncorrect musi zaczynać się od konserwatywnego komunikatu „${canonPrefix}" (osłabiony komunikat bezpieczeństwa nie może przejść CI)`);
-    if (!q.paths.includes("S1") || !q.paths.includes("S2") || !q.paths.includes("S3")) fail(`${q.id} krytyczne musi obejmować wszystkie ścieżki`);
+    if (paths) {
+      const owning = Object.entries(paths.paths)
+        .filter(([, p]) => !isFormative(p) && p.modules && p.modules[q.module])
+        .map(([pid]) => pid);
+      for (const pid of owning) if (!q.paths.includes(pid)) fail(`${q.id} krytyczne nie obejmuje ścieżki ${pid} (moduł ${q.module} należy do tej ścieżki — jej test wymusza 100% krytycznych)`);
+    }
   }
   // type-specific answer integrity
   for (const q of Q) {
@@ -284,6 +306,14 @@ if (Qall) {
     if (new Set(mids).size !== mids.length) fail(`modules.json: zduplikowane id modułów`);
     if (new Set(orders).size !== orders.length) fail(`modules.json: zduplikowane order`);
     for (const id of Object.keys(EXPECTED_COUNTS)) if (!mids.includes(id)) fail(`modules.json: brak modułu ${id}`);
+    // #171: poziomy ścieżki „AI z QA" (S1/S2/S3) muszą deklarować KOMPLET rdzenia M1..M12 (dawny wymóg
+    // paths.schema przeniesiony tu — schemat nie może go wymuszać dla P2, która ma własny zestaw MB1..MB6).
+    if (paths) {
+      for (const pid of ["S1", "S2", "S3"]) {
+        const pm = (paths.paths[pid] || {}).modules || {};
+        for (const id of CORE_MODULES) if (!pm[id]) fail(`ścieżka ${pid}: brak modułu rdzenia ${id} w paths.json (poziomy AI z QA wymagają kompletu M1..M12)`);
+      }
+    }
     for (const m of modules.modules) {
       if (!hasBankQuestions(m) || !m.questionRange) continue; // diagnostyczny (MSH) — bez puli; malformowany core/dedicated bez questionRange łapie schemat (czysty błąd, nie crash) (M14/ADR-0008)
       const inMod = Q.filter((q) => q.module === m.id).map((q) => q.id).sort();
@@ -326,14 +356,16 @@ if (Qall) {
         if (sc === "dedicated" && q.paths.length !== 1) fail(`${q.id}: moduł ${q.module} dedykowany — pytanie musi należeć do dokładnie 1 ścieżki (rozłączność), ma paths=${JSON.stringify(q.paths)}`);
         if (sc === "core" && q.paths.length < 2) fail(`${q.id}: moduł ${q.module} rdzeniowy — pytanie musi być wspólne (>=2 ścieżki), ma paths=${JSON.stringify(q.paths)}`);
       }
-      const critN = Q.filter((q) => q.isCritical).length;
       const dedReport = [];
       for (const [pid, p] of Object.entries(paths.paths)) {
-        if (isFormative(p)) continue; // formatywna (S4) — bez testu, kwota dedykowanych nieistotna (M15/ADR-0009)
+        if (isFormative(p)) continue; // formatywna (S4/P1) — bez testu, kwota dedykowanych nieistotna (M15/ADR-0009)
         const ded = Q.filter((q) => scopeById[q.module] === "dedicated" && q.paths.includes(pid)).length;
         const min = p.dedicatedQuestionsMin || 0;
+        // #171: krytyczne liczone PER ŚCIEŻKA (test wymusza tylko krytyczne z puli ścieżki) — globalna liczba
+        // zawyżałaby wymóg (krytyczne MB2/P2 nie wchodzą do testów S1-S3 i odwrotnie).
+        const critP = Q.filter((q) => q.isCritical && q.paths.includes(pid)).length;
         if (ded < min) fail(`ścieżka ${pid}: pula dedykowanych ${ded} < dedicatedQuestionsMin ${min} (kwota dedykowanych niewykonalna)`);
-        if (min + critN > p.finalTestQuestions) fail(`ścieżka ${pid}: dedicatedQuestionsMin ${min} + krytyczne ${critN} > finalTestQuestions ${p.finalTestQuestions} (test niewykonalny)`);
+        if (min + critP > p.finalTestQuestions) fail(`ścieżka ${pid}: dedicatedQuestionsMin ${min} + krytyczne ${critP} > finalTestQuestions ${p.finalTestQuestions} (test niewykonalny)`);
         dedReport.push(`${pid}=${ded}/${min}`);
       }
       report.push(`Dedykowane per ścieżka (pula/kwota): ${dedReport.join(" ")} — pule rozłączne (M13/ADR-0006 #94)`);
@@ -400,7 +432,9 @@ if (goldenDoc) {
     if (JSON.stringify(bankGolden) !== JSON.stringify([...gids].sort())) fail(`golden: lista golden-set.json != pytania golden:true w banku`);
     if (gq.length === 24) {
       const gMod = {}; for (const q of gq) gMod[q.module] = (gMod[q.module]||0)+1;
-      for (const m of Object.keys(EXPECTED_COUNTS)) if (gMod[m] !== 2) fail(`golden: ${m}=${gMod[m]||0} != 2 (po 2/moduł)`);
+      // #171: golden pokrywa wyłącznie rdzeń M1..M12 (CORE_MODULES) — moduły MB poza goldenem (bez historii kalibracji).
+      for (const m of CORE_MODULES) if (gMod[m] !== 2) fail(`golden: ${m}=${gMod[m]||0} != 2 (po 2/moduł)`);
+      for (const q of gq) if (!CORE_MODULES.includes(q.module)) fail(`golden: ${q.id} z modułu ${q.module} spoza rdzenia M1..M12`);
       const gD = { L1:0,L2:0,L3:0,L4:0 }; for (const q of gq) gD[q.difficulty]++;
       for (const [l,t] of Object.entries(GOLDEN_DIFF)) if (gD[l] !== t) fail(`golden trudność ${l}=${gD[l]} != ${t}`);
       const gSec = gq.filter((q)=>q.pillar==="security_governance").length;
@@ -550,7 +584,7 @@ if (paths && rubrics) {
 // Integralność: klucze interakcji wskazują na istniejące kategorie/opcje; zadanie praktyczne → istniejąca rubryka.
 function loadModuleContent(locale) {
   const CDIR = join(DATA, locale, "module-content");
-  if (!existsSync(CDIR)) { fail(`brak treści modułów (data/${locale}/module-content/) — wymaga 12 plików mNN.json + mshp.json + msho.json + msk1..msk4.json`); return null; }
+  if (!existsSync(CDIR)) { fail(`brak treści modułów (data/${locale}/module-content/) — wymaga 12 plików mNN.json + mshp.json + msho.json + msk1..msk4.json + mb1..mb6.json + md1..md6.json`); return null; }
   const schema = load(join(SCHEMAS, "module-content.schema.json"));
   const rubricIds = new Set((rubrics ? rubrics.rubrics : []).map((r) => r.id));
   const rubricById = new Map((rubrics ? rubrics.rubrics : []).map((r) => [r.id, r]));
@@ -563,6 +597,9 @@ function loadModuleContent(locale) {
     { f: "mshp.json", expectMod: "MSHP" },
     { f: "msho.json", expectMod: "MSHO" },
     ...Array.from({ length: 4 }, (_, i) => ({ f: `msk${i + 1}.json`, expectMod: "MSK" + (i + 1) })),
+    // #171: P2 „Bezpieczne używanie AI" (MB1..MB6, z pulą pytań) + P1 „AI w domu" (MD1..MD6, formatywne bez puli).
+    ...Array.from({ length: 6 }, (_, i) => ({ f: `mb${i + 1}.json`, expectMod: "MB" + (i + 1) })),
+    ...Array.from({ length: 6 }, (_, i) => ({ f: `md${i + 1}.json`, expectMod: "MD" + (i + 1) })),
   ];
   for (const { f, expectMod } of contentFiles) {
     const fp = join(CDIR, f);
@@ -614,15 +651,15 @@ function loadModuleContent(locale) {
   return present;
 }
 const contentMods = CANON ? loadModuleContent(CANON) : null;
-if (contentMods) report.push(`Treść modułów: ${contentMods.length}/18 (${contentMods.join(",")})`);
+if (contentMods) report.push(`Treść modułów: ${contentMods.length}/30 (${contentMods.join(",")})`);
 // M17 (#126–#131): bramkujemy treść modułów dla WSZYSTKICH locale (nie tylko CANON) — schemat + integralność
 // interakcji + lint syntetyczny. Zamyka znany GAP M16 (treść nie-CANON dotąd poza bramką CI). Parytet ID rubryk
 // (parityIdSet rubrics.json) gwarantuje, że rubricId w treści nie-CANON wskazuje na istniejącą rubrykę CANON.
 for (const lang of LOCALES) {
   if (lang === CANON) continue;
   const mods = loadModuleContent(lang);
-  if (mods && mods.length !== 18) fail(`treść modułów ${lang}: ${mods.length}/18 plików`);
-  else if (mods) report.push(`Treść modułów ${lang}: ${mods.length}/18 — schemat + integralność + lint OK`);
+  if (mods && mods.length !== 30) fail(`treść modułów ${lang}: ${mods.length}/30 plików`);
+  else if (mods) report.push(`Treść modułów ${lang}: ${mods.length}/30 — schemat + integralność + lint OK`);
 }
 
 // ---------------- Leak-gate: brak resztek języka źródłowego (PL) w przetłumaczonych locale (#133) ----------------
