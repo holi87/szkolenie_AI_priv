@@ -1,0 +1,127 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P1 AI w domu (formatywna)",
+    "interaction": "Suwaki promptu (kind: tune) — ćwiczenie formatywne, NIE scorowane do zaliczenia",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE i ogólne (zero realnych danych/PII). Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MD2",
+  "intro": "The difference between “AI is no help to me” and “AI saves me an hour a day” usually comes down to how you ask. In this module you will learn the three simple ingredients of a good request — context, goal, format — and you will see that refining an answer in conversation works better than hunting for the “perfect” question. All with examples from home life.",
+  "screens": [
+    {
+      "id": "md2-s1-jak-prosic",
+      "title": "The three ingredients of a good request",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Prompt", "text": "Simply your request to the AI — a question or instruction written in everyday words. The more clearly you say who is asking, why, and what kind of answer you expect, the better the result you get." },
+        { "kind": "list", "items": [
+          "CONTEXT — who and in what situation: “I am a parent of two kids, I cook simple things”.",
+          "GOAL — what you want to achieve: “I need a dinner plan for 5 days, up to 30 minutes of cooking”.",
+          "FORMAT — what the answer should look like: “List it as bullet points, with a shopping list at the end”."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Compare for yourself", "text": "“What is for dinner?” will give you random ideas. “I am a parent, my kids do not eat spicy food, I have 30 minutes — suggest 3 dinners in bullet points” will give you something you can actually use." }
+      ]
+    },
+    {
+      "id": "md2-s2-iterowanie",
+      "title": "Iterating — a conversation instead of the perfect question",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "You do not have to write a perfect request on the first try. A chat is a conversation: you get a first version, you say what to fix, you get a better one. Anna Sample compares it to a fitting room — the first option rarely fits perfectly, but after two adjustments it fits like a glove." },
+        { "kind": "list", "ordered": true, "items": [
+          "Write your request as best you can — no perfectionism.",
+          "Read the answer and name what bothers you: too long? too formal? not the right topic?",
+          "Ask for a fix in one sentence: “shorter”, “in a warmer tone”, “without difficult words”.",
+          "Repeat until it is right — usually 2-3 rounds are enough."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Refining is not failure", "text": "Following up and correcting is the normal way of working with AI — just like clarifying your order in a restaurant. The assistant will not take offense at your fifth correction." }
+      ]
+    },
+    {
+      "id": "md2-s3-przyklady-domowe",
+      "title": "Home prompts — five ready-made situations",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "See how the same three ingredients (context, goal, format) work in typical household matters. You can treat each “better request” as a template and swap in your own details." },
+        { "kind": "table", "headers": ["Situation", "Weak request", "Better request"], "rows": [
+          ["E-mail", "“Write an e-mail”", "“Write a short, polite e-mail to the homeowners’ association (contact: zarzad@przyklad.test) asking them to repair the intercom. Matter-of-fact, no complaints.”"],
+          ["Weekly plan", "“Plan my week”", "“I work until 4 p.m., the kids have swimming on Tuesday. Lay out a weekly plan of household chores in a table, 2 tasks per day.”"],
+          ["Recipe from the fridge", "“What should I cook?”", "“I have eggs, pasta, spinach, and cheese. Suggest 2 quick dinners using only these ingredients, steps in bullet points.”"],
+          ["Learning a language", "“Teach me English”", "“I know English at a basic level. Every day I want 5 sentences about cooking with a translation and a simple quiz at the end.”"],
+          ["Travel", "“Where should I go?”", "“I am planning a 3-day trip with a 7-year-old, up to 200 km from home, on a budget. Suggest 3 options with pros and cons in bullet points.”"]
+        ], "textAlt": "The table compares weak and better requests in five situations: an e-mail, a weekly plan, a recipe from the fridge, learning a language, and travel. The better requests always include context (who and in what situation), a goal (what exactly should be produced), and a format (bullet points, a table, a quiz)." },
+        { "kind": "callout", "variant": "info", "title": "Collect your favorites", "text": "When a request works brilliantly, save it in your notes (for example, in NotkaApp). After a month you have your own prompt cheat sheet for every occasion." }
+      ]
+    },
+    {
+      "id": "md2-s4-przed-cwiczeniem",
+      "title": "Try it out in practice",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "In a moment you will play with the “sliders” of a request: you will see how the same situation — asking for an e-mail to the neighbors — changes when you add context, set a format, and ask for plain language. There is no passing threshold here; the goal is to see with your own eyes that a clear request = a better answer." },
+        { "kind": "callout", "variant": "safe", "title": "The golden rule", "text": "If an answer disappointed you, 9 times out of 10 adding one sentence of context or specifying a format will help — before you conclude that “AI does not work”." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "tune",
+    "id": "md2-tune",
+    "title": "Tune your request",
+    "intro": "The situation: you ask the AI for an e-mail to your neighbors about a noisy renovation. Move the sliders and watch how the answer changes. Then answer one checkpoint question.",
+    "outputLabel": "What the AI answer looks like",
+    "controls": [
+      {
+        "id": "kontekst",
+        "label": "Context",
+        "levels": [
+          { "value": "brak", "label": "None", "effect": "The AI guesses the situation: the e-mail comes out generic, may be too harsh or completely off topic — it does not know who is writing or to whom." },
+          { "value": "kto-i-po-co", "label": "Who and why", "effect": "The AI knows you are writing as a neighbor, you care about good relations, and you only want to agree on quiet hours — the e-mail gets to the heart of the matter." }
+        ]
+      },
+      {
+        "id": "format",
+        "label": "Format",
+        "levels": [
+          { "value": "dowolny", "label": "Any", "effect": "You get a long block of text — you have to shorten and organize it yourself before sending." },
+          { "value": "lista-punktow", "label": "Short, with bullet points", "effect": "The e-mail has 3 sentences of introduction and concrete points (what the request is about, proposed hours) — ready to send almost without edits." }
+        ]
+      },
+      {
+        "id": "ton",
+        "label": "Tone",
+        "levels": [
+          { "value": "dowolny", "label": "Any", "effect": "By default the AI writes in stiff, bureaucratic language (“With reference to the situation at hand…”) — it sounds like a letter from a government office, not a note from a neighbor." },
+          { "value": "prosty-jezyk", "label": "Plain, friendly language", "effect": "The e-mail sounds natural and human — it politely names the problem and proposes a solution without souring the relationship with the neighbors." }
+        ]
+      }
+    ],
+    "checkpoint": {
+      "prompt": "Which combination of settings will give the best e-mail to the neighbors?",
+      "type": "single_choice",
+      "options": [
+        { "id": "a", "text": "Context: none · Format: any · Tone: any — the AI knows best on its own." },
+        { "id": "b", "text": "Context: who and why · Format: short, with bullet points · Tone: plain, friendly language." },
+        { "id": "c", "text": "Context: who and why · Format: any · Tone: any — context alone is enough." },
+        { "id": "d", "text": "Context: none · Format: short, with bullet points · Tone: plain language — form matters more than substance." }
+      ],
+      "correct": ["b"],
+      "feedbackCorrect": "Exactly! Context tells the AI what it is really about, format organizes the content, and a plain tone takes care of the relationship. These three ingredients together produce an e-mail ready to send.",
+      "feedbackIncorrect": "Almost! The full set works best: context (who is writing and why), format (short, in bullet points), and tone (plain, friendly language). Context alone helps, but without format and tone the e-mail still needs edits."
+    }
+  },
+  "summary": {
+    "points": [
+      "A good request has three ingredients: context (who and in what situation), a goal (what should be produced), and a format (what it should look like).",
+      "Do not hunt for the perfect prompt — refine the answer in conversation; 2-3 rounds are usually enough.",
+      "Household situations (an e-mail, a plan, a recipe, language learning, travel) have repeatable request patterns — collect the ones that work.",
+      "A disappointing answer is most often a sign that context or format was missing — not that “AI does not work”."
+    ],
+    "checklist": [
+      "Does my request say who I am and why I am asking?",
+      "Did I specify what the answer should look like (bullet points, a table, length)?",
+      "Did I refine the answer instead of starting from scratch?",
+      "Did I save a request that worked brilliantly so I can use it again?"
+    ],
+    "checklistTitle": "Checklist — a good request to AI",
+    "nextStep": "Next step: in the “AI in your phone and home” module you will see where AI already lives in your devices — and which of those features genuinely make life easier."
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P1 AI w domu (formatywna)",
+    "interaction": "Klasyfikacja zadań (kind: classify) — ćwiczenie formatywne, NIE scorowane do zaliczenia",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE i ogólne (zero realnych danych/PII). Moduł formatywny — bez progu zaliczenia i certyfikatu. Tłumaczenie wietnamskie (vi)."
+  },
+  "module": "MD1",
+  "intro": "AI không phải là phép màu hay khoa học viễn tưởng — đó là một công cụ mà ngay hôm nay đã có thể giúp bạn viết email, lên kế hoạch cho tuần hay giải thích một chủ đề khó bằng từ ngữ đơn giản. Trong mô-đun này, bạn sẽ thấy AI thật sự làm được gì, nó hay sai ở đâu và nên bắt đầu từ đâu. Không bài kiểm tra, không áp lực — đây là một cuộc dạo chơi thong thả trên vùng đất mới.",
+  "screens": [
+    {
+      "id": "md1-s1-czaty-asystenci",
+      "title": "Chat và trợ lý — người trợ giúp mới của bạn",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Hình thức AI phổ biến nhất là chat: bạn viết câu hỏi hay lời đề nghị bằng từ ngữ thường ngày, và trợ lý trả lời. Bạn không cần biết bất kỳ câu lệnh nào hay “ngôn ngữ máy tính” — bạn trò chuyện như với một người sẵn lòng giúp đỡ, rất kiên nhẫn và không bao giờ thở dài khi bạn hỏi cùng một điều đến lần thứ ba." },
+        { "kind": "list", "items": [
+          "Bạn có thể nhờ giải thích: “hãy giải thích cho tôi như thể tôi 10 tuổi”.",
+          "Bạn có thể nhờ viết: email, lời chúc, tin rao vặt, danh sách mua sắm.",
+          "Bạn có thể xin ý tưởng: nấu gì cho bữa trưa, làm gì vào ngày thứ Bảy mưa gió, tặng quà gì cho bà.",
+          "Bạn có thể hỏi thêm và yêu cầu sửa: “ngắn hơn”, “đơn giản hơn”, “thế nếu như…?”."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Không có câu hỏi nào là ngớ ngẩn", "text": "Trợ lý AI không phán xét. Bạn có thể hỏi những điều “hiển nhiên”, nhờ nhắc lại và viết sai chính tả — nó vẫn hiểu bạn muốn gì." }
+      ]
+    },
+    {
+      "id": "md1-s2-multimodalnosc",
+      "title": "Văn bản, hình ảnh, giọng nói — AI hiểu nhiều hơn các con chữ",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Các trợ lý hiện đại không chỉ giới hạn ở văn bản. Bạn có thể cho chúng xem một bức ảnh, nói điều gì đó thành tiếng hoặc nhờ tạo một hình ảnh. Điều này mở ra những ứng dụng rất thiết thực trong cuộc sống hằng ngày." },
+        { "kind": "table", "headers": ["Bạn đưa gì", "Bạn có thể nhận gì", "Ví dụ đời thường"], "rows": [
+          ["Văn bản", "Câu trả lời, văn bản, kế hoạch, ý tưởng", "“Hãy viết một lời đáp lịch sự cho lời mời này”"],
+          ["Ảnh chụp", "Mô tả, giải thích, bản dịch", "Ảnh chụp nhãn sản phẩm bằng tiếng Đức → “ở đây viết gì vậy?”"],
+          ["Giọng nói", "Trò chuyện không cần gõ phím", "Bạn đang nấu ăn và hỏi thành tiếng có thể thay kem tươi bằng gì"],
+          ["Yêu cầu tạo ảnh", "Hình ảnh được tạo ra", "Tranh tô màu cho trẻ, hình minh họa cho thiệp mời"]
+        ], "textAlt": "Bảng cho thấy bốn cách làm việc với AI: văn bản cho ra câu trả lời và kế hoạch, ảnh chụp cho ra mô tả hoặc bản dịch, giọng nói cho phép trò chuyện không cần gõ phím, còn yêu cầu tạo ảnh cho ra hình ảnh được tạo. Mỗi hàng có một ví dụ từ đời sống gia đình." },
+        { "kind": "callout", "variant": "info", "title": "Hãy thử với máy ảnh", "text": "Một trong những bước đầu tiên thú vị nhất là cho AI xem một bức ảnh: tờ hướng dẫn sử dụng, cái cây ngoài ban công, thành phần sản phẩm — và hỏi “đây là gì?” hoặc “giải thích đơn giản giúp tôi”." }
+      ]
+    },
+    {
+      "id": "md1-s3-czego-nie-potrafi",
+      "title": "Điều AI KHÔNG làm được — nghe chắc chắn, nhưng có lúc sai",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Ảo giác", "text": "Tình huống AI đưa ra thông tin không đúng sự thật nhưng nghe rất thuyết phục. Trợ lý không cố ý nói dối — nó chỉ đơn giản “đoán” một câu trả lời khớp với câu hỏi, và làm điều đó bằng đúng cái giọng điệu tự tin như khi nói về sự thật." },
+        { "kind": "paragraph", "text": "Hãy hình dung một người quen đọc rộng và hoạt ngôn, nhưng không bao giờ nói “tôi không biết”. Khi được hỏi về giờ mở cửa của phòng khám, anh ta sẽ đưa ra một giờ nào đó — có thể đúng, có thể bịa. AI hoạt động đúng như vậy: nó giải thích, gợi ý và viết rất giỏi, nhưng nó không phải là nhà tiên tri." },
+        { "kind": "list", "items": [
+          "Ngày tháng, giá cả, giờ mở cửa, quy định pháp luật — luôn kiểm tra tại nguồn.",
+          "Lời khuyên về sức khỏe và tài chính — hãy coi là phần mở đầu cho cuộc trò chuyện với bác sĩ hay cố vấn, không phải là quyết định.",
+          "Tin tức “của hôm nay” — trợ lý có thể không biết những sự kiện mới nhất.",
+          "Tính toán và các chi tiết vụn vặt — AI đôi khi yếu một cách đáng ngạc nhiên ở những thứ trông có vẻ đơn giản."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Nguyên tắc tin tưởng có giới hạn", "text": "Quyết định càng quan trọng (sức khỏe, tiền bạc, giấy tờ), câu trả lời của AI càng chỉ là một gợi ý cần kiểm tra — không phải lời cuối cùng." }
+      ]
+    },
+    {
+      "id": "md1-s4-od-czego-zaczac",
+      "title": "Bắt đầu từ đâu — tuần đầu tiên với AI",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Cách tốt nhất để làm quen với AI là những nhiệm vụ nhỏ, an toàn, nơi sai sót không gây tốn kém gì. Anna Testowa bắt đầu từ việc lên thực đơn bữa trưa cho cả tuần, Jan Syntetyczny — từ việc viết những lời đáp email lịch sự. Sau một tuần, cả hai đều đã có những ứng dụng yêu thích của riêng mình." },
+        { "kind": "list", "ordered": true, "items": [
+          "Chọn một ứng dụng chat AI miễn phí và tạo tài khoản.",
+          "Đặt một câu hỏi về lĩnh vực bạn am hiểu — bạn sẽ thấy nó trả lời tốt (và tự tin) đến mức nào.",
+          "Nhờ giúp một việc nhỏ có thật: email, kế hoạch, công thức nấu ăn.",
+          "Cố tình hỏi thêm và yêu cầu sửa câu trả lời — bạn sẽ thấy cuộc trò chuyện hiệu quả hơn một câu hỏi đơn lẻ.",
+          "Kiểm tra một câu trả lời “mang tính sự kiện” ở một nguồn khác — bạn sẽ cảm nhận được ranh giới của sự tin tưởng nằm ở đâu."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Bạn không làm hỏng gì đâu", "text": "Chat AI là nơi an toàn để thử nghiệm. Điều tệ nhất có thể xảy ra là một câu trả lời lạc đề — khi đó bạn chỉ cần viết “không phải ý đó” và thử cách khác." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "md1-classify",
+    "title": "AI sẽ làm tốt hay cần con người?",
+    "intro": "Hãy phân loại từng nhiệm vụ: AI hôm nay sẽ làm tốt, hay nhiều khả năng nó sẽ sai và cần kiểm chứng hoặc cần con người? Đây là bài tập rèn luyện — phần phản hồi giải thích từng đáp án.",
+    "categories": [
+      { "id": "ai-dobrze", "label": "AI hôm nay làm tốt", "desc": "Các nhiệm vụ ngôn ngữ và ý tưởng: dịch, viết, giải thích, lên kế hoạch." },
+      { "id": "czlowiek", "label": "Ở đây AI hay sai / cần con người", "desc": "Sự kiện thời sự, quyết định quan trọng, sức khỏe, tiền bạc — cần được kiểm tra." }
+    ],
+    "items": [
+      { "id": "md1-i1", "text": "Viết một lời đáp lịch sự cho thiệp mời dự lễ rước lễ lần đầu.", "correctCategory": "ai-dobrze", "rationale": "Viết văn bản là thế mạnh của AI — bạn dễ dàng chỉnh lại giọng điệu và độ dài." },
+      { "id": "md1-i2", "text": "Cho biết giờ mở cửa hiện tại của phòng khám trong khu phố tôi.", "correctCategory": "czlowiek", "rationale": "AI có thể bịa ra giờ giấc bằng giọng điệu tự tin. Những thứ như vậy hãy kiểm tra trên trang web của phòng khám hoặc qua điện thoại." },
+      { "id": "md1-i3", "text": "Giải thích bằng từ ngữ đơn giản lạm phát là gì.", "correctCategory": "ai-dobrze", "rationale": "Giải thích khái niệm “theo cách dễ hiểu” là một trong những ứng dụng tốt nhất của AI." },
+      { "id": "md1-i4", "text": "Quyết định xem tôi có nên vay khoản thế chấp này không.", "correctCategory": "czlowiek", "rationale": "Quyết định tài chính quan trọng — AI có thể giúp sắp xếp các câu hỏi, nhưng quyết định hãy tham vấn cố vấn và sự tỉnh táo của chính bạn." },
+      { "id": "md1-i5", "text": "Đề xuất kế hoạch bữa ăn cho cả tuần từ những nguyên liệu đơn giản.", "correctCategory": "ai-dobrze", "rationale": "Lên kế hoạch và ý tưởng là nhiệm vụ an toàn — cùng lắm bạn đổi món không hợp khẩu vị." },
+      { "id": "md1-i6", "text": "Cho biết tôi nên uống thuốc gì cho cơn đau đầu này.", "correctCategory": "czlowiek", "rationale": "Sức khỏe cần bác sĩ hoặc dược sĩ. AI có thể giải thích khái niệm, nhưng không nên kê liều thuốc." },
+      { "id": "md1-i7", "text": "Dịch một công thức nấu ăn từ tiếng Ý sang tiếng Việt.", "correctCategory": "ai-dobrze", "rationale": "Dịch các văn bản thường ngày là việc AI làm rất tốt." },
+      { "id": "md1-i8", "text": "Cho biết kết quả trận đấu hôm qua và những tin tức mới nhất.", "correctCategory": "czlowiek", "rationale": "Các sự kiện mới nhất có thể nằm ngoài kiến thức của trợ lý — nó có thể đưa ra thông tin cũ hoặc bịa đặt." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "AI là cuộc trò chuyện bằng từ ngữ thường ngày — cứ hỏi, hỏi thêm, yêu cầu sửa, bạn không làm hỏng gì cả.",
+      "Trợ lý hiểu văn bản, hình ảnh và giọng nói — cho xem một bức ảnh đôi khi nhanh hơn là mô tả.",
+      "AI nghe có vẻ chắc chắn cả khi nó sai — sự kiện, sức khỏe và tiền bạc luôn phải kiểm tra tại nguồn.",
+      "Hãy bắt đầu từ những nhiệm vụ nhỏ, an toàn: email, kế hoạch tuần, giải thích một chủ đề khó."
+    ],
+    "checklist": [
+      "Tôi đã tạo tài khoản ở một ứng dụng chat AI và đặt câu hỏi đầu tiên chưa?",
+      "Tôi có biết ảo giác là gì và những câu trả lời nào cần kiểm tra không?",
+      "Tôi đã thử hỏi thêm và yêu cầu sửa câu trả lời thay vì dừng lại ở câu đầu tiên chưa?",
+      "Tôi có một việc hằng ngày mà AI thật sự giúp ích cho mình không?"
+    ],
+    "checklistTitle": "Danh sách kiểm tra — những bước đầu với AI",
+    "nextStep": "Bước tiếp theo: trong mô-đun “Prompt cho mỗi ngày”, bạn sẽ học cách diễn đạt lời đề nghị sao cho câu trả lời trúng đích ngay từ đầu — với ngữ cảnh, mục tiêu và định dạng."
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P1 AI w domu (formatywna)",
+    "interaction": "Klasyfikacja: zadanie dla asystenta vs lepiej zrobić samemu (kind: classify)",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp, przyklad.test, Jan Syntetyczny, Anna Testowa). ZERO realnych danych/PII. Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MD3",
+  "intro": "La IA ya la llevas en el bolsillo: en el móvil, la cámara, el traductor y el altavoz del salón. Este módulo muestra cuáles de esas funciones facilitan la vida de verdad y cuáles son un gadget de cinco minutos — y cómo empezar a usarlas sin poner la casa patas arriba.",
+  "screens": [
+    {
+      "id": "md3-s1-asystenci",
+      "title": "El asistente de voz: para qué sirve",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "El asistente de voz funciona mejor en tareas cortas con un resultado claro, que haces con las manos ocupadas: un temporizador mientras cocinas, un recordatorio, un mensaje, controlar la luz o la música. Se le dan peor los asuntos largos y de varias etapas que exigen ir valorando por el camino." },
+        { "kind": "list", "items": [
+          "Genial: «pon un temporizador de 12 minutos», «recuérdame mañana a las 8 las medicinas», «añade leche a la lista de la compra».",
+          "Bien: preguntas rápidas sobre el tiempo, la ruta, los horarios — con el hábito de verificar las respuestas importantes.",
+          "Flojo: «planifica la reforma de la cocina» — demasiadas decisiones y contexto para una sola orden de voz."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Regla práctica", "text": "Si la tarea cabría en una nota adhesiva — es trabajo para el asistente. Si necesita una conversación — siéntate ante el chat de IA, donde ves y corriges las respuestas." }
+      ]
+    },
+    {
+      "id": "md3-s2-telefon",
+      "title": "IA en la cámara, las fotos y el traductor",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "La mayor cantidad de IA silenciosa y útil vive en el móvil. No parece un chat, pero hace el trabajo:" },
+        { "kind": "list", "items": [
+          "Cámara: modo nocturno, eliminar a personas que se colaron en el encuadre, restaurar fotos antiguas.",
+          "Galería: búsqueda por contenido — escribe «ticket», «perro», «playa», en lugar de pasar miles de miniaturas.",
+          "Traductor: conversación en vivo y traducción de rótulos con la cámara — el menú, el horario de trenes, la etiqueta de un medicamento en vacaciones.",
+          "Dictado y transcripción: habla en lugar de escribir; la grabación del consejo familiar se convierte en una nota."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Por dónde empezar", "text": "Elige UNA función de esta lista y úsala durante una semana. El hábito con una sola función enseña más que el repaso de veinte." }
+      ]
+    },
+    {
+      "id": "md3-s3-smart-home",
+      "title": "Hogar inteligente: valor o gadget",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "En casa, la IA puede ser de verdad útil — y puede ser un juguete que al mes acumula polvo en un cajón. La diferencia suele reducirse a una cosa: si el aparato resuelve un problema que realmente tienes." },
+        { "kind": "table", "headers": ["Uso", "Valor", "Por qué"], "rows": [
+          ["Un termostato que aprende el ritmo del día", "real", "ahorra dinero sin que tengas que prestarle atención"],
+          ["Luces con horario y orden de voz", "real", "comodidad diaria, también para las personas mayores"],
+          ["Un sensor de humo/agua que avisa al móvil", "real", "seguridad, funciona cuando no estás"],
+          ["Una nevera con pantalla que propone recetas", "normalmente gadget", "lo mismo lo hace el móvil, sin cambiar de nevera"],
+          ["Un hervidor controlado desde una app", "normalmente gadget", "igualmente tienes que levantarte a poner el agua"]
+        ], "textAlt": "Tabla: dan valor real los aparatos que ahorran dinero o tiempo o aumentan la seguridad (termostato, luces, sensores); suelen ser gadgets los aparatos que duplican el móvil, como la nevera con pantalla o el hervidor a distancia." },
+        { "kind": "callout", "variant": "warn", "title": "Antes de comprar", "text": "Pregúntate: ¿qué problema MÍO resuelve esto? Si la respuesta empieza por «estaría bien…», es un gadget. Si empieza por «por fin no tendré que…», es valor." }
+      ]
+    },
+    {
+      "id": "md3-s4-higiena",
+      "title": "Pequeña higiene de la IA doméstica",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Los aparatos con micrófono y cámara son una comodidad que exige dos minutos de sensatez al configurarlos. Lo trataremos en detalle en el módulo sobre privacidad — aquí, la versión mínima:" },
+        { "kind": "list", "ordered": true, "items": [
+          "Comprueba dónde está el interruptor físico del micrófono en el altavoz — y úsalo cuando quieras.",
+          "No pongas aparatos con cámara en el dormitorio ni en la habitación del niño.",
+          "De vez en cuando revisa en la app el historial de grabaciones del asistente y bórralo."
+        ] }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "md3-classify",
+    "title": "¿Tarea para el asistente o mejor hacerlo uno mismo?",
+    "intro": "Decide qué tareas merece la pena delegar al asistente de voz o a la IA del móvil, y cuáles es mejor hacer por tu cuenta. El feedback explica por qué.",
+    "categories": [
+      { "id": "assistant", "label": "Tarea para el asistente", "desc": "Corta, con un resultado claro y un coste de error bajo — la IA lo hará más rápido." },
+      { "id": "self", "label": "Mejor hacerlo uno mismo", "desc": "Exige criterio o confianza, o trata de asuntos en los que el error cuesta." }
+    ],
+    "items": [
+      { "id": "md3-i1", "text": "Poner el temporizador para la pasta cuando tienes las manos llenas de harina.", "correctCategory": "assistant", "rationale": "Orden corta, resultado claro, cero riesgo — ideal para la voz." },
+      { "id": "md3-i2", "text": "Elegir una oferta de crédito basándote en una sola respuesta del asistente.", "correctCategory": "self", "rationale": "Una decisión financiera exige comparar ofertas y verificar — la IA puede ayudar a reunir datos, pero no decidir." },
+      { "id": "md3-i3", "text": "Encontrar la foto de un ticket en la galería escribiendo la palabra «ticket».", "correctCategory": "assistant", "rationale": "La búsqueda por contenido es el punto fuerte de la IA en la galería — segundos en lugar de pasar fotos." },
+      { "id": "md3-i4", "text": "Traducir el menú de un restaurante extranjero con la cámara del móvil.", "correctCategory": "assistant", "rationale": "La traducción en vivo es una función madura; el coste de un error con un menú es bajo." },
+      { "id": "md3-i5", "text": "Escribir una felicitación de boda personal para tu mejor amiga.", "correctCategory": "self", "rationale": "El valor de la felicitación está en lo personal — la IA puede sugerir un borrador, pero las palabras deben ser tuyas." },
+      { "id": "md3-i6", "text": "Añadir «compra leche y mantequilla» a la lista de la compra de camino al coche.", "correctCategory": "assistant", "rationale": "Una nota de voz rápida — exactamente para eso nació el asistente." },
+      { "id": "md3-i7", "text": "Valorar si el correo del banco que pide tus datos es una estafa.", "correctCategory": "self", "rationale": "La seguridad exige tu vigilancia y la verificación con el banco — no la delegues en un automatismo." },
+      { "id": "md3-i8", "text": "Convertir la grabación del consejo familiar sobre las vacaciones en una nota con la lista de acuerdos.", "correctCategory": "assistant", "rationale": "Transcribir y resumir son puntos fuertes de la IA — y la nota la revisarás de todos modos." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Asistente de voz = tareas de nota adhesiva; conversaciones y decisiones = el chat, donde ves las respuestas.",
+      "La mayor parte de la IA útil ya la tienes: galería, traductor, dictado — elige una función y crea el hábito.",
+      "En las compras para casa pregunta por TU problema a resolver; los micrófonos y cámaras configúralos con cabeza."
+    ],
+    "checklist": [
+      "¿Sé dónde está en mi móvil la búsqueda de fotos por contenido?",
+      "¿He probado la traducción en vivo con la cámara?",
+      "¿Sé cómo apagar el micrófono del altavoz de casa?"
+    ],
+    "checklistTitle": "Checklist — IA en el móvil y en casa",
+    "nextStep": "Siguiente paso: el módulo sobre crear con IA — imágenes, música y vídeo para las ocasiones de casa."
+  }
+}

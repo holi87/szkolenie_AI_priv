@@ -1,0 +1,126 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P2 Bezpieczne używanie AI",
+    "interaction": "Klasyfikacja treści (kind: classify) — co można wkleić do publicznego czatu, a co wymaga anonimizacji lub zostaje poza czatem",
+    "sections": "Ekrany odpowiadają sekcjom MB2.1–MB2.5 (referowane przez pytania banku Q123–Q128): dane osobowe RODO, minimalizacja/anonimizacja, sekrety, narzędzia zatwierdzone vs publiczne (NDA), uprawnienia aplikacji.",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp, SklepDemo, Jan Syntetyczny, Anna Testowa, domeny @przyklad.test / @example.com, placeholdery zamiast sekretów). Zero realnych danych, PII, numerów i tokenów."
+  },
+  "module": "MB2",
+  "intro": "Das größte KI-Risiko im Arbeitsalltag braucht keinen Hacker — ein gewöhnliches „Einfügen und Absenden“ genügt. In diesem Modul lernen Sie, personenbezogene Daten zu erkennen, nur das wirklich Nötige einzufügen, Passwörter und Schlüssel von Chats fernzuhalten und vom Unternehmen freigegebene Werkzeuge von öffentlichen zu unterscheiden. Am Ende prüfen Sie das in der Praxis.",
+  "screens": [
+    {
+      "id": "mb2-s1-dane-osobowe",
+      "title": "MB2.1 — Was ein personenbezogenes Datum ist (DSGVO in der Praxis)",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Personenbezogene Daten", "text": "Alle Informationen, die eine konkrete Person identifizierbar machen — direkt (Vor- und Nachname, E-Mail-Adresse, Gesichtsfoto) oder durch die Kombination mehrerer Fakten (Position + Firma + Stadt). Die DSGVO schützt sie unabhängig davon, ob sie einen Kunden, eine Kollegin oder Sie selbst betreffen." },
+        { "kind": "list", "items": [
+          "Offensichtlich: Vor- und Nachname, E-Mail, Adresse, Telefonnummer, Bildnis, Identifikationsnummer.",
+          "Weniger offensichtlich: Kundenkennung im System, einer Person zugeordnete Bestellhistorie, der Inhalt ihrer Reklamation.",
+          "Besonders geschützt: Daten zu Gesundheit, Überzeugungen, Religion — diese fügen Sie nie ein, in keiner Form.",
+          "Kombinationen: „die Leiterin der Retourenabteilung von SklepDemo aus Dresden“ identifiziert eine Person, auch ohne dass ein Name fällt."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Warum das KI-Chats betrifft", "text": "Personenbezogene Daten in einen öffentlichen Chat einzufügen heißt, sie an ein externes Unternehmen weiterzugeben — meist ohne Rechtsgrundlage und ohne Wissen der betroffenen Person. Das ist eine reale DSGVO-Verletzung, keine Formalität.",
+          "links": [ { "label": "UODO — polnische Datenschutzbehörde: Informationen zu Datenschutz und DSGVO", "href": "https://uodo.gov.pl/" } ]
+        }
+      ]
+    },
+    {
+      "id": "mb2-s2-minimalizacja",
+      "title": "MB2.2 — Minimierung: Fügen Sie nur das Nötige ein",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Das Prinzip der Datenminimierung ist einfach: Das Modell braucht den Inhalt des Problems, nicht die Identität der Menschen. Bevor Sie irgendetwas einfügen, entfernen oder ersetzen Sie alles, was auf konkrete Personen und konkrete Verträge hinweist. Der Sinn der Aufgabe bleibt — das Risiko verschwindet." },
+        { "kind": "table", "headers": ["Vorher (nicht einfügen)", "Nach der Anonymisierung (kann eingefügt werden)"], "rows": [
+          ["Kunde Jan Synthetisch (jan.synthetisch@przyklad.test) verlangt eine Erstattung für eine Bestellung bei SklepDemo", "Ein Kunde verlangt eine Erstattung für eine Bestellung — hilf mir, eine höfliche Absage zu formulieren"],
+          ["Anna Beispiel aus der Personalabteilung beschwert sich über ihren Vorgesetzten, ich gebe dir ihre E-Mail im Wortlaut", "Ein Mitarbeiter meldet einen Konflikt mit dem Vorgesetzten — wie führe ich ein solches Gespräch?"],
+          ["Vertrag Nr. 2024/DEMO mit der Firma PipeDemo, Preise und Vertragsstrafen im Anhang", "Ich habe einen B2B-Vertrag mit Vertragsstrafen bei Verzug — was sollte ich vor der Unterschrift prüfen?"]
+        ], "textAlt": "Die Tabelle vergleicht Inhalte vor und nach der Anonymisierung: Statt der Daten des Kunden Jan Synthetisch mit E-Mail-Adresse fügen wir nur die Beschreibung des Erstattungsproblems ein; statt der vollständigen E-Mail einer Mitarbeiterin die Beschreibung des Konflikts ohne Namen; statt Vertragsnummer und Preisen eine allgemeine Frage zum B2B-Vertrag." },
+        { "kind": "callout", "variant": "safe", "title": "Die Platzhalter-Technik", "text": "Ersetzen Sie Konkretes durch Rollen: „[KUNDE]“, „[FIRMA]“, „[BETRAG]“. Das Modell kommt damit genauso gut zurecht, und nach Erhalt der Antwort setzen Sie die echten Daten wieder ein — bei sich, außerhalb des Chats." }
+      ]
+    },
+    {
+      "id": "mb2-s3-sekrety",
+      "title": "MB2.3 — Geheimnisse: Passwörter, Schlüssel und Tokens nie in den Chat",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Passwörter, API-Schlüssel, Zugriffstokens, Einmalcodes, Einladungslinks zu Systemen — das alles sind Geheimnisse. Sie unterscheiden sich von personenbezogenen Daten in einem Punkt: Ihr Leck verschafft jemandem sofortigen Zugang zu einem System. Deshalb gilt die Regel ausnahmslos: Geheimnisse gelangen in keinen Chat, niemals, in keinem Ausschnitt." },
+        { "kind": "list", "items": [
+          "Sie bitten die KI um Hilfe bei einer Konfiguration? Fügen Sie die Datei mit ersetztem Geheimnis ein: Statt des echten Schlüssels schreiben Sie „[API_SCHLUESSEL]“.",
+          "Ein „versehentlich“ eingefügtes und sofort aus dem Chat gelöschtes Geheimnis — es kann trotzdem bereits beim Anbieter gespeichert worden sein.",
+          "Wenn ein Geheimnis geleakt ist, reicht Löschen nicht: Es muss ungültig gemacht und neu erzeugt werden, und der Vorfall muss gemeldet werden.",
+          "Das gilt auch für „unwichtige“ Passwörter — Menschen verwenden dieselben Passwörter an vielen Stellen."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Geheimnis eingefügt? Handeln Sie sofort", "text": "Verlassen Sie sich nicht darauf, dass es niemand bemerkt. Ändern oder widerrufen Sie das Geheimnis sofort und melden Sie den Vorfall gemäß dem Verfahren Ihres Unternehmens (IT-/Sicherheitsabteilung). Eine schnelle Reaktion ist der Unterschied zwischen einem Vorfall und einer Katastrophe." }
+      ]
+    },
+    {
+      "id": "mb2-s4-narzedzia",
+      "title": "MB2.4 — Freigegebene vs. öffentliche Werkzeuge (und was das NDA dazu sagt)",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Nicht jeder KI-Chat ist gleich. Ein vom Unternehmen freigegebenes Werkzeug hat einen unterschriebenen Vertrag mit dem Anbieter: Die Daten trainieren keine Modelle, werden vereinbarungsgemäß gespeichert, und es ist klar, wer für sie verantwortlich ist. Ein öffentlicher, kostenloser Chat ist ein Vertrag nach dem Motto „Sie nehmen, was da ist“ — oft mit dem Recht des Anbieters, Ihre Eingaben zu verwerten." },
+        { "kind": "table", "headers": ["Merkmal", "Vom Unternehmen freigegebenes Werkzeug", "Öffentlicher kostenloser Chat"], "rows": [
+          ["Vertrag zum Datenschutz", "Ja — das Unternehmen hat ihn unterschrieben und geprüft", "Nein — es gelten die allgemeinen Nutzungsbedingungen des Anbieters"],
+          ["Nutzung Ihrer Eingaben zum Training", "Vertraglich meist ausgeschlossen", "Oft standardmäßig aktiviert"],
+          ["Daten unter Kunden-NDA", "Nur wenn die Firmenrichtlinie es ausdrücklich erlaubt", "Niemals — das ist ein NDA-Bruch"],
+          ["Wer bei einem Vorfall haftet", "Klarer Weg: Unternehmen und Anbieter", "Unklar — das Risiko tragen Sie selbst"]
+        ], "textAlt": "Die Tabelle vergleicht ein vom Unternehmen freigegebenes Werkzeug mit einem öffentlichen kostenlosen Chat: Das freigegebene hat einen unterschriebenen Datenschutzvertrag, ausgeschlossenes Training auf Eingaben und klare Verantwortung; der öffentliche Chat läuft über die allgemeinen Nutzungsbedingungen, trainiert oft auf Eingaben, und NDA-geschützte Daten dürfen dort niemals eingefügt werden." },
+        { "kind": "callout", "variant": "warn", "title": "Ein NDA ist keine Formalität", "text": "Unter eine Vertraulichkeitsvereinbarung mit dem Kunden fallende Materialien (Spezifikationen, Preislisten, Pläne) in einen öffentlichen Chat einzufügen ist ein Vertragsbruch — unabhängig davon, ob es jemand bemerkt. Zweifeln Sie, ob ein Werkzeug freigegeben ist? Fragen Sie nach, bevor Sie einfügen." }
+      ]
+    },
+    {
+      "id": "mb2-s5-uprawnienia",
+      "title": "MB2.5 — Berechtigungen von KI-Apps: Geben Sie so wenig wie möglich",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Immer mehr KI-Apps bitten um Zugriff auf Ihre Ressourcen: das E-Mail-Postfach, den Kalender, das Dokumentenlaufwerk, die Kontakte. Jede Zustimmung ist eine offene Tür — die App sieht alles, wozu Sie sie hereinlassen, nicht nur das, was sie gerade braucht. Es gilt das Prinzip der minimalen Berechtigungen: Geben Sie genau so viel Zugriff, wie die Aufgabe erfordert, und kein bisschen mehr." },
+        { "kind": "list", "ordered": true, "items": [
+          "Prüfen Sie vor der Installation, welche Zugriffe die App verlangt — und ob sie zu ihrer Funktion passen (eine Notiz-App braucht Ihre Kontakte nicht).",
+          "Wählen Sie den minimalen Umfang: Zugriff auf einen Ordner statt auf das ganze Laufwerk, auf einen Kalender statt auf das Postfach.",
+          "Behandeln Sie KI-Plug-ins und Browser-Erweiterungen genauso — „alle Seiten lesen“ ist eine sehr weitreichende Berechtigung.",
+          "Gehen Sie die erteilten Zugriffe von Zeit zu Zeit durch und entziehen Sie die, die Sie nicht mehr nutzen."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Beispiel einer guten Entscheidung", "text": "Die App NotkaApp bittet um Zugriff auf das ganze Laufwerk, um Dokumente zusammenzufassen. Der sichere Zug: Legen Sie einen eigenen Ordner „Zum Zusammenfassen“ an, geben Sie nur darauf Zugriff und legen Sie dort ausschließlich Dateien ab, die Sie wirklich verarbeiten lassen wollen." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "mb2-classify",
+    "title": "Einfügen oder nicht einfügen?",
+    "intro": "Beurteilen Sie jeden Inhalt: Kann er sicher in einen öffentlichen KI-Chat eingefügt werden, oder muss er zuerst anonymisiert werden bzw. außerhalb des Chats bleiben? Alle Beispiele sind synthetisch.",
+    "categories": [
+      { "id": "ok", "label": "Kann in den öffentlichen Chat eingefügt werden", "desc": "Keine personenbezogenen Daten, Geheimnisse oder vertraulichen Inhalte — nur der Inhalt des Problems." },
+      { "id": "stop", "label": "Nicht einfügen / zuerst anonymisieren", "desc": "Enthält personenbezogene Daten, Geheimnisse oder vertrauliche Inhalte." }
+    ],
+    "items": [
+      { "id": "mb2-i1", "text": "„Ein Kunde verlangt eine Erstattung nach Fristablauf — hilf mir, eine höfliche, aber bestimmte Absage zu formulieren.“", "correctCategory": "ok", "rationale": "Nur die Problembeschreibung, null identifizierende Daten — vorbildliche Minimierung." },
+      { "id": "mb2-i2", "text": "Der vollständige Text der Reklamation von Jan Synthetisch mit seiner E-Mail-Adresse jan.synthetisch@przyklad.test und der Bestellnummer.", "correctCategory": "stop", "rationale": "Vor- und Nachname und E-Mail sind personenbezogene Daten — ersetzen Sie sie vor dem Einfügen durch Platzhalter wie [KUNDE]." },
+      { "id": "mb2-i3", "text": "Ein Konfigurationsausschnitt mit dem echten API-Schlüssel zum System SklepDemo, „damit die KI den Fehler findet“.", "correctCategory": "stop", "rationale": "Geheimnisse gelangen niemals in den Chat — fügen Sie die Konfiguration mit dem Schlüssel ersetzt durch [API_SCHLUESSEL] ein." },
+      { "id": "mb2-i4", "text": "„Ich habe eine Tabelle mit den Spalten: Datum, Ausgabenkategorie, Betrag. Wie berechne ich Monatssummen in der Tabellenkalkulation?“", "correctCategory": "ok", "rationale": "Eine Frage nach der Methode, eine Strukturbeschreibung ohne einen einzigen echten Datensatz — sicher." },
+      { "id": "mb2-i5", "text": "Die NDA-geschützte Produktspezifikation eines Kunden — „nur ein Ausschnitt, damit die KI bei der Zusammenfassung hilft“.", "correctCategory": "stop", "rationale": "Das NDA umfasst auch Ausschnitte. Vertrauliche Kundenmaterialien gehören in keinem Teil in öffentliche Chats." },
+      { "id": "mb2-i6", "text": "„Ein Mitarbeiter meldet einen Konflikt mit dem Vorgesetzten — wie bereite ich mich auf ein solches Gespräch vor?“ (ohne Namen und Abteilung).", "correctCategory": "ok", "rationale": "Eine Situationsbeschreibung ohne Möglichkeit, Personen zu identifizieren — die personenbezogenen Daten wurden wirksam entfernt." },
+      { "id": "mb2-i7", "text": "Die Teilnehmerliste einer Schulung: Vornamen, Nachnamen und E-Mails — „die KI soll sie alphabetisch sortieren“.", "correctCategory": "stop", "rationale": "Das sind personenbezogene Daten vieler Personen auf einmal. Sortieren Sie lokal in der Tabellenkalkulation — KI wird hier gar nicht gebraucht." },
+      { "id": "mb2-i8", "text": "Ihr eigener Entwurf einer Ankündigung für das Firmenpicknick — „verbessere den Stil und kürze auf drei Sätze“.", "correctCategory": "ok", "rationale": "Öffentlicher, zur Veröffentlichung bestimmter Inhalt ohne personenbezogene Daten — typische sichere KI-Nutzung." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Ein personenbezogenes Datum ist alles, was eine Person identifiziert — auch eine Kombination von Fakten ohne Namen.",
+      "Minimierung: Fügen Sie den Inhalt des Problems ein, nicht die Identität der Menschen — Platzhalter wie [KUNDE], [FIRMA], [BETRAG] erledigen das.",
+      "Passwörter, Schlüssel und Tokens gelangen niemals in den Chat; ein geleaktes Geheimnis = sofortige Änderung und Meldung.",
+      "Firmendaten und NDA-geschützte Daten nur in vom Unternehmen freigegebenen Werkzeugen — ein öffentlicher Chat ist ein fremder Briefkasten.",
+      "Geben Sie KI-Apps die kleinstmöglichen Berechtigungen und entziehen Sie ungenutzte Zugriffe regelmäßig."
+    ],
+    "checklist": [
+      "Prüfe ich den Text vor dem Einfügen auf Namen, E-Mails und andere Identifikatoren?",
+      "Ersetze ich Konkretes durch Platzhalter, statt das Original einzufügen?",
+      "Bin ich sicher, dass der Inhalt kein Passwort, keinen Schlüssel und kein Token enthält?",
+      "Weiß ich, welche KI-Werkzeuge in meinem Unternehmen freigegeben sind und für welche Daten?",
+      "Haben KI-Apps bei mir nur die Berechtigungen, die sie wirklich brauchen?"
+    ],
+    "checklistTitle": "Checkliste — bevor Sie irgendetwas in einen Chat einfügen",
+    "nextStep": "Nächster Schritt: Modul MB3 — Sie sehen, wie Angreifer Befehle in Inhalten verstecken, die die KI für Sie liest, und wie Sie sich davor schützen."
+  }
+}

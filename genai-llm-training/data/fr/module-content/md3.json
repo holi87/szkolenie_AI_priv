@@ -1,0 +1,103 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P1 AI w domu (formatywna)",
+    "interaction": "Klasyfikacja: zadanie dla asystenta vs lepiej zrobić samemu (kind: classify)",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp, przyklad.test, Jan Syntetyczny, Anna Testowa). ZERO realnych danych/PII. Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MD3",
+  "intro": "Vous avez déjà l'IA dans la poche : dans le téléphone, l'appareil photo, le traducteur et l'enceinte du salon. Ce module montre lesquelles de ces fonctions facilitent vraiment la vie et lesquelles sont des gadgets de cinq minutes — et comment commencer à les utiliser sans mettre la maison sens dessus dessous.",
+  "screens": [
+    {
+      "id": "md3-s1-asystenci",
+      "title": "L'assistant vocal : à quoi il sert",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "L'assistant vocal excelle dans les tâches courtes au résultat clair, que vous faites les mains occupées : un minuteur en cuisinant, un rappel, un message, le contrôle de la lumière ou de la musique. Il se débrouille moins bien avec les affaires longues, en plusieurs étapes, qui demandent d'évaluer en cours de route." },
+        { "kind": "list", "items": [
+          "Excellent : « mets un minuteur de 12 minutes », « rappelle-moi mes médicaments demain à 8 h », « ajoute le lait à la liste de courses ».",
+          "Bien : des questions rapides sur la météo, l'itinéraire, les horaires d'ouverture — avec l'habitude de vérifier les réponses importantes.",
+          "Faible : « planifie la rénovation de la cuisine » — trop de décisions et de contexte pour une seule commande vocale."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "La règle du pouce", "text": "Si la tâche tiendrait sur un post-it — c'est un travail pour l'assistant. Si elle demande une conversation — installez-vous devant un chat d'IA, où vous voyez et corrigez les réponses." }
+      ]
+    },
+    {
+      "id": "md3-s2-telefon",
+      "title": "L'IA dans l'appareil photo, les photos et le traducteur",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "C'est dans le téléphone que se cache le plus d'IA discrète et utile. Elle ne ressemble pas à un chat, mais elle fait le travail :" },
+        { "kind": "list", "items": [
+          "Appareil photo : mode nuit, suppression des passants du cadre, amélioration de la netteté des vieilles photos.",
+          "Galerie : recherche par contenu — tapez « ticket de caisse », « chien », « plage » au lieu de faire défiler des milliers de miniatures.",
+          "Traducteur : conversation en direct et traduction des inscriptions par l'appareil photo — menu, horaires, étiquette d'un médicament en vacances.",
+          "Dictée et transcription : parlez au lieu d'écrire ; l'enregistrement d'un conseil de famille se transforme en note."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Par où commencer", "text": "Choisissez UNE fonction de cette liste et utilisez-la pendant une semaine. L'habitude d'une seule fonction apprend plus qu'un tour d'horizon de vingt." }
+      ]
+    },
+    {
+      "id": "md3-s3-smart-home",
+      "title": "Maison connectée : valeur ou gadget",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "À la maison, l'IA est parfois vraiment utile — et parfois un jouet qui, au bout d'un mois, prend la poussière dans un tiroir. La différence tient généralement à une seule chose : l'appareil résout-il un problème que vous avez réellement." },
+        { "kind": "table", "headers": ["Usage", "Valeur", "Pourquoi"], "rows": [
+          ["Thermostat qui apprend le rythme de la journée", "réelle", "il économise de l'argent sans votre attention"],
+          ["Lumières programmées et à commande vocale", "réelle", "confort quotidien, aussi pour les personnes âgées"],
+          ["Détecteur de fumée/d'eau qui alerte le téléphone", "réelle", "sécurité, il fonctionne quand vous n'êtes pas là"],
+          ["Frigo à écran qui propose des recettes", "généralement gadget", "le téléphone fait la même chose, sans changer de frigo"],
+          ["Bouilloire pilotée depuis une appli", "généralement gadget", "il faut quand même se lever pour verser l'eau"]
+        ], "textAlt": "Tableau : la valeur réelle vient des appareils qui économisent de l'argent, du temps ou augmentent la sécurité (thermostat, lumières, détecteurs) ; les gadgets sont souvent des appareils qui doublonnent le téléphone, comme le frigo à écran ou la bouilloire à distance." },
+        { "kind": "callout", "variant": "warn", "title": "Avant d'acheter", "text": "Demandez-vous : quel problème À MOI cela résout-il ? Si la réponse commence par « ce serait sympa de… », c'est un gadget. Si elle commence par « enfin je n'aurai plus à… », c'est de la valeur." }
+      ]
+    },
+    {
+      "id": "md3-s4-higiena",
+      "title": "Petite hygiène de l'IA domestique",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Les appareils avec micro et caméra sont un confort qui demande deux minutes de bon sens à la configuration. Nous y reviendrons en détail dans le module sur la vie privée — ici, la version minimale :" },
+        { "kind": "list", "ordered": true, "items": [
+          "Vérifiez où se trouve l'interrupteur physique du micro sur l'enceinte — et utilisez-le quand vous voulez.",
+          "Ne placez pas d'appareils avec caméra dans la chambre à coucher ni dans la chambre d'enfant.",
+          "De temps en temps, parcourez dans l'application l'historique des enregistrements de l'assistant et effacez-le."
+        ] }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "md3-classify",
+    "title": "Tâche pour l'assistant ou mieux vaut le faire soi-même ?",
+    "intro": "Décidez quelles tâches valent la peine d'être confiées à l'assistant vocal ou à l'IA du téléphone, et lesquelles il vaut mieux faire soi-même. Le feedback explique pourquoi.",
+    "categories": [
+      { "id": "assistant", "label": "Tâche pour l'assistant", "desc": "Courte, résultat clair, faible coût d'erreur — l'IA le fera plus vite." },
+      { "id": "self", "label": "Mieux vaut le faire soi-même", "desc": "Demande du jugement, de la confiance, ou concerne des affaires où l'erreur coûte cher." }
+    ],
+    "items": [
+      { "id": "md3-i1", "text": "Mettre un minuteur pour les pierogis quand vous avez les mains dans la farine.", "correctCategory": "assistant", "rationale": "Commande courte, résultat clair, zéro risque — idéal pour la voix." },
+      { "id": "md3-i2", "text": "Choisir une offre de crédit sur la base d'une seule réponse de l'assistant.", "correctCategory": "self", "rationale": "Une décision financière demande de comparer les offres et de vérifier — l'IA peut aider à rassembler les données, mais pas décider." },
+      { "id": "md3-i3", "text": "Retrouver la photo d'un ticket de caisse dans la galerie en tapant le mot « ticket ».", "correctCategory": "assistant", "rationale": "La recherche par contenu est un point fort de l'IA dans la galerie — quelques secondes au lieu de faire défiler." },
+      { "id": "md3-i4", "text": "Traduire le menu d'un restaurant à l'étranger avec l'appareil photo du téléphone.", "correctCategory": "assistant", "rationale": "La traduction en direct est une fonction mûre ; le prix d'une erreur sur un menu est faible." },
+      { "id": "md3-i5", "text": "Écrire des vœux de mariage personnels pour votre meilleure amie.", "correctCategory": "self", "rationale": "La valeur des vœux est leur caractère personnel — l'IA peut proposer un brouillon, mais les mots doivent être les vôtres." },
+      { "id": "md3-i6", "text": "Ajouter « acheter du lait et du beurre » à la liste de courses en allant à la voiture.", "correctCategory": "assistant", "rationale": "Une note vocale rapide — exactement ce pour quoi l'assistant a été créé." },
+      { "id": "md3-i7", "text": "Évaluer si un e-mail de la banque demandant vos données est une arnaque.", "correctCategory": "self", "rationale": "La sécurité exige votre vigilance et une vérification auprès de la banque — ne la déléguez pas à un automate." },
+      { "id": "md3-i8", "text": "Transformer l'enregistrement d'un conseil de famille sur les vacances en note avec la liste des décisions.", "correctCategory": "assistant", "rationale": "La transcription et le résumé sont des points forts de l'IA — et vous relirez la note de toute façon." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Assistant vocal = les tâches qui tiennent sur un post-it ; conversations et décisions = le chat, où vous voyez les réponses.",
+      "Le plus gros de l'IA utile, vous l'avez déjà : galerie, traducteur, dictée — choisissez une fonction et créez l'habitude.",
+      "Pour les achats maison, demandez quel problème À VOUS cela résout ; configurez micros et caméras avec discernement."
+    ],
+    "checklist": [
+      "Est-ce que je sais où se trouve, dans mon téléphone, la recherche de photos par contenu ?",
+      "Ai-je testé la traduction en direct avec l'appareil photo ?",
+      "Est-ce que je sais comment couper le micro de l'enceinte de la maison ?"
+    ],
+    "checklistTitle": "Check-list — l'IA dans le téléphone et la maison",
+    "nextStep": "Prochaine étape : le module sur la création avec l'IA — images, musique et vidéo pour les occasions familiales."
+  }
+}

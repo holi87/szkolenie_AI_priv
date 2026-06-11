@@ -1,0 +1,103 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P1 AI w domu (formatywna)",
+    "interaction": "Klasyfikacja: zadanie dla asystenta vs lepiej zrobić samemu (kind: classify)",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp, przyklad.test, Jan Syntetyczny, Anna Testowa). ZERO realnych danych/PII. Moduł formatywny — bez progu zaliczenia i certyfikatu. Tłumaczenie wietnamskie (vi)."
+  },
+  "module": "MD3",
+  "intro": "AI đã nằm sẵn trong túi của bạn: trong điện thoại, máy ảnh, ứng dụng dịch và chiếc loa ở phòng khách. Mô-đun này cho thấy chức năng nào trong số đó thật sự giúp cuộc sống dễ dàng hơn, chức năng nào chỉ là món đồ chơi năm phút — và cách bắt đầu sử dụng chúng mà không phải xáo trộn cả ngôi nhà.",
+  "screens": [
+    {
+      "id": "md3-s1-asystenci",
+      "title": "Trợ lý giọng nói: phù hợp với việc gì",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Trợ lý giọng nói phát huy tốt nhất ở những nhiệm vụ ngắn có kết quả rõ ràng, khi tay bạn đang bận: hẹn giờ lúc nấu ăn, lời nhắc, tin nhắn, điều khiển đèn hay nhạc. Nó kém hơn ở những việc dài, nhiều bước, đòi hỏi phải đánh giá dọc đường." },
+        { "kind": "list", "items": [
+          "Tuyệt vời: “hẹn giờ 12 phút”, “nhắc tôi uống thuốc lúc 8 giờ sáng mai”, “thêm sữa vào danh sách mua sắm”.",
+          "Tốt: các câu hỏi nhanh về thời tiết, đường đi, giờ mở cửa — kèm thói quen kiểm chứng những câu trả lời quan trọng.",
+          "Kém: “lên kế hoạch sửa bếp” — quá nhiều quyết định và ngữ cảnh cho một câu lệnh giọng nói."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Nguyên tắc ngón tay cái", "text": "Nếu nhiệm vụ vừa vặn trên một tờ giấy nhớ — đó là việc cho trợ lý. Nếu nó cần một cuộc trò chuyện — hãy ngồi vào chat AI, nơi bạn nhìn thấy và chỉnh được câu trả lời." }
+      ]
+    },
+    {
+      "id": "md3-s2-telefon",
+      "title": "AI trong máy ảnh, ảnh chụp và ứng dụng dịch",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Phần lớn AI hữu ích thầm lặng nằm trong điện thoại. Nó không trông giống chat, nhưng làm việc rất hiệu quả:" },
+        { "kind": "list", "items": [
+          "Máy ảnh: chế độ chụp đêm, xóa người lạ lọt vào khung hình, làm nét ảnh cũ.",
+          "Thư viện ảnh: tìm theo nội dung — gõ “hóa đơn”, “chó”, “bãi biển” thay vì cuộn qua hàng nghìn ảnh thu nhỏ.",
+          "Ứng dụng dịch: hội thoại trực tiếp và dịch chữ qua máy ảnh — thực đơn, lịch tàu xe, nhãn thuốc trong kỳ nghỉ.",
+          "Đọc chính tả và gỡ băng: nói thay vì gõ; bản ghi âm buổi bàn bạc của gia đình biến thành ghi chú."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Bắt đầu từ đâu", "text": "Hãy chọn MỘT chức năng trong danh sách này và dùng nó trong một tuần. Thói quen từ một chức năng dạy bạn nhiều hơn việc lướt qua hai mươi cái." }
+      ]
+    },
+    {
+      "id": "md3-s3-smart-home",
+      "title": "Nhà thông minh: giá trị hay đồ chơi",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Trong nhà, AI có lúc thật sự hữu ích — và có lúc là món đồ chơi mà sau một tháng nằm phủ bụi trong ngăn kéo. Sự khác biệt thường quy về một điều: thiết bị có giải quyết vấn đề bạn thật sự gặp hay không." },
+        { "kind": "table", "headers": ["Ứng dụng", "Giá trị", "Vì sao"], "rows": [
+          ["Bộ điều nhiệt học theo nhịp sinh hoạt trong ngày", "thật", "tiết kiệm tiền mà bạn không phải bận tâm"],
+          ["Đèn theo lịch và theo lệnh giọng nói", "thật", "tiện lợi hằng ngày, cả cho người lớn tuổi"],
+          ["Cảm biến khói/nước báo về điện thoại", "thật", "an toàn, hoạt động cả khi bạn vắng nhà"],
+          ["Tủ lạnh có màn hình gợi ý công thức nấu ăn", "thường là đồ chơi", "điện thoại làm được y như vậy, khỏi cần thay tủ lạnh"],
+          ["Ấm đun nước điều khiển qua ứng dụng", "thường là đồ chơi", "đằng nào bạn cũng phải đứng dậy để rót nước"]
+        ], "textAlt": "Bảng: giá trị thật đến từ các thiết bị tiết kiệm tiền, thời gian hoặc tăng độ an toàn (bộ điều nhiệt, đèn, cảm biến); những thiết bị trùng lặp chức năng với điện thoại, như tủ lạnh có màn hình hay ấm nước điều khiển từ xa, thường chỉ là đồ chơi." },
+        { "kind": "callout", "variant": "warn", "title": "Trước khi mua", "text": "Hãy tự hỏi: nó giải quyết vấn đề nào CỦA TÔI? Nếu câu trả lời bắt đầu bằng “có nó thì cũng hay…”, đó là đồ chơi. Nếu bắt đầu bằng “cuối cùng tôi sẽ không phải…”, đó là giá trị." }
+      ]
+    },
+    {
+      "id": "md3-s4-higiena",
+      "title": "Chút vệ sinh cho AI trong nhà",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Thiết bị có micro và camera là sự tiện lợi đòi hỏi hai phút tỉnh táo khi cài đặt. Chúng ta sẽ bàn kỹ trong mô-đun về quyền riêng tư — ở đây là phiên bản tối thiểu:" },
+        { "kind": "list", "ordered": true, "items": [
+          "Tìm xem công tắc tắt micro vật lý trên loa nằm ở đâu — và dùng nó khi bạn muốn.",
+          "Không đặt thiết bị có camera trong phòng ngủ hay phòng trẻ em.",
+          "Thỉnh thoảng xem lại lịch sử ghi âm của trợ lý trong ứng dụng và xóa nó."
+        ] }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "md3-classify",
+    "title": "Việc cho trợ lý hay tự làm thì hơn?",
+    "intro": "Hãy quyết định nhiệm vụ nào nên giao cho trợ lý giọng nói hoặc AI trong điện thoại, nhiệm vụ nào tốt hơn nên tự làm. Phần phản hồi giải thích lý do.",
+    "categories": [
+      { "id": "assistant", "label": "Việc cho trợ lý", "desc": "Ngắn, kết quả rõ ràng, cái giá của sai sót thấp — AI làm nhanh hơn." },
+      { "id": "self", "label": "Tự làm thì hơn", "desc": "Đòi hỏi sự đánh giá, lòng tin, hoặc liên quan đến những việc mà sai sót phải trả giá." }
+    ],
+    "items": [
+      { "id": "md3-i1", "text": "Hẹn giờ luộc bánh khi tay bạn đang lấm đầy bột.", "correctCategory": "assistant", "rationale": "Câu lệnh ngắn, kết quả rõ ràng, không rủi ro — lý tưởng cho giọng nói." },
+      { "id": "md3-i2", "text": "Chọn gói vay tín dụng dựa trên một câu trả lời duy nhất của trợ lý.", "correctCategory": "self", "rationale": "Quyết định tài chính đòi hỏi so sánh các lựa chọn và kiểm chứng — AI có thể giúp thu thập dữ liệu, nhưng không được quyết định thay." },
+      { "id": "md3-i3", "text": "Tìm ảnh chụp hóa đơn trong thư viện bằng cách gõ từ “hóa đơn”.", "correctCategory": "assistant", "rationale": "Tìm kiếm theo nội dung là thế mạnh của AI trong thư viện ảnh — vài giây thay vì cuộn mãi." },
+      { "id": "md3-i4", "text": "Dịch thực đơn ở nhà hàng nước ngoài bằng máy ảnh điện thoại.", "correctCategory": "assistant", "rationale": "Dịch trực tiếp là chức năng đã chín muồi; cái giá của sai sót với thực đơn là thấp." },
+      { "id": "md3-i5", "text": "Viết lời chúc mừng đám cưới mang dấu ấn cá nhân cho cô bạn thân nhất.", "correctCategory": "self", "rationale": "Giá trị của lời chúc nằm ở tính cá nhân — AI có thể gợi ý bản phác, nhưng lời lẽ phải là của bạn." },
+      { "id": "md3-i6", "text": "Thêm “mua sữa và bơ” vào danh sách mua sắm trên đường ra xe.", "correctCategory": "assistant", "rationale": "Ghi chú giọng nói nhanh — chính xác là thứ trợ lý được sinh ra để làm." },
+      { "id": "md3-i7", "text": "Đánh giá xem email từ ngân hàng yêu cầu cung cấp dữ liệu có phải lừa đảo không.", "correctCategory": "self", "rationale": "An toàn đòi hỏi sự cảnh giác của bạn và việc xác minh với ngân hàng — đừng giao phó nó cho máy." },
+      { "id": "md3-i8", "text": "Chuyển bản ghi âm buổi bàn bạc của gia đình về kỳ nghỉ thành ghi chú với danh sách các điều đã thống nhất.", "correctCategory": "assistant", "rationale": "Gỡ băng và tóm tắt là thế mạnh của AI — và đằng nào bạn cũng sẽ xem lại ghi chú." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Trợ lý giọng nói = những việc vừa trên tờ giấy nhớ; trò chuyện và quyết định = chat, nơi bạn nhìn thấy câu trả lời.",
+      "Phần lớn AI hữu ích bạn đã có sẵn: thư viện ảnh, ứng dụng dịch, đọc chính tả — hãy chọn một chức năng và tạo thói quen.",
+      "Khi mua sắm cho ngôi nhà, hãy hỏi về vấn đề CỦA MÌNH cần giải quyết; micro và camera hãy cài đặt một cách tỉnh táo."
+    ],
+    "checklist": [
+      "Tôi có biết chức năng tìm ảnh theo nội dung nằm ở đâu trong điện thoại của mình không?",
+      "Tôi đã thử dịch trực tiếp bằng máy ảnh chưa?",
+      "Tôi có biết cách tắt micro trên chiếc loa trong nhà không?"
+    ],
+    "checklistTitle": "Danh sách kiểm tra — AI trong điện thoại và ngôi nhà",
+    "nextStep": "Bước tiếp theo: mô-đun về sáng tạo cùng AI — hình ảnh, âm nhạc và video cho những dịp gia đình."
+  }
+}

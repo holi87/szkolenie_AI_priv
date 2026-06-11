@@ -1,0 +1,103 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P1 AI w domu (formatywna)",
+    "interaction": "Klasyfikacja: zadanie dla asystenta vs lepiej zrobić samemu (kind: classify)",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp, przyklad.test, Jan Syntetyczny, Anna Testowa). ZERO realnych danych/PII. Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MD3",
+  "intro": "You already have AI in your pocket: in your phone, camera, translator, and the speaker in your living room. This module shows which of these features genuinely make life easier and which are a five-minute gadget — and how to start using them without turning your home upside down.",
+  "screens": [
+    {
+      "id": "md3-s1-asystenci",
+      "title": "The voice assistant: what it is good for",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "A voice assistant works best for short tasks with a clear outcome that you do with your hands full: a timer while cooking, a reminder, a message, controlling the lights or the music. It does worse with long, multi-step matters that require judgment along the way." },
+        { "kind": "list", "items": [
+          "Great: “set a timer for 12 minutes”, “remind me about my medication tomorrow at 8”, “add milk to the shopping list”.",
+          "Good: quick questions about the weather, a route, opening hours — with the habit of verifying important answers.",
+          "Weak: “plan my kitchen renovation” — too many decisions and too much context for one voice command."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Rule of thumb", "text": "If the task would fit on a sticky note — it is a job for the assistant. If it needs a conversation — sit down with an AI chat, where you can see and refine the answers." }
+      ]
+    },
+    {
+      "id": "md3-s2-telefon",
+      "title": "AI in your camera, photos, and translator",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Most of the quiet, useful AI lives in your phone. It does not look like a chat, but it gets the job done:" },
+        { "kind": "list", "items": [
+          "Camera: night mode, removing accidental passersby from the frame, sharpening old photos.",
+          "Photo gallery: search by content — type “receipt”, “dog”, “beach” instead of scrolling through thousands of thumbnails.",
+          "Translator: live conversation and translating text through the camera — a menu, a timetable, a medicine label on vacation.",
+          "Dictation and transcription: speak instead of typing; a recording of a family planning session turns into a note."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Where to start", "text": "Pick ONE feature from this list and use it for a week. A habit built on one feature teaches you more than a tour of twenty." }
+      ]
+    },
+    {
+      "id": "md3-s3-smart-home",
+      "title": "The smart home: value or gadget",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "At home, AI can be genuinely helpful — and it can be a toy gathering dust in a drawer after a month. The difference usually comes down to one thing: does the device solve a problem you actually have." },
+        { "kind": "table", "headers": ["Use", "Value", "Why"], "rows": [
+          ["A thermostat that learns your daily rhythm", "real", "saves money without your attention"],
+          ["Lights on a schedule and voice command", "real", "everyday convenience, also for older people"],
+          ["A smoke/water sensor that alerts your phone", "real", "safety, works when you are away"],
+          ["A fridge with a screen suggesting recipes", "usually a gadget", "your phone does the same, without replacing the fridge"],
+          ["A kettle controlled from an app", "usually a gadget", "you still have to get up to pour the water"]
+        ], "textAlt": "Table: real value comes from devices that save money or time or increase safety (thermostat, lights, sensors); gadgets tend to be devices that duplicate your phone, like a fridge with a screen or a remote-controlled kettle." },
+        { "kind": "callout", "variant": "warn", "title": "Before you buy", "text": "Ask: what problem of MINE does this solve? If the answer starts with “it would be nice to…”, it is a gadget. If it starts with “finally I will not have to…”, it is value." }
+      ]
+    },
+    {
+      "id": "md3-s4-higiena",
+      "title": "A little home-AI hygiene",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Devices with a microphone and camera are a convenience that requires two minutes of common sense at setup. We will cover this in detail in the privacy module — here is the minimal version:" },
+        { "kind": "list", "ordered": true, "items": [
+          "Find the physical microphone switch on your speaker — and use it whenever you want.",
+          "Do not put devices with a camera in the bedroom or in a child’s room.",
+          "Every so often, review the assistant’s recording history in the app and clear it."
+        ] }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "md3-classify",
+    "title": "A task for the assistant, or better done yourself?",
+    "intro": "Decide which tasks are worth handing to a voice assistant or the AI in your phone, and which are better done yourself. The feedback explains why.",
+    "categories": [
+      { "id": "assistant", "label": "A task for the assistant", "desc": "Short, a clear outcome, a low cost of error — AI will do it faster." },
+      { "id": "self", "label": "Better done yourself", "desc": "Requires judgment or trust, or concerns matters where an error costs you." }
+    ],
+    "items": [
+      { "id": "md3-i1", "text": "Setting a timer for the dumplings when your hands are covered in flour.", "correctCategory": "assistant", "rationale": "A short command, a clear outcome, zero risk — perfect for voice." },
+      { "id": "md3-i2", "text": "Choosing a loan offer based on a single answer from the assistant.", "correctCategory": "self", "rationale": "A financial decision requires comparing offers and verifying — AI can help gather the data, but not decide." },
+      { "id": "md3-i3", "text": "Finding a photo of a receipt in your gallery by typing the word “receipt”.", "correctCategory": "assistant", "rationale": "Searching by content is a strength of AI in the gallery — seconds instead of scrolling." },
+      { "id": "md3-i4", "text": "Translating a menu in a foreign restaurant with your phone’s camera.", "correctCategory": "assistant", "rationale": "Live translation is a mature feature; the cost of a mistake with a menu is low." },
+      { "id": "md3-i5", "text": "Writing personal wedding wishes for your closest friend.", "correctCategory": "self", "rationale": "The value of the wishes is their personal character — AI can suggest a draft, but the words should be yours." },
+      { "id": "md3-i6", "text": "Adding “buy milk and butter” to the shopping list on the way to the car.", "correctCategory": "assistant", "rationale": "A quick voice note — exactly what the assistant was made for." },
+      { "id": "md3-i7", "text": "Judging whether an e-mail from the bank asking for your details is a scam.", "correctCategory": "self", "rationale": "Security requires your own vigilance and verification with the bank — do not delegate it to a machine." },
+      { "id": "md3-i8", "text": "Turning a recording of a family vacation planning session into a note with a list of decisions.", "correctCategory": "assistant", "rationale": "Transcription and summarizing are AI strengths — and you will review the note anyway." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Voice assistant = sticky-note tasks; conversations and decisions = a chat where you can see the answers.",
+      "You already have most of the useful AI: gallery, translator, dictation — pick one feature and build the habit.",
+      "When shopping for your home, ask about YOUR problem to solve; set up microphones and cameras thoughtfully."
+    ],
+    "checklist": [
+      "Do I know where content-based photo search is in my phone?",
+      "Have I tried live camera translation?",
+      "Do I know how to turn off the microphone on my home speaker?"
+    ],
+    "checklistTitle": "Checklist — AI in your phone and home",
+    "nextStep": "Next step: the module on creating with AI — images, music, and video for family occasions."
+  }
+}

@@ -1,0 +1,141 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P2 Bezpieczne używanie AI",
+    "interaction": "Rubryka weryfikacji odpowiedzi AI (kind: rubric, bez recordsPractical — ćwiczenie, nie bramka)",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp/SklepDemo, przyklad.test, Jan Syntetyczny). ZERO realnych danych/PII."
+  },
+  "module": "MB6",
+  "intro": "Ein Sprachmodell erzeugt die wahrscheinlichste Antwort, nicht die geprüfte Wahrheit — und tut das immer im selben, sicheren Ton. Dieses Modul gibt Ihnen ein einfaches, wiederholbares Überprüfungsverfahren: Quelle, Datum, zweite Spur, Kompetenzgrenzen. Am Ende üben Sie es an einer konkreten KI-Antwort.",
+  "screens": [
+    {
+      "id": "mb6-s1-pewny-ton",
+      "title": "Warum KI sicher klingt, wenn sie erfindet",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Das Modell „weiß“ nicht und „prüft“ nicht — es sagt die nächsten Wörter auf Basis von Mustern aus den Trainingsdaten voraus. Deshalb kommen Wahrheit und Erfindung (Halluzination) gleich flüssig aus ihm heraus, mit derselben Eloquenz. Ton, Länge und schönes Format sind Stil, kein Beweis." },
+        { "kind": "definition", "term": "Halluzination", "text": "Eine vom Modell erzeugte Information, die glaubwürdig klingt, aber unwahr ist — ein erfundener Fakt, eine Zahl, ein Zitat oder eine Quelle." },
+        { "kind": "callout", "variant": "warn", "title": "Die häufigste Falle", "text": "Das Modell kann auch die QUELLE erfinden: den Titel eines Berichts, den Autor, den Link. Dass eine Antwort eine Fußnote hat, beweist gar nichts — die Fußnote muss man öffnen." }
+      ]
+    },
+    {
+      "id": "mb6-s2-fact-checking",
+      "title": "Faktencheck Schritt für Schritt",
+      "type": "content",
+      "blocks": [
+        { "kind": "list", "ordered": true, "items": [
+          "Markieren Sie die Aussagen, die eine Entscheidung tragen: Zahlen, Daten, Namen, Zitate, Empfehlungen.",
+          "Öffnen Sie die angegebene Quelle: Existiert sie? Enthält sie diese Information tatsächlich?",
+          "Prüfen Sie das Datum: Ist die Information für Ihre Frage aktuell?",
+          "Finden Sie eine zweite, UNABHÄNGIGE Spur: eine andere Quelle, die den Kernfakt bestätigt (nicht die nächste Antwort desselben Modells).",
+          "Erst danach verwenden Sie den Inhalt weiter — mit Korrekturen, falls die Überprüfung etwas ergeben hat."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Unabhängigkeit", "text": "Eine zweite Zusammenfassung aus demselben Chat oder ein „bestätige, dass das stimmt“ im selben Fenster ist KEINE unabhängige Überprüfung — es ist dieselbe Maschine und derselbe Kontext." }
+      ]
+    },
+    {
+      "id": "mb6-s3-kiedy-nie-ufac",
+      "title": "Themen mit erhöhtem Risiko",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Nicht jede Antwort erfordert eine Ermittlung — das Pfannkuchenrezept überprüft die Pfanne. Die Wachsamkeit erhöhen Sie proportional zu den Kosten eines Fehlers:" },
+        { "kind": "table", "headers": ["Thema", "Risiko", "Prüfinstanz"], "rows": [
+          ["Gesundheit, Medikamente, Dosierung", "sehr hoch", "Arzt / Apotheker"],
+          ["Recht, Steuern, „aktuelle Vorschriften“", "hoch (Veränderlichkeit!)", "offizielle, datierte Quelle / Fachperson"],
+          ["Geld, Investitionen, Verträge", "hoch", "Quelldokument / Berater"],
+          ["Zahlen und Statistiken zur Veröffentlichung", "mittel–hoch", "Quellbericht + zweite Spur"],
+          ["Aktuelle Ereignisse", "hoch (Wissensstichtag des Modells)", "aktuelle, glaubwürdige Medien"]
+        ], "textAlt": "Tabelle der Themen mit erhöhtem Risiko: Gesundheit, Recht, Finanzen, Statistiken und Neuigkeiten erfordern eine Überprüfung in Quellen oder bei einer Fachperson; je höher die Kosten eines Fehlers, desto gründlicher die Überprüfung." },
+        { "kind": "callout", "variant": "warn", "title": "Der Wissensstichtag", "text": "Das Modell ist am Ende seiner Trainingsdaten „stehen geblieben“. Fragen nach „aktuellen“ Tarifen, Vorschriften oder Softwareversionen sind eine Einladung zu einer veralteten Antwort in sicherem Ton." }
+      ]
+    },
+    {
+      "id": "mb6-s4-nawyk",
+      "title": "Die Gewohnheit: Überprüfen, bevor Sie weitergeben",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Den größten Schaden richtet nicht die Halluzination selbst an, sondern ihr Weiterleben: in ein Angebot kopiert, an die Familie geschickt, im Meeting wiederholt. Ihre Regel: Sie geben nichts weiter, was Sie nicht mit eigenen Worten verteidigen können und wofür Sie keine Quelle nennen können." },
+        { "kind": "list", "items": [
+          "Sie haben 10 Minuten? Überprüfen Sie das, was eine Entscheidung trägt; den Rest kennzeichnen Sie offen als ungeprüft.",
+          "Jemand fragt „Woher weißt du das?“ — die Antwort „von der KI“ reicht nicht; haben Sie eine Quelle.",
+          "Sie haben eine Halluzination in fremdem Material entdeckt? Sagen Sie es — Sie unterbrechen die Kette."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Die gute Nachricht", "text": "Diese Gewohnheit kostet Minuten und schützt Ihre Glaubwürdigkeit — die am schwersten wiederherzustellende Ressource im Beruf und in der Familie." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "rubric",
+    "id": "mb6-rubric",
+    "title": "Überprüfen Sie die KI-Antwort anhand der Rubrik",
+    "intro": "Die KI hat einen Absatz für einen Newsletter generiert: „Laut einem Bericht des Instituts Synthetisch von przyklad.test haben bereits 87 % der Unternehmen KI im Kundenservice eingeführt. Diese Zahl steigt seit Jahren. Vollständiger Bericht: przyklad.test/raport-ai“. Beurteilen Sie diese Antwort anhand der vier Überprüfungskriterien — wählen Sie die Handlungen, die wirklich überprüfen.",
+    "criteria": [
+      {
+        "id": "mb6-c1",
+        "name": "Quelle: existiert und bestätigt",
+        "prompt": "Was tun Sie mit der angegebenen Quelle, bevor Sie die Zahl 87 % verwenden?",
+        "points": 1,
+        "hint": "Die Fußnote muss man öffnen — das Modell kann den Bericht samt Link erfinden.",
+        "options": [
+          { "id": "a", "text": "Ich öffne den Link und prüfe, ob der Bericht existiert und ob er genau diese Zahl enthält." },
+          { "id": "b", "text": "Da der Link glaubwürdig aussieht, betrachte ich die Quelle als bestätigt." },
+          { "id": "c", "text": "Ich frage dieselbe KI, ob der Bericht wirklich existiert." }
+        ],
+        "correctOptionIds": ["a"]
+      },
+      {
+        "id": "mb6-c2",
+        "name": "Datum und Aktualität",
+        "prompt": "Wie prüfen Sie die Aktualität der Statistik?",
+        "points": 1,
+        "hint": "„Steigt seit Jahren“ ohne Datum ist eine leere Behauptung — das Wissen des Modells hat einen Stichtag.",
+        "options": [
+          { "id": "a", "text": "Ich nehme an: Da die KI heute geantwortet hat, sind die Daten von heute." },
+          { "id": "b", "text": "Ich suche im Bericht das Erhebungsdatum und prüfe, ob es keine neueren Daten gibt." },
+          { "id": "c", "text": "Ich finde, der Trend „steigt seit Jahren“ genügt anstelle eines Datums." }
+        ],
+        "correctOptionIds": ["b"]
+      },
+      {
+        "id": "mb6-c3",
+        "name": "Zweite unabhängige Spur",
+        "prompt": "Was stellt eine unabhängige Bestätigung der Zahl 87 % dar?",
+        "points": 1,
+        "hint": "Unabhängig = eine andere Maschine/Institution/Publikation, nicht derselbe Chat.",
+        "options": [
+          { "id": "a", "text": "Eine zweite Antwort desselben Chats, in der die KI die Zahl „bestätigt“." },
+          { "id": "b", "text": "Dieselbe Zahl, von einem Kollegen aus demselben Werkzeug kopiert." },
+          { "id": "c", "text": "Eine andere glaubwürdige Quelle (z. B. eine unabhängige Branchenpublikation), die einen ähnlichen Wert nennt." }
+        ],
+        "correctOptionIds": ["c"]
+      },
+      {
+        "id": "mb6-c4",
+        "name": "Kompetenzgrenzen und Entscheidung",
+        "prompt": "Die Überprüfung hat ergeben, dass der Bericht nicht auffindbar ist. Was tun Sie mit dem Absatz?",
+        "points": 1,
+        "hint": "Eine ungeprüfte Zahl geht nicht in die Veröffentlichung — egal, wie gut sie klingt.",
+        "options": [
+          { "id": "a", "text": "Ich veröffentliche unverändert — der Absatz klingt professionell, und die Leser prüfen es ohnehin nicht." },
+          { "id": "b", "text": "Ich entferne die erfundene Statistik; wenn das Thema eine Zahl braucht, suche ich sie in einer existierenden, überprüfbaren Quelle und zitiere diese Quelle." },
+          { "id": "c", "text": "Ich behalte die Zahl, entferne aber den Link, damit niemand entdeckt, dass der Bericht nicht existiert." }
+        ],
+        "correctOptionIds": ["b"]
+      }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Sicherer Ton, Länge und Format sind der Stil des Modells, kein Beweis — Wahrheit und Halluzination klingen identisch.",
+      "Überprüfung = geöffnete Quelle + Datum + zweite unabhängige Spur; derselbe Chat überprüft sich nicht selbst.",
+      "Gesundheit, Recht, Geld, Statistiken und Neuigkeiten — hier überprüfen Sie immer, proportional zu den Kosten eines Fehlers."
+    ],
+    "checklist": [
+      "Habe ich die angegebene Quelle geöffnet und die zitierte Information darin gefunden?",
+      "Kenne ich das Datum der Information, und ist sie für meine Verwendung aktuell?",
+      "Habe ich eine zweite, unabhängige Spur für die zentralen Fakten und Zahlen?",
+      "Kann ich diesen Inhalt mit eigenen Worten verteidigen, bevor ich ihn weitergebe?"
+    ],
+    "checklistTitle": "Checkliste — bevor Sie eine KI-Antwort verwenden",
+    "nextStep": "Das ist das letzte Modul des Pfads. Schließen Sie die erforderlichen Module ab und treten Sie zum Abschlusstest an — denken Sie daran, dass die kritischen Fragen zu sensiblen Daten ausnahmslos korrekte Antworten erfordern."
+  }
+}

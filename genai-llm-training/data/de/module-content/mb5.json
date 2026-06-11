@@ -1,0 +1,97 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P2 Bezpieczne używanie AI",
+    "interaction": "Klasyfikacja: zgodne z polityką vs shadow AI (kind: classify)",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp/SklepDemo, przyklad.test, Jan Syntetyczny). ZERO realnych danych/PII."
+  },
+  "module": "MB5",
+  "intro": "Unternehmen verbieten KI nicht aus Prinzip — sie ordnen, WOMIT gearbeitet werden darf und MIT WELCHEN Daten. Dieses Modul erklärt, was Shadow AI ist und warum sie schadet, wie man eine Firmenrichtlinie liest, wie es um die Urheberrechte generierter Inhalte steht und wer für das Arbeitsergebnis mit KI verantwortlich ist.",
+  "screens": [
+    {
+      "id": "mb5-s1-shadow-ai",
+      "title": "Shadow AI: Arbeit im Verborgenen",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Shadow AI", "text": "Die Nutzung von KI-Werkzeugen für dienstliche Aufgaben ohne Wissen und Zustimmung des Unternehmens — meist über private Konten in öffentlichen Chats." },
+        { "kind": "paragraph", "text": "Das Problem ist nicht das Werkzeug selbst, sondern die fehlende Kontrolle: Niemand weiß, welche Firmen- und Kundendaten abfließen, zu welchen Bedingungen sie verarbeitet werden oder ob sie ins Training eines fremden Modells gelangen. Gute Arbeitsergebnisse gleichen dieses Risiko nicht aus — es wächst mit jedem Einfügen." },
+        { "kind": "callout", "variant": "warn", "title": "Die stillen Kosten", "text": "Ein Leck durch Shadow AI kommt meist spät und zufällig ans Licht — und betrifft dann bereits Monate von Daten, nicht eine einzelne Nachricht." }
+      ]
+    },
+    {
+      "id": "mb5-s2-polityka",
+      "title": "Firmenrichtlinie: Womit und mit welchen Daten gearbeitet werden darf",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Eine gute KI-Richtlinie beantwortet zwei Fragen: Welche Werkzeuge sind freigegeben und welche Datenkategorien dürfen darin verarbeitet werden? Sie ist eine Landkarte, keine Mauer — sie zeigt den sicheren Weg, statt alles zu verbieten." },
+        { "kind": "table", "headers": ["Datenkategorie", "Öffentlicher Chat (privates Konto)", "Freigegebenes Firmenwerkzeug"], "rows": [
+          ["Allgemeines Wissen, Entwürfe ohne Firmendaten", "in der Regel erlaubt", "erlaubt"],
+          ["Interne Dokumente, Code, Pläne", "nicht erlaubt", "erlaubt gemäß Richtlinie"],
+          ["Kunden- und personenbezogene Daten", "nicht erlaubt", "nur wenn die Richtlinie es ausdrücklich erlaubt"]
+        ], "textAlt": "Matrix: Je sensibler die Daten, desto enger die Werkzeugauswahl — Kundendaten ausschließlich in Werkzeugen, die die Richtlinie ausdrücklich zulässt." },
+        { "kind": "callout", "variant": "safe", "title": "Ein neues Werkzeug?", "text": "Sie haben etwas Besseres gefunden? Melden Sie es zur Bewertung an (IT/Sicherheit), statt es heimlich zu nutzen. Den Freigabeweg gibt es, damit Innovation Sicherheit nicht ausschließt." }
+      ]
+    },
+    {
+      "id": "mb5-s3-licencje",
+      "title": "Lizenzen und Urheberrechte an KI-Inhalten",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Von KI erzeugte Inhalte sind im praktischen Sinne nicht „herrenlos“: Die Nutzungsbedingungen bestimmt die Lizenz des Werkzeugs (z. B. ob kommerzielle Nutzung erlaubt ist), und das Ergebnis kann fremde Rechte verletzen, wenn es einen erkennbaren Stil, ein Markenzeichen oder ein Bildnis reproduziert." },
+        { "kind": "list", "items": [
+          "Prüfen Sie vor der kommerziellen Nutzung die Lizenz des Generators — „kostenlos“ heißt nicht „für alles“.",
+          "Eine Grafik, die einer bekannten Marke oder einem bekannten Stil zum Verwechseln ähnlich ist, ist ein rechtliches Risiko — unabhängig davon, dass „die KI sie gemacht hat“.",
+          "Kennzeichnen Sie KI-Inhalte dort, wo Unternehmen, Plattform oder Gesetz es verlangen — und überall dort, wo ein Verschweigen das Vertrauen untergraben würde."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Faustregel", "text": "Sie zweifeln, ob Sie etwas öffentlich verwenden dürfen? Das ist eine Frage an die für Recht/Marke verantwortliche Person — VOR der Veröffentlichung, nicht danach." }
+      ]
+    },
+    {
+      "id": "mb5-s4-odpowiedzialnosc",
+      "title": "Verantwortlich ist der Mensch, nicht das Modell",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "KI ist ein Werkzeug — wie ein Texteditor oder eine Tabellenkalkulation. Für das Angebot, den Bericht oder die Kundenantwort stehen Sie mit Ihrem Namen ein, samt der Fehler, die das Modell erfunden und Sie durchgelassen haben. Die Nutzungsbedingungen der KI-Anbieter schließen deren Haftung für den Inhalt der Ergebnisse ausdrücklich aus." },
+        { "kind": "list", "ordered": true, "items": [
+          "Überprüfen Sie Fakten, Zahlen und Namen in KI-Inhalten, bevor Sie sie unterschreiben.",
+          "Leiten Sie nichts weiter, was Sie nicht mit eigenen Worten verteidigen können.",
+          "Hinterlassen Sie bei wichtigen Inhalten eine Überprüfungsspur: was geprüft wurde und in welcher Quelle."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Denken Sie daran", "text": "„Das hat die KI so generiert“ ist keine Verteidigungslinie — weder gegenüber dem Kunden noch gegenüber dem Vorgesetzten noch vor dem Gesetz." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "mb5-classify",
+    "title": "Richtlinienkonform oder Shadow AI?",
+    "intro": "Die Firma SklepDemo erlaubt Kundendaten ausschließlich im internen KI-Assistenten; öffentliche Chats sind nur für Inhalte ohne Firmendaten zugelassen. Beurteilen Sie die Praktiken.",
+    "categories": [
+      { "id": "ok", "label": "Richtlinienkonform", "desc": "Freigegebenes Werkzeug oder Inhalt ohne Firmen-/Kundendaten." },
+      { "id": "shadow", "label": "Shadow AI / Verstoß", "desc": "Nicht freigegebenes Werkzeug, Daten außerhalb der Kontrolle des Unternehmens, Umgehen der Regeln." }
+    ],
+    "items": [
+      { "id": "mb5-i1", "text": "Ein Mitarbeiter fragt einen öffentlichen Chat nach allgemeinen guten Praktiken für das Schreiben von E-Mails — ohne jegliche Firmendaten.", "correctCategory": "ok", "rationale": "Allgemeiner Inhalt, null Firmendaten — der öffentliche Chat ist erlaubt." },
+      { "id": "mb5-i2", "text": "Das Team fügt Beschreibungen von Kundentickets über private Konten in einen öffentlichen Chat ein, „weil es schneller geht“.", "correctCategory": "shadow", "rationale": "Kundendaten außerhalb des freigegebenen Werkzeugs — systematische Shadow AI, unabhängig von den Ergebnissen." },
+      { "id": "mb5-i3", "text": "Ein Analyst arbeitet mit Kundendaten im internen, freigegebenen KI-Assistenten.", "correctCategory": "ok", "rationale": "Genau dafür wurde das interne Werkzeug freigegeben." },
+      { "id": "mb5-i4", "text": "Ein Abteilungsleiter schickt einen vertraulichen Bericht an sein privates Postfach, um ihn zu Hause durch seinen Lieblings-KI-Chat laufen zu lassen.", "correctCategory": "shadow", "rationale": "Vertrauliche Daten verlassen die Kontrolle des Unternehmens doppelt: private Post + nicht freigegebenes Werkzeug." },
+      { "id": "mb5-i5", "text": "Eine Mitarbeiterin meldet ein neues KI-Werkzeug der IT-Abteilung zur Bewertung und wartet mit der Nutzung auf die Entscheidung.", "correctCategory": "ok", "rationale": "Der vorbildliche Weg: Innovation über Bewertung und Freigabe, nicht im Stillen." },
+      { "id": "mb5-i6", "text": "Ein Programmierer fügt Ausschnitte aus internem Code über sein privates Konto in einen öffentlichen Chat ein, um schneller einen Fehler zu finden.", "correctCategory": "shadow", "rationale": "Interner Code ist Firmendatenbestand — ein öffentlicher Chat über ein privates Konto verstößt gegen die Richtlinie." },
+      { "id": "mb5-i7", "text": "Das Marketing nutzt einen freigegebenen Grafikgenerator und prüft vor der Veröffentlichung die Lizenz für die kommerzielle Nutzung.", "correctCategory": "ok", "rationale": "Freigegebenes Werkzeug + Lizenzbewusstsein vor der Veröffentlichung." },
+      { "id": "mb5-i8", "text": "Ein Praktikant legt ein „gemeinsames Teamkonto“ in einem öffentlichen Chat an, damit das ganze Team dort „offiziell“ Kundendaten einfügt.", "correctCategory": "shadow", "rationale": "Ein gemeinsames Konto legalisiert nichts — die Kundendaten gelangen weiterhin in ein nicht freigegebenes Werkzeug." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Shadow AI = Arbeit mit Firmendaten ohne deren Wissen und Kontrolle; gute Ergebnisse gleichen ein Leck nicht aus.",
+      "Die KI-Richtlinie ist eine Landkarte: freigegebene Werkzeuge × erlaubte Datenkategorien. Neue Werkzeuge melden Sie zur Bewertung an.",
+      "Die Lizenz des Generators prüfen Sie vor der kommerziellen Nutzung, und für Inhalte unter Ihrem Namen sind Sie selbst verantwortlich."
+    ],
+    "checklist": [
+      "Ist das Werkzeug, das ich für diese Aufgabe nutze, für diesen Datentyp freigegeben?",
+      "Kann ich den KI-Inhalt mit eigenen Worten verteidigen, bevor ich ihn unterschreibe?",
+      "Kenne ich den Weg, ein neues Werkzeug in meinem Unternehmen zur Bewertung anzumelden?"
+    ],
+    "checklistTitle": "Checkliste — KI am Arbeitsplatz",
+    "nextStep": "Nächster Schritt: das letzte Modul des Pfads — die Überprüfung von KI-Inhalten, also wie Sie die Antworten des Modells prüfen, bevor Sie sie weitergeben."
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P2 Bezpieczne używanie AI",
+    "interaction": "Klasyfikacja: zgodne z polityką vs shadow AI (kind: classify)",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp/SklepDemo, przyklad.test, Jan Syntetyczny). ZERO realnych danych/PII. Tłumaczenie wietnamskie (vi)."
+  },
+  "module": "MB5",
+  "intro": "Các công ty không cấm AI cho có lệ — họ sắp xếp rõ được làm việc BẰNG GÌ và VỚI DỮ LIỆU NÀO. Module này giải thích shadow AI là gì và vì sao nó gây hại, cách đọc chính sách công ty, vấn đề bản quyền của nội dung do AI tạo ra, và ai chịu trách nhiệm về kết quả công việc với AI.",
+  "screens": [
+    {
+      "id": "mb5-s1-shadow-ai",
+      "title": "Shadow AI: làm việc trong bóng tối",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Shadow AI", "text": "Việc dùng công cụ AI cho các nhiệm vụ công việc mà công ty không hề biết và không cho phép — thường là qua tài khoản cá nhân trên các chat công khai." },
+        { "kind": "paragraph", "text": "Vấn đề không nằm ở bản thân công cụ, mà ở chỗ thiếu kiểm soát: không ai biết dữ liệu công ty và khách hàng nào đang chảy ra ngoài, được xử lý theo điều kiện gì, hay có bị đưa vào huấn luyện mô hình của người khác không. Kết quả công việc tốt không bù đắp được rủi ro này — nó lớn dần theo mỗi lần dán." },
+        { "kind": "callout", "variant": "warn", "title": "Cái giá thầm lặng", "text": "Rò rỉ qua shadow AI thường bị phát hiện muộn và tình cờ — và khi đó nó đã liên quan đến nhiều tháng dữ liệu, chứ không phải một tin nhắn." }
+      ]
+    },
+    {
+      "id": "mb5-s2-polityka",
+      "title": "Chính sách công ty: được làm việc bằng gì và với dữ liệu nào",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Một chính sách AI tốt trả lời hai câu hỏi: những công cụ nào được phê duyệt và những loại dữ liệu nào được phép xử lý trong đó. Đó là tấm bản đồ, không phải bức tường — nó chỉ ra con đường an toàn thay vì cấm đoán tất cả." },
+        { "kind": "table", "headers": ["Loại dữ liệu", "Chat công khai (tài khoản cá nhân)", "Công cụ công ty được phê duyệt"], "rows": [
+          ["Kiến thức chung, bản nháp không có dữ liệu công ty", "thường được phép", "được phép"],
+          ["Tài liệu nội bộ, mã nguồn, kế hoạch", "không được phép", "được phép theo chính sách"],
+          ["Dữ liệu khách hàng và dữ liệu cá nhân", "không được phép", "chỉ khi chính sách cho phép rõ ràng"]
+        ], "textAlt": "Ma trận: dữ liệu càng nhạy cảm, lựa chọn công cụ càng hẹp — dữ liệu khách hàng chỉ trong những công cụ được chính sách cho phép rõ ràng." },
+        { "kind": "callout", "variant": "safe", "title": "Công cụ mới?", "text": "Tìm được thứ gì đó tốt hơn? Hãy gửi đi thẩm định (IT/an ninh) thay vì âm thầm sử dụng. Quy trình phê duyệt tồn tại để đổi mới không loại trừ an toàn." }
+      ]
+    },
+    {
+      "id": "mb5-s3-licencje",
+      "title": "Giấy phép và bản quyền của nội dung AI",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Nội dung do AI tạo ra không hề “vô chủ” theo nghĩa thực tế: điều kiện sử dụng do giấy phép của công cụ quy định (ví dụ có được dùng thương mại hay không), và kết quả có thể xâm phạm quyền của người khác nếu nó tái hiện một phong cách, nhãn hiệu hoặc hình ảnh dễ nhận biết." },
+        { "kind": "list", "items": [
+          "Trước khi dùng thương mại, hãy kiểm tra giấy phép của công cụ tạo nội dung — “miễn phí” không có nghĩa là “dùng vào việc gì cũng được”.",
+          "Hình ảnh giống đến mức gây nhầm lẫn với một thương hiệu hoặc phong cách nổi tiếng là rủi ro pháp lý, bất kể việc “AI làm ra nó”.",
+          "Hãy ghi rõ nội dung do AI tạo ở những nơi công ty, nền tảng hoặc pháp luật yêu cầu — và ở bất cứ đâu mà việc che giấu sẽ làm xói mòn lòng tin."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Nguyên tắc ngón tay cái", "text": "Không chắc mình có được dùng thứ gì đó công khai không? Đó là câu hỏi cho người phụ trách pháp lý/thương hiệu — TRƯỚC khi xuất bản, không phải sau." }
+      ]
+    },
+    {
+      "id": "mb5-s4-odpowiedzialnosc",
+      "title": "Con người chịu trách nhiệm, không phải mô hình",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "AI là công cụ — như trình soạn thảo văn bản hay bảng tính. Bản chào giá, báo cáo hay câu trả lời gửi khách hàng là do BẠN đứng tên, cùng với cả những lỗi mà mô hình bịa ra còn bạn để lọt. Điều khoản của các nhà cung cấp AI loại trừ rõ ràng trách nhiệm của họ về nội dung kết quả." },
+        { "kind": "list", "ordered": true, "items": [
+          "Kiểm chứng sự kiện, con số và tên gọi trong nội dung từ AI trước khi bạn ký tên vào.",
+          "Đừng chuyển tiếp bất cứ thứ gì bạn không thể tự bảo vệ bằng lời của chính mình.",
+          "Với nội dung quan trọng, hãy để lại dấu vết kiểm chứng: đã kiểm tra gì và ở nguồn nào."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Hãy nhớ", "text": "“AI sinh ra như vậy” không phải là lý lẽ bào chữa — không phải trước khách hàng, không phải trước cấp trên, cũng không phải trước pháp luật." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "mb5-classify",
+    "title": "Đúng chính sách hay shadow AI?",
+    "intro": "Công ty SklepDemo chỉ cho phép dữ liệu khách hàng trong trợ lý AI nội bộ; chat công khai chỉ được dùng cho nội dung không có dữ liệu công ty. Hãy đánh giá các thực hành sau.",
+    "categories": [
+      { "id": "ok", "label": "Đúng chính sách", "desc": "Công cụ được phê duyệt hoặc nội dung không có dữ liệu công ty/khách hàng." },
+      { "id": "shadow", "label": "Shadow AI / vi phạm", "desc": "Công cụ chưa được phê duyệt, dữ liệu nằm ngoài kiểm soát của công ty, lách quy tắc." }
+    ],
+    "items": [
+      { "id": "mb5-i1", "text": "Nhân viên hỏi chat công khai về các thực hành tốt khi viết e-mail nói chung — không kèm bất kỳ dữ liệu công ty nào.", "correctCategory": "ok", "rationale": "Nội dung chung chung, không có dữ liệu công ty — chat công khai được phép." },
+      { "id": "mb5-i2", "text": "Cả nhóm dán mô tả phiếu yêu cầu của khách hàng vào tài khoản cá nhân trên chat công khai, “vì nhanh hơn”.", "correctCategory": "shadow", "rationale": "Dữ liệu khách hàng nằm ngoài công cụ được phê duyệt — shadow AI có hệ thống, bất kể kết quả ra sao." },
+      { "id": "mb5-i3", "text": "Chuyên viên phân tích làm việc trên dữ liệu khách hàng trong trợ lý AI nội bộ đã được phê duyệt.", "correctCategory": "ok", "rationale": "Công cụ nội bộ được phê duyệt chính xác cho mục đích này." },
+      { "id": "mb5-i4", "text": "Trưởng phòng gửi báo cáo mật vào hộp thư cá nhân để về nhà chạy qua chat AI ưa thích.", "correctCategory": "shadow", "rationale": "Dữ liệu mật rời khỏi tầm kiểm soát của công ty theo hai cách: e-mail cá nhân + công cụ chưa được phê duyệt." },
+      { "id": "mb5-i5", "text": "Một nhân viên gửi công cụ AI mới cho bộ phận IT thẩm định và chờ quyết định rồi mới dùng.", "correctCategory": "ok", "rationale": "Con đường mẫu mực: đổi mới thông qua thẩm định và phê duyệt, không phải lén lút." },
+      { "id": "mb5-i6", "text": "Lập trình viên dán các đoạn mã nội bộ vào chat công khai từ tài khoản cá nhân để tìm lỗi nhanh hơn.", "correctCategory": "shadow", "rationale": "Mã nội bộ là dữ liệu công ty — chat công khai từ tài khoản cá nhân vi phạm chính sách." },
+      { "id": "mb5-i7", "text": "Bộ phận marketing dùng công cụ tạo hình ảnh đã được phê duyệt và kiểm tra giấy phép sử dụng thương mại trước khi xuất bản.", "correctCategory": "ok", "rationale": "Công cụ được phê duyệt + ý thức về giấy phép trước khi xuất bản." },
+      { "id": "mb5-i8", "text": "Thực tập sinh lập “tài khoản chung của nhóm” trên chat công khai để cả nhóm dán dữ liệu khách hàng vào đó “một cách chính thức”.", "correctCategory": "shadow", "rationale": "Tài khoản chung không hợp pháp hóa được điều gì — dữ liệu khách hàng vẫn đi vào một công cụ chưa được phê duyệt." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Shadow AI = làm việc trên dữ liệu công ty ngoài tầm hiểu biết và kiểm soát của công ty; kết quả tốt không bù đắp được rò rỉ.",
+      "Chính sách AI là tấm bản đồ: công cụ được phê duyệt × loại dữ liệu được phép. Công cụ mới hãy gửi đi thẩm định.",
+      "Giấy phép của công cụ tạo nội dung phải kiểm tra trước khi dùng thương mại, còn nội dung đứng tên bạn thì BẠN chịu trách nhiệm."
+    ],
+    "checklist": [
+      "Công cụ tôi dùng cho nhiệm vụ này có được phê duyệt cho loại dữ liệu này không?",
+      "Tôi có thể bảo vệ nội dung từ AI bằng lời của chính mình trước khi ký tên vào không?",
+      "Tôi có biết quy trình gửi công cụ mới đi thẩm định ở công ty mình không?"
+    ],
+    "checklistTitle": "Checklist — AI trong công việc",
+    "nextStep": "Bước tiếp theo: module cuối của lộ trình — kiểm chứng nội dung AI, tức là cách kiểm tra câu trả lời của mô hình trước khi bạn chuyển nó đi tiếp."
+  }
+}

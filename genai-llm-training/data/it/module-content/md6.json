@@ -1,0 +1,130 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P1 AI w domu (formatywna)",
+    "interaction": "Strojenie ustawień prywatności (kind: tune) — ćwiczenie formatywne z checkpointem",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp, przyklad.test, Jan Syntetyczny, Anna Testowa). ZERO realnych danych/PII. Moduł formatywny — bez progu zaliczenia i certyfikatu. Tłumaczenie IT."
+  },
+  "module": "MD6",
+  "intro": "Una conversazione con l'IA sa essere sincera come quella con un amico — solo che viene salvata su un server altrui. Questo modulo mostra cosa condividi davvero, quali impostazioni dell'account conviene cambiare in cinque minuti e cosa non incollare mai. Alla fine regolerai delle impostazioni di privacy modello.",
+  "screens": [
+    {
+      "id": "md6-s1-co-udostepniasz",
+      "title": "Cosa condividi davvero",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Ogni messaggio alla chat IA arriva sul server del fornitore. Lì può essere conservato come cronologia, letto a campione da persone (controllo qualità) e — a seconda delle impostazioni — usato per addestrare le versioni successive del modello. Non è un motivo di panico; è un motivo per sapere cosa si invia." },
+        { "kind": "list", "items": [
+          "Il contenuto delle conversazioni: domande, testi incollati, foto e documenti caricati.",
+          "I metadati: quando, da quale dispositivo, con che frequenza usi il servizio.",
+          "La voce: le registrazioni dei comandi agli assistenti vocali (di solito con una cronologia consultabile)."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Il test della cartolina", "text": "Scrivi all'IA come su una cartolina: tutto ciò che è davvero sensibile resta fuori. La cartolina la legge il postino — e va bene così, finché lo sai." }
+      ]
+    },
+    {
+      "id": "md6-s2-ustawienia",
+      "title": "Cinque minuti nelle impostazioni dell'account",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "La maggior parte degli strumenti IA ha tre impostazioni che vale la pena trovare e regolare consapevolmente — i nomi cambiano, la meccanica è la stessa:" },
+        { "kind": "table", "headers": ["Impostazione", "Cosa fa", "Raccomandazione per casa"], "rows": [
+          ["Cronologia delle conversazioni", "conserva tutte le chat sull'account", "attiva per comodità, ma pulita regolarmente; le conversazioni sensibili in modalità temporanea"],
+          ["Addestramento sui miei dati", "permette di usare le tue conversazioni per migliorare il modello", "disattiva (opt-out), se lo strumento lo consente"],
+          ["Personalizzazione/memoria", "l'IA ricorda fatti su di te tra una conversazione e l'altra", "con consapevolezza: comoda, ma ogni tanto rivedi COSA ha memorizzato"]
+        ], "textAlt": "Tre impostazioni chiave: cronologia delle conversazioni (pulisci regolarmente), addestramento sui dati (disattiva, opt-out), memoria e personalizzazione (rivedi i fatti memorizzati)." },
+        { "kind": "callout", "variant": "safe", "title": "Fallo oggi", "text": "Apri le impostazioni della tua chat IA principale e trova queste tre voci. Cinque minuti, una volta sola, per ogni account di casa." }
+      ]
+    },
+    {
+      "id": "md6-s3-czego-nie-wklejac",
+      "title": "Cosa non incollare mai",
+      "type": "content",
+      "blocks": [
+        { "kind": "list", "items": [
+          "Documenti d'identità: scansioni della carta d'identità, del passaporto, delle tessere — tue e altrui.",
+          "Dati sanitari con nomi e cognomi: referti, ricette, documentazione — chiedi in generale, senza identità.",
+          "Password, codici, dati della carta: a nessuna chat, per nessuno scopo, mai.",
+          "Foto di bambini e di altre persone senza il loro consenso — l'immagine finisce su un server estraneo.",
+          "Segreti altrui: messaggi di altre persone, documenti di lavoro — non sono tuoi da condividere."
+        ] },
+        { "kind": "paragraph", "text": "La regola generale: chiedi del PROBLEMA, non della PERSONA. «Come parlare con il medico dei valori del colesterolo?» funziona altrettanto bene senza incollare il referto con il nome della mamma." },
+        { "kind": "callout", "variant": "info", "title": "E se l'hai già incollato?", "text": "Cancella la conversazione dalla cronologia, disattiva l'addestramento sui dati e ricordatene per il futuro. Il mondo non finisce — ma l'abitudine conviene correggerla da oggi." }
+      ]
+    },
+    {
+      "id": "md6-s4-urzadzenia",
+      "title": "Ordine nei dispositivi di casa",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "La privacy dell'IA domestica è anche hardware: speaker, videocamere, televisori e giocattoli con microfono. Un quarto d'ora di riordino ogni sei mesi basta:" },
+        { "kind": "list", "ordered": true, "items": [
+          "Rivedi e cancella la cronologia delle registrazioni dell'assistente vocale (nell'app dell'account).",
+          "Controlla gli interruttori fisici dei microfoni e i copri-obiettivo delle videocamere — e insegna ai familiari dove sono.",
+          "Tieni i dispositivi con videocamera fuori dalla camera da letto e dalla stanza dei bambini.",
+          "Togli i permessi alle app che non usi (microfono, posizione, contatti).",
+          "Account per ospiti e bambini: profili separati invece di un account comune dell'adulto."
+        ] }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "tune",
+    "id": "md6-tune",
+    "title": "Regola le impostazioni di privacy",
+    "intro": "Regola i tre cursori come imposteresti un account IA per la tua famiglia e osserva cosa cambia ogni impostazione. Poi mettiti alla prova nel checkpoint.",
+    "outputLabel": "L'effetto della tua configurazione:",
+    "controls": [
+      {
+        "id": "md6-t-history",
+        "label": "Cronologia delle conversazioni",
+        "levels": [
+          { "value": "forever", "label": "Attiva per sempre", "effect": "Comodo: torni alle vecchie conversazioni. Rischio: anni di domande private in un unico posto — un boccone ghiotto in caso di violazione dell'account." },
+          { "value": "cleaned", "label": "Attiva, pulita regolarmente", "effect": "Una via di mezzo ragionevole: la comodità quotidiana resta, l'archivio delle conversazioni sensibili sparisce. I temi sensibili in più in modalità temporanea." }
+        ]
+      },
+      {
+        "id": "md6-t-training",
+        "label": "Addestramento sui miei dati",
+        "levels": [
+          { "value": "on", "label": "Attivo per impostazione predefinita", "effect": "Le tue conversazioni possono migliorare i modelli futuri. Il contenuto esce per sempre dal tuo controllo — revocare il consenso non ritira i dati del passato." },
+          { "value": "off", "label": "Disattivato (opt-out)", "effect": "Le conversazioni servono solo alla gestione del tuo account. L'impostazione domestica più sicura — la qualità delle risposte non cala." }
+        ]
+      },
+      {
+        "id": "md6-t-content",
+        "label": "Cosa invio nelle conversazioni",
+        "levels": [
+          { "value": "everything", "label": "Tutto senza filtro", "effect": "Scansioni, referti, foto di famiglia in chat. Ogni contenuto sensibile su un server estraneo è un rischio che non controlli." },
+          { "value": "filtered", "label": "Senza dati personali", "effect": "Chiedi del problema, non della persona: le stesse buone risposte, zero dati sensibili fuori casa. Test della cartolina superato." }
+        ]
+      }
+    ],
+    "checkpoint": {
+      "prompt": "Quale configurazione protegge meglio la privacy domestica mantenendo la comodità?",
+      "type": "single_choice",
+      "options": [
+        { "id": "A", "text": "Cronologia per sempre + addestramento attivo + invio tutto — così l'IA funziona al meglio." },
+        { "id": "B", "text": "Cronologia pulita regolarmente + addestramento disattivato (opt-out) + niente dati personali nelle conversazioni." },
+        { "id": "C", "text": "Tutto disattivato e account cancellato — solo l'assenza di IA dà privacy." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Sì: è la configurazione «sicura e comoda» — cronologia pulita, dati fuori dall'addestramento, contenuti sensibili fuori dalla chat. La qualità delle risposte non soffre per nessuna di queste impostazioni.",
+      "feedbackIncorrect": "La condivisione massima non migliora le risposte alle domande quotidiane, e rinunciare all'IA non è una strategia di privacy, ma una fuga. Il giusto mezzo: cronologia pulita + opt-out dall'addestramento + test della cartolina per i contenuti."
+    }
+  },
+  "summary": {
+    "points": [
+      "Tutto ciò che scrivi all'IA finisce su un server altrui — scrivi come su una cartolina.",
+      "Tre impostazioni da sistemare in 5 minuti: cronologia (pulisci), addestramento sui dati (disattiva), memoria (rivedi).",
+      "Mai: documenti d'identità, dati sanitari con nomi, password, foto di bambini, segreti altrui."
+    ],
+    "checklist": [
+      "Ho disattivato l'addestramento sui miei dati in tutti gli account IA di casa?",
+      "So come avviare una conversazione temporanea nella mia chat?",
+      "Ho rivisto la cronologia delle registrazioni dell'assistente vocale in questo semestre?",
+      "I familiari conoscono la regola: chiedi del problema, non della persona?"
+    ],
+    "checklistTitle": "Checklist — privacy domestica",
+    "nextStep": "Questo è l'ultimo modulo del percorso. Torna a qualsiasi modulo quando vuoi — questo percorso è formativo: senza test, al tuo ritmo. E se vuoi di più, dai un'occhiata al percorso «Uso sicuro dell'IA»."
+  }
+}

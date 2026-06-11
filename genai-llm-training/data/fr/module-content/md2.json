@@ -1,0 +1,127 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P1 AI w domu (formatywna)",
+    "interaction": "Suwaki promptu (kind: tune) — ćwiczenie formatywne, NIE scorowane do zaliczenia",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE i ogólne (zero realnych danych/PII). Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MD2",
+  "intro": "La différence entre « l'IA ne m'aide pas » et « l'IA me fait gagner une heure par jour » tient le plus souvent à la façon dont vous demandez. Dans ce module, vous apprendrez les trois ingrédients simples d'une bonne demande — contexte, objectif, format — et vous verrez que corriger la réponse au fil de la conversation marche mieux que chercher la question « parfaite ». Le tout sur des exemples de la vie domestique.",
+  "screens": [
+    {
+      "id": "md2-s1-jak-prosic",
+      "title": "Les trois ingrédients d'une bonne demande",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Prompt", "text": "Tout simplement votre demande à l'IA — une question ou une consigne écrite avec des mots de tous les jours. Plus vous dites clairement qui demande, pourquoi et quelle réponse vous attendez, meilleur sera le résultat." },
+        { "kind": "list", "items": [
+          "CONTEXTE — qui et dans quelle situation : « Je suis parent de deux enfants, je cuisine des choses simples ».",
+          "OBJECTIF — ce que vous voulez obtenir : « J'ai besoin d'un plan de dîners pour 5 jours, avec 30 minutes de cuisine maximum ».",
+          "FORMAT — à quoi doit ressembler la réponse : « Présente-la en points, avec une liste de courses à la fin »."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Comparez par vous-même", "text": "« Quoi pour le dîner ? » vous donnera des idées au hasard. « Je suis parent, les enfants ne mangent pas épicé, j'ai 30 minutes — propose 3 dîners en points » vous donnera quelque chose de vraiment utilisable." }
+      ]
+    },
+    {
+      "id": "md2-s2-iterowanie",
+      "title": "Itérer — une conversation plutôt qu'une question parfaite",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Vous n'avez pas besoin d'écrire une demande parfaite du premier coup. Le chat est une conversation : vous recevez une première version, vous dites quoi corriger, vous en recevez une meilleure. Anne Exemple compare cela à une cabine d'essayage — la première proposition tombe rarement parfaitement, mais après deux retouches, elle va comme un gant." },
+        { "kind": "list", "ordered": true, "items": [
+          "Écrivez votre demande du mieux que vous pouvez — sans perfectionnisme.",
+          "Lisez la réponse et nommez ce qui ne vous convient pas : trop long ? trop officiel ? pas le bon sujet ?",
+          "Demandez une correction en une phrase : « plus court », « sur un ton plus chaleureux », « sans mots compliqués ».",
+          "Répétez jusqu'à ce que ce soit bien — 2-3 tours suffisent en général."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Corriger n'est pas un échec", "text": "Préciser et corriger est la façon normale de travailler avec l'IA — exactement comme préciser une commande au restaurant. L'assistant ne se vexera pas à la cinquième retouche." }
+      ]
+    },
+    {
+      "id": "md2-s3-przyklady-domowe",
+      "title": "Prompts domestiques — cinq situations prêtes à l'emploi",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Voyez comment les mêmes trois ingrédients (contexte, objectif, format) fonctionnent dans des affaires domestiques typiques. Chaque « meilleure demande » peut servir de modèle : remplacez les détails par les vôtres." },
+        { "kind": "table", "headers": ["Situation", "Demande faible", "Meilleure demande"], "rows": [
+          ["E-mail", "« Écris un e-mail »", "« Écris un e-mail court et poli au syndic de copropriété (contact : zarzad@przyklad.test) pour demander la réparation de l'interphone. Factuel, sans reproches. »"],
+          ["Plan de la semaine", "« Planifie ma semaine »", "« Je travaille jusqu'à 16 h, les enfants ont piscine le mardi. Organise un plan des tâches ménagères de la semaine dans un tableau, 2 tâches par jour. »"],
+          ["Recette avec le frigo", "« Quoi cuisiner ? »", "« J'ai des œufs, des pâtes, des épinards et du fromage. Propose 2 dîners rapides uniquement avec ces ingrédients, les étapes en points. »"],
+          ["Apprendre une langue", "« Apprends-moi l'anglais »", "« Je connais l'anglais au niveau débutant. Chaque jour, je veux 5 phrases sur la cuisine avec leur traduction et un petit quiz à la fin. »"],
+          ["Voyage", "« Où partir ? »", "« Je prépare une escapade de 3 jours avec un enfant de 7 ans, à moins de 200 km de la maison, pas cher. Propose 3 options avec les plus et les moins en points. »"]
+        ], "textAlt": "Le tableau compare des demandes faibles et meilleures dans cinq situations : e-mail, plan de la semaine, recette avec le frigo, apprentissage d'une langue et voyage. Les meilleures demandes contiennent toujours le contexte (qui et dans quelle situation), l'objectif (ce qui doit concrètement être produit) et le format (points, tableau, quiz)." },
+        { "kind": "callout", "variant": "info", "title": "Collectionnez vos préférées", "text": "Quand une demande fonctionne très bien, notez-la (par exemple dans NotkaApp). Au bout d'un mois, vous aurez votre propre antisèche de prompts pour chaque occasion." }
+      ]
+    },
+    {
+      "id": "md2-s4-przed-cwiczeniem",
+      "title": "Vérifiez-le en pratique",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Dans un instant, vous allez jouer avec les « curseurs » d'une demande : vous verrez comment la même situation — une demande d'e-mail aux voisins — change quand vous ajoutez du contexte, précisez le format et demandez un langage simple. Il n'y a pas de seuil de réussite ici ; le but est de constater de vos propres yeux qu'une demande claire = une meilleure réponse." },
+        { "kind": "callout", "variant": "safe", "title": "La règle d'or", "text": "Si la réponse vous a déçu, dans 9 cas sur 10 il suffit d'ajouter une phrase de contexte ou de préciser le format — avant de conclure que « l'IA ne marche pas »." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "tune",
+    "id": "md2-tune",
+    "title": "Réglez votre demande",
+    "intro": "Situation : vous demandez à l'IA un e-mail aux voisins au sujet de travaux bruyants. Déplacez les curseurs et observez comment la réponse change. Ensuite, répondez à une question de contrôle.",
+    "outputLabel": "À quoi ressemble la réponse de l'IA",
+    "controls": [
+      {
+        "id": "kontekst",
+        "label": "Contexte",
+        "levels": [
+          { "value": "brak", "label": "Aucun", "effect": "L'IA devine la situation : l'e-mail sort vague, peut être trop sec ou complètement à côté — elle ne sait pas qui écrit ni à qui." },
+          { "value": "kto-i-po-co", "label": "Qui et pourquoi", "effect": "L'IA sait que vous écrivez en tant que voisin(e), que vous tenez aux bonnes relations et que vous voulez seulement convenir d'heures de calme — l'e-mail va droit au but." }
+        ]
+      },
+      {
+        "id": "format",
+        "label": "Format",
+        "levels": [
+          { "value": "dowolny", "label": "Libre", "effect": "Vous recevez un long bloc de texte — il faut le raccourcir et l'organiser vous-même avant l'envoi." },
+          { "value": "lista-punktow", "label": "Court, avec des points", "effect": "L'e-mail a 3 phrases d'introduction et des points concrets (l'objet de la demande, les heures proposées) — prêt à envoyer presque sans retouches." }
+        ]
+      },
+      {
+        "id": "ton",
+        "label": "Ton",
+        "levels": [
+          { "value": "dowolny", "label": "Libre", "effect": "Par défaut, l'IA écrit de façon administrative et raide (« Suite à la situation survenue… ») — on dirait un courrier de l'administration, pas une lettre d'un voisin." },
+          { "value": "prosty-jezyk", "label": "Langage simple et bienveillant", "effect": "L'e-mail sonne naturel et humain — il nomme poliment le problème et propose une solution, sans abîmer les relations avec les voisins." }
+        ]
+      }
+    ],
+    "checkpoint": {
+      "prompt": "Quelle combinaison de réglages donnera le meilleur e-mail aux voisins ?",
+      "type": "single_choice",
+      "options": [
+        { "id": "a", "text": "Contexte : aucun · Format : libre · Ton : libre — l'IA sait mieux toute seule." },
+        { "id": "b", "text": "Contexte : qui et pourquoi · Format : court, avec des points · Ton : langage simple et bienveillant." },
+        { "id": "c", "text": "Contexte : qui et pourquoi · Format : libre · Ton : libre — le contexte seul suffit." },
+        { "id": "d", "text": "Contexte : aucun · Format : court, avec des points · Ton : langage simple — la forme compte plus que le fond." }
+      ],
+      "correct": ["b"],
+      "feedbackCorrect": "Exactement ! Le contexte dit à l'IA de quoi il s'agit vraiment, le format organise le contenu, et le ton simple préserve les relations. Ces trois ingrédients ensemble donnent un e-mail prêt à envoyer.",
+      "feedbackIncorrect": "Presque ! C'est le trio complet qui marche le mieux : contexte (qui écrit et pourquoi), format (court, en points) et ton (langage simple et bienveillant). Le contexte seul aide, mais sans le format et le ton, l'e-mail demande encore des retouches."
+    }
+  },
+  "summary": {
+    "points": [
+      "Une bonne demande a trois ingrédients : le contexte (qui et dans quelle situation), l'objectif (ce qui doit être produit) et le format (à quoi cela doit ressembler).",
+      "Ne cherchez pas le prompt parfait — corrigez la réponse au fil de la conversation, 2-3 tours suffisent en général.",
+      "Les situations domestiques (e-mail, plan, recette, apprentissage d'une langue, voyage) ont des schémas de demandes réutilisables — collectionnez ceux qui marchent.",
+      "Une réponse décevante signale le plus souvent qu'il manquait du contexte ou un format — pas que « l'IA ne marche pas »."
+    ],
+    "checklist": [
+      "Ma demande dit-elle qui je suis et pourquoi je demande ?",
+      "Ai-je précisé à quoi doit ressembler la réponse (points, tableau, longueur) ?",
+      "Ai-je corrigé la réponse au lieu de repartir de zéro ?",
+      "Ai-je noté la demande qui a très bien marché pour la réutiliser ?"
+    ],
+    "checklistTitle": "Check-list — une bonne demande à l'IA",
+    "nextStep": "Prochaine étape : dans le module « L'IA dans le téléphone et la maison », vous verrez où l'IA habite déjà dans vos appareils — et lesquelles de ces fonctions facilitent vraiment la vie."
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P1 AI w domu (formatywna)",
+    "interaction": "Klasyfikacja zadań (kind: classify) — ćwiczenie formatywne, NIE scorowane do zaliczenia",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE i ogólne (zero realnych danych/PII). Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MD1",
+  "intro": "La IA no es magia ni ciencia ficción — es una herramienta que ya hoy puede ayudarte a escribir un correo, planificar la semana o explicarte un tema difícil con palabras sencillas. En este módulo verás qué sabe hacer de verdad la IA, dónde se equivoca y por dónde es mejor empezar. Sin test, sin presión — es un paseo tranquilo por un terreno nuevo.",
+  "screens": [
+    {
+      "id": "md1-s1-czaty-asystenci",
+      "title": "Chats y asistentes — tu nuevo ayudante",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "La forma más popular de IA es el chat: escribes una pregunta o una petición con palabras normales y el asistente responde. No necesitas conocer ningún comando ni «el idioma de los ordenadores» — conversas como con una persona servicial que tiene mucha paciencia y nunca suspira cuando preguntas lo mismo por tercera vez." },
+        { "kind": "list", "items": [
+          "Puedes pedir explicaciones: «explícamelo como si tuviera 10 años».",
+          "Puedes pedir textos: un correo, una felicitación, un anuncio, la lista de la compra.",
+          "Puedes pedir ideas: qué hacer de comer, qué hacer un sábado lluvioso, qué regalarle a la abuela.",
+          "Puedes repreguntar y corregir: «más corto», «más sencillo», «¿y si…?»."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "No hay preguntas tontas", "text": "El asistente de IA no juzga. Puedes preguntar cosas «obvias», pedir que te lo repita y escribir con erratas — entenderá igualmente de qué se trata." }
+      ]
+    },
+    {
+      "id": "md1-s2-multimodalnosc",
+      "title": "Texto, imagen, voz — la IA entiende más que letras",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Los asistentes actuales no se limitan al texto. Puedes enseñarles una foto, decirles algo en voz alta o pedirles que generen una imagen. Eso abre usos muy prácticos en la vida diaria." },
+        { "kind": "table", "headers": ["Qué le das", "Qué puedes recibir", "Ejemplo de la vida real"], "rows": [
+          ["Texto", "Una respuesta, un texto, un plan, ideas", "«Escribe una respuesta amable a esta invitación»"],
+          ["Una foto", "Descripción, explicación, traducción", "Foto de una etiqueta en alemán → «¿qué pone aquí?»"],
+          ["Voz", "Conversación sin escribir", "Estás cocinando y preguntas en voz alta con qué sustituir la nata"],
+          ["Petición de imagen", "Un gráfico generado", "Un dibujo para colorear para el niño, una ilustración para una invitación"]
+        ], "textAlt": "La tabla muestra cuatro formas de trabajar con la IA: el texto da respuestas y planes, la foto da una descripción o traducción, la voz permite conversar sin escribir, y la petición de imagen da un gráfico generado. Cada fila tiene un ejemplo de la vida doméstica." },
+        { "kind": "callout", "variant": "info", "title": "Prueba con la cámara", "text": "Uno de los primeros pasos más agradables es enseñarle a la IA una foto: un manual de instrucciones, una planta del balcón, los ingredientes de un producto — y preguntar «¿qué es esto?» o «explícamelo de forma sencilla»." }
+      ]
+    },
+    {
+      "id": "md1-s3-czego-nie-potrafi",
+      "title": "Lo que la IA NO sabe hacer — suena segura, a veces se equivoca",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Alucinación", "text": "Una situación en la que la IA da una información falsa pero que suena muy convincente. El asistente no miente a propósito — simplemente «adivina» una respuesta que encaja con la pregunta, y lo hace con el mismo tono seguro que cuando dice hechos." },
+        { "kind": "paragraph", "text": "Imagina a un conocido leído y elocuente que nunca dice «no lo sé». Si le preguntas por el horario del centro de salud, te dará algún horario — quizá real, quizá inventado. Así funciona la IA: explica, sugiere y escribe de maravilla, pero no es un oráculo." },
+        { "kind": "list", "items": [
+          "Fechas, precios, horarios de apertura, normas legales — compruébalo siempre en la fuente.",
+          "Consejos de salud y de dinero — tómalos como el inicio de una conversación con el médico o un asesor, no como una decisión.",
+          "Las noticias «de hoy» — el asistente puede no conocer los últimos acontecimientos.",
+          "Cálculos y datos minuciosos — la IA puede ser sorprendentemente floja en cosas que parecen sencillas."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Regla de la confianza limitada", "text": "Cuanto más importante la decisión (salud, dinero, documentos), más la respuesta de la IA es solo una sugerencia que comprobar — no la última palabra." }
+      ]
+    },
+    {
+      "id": "md1-s4-od-czego-zaczac",
+      "title": "Por dónde empezar — la primera semana con la IA",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "La mejor manera de familiarizarse con la IA son las tareas pequeñas y seguras, en las que un error no cuesta nada. Ana Ejemplo empezó planificando las comidas de la semana; Juan Sintético, escribiendo respuestas amables a sus correos. Al cabo de una semana, ambos tenían ya sus usos favoritos." },
+        { "kind": "list", "ordered": true, "items": [
+          "Elige un chat de IA gratuito y crea una cuenta.",
+          "Haz una pregunta sobre algo que dominas — verás lo bien (y con qué seguridad) responde.",
+          "Pide ayuda con un asunto real y pequeño: un correo, un plan, una receta.",
+          "Repregunta y corrige la respuesta a propósito — verás que la conversación funciona mejor que una sola pregunta.",
+          "Comprueba una respuesta «de hechos» en otra fuente — sentirás dónde pasa la frontera de la confianza."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "No vas a romper nada", "text": "El chat de IA es un lugar seguro para experimentar. Lo peor que puede pasar es una respuesta desacertada — entonces simplemente escribes «no era eso» y lo intentas de otra manera." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "md1-classify",
+    "title": "¿La IA lo hará bien o hace falta un humano?",
+    "intro": "Clasifica cada tarea: ¿la IA la hará hoy bien, o más bien se equivocará y hace falta verificación o un humano? Es un ejercicio formativo — el feedback explica cada respuesta.",
+    "categories": [
+      { "id": "ai-dobrze", "label": "La IA lo hará hoy bien", "desc": "Tareas de lenguaje e ideas: traducir, escribir, explicar, planificar." },
+      { "id": "czlowiek", "label": "Aquí la IA se equivoca / hace falta un humano", "desc": "Hechos actuales, decisiones importantes, salud, dinero — exigen comprobación." }
+    ],
+    "items": [
+      { "id": "md1-i1", "text": "Escribe una respuesta amable a una invitación a una comunión.", "correctCategory": "ai-dobrze", "rationale": "Escribir textos es el punto fuerte de la IA — corregirás fácilmente el tono y la longitud." },
+      { "id": "md1-i2", "text": "Dime el horario actual del centro de salud de mi barrio.", "correctCategory": "czlowiek", "rationale": "La IA puede inventarse el horario con tono seguro. Esas cosas compruébalas en la web del centro o por teléfono." },
+      { "id": "md1-i3", "text": "Explica con palabras sencillas qué es la inflación.", "correctCategory": "ai-dobrze", "rationale": "Explicar conceptos «en cristiano» es uno de los mejores usos de la IA." },
+      { "id": "md1-i4", "text": "Decide si debo pedir esta hipoteca.", "correctCategory": "czlowiek", "rationale": "Una decisión financiera importante — la IA puede ayudar a ordenar las preguntas, pero la decisión consúltala con un asesor y con tu propio juicio." },
+      { "id": "md1-i5", "text": "Propón un plan de comidas para la semana con ingredientes sencillos.", "correctCategory": "ai-dobrze", "rationale": "Planificar y proponer ideas es una tarea segura — como mucho cambias el plato que no te convence." },
+      { "id": "md1-i6", "text": "Dime qué medicamentos tomar para este dolor de cabeza.", "correctCategory": "czlowiek", "rationale": "La salud requiere un médico o un farmacéutico. La IA puede explicar conceptos, pero no debe dosificar medicamentos." },
+      { "id": "md1-i7", "text": "Traduce una receta de cocina del italiano al español.", "correctCategory": "ai-dobrze", "rationale": "Las traducciones de textos cotidianos le salen muy bien a la IA." },
+      { "id": "md1-i8", "text": "Dame el resultado del partido de ayer y las últimas noticias.", "correctCategory": "czlowiek", "rationale": "Los acontecimientos más recientes pueden quedar fuera del conocimiento del asistente — puede dar información antigua o inventada." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "La IA es una conversación con palabras normales — pregunta, repregunta, corrige, no vas a romper nada.",
+      "El asistente entiende texto, fotos y voz — enseñar una foto a veces es más rápido que describir.",
+      "La IA suena segura también cuando se equivoca — los hechos, la salud y el dinero compruébalos siempre en la fuente.",
+      "Empieza por tareas pequeñas y seguras: un correo, el plan de la semana, la explicación de un tema difícil."
+    ],
+    "checklist": [
+      "¿Tengo una cuenta creada en un chat de IA y he hecho mi primera pregunta?",
+      "¿Sé qué es una alucinación y qué respuestas hay que comprobar?",
+      "¿He probado a repreguntar y corregir la respuesta en lugar de quedarme con la primera?",
+      "¿Tengo una tarea diaria en la que la IA me ayuda de verdad?"
+    ],
+    "checklistTitle": "Checklist — primeros pasos con la IA",
+    "nextStep": "Siguiente paso: en el módulo «Prompts para el día a día» aprenderás a formular las peticiones de modo que las respuestas acierten a la primera — con contexto, objetivo y formato."
+  }
+}

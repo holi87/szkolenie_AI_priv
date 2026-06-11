@@ -1,0 +1,127 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P1 AI w domu (formatywna)",
+    "interaction": "Suwaki promptu (kind: tune) — ćwiczenie formatywne, NIE scorowane do zaliczenia",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE i ogólne (zero realnych danych/PII). Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MD2",
+  "intro": "Der Unterschied zwischen „KI hilft mir nicht“ und „KI spart mir täglich eine Stunde“ liegt meist in der Art, wie Sie bitten. In diesem Modul lernen Sie die drei einfachen Zutaten einer guten Bitte — Kontext, Ziel, Format — und sehen, dass das Nachbessern der Antwort im Gespräch besser funktioniert als die Suche nach der „perfekten“ Frage. Alles an Beispielen aus dem Alltag zu Hause.",
+  "screens": [
+    {
+      "id": "md2-s1-jak-prosic",
+      "title": "Drei Zutaten einer guten Bitte",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Prompt", "text": "Einfach Ihre Bitte an die KI — eine Frage oder Anweisung in ganz normalen Worten. Je klarer Sie sagen, wer fragt, wozu und welche Antwort Sie erwarten, desto besser ist das Ergebnis." },
+        { "kind": "list", "items": [
+          "KONTEXT — wer und in welcher Situation: „Ich bin Elternteil von zwei Kindern und koche einfache Gerichte“.",
+          "ZIEL — was Sie erreichen wollen: „Ich brauche einen Essensplan für 5 Tage, mit höchstens 30 Minuten Kochzeit“.",
+          "FORMAT — wie die Antwort aussehen soll: „Liste alles in Stichpunkten auf, mit einer Einkaufsliste am Ende“."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Vergleichen Sie selbst", "text": "„Was gibt es zum Mittagessen?“ liefert Ihnen zufällige Ideen. „Ich bin Elternteil, die Kinder essen nichts Scharfes, ich habe 30 Minuten — schlage 3 Mittagessen in Stichpunkten vor“ liefert Ihnen etwas, das Sie wirklich nutzen können." }
+      ]
+    },
+    {
+      "id": "md2-s2-iterowanie",
+      "title": "Iterieren — ein Gespräch statt der perfekten Frage",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Sie müssen nicht beim ersten Mal die perfekte Bitte schreiben. Ein Chat ist ein Gespräch: Sie bekommen eine erste Version, sagen, was zu verbessern ist, und bekommen eine bessere. Anna Beispiel vergleicht das mit einer Umkleidekabine — der erste Vorschlag sitzt selten perfekt, aber nach zwei Korrekturen passt er wie angegossen." },
+        { "kind": "list", "ordered": true, "items": [
+          "Schreiben Sie die Bitte so gut Sie können — ohne Perfektionismus.",
+          "Lesen Sie die Antwort und benennen Sie, was Ihnen nicht passt: zu lang? zu förmlich? nicht das richtige Thema?",
+          "Bitten Sie mit einem Satz um eine Korrektur: „kürzer“, „in wärmerem Ton“, „ohne schwierige Wörter“.",
+          "Wiederholen Sie das, bis es gut ist — meist genügen 2-3 Runden."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Nachbessern ist keine Niederlage", "text": "Nachfragen und Korrigieren ist die normale Arbeitsweise mit KI — genau wie das Präzisieren einer Bestellung im Restaurant. Der Assistent ist auch bei der fünften Korrektur nicht beleidigt." }
+      ]
+    },
+    {
+      "id": "md2-s3-przyklady-domowe",
+      "title": "Prompts für zu Hause — fünf fertige Situationen",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Sehen Sie, wie dieselben drei Zutaten (Kontext, Ziel, Format) in typischen häuslichen Angelegenheiten funktionieren. Jede „bessere Bitte“ können Sie als Vorlage behandeln und die Details durch Ihre eigenen ersetzen." },
+        { "kind": "table", "headers": ["Situation", "Schwache Bitte", "Bessere Bitte"], "rows": [
+          ["E-Mail", "„Schreibe eine E-Mail“", "„Schreibe eine kurze, höfliche E-Mail an die Hausverwaltung (Kontakt: zarzad@przyklad.test) mit der Bitte, die Gegensprechanlage zu reparieren. Sachlich, ohne Vorwürfe.“"],
+          ["Wochenplan", "„Plane meine Woche“", "„Ich arbeite bis 16 Uhr, die Kinder haben dienstags Schwimmen. Erstelle einen Wochenplan für die Hausarbeiten als Tabelle, mit 2 Aufgaben pro Tag.“"],
+          ["Rezept aus dem Kühlschrank", "„Was soll ich kochen?“", "„Ich habe Eier, Nudeln, Spinat und Käse. Schlage 2 schnelle Mittagessen nur aus diesen Zutaten vor, die Schritte in Stichpunkten.“"],
+          ["Sprachenlernen", "„Bring mir Englisch bei“", "„Ich kann Englisch auf Grundniveau. Ich möchte täglich 5 Sätze übers Kochen, mit Übersetzung und einem einfachen Quiz am Ende.“"],
+          ["Reise", "„Wohin soll ich fahren?“", "„Ich plane einen 3-tägigen Ausflug mit einem 7-Jährigen, bis 200 km von zu Hause, preiswert. Schlage 3 Optionen mit Vor- und Nachteilen in Stichpunkten vor.“"]
+        ], "textAlt": "Die Tabelle vergleicht schwache und bessere Bitten in fünf Situationen: E-Mail, Wochenplan, Rezept aus dem Kühlschrank, Sprachenlernen und Reise. Bessere Bitten enthalten immer Kontext (wer und in welcher Situation), Ziel (was konkret entstehen soll) und Format (Stichpunkte, Tabelle, Quiz)." },
+        { "kind": "callout", "variant": "info", "title": "Sammeln Sie Ihre Favoriten", "text": "Wenn eine Bitte hervorragend funktioniert, speichern Sie sie in Ihren Notizen (z. B. in NotkaApp). Nach einem Monat haben Sie Ihren eigenen Prompt-Spickzettel für jede Gelegenheit." }
+      ]
+    },
+    {
+      "id": "md2-s4-przed-cwiczeniem",
+      "title": "Prüfen Sie es in der Praxis",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Gleich spielen Sie mit den „Schiebereglern“ einer Bitte: Sie sehen, wie sich dieselbe Situation — die Bitte um eine E-Mail an die Nachbarn — verändert, wenn Sie Kontext hinzufügen, das Format festlegen und um einfache Sprache bitten. Es gibt hier keine Bestehensgrenze; das Ziel ist, mit eigenen Augen zu erleben, dass eine klare Bitte eine bessere Antwort bedeutet." },
+        { "kind": "callout", "variant": "safe", "title": "Die goldene Regel", "text": "Wenn Sie eine Antwort enttäuscht hat, hilft in 9 von 10 Fällen ein Satz mehr Kontext oder eine Formatangabe — bevor Sie entscheiden, dass „die KI nicht funktioniert“." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "tune",
+    "id": "md2-tune",
+    "title": "Stimmen Sie Ihre Bitte fein ab",
+    "intro": "Situation: Sie bitten die KI um eine E-Mail an die Nachbarn wegen einer lauten Renovierung. Verstellen Sie die Regler und beobachten Sie, wie sich die Antwort verändert. Beantworten Sie danach eine Kontrollfrage.",
+    "outputLabel": "So sieht die KI-Antwort aus",
+    "controls": [
+      {
+        "id": "kontekst",
+        "label": "Kontext",
+        "levels": [
+          { "value": "brak", "label": "Keiner", "effect": "Die KI rät die Situation: Die E-Mail wird allgemein, womöglich zu scharf oder völlig am Thema vorbei — sie weiß nicht, wer schreibt und an wen." },
+          { "value": "kto-i-po-co", "label": "Wer und wozu", "effect": "Die KI weiß, dass Sie als Nachbar(in) schreiben, Ihnen gute Beziehungen wichtig sind und Sie nur die Ruhezeiten klären wollen — die E-Mail trifft den Kern der Sache." }
+        ]
+      },
+      {
+        "id": "format",
+        "label": "Format",
+        "levels": [
+          { "value": "dowolny", "label": "Beliebig", "effect": "Sie bekommen einen langen Textblock — vor dem Versenden müssen Sie ihn selbst kürzen und ordnen." },
+          { "value": "lista-punktow", "label": "Kurz, mit Stichpunkten", "effect": "Die E-Mail hat 3 Sätze Einleitung und konkrete Punkte (worum es geht, vorgeschlagene Zeiten) — fast ohne Korrekturen versandfertig." }
+        ]
+      },
+      {
+        "id": "ton",
+        "label": "Ton",
+        "levels": [
+          { "value": "dowolny", "label": "Beliebig", "effect": "Die KI schreibt standardmäßig amtlich und steif („Bezug nehmend auf die entstandene Situation …“) — das klingt wie ein Behördenschreiben, nicht wie ein Brief vom Nachbarn." },
+          { "value": "prosty-jezyk", "label": "Einfache, freundliche Sprache", "effect": "Die E-Mail klingt natürlich und menschlich — sie benennt das Problem höflich und schlägt eine Lösung vor, ohne die Beziehung zu den Nachbarn zu belasten." }
+        ]
+      }
+    ],
+    "checkpoint": {
+      "prompt": "Welche Kombination von Einstellungen ergibt die beste E-Mail an die Nachbarn?",
+      "type": "single_choice",
+      "options": [
+        { "id": "a", "text": "Kontext: keiner · Format: beliebig · Ton: beliebig — die KI weiß es selbst am besten." },
+        { "id": "b", "text": "Kontext: wer und wozu · Format: kurz, mit Stichpunkten · Ton: einfache, freundliche Sprache." },
+        { "id": "c", "text": "Kontext: wer und wozu · Format: beliebig · Ton: beliebig — der Kontext allein genügt." },
+        { "id": "d", "text": "Kontext: keiner · Format: kurz, mit Stichpunkten · Ton: einfache Sprache — die Form ist wichtiger als der Inhalt." }
+      ],
+      "correct": ["b"],
+      "feedbackCorrect": "Genau! Der Kontext sagt der KI, worum es wirklich geht, das Format ordnet den Inhalt, und der einfache Ton schützt die Beziehung. Diese drei Zutaten zusammen ergeben eine versandfertige E-Mail.",
+      "feedbackIncorrect": "Fast! Am besten funktioniert das Komplettpaket: Kontext (wer schreibt und wozu), Format (kurz, in Stichpunkten) und Ton (einfache, freundliche Sprache). Der Kontext allein hilft, aber ohne Format und Ton braucht die E-Mail weiterhin Korrekturen."
+    }
+  },
+  "summary": {
+    "points": [
+      "Eine gute Bitte hat drei Zutaten: Kontext (wer und in welcher Situation), Ziel (was entstehen soll) und Format (wie es aussehen soll).",
+      "Suchen Sie nicht den perfekten Prompt — verbessern Sie die Antwort im Gespräch, meist genügen 2-3 Runden.",
+      "Häusliche Situationen (E-Mail, Plan, Rezept, Sprachenlernen, Reise) haben wiederkehrende Bitte-Muster — sammeln Sie die, die funktionieren.",
+      "Eine enttäuschende Antwort ist meist ein Signal, dass Kontext oder Format gefehlt hat — nicht, dass „die KI nicht funktioniert“."
+    ],
+    "checklist": [
+      "Sagt meine Bitte, wer ich bin und wozu ich frage?",
+      "Habe ich festgelegt, wie die Antwort aussehen soll (Stichpunkte, Tabelle, Länge)?",
+      "Habe ich die Antwort verbessert, statt von vorn anzufangen?",
+      "Habe ich eine Bitte gespeichert, die hervorragend funktioniert hat, um sie wiederzuverwenden?"
+    ],
+    "checklistTitle": "Checkliste — eine gute Bitte an die KI",
+    "nextStep": "Nächster Schritt: Im Modul „KI im Smartphone und zu Hause“ sehen Sie, wo KI bereits in Ihren Geräten wohnt — und welche dieser Funktionen das Leben wirklich leichter machen."
+  }
+}

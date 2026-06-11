@@ -1,0 +1,130 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P1 AI w domu (formatywna)",
+    "interaction": "Strojenie ustawień prywatności (kind: tune) — ćwiczenie formatywne z checkpointem",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp, przyklad.test, Jan Syntetyczny, Anna Testowa). ZERO realnych danych/PII. Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MD6",
+  "intro": "Une conversation avec l'IA est parfois aussi sincère qu'une conversation avec un ami — sauf qu'elle s'enregistre sur le serveur de quelqu'un d'autre. Ce module montre ce que vous partagez vraiment, quels réglages de compte valent la peine d'être changés en cinq minutes et ce qu'il ne faut jamais coller. À la fin, vous réglerez une configuration de confidentialité modèle.",
+  "screens": [
+    {
+      "id": "md6-s1-co-udostepniasz",
+      "title": "Ce que vous partagez vraiment",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Chaque message envoyé à un chat d'IA arrive sur le serveur du fournisseur. Il peut y être conservé comme historique, lu ponctuellement par des humains (contrôle qualité) et — selon les réglages — utilisé pour entraîner les versions suivantes du modèle. Ce n'est pas une raison de paniquer ; c'est une raison de savoir ce que l'on envoie." },
+        { "kind": "list", "items": [
+          "Le contenu des conversations : questions, textes collés, photos et documents téléversés.",
+          "Les métadonnées : quand, depuis quel appareil, à quelle fréquence vous utilisez le service.",
+          "La voix : les enregistrements de commandes chez les assistants vocaux (généralement avec un historique consultable)."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Le test de la carte postale", "text": "Écrivez à l'IA comme sur une carte postale : tout ce qui est vraiment sensible reste en dehors. La carte postale, le facteur la lit — et c'est acceptable tant que vous le savez." }
+      ]
+    },
+    {
+      "id": "md6-s2-ustawienia",
+      "title": "Cinq minutes dans les réglages du compte",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "La plupart des outils d'IA ont trois réglages qu'il vaut la peine de trouver et de définir consciemment — les noms varient, la mécanique est la même :" },
+        { "kind": "table", "headers": ["Réglage", "Ce qu'il fait", "Recommandation pour la maison"], "rows": [
+          ["Historique des conversations", "conserve tous les chats sur le compte", "activé pour le confort, mais nettoyé régulièrement ; les conversations sensibles en mode temporaire"],
+          ["Entraînement sur mes données", "permet d'utiliser vos conversations pour améliorer le modèle", "désactivez (opt-out) si l'outil le permet"],
+          ["Personnalisation/mémoire", "l'IA retient des faits sur vous entre les conversations", "en conscience : pratique, mais vérifiez parfois CE qu'elle a retenu"]
+        ], "textAlt": "Trois réglages clés : l'historique des conversations (à nettoyer régulièrement), l'entraînement sur les données (à désactiver, opt-out), la mémoire et la personnalisation (à passer en revue)." },
+        { "kind": "callout", "variant": "safe", "title": "À faire aujourd'hui", "text": "Ouvrez les réglages de votre chat d'IA principal et trouvez ces trois éléments. Cinq minutes, une seule fois, pour chaque compte de la maison." }
+      ]
+    },
+    {
+      "id": "md6-s3-czego-nie-wklejac",
+      "title": "Ce qu'il ne faut jamais coller",
+      "type": "content",
+      "blocks": [
+        { "kind": "list", "items": [
+          "Documents d'identité : scans de carte d'identité, de passeport, de carte d'étudiant — les vôtres et ceux des autres.",
+          "Données de santé avec des noms : résultats d'analyses, ordonnances, dossiers médicaux — posez des questions générales, sans identité.",
+          "Mots de passe, codes, données de carte bancaire : à aucun chat, pour aucune raison, jamais.",
+          "Photos d'enfants et d'autres personnes sans leur accord — leur image part sur un serveur étranger.",
+          "Les secrets d'autrui : messages d'autres personnes, documents du travail — ils ne sont pas à vous pour être partagés."
+        ] },
+        { "kind": "paragraph", "text": "Règle générale : demandez sur le PROBLÈME, pas sur la PERSONNE. « Comment parler au médecin des résultats de cholestérol ? » fonctionne tout aussi bien sans coller le résultat avec le nom de maman." },
+        { "kind": "callout", "variant": "info", "title": "Et si vous avez déjà collé ?", "text": "Supprimez la conversation de l'historique, désactivez l'entraînement sur les données et retenez la leçon pour l'avenir. Ce n'est pas la fin du monde — mais l'habitude vaut d'être corrigée dès aujourd'hui." }
+      ]
+    },
+    {
+      "id": "md6-s4-urzadzenia",
+      "title": "De l'ordre dans les appareils de la maison",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "La confidentialité de l'IA domestique, c'est aussi le matériel : enceintes, caméras, téléviseurs et jouets à micro. Un quart d'heure de rangement tous les six mois suffit :" },
+        { "kind": "list", "ordered": true, "items": [
+          "Passez en revue et nettoyez l'historique des enregistrements de l'assistant vocal (dans l'application du compte).",
+          "Vérifiez les interrupteurs physiques des micros et les caches des caméras — et apprenez aux membres du foyer où ils se trouvent.",
+          "Gardez les appareils avec caméra hors de la chambre à coucher et de la chambre d'enfant.",
+          "Retirez leurs autorisations aux applications que vous n'utilisez pas (micro, localisation, contacts).",
+          "Comptes invités et enfants : des profils séparés plutôt qu'un compte d'adulte partagé."
+        ] }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "tune",
+    "id": "md6-tune",
+    "title": "Réglez les paramètres de confidentialité",
+    "intro": "Réglez les trois curseurs comme vous configureriez un compte d'IA pour votre famille, et observez ce que change chaque réglage. Puis testez-vous au checkpoint.",
+    "outputLabel": "L'effet de votre configuration :",
+    "controls": [
+      {
+        "id": "md6-t-history",
+        "label": "Historique des conversations",
+        "levels": [
+          { "value": "forever", "label": "Activé pour toujours", "effect": "Pratique : vous revenez aux anciennes conversations. Risque : des années de questions privées au même endroit — une proie de choix en cas de piratage du compte." },
+          { "value": "cleaned", "label": "Activé, nettoyé régulièrement", "effect": "Le juste milieu raisonnable : le confort courant reste, l'archive de conversations sensibles disparaît. Les sujets sensibles, en plus, en mode temporaire." }
+        ]
+      },
+      {
+        "id": "md6-t-training",
+        "label": "Entraînement sur mes données",
+        "levels": [
+          { "value": "on", "label": "Activé par défaut", "effect": "Vos conversations peuvent améliorer les futurs modèles. Le contenu échappe à votre contrôle pour de bon — retirer son accord ne retire pas les données du passé." },
+          { "value": "off", "label": "Désactivé (opt-out)", "effect": "Les conversations ne servent qu'au fonctionnement de votre compte. Le réglage domestique le plus sûr — la qualité des réponses ne baisse pas." }
+        ]
+      },
+      {
+        "id": "md6-t-content",
+        "label": "Ce que j'envoie dans les conversations",
+        "levels": [
+          { "value": "everything", "label": "Tout, sans filtre", "effect": "Scans, résultats d'analyses, photos de famille dans le chat. Chaque contenu sensible sur un serveur étranger est un risque que vous ne contrôlez pas." },
+          { "value": "filtered", "label": "Sans données personnelles", "effect": "Vous demandez sur le problème, pas sur la personne : les mêmes bonnes réponses, zéro donnée sensible hors de la maison. Test de la carte postale réussi." }
+        ]
+      }
+    ],
+    "checkpoint": {
+      "prompt": "Quelle configuration protège le mieux la vie privée de la maison tout en gardant le confort ?",
+      "type": "single_choice",
+      "options": [
+        { "id": "A", "text": "Historique pour toujours + entraînement activé + j'envoie tout — c'est là que l'IA marche le mieux." },
+        { "id": "B", "text": "Historique nettoyé régulièrement + entraînement désactivé (opt-out) + pas de données personnelles dans les conversations." },
+        { "id": "C", "text": "Tout désactivé et compte supprimé — seule l'absence d'IA donne la confidentialité." }
+      ],
+      "correct": ["B"],
+      "feedbackCorrect": "Oui : c'est la configuration « sûre et confortable » — historique nettoyé, données hors entraînement, contenus sensibles hors du chat. La qualité des réponses ne souffre d'aucun de ces réglages.",
+      "feedbackIncorrect": "Le partage maximal n'améliore pas les réponses aux questions du quotidien, et renoncer à l'IA n'est pas une stratégie de confidentialité, c'est une fuite. Le juste milieu : historique nettoyé + opt-out de l'entraînement + test de la carte postale pour les contenus."
+    }
+  },
+  "summary": {
+    "points": [
+      "Tout ce que vous écrivez à l'IA atterrit sur le serveur de quelqu'un d'autre — écrivez comme sur une carte postale.",
+      "Trois réglages à maîtriser en 5 minutes : l'historique (nettoyez), l'entraînement sur les données (désactivez), la mémoire (passez en revue).",
+      "Jamais : documents d'identité, données de santé avec des noms, mots de passe, photos d'enfants, secrets d'autrui."
+    ],
+    "checklist": [
+      "Ai-je désactivé l'entraînement sur mes données sur tous les comptes d'IA de la maison ?",
+      "Est-ce que je sais comment lancer une conversation temporaire dans mon chat ?",
+      "Ai-je passé en revue l'historique des enregistrements de l'assistant vocal ce semestre ?",
+      "Les membres du foyer connaissent-ils la règle : demande sur le problème, pas sur la personne ?"
+    ],
+    "checklistTitle": "Check-list — la vie privée à la maison",
+    "nextStep": "C'est le dernier module du parcours. Revenez à n'importe quel module quand vous voulez — ce parcours est formatif : sans test, à votre rythme. Et si vous en voulez plus, regardez le parcours « Usage sûr de l'IA »."
+  }
+}

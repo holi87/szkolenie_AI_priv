@@ -1,0 +1,109 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P1 AI w domu (formatywna)",
+    "interaction": "Klasyfikacja zadań (kind: classify) — ćwiczenie formatywne, NIE scorowane do zaliczenia",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE i ogólne (zero realnych danych/PII). Moduł formatywny — bez progu zaliczenia i certyfikatu."
+  },
+  "module": "MD1",
+  "intro": "AI is not magic or science fiction — it is a tool that can already help you write an e-mail, plan your week, or explain a difficult topic in simple words. In this module you will see what AI can really do, where it gets things wrong, and what the best starting point is. No test, no pressure — this is a relaxed walk through new territory.",
+  "screens": [
+    {
+      "id": "md1-s1-czaty-asystenci",
+      "title": "Chats and assistants — your new helper",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "The most popular form of AI is a chat: you type a question or a request in everyday words, and the assistant answers. You do not need to know any commands or “computer language” — you talk to it like a helpful person with lots of patience who never sighs when you ask the same thing a third time." },
+        { "kind": "list", "items": [
+          "You can ask for explanations: “explain this to me as if I were 10 years old”.",
+          "You can ask for texts: an e-mail, greetings, an announcement, a shopping list.",
+          "You can ask for ideas: what to make for dinner, what to do on a rainy Saturday, what gift to get Grandma.",
+          "You can follow up and refine: “shorter”, “simpler”, “and what if…?”."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "There are no silly questions", "text": "An AI assistant does not judge. You can ask about “obvious” things, ask it to repeat itself, and write with typos — it will still understand what you mean." }
+      ]
+    },
+    {
+      "id": "md1-s2-multimodalnosc",
+      "title": "Text, image, voice — AI understands more than letters",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Modern assistants are not limited to text. You can show them a photo, say something out loud, or ask them to generate a picture. That opens up very practical uses in everyday life." },
+        { "kind": "table", "headers": ["What you give", "What you can get", "Real-life example"], "rows": [
+          ["Text", "An answer, a text, a plan, ideas", "“Write a polite reply to this invitation”"],
+          ["A photo", "A description, an explanation, a translation", "A photo of a label in German → “what does this say?”"],
+          ["Voice", "A conversation without typing", "You are cooking and ask out loud what to substitute for cream"],
+          ["A request for an image", "A generated picture", "A coloring page for a child, an illustration for an invitation"]
+        ], "textAlt": "The table shows four ways of working with AI: text gives answers and plans, a photo gives a description or translation, voice lets you talk without typing, and a request for an image gives a generated picture. Each row has an example from home life." },
+        { "kind": "callout", "variant": "info", "title": "Try it with your camera", "text": "One of the nicest first steps is showing the AI a photo: an instruction manual, a plant from the balcony, a product’s ingredient list — and asking “what is this?” or “explain it simply”." }
+      ]
+    },
+    {
+      "id": "md1-s3-czego-nie-potrafi",
+      "title": "What AI CANNOT do — sounds confident, can be wrong",
+      "type": "content",
+      "blocks": [
+        { "kind": "definition", "term": "Hallucination", "text": "A situation in which AI gives you information that is untrue but sounds very convincing. The assistant is not lying on purpose — it simply “guesses” an answer that fits the question, and it does so in the same confident tone it uses for facts." },
+        { "kind": "paragraph", "text": "Imagine a friend who is well-read and eloquent but never says “I do not know”. Asked about a clinic’s opening hours, they will give you some hours — maybe real, maybe invented. That is exactly how AI works: it explains, suggests, and writes brilliantly, but it is not an oracle." },
+        { "kind": "list", "items": [
+          "Dates, prices, opening hours, legal regulations — always check with the source.",
+          "Health and financial advice — treat it as a warm-up for a conversation with a doctor or advisor, not as a decision.",
+          "“Today’s” news — the assistant may not know the latest events.",
+          "Arithmetic and fiddly facts — AI can be surprisingly weak at things that look simple."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "The limited-trust rule", "text": "The more important the decision (health, money, documents), the more an AI answer is just a suggestion to verify — not the final word." }
+      ]
+    },
+    {
+      "id": "md1-s4-od-czego-zaczac",
+      "title": "Where to start — your first week with AI",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "The best way to get comfortable with AI is small, safe tasks where a mistake costs nothing. Anna Sample started with planning dinners for the week; John Synthetic started with writing polite replies to e-mails. After a week, they both had their favorite uses." },
+        { "kind": "list", "ordered": true, "items": [
+          "Pick one free AI chat and create an account.",
+          "Ask a question about something you know well — you will see how well (and how confidently) it answers.",
+          "Ask for help with one real, small task: an e-mail, a plan, a recipe.",
+          "Deliberately follow up and refine the answer — you will see that a conversation works better than a single question.",
+          "Check one “factual” answer in another source — you will feel where the trust boundary runs."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "You cannot break anything", "text": "An AI chat is a safe place to experiment. The worst that can happen is an off-target answer — then you simply write “that is not what I meant” and try again differently." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "md1-classify",
+    "title": "Will AI do this well, or is a human needed?",
+    "intro": "Sort each task: will AI handle it well today, or is it likely to get it wrong, so verification or a human is needed? This is a practice exercise — the feedback explains every answer.",
+    "categories": [
+      { "id": "ai-dobrze", "label": "AI will do this well today", "desc": "Language and idea tasks: translation, writing, explaining, planning." },
+      { "id": "czlowiek", "label": "Here AI gets it wrong / a human is needed", "desc": "Current facts, important decisions, health, money — these require checking." }
+    ],
+    "items": [
+      { "id": "md1-i1", "text": "Write a polite reply to a First Communion invitation.", "correctCategory": "ai-dobrze", "rationale": "Writing texts is AI’s strong suit — you can easily adjust the tone and length." },
+      { "id": "md1-i2", "text": "Give me the current opening hours of the clinic in my neighborhood.", "correctCategory": "czlowiek", "rationale": "AI can make up the hours in a confident tone. Check things like this on the clinic’s website or by phone." },
+      { "id": "md1-i3", "text": "Explain in simple words what inflation is.", "correctCategory": "ai-dobrze", "rationale": "Explaining concepts “in plain language” is one of AI’s best uses." },
+      { "id": "md1-i4", "text": "Decide whether I should take out this mortgage.", "correctCategory": "czlowiek", "rationale": "A major financial decision — AI can help organize your questions, but consult the decision with an advisor and your own judgment." },
+      { "id": "md1-i5", "text": "Suggest a weekly meal plan using simple ingredients.", "correctCategory": "ai-dobrze", "rationale": "Planning and ideas are a safe task — at worst you swap out a dish you do not like." },
+      { "id": "md1-i6", "text": "Tell me what medication to take for this headache.", "correctCategory": "czlowiek", "rationale": "Health requires a doctor or pharmacist. AI can explain concepts, but it should not be dosing medication." },
+      { "id": "md1-i7", "text": "Translate a recipe from Italian into English.", "correctCategory": "ai-dobrze", "rationale": "AI handles translations of everyday texts very well." },
+      { "id": "md1-i8", "text": "Give me yesterday’s match score and the latest news.", "correctCategory": "czlowiek", "rationale": "The freshest events may be beyond the assistant’s knowledge — it may give you old or made-up information." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "AI is a conversation in everyday words — ask, follow up, refine; you cannot break anything.",
+      "The assistant understands text, photos, and voice — showing a photo is often faster than describing it.",
+      "AI sounds confident even when it is wrong — always check facts, health, and money with the source.",
+      "Start with small, safe tasks: an e-mail, a weekly plan, an explanation of a difficult topic."
+    ],
+    "checklist": [
+      "Do I have an account in one AI chat, and have I asked my first question?",
+      "Do I know what a hallucination is and which answers need checking?",
+      "Have I tried following up and refining an answer instead of stopping at the first one?",
+      "Do I have one everyday task where AI genuinely helps me?"
+    ],
+    "checklistTitle": "Checklist — first steps with AI",
+    "nextStep": "Next step: in the “Everyday prompts” module you will learn to phrase requests so the answers land right away — with context, goal, and format."
+  }
+}

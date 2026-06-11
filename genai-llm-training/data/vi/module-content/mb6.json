@@ -1,0 +1,141 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P2 Bezpieczne używanie AI",
+    "interaction": "Rubryka weryfikacji odpowiedzi AI (kind: rubric, bez recordsPractical — ćwiczenie, nie bramka)",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp/SklepDemo, przyklad.test, Jan Syntetyczny). ZERO realnych danych/PII. Tłumaczenie wietnamskie (vi)."
+  },
+  "module": "MB6",
+  "intro": "Mô hình ngôn ngữ tạo ra câu trả lời có xác suất cao nhất, chứ không phải sự thật đã được kiểm chứng — và nó luôn làm điều đó với cùng một giọng điệu tự tin. Mô-đun này cho bạn một cách kiểm chứng đơn giản, có thể lặp lại: nguồn, ngày tháng, dấu vết thứ hai, giới hạn năng lực. Ở phần cuối, bạn sẽ thực hành nó trên một câu trả lời AI cụ thể.",
+  "screens": [
+    {
+      "id": "mb6-s1-pewny-ton",
+      "title": "Vì sao AI nghe chắc chắn khi nó bịa đặt",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Mô hình không “biết” và không “kiểm tra” — nó dự đoán các từ tiếp theo dựa trên những mẫu hình trong dữ liệu huấn luyện. Vì vậy sự thật và điều bịa đặt (ảo giác) tuôn ra từ nó trôi chảy như nhau, với cùng một sự lưu loát. Giọng điệu, độ dài và định dạng đẹp mắt là phong cách, không phải bằng chứng." },
+        { "kind": "definition", "term": "Ảo giác", "text": "Thông tin do mô hình tạo ra nghe có vẻ đáng tin nhưng không đúng sự thật — một sự kiện, con số, trích dẫn hay nguồn được bịa ra." },
+        { "kind": "callout", "variant": "warn", "title": "Cạm bẫy phổ biến nhất", "text": "Mô hình còn có thể bịa cả NGUỒN: tên báo cáo, tác giả, đường link. Bản thân việc câu trả lời có chú dẫn không chứng minh điều gì — chú dẫn phải được mở ra xem." }
+      ]
+    },
+    {
+      "id": "mb6-s2-fact-checking",
+      "title": "Kiểm chứng sự kiện từng bước",
+      "type": "content",
+      "blocks": [
+        { "kind": "list", "ordered": true, "items": [
+          "Xác định các khẳng định mang tính quyết định: con số, ngày tháng, tên gọi, trích dẫn, khuyến nghị.",
+          "Mở nguồn được dẫn: nó có tồn tại không? nó có thật sự chứa thông tin này không?",
+          "Kiểm tra ngày tháng: thông tin có còn cập nhật cho câu hỏi của bạn không?",
+          "Tìm dấu vết thứ hai, ĐỘC LẬP: một nguồn khác xác nhận sự kiện then chốt (không phải thêm một câu trả lời nữa của cùng mô hình đó).",
+          "Chỉ sau đó mới dùng tiếp nội dung — kèm các chỉnh sửa, nếu việc kiểm chứng phát hiện ra điều gì."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "Tính độc lập", "text": "Bản tóm tắt thứ hai từ cùng cuộc chat hay câu “hãy xác nhận rằng điều này là thật” trong cùng cửa sổ KHÔNG phải là kiểm chứng độc lập — đó vẫn là cùng một cỗ máy và cùng một ngữ cảnh." }
+      ]
+    },
+    {
+      "id": "mb6-s3-kiedy-nie-ufac",
+      "title": "Các chủ đề rủi ro cao",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Không phải câu trả lời nào cũng cần một cuộc điều tra — công thức bánh kếp sẽ được chiếc chảo kiểm chứng. Bạn nâng mức cảnh giác tỷ lệ thuận với cái giá của sai sót:" },
+        { "kind": "table", "headers": ["Chủ đề", "Rủi ro", "Bên kiểm chứng"], "rows": [
+          ["Sức khỏe, thuốc, liều dùng", "rất cao", "bác sĩ / dược sĩ"],
+          ["Pháp luật, thuế, “quy định hiện hành”", "cao (hay thay đổi!)", "nguồn chính thức có ghi ngày / chuyên gia"],
+          ["Tiền bạc, đầu tư, hợp đồng", "cao", "tài liệu gốc / cố vấn"],
+          ["Con số và thống kê để công bố", "trung bình–cao", "báo cáo gốc + dấu vết thứ hai"],
+          ["Sự kiện mới xảy ra", "cao (ngày giới hạn kiến thức của mô hình)", "báo chí đáng tin cậy đang cập nhật"]
+        ], "textAlt": "Bảng các chủ đề rủi ro cao: sức khỏe, pháp luật, tài chính, thống kê và tin tức mới đòi hỏi kiểm chứng tại nguồn hoặc với chuyên gia; cái giá của sai sót càng cao, việc kiểm chứng càng phải chặt chẽ." },
+        { "kind": "callout", "variant": "warn", "title": "Ngày giới hạn kiến thức", "text": "Mô hình đã “dừng lại” ở cuối dữ liệu huấn luyện của nó. Hỏi về mức giá, quy định hay phiên bản phần mềm “hiện hành” là tự chuốc lấy một câu trả lời lỗi thời được đưa ra bằng giọng điệu tự tin." }
+      ]
+    },
+    {
+      "id": "mb6-s4-nawyk",
+      "title": "Thói quen: kiểm chứng trước khi chuyển tiếp",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Thiệt hại lớn nhất không nằm ở bản thân ảo giác, mà ở vòng đời tiếp theo của nó: được dán vào bản chào hàng, gửi cho gia đình, nhắc lại trong cuộc họp. Nguyên tắc của bạn: không chuyển tiếp bất cứ thứ gì mà bạn không thể tự bảo vệ bằng lời lẽ của mình và chỉ ra mình biết điều đó từ đâu." },
+        { "kind": "list", "items": [
+          "Bạn có 10 phút? Hãy kiểm chứng những gì mang tính quyết định; phần còn lại đánh dấu rõ ràng là chưa được kiểm chứng.",
+          "Ai đó hỏi “bạn biết điều này từ đâu?” — câu trả lời “từ AI” là không đủ; hãy có nguồn.",
+          "Bạn phát hiện ảo giác trong tài liệu của người khác? Hãy nói ra — bạn cắt đứt chuỗi lan truyền."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Tin tốt", "text": "Thói quen này chỉ tốn vài phút, nhưng bảo vệ uy tín của bạn — nguồn vốn khó khôi phục nhất trong công việc và trong gia đình." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "rubric",
+    "id": "mb6-rubric",
+    "title": "Kiểm chứng câu trả lời AI theo bảng tiêu chí",
+    "intro": "AI đã tạo một đoạn văn cho bản tin: “Theo báo cáo của Instytut Syntetyczny tại przyklad.test, có tới 87% công ty ở Ba Lan đã triển khai AI trong chăm sóc khách hàng. Con số này tăng liên tục nhiều năm nay. Báo cáo đầy đủ: przyklad.test/raport-ai”. Hãy đánh giá câu trả lời này theo bốn tiêu chí kiểm chứng — chọn những hành động thật sự mang tính kiểm chứng.",
+    "criteria": [
+      {
+        "id": "mb6-c1",
+        "name": "Nguồn: tồn tại và xác nhận",
+        "prompt": "Bạn làm gì với nguồn được dẫn trước khi dùng con số 87%?",
+        "points": 1,
+        "hint": "Chú dẫn phải được mở ra xem — mô hình có thể bịa cả báo cáo lẫn đường link.",
+        "options": [
+          { "id": "a", "text": "Tôi mở đường link và kiểm tra xem báo cáo có tồn tại không và có chứa chính xác con số này không." },
+          { "id": "b", "text": "Vì đường link trông đáng tin, tôi coi nguồn là đã được xác nhận." },
+          { "id": "c", "text": "Tôi hỏi chính AI đó xem báo cáo có chắc chắn tồn tại không." }
+        ],
+        "correctOptionIds": ["a"]
+      },
+      {
+        "id": "mb6-c2",
+        "name": "Ngày tháng và tính cập nhật",
+        "prompt": "Bạn kiểm tra tính cập nhật của số liệu thống kê như thế nào?",
+        "points": 1,
+        "hint": "“Tăng liên tục nhiều năm nay” mà không có ngày tháng là một tuyên bố rỗng — kiến thức của mô hình có ngày giới hạn.",
+        "options": [
+          { "id": "a", "text": "Tôi mặc định rằng vì AI trả lời hôm nay nên dữ liệu là của hôm nay." },
+          { "id": "b", "text": "Tôi tìm trong báo cáo ngày thực hiện khảo sát và kiểm tra xem có dữ liệu mới hơn không." },
+          { "id": "c", "text": "Tôi cho rằng xu hướng “tăng liên tục nhiều năm nay” là đủ để thay cho ngày tháng." }
+        ],
+        "correctOptionIds": ["b"]
+      },
+      {
+        "id": "mb6-c3",
+        "name": "Dấu vết độc lập thứ hai",
+        "prompt": "Điều gì tạo thành sự xác nhận độc lập cho con số 87%?",
+        "points": 1,
+        "hint": "Độc lập = một cỗ máy/tổ chức/ấn phẩm khác, không phải cùng cuộc chat.",
+        "options": [
+          { "id": "a", "text": "Câu trả lời thứ hai trong cùng cuộc chat, trong đó AI “xác nhận” con số." },
+          { "id": "b", "text": "Cùng con số đó được đồng nghiệp dán lại từ cùng một công cụ." },
+          { "id": "c", "text": "Một nguồn đáng tin cậy khác (ví dụ một ấn phẩm chuyên ngành độc lập) đưa ra giá trị tương đương." }
+        ],
+        "correctOptionIds": ["c"]
+      },
+      {
+        "id": "mb6-c4",
+        "name": "Giới hạn năng lực và quyết định",
+        "prompt": "Việc kiểm chứng cho thấy không thể tìm ra báo cáo. Bạn làm gì với đoạn văn?",
+        "points": 1,
+        "hint": "Con số chưa được kiểm chứng không được đưa vào ấn phẩm — bất kể nó nghe hay đến đâu.",
+        "options": [
+          { "id": "a", "text": "Tôi đăng nguyên văn — đoạn văn nghe rất chuyên nghiệp, mà độc giả cũng chẳng kiểm tra đâu." },
+          { "id": "b", "text": "Tôi xóa số liệu bịa đặt; nếu chủ đề cần một con số, tôi tìm nó trong một nguồn có thật, kiểm chứng được và trích dẫn nguồn đó." },
+          { "id": "c", "text": "Tôi giữ con số nhưng xóa đường link, để không ai phát hiện ra rằng báo cáo không tồn tại." }
+        ],
+        "correctOptionIds": ["b"]
+      }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Giọng điệu tự tin, độ dài và định dạng là phong cách của mô hình, không phải bằng chứng — sự thật và ảo giác nghe giống hệt nhau.",
+      "Kiểm chứng = mở nguồn + ngày tháng + dấu vết độc lập thứ hai; cùng một cuộc chat không thể tự kiểm chứng chính nó.",
+      "Sức khỏe, pháp luật, tiền bạc, thống kê và tin mới — ở đây bạn luôn kiểm chứng, tỷ lệ thuận với cái giá của sai sót."
+    ],
+    "checklist": [
+      "Tôi đã mở nguồn được dẫn và tìm thấy trong đó thông tin được viện dẫn chưa?",
+      "Tôi có biết ngày tháng của thông tin và nó có còn cập nhật cho mục đích sử dụng của tôi không?",
+      "Tôi có dấu vết độc lập thứ hai cho các sự kiện và con số then chốt không?",
+      "Tôi có thể bảo vệ nội dung này bằng lời lẽ của chính mình trước khi chuyển tiếp nó không?"
+    ],
+    "checklistTitle": "Danh sách kiểm tra — trước khi bạn dùng câu trả lời của AI",
+    "nextStep": "Đây là mô-đun cuối cùng của lộ trình. Hãy hoàn thành các mô-đun bắt buộc và bước vào bài kiểm tra cuối — hãy nhớ rằng các câu hỏi trọng yếu về dữ liệu nhạy cảm đòi hỏi trả lời đúng toàn bộ."
+  }
+}

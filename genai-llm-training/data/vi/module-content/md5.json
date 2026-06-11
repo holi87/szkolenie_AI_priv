@@ -1,0 +1,102 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P1 AI w domu (formatywna)",
+    "interaction": "Klasyfikacja: zdrowa vs ryzykowna praktyka rodzinna (kind: classify)",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp, przyklad.test, Jan Syntetyczny, Anna Testowa). ZERO realnych danych/PII. Moduł formatywny — bez progu zaliczenia i certyfikatu. Tłumaczenie wietnamskie (vi)."
+  },
+  "module": "MD5",
+  "intro": "Trẻ em không hỏi có nên dùng AI hay không — chúng đang dùng rồi: cho bài tập, vẽ tranh, trò chuyện với chatbot. Câu hỏi là chúng làm điều đó cùng bạn hay bên cạnh bạn. Mô-đun này giúp bạn nói về AI mà không dọa dẫm cũng không tán dương mù quáng, đặt ra những quy tắc lành mạnh và phân biệt việc hỗ trợ học tập với việc làm thay phần suy nghĩ.",
+  "screens": [
+    {
+      "id": "md5-s1-rozmowa",
+      "title": "Trò chuyện với con về AI như thế nào",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Cuộc trò chuyện đầu tiên tốt nhất về AI không phải là một bài giảng, mà là một thí nghiệm chung: hãy ngồi xuống cùng nhau, hỏi chat về điều đứa trẻ am hiểu (trò chơi yêu thích, con vật, đội bóng) — và cùng nhau tìm xem AI nói đúng chỗ nào, sai chỗ nào. Đứa trẻ từng một lần bắt quả tang AI sai sẽ nhớ nhiều hơn mười buổi thuyết giảng." },
+        { "kind": "list", "items": [
+          "Nói đơn giản: “AI đoán rất giỏi, nhưng không biết chắc — vì vậy chúng ta kiểm tra”.",
+          "Đừng dọa dẫm và đừng tán dương mù quáng — cả hai thái cực đều khép lại cuộc trò chuyện.",
+          "Thỏa thuận rằng với câu trả lời kỳ lạ, đáng lo hay “quá người lớn”, con sẽ đến gặp bạn — không bị phạt vì chính câu hỏi."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Câu nói vàng", "text": "“AI là một người trợ giúp đọc rộng nhưng đôi khi bịa chuyện — và nó không bao giờ là bạn của con hay là người lớn để con kể bí mật”." }
+      ]
+    },
+    {
+      "id": "md5-s2-zasady",
+      "title": "Quy tắc chung thay vì lệnh cấm",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Lệnh cấm tuyệt đối chỉ hiệu lực đến giờ ra chơi đầu tiên ở trường — các bạn cùng lớp có điện thoại. Hiệu quả hơn là những quy tắc được thỏa thuận cùng nhau, phù hợp với lứa tuổi, kèm lời giải thích “vì sao” rõ ràng:" },
+        { "kind": "table", "headers": ["Lĩnh vực", "Quy tắc mẫu", "Vì sao"], "rows": [
+          ["Dữ liệu", "Chúng ta không cho AI biết tên, địa chỉ, trường học hay ảnh chụp", "chat không phải nhật ký; nội dung đi lên máy chủ"],
+          ["Thời gian và nơi chốn", "AI trên thiết bị chung, ở nơi dễ nhìn thấy (với trẻ nhỏ)", "sự hiện diện của người lớn thay vì giám sát"],
+          ["Nội dung", "Câu trả lời kỳ lạ/đáng lo thì cho bố mẹ xem", "bộ lọc không bắt được hết"],
+          ["Trường học", "AI giúp con hiểu, không làm bài thay con", "điểm số phải đo cái đầu của con"]
+        ], "textAlt": "Bảng quy tắc gia đình: bảo vệ dữ liệu của trẻ, sử dụng ở nơi dễ nhìn thấy, báo các nội dung đáng lo, AI là trợ giúp để hiểu thay vì làm bài hộ." },
+        { "kind": "callout", "variant": "info", "title": "Kiểm soát của cha mẹ", "text": "Hãy bật chế độ trẻ em và bộ lọc ở những nơi có sẵn — nhưng hãy coi chúng như dây an toàn, không phải người lái xe. Không bộ lọc nào thay thế được cuộc trò chuyện." }
+      ]
+    },
+    {
+      "id": "md5-s3-nauka",
+      "title": "Hỗ trợ học tập hay làm thay",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Ranh giới dễ gọi tên nhưng khó canh giữ: AI hỗ trợ khi sau khi dùng nó đứa trẻ biết NHIỀU HƠN; nó làm thay khi đứa trẻ biết y như cũ nhưng có sẵn kết quả. Cùng một công cụ làm cả hai việc — sự khác biệt nằm ở cách sử dụng." },
+        { "kind": "list", "items": [
+          "Hỗ trợ: “giải thích phân số cho con bằng ví dụ chiếc bánh pizza”, “hỏi con năm câu từ chương này”, “xem bài văn của con và nói cần sửa gì — đừng viết thay con”.",
+          "Làm thay: “viết bài văn về Mickiewicz cho ngày mai”, “giải những bài tập này” — rồi chép thẳng vào vở.",
+          "Bài kiểm tra tại nhà: hãy nhờ con giải thích kết quả bằng lời của chính con. Giải thích được? Đó là hỗ trợ. Không giải thích được? Đó là làm thay."
+        ] },
+        { "kind": "callout", "variant": "warn", "title": "Cái giá dài hạn", "text": "Làm thay tiết kiệm một buổi tối, nhưng trả giá bằng kỹ năng. Đứa trẻ học được rằng “AI sẽ làm hộ mình” sẽ đứng một mình trong bài kiểm tra, kỳ thi và công việc đầu tiên." }
+      ]
+    },
+    {
+      "id": "md5-s4-higiena",
+      "title": "Vệ sinh số của cả gia đình",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Trẻ em không sao chép quy tắc, mà sao chép hành vi. Nếu bố mẹ trong bữa tối “chỉ xem chat một chút”, quy tắc “con người trước, màn hình sau” chết ngay trong thực tế. Vệ sinh số chỉ hiệu quả khi áp dụng cho tất cả mọi người:" },
+        { "kind": "list", "ordered": true, "items": [
+          "Vùng không màn hình: bữa ăn chung, một giờ trước khi ngủ — với cả người lớn.",
+          "Chatbot “bầu bạn” không phải nơi tâm sự: cảm xúc và bí mật bàn với con người; đứa trẻ cần biết cuộc trò chuyện với bot không riêng tư như nhật ký.",
+          "Mỗi tháng một lần cùng nhau nhìn lại: AI vừa dạy chúng ta điều gì, nó sai ở đâu, chúng ta thay đổi gì trong quy tắc."
+        ] },
+        { "kind": "callout", "variant": "safe", "title": "Mục tiêu", "text": "Chúng ta không nuôi dạy một đứa trẻ không dùng AI — chúng ta nuôi dạy một đứa trẻ dùng nó một cách có ý thức và biết khi nào nên đặt xuống." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "md5-classify",
+    "title": "Thực hành gia đình lành mạnh hay rủi ro?",
+    "intro": "Hãy đánh giá các thực hành gia đình liên quan đến AI. Phần phản hồi giải thích điều gì củng cố và điều gì làm xói mòn sự an toàn cùng sự phát triển của trẻ.",
+    "categories": [
+      { "id": "healthy", "label": "Thực hành lành mạnh", "desc": "Sự đồng hành, trò chuyện, học cách tư duy, bảo vệ dữ liệu của trẻ." },
+      { "id": "risky", "label": "Thực hành rủi ro", "desc": "Làm thay, dữ liệu của trẻ trên mạng, AI như vú em hay người tâm sự." }
+    ],
+    "items": [
+      { "id": "md5-i1", "text": "Bố mẹ cùng con bắt quả tang AI sai trong chủ đề mà đứa trẻ am hiểu.", "correctCategory": "healthy", "rationale": "Dạy sự hoài nghi lành mạnh tốt hơn một bài giảng — đứa trẻ tự trải nghiệm việc AI có thể sai." },
+      { "id": "md5-i2", "text": "Cậu bé tám tuổi tối tối một mình tâm sự nỗi buồn với chatbot “người bạn”.", "correctCategory": "risky", "rationale": "Bot không phải người tâm sự: cảm xúc của trẻ cần con người, còn nội dung trò chuyện đi lên máy chủ." },
+      { "id": "md5-i3", "text": "Cậu thiếu niên nhờ AI ra năm câu hỏi ôn tập trước bài kiểm tra và tự mình trả lời chúng.", "correctCategory": "healthy", "rationale": "AI như huấn luyện viên kiến thức — sau khi dùng, đứa trẻ biết nhiều hơn chứ không ít đi." },
+      { "id": "md5-i4", "text": "Phụ huynh dán vào chat công khai bản nhận xét của trường có đầy đủ họ tên đứa trẻ, nhờ phân tích.", "correctCategory": "risky", "rationale": "Dữ liệu của trẻ trong công cụ công khai — việc phân tích vẫn khả thi sau khi ẩn danh hóa." },
+      { "id": "md5-i5", "text": "Bài văn cho ngày mai do AI viết, đứa trẻ chép vào vở, bố mẹ “không thấy gì”.", "correctCategory": "risky", "rationale": "Làm thay với sự đồng thuận ngầm của người lớn — bài học kép: mình không biết làm và mình không cần làm." },
+      { "id": "md5-i6", "text": "Cả nhà cùng thỏa thuận quy tắc AI trong bữa tối, bao gồm cả quy tắc cho bố mẹ.", "correctCategory": "healthy", "rationale": "Quy tắc cùng xây dựng và bình đẳng có cơ hội được tuân thủ." },
+      { "id": "md5-i7", "text": "Chiếc máy tính bảng với chatbot làm “vú em” cả buổi chiều, để nhà được yên tĩnh.", "correctCategory": "risky", "rationale": "AI làm người trông trẻ mà không có người lớn hiện diện — cả bộ lọc lẫn bot đều không thay được sự quan tâm." },
+      { "id": "md5-i8", "text": "Đứa trẻ cho bố mẹ xem câu trả lời kỳ lạ của chat và cả hai cùng báo cáo nó trong ứng dụng.", "correctCategory": "healthy", "rationale": "Thỏa thuận “con đến mà không bị phạt” đang hoạt động + đứa trẻ học cách phản ứng, không chỉ né tránh." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "Trò chuyện qua những thí nghiệm chung, không qua bài giảng — hãy để đứa trẻ bắt quả tang AI sai.",
+      "Quy tắc thay vì lệnh cấm: bảo vệ dữ liệu, báo nội dung đáng lo, AI giúp hiểu chứ không làm bài thay.",
+      "Vệ sinh số áp dụng cho cả người lớn — trẻ em sao chép hành vi, không sao chép nội quy."
+    ],
+    "checklist": [
+      "Con tôi có biết những gì không được cho AI biết không (tên, địa chỉ, trường học, ảnh chụp)?",
+      "Chúng tôi có thỏa thuận: câu trả lời kỳ lạ = con cho bố mẹ xem mà không bị trách phạt không?",
+      "Tôi có phân biệt được khi nào AI dạy và khi nào nó làm thay — và có làm bài kiểm tra đó không?"
+    ],
+    "checklistTitle": "Danh sách kiểm tra — AI trong gia đình",
+    "nextStep": "Bước tiếp theo: mô-đun cuối của lộ trình — quyền riêng tư trong nhà, tức các cài đặt tài khoản AI và sự ngăn nắp trong dữ liệu của cả ngôi nhà."
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "_meta": {
+    "issue": "#171 Rebuild ścieżek — P2 Bezpieczne używanie AI",
+    "interaction": "Klasyfikacja sytuacji (kind: classify) — odróżnianie ryzyk AI od bezpiecznych praktyk w codziennej pracy",
+    "dataPolicy": "WSZYSTKIE przykłady SYNTETYCZNE (NotkaApp, SklepDemo, Jan Syntetyczny, domeny @przyklad.test). Zero realnych danych, PII, numerów i sekretów."
+  },
+  "module": "MB1",
+  "intro": "L'IA peut réellement accélérer votre travail — mais elle a aussi ses pièges : elle invente sur un ton assuré, il est facile de lui faire trop confiance, et l'on peut coller par mégarde dans le chat des données qui ne devraient pas quitter l'entreprise. Ce module est une carte des risques essentiels : vous les découvrirez un par un, pour savoir dans les modules suivants quoi surveiller exactement.",
+  "screens": [
+    {
+      "id": "mb1-s1-halucynacje",
+      "title": "Hallucinations : un ton assuré n'est pas une preuve de vérité",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Un modèle de langage ne vérifie pas les faits — il prédit quels mots correspondent le mieux à votre question. Il peut donc donner une date inventée, une réglementation inexistante ou un nom de produit imaginaire, et il le fera avec le même ton assuré que lorsqu'il dit des choses vraies. Ce phénomène s'appelle une hallucination." },
+        { "kind": "definition", "term": "Hallucination", "text": "Réponse d'IA qui semble crédible et est donnée avec une pleine assurance, mais qui est partiellement ou totalement fausse. Le modèle ne « ment » pas volontairement — il ne distingue simplement pas ce qu'il sait de ce qui sonne bien." },
+        { "kind": "callout", "variant": "warn", "title": "La règle la plus importante de ce cours", "text": "Le ton assuré d'une réponse ne dit rien de sa véracité. Plus la décision fondée sur une réponse d'IA est importante, plus vous devez la vérifier — le module MB6 est entièrement consacré à la manière de le faire." }
+      ]
+    },
+    {
+      "id": "mb1-s2-nadmierne-zaufanie",
+      "title": "Manipulation et excès de confiance",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "L'IA est polie, rapide et a toujours une réponse — il est donc facile de commencer à la traiter comme un expert infaillible. De plus, le modèle a tendance à acquiescer : si vous lui suggérez une réponse dans votre question, il la confirmera souvent au lieu de la corriger. De l'autre côté, il y a aussi des gens qui utilisent l'IA pour créer des contenus faux mais convaincants." },
+        { "kind": "list", "items": [
+          "Effet d'autorité — une réponse fluide et éloquente paraît experte, même quand elle est fausse.",
+          "Acquiescement — le modèle adhère volontiers au présupposé caché dans votre question (« n'est-ce pas que X ? »).",
+          "Manipulation à grande échelle — l'IA permet de produire en masse et à bas coût de faux courriels, avis et articles.",
+          "Vigilance endormie — après dix bonnes réponses, vous cessez de vérifier la onzième."
+        ] },
+        { "kind": "callout", "variant": "info", "title": "La bonne attitude", "text": "Traitez l'IA comme un stagiaire brillant mais inexpérimenté : il préparera très bien une ébauche et suggérera des idées, mais la responsabilité finale du résultat vous revient. Le module MB5 développera cette règle." }
+      ]
+    },
+    {
+      "id": "mb1-s3-wycieki-danych",
+      "title": "Fuites de données via les chats",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Tout ce que vous tapez dans un chat d'IA public quitte votre ordinateur et atterrit sur les serveurs du fournisseur. Selon les conditions d'utilisation, cela peut être conservé, consulté par des humains ou utilisé pour entraîner les modèles suivants. Y coller des données client ou un document confidentiel est une fuite potentielle — même si rien de grave ne se produit immédiatement." },
+        { "kind": "table", "headers": ["Ce que vous collez", "Ce qui peut arriver"], "rows": [
+          ["Données personnelles d'un client (p. ex. « Jean Synthétique, jan@przyklad.test »)", "Atteinte à la vie privée et au RGPD — les données ont quitté l'entreprise"],
+          ["Document confidentiel de l'entreprise (tarifs, stratégie, contrat)", "Violation du secret d'entreprise ou d'un NDA avec le client"],
+          ["Mot de passe, clé ou jeton d'un système", "Quiconque accède à ces données peut entrer dans le système"],
+          ["Question générale sans données d'entreprise", "Rien — c'est un usage sûr du chat public"]
+        ], "textAlt": "Le tableau montre les conséquences du collage de différents contenus dans un chat public : les données personnelles exposent à une violation du RGPD, les documents confidentiels à une violation du secret d'entreprise, les mots de passe à une prise de contrôle du système, tandis que les questions générales sans données d'entreprise sont sûres." },
+        { "kind": "callout", "variant": "safe", "title": "Un filtre simple avant de coller", "text": "Avant de coller quoi que ce soit, posez-vous la question : « Pourrais-je afficher la même chose sur un panneau d'annonces dans un centre commercial ? ». Si non — ne collez pas, ou supprimez d'abord les fragments sensibles. Vous verrez les détails dans le module MB2." }
+      ]
+    },
+    {
+      "id": "mb1-s4-mapa",
+      "title": "Où l'IA aide, et où elle nuit",
+      "type": "content",
+      "blocks": [
+        { "kind": "paragraph", "text": "Le risque dépend de la tâche. L'IA brille là où le résultat se juge facilement de vos propres yeux : ébauches, résumés, brainstorming, amélioration du style. Elle devient dangereuse là où l'erreur coûte cher et où vous n'avez aucun moyen de la repérer : faits, chiffres, droit, santé, décisions concernant des personnes." },
+        { "kind": "table", "headers": ["Tâche", "Risque", "Pourquoi"], "rows": [
+          ["Ébauche de courriel, résumé d'une note, idées", "Faible", "Vous voyez vous-même si le résultat a du sens — vérification facile"],
+          ["Traduction ou amélioration du style de votre propre texte", "Faible à moyen", "Vous connaissez le contenu, mais des nuances peuvent se perdre"],
+          ["Faits, dates, chiffres, réglementations, conseils de santé", "Élevé", "Les hallucinations sonnent exactement comme la vérité"],
+          ["Décisions concernant des personnes (évaluations, recrutement, réclamations)", "Élevé", "Une erreur ou un biais du modèle touche une personne réelle"]
+        ], "textAlt": "Tableau des risques des tâches d'IA : les ébauches et résumés présentent un risque faible car faciles à vérifier ; les traductions un risque faible à moyen ; les faits, chiffres et conseils de santé un risque élevé car les hallucinations sonnent comme la vérité ; les décisions concernant des personnes un risque élevé car l'erreur touche une personne réelle." },
+        { "kind": "paragraph", "text": "Nous développerons cette carte dans les modules suivants : données sensibles (MB2), attaques via les contenus (MB3), deepfakes et arnaques (MB4), règles d'entreprise (MB5) et vérification des réponses (MB6). Pour l'instant, vérifiez que vous reconnaissez le risque quand vous le voyez." }
+      ]
+    }
+  ],
+  "interaction": {
+    "kind": "classify",
+    "id": "mb1-classify",
+    "title": "Risque ou pratique sûre ?",
+    "intro": "Lisez chaque situation et décidez : est-ce un risque de l'IA ou une pratique sûre ? Le feedback expliquera pourquoi.",
+    "categories": [
+      { "id": "risk", "label": "Risque de l'IA", "desc": "Situation qui peut se terminer par une erreur, une fuite ou un dommage." },
+      { "id": "safe", "label": "Pratique sûre", "desc": "Usage raisonnable de l'IA, avec contrôle et prudence." }
+    ],
+    "items": [
+      { "id": "mb1-i1", "text": "Vous copiez une réponse d'IA avec des dates et des chiffres directement dans un rapport pour la direction, parce qu'elle sonnait très sûre d'elle.", "correctCategory": "risk", "rationale": "Un ton assuré n'est pas une preuve de vérité — les faits et les chiffres venant de l'IA exigent une vérification avant usage." },
+      { "id": "mb1-i2", "text": "Vous demandez à l'IA trois propositions de titre pour une présentation, puis vous choisissez et améliorez vous-même la meilleure.", "correctCategory": "safe", "rationale": "Le brainstorming est un risque faible — vous jugez le résultat de vos propres yeux et gardez le contrôle." },
+      { "id": "mb1-i3", "text": "Vous collez dans un chat public la réclamation complète d'un client avec son nom, son prénom et son adresse e-mail.", "correctCategory": "risk", "rationale": "Les données personnelles du client ont quitté l'entreprise — c'est une fuite potentielle et une violation du RGPD." },
+      { "id": "mb1-i4", "text": "Avant de coller un extrait de ticket, vous en supprimez le nom et l'adresse du client, en ne laissant que la description du problème.", "correctCategory": "safe", "rationale": "L'anonymisation avant collage est l'hygiène de base du travail avec les chats d'IA." },
+      { "id": "mb1-i5", "text": "Vous demandez à l'IA : « N'est-ce pas que notre concurrent SklepDemo a fait faillite ? » et vous prenez la confirmation pour un fait.", "correctCategory": "risk", "rationale": "Le modèle a tendance à acquiescer au présupposé de la question — une confirmation n'est pas une vérification." },
+      { "id": "mb1-i6", "text": "L'IA vous a résumé un long document — avant de transmettre le résumé, vous comparez les points clés avec l'original.", "correctCategory": "safe", "rationale": "Un résumé plus un contrôle rapide avec l'original : c'est l'usage sûr et exemplaire de l'IA." },
+      { "id": "mb1-i7", "text": "Après un mois de réponses justes, vous cessez de vérifier quoi que ce soit — « ce modèle ne s'est encore jamais trompé ».", "correctCategory": "risk", "rationale": "La vigilance endormie est le piège classique de l'excès de confiance — l'hallucination arrivera sans prévenir." },
+      { "id": "mb1-i8", "text": "Pour un conseil concernant un contrat client, vous ne vous fiez pas au chat : vous consultez le service juridique.", "correctCategory": "safe", "rationale": "Le droit est un domaine à risque élevé — la décision revient à un humain doté des compétences appropriées." }
+    ]
+  },
+  "summary": {
+    "points": [
+      "L'IA prédit des mots, elle ne vérifie pas les faits — le ton assuré d'une réponse ne signifie pas qu'elle est vraie.",
+      "L'excès de confiance grandit en silence : plus l'IA fonctionne bien longtemps, plus il est facile de rater son erreur.",
+      "Tout ce que vous collez dans un chat public quitte l'entreprise — laissez les données personnelles et les contenus confidentiels hors du chat.",
+      "Le risque dépend de la tâche : ébauches et idées sont sûres ; faits, droit, santé et décisions concernant des personnes exigent un humain."
+    ],
+    "checklist": [
+      "Est-ce que je sais qu'une hallucination sonne aussi sûre d'elle que la vérité ?",
+      "Est-ce que je vérifie les réponses de l'IA d'autant plus que la décision est importante ?",
+      "Avant de coller quoi que ce soit dans le chat, est-ce que je vérifie qu'il n'y a pas de données personnelles ou confidentielles ?",
+      "Est-ce que je sais désigner les tâches où l'IA m'aide et celles où elle peut nuire ?"
+    ],
+    "checklistTitle": "Check-list — carte des risques de l'IA",
+    "nextStep": "Prochaine étape : le module MB2 — vous apprendrez à reconnaître précisément les données sensibles et à préparer les contenus pour pouvoir les coller en toute sécurité dans le chat."
+  }
+}
